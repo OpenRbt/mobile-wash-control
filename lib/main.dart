@@ -1,6 +1,8 @@
 import 'dart:core';
 //import 'dart:io';
 
+import 'package:mobile_wash_control/HomePage.dart';
+import 'package:mobile_wash_control/PostMenu.dart';
 import 'package:mobile_wash_control/ServersPage.dart';
 import 'package:wifi/wifi.dart';
 import 'package:ping_discover_network/ping_discover_network.dart';
@@ -33,7 +35,14 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Welcome'),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => MyHomePage(title: "Welcome"),
+        "/testScan": (context) => ServersPage(servers: null),
+        "/home": (context) => HomePage(),
+        "/home/editPost": (context) => PostMenu(postID: null),
+      },
+      //home: MyHomePage(title: 'Welcome'),
     );
   }
 }
@@ -143,17 +152,27 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _BuildServersButton(),
+            _buildServersButton(),
             Text(_canScan ? _scanMSG : ""),
+            RaisedButton(
+                child: Text("Home"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home");
+                }),
+            RaisedButton(
+                child: Text("EditPost"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home/editPost", arguments: PostMenuArgs(-1));
+                }),
           ],
         ),
       ),
-      floatingActionButton: _BuildScanButton(),
+      floatingActionButton: _buildScanButton(),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  Widget _BuildServersButton() {
+  Widget _buildServersButton() {
     return new RaisedButton(
         color: _servers.length < 1 ? Colors.redAccent : Colors.green,
         child: new Text(_canScan
@@ -170,12 +189,12 @@ class _MyHomePageState extends State<MyHomePage> {
               });
   }
 
-  Widget _BuildScanButton() {
+  Widget _buildScanButton() {
     return new FloatingActionButton(
       backgroundColor: _canScan ? Colors.green : Colors.yellow,
       splashColor: Colors.greenAccent,
       onPressed: _canScan
-          ? ()  {
+          ? () {
               _scanLan();
             }
           : () {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ServersPage extends StatelessWidget {
-  List<String> servers = new List<String>();
+  final List<String> servers;
 
   ServersPage({Key key, @required this.servers}) : super(key: key);
 
