@@ -6,17 +6,26 @@ class PostMenuArgs {
   PostMenuArgs(this.postID);
 }
 
-class PostMenu extends StatelessWidget {
+class PostMenu extends StatefulWidget {
   int postID;
-
   PostMenu({Key key, @required this.postID}) : super(key: key);
 
   @override
+  _PostMenuState createState() => _PostMenuState(postID);
+}
+
+class _PostMenuState extends State<PostMenu> {
+  int _postID;
+  _PostMenuState(this._postID) : super() {
+    _postID = _postID == null ? -1 : _postID;
+  }
+
+  List<bool> _checkboxList = [false, false, false, false, false, false];
+
+  @override
   Widget build(BuildContext context) {
-    final PostMenuArgs args = ModalRoute.of(context).settings.arguments;
-    this.postID = args.postID;
     final AppBar appBar = AppBar(
-      title: Text("Пост: $postID"),
+      title: Text("Пост: ${this._postID}"),
     );
 
     double screenH = MediaQuery.of(context).size.height;
@@ -132,84 +141,12 @@ class PostMenu extends StatelessWidget {
                     crossAxisCount: 1,
                     childAspectRatio: (screenW / 2) / 75,
                     children: [
-                      RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.lightGreenAccent,
-                        onPressed: () {},
-                        child: Text(
-                          "Активный",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.lightGreenAccent,
-                        onPressed: () {},
-                        child: Text(
-                          "Активный",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.lightGreenAccent,
-                        onPressed: () {},
-                        child: Text(
-                          "Активный",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.lightGreenAccent,
-                        onPressed: () {},
-                        child: Text(
-                          "Активный",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.lightGreenAccent,
-                        onPressed: () {},
-                        child: Text(
-                          "Активный",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.lightGreenAccent,
-                        onPressed: () {},
-                        child: Text(
-                          "Активный",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
+                      _getCheckBox(0),
+                      _getCheckBox(1),
+                      _getCheckBox(2),
+                      _getCheckBox(3),
+                      _getCheckBox(4),
+                      _getCheckBox(5),
                     ],
                   ),
                 ),
@@ -218,8 +155,21 @@ class PostMenu extends StatelessWidget {
           );
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: _getFloatingButton(true),
+      //floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      //floatingActionButton: _getFloatingButton(true),
+    );
+  }
+
+  Widget _getCheckBox(int index) {
+    return CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.trailing,
+      title: Text('Активный'),
+      value: _checkboxList[index],
+      onChanged: (newValue) {
+        setState(() {
+          _checkboxList[index] = !_checkboxList[index];
+        });
+      },
     );
   }
 
