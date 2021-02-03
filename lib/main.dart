@@ -8,6 +8,7 @@ import 'package:wifi/wifi.dart';
 import 'package:ping_discover_network/ping_discover_network.dart';
 
 import 'package:flutter/material.dart';
+import 'package:mobile_wash_control/client/api.dart';
 
 void main() {
   runApp(MyApp());
@@ -163,6 +164,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text("EditPost"),
                 onPressed: () {
                   Navigator.pushNamed(context, "/home/editPost", arguments: PostMenuArgs(-1));
+                }),
+            RaisedButton(
+                child: Text("TestClient"),
+                onPressed: () {
+                  var api_instance = new DefaultApi();
+                  var args = new Args2(); // Args2 |
+
+                  try {
+                    api_instance.addServiceAmount(args);
+                  } catch (e) {
+                    print("Exception when calling DefaultApi->addServiceAmount: $e\n");
+                  }
                 }),
           ],
         ),
