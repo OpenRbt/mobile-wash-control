@@ -8,7 +8,7 @@ class StationStatus {
   String name = null;
   
 
-  Hash hash = null;
+  String hash = null;
   
 
   Status status = null;
@@ -34,7 +34,7 @@ class StationStatus {
     hash =
       
       
-      new Hash.fromJson(json['hash'])
+      json['hash']
 ;
     status =
       

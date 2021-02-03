@@ -39,7 +39,10 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => MyHomePage(title: "Welcome"),
-        "/testScan": (context) => ServersPage(servers: null),
+        "/testScan": (context) => ServersPage(
+              servers: null,
+              serversValid: [],
+            ),
         "/home": (context) => HomePage(),
         "/home/editPost": (context) => PostMenu(postID: null),
       },
@@ -71,6 +74,8 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _wifi = false;
   bool _canScan = true;
   List<String> _servers = new List<String>();
+  List<bool> _serversValid = new List<bool>();
+  final DefaultApi _api = DefaultApi();
 
   void _scanLan() async {
     setState(() {
@@ -78,34 +83,111 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     _scanMSG = "";
     _servers = new List();
+    _serversValid = new List();
     String ssid = await Wifi.ssid;
     int level = await Wifi.level;
     String localIp = await Wifi.ip;
 
-    // var Destination = InternetAddress(
-    //     localIp.substring(0, localIp.lastIndexOf('.')) + ".255");
-    // print("Target IP : ${Destination}");
-    // RawDatagramSocket.bind(InternetAddress.ANY_IP_V4, 8989)
-    //     .then((RawDatagramSocket udpSocket) {
-    //   udpSocket.broadcastEnabled = true;
-    //   udpSocket.listen((event) {
-    //     Datagram dg = udpSocket.receive();
-    //     if (dg != null) {
-    //       print("RESPONSE FROM : ${dg.address.host}:${dg.port}");
-    //     }
-    //   });
-    //   List<int> data = utf8.encode("TEST");
-    //   udpSocket.send(data, Destination, 8989);
-    // });
     _wifi = level > 0;
     if (_wifi) {
       final stream = NetworkAnalyzer.discover2(
-          localIp.substring(0, localIp.lastIndexOf('.')), 80);
+          localIp.substring(0, localIp.lastIndexOf('.')), 8020);
       stream.listen((NetworkAddress address) {
         if (address.exists) {
           _servers.add("${address.ip}");
         }
-      }).onDone(() {
+      }).onDone(() async {
+        _serversValid = List.generate(_servers.length, (index) {
+          return false;
+        });
+        for (int i = 0; i < _servers.length; i++) {
+          _api.apiClient.basePath = "http://" + _servers[i] + ":8020";
+
+          _serversValid[i] = true;
+          try {
+            String res = await _api.info();
+            print(res);
+          } catch (e) {
+            _serversValid[i] = false;
+            print("Exception when calling DefaultApi->info: $e\n");
+          }
+
+          try {
+            StatusReport statusReport = await _api.status();
+            print(statusReport);
+          } catch (e) {
+            _serversValid[i] = false;
+            print("Exception when calling DefaultApi->status: $e\n");
+          }
+
+          try {
+            StatusCollectionReport statusCollectionReport =
+                await _api.statusCollection();
+            print(statusCollectionReport);
+          } catch (e) {
+            _serversValid[i] = false;
+            print("Exception when calling DefaultApi->statusCollection: $e\n");
+          }
+
+          try {
+            String res = await _api.getPing().toString();
+            print(res);
+          } catch (e) {
+            _serversValid[i] = false;
+            print("Exception when calling DefaultApi->getPing: $e\n");
+          }
+
+          try {
+            List<StationsVariables> stationsVariables =
+                await _api.stationsVariables();
+            print(stationsVariables);
+          } catch (e) {
+            _serversValid[i] = false;
+            print("Exception when calling DefaultApi->stationsVariables: $e\n");
+          }
+
+          try {
+            KasseConfig kasseConfig = await _api.kasse();
+            print(kasseConfig);
+          } catch (e) {
+            _serversValid[i] = false;
+            print("Exception when calling DefaultApi->kasse: $e\n");
+          }
+
+          try {
+            var args = new Args16();
+            args.stationID = 1;
+            args.programID = 9;
+            InlineResponse2001 res = await _api.programRelays(args);
+            print(res.toString());
+          } catch (e) {
+            _serversValid[i] = false;
+            print("Exception when calling DefaultApi->programRelays: $e\n");
+          }
+
+          try {
+            var args = new Args16();
+            args.stationID = 1;
+            args.programID = 1;
+            InlineResponse2001 res = await _api.programRelays(args);
+            print(res.toString());
+          } catch (e) {
+            _serversValid[i] = false;
+            print("Exception when calling DefaultApi->programRelays: $e\n");
+          }
+
+          try {
+            var args = new Args16();
+            args.stationID = 10;
+            args.programID = 10;
+            InlineResponse2001 res = await _api.programRelays(args);
+            print(res.toString());
+          } catch (e) {
+            _serversValid[i] = false;
+            print("Exception when calling DefaultApi->programRelays: $e\n");
+          }
+        }
+
         setState(() {
           _scanMSG += "Found ${_servers.length} servers";
           _canScan = true;
@@ -163,7 +245,8 @@ class _MyHomePageState extends State<MyHomePage> {
             RaisedButton(
                 child: Text("EditPost"),
                 onPressed: () {
-                  Navigator.pushNamed(context, "/home/editPost", arguments: PostMenuArgs(-1));
+                  Navigator.pushNamed(context, "/home/editPost",
+                      arguments: PostMenuArgs(-1));
                 }),
             RaisedButton(
                 child: Text("TestClient"),
@@ -174,7 +257,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   try {
                     api_instance.addServiceAmount(args);
                   } catch (e) {
-                    print("Exception when calling DefaultApi->addServiceAmount: $e\n");
+                    print(
+                        "Exception when calling DefaultApi->addServiceAmount: $e\n");
                   }
                 }),
           ],
@@ -198,7 +282,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ServersPage(servers: _servers)));
+                        builder: (context) => ServersPage(
+                              servers: _servers,
+                              serversValid: _serversValid,
+                            )));
               });
   }
 
