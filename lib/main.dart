@@ -105,18 +105,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
           _serversValid[i] = true;
           try {
-            String res = await _api.info();
+            var args = new Args();
+            args.id = 1;
+            args.startDate = new DateTime.now()
+                .add(new Duration(days: -30))
+                .millisecondsSinceEpoch;
+            args.endDate = new DateTime.now().millisecondsSinceEpoch;
+            StationReport res = await _api.stationReportDates(args);
             print(res);
           } catch (e) {
-            _serversValid[i] = false;
-            print("Exception when calling DefaultApi->info: $e\n");
+            print(
+                "Exception when calling DefaultApi->station-report-dates: $e\n");
+          }
+
+          try {
+            var args = new Args1();
+            args.id = 1;
+            var res = await _api.stationReportCurrentMoney(args);
+            print(res);
+          } catch (e) {
+            print(
+                "Exception when calling DefaultApi->station-report-current-money: $e\n");
           }
 
           try {
             StatusReport statusReport = await _api.status();
             print(statusReport);
           } catch (e) {
-            _serversValid[i] = false;
             print("Exception when calling DefaultApi->status: $e\n");
           }
 
@@ -125,67 +140,249 @@ class _MyHomePageState extends State<MyHomePage> {
                 await _api.statusCollection();
             print(statusCollectionReport);
           } catch (e) {
-            _serversValid[i] = false;
-            print("Exception when calling DefaultApi->statusCollection: $e\n");
+            print(
+                "Exception when calling DefaultApi->/status-collection: $e\n");
           }
 
           try {
-            String res = await _api.getPing().toString();
+            var args = new Args2();
+            args.amount = 10;
+            args.hash = "somehash";
+            var res = await _api.addServiceAmount(args);
             print(res);
           } catch (e) {
-            _serversValid[i] = false;
+            print(
+                "Exception when calling DefaultApi->add-service-amount: $e\n");
+          }
+
+          try {
+            var args = new Args3();
+            args.id = -1;
+            args.hash = "somehash";
+            args.name = "somename";
+            var res = await _api.setStation(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->set-station: $e\n");
+          }
+
+          try {
+            var args = new Args4();
+            args.id = -1;
+            var res = await _api.delStation(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->del-station: $e\n");
+          }
+
+          try {
+            var args = new RelayReport();
+            args.hash = "somehash";
+            args.relayStats = List.generate(3, (index) {
+              var tmp = new RelayStat();
+              tmp.relayID = index;
+              tmp.switchedCount = index * 5;
+              tmp.totalTimeOn = index * 30;
+              return tmp;
+            });
+            var res = await _api.saveRelay(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->save-relay: $e\n");
+          }
+
+          try {
+            var args = new Args5();
+            args.hash = "somehash";
+            var res = await _api.loadRelay(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->load-relay: $e\n");
+          }
+
+          try {
+            var args = new MoneyReport();
+            args.hash = "somehash";
+            args.banknotes = 100;
+            args.carsTotal = 200;
+            args.coins = 300;
+            args.electronical = 400;
+            args.service = 500;
+            var res = await _api.saveMoney(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->save-money: $e\n");
+          }
+
+          try {
+            var args = new Args6();
+            args.id = -1;
+            var res = await _api.saveCollection(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->save-collection: $e\n");
+          }
+
+          try {
+            var args = new Args7();
+            args.hash = "somehash";
+            var res = await _api.loadMoney(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->load-money: $e\n");
+          }
+
+          try {
+            var args = new Args8();
+            args.hash = "somehash";
+            args.keyPair = new KeyPair();
+            args.keyPair.key = "somekey";
+            args.keyPair.value = "somevalue";
+            var res = await _api.save(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->load: $e\n");
+          }
+
+          try {
+            var args = new Args9();
+            args.key = "somekey";
+            args.hash = "somehash";
+            var res = await _api.load(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->save: $e\n");
+          }
+
+          try {
+            var args = new Args10();
+            args.hash = "somehash";
+            var res = await _api.ping(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->Ping: $e\n");
+          }
+
+          try {
+            var res = await _api.getPing();
+            print(res);
+          } catch (e) {
             print("Exception when calling DefaultApi->getPing: $e\n");
           }
 
           try {
-            List<StationsVariables> stationsVariables =
-                await _api.stationsVariables();
-            print(stationsVariables);
+            var res = await _api.info();
+            print(res);
           } catch (e) {
             _serversValid[i] = false;
-            print("Exception when calling DefaultApi->stationsVariables: $e\n");
+            print("Exception when calling DefaultApi->info: $e\n");
+          }
+          try {
+            var args = new Args11();
+            args.hash = "somehash";
+            var res = await _api.stationByHash(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->station-by-hash: $e\n");
           }
 
           try {
-            KasseConfig kasseConfig = await _api.kasse();
-            print(kasseConfig);
+            var args = new Args12();
+            args.hash = "somehash";
+            args.keyPair = new KeyPair();
+            args.keyPair.key = "somekey";
+            args.keyPair.value = "somevalue";
+            var res = _api.saveIfNotExists(args);
+            print(res);
           } catch (e) {
-            _serversValid[i] = false;
-            print("Exception when calling DefaultApi->kasse: $e\n");
+            print(
+                "Exception when calling DefaultApi->save-if-not-exists: $e\n");
+          }
+
+          try {
+            var res = await _api.stationsVariables();
+            print(res);
+          } catch (e) {
+            print(
+                "Exception when calling DefaultApi->stations-variables: $e\n");
+          }
+
+          try {
+            var args = new Args13();
+            args.stationID = -1;
+            var res = _api.openStation(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->open-station: $e\n");
+          }
+
+          try {
+            var args = new Args14();
+            args.stationID = -1;
+            var res = _api.programs(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->programs: $e\n");
+          }
+
+          try {
+            var args = new Args15();
+            args.stationID = -1;
+            args.programID = 1;
+            args.name = "somename";
+            var res = _api.setProgramName(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->set-program-name: $e\n");
           }
 
           try {
             var args = new Args16();
             args.stationID = 1;
             args.programID = 9;
-            InlineResponse2001 res = await _api.programRelays(args);
-            print(res.toString());
+            var res = await _api.programRelays(args);
+            print(res);
           } catch (e) {
-            _serversValid[i] = false;
-            print("Exception when calling DefaultApi->programRelays: $e\n");
+            print("Exception when calling DefaultApi->program-relays: $e\n");
           }
 
           try {
-            var args = new Args16();
-            args.stationID = 1;
+            var args = new Args17();
+            args.stationID = -1;
             args.programID = 1;
-            InlineResponse2001 res = await _api.programRelays(args);
-            print(res.toString());
+            args.relays = List.generate(8, (index) {
+              var conf = new RelayConfig();
+              conf.id = index;
+              conf.timeon = index * 10;
+              conf.timeoff = index * 10 + 10;
+              conf.prfelight = index * 10;
+              return conf;
+            });
+            var res = _api.setProgramRelays(args);
+            print(res);
           } catch (e) {
-            _serversValid[i] = false;
-            print("Exception when calling DefaultApi->programRelays: $e\n");
+            print("Exception when calling DefaultApi->set-program-relays: $e\n");
           }
 
           try {
-            var args = new Args16();
-            args.stationID = 10;
-            args.programID = 10;
-            InlineResponse2001 res = await _api.programRelays(args);
-            print(res.toString());
+            var res = await _api.kasse();
+            print(res);
           } catch (e) {
-            _serversValid[i] = false;
-            print("Exception when calling DefaultApi->programRelays: $e\n");
+            print("Exception when calling DefaultApi->kasse: $e\n");
           }
+
+          try {
+            var args = new KasseConfig();
+            args.tax = "TAX_VAT110";
+            args.receiptItemName = "someitemname";
+            args.cashier = "IVANOV IVAN IVANOVICH";
+            args.cashierINN = "123456789012";
+            var res = await _api.setKasse(args);
+            print(res);
+          } catch (e) {
+            print("Exception when calling DefaultApi->set-kasse: $e\n");
+          }
+
         }
 
         setState(() {
