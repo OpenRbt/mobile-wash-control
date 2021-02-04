@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -14,7 +15,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text("Главная"),
         ),
-        drawer: _prepareDrawer(context),
+        drawer: prepareDrawer(context, Pages.Main),
         body: OrientationBuilder(
           builder: (context, orientation) {
             return GridView.count(
@@ -164,54 +165,5 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ));
-  }
-
-  Widget _prepareDrawer(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: const EdgeInsets.all(0),
-        children: <Widget>[
-          DrawerHeader(
-              decoration: BoxDecoration(color: Colors.green),
-              child: Text(
-                "Главная",
-                style: TextStyle(fontSize: 20),
-              )),
-          ListTile(
-            leading: Icon(Icons.toc),
-            title: Text("Посты"),
-          ),
-          ListTile(
-            leading: Icon(Icons.toc),
-            title: Text("Программы"),
-          ),
-          ListTile(
-            leading: Icon(Icons.toc),
-            title: Text("Дозатроны"),
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text("Настройки"),
-          ),
-          ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text("Учетки"),
-          ),
-          ListTile(
-            leading: Icon(Icons.stacked_line_chart),
-            title: Text("Статистика"),
-          ),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text("Выход"),
-            onTap: () {
-              //Navigator.pushNamed(context, "/");
-              Navigator.of(context).pop();
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
   }
 }
