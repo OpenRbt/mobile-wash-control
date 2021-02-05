@@ -1,9 +1,15 @@
 import 'dart:core';
 //import 'dart:io';
 
+import 'package:mobile_wash_control/AccountsMenu.dart';
+import 'package:mobile_wash_control/DozatronsMenu.dart';
 import 'package:mobile_wash_control/HomePage.dart';
-import 'package:mobile_wash_control/PostMenu.dart';
+import 'package:mobile_wash_control/EditPostMenu.dart';
+import 'package:mobile_wash_control/PostsMenu.dart';
+import 'package:mobile_wash_control/ProgramsMenu.dart';
 import 'package:mobile_wash_control/ServersPage.dart';
+import 'package:mobile_wash_control/SettingsMenu.dart';
+import 'package:mobile_wash_control/StatisticsMenu.dart';
 import 'package:wifi/wifi.dart';
 import 'package:ping_discover_network/ping_discover_network.dart';
 
@@ -44,7 +50,13 @@ class MyApp extends StatelessWidget {
               serversValid: [],
             ),
         "/home": (context) => HomePage(),
-        "/home/editPost": (context) => PostMenu(postID: null),
+        "/home/editPost": (context) => EditPostMenu(postID: null),
+        "/home/programs": (context) => ProgramsMenu(),
+        "/home/settings": (context) => SettingsMenu(),
+        "/home/statistics": (context) => StatisticsMenu(),
+        "/home/dozatrons": (context) => DozatronsMenu(),
+        "/home/posts": (context) => PostsMenu(),
+        "/home/accounts": (context) => AccountsMenu(),
       },
       //home: MyHomePage(title: 'Welcome'),
     );
@@ -361,7 +373,8 @@ class _MyHomePageState extends State<MyHomePage> {
             var res = _api.setProgramRelays(args);
             print(res);
           } catch (e) {
-            print("Exception when calling DefaultApi->set-program-relays: $e\n");
+            print(
+                "Exception when calling DefaultApi->set-program-relays: $e\n");
           }
 
           try {
@@ -382,7 +395,6 @@ class _MyHomePageState extends State<MyHomePage> {
           } catch (e) {
             print("Exception when calling DefaultApi->set-kasse: $e\n");
           }
-
         }
 
         setState(() {
@@ -444,6 +456,36 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.pushNamed(context, "/home/editPost",
                       arguments: PostMenuArgs(-1));
+                }),
+            RaisedButton(
+                child: Text("programs"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home/programs");
+                }),
+            RaisedButton(
+                child: Text("settings"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home/settings");
+                }),
+            RaisedButton(
+                child: Text("statistics"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home/statistics");
+                }),
+            RaisedButton(
+                child: Text("dozatrons"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home/dozatrons");
+                }),
+            RaisedButton(
+                child: Text("posts"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home/posts");
+                }),
+            RaisedButton(
+                child: Text("accounts"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home/accounts");
                 }),
             RaisedButton(
                 child: Text("TestClient"),

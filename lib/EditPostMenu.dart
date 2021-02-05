@@ -6,17 +6,17 @@ class PostMenuArgs {
   PostMenuArgs(this.postID);
 }
 
-class PostMenu extends StatefulWidget {
+class EditPostMenu extends StatefulWidget {
   final int postID;
-  PostMenu({Key key, @required this.postID}) : super(key: key);
+  EditPostMenu({Key key, @required this.postID}) : super(key: key);
 
   @override
-  _PostMenuState createState() => _PostMenuState(postID);
+  _EditPostMenuState createState() => _EditPostMenuState(postID);
 }
 
-class _PostMenuState extends State<PostMenu> {
-   int _postID;
-  _PostMenuState(this._postID) : super() {
+class _EditPostMenuState extends State<EditPostMenu> {
+  int _postID;
+  _EditPostMenuState(this._postID) : super() {
     _postID = _postID == null ? -1 : _postID;
   }
 
@@ -39,7 +39,7 @@ class _PostMenuState extends State<PostMenu> {
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
 
-    if (screenW > screenH){
+    if (screenW > screenH) {
       SystemChrome.setEnabledSystemUIOverlays([]);
     } else {
       SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
@@ -50,7 +50,7 @@ class _PostMenuState extends State<PostMenu> {
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new SizedBox(
-              height: screenH - 1 * appBar.preferredSize.height,
+              height: screenH - appBar.preferredSize.height,
               width: screenW,
               child: _getMenu(screenH > screenW, screenW));
         },
@@ -118,9 +118,7 @@ class _PostMenuState extends State<PostMenu> {
             children: [
               SizedBox(
                 height: 50,
-                width: isPortrait
-                    ? 50
-                    : (screenW / 3 - 20) / 6,
+                width: isPortrait ? 50 : (screenW / 3 - 20) / 6,
                 child: Align(
                     alignment: Alignment.center,
                     child: FittedBox(
@@ -138,9 +136,7 @@ class _PostMenuState extends State<PostMenu> {
               ),
               SizedBox(
                 height: 50,
-                width: isPortrait
-                    ? 150
-                    : (screenW / 3 - 20) / 6 * 4,
+                width: isPortrait ? 150 : (screenW / 3 - 20) / 6 * 4,
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
@@ -151,9 +147,7 @@ class _PostMenuState extends State<PostMenu> {
               ),
               SizedBox(
                 height: 50,
-                width: isPortrait
-                    ? 50
-                    : (screenW / 3 - 20) / 6,
+                width: isPortrait ? 50 : (screenW / 3 - 20) / 6,
                 child: Align(
                     alignment: Alignment.center,
                     child: FittedBox(
@@ -188,8 +182,7 @@ class _PostMenuState extends State<PostMenu> {
                 "Инкассировать",
                 style: TextStyle(fontSize: 15),
               ),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
           ),
         ),
@@ -209,8 +202,7 @@ class _PostMenuState extends State<PostMenu> {
                 "Открыть дверь",
                 style: TextStyle(fontSize: 15),
               ),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
           ),
         ),
