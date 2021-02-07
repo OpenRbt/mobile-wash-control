@@ -32,6 +32,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   @override
   Widget build(BuildContext context) {
+
     final AppBar appBar = AppBar(
       title: Text("Пост: ${this._postID}"),
     );

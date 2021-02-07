@@ -11,6 +11,7 @@ class PostsMenu extends StatefulWidget {
 
 class _PostsMenuState extends State<PostsMenu> {
   _PostsMenuState() : super();
+  SessionData sessionData;
   List<bool> _PostsCheckbox = List.generate(8, (index) {
     return false;
   });
@@ -28,7 +29,7 @@ class _PostsMenuState extends State<PostsMenu> {
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: appBar,
-      drawer: prepareDrawer(context, Pages.Posts),
+      drawer: prepareDrawer(context, Pages.Posts,sessionData),
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new SizedBox(

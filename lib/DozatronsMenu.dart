@@ -10,6 +10,7 @@ class DozatronsMenu extends StatefulWidget {
 
 class _DozatronsMenuState extends State<DozatronsMenu> {
   _DozatronsMenuState() : super();
+  SessionData sessionData;
 
   List<String> _DozatronsDown = ["Активная пена", "Шампунь", "Воск", "Полимер"];
 
@@ -23,7 +24,7 @@ class _DozatronsMenuState extends State<DozatronsMenu> {
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: appBar,
-      drawer: prepareDrawer(context, Pages.Dozatrons),
+      drawer: prepareDrawer(context, Pages.Dozatrons, sessionData),
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new SizedBox(

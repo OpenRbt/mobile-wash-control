@@ -3,19 +3,20 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
-
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  SessionData sessionData;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Главная"),
         ),
-        drawer: prepareDrawer(context, Pages.Main),
+        drawer: prepareDrawer(context, Pages.Main, sessionData),
         body: OrientationBuilder(
           builder: (context, orientation) {
             return GridView.count(

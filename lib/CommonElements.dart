@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'dart:io';
 
 enum Pages { Main, Posts, Programs, Dozatrons, Settings, Accounts, Statistics }
 
+class SessionData {
+  final String pin;
+  final String host;
+  SessionData(this.pin, this.host);
+}
+
 //TODO: bottom and top padding for menu items (stretch ListView?), scale menu items to fit menu
-Widget prepareDrawer(BuildContext context, Pages selectedPage) {
+Widget prepareDrawer(
+    BuildContext context, Pages selectedPage, SessionData sessionData) {
   var texts = [
     "Главная",
     "Посты",
@@ -15,6 +23,17 @@ Widget prepareDrawer(BuildContext context, Pages selectedPage) {
     "Статистика",
     "Выход"
   ];
+
+  var routes = [
+    "/home",
+    "/home/posts",
+    "/home/programs",
+    "/home/dozatrons",
+    "/home/settings",
+    "/home/accounts",
+    "/home/statistics",
+  ];
+
   var styles = new List.filled(texts.length, TextStyle(fontSize: 30));
   styles[selectedPage.index] =
       TextStyle(fontSize: 40, fontWeight: FontWeight.bold);
@@ -32,37 +51,59 @@ Widget prepareDrawer(BuildContext context, Pages selectedPage) {
   return SafeArea(
       //minimum: const EdgeInsets.all(16.0), TODO: check if needed on devices with different designs
       child: FittedBox(
-
           child: Container(
               width: screenWidth * 3 / 4,
               height: screenHeight,
               child: CustomPaint(
                   painter: MyPainter(context),
                   child: ListTileTheme(
-                        //tileColor: Colors.green,
-                        child: ListView.separated(
-                          itemCount: 8,
-                          //clipBehavior: Clip.antiAliasWithSaveLayer,
-                          itemBuilder: (BuildContext context, int index) {
-                            var onTap =
-                                index == 7 // TODO: onTap for each button
-                                    ? () {
-                                        //Navigator.pushNamed(context, "/");
-                                        Navigator.of(context).pop();
-                                        Navigator.pop(context);
-                                      }
-                                    : null;
-                            return ListTile(
-                                title: textElements[index], onTap: onTap);
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(
-                              height: screenHeight / 32,
-                            );
-                          },
-
-                        ),
-                      )))));
+                    //tileColor: Colors.green,
+                    child: ListView.separated(
+                      itemCount: 8,
+                      //clipBehavior: Clip.antiAliasWithSaveLayer,
+                      itemBuilder: (BuildContext context, int index) {
+                        var onTap = index == 7 // TODO: onTap for each button
+                            ? () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          title: Text("Выход"),
+                                          content: Text("Выйти из приложения?"),
+                                          actionsPadding: EdgeInsets.all(10),
+                                          actions: [
+                                            RaisedButton(
+                                              onPressed: () {
+                                                exit(0);
+                                              },
+                                              child: Text("Да"),
+                                            ),
+                                            RaisedButton(
+                                                color: Colors.lightGreen,
+                                                textColor: Colors.white,
+                                                disabledColor: Colors.grey,
+                                                disabledTextColor: Colors.black,
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text("Нет"))
+                                          ],
+                                        ));
+                              }
+                            : () {
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, routes[index],
+                                    arguments: sessionData);
+                              };
+                        return ListTile(
+                            title: textElements[index], onTap: onTap);
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          height: screenHeight / 32,
+                        );
+                      },
+                    ),
+                  )))));
 }
 
 class MyPainter extends CustomPainter {
@@ -71,7 +112,8 @@ class MyPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    size = size.width < size.height ? size : Size(size.height * 3 / 4, size.width);
+    size =
+        size.width < size.height ? size : Size(size.height * 3 / 4, size.width);
     final sizeB = Size(size.width * 2, size.height + size.height * 0.5);
     var rect = Offset(-size.width, -size.height * 0.25) & sizeB;
     canvas.drawOval(rect, Paint()..color = Colors.white);

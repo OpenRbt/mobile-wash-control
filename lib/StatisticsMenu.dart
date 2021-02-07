@@ -10,9 +10,11 @@ class StatisticsMenu extends StatefulWidget {
 
 class _StatisticsMenuState extends State<StatisticsMenu> {
   _StatisticsMenuState() : super();
+  SessionData sessionData;
 
   @override
   Widget build(BuildContext context) {
+
     final AppBar appBar = AppBar(
       title: Text("Статистика"),
     );
@@ -21,7 +23,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: appBar,
-      drawer: prepareDrawer(context, Pages.Statistics),
+      drawer: prepareDrawer(context, Pages.Statistics,sessionData),
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new SizedBox(

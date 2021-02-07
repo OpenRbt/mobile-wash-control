@@ -10,6 +10,7 @@ class ProgramsMenu extends StatefulWidget {
 
 class _ProgramsMenuState extends State<ProgramsMenu> {
   _ProgramsMenuState() : super();
+  SessionData sessionData;
 
   List<bool> _ProgramsCheckbox = List.generate(6, (index) {
     return false;
@@ -33,7 +34,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: appBar,
-      drawer: prepareDrawer(context, Pages.Programs),
+      drawer: prepareDrawer(context, Pages.Programs,sessionData),
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new SizedBox(

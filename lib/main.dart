@@ -456,50 +456,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.pushNamed(context, "/home/editPost",
                       arguments: PostMenuArgs(-1));
-                }),
-            RaisedButton(
-                child: Text("programs"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/home/programs");
-                }),
-            RaisedButton(
-                child: Text("settings"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/home/settings");
-                }),
-            RaisedButton(
-                child: Text("statistics"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/home/statistics");
-                }),
-            RaisedButton(
-                child: Text("dozatrons"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/home/dozatrons");
-                }),
-            RaisedButton(
-                child: Text("posts"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/home/posts");
-                }),
-            RaisedButton(
-                child: Text("accounts"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/home/accounts");
-                }),
-            RaisedButton(
-                child: Text("TestClient"),
-                onPressed: () {
-                  var api_instance = new DefaultApi();
-                  var args = new Args2(); // Args2 |
-
-                  try {
-                    api_instance.addServiceAmount(args);
-                  } catch (e) {
-                    print(
-                        "Exception when calling DefaultApi->addServiceAmount: $e\n");
-                  }
-                }),
+                })
           ],
         ),
       ),
