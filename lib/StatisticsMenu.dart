@@ -10,10 +10,11 @@ class StatisticsMenu extends StatefulWidget {
 
 class _StatisticsMenuState extends State<StatisticsMenu> {
   _StatisticsMenuState() : super();
-  SessionData sessionData;
 
   @override
   Widget build(BuildContext context) {
+    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+
     final AppBar appBar = AppBar(
       title: Text("Статистика"),
     );

@@ -1,24 +1,21 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 
 class PostMenuArgs {
   final int postID;
-  PostMenuArgs(this.postID);
+  final SessionData client;
+  PostMenuArgs(this.postID, this.client);
 }
 
 class EditPostMenu extends StatefulWidget {
-  final int postID;
-  EditPostMenu({Key key, @required this.postID}) : super(key: key);
+  EditPostMenu({Key key}) : super(key: key);
 
   @override
-  _EditPostMenuState createState() => _EditPostMenuState(postID);
+  _EditPostMenuState createState() => _EditPostMenuState();
 }
 
 class _EditPostMenuState extends State<EditPostMenu> {
-  int _postID;
-  _EditPostMenuState(this._postID) : super() {
-    _postID = _postID == null ? -1 : _postID;
-  }
 
   List<bool> _checkboxList = [false, false, false, false, false, false];
   final List<String> _buttonNames = [
@@ -32,9 +29,11 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final PostMenuArgs postMenuArgs = ModalRoute.of(context).settings.arguments;
+
 
     final AppBar appBar = AppBar(
-      title: Text("Пост: ${this._postID}"),
+      title: Text("Пост: ${postMenuArgs.postID}"),
     );
 
     double screenH = MediaQuery.of(context).size.height;
@@ -67,7 +66,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
           Divider(
             height: 5,
             thickness: 5,
-            color: Colors.green,
+            color: Colors.lightGreen,
           ),
           Row(
             children: [
@@ -106,7 +105,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
               ),
               decoration: BoxDecoration(
                 color: Colors.black12,
-                border: Border.all(color: Colors.green),
+                border: Border.all(color: Colors.lightGreen),
               ),
             ),
           ),
@@ -127,8 +126,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
                       child: IconButton(
                         iconSize: 75,
                         icon: Icon(Icons.remove_circle_outline),
-                        color: Colors.green,
-                        splashColor: Colors.greenAccent,
+                        color: Colors.lightGreen,
+                        splashColor: Colors.lightGreenAccent,
                         onPressed: () {
                           print("remove btn");
                         },
@@ -156,8 +155,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
                       child: IconButton(
                         iconSize: 75,
                         icon: Icon(Icons.add_circle_outline),
-                        color: Colors.green,
-                        splashColor: Colors.greenAccent,
+                        color: Colors.lightGreen,
+                        splashColor: Colors.lightGreenAccent,
                         onPressed: () {
                           print("add btn");
                         },

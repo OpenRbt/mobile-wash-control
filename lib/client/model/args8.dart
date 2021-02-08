@@ -2,7 +2,7 @@ part of swagger.api;
 
 class Args8 {
   
-  String hash = null;
+  Hash hash = null;
   
 
   KeyPair keyPair = null;
@@ -19,7 +19,7 @@ class Args8 {
     hash =
       
       
-      json['hash']
+      new Hash.fromJson(json['hash'])
 ;
     keyPair =
       

@@ -10,12 +10,13 @@ class DozatronsMenu extends StatefulWidget {
 
 class _DozatronsMenuState extends State<DozatronsMenu> {
   _DozatronsMenuState() : super();
-  SessionData sessionData;
 
   List<String> _DozatronsDown = ["Активная пена", "Шампунь", "Воск", "Полимер"];
 
   @override
   Widget build(BuildContext context) {
+    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+
     final AppBar appBar = AppBar(
       title: Text("Дозатроны"),
     );

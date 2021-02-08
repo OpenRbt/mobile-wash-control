@@ -10,10 +10,11 @@ class SettingsMenu extends StatefulWidget {
 
 class _SettingsMenuState extends State<SettingsMenu> {
   _SettingsMenuState() : super();
-  SessionData sessionData;
 
   @override
   Widget build(BuildContext context) {
+    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+
     final AppBar appBar = AppBar(
       title: Text("Настройки"),
     );
@@ -97,7 +98,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color:
-                                    index % 2 == 0 ? Colors.green : Colors.red),
+                                    index % 2 == 0 ? Colors.lightGreen : Colors.red),
                           )
                         ]);
                       })),

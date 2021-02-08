@@ -2,7 +2,7 @@ part of swagger.api;
 
 class Args11 {
   
-  String hash = null;
+  Hash hash = null;
   
   Args11();
 
@@ -16,7 +16,7 @@ class Args11 {
     hash =
       
       
-      json['hash']
+      new Hash.fromJson(json['hash'])
 ;
   }
 

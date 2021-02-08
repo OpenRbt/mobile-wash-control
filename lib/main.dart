@@ -2,6 +2,7 @@ import 'dart:core';
 //import 'dart:io';
 
 import 'package:mobile_wash_control/AccountsMenu.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/DozatronsMenu.dart';
 import 'package:mobile_wash_control/HomePage.dart';
 import 'package:mobile_wash_control/EditPostMenu.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Mobile Wash Control',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.lightGreen,
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
         // closer together (more dense) than on mobile platforms.
@@ -44,13 +45,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => MyHomePage(title: "Welcome"),
+        "/": (context) => MyHomePage(title: "Главная страница"),
         "/testScan": (context) => ServersPage(
               servers: null,
               serversValid: [],
             ),
         "/home": (context) => HomePage(),
-        "/home/editPost": (context) => EditPostMenu(postID: null),
+        "/home/editPost": (context) => EditPostMenu(),
         "/home/programs": (context) => ProgramsMenu(),
         "/home/settings": (context) => SettingsMenu(),
         "/home/statistics": (context) => StatisticsMenu(),
@@ -116,295 +117,43 @@ class _MyHomePageState extends State<MyHomePage> {
           _api.apiClient.basePath = "http://" + _servers[i] + ":8020";
 
           _serversValid[i] = true;
-          try {
-            var args = new Args();
-            args.id = 1;
-            args.startDate = new DateTime.now()
-                .add(new Duration(days: -30))
-                .millisecondsSinceEpoch;
-            args.endDate = new DateTime.now().millisecondsSinceEpoch;
-            StationReport res = await _api.stationReportDates(args);
-            print(res);
-          } catch (e) {
-            print(
-                "Exception when calling DefaultApi->station-report-dates: $e\n");
-          }
 
-          try {
-            var args = new Args1();
-            args.id = 1;
-            var res = await _api.stationReportCurrentMoney(args);
-            print(res);
-          } catch (e) {
-            print(
-                "Exception when calling DefaultApi->station-report-current-money: $e\n");
-          }
-
-          try {
-            StatusReport statusReport = await _api.status();
-            print(statusReport);
-          } catch (e) {
-            print("Exception when calling DefaultApi->status: $e\n");
-          }
-
-          try {
-            StatusCollectionReport statusCollectionReport =
-                await _api.statusCollection();
-            print(statusCollectionReport);
-          } catch (e) {
-            print(
-                "Exception when calling DefaultApi->/status-collection: $e\n");
-          }
-
-          try {
-            var args = new Args2();
-            args.amount = 10;
-            args.hash = "somehash";
-            var res = await _api.addServiceAmount(args);
-            print(res);
-          } catch (e) {
-            print(
-                "Exception when calling DefaultApi->add-service-amount: $e\n");
-          }
-
-          try {
-            var args = new Args3();
-            args.id = -1;
-            args.hash = "somehash";
-            args.name = "somename";
-            var res = await _api.setStation(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->set-station: $e\n");
-          }
-
-          try {
-            var args = new Args4();
-            args.id = -1;
-            var res = await _api.delStation(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->del-station: $e\n");
-          }
-
-          try {
-            var args = new RelayReport();
-            args.hash = "somehash";
-            args.relayStats = List.generate(3, (index) {
-              var tmp = new RelayStat();
-              tmp.relayID = index;
-              tmp.switchedCount = index * 5;
-              tmp.totalTimeOn = index * 30;
-              return tmp;
-            });
-            var res = await _api.saveRelay(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->save-relay: $e\n");
-          }
-
-          try {
-            var args = new Args5();
-            args.hash = "somehash";
-            var res = await _api.loadRelay(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->load-relay: $e\n");
-          }
-
-          try {
-            var args = new MoneyReport();
-            args.hash = "somehash";
-            args.banknotes = 100;
-            args.carsTotal = 200;
-            args.coins = 300;
-            args.electronical = 400;
-            args.service = 500;
-            var res = await _api.saveMoney(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->save-money: $e\n");
-          }
-
-          try {
-            var args = new Args6();
-            args.id = -1;
-            var res = await _api.saveCollection(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->save-collection: $e\n");
-          }
-
-          try {
-            var args = new Args7();
-            args.hash = "somehash";
-            var res = await _api.loadMoney(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->load-money: $e\n");
-          }
-
-          try {
-            var args = new Args8();
-            args.hash = "somehash";
-            args.keyPair = new KeyPair();
-            args.keyPair.key = "somekey";
-            args.keyPair.value = "somevalue";
-            var res = await _api.save(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->load: $e\n");
-          }
-
-          try {
-            var args = new Args9();
-            args.key = "somekey";
-            args.hash = "somehash";
-            var res = await _api.load(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->save: $e\n");
-          }
-
-          try {
-            var args = new Args10();
-            args.hash = "somehash";
-            var res = await _api.ping(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->Ping: $e\n");
-          }
+          // try {
+          //   var args = new Args10();
+          //   args.hash = "somehash";
+          //   var res = await _api.ping(args);
+          //   print(res);
+          // } catch (e) {
+          //   print("Exception when calling DefaultApi->Ping: $e\n");
+          // }
 
           try {
             var res = await _api.getPing();
             print(res);
           } catch (e) {
+            _serversValid[i] = false;
             print("Exception when calling DefaultApi->getPing: $e\n");
           }
 
-          try {
-            var res = await _api.info();
-            print(res);
-          } catch (e) {
-            _serversValid[i] = false;
-            print("Exception when calling DefaultApi->info: $e\n");
-          }
-          try {
-            var args = new Args11();
-            args.hash = "somehash";
-            var res = await _api.stationByHash(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->station-by-hash: $e\n");
-          }
-
-          try {
-            var args = new Args12();
-            args.hash = "somehash";
-            args.keyPair = new KeyPair();
-            args.keyPair.key = "somekey";
-            args.keyPair.value = "somevalue";
-            var res = _api.saveIfNotExists(args);
-            print(res);
-          } catch (e) {
-            print(
-                "Exception when calling DefaultApi->save-if-not-exists: $e\n");
-          }
-
-          try {
-            var res = await _api.stationsVariables();
-            print(res);
-          } catch (e) {
-            print(
-                "Exception when calling DefaultApi->stations-variables: $e\n");
-          }
-
-          try {
-            var args = new Args13();
-            args.stationID = -1;
-            var res = _api.openStation(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->open-station: $e\n");
-          }
-
-          try {
-            var args = new Args14();
-            args.stationID = -1;
-            var res = _api.programs(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->programs: $e\n");
-          }
-
-          try {
-            var args = new Args15();
-            args.stationID = -1;
-            args.programID = 1;
-            args.name = "somename";
-            var res = _api.setProgramName(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->set-program-name: $e\n");
-          }
-
-          try {
-            var args = new Args16();
-            args.stationID = 1;
-            args.programID = 9;
-            var res = await _api.programRelays(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->program-relays: $e\n");
-          }
-
-          try {
-            var args = new Args17();
-            args.stationID = -1;
-            args.programID = 1;
-            args.relays = List.generate(8, (index) {
-              var conf = new RelayConfig();
-              conf.id = index;
-              conf.timeon = index * 10;
-              conf.timeoff = index * 10 + 10;
-              conf.prfelight = index * 10;
-              return conf;
-            });
-            var res = _api.setProgramRelays(args);
-            print(res);
-          } catch (e) {
-            print(
-                "Exception when calling DefaultApi->set-program-relays: $e\n");
-          }
-
-          try {
-            var res = await _api.kasse();
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->kasse: $e\n");
-          }
-
-          try {
-            var args = new KasseConfig();
-            args.tax = "TAX_VAT110";
-            args.receiptItemName = "someitemname";
-            args.cashier = "IVANOV IVAN IVANOVICH";
-            args.cashierINN = "123456789012";
-            var res = await _api.setKasse(args);
-            print(res);
-          } catch (e) {
-            print("Exception when calling DefaultApi->set-kasse: $e\n");
-          }
+          // try {
+          //   var res = await _api.info();
+          //   print(res);
+          // } catch (e) {
+          //   _serversValid[i] = false;
+          //   print("Exception when calling DefaultApi->info: $e\n");
+          // }
         }
 
         setState(() {
-          _scanMSG += "Found ${_servers.length} servers";
+          _scanMSG = _servers.length > 0
+              ? "Доступные серверы: "
+              : "Не найдено серверов";
           _canScan = true;
         });
       });
     } else {
       setState(() {
-        _scanMSG = "Not connected to WiFi";
+        _scanMSG = "Нет подключения к WiFi";
         _canScan = true;
       });
     }
@@ -412,6 +161,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var appBar = AppBar(
+      title: Text(widget.title),
+    );
+
+    var screenW = MediaQuery.of(context).size.width;
+    var screenH = MediaQuery.of(context).size.height;
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -419,11 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+      appBar: appBar,
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
@@ -442,21 +194,60 @@ class _MyHomePageState extends State<MyHomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            _buildServersButton(),
-            Text(_canScan ? _scanMSG : ""),
-            RaisedButton(
-                child: Text("Home"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/home");
-                }),
-            RaisedButton(
-                child: Text("EditPost"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/home/editPost",
-                      arguments: PostMenuArgs(-1));
-                })
+            SizedBox(
+                height: 100,
+                width: screenW,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildServersButton(),
+                    Text(
+                      _canScan ? _scanMSG : "",
+                      style: TextStyle(fontSize: 30),
+                    ),
+                  ],
+                )),
+            SizedBox(
+              height: screenH - appBar.preferredSize.height - 150,
+              child: ListView.separated(
+                separatorBuilder: (BuildContext context, int index) {
+                  return Divider(
+                    height: 5,
+                    color: Colors.black38,
+                    thickness: 5,
+                  );
+
+                },
+                itemCount: _servers.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    tileColor: Colors.black12,
+                    title: Text(
+                      "Server: " + _servers[index],
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    trailing: Icon(
+                      _serversValid[index] ? Icons.check_circle : Icons.circle,
+                      color:
+                          _serversValid[index] ? Colors.lightGreen : Colors.red,
+                      size: 30,
+                    ),
+                    onTap: _serversValid[index]
+                        ? () {
+                            var api = DefaultApi();
+                            api.apiClient.basePath =
+                                "http://" + _servers[index] + ":8020";
+                            var session = SessionData("0000", api);
+                            Navigator.pushNamed(context, "/home",
+                                arguments: session);
+                          }
+                        : null,
+                  );
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -467,28 +258,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildServersButton() {
     return new RaisedButton(
-        color: _servers.length < 1 ? Colors.redAccent : Colors.green,
-        child: new Text(_canScan
-            ? (_servers.length < 1 ? "No servers found" : "Open server list")
-            : "Scanning"),
-        onPressed: (!_canScan || _servers.length < 1)
-            ? null
-            : () {
-                //await _scanLan();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ServersPage(
-                              servers: _servers,
-                              serversValid: _serversValid,
-                            )));
-              });
-  }
-
-  Widget _buildScanButton() {
-    return new FloatingActionButton(
-      backgroundColor: _canScan ? Colors.green : Colors.yellow,
-      splashColor: Colors.greenAccent,
+      color: _canScan ? Colors.lightGreen : Colors.yellow,
+      splashColor: Colors.lightGreenAccent,
+      child: new Text(_canScan ? ("Поиск серверов") : "Сканирование"),
       onPressed: _canScan
           ? () {
               _scanLan();
@@ -496,8 +268,18 @@ class _MyHomePageState extends State<MyHomePage> {
           : () {
               print("cant_scan");
             },
-      tooltip: 'Scan servers',
-      child: Icon(Icons.network_check),
+    );
+  }
+
+  Widget _buildScanButton() {
+    return new FloatingActionButton(
+      backgroundColor: Colors.lightGreen,
+      splashColor: Colors.lightGreenAccent,
+      onPressed: () {
+        Navigator.pushNamed(context, '/home');
+      },
+      tooltip: '',
+      child: Icon(Icons.home),
     );
   }
 }

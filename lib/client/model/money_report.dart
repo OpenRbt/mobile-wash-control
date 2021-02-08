@@ -1,24 +1,24 @@
 part of swagger.api;
 
 class MoneyReport {
-
+  
   int carsTotal = null;
-
+  
 
   int coins = null;
-
+  
 
   int banknotes = null;
-
+  
 
   int electronical = null;
-
+  
 
   int service = null;
+  
 
-
-  String hash = null;
-
+  Hash hash = null;
+  
   MoneyReport();
 
   @override
@@ -44,8 +44,10 @@ class MoneyReport {
         json['service']
     ;
     hash =
-      json['hash']
-    ;
+      
+      
+      new Hash.fromJson(json['hash'])
+;
   }
 
   Map<String, dynamic> toJson() {

@@ -10,10 +10,11 @@ class AccountsMenu extends StatefulWidget {
 
 class _AccountsMenuState extends State<AccountsMenu> {
   _AccountsMenuState() : super();
-  SessionData sessionData;
 
   @override
   Widget build(BuildContext context) {
+    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+
     final AppBar appBar = AppBar(
       title: Text("Учетки"),
     );

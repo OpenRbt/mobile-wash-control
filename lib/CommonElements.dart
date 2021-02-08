@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:io';
+import 'client/api.dart';
 
 enum Pages { Main, Posts, Programs, Dozatrons, Settings, Accounts, Statistics }
 
 class SessionData {
   final String pin;
-  final String host;
-  SessionData(this.pin, this.host);
+  final DefaultApi client;
+  SessionData(this.pin, this.client);
 }
 
 //TODO: bottom and top padding for menu items (stretch ListView?), scale menu items to fit menu
@@ -53,7 +54,10 @@ Widget prepareDrawer(
       //minimum: const EdgeInsets.all(16.0), TODO: check if needed on devices with different designs
       child: FittedBox(
           child: Container(
-              width: screenWidth * 3 / 4 * (isPortrait ? 1 : screenHeight / screenWidth),
+              width: screenWidth *
+                  3 /
+                  4 *
+                  (isPortrait ? 1 : screenHeight / screenWidth),
               height: screenHeight,
               child: CustomPaint(
                   painter: MyPainter(context),

@@ -1,16 +1,60 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+
+import 'EditPostMenu.dart';
+
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+class HomePageData {
+  final int id;
+  final String name;
+  final String hash;
+  final String status;
+  final String info;
+
+  HomePageData(this.id, this.name, this.hash, this.status, this.info);
+}
+
 class _HomePageState extends State<HomePage> {
-  SessionData sessionData;
+  bool _firstLoad = true;
+  List<HomePageData> _homePageData = List.generate(12, (index) {
+    return new HomePageData(-1, "Loading...", "...", "...", "...");
+  });
+
+  final List<String> _buttonLabel = ["П", "Ш", "О", "В", "С", "| |"];
+
+  void GetStations(SessionData sessionData) async {
+    try {
+      var res = await sessionData.client.status();
+
+      setState(() {
+        _homePageData = List.generate((res.stations.length), (index) {
+          return new HomePageData(
+              res.stations[index].id,
+              res.stations[index].name,
+              res.stations[index].hash,
+              res.stations[index].status.toString(),
+              res.stations[index].info);
+        });
+
+        _homePageData.sort((a, b) => a.id.compareTo(b.id));
+        _firstLoad = false;
+      });
+    } catch (e) {
+      print("Exception when calling DefaultApi->Status: $e\n");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+
+    if (_firstLoad) {
+      GetStations(sessionData);
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -24,143 +68,60 @@ class _HomePageState extends State<HomePage> {
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
-              children: List.generate(12, (index) {
-                return SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: DecoratedBox(
-                    decoration: const BoxDecoration(color: Colors.black12),
-                    //padding: const EdgeInsets.all(0),
-                    //color: Colors.black12,
-                    //onPressed: () {},
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                            height: 50,
-                            width: 200,
-                            child: Column(
-                              children: [
-                                Text("FIELD: ${index + 1}"),
-                                Text("PROGRAM: ${index + 1}"),
-                              ],
-                            )),
-                        SizedBox(
-                            height: 102.5,
-                            width: 200,
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: FlatButton(
-                                        color: Colors.lightGreen,
-                                        splashColor: Colors.lightGreenAccent,
-                                        onPressed: () {
-                                          print(
-                                              "Tapped on button 1 from ${index + 1}");
-                                        },
-                                        child: Text("1"),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 2.5,
-                                    ),
-                                    SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: FlatButton(
-                                        color: Colors.lightGreen,
-                                        splashColor: Colors.lightGreenAccent,
-                                        onPressed: () {
-                                          print(
-                                              "Tapped on button 2 from ${index + 1}");
-                                        },
-                                        child: Text("2"),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 2.5,
-                                    ),
-                                    SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: FlatButton(
-                                        color: Colors.lightGreen,
-                                        splashColor: Colors.lightGreenAccent,
-                                        onPressed: () {
-                                          print(
-                                              "Tapped on button 3 from ${index + 1}");
-                                        },
-                                        child: Text("3"),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 2.5,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: FlatButton(
-                                        color: Colors.lightGreen,
-                                        splashColor: Colors.lightGreenAccent,
-                                        onPressed: () {
-                                          print(
-                                              "Tapped on button 4 from ${index + 1}");
-                                        },
-                                        child: Text("4"),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 2.5,
-                                    ),
-                                    SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: FlatButton(
-                                        color: Colors.lightGreen,
-                                        splashColor: Colors.lightGreenAccent,
-                                        onPressed: () {
-                                          print(
-                                              "Tapped on button 5 from ${index + 1}");
-                                        },
-                                        child: Text("5"),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 2.5,
-                                    ),
-                                    SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: FlatButton(
-                                        color: Colors.lightGreen,
-                                        splashColor: Colors.lightGreenAccent,
-                                        onPressed: () {
-                                          print(
-                                              "Tapped on button 6 from ${index + 1}");
-                                        },
-                                        child: Text("6"),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ))
-                      ],
+              childAspectRatio: 1,
+              children: List.generate(_homePageData.length, (index) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      width: 165,
+                      child: RaisedButton(
+                        color: Colors.lightGreen,
+                        highlightColor: Colors.lightGreenAccent,
+                        onPressed: () {
+                          var args = PostMenuArgs(
+                              _homePageData[index].id, sessionData);
+                          Navigator.pushNamed(context, "/home/editPost",
+                              arguments: args);
+                        },
+                        child: Column(
+                          children: [
+                            Text("${_homePageData[index].id}"),
+                            Text(_homePageData[index].name),
+                            Text("PROGRAM: __"),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 115,
+                      width: 165,
+                      child: DecoratedBox(
+                          child: GridView.count(
+                            physics: NeverScrollableScrollPhysics(),
+                            crossAxisCount: 3,
+                            children: List.generate(6, (btn) {
+                              return SizedBox(
+                                  height: 50,
+                                  width: 200,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: RaisedButton(
+                                      color: btn == 5
+                                          ? Colors.lightGreenAccent
+                                          : Colors.white,
+                                      onPressed: () {},
+                                      child: Text(_buttonLabel[btn]),
+                                    ),
+                                  ));
+                            }),
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black26,
+                          )),
+                    )
+                  ],
                 );
               }),
             );

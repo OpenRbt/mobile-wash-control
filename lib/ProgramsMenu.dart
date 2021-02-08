@@ -10,7 +10,6 @@ class ProgramsMenu extends StatefulWidget {
 
 class _ProgramsMenuState extends State<ProgramsMenu> {
   _ProgramsMenuState() : super();
-  SessionData sessionData;
 
   List<bool> _ProgramsCheckbox = List.generate(6, (index) {
     return false;
@@ -26,6 +25,8 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+
     final AppBar appBar = AppBar(
       title: Text("Программы"),
     );
