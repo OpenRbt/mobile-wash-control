@@ -16,6 +16,8 @@ class EditPostMenu extends StatefulWidget {
 }
 
 class _EditPostMenuState extends State<EditPostMenu> {
+  int _total = 0;
+
 
   List<bool> _checkboxList = [false, false, false, false, false, false];
   final List<String> _buttonNames = [
@@ -100,7 +102,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 fit: BoxFit.fitHeight,
                 child: Padding(
                   padding: EdgeInsets.all(2),
-                  child: Text("0000"),
+                  child: Text("${'0'*(4 - _total.toString().length)+ _total.toString()}"),
                 ),
               ),
               decoration: BoxDecoration(
@@ -129,7 +131,10 @@ class _EditPostMenuState extends State<EditPostMenu> {
                         color: Colors.lightGreen,
                         splashColor: Colors.lightGreenAccent,
                         onPressed: () {
-                          print("remove btn");
+                          setState(() {
+                            _total -= 10;
+                            _total = _total < 0 ? 0 : _total;
+                          });
                         },
                       ),
                     )),
@@ -158,7 +163,10 @@ class _EditPostMenuState extends State<EditPostMenu> {
                         color: Colors.lightGreen,
                         splashColor: Colors.lightGreenAccent,
                         onPressed: () {
-                          print("add btn");
+                          setState(() {
+                            _total += 10;
+                            _total = _total > 9999 ? 9990 : _total;
+                          });
                         },
                       ),
                     )),

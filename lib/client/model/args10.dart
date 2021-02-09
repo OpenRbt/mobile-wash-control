@@ -4,11 +4,17 @@ class Args10 {
   
   Hash hash = null;
   
+
+  int currentBalance = null;
+  
+
+  int currentProgram = null;
+  
   Args10();
 
   @override
   String toString() {
-    return 'Args10[hash=$hash, ]';
+    return 'Args10[hash=$hash, currentBalance=$currentBalance, currentProgram=$currentProgram, ]';
   }
 
   Args10.fromJson(Map<String, dynamic> json) {
@@ -18,11 +24,19 @@ class Args10 {
       
       new Hash.fromJson(json['hash'])
 ;
+    currentBalance =
+        json['currentBalance']
+    ;
+    currentProgram =
+        json['currentProgram']
+    ;
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'hash': hash
+      'hash': hash,
+      'currentBalance': currentBalance,
+      'currentProgram': currentProgram
      };
   }
 

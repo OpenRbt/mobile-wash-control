@@ -14,14 +14,16 @@ class HomePageData {
   final String hash;
   final String status;
   final String info;
+  final int programID;
 
-  HomePageData(this.id, this.name, this.hash, this.status, this.info);
+  HomePageData(
+      this.id, this.name, this.hash, this.status, this.info, this.programID);
 }
 
 class _HomePageState extends State<HomePage> {
   bool _firstLoad = true;
-  List<HomePageData> _homePageData = List.generate(12, (index) {
-    return new HomePageData(-1, "Loading...", "...", "...", "...");
+  List<HomePageData> _homePageData = List.generate(8, (index) {
+    return new HomePageData(-1, "Loading...", "...", "...", "...", -1);
   });
 
   final List<String> _buttonLabel = ["П", "Ш", "О", "В", "С", "| |"];
@@ -30,6 +32,9 @@ class _HomePageState extends State<HomePage> {
     try {
       var res = await sessionData.client.status();
 
+      if (!mounted){
+        return;
+      }
       setState(() {
         _homePageData = List.generate((res.stations.length), (index) {
           return new HomePageData(
@@ -37,7 +42,8 @@ class _HomePageState extends State<HomePage> {
               res.stations[index].name,
               res.stations[index].hash,
               res.stations[index].status.toString(),
-              res.stations[index].info);
+              res.stations[index].info,
+              res.stations[index].currentProgram);
         });
 
         _homePageData.sort((a, b) => a.id.compareTo(b.id));
@@ -89,7 +95,8 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text("${_homePageData[index].id}"),
                             Text(_homePageData[index].name),
-                            Text("PROGRAM: __"),
+                            Text(
+                                "PROGRAM: ${_homePageData[index].programID ?? '__'}"),
                           ],
                         ),
                       ),
@@ -108,7 +115,8 @@ class _HomePageState extends State<HomePage> {
                                   child: Padding(
                                     padding: EdgeInsets.all(5),
                                     child: RaisedButton(
-                                      color: btn == 5
+                                      color: btn + 1 ==
+                                              _homePageData[index].programID
                                           ? Colors.lightGreenAccent
                                           : Colors.white,
                                       onPressed: () {},

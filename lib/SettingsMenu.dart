@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 
@@ -13,6 +14,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime currentTime = DateTime.now();
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
 
     final AppBar appBar = AppBar(
@@ -33,26 +35,32 @@ class _SettingsMenuState extends State<SettingsMenu> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        width: screenW / 3,
-                        child: Text("Дата "),
-                      ),
-                      SizedBox(
-                        height: 50,
-                        width: screenW / 3,
-                        child: Text("Время "),
-                      ),
-                      SizedBox(
-                        height: 50,
-                        width: screenW / 3,
-                        child: Text("Темп "),
-                      )
-                    ],
-                  ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Дата ", style: TextStyle(fontSize: 16)),
+                        SizedBox(
+                          width: 80,
+                          child: RaisedButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {},
+                            child: Text(
+                                "${currentTime.day}.${currentTime.month}.${currentTime.year}"),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text("Tемп. ", style: TextStyle(fontSize: 16)),
+                        SizedBox(
+                          width: 40,
+                          child: RaisedButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {},
+                            child: Text("___"),
+                          ),
+                        )
+                      ]),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -87,7 +95,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
                       defaultColumnWidth: FixedColumnWidth(110),
                       children: List.generate(8, (index) {
                         return new TableRow(children: [
-
                           Text(" Пост $index"),
                           Text(
                             "192.168.0.16$index",
@@ -97,8 +104,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             index % 2 == 0 ? "Активный" : "Неактивный",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color:
-                                    index % 2 == 0 ? Colors.lightGreen : Colors.red),
+                                color: index % 2 == 0
+                                    ? Colors.lightGreen
+                                    : Colors.red),
                           )
                         ]);
                       })),

@@ -107,7 +107,9 @@ Widget prepareDrawer(
                                                   ));
                                         }
                                       : () {
-                                          Navigator.pop(context);
+                                          //Navigator.of(context).pop(); //Closing current screen
+                                          Navigator.pop(
+                                              context); //Closing Drawer
                                           Navigator.pushNamed(
                                               context, routes[index],
                                               arguments: sessionData);

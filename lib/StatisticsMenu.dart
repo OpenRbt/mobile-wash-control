@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'client/api.dart';
 
 class StatisticsMenu extends StatefulWidget {
   @override
@@ -8,6 +9,85 @@ class StatisticsMenu extends StatefulWidget {
 
 class _StatisticsMenuState extends State<StatisticsMenu> {
   _StatisticsMenuState() : super();
+  bool _firstLoad = true;
+  bool _updating = false;
+  List<StationReport> _reports = new List();
+  DateTime _startDate = DateTime.now().add(new Duration(days: -31));
+  DateTime _endDate = DateTime.now();
+
+  void _GetStatistics(SessionData sessionData) async {
+    if (_updating) {
+      return;
+    }
+    _updating = true;
+    List<Future<StationReport>> reportsTmp = new List();
+    List<StationReport> reports = new List();
+    for (int i = 0; i < 8; i++) {
+      try {
+        var args = Args();
+        args.id = i + 1;
+        args.startDate = (_startDate.millisecondsSinceEpoch/1000).toInt();
+        args.endDate = (_endDate.millisecondsSinceEpoch/1000).toInt();
+        print("${args.startDate} | ${args.endDate}");
+        reportsTmp.add(sessionData.client.stationReportDates(args));
+      } catch (e) {}
+    }
+
+    for (int i = 0; i < reportsTmp.length; i++) {
+      try {
+        reports.add(await reportsTmp[i]);
+      } catch (e) {
+        print("Exception when calling DefaultApi->/station-report-dates:");
+      }
+    }
+    print("Recieved reports: ${reports.length}");
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _reports = reports;
+    });
+    _updating = false;
+  }
+
+  Future<Null> _selectStartDate(BuildContext context) async {
+    {
+      final DateTime picked = await showDatePicker(
+          context: context,
+          initialDate: _startDate,
+          firstDate: DateTime.now().add(new Duration(days: -365)),
+          lastDate: DateTime.now().add(new Duration(days: 1)));
+
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        if (picked != null && picked != _startDate) {
+          _startDate = picked;
+        }
+      });
+    }
+  }
+
+  Future<Null> _selectEndDate(BuildContext context) async {
+    {
+      final DateTime picked = await showDatePicker(
+          context: context,
+          initialDate: _endDate,
+          firstDate: DateTime.now().add(new Duration(days: -365)),
+          lastDate: DateTime.now().add(new Duration(days: 1)));
+
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        if (picked != null && picked != _endDate) {
+          _endDate = picked;
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +96,11 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
     final AppBar appBar = AppBar(
       title: Text("Статистика"),
     );
+
+    if (_firstLoad){
+      _GetStatistics(sessionData);
+      _firstLoad = false;
+    }
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
@@ -35,47 +120,27 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text("Период с ", style: TextStyle(fontSize: 16)),
-                          SizedBox(width: 5),
-                          Expanded(
-                              child: TextFormField(
-                                onChanged: (s){print('1 ' + s);},
-                                  onEditingComplete: (){print('2 ');},
-                                  onFieldSubmitted: (s){print('3 ');},
-                                  onSaved: (s){print('4 ' + s);},
-                                  onTap: (){print('5 ');},
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black, width: 1.0),
-                                      ),
-                                      hintText: "дата начала"))),
-                          SizedBox(width: 5),
-                          Text(" по ", style: TextStyle(fontSize: 16)),
-                          SizedBox(width: 5),
-                          Expanded(
-                              child: TextFormField(
-                                  onChanged: (s){print('1 ' + s);},
-                                  onEditingComplete: (){print('2 ');},
-                                  onFieldSubmitted: (s){print('3 ');},
-                                  onSaved: (s){print('4 ' + s);},
-                                  onTap: (){print('5 ');},
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black, width: 1.0),
-                                      ),
-                                      hintText: "дата конца"))),
-                          SizedBox(width: 5),
                           RaisedButton(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: Colors.black)),
-                              //textColor: Colors.white,
-                              //disabledColor: Colors.grey,
-                              //disabledTextColor: Colors.black,
-                              onPressed: () {print('Pressed refresh button');},
-                              child: Text("обновить",
-                                  style: TextStyle(fontSize: 18)))
+                            onPressed: () => _selectStartDate(context),
+                            child: Text(
+                                "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
+                          ),
+                          Text(" по ", style: TextStyle(fontSize: 16)),
+
+                          RaisedButton(
+                            onPressed: () => _selectEndDate(context),
+                            child: Text(
+                                "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                          ),
+                          IconButton(
+                              icon: Icon(
+                                Icons.update,
+                                color: _updating ? Colors.yellow : Colors.green,
+                              ),
+                              onPressed: () {
+                                _GetStatistics(sessionData);
+                                setState(() {});
+                              }),
                         ],
                       ),
                       SizedBox(height: 10),
@@ -93,8 +158,8 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                             'авто',
                             'ср. чек'
                           ])
-                        ]..addAll(List.generate(8, (index) {
-                            return createTableRow(List.filled(6, ''));
+                        ]..addAll(List.generate(_reports.length, (index) {
+                            return createTableRow([index+1,_reports[index].moneyReport.banknotes,_reports[index].moneyReport.electronical,_reports[index].moneyReport.service, _reports[index].moneyReport.carsTotal, 0]);
                           })),
                       ),
                       SizedBox(height: 10),

@@ -57,6 +57,10 @@ class ApiClient {
           return new Args16.fromJson(value);
         case 'Args17':
           return new Args17.fromJson(value);
+        case 'Args18':
+          return new Args18.fromJson(value);
+        case 'Args19':
+          return new Args19.fromJson(value);
         case 'Args2':
           return new Args2.fromJson(value);
         case 'Args3':
@@ -73,6 +77,8 @@ class ApiClient {
           return new Args8.fromJson(value);
         case 'Args9':
           return new Args9.fromJson(value);
+        case 'CardReaderConfig':
+          return new CardReaderConfig.fromJson(value);
         case 'CollectionReport':
           return new CollectionReport.fromJson(value);
         case 'Hash':
