@@ -11,7 +11,6 @@ class SessionData {
   SessionData(this.pin, this.client);
 }
 
-//TODO: bottom and top padding for menu items (stretch ListView?), scale menu items to fit menu
 Widget prepareDrawer(
     BuildContext context, Pages selectedPage, SessionData sessionData) {
   var texts = [
@@ -47,74 +46,84 @@ Widget prepareDrawer(
   var screenWidth = MediaQuery.of(context).size.width;
   var screenHeight = MediaQuery.of(context).size.height;
   var isPortrait = screenWidth < screenHeight;
-  //var safeTopPadding = MediaQuery.of(context).padding.top; //statusbar height
-  //var safeBottomPadding = MediaQuery.of(context).padding.top; //buttons? height
 
   return SafeArea(
-      //minimum: const EdgeInsets.all(16.0), TODO: check if needed on devices with different designs
-      child: FittedBox(
-          child: Container(
-              width: screenWidth *
-                  3 /
-                  4 *
-                  (isPortrait ? 1 : screenHeight / screenWidth),
-              height: screenHeight,
-              child: CustomPaint(
-                  painter: MyPainter(context),
-                  child: ListTileTheme(
-                      //tileColor: Colors.green,
-                      child: Flex(direction: Axis.horizontal, children: [
-                    Expanded(
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: 8,
-                        //clipBehavior: Clip.antiAlias,
-                        itemBuilder: (BuildContext context, int index) {
-                          var onTap = index == 7
-                              ? () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                            title: Text("Выход"),
-                                            content:
-                                                Text("Выйти из приложения?"),
-                                            actionsPadding: EdgeInsets.all(10),
-                                            actions: [
-                                              RaisedButton(
-                                                onPressed: () {
-                                                  exit(0);
-                                                },
-                                                child: Text("Да"),
-                                              ),
-                                              RaisedButton(
-                                                  color: Colors.lightGreen,
-                                                  textColor: Colors.white,
-                                                  disabledColor: Colors.grey,
-                                                  disabledTextColor:
-                                                      Colors.black,
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text("Нет"))
-                                            ],
-                                          ));
-                                }
-                              : () {
-                                  Navigator.pop(context);
-                                  Navigator.pushNamed(context, routes[index],
-                                      arguments: sessionData);
-                                };
-                          return ListTile(
-                              title: textElements[index], onTap: onTap);
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(
-                            height: screenHeight / 24,
-                          );
-                        },
-                      ),
-                    )
-                  ]))))));
+      minimum: const EdgeInsets.only(
+          top: 16.0,
+          bottom:
+              16.0), //TODO: check if actually needed on devices with different designs
+      child: ScrollConfiguration(
+          behavior: MyScrollingBehavior(),
+          child: FittedBox(
+              child: Container(
+                  width: screenWidth *
+                      3 /
+                      4 *
+                      (isPortrait ? 1 : screenHeight / screenWidth),
+                  height: screenHeight,
+                  child: CustomPaint(
+                      painter: MyPainter(context),
+                      child: ListTileTheme(
+                          style: ListTileStyle.drawer,
+                          child: Flex(direction: Axis.horizontal, children: [
+                            Expanded(
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                itemCount: 8,
+                                //clipBehavior: Clip.antiAlias,
+                                itemBuilder: (BuildContext context, int index) {
+                                  var onTap = index == 7
+                                      ? () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                    title: Text("Выход"),
+                                                    content: Text(
+                                                        "Выйти из приложения?"),
+                                                    actionsPadding:
+                                                        EdgeInsets.all(10),
+                                                    actions: [
+                                                      RaisedButton(
+                                                        onPressed: () {
+                                                          exit(0);
+                                                        },
+                                                        child: Text("Да"),
+                                                      ),
+                                                      RaisedButton(
+                                                          color:
+                                                              Colors.lightGreen,
+                                                          textColor:
+                                                              Colors.white,
+                                                          disabledColor:
+                                                              Colors.grey,
+                                                          disabledTextColor:
+                                                              Colors.black,
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text("Нет"))
+                                                    ],
+                                                  ));
+                                        }
+                                      : () {
+                                          Navigator.pop(context);
+                                          Navigator.pushNamed(
+                                              context, routes[index],
+                                              arguments: sessionData);
+                                        };
+                                  return ListTile(
+                                      title: textElements[index], onTap: onTap);
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return SizedBox(
+                                    height: screenHeight / 24,
+                                  );
+                                },
+                              ),
+                            )
+                          ])))))));
 }
 
 class MyPainter extends CustomPainter {
@@ -140,5 +149,13 @@ class MyPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
+  }
+}
+
+class MyScrollingBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:core';
 //import 'dart:io';
 
 import 'package:mobile_wash_control/AccountsMenu.dart';
+import 'package:mobile_wash_control/AuthPage.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/DozatronsMenu.dart';
 import 'package:mobile_wash_control/HomePage.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
+        "/auth": (context) => AuthPage(),
         "/": (context) => MyHomePage(title: "Главная страница"),
         "/testScan": (context) => ServersPage(
               servers: null,

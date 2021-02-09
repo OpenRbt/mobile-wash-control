@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 
-class StatisticsMenuArgs {}
-
 class StatisticsMenu extends StatefulWidget {
   @override
   _StatisticsMenuState createState() => _StatisticsMenuState();
@@ -39,7 +37,12 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                           Text("Период с ", style: TextStyle(fontSize: 16)),
                           SizedBox(width: 5),
                           Expanded(
-                              child: TextField(
+                              child: TextFormField(
+                                onChanged: (s){print('1 ' + s);},
+                                  onEditingComplete: (){print('2 ');},
+                                  onFieldSubmitted: (s){print('3 ');},
+                                  onSaved: (s){print('4 ' + s);},
+                                  onTap: (){print('5 ');},
                                   decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -50,7 +53,12 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                           Text(" по ", style: TextStyle(fontSize: 16)),
                           SizedBox(width: 5),
                           Expanded(
-                              child: TextField(
+                              child: TextFormField(
+                                  onChanged: (s){print('1 ' + s);},
+                                  onEditingComplete: (){print('2 ');},
+                                  onFieldSubmitted: (s){print('3 ');},
+                                  onSaved: (s){print('4 ' + s);},
+                                  onTap: (){print('5 ');},
                                   decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -65,7 +73,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                               //textColor: Colors.white,
                               //disabledColor: Colors.grey,
                               //disabledTextColor: Colors.black,
-                              onPressed: () {},
+                              onPressed: () {print('Pressed refresh button');},
                               child: Text("обновить",
                                   style: TextStyle(fontSize: 18)))
                         ],
@@ -84,63 +92,50 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                             'сервисные',
                             'авто',
                             'ср. чек'
-                          ]),
-                          createTableRow(List.filled(6, '')),
-                          createTableRow(List.filled(6, '')),
-                          createTableRow(List.filled(6, '')),
-                          createTableRow(List.filled(6, '')),
-                          createTableRow(List.filled(6, '')),
-                          createTableRow(List.filled(6, '')),
-                          createTableRow(List.filled(6, '')),
-                          createTableRow(List.filled(6, '')),
-                        ],
+                          ])
+                        ]..addAll(List.generate(8, (index) {
+                            return createTableRow(List.filled(6, ''));
+                          })),
                       ),
                       SizedBox(height: 10),
-                      Center(child: Text('Моторесурс', style: TextStyle(fontSize: 22))),
+                      Center(
+                          child: Text('Моторесурс',
+                              style: TextStyle(fontSize: 22))),
                       SizedBox(height: 5),
-                      Center(child:
-                      Wrap(children: [
-                        createPack(1),
-                        createPack(2),
-                        createPack(3),
-                        createPack(4),
-                        createPack(5),
-                        createPack(6),
-                        createPack(7),
-                        createPack(8),
-                      ]))
+                      Center(
+                          child: Wrap(
+                              children: List.generate(
+                                  8, (index) => createMoto(index + 1))))
                     ])));
           },
         ));
   }
 }
 
-Widget createPack(int number) {
+Widget createMoto(int number) {
   return Column(children: [
-  Container(
-      width: 80,
-      height: 18,
-  decoration: BoxDecoration(
-  border: Border.all(color: Colors.black)
-  ), child: Center(child:Text('пост ' + number.toString()))),
-    Container(
-      width: 80,
-        height: 18,
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.black)
-        ), child:  Center(child:Text(''))),
     Container(
         width: 80,
         height: 18,
-        child:RaisedButton(
-            shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.black)),
-              color: Colors.white,
-              disabledColor: Colors.white,
-              onPressed: () {
-                print("Pressed " + number.toString() + " post button");
-              },
-              child: Text("сброс", style: TextStyle(fontSize: 16)))),
+        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+        child: Center(child: Text('пост ' + number.toString()))),
+    Container(
+        width: 80,
+        height: 18,
+        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+        child: Center(child: Text(''))),
+    Container(
+        width: 80,
+        height: 18,
+        child: RaisedButton(
+            shape:
+                RoundedRectangleBorder(side: BorderSide(color: Colors.black)),
+            color: Colors.white,
+            disabledColor: Colors.white,
+            onPressed: () {
+              print("Pressed " + number.toString() + " post reset button");
+            },
+            child: Text("сброс", style: TextStyle(fontSize: 16)))),
     SizedBox(height: 20)
   ]);
 }
