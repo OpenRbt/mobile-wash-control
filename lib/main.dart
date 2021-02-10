@@ -12,6 +12,7 @@ import 'package:mobile_wash_control/ProgramsMenu.dart';
 import 'package:mobile_wash_control/ServersPage.dart';
 import 'package:mobile_wash_control/SettingsMenu.dart';
 import 'package:mobile_wash_control/StatisticsMenu.dart';
+
 import 'package:wifi/wifi.dart';
 import 'package:ping_discover_network/ping_discover_network.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'dart:math';
+import 'package:flutter/services.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -15,8 +15,8 @@ class _AuthPageState extends State<AuthPage> {
 
   void _authCheck(SessionData sessionData) {
     if (_displayedSymbols.toString() == "[0, 0, 0, 0]") {
+      SystemChrome.setPreferredOrientations([]);
       Navigator.pop(context);
-      Navigator.pushNamed(context, '/home', arguments: sessionData);
     }
   }
 
@@ -25,14 +25,23 @@ class _AuthPageState extends State<AuthPage> {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
-    return Scaffold(body: SafeArea(child: OrientationBuilder(
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    return WillPopScope(onWillPop: () async {
+      SystemNavigator.pop();
+      return false;
+    }, child: Scaffold(body: SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
         return new Container(
             width: screenW,
             height: screenH,
             child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(children: [
+                child: ListView(children: [
                   Container(
                     height: 62,
                     width: screenW / 4 * 3,
@@ -86,14 +95,14 @@ class _AuthPageState extends State<AuthPage> {
                   )
                 ])));
       },
-    )));
+    ))));
   }
 
   Widget _keyPadKey(String text, double screenW, double screenH,
       {SessionData sessionData}) {
     return Container(
-        width: screenW / 5,
-        height: screenH / 8,
+        width: screenW / 4,
+        height: 80,
         padding: EdgeInsets.all(2),
         child: RaisedButton(
           shape: RoundedRectangleBorder(
@@ -104,9 +113,7 @@ class _AuthPageState extends State<AuthPage> {
           child: FittedBox(
               fit: BoxFit.fitWidth,
               child: Text(text,
-                  style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold))),
+                  style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold))),
           onPressed: () {
             switch (text) {
               case 'Ок':
