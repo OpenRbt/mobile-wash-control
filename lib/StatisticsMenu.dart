@@ -26,8 +26,8 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
       try {
         var args = Args();
         args.id = i + 1;
-        args.startDate = (_startDate.millisecondsSinceEpoch/1000).toInt();
-        args.endDate = (_endDate.millisecondsSinceEpoch/1000).toInt();
+        args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
+        args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
         print("${args.startDate} | ${args.endDate}");
         reportsTmp.add(sessionData.client.stationReportDates(args));
       } catch (e) {}
@@ -37,7 +37,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
       try {
         reports.add(await reportsTmp[i]);
       } catch (e) {
-        print("Exception when calling DefaultApi->/station-report-dates:");
+        print("Exception when calling DefaultApi->/station-report-dates: $e\n");
       }
     }
     print("Recieved reports: ${reports.length}");
@@ -97,7 +97,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
       title: Text("Статистика"),
     );
 
-    if (_firstLoad){
+    if (_firstLoad) {
       _GetStatistics(sessionData);
       _firstLoad = false;
     }
@@ -126,7 +126,6 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                                 "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
                           ),
                           Text(" по ", style: TextStyle(fontSize: 16)),
-
                           RaisedButton(
                             onPressed: () => _selectEndDate(context),
                             child: Text(
@@ -159,7 +158,14 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                             'ср. чек'
                           ])
                         ]..addAll(List.generate(_reports.length, (index) {
-                            return createTableRow([index+1,_reports[index].moneyReport.banknotes,_reports[index].moneyReport.electronical,_reports[index].moneyReport.service, _reports[index].moneyReport.carsTotal, 0]);
+                            return createTableRow([
+                              index + 1,
+                              _reports[index].moneyReport.banknotes,
+                              _reports[index].moneyReport.electronical,
+                              _reports[index].moneyReport.service,
+                              _reports[index].moneyReport.carsTotal,
+                              0
+                            ]);
                           })),
                       ),
                       SizedBox(height: 10),

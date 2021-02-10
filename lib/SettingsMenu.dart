@@ -4,6 +4,15 @@ import 'package:mobile_wash_control/CommonElements.dart';
 
 class SettingsMenuArgs {}
 
+class SettingsData {
+  final int id;
+  final String name;
+  final String hash;
+  final String status;
+
+  SettingsData(this.id, this.name, this.hash, this.status);
+}
+
 class SettingsMenu extends StatefulWidget {
   @override
   _SettingsMenuState createState() => _SettingsMenuState();
@@ -12,10 +21,43 @@ class SettingsMenu extends StatefulWidget {
 class _SettingsMenuState extends State<SettingsMenu> {
   _SettingsMenuState() : super();
 
+  bool _firstLoad = true;
+  List<SettingsData> _settingsData = List.generate(8, (index) {
+    return new SettingsData(-1, "Loading", "...", "loading");
+  });
+
+  void GetSettings(SessionData sessionData) async {
+    try {
+      var res = await sessionData.client.status();
+
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _settingsData = List.generate((res.stations.length), (index) {
+          return new SettingsData(
+              res.stations[index].id,
+              res.stations[index].name,
+              res.stations[index].hash,
+              res.stations[index].status.value);
+        });
+
+        _settingsData.sort((a, b) => a.id.compareTo(b.id));
+        _firstLoad = false;
+      });
+    } catch (e) {
+      print("Exception when calling DefaultApi->Status: $e\n");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final DateTime currentTime = DateTime.now();
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+
+    if (_firstLoad) {
+      GetSettings(sessionData);
+    }
 
     final AppBar appBar = AppBar(
       title: Text("Настройки"),
@@ -93,22 +135,38 @@ class _SettingsMenuState extends State<SettingsMenu> {
                   Table(
                       border: TableBorder.all(),
                       defaultColumnWidth: FixedColumnWidth(110),
-                      children: List.generate(8, (index) {
+                      children: List.generate(_settingsData.length, (index) {
                         return new TableRow(children: [
-                          Text(" Пост $index"),
+                          Text("${_settingsData[index].name}"),
                           Text(
-                            "192.168.0.16$index",
+                            "___.___.___.___",
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            index % 2 == 0 ? "Активный" : "Неактивный",
+                            "${_settingsData[index].status}",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: index % 2 == 0
+                                color: _settingsData[index].status == "online"
                                     ? Colors.lightGreen
                                     : Colors.red),
                           )
                         ]);
+
+                        // return new TableRow(children: [
+                        //   Text(" Пост $index"),
+                        //   Text(
+                        //     "192.168.0.16$index",
+                        //     textAlign: TextAlign.center,
+                        //   ),
+                        //   Text(
+                        //     index % 2 == 0 ? "Активный" : "Неактивный",
+                        //     textAlign: TextAlign.center,
+                        //     style: TextStyle(
+                        //         color: index % 2 == 0
+                        //             ? Colors.lightGreen
+                        //             : Colors.red),
+                        //   )
+                        // ]);
                       })),
                   SizedBox(
                     height: 25,
@@ -160,5 +218,15 @@ class _SettingsMenuState extends State<SettingsMenu> {
         },
       ),
     );
+  }
+}
+
+TableRow createTableRow(List values) {
+  List<TableCell> result = [];
+  for (var val in values) {
+    result.add(TableCell(
+      verticalAlignment: TableCellVerticalAlignment.middle,
+      child: Center(child: Text(val.toString())),
+    ));
   }
 }

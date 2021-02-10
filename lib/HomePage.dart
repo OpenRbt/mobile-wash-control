@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                         highlightColor: Colors.lightGreenAccent,
                         onPressed: () {
                           var args = PostMenuArgs(
-                              _homePageData[index].id, sessionData);
+                              _homePageData[index].id,_homePageData[index].hash, sessionData);
                           Navigator.pushNamed(context, "/home/editPost",
                               arguments: args);
                         },
