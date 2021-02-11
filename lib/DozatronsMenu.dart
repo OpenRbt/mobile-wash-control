@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/client/api.dart';
 
 class DozatronsMenuArgs {}
 
@@ -12,6 +13,45 @@ class _DozatronsMenuState extends State<DozatronsMenu> {
   _DozatronsMenuState() : super();
 
   List<String> _DozatronsDown = ["Активная пена", "Шампунь", "Воск", "Полимер"];
+
+
+  /*
+    //stub
+    var _firstLoad = true;
+
+    void GetData(SessionData sessionData) async {
+    try {
+      var stationId = 1; //TODO: somehow get station id
+
+      var args14 = Args14();
+      args14.stationID = stationId;
+      List<ProgramInfo> _programms = await sessionData.client.programs(args14);
+      if (!mounted) {
+        return;
+      }
+      setState(() async {
+        for (int i = 0; i < 0; i++)
+          {
+            var args16 = Args16();
+            args16.stationID = stationId;
+            args16.programID = _programms[i].id;
+            InlineResponse2001 programRelays = await sessionData.client.programRelays(args16);
+            var relays = programRelays.relays;
+            relays.first.
+            return new RelayData(
+                programRelay.id,
+                programRelay.name,
+                programRelay.hash,
+                programRelay.status.value);
+          }
+
+        _settingsData.sort((a, b) => a.id.compareTo(b.id));
+        _firstLoad = false;
+      });
+    } catch (e) {
+      print("Exception when calling DefaultApi->: $e\n");
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {

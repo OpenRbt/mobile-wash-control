@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:mobile_wash_control/client/api.dart';
 //import 'dart:io';
 
 import 'package:mobile_wash_control/AccountsMenu.dart';
@@ -279,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.lightGreen,
       splashColor: Colors.lightGreenAccent,
       onPressed: () {
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/home', arguments: SessionData("0000", DefaultApi()));
       },
       tooltip: '',
       child: Icon(Icons.home),
