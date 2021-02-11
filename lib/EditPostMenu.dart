@@ -22,6 +22,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
   bool _firstLoad = true;
   Timer _updateBalanceTimer;
   int _balance = 0;
+  int _current_program = -1;
 
   @override
   void initState() {
@@ -45,6 +46,12 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   void _getBalance(SessionData sessionData, int postID) async {
     try {
+      var res1 = await sessionData.client.status();
+      _current_program = res1.stations
+          .where((element) => element.id == postID)
+          .last
+          .currentProgram;
+      _current_program = _current_program ?? -1;
       var args = Args1();
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
@@ -155,7 +162,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children : [
+            children: [
               // SizedBox(
               //   height: 50,
               //   width: isPortrait ? 50 : (screenW / 3 - 20) / 6,
@@ -326,7 +333,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   Widget _getListButton(int index) {
     return new RaisedButton(
-      color: Colors.lightGreen,
+      color:
+          (_current_program - 1) == index ? Colors.lightGreen : Colors.white10,
       textColor: Colors.white,
       disabledColor: Colors.grey,
       disabledTextColor: Colors.black,

@@ -35,19 +35,19 @@ class _HomePageState extends State<HomePage> {
       if (!mounted){
         return;
       }
-      setState(() {
-        _homePageData = List.generate((res.stations.length), (index) {
-          return new HomePageData(
-              res.stations[index].id,
-              res.stations[index].name,
-              res.stations[index].hash,
-              res.stations[index].status.toString(),
-              res.stations[index].info,
-              res.stations[index].currentProgram);
-        });
+      _homePageData = List.generate((res.stations.length), (index) {
+        return new HomePageData(
+            res.stations[index].id,
+            res.stations[index].name,
+            res.stations[index].hash,
+            res.stations[index].status.toString(),
+            res.stations[index].info,
+            res.stations[index].currentProgram);
+      });
 
-        _homePageData.sort((a, b) => a.id.compareTo(b.id));
-        _firstLoad = false;
+      _homePageData.sort((a, b) => a.id.compareTo(b.id));
+      _firstLoad = false;
+      setState(() {
       });
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");

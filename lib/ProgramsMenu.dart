@@ -42,18 +42,19 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
       if (!mounted) {
         return;
       }
-      setState(() async {
-        var args9 = Args9();
-        args9.hash = stationStatus.hash;
-        for (int i = 0; i < programs.length; i++)
-          {
-            args9.key = programs[i].name;//TODO: check if it is the right key
-            var price = await sessionData.client.load(args9);
-            _prices.add(price);
-          }
-        _ProgramsName = programs.map((p) => p.name);
-        _ProgramsCheckbox[currentProgramId - 1] = true;
-        _firstLoad = false;
+      var args9 = Args9();
+      args9.hash = stationStatus.hash;
+      for (int i = 0; i < programs.length; i++)
+      {
+        args9.key = programs[i].name;//TODO: check if it is the right key
+        var price = await sessionData.client.load(args9);
+        _prices.add(price);
+      }
+      _ProgramsName = programs.map((p) => p.name);
+      _ProgramsCheckbox[currentProgramId - 1] = true;
+      _firstLoad = false;
+
+      setState(()  {
       });
     } catch (e) {
       print("Exception when calling DefaultApi->programs in ProgramsMenu: $e\n");
