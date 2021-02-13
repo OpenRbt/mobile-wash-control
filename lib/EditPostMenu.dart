@@ -72,7 +72,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
     final PostMenuArgs postMenuArgs = ModalRoute.of(context).settings.arguments;
 
     if (_firstLoad) {
-      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+      _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
+      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 15), (timer) {
         _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
       });
       _firstLoad = false;

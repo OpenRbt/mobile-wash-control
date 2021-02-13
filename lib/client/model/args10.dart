@@ -2,7 +2,7 @@ part of swagger.api;
 
 class Args10 {
   
-  Hash hash = null;
+  String hash = null;
   
 
   int currentBalance = null;
@@ -22,7 +22,7 @@ class Args10 {
     hash =
       
       
-      new Hash.fromJson(json['hash'])
+      json['hash']
 ;
     currentBalance =
         json['currentBalance']

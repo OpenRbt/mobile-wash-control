@@ -8,12 +8,47 @@ class AccountsMenu extends StatefulWidget {
   _AccountsMenuState createState() => _AccountsMenuState();
 }
 
+class AccountInfo {
+  String User;
+  String Pin;
+  String Status;
+  AccountInfo(this.User, this.Pin, this.Status);
+}
+
 class _AccountsMenuState extends State<AccountsMenu> {
+  List<AccountInfo> _accounts = List();
+  bool _firstLoad = true;
+
+  void GetUsers(SessionData sessionData) async {
+    try {
+      var res = await sessionData.client.getUsers();
+
+      if (!mounted) {
+        return;
+      }
+      for (var user in res.users) {
+        _accounts.add(AccountInfo(
+            "${user.login} | ${user.lastName} ${user.lastName} ${user.firstName} ${user.middleName}",
+            "TODO",
+            "TODO"));
+      }
+
+      setState(() {});
+    } catch (e) {
+      print("Exception when calling DefaultApi->/users: $e\n");
+    }
+  }
+
   _AccountsMenuState() : super();
 
   @override
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+
+    if (_firstLoad) {
+      GetUsers(sessionData);
+      _firstLoad = false;
+    }
 
     final AppBar appBar = AppBar(
       title: Text("Учетки"),
@@ -64,18 +99,18 @@ class _AccountsMenuState extends State<AccountsMenu> {
                   Table(
                       border: TableBorder.all(),
                       defaultColumnWidth: FixedColumnWidth(screenW / 3 - 10),
-                      children: List.generate(8, (index) {
+                      children: List.generate(_accounts.length, (index) {
                         return new TableRow(children: [
                           Text(
-                            "Пользователь",
+                            "${_accounts[index].User}",
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "0000",
+                            "${_accounts[index].Pin}",
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            index % 2 == 0 ? "Активный" : "Неактивный",
+                            "${_accounts[index].Status}",
                             textAlign: TextAlign.center,
                           )
                         ]);

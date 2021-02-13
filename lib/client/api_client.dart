@@ -20,6 +20,7 @@ class ApiClient {
 
   ApiClient({this.basePath: "http://localhost"}) {
     // Setup authentications (key: authentication name, value: authentication).
+    _authentications['pinCode'] = new ApiKeyAuth("header", "Pin");
   }
 
   void addDefaultHeader(String key, String value) {
@@ -63,6 +64,14 @@ class ApiClient {
           return new Args19.fromJson(value);
         case 'Args2':
           return new Args2.fromJson(value);
+        case 'Args20':
+          return new Args20.fromJson(value);
+        case 'Args21':
+          return new Args21.fromJson(value);
+        case 'Args22':
+          return new Args22.fromJson(value);
+        case 'Args23':
+          return new Args23.fromJson(value);
         case 'Args3':
           return new Args3.fromJson(value);
         case 'Args4':
@@ -81,18 +90,36 @@ class ApiClient {
           return new CardReaderConfig.fromJson(value);
         case 'CollectionReport':
           return new CollectionReport.fromJson(value);
+        case 'FirstName':
+          return new FirstName.fromJson(value);
         case 'Hash':
           return new Hash.fromJson(value);
         case 'InlineResponse200':
           return new InlineResponse200.fromJson(value);
         case 'InlineResponse2001':
           return new InlineResponse2001.fromJson(value);
+        case 'InlineResponse409':
+          return new InlineResponse409.fromJson(value);
+        case 'IsAdmin':
+          return new IsAdmin.fromJson(value);
+        case 'IsEngineer':
+          return new IsEngineer.fromJson(value);
+        case 'IsOperator':
+          return new IsOperator.fromJson(value);
         case 'KasseConfig':
           return new KasseConfig.fromJson(value);
         case 'KeyPair':
           return new KeyPair.fromJson(value);
+        case 'LastName':
+          return new LastName.fromJson(value);
+        case 'Login':
+          return new Login.fromJson(value);
+        case 'MiddleName':
+          return new MiddleName.fromJson(value);
         case 'MoneyReport':
           return new MoneyReport.fromJson(value);
+        case 'Password':
+          return new Password.fromJson(value);
         case 'ProgramInfo':
           return new ProgramInfo.fromJson(value);
         case 'RelayConfig':
@@ -113,6 +140,10 @@ class ApiClient {
           return new StatusCollectionReport.fromJson(value);
         case 'StatusReport':
           return new StatusReport.fromJson(value);
+        case 'UserConfig':
+          return new UserConfig.fromJson(value);
+        case 'UsersReport':
+          return new UsersReport.fromJson(value);
         default:
           {
             Match match;

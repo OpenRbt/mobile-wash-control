@@ -222,7 +222,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.black38,
                     thickness: 5,
                   );
-
                 },
                 itemCount: _servers.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -241,6 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: _serversValid[index]
                         ? () {
                             var api = DefaultApi();
+                            api.apiClient.addDefaultHeader("Pin", "1234");
                             api.apiClient.basePath =
                                 "http://" + _servers[index] + ":8020";
                             var session = SessionData("0000", api);
@@ -280,7 +280,8 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.lightGreen,
       splashColor: Colors.lightGreenAccent,
       onPressed: () {
-        Navigator.pushNamed(context, '/home', arguments: SessionData("0000", DefaultApi()));
+        Navigator.pushNamed(context, '/home',
+            arguments: SessionData("0000", DefaultApi()));
       },
       tooltip: '',
       child: Icon(Icons.home),

@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
-
+    
     if (_firstLoad) {
       GetStations(sessionData);
     }
