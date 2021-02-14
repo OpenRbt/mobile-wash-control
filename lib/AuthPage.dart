@@ -1,17 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_wash_control/client/api.dart';
 
 class AuthPage extends StatefulWidget {
   @override
   _AuthPageState createState() => _AuthPageState();
 }
 
+class AuthArgs {
+  final String Host;
+
+  AuthArgs(this.Host);
+}
+
 class _AuthPageState extends State<AuthPage> {
   _AuthPageState() : super();
+  final int _maxPinLength = 4;
 
+
+  String _host;
+  var _sessionData;
   var _currentDisplayPos = 0;
   List<String> _displayedSymbols = <String>['x', 'x', 'x', 'x'];
+  String _currentPin = "";
+
+  void _loadPage(){
+    SystemChrome.setPreferredOrientations([]);
+    Navigator.pop(context);
+    Navigator.pushNamed(context, "/home", arguments: _sessionData);
+  }
+
+  void _authCheckAlt() async {
+    try {
+      _sessionData = new SessionData(DefaultApi());
+      _sessionData.client.apiClient.basePath = _host;
+      _sessionData.client.apiClient.addDefaultHeader("Pin", _currentPin);
+      var res = await _sessionData.client.getUser();
+      if (res != null){
+        _loadPage();
+      }
+      print(res);
+    } catch (e) {
+      print("Exception when calling DefaultApi->/user: $e\n");
+    }
+  }
 
   void _authCheck(SessionData sessionData) {
     if (_displayedSymbols.toString() == "[0, 0, 0, 0]") {
@@ -20,9 +53,12 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
+  //TODO: Add horizontal layout
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    //final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final AuthArgs authArgs = ModalRoute.of(context).settings.arguments;
+    _host = authArgs.Host;
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
 
@@ -47,7 +83,8 @@ class _AuthPageState extends State<AuthPage> {
                     width: screenW / 4 * 3,
                     child: DecoratedBox(
                       child: Center(
-                          child: Text(_toDisplay(_displayedSymbols),
+                          child: Text(_toDisplayAlt(),
+                              // child: Text(_toDisplay(_displayedSymbols),
                               style: TextStyle(fontSize: 40))),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -89,8 +126,11 @@ class _AuthPageState extends State<AuthPage> {
                     children: [
                       _keyPadKey('с', screenW, screenH), // russian
                       _keyPadKey('0', screenW, screenH),
-                      _keyPadKey('Ок', screenW, screenH,
-                          sessionData: sessionData) // russian
+                      _keyPadKey(
+                        'Ок',
+                        screenW,
+                        screenH,
+                      ) // russian
                     ],
                   )
                 ])));
@@ -98,8 +138,11 @@ class _AuthPageState extends State<AuthPage> {
     ))));
   }
 
-  Widget _keyPadKey(String text, double screenW, double screenH,
-      {SessionData sessionData}) {
+  Widget _keyPadKey(
+    String text,
+    double screenW,
+    double screenH,
+  ) {
     return Container(
         width: screenW / 4,
         height: 80,
@@ -117,16 +160,19 @@ class _AuthPageState extends State<AuthPage> {
           onPressed: () {
             switch (text) {
               case 'Ок':
-                _authCheck(sessionData);
+                _authCheckAlt();
+                // _authCheck(sessionData);
                 break;
               case 'с':
                 setState(() {
-                  _deleteSymbol();
+                  _deleteSymbolAlt();
+                  // _deleteSymbol();
                 });
                 break;
               default:
                 setState(() {
-                  _addSymbol(text);
+                  _addSymbolAlt(text);
+                  // _addSymbol(text);
                 });
                 break;
             }
@@ -158,6 +204,30 @@ class _AuthPageState extends State<AuthPage> {
     for (int i = 0; i <= lastNumberIndex; i++)
       res += i == lastNumberIndex ? values[lastNumberIndex].toString() : '*';
     for (int i = lastNumberIndex + 1; i < 4; i++) res += ' ';
+    return res;
+  }
+
+  void _deleteSymbolAlt() {
+    if (_currentPin.length > 1) {
+      _currentPin = _currentPin.substring(0, _currentPin.length - 1);
+    } else {
+      _currentPin = "";
+    }
+  }
+
+  void _addSymbolAlt(String symbol) {
+    if (_currentPin.length < _maxPinLength) {
+      _currentPin += symbol;
+    }
+  }
+
+  String _toDisplayAlt() {
+    var res = "";
+    if (_currentPin.length > 0) {
+      return _currentPin
+          .substring(_currentPin.length - 1)
+          .padLeft(_currentPin.length, "*");
+    }
     return res;
   }
 }

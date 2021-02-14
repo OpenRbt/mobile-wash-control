@@ -6,10 +6,8 @@ import 'client/api.dart';
 enum Pages { Main, Posts, Programs, Dozatrons, Settings, Accounts, Statistics }
 
 class SessionData {
-  final String pin;
   final DefaultApi client;
-
-  SessionData(this.pin, this.client);
+  SessionData(this.client);
 }
 
 Widget prepareDrawer(

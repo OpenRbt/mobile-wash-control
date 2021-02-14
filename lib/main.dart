@@ -239,13 +239,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     onTap: _serversValid[index]
                         ? () {
-                            var api = DefaultApi();
-                            api.apiClient.addDefaultHeader("Pin", "1234");
-                            api.apiClient.basePath =
-                                "http://" + _servers[index] + ":8020";
-                            var session = SessionData("0000", api);
-                            Navigator.pushNamed(context, "/home",
-                                arguments: session);
+                      var args = AuthArgs("http://" + _servers[index] + ":8020");
+                            Navigator.pushNamed(context, "/auth",
+                                arguments: args);
                           }
                         : null,
                   );
@@ -275,13 +271,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  //TODO: remove after all pages implementations
   Widget _buildScanButton() {
     return new FloatingActionButton(
       backgroundColor: Colors.lightGreen,
       splashColor: Colors.lightGreenAccent,
       onPressed: () {
         Navigator.pushNamed(context, '/home',
-            arguments: SessionData("0000", DefaultApi()));
+            arguments: SessionData(DefaultApi()));
       },
       tooltip: '',
       child: Icon(Icons.home),
