@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'package:flutter/services.dart';
+
 class ProgramsMenuArgs {}
 
 class ProgramsMenu extends StatefulWidget {
@@ -15,8 +16,8 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
   List<bool> _ProgramsCheckbox = List.generate(6, (index) {
     return false;
   });
-  List<String> _ProgramsName = ['test1','test2'];
-  /* = [
+
+  /*List<String> _ProgramsName = [
     "Пена",
     "Вода + Шампунь",
     "Ополаскивание",
@@ -25,49 +26,47 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
     "Пауза"
   ]*/
 
-  List<String> _prices = ['11', '22'];
-  int _stationId = -1;
-  List<StationStatus> _stations;
+  List<ProgramInfo>
+      _programs/*= [
+    ProgramInfo()..id = 1..name = 'test1',
+    ProgramInfo()..id = 2..name = 'test2',
+  ]*/
+      ;
+
+  List<String> _prices/*= ['11', '22']*/;
+  List<StationStatus> _stations/*= [StationStatus()..id = 5..hash = 'test']*/;
+  StationStatus _currentStation;
   bool _firstLoad = true;
 
   void GetData(SessionData sessionData) async {
     try {
       if (_firstLoad) {
-        /*var fake = StationStatus();
-        fake.id = 5;
-        _stations = [fake];*/
         StatusReport status = await sessionData.client.status();
-        return; //TODO: remove afterwards
         _stations = status.stations ?? [];
         _firstLoad = false;
         return;
       }
 
       var args14 = Args14();
-      args14.stationID = _stationId;
-      List<ProgramInfo> programs = await sessionData.client.programs(args14);
+      args14.stationID = _currentStation.id;
+      _programs = await sessionData.client.programs(args14);
       StatusReport status = await sessionData.client.status();
       var stationStatus =
-          status.stations.where((st) => st.id == _stationId).single;
-      //int currentProgramIndex = programs.map((e) => e.id).toList().indexOf(stationStatus.currentProgram);
-
-      if (!mounted) {
-        return;
-      }
+          status.stations.where((st) => st.id == _currentStation.id).single;
       var args9 = Args9();
       args9.hash = stationStatus.hash;
-      for (int i = 0; i < programs.length; i++) {
-        args9.key = programs[i].name;
-        //args9.hash = ''; //TODO: fill it
+      for (int i = 0; i < _programs.length; i++) {
+        args9.key = _programs[i].name;
+        args9.hash = _currentStation.hash;
         var price = await sessionData.client.load(args9);
         _prices.add(price);
       }
-      _ProgramsName = programs.map((p) => p.name);
-      //_ProgramsCheckbox[currentProgramIndex] = true;
-      setState(() {});
+      if (!mounted) {
+        return;
+      }
+      setState(() {}); //TODO: check if it is needed
     } catch (e) {
-      print(
-          "Exception when calling DefaultApi->programs in ProgramsMenu: $e\n");
+      print("Exception when calling GetData in ProgramsMenu: $e\n");
     }
   }
 
@@ -94,51 +93,51 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
             height: screenH - appBar.preferredSize.height,
             width: screenW,
             child:
-            ListView(children: buildThings(sessionData, screenW, screenH)),
+                ListView(children: buildChildren(sessionData, screenW, screenH)),
           );
         },
       ),
     );
   }
 
-  List<Widget> buildThings(
+  List<Widget> buildChildren(
       SessionData sessionData, double screenW, double screenH) {
     return [
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text('Посты:'),
         SizedBox(width: 20),
         DropdownButton(
-            value: _stationId,
+            value: _currentStation,
             onChanged: (newValue) {
               setState(() {
-                _stationId = newValue;
-                GetData(sessionData);
+                _currentStation = newValue;
+                if (_currentStation != null) GetData(sessionData);
               });
             },
             items: _stations == null
                 ? []
                 : List.generate(_stations.length, (index) {
                     return DropdownMenuItem(
-                        value: _stations[index].id,
+                        value: _stations[index],
                         child: Text("${_stations[index].id} пост"));
                   })
-              ..add(DropdownMenuItem<int>(value: -1, child: Text("--------"))))
+              ..add(DropdownMenuItem<StationStatus>(
+                  value: null, child: Text("--------"))))
       ])
-    ]..addAll(_ProgramsName == null
+    ]..addAll(_programs == null
         ? [Center(child: Text('Нет программ'))]
-        : List.generate(_ProgramsName.length, (index) {
-
+        : List.generate(_programs.length, (index) {
             var nameController = TextEditingController();
-            _controllers.add(nameController);
             nameController.value = TextEditingValue(
-              text: _ProgramsName[index],
+              text: _programs[index].name,
             );
+            _controllers.add(nameController);
 
             var priceController = TextEditingController();
-            _controllers.add(priceController);
             priceController.value = TextEditingValue(
               text: _prices[index],
             );
+            _controllers.add(priceController);
 
             return new Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -148,17 +147,21 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                   height: 75,
                   width: screenW / 4,
                   child: TextField(
-                    decoration: InputDecoration(border: OutlineInputBorder()),
-                    controller: nameController,
-                    onSubmitted: (newValue) {
-                      _ProgramsName[index] = newValue;
-                      var args = Args15();
-                      args.name = newValue;
-                      args.stationID = _stationId;
-                      // args.programID = a; TODO: get them in getdata
-                      //sessionData.client.setProgramName(args);
-                    }
-                  ),
+                      decoration: InputDecoration(border: OutlineInputBorder()),
+                      controller: nameController,
+                      onSubmitted: (newValue) async {
+                        try {
+                          var args = Args15();
+                          args.stationID = _currentStation.id;
+                          args.programID = _programs[index].id;
+                          args.name = newValue;
+                          await sessionData.client.setProgramName(args);
+                          _programs[index].name = newValue;
+                        } catch (e) {
+                          print(
+                              "Exception when calling DefaultApi->setProgramName in ProgramsMenu: $e\n");
+                        }
+                      }),
                 ),
                 SizedBox(
                   height: 75,
@@ -179,19 +182,27 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                         height: 75,
                         width: screenW / 9,
                         child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          decoration:
-                              InputDecoration(border: OutlineInputBorder()),
-                          controller: priceController,
-                            onSubmitted: (newValue) {
-                              _prices[index] = newValue;
-
-                              //sessionData.client.save(args); //TODO: api call
-                            }
-                        ),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            decoration:
+                                InputDecoration(border: OutlineInputBorder()),
+                            controller: priceController,
+                            onSubmitted: (newValue) async {
+                              try {
+                                var args = Args8();
+                                args.hash = _currentStation.hash;
+                                args.keyPair = KeyPair()
+                                  ..key = _programs[index].name
+                                  ..value = newValue;
+                                await sessionData.client.save(args);
+                                _prices[index] = newValue;
+                              } catch (e) {
+                                print(
+                                    "Exception when calling DefaultApi->save in ProgramsMenu: $e\n");
+                              }
+                            }),
                       ),
                       SizedBox(
                         width: screenW / 9,
@@ -239,8 +250,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
   List<TextEditingController> _controllers = [];
   @override
   void dispose() {
-    for (var c in _controllers)
-      c.dispose();
+    for (var c in _controllers) c.dispose();
     super.dispose();
   }
 }
