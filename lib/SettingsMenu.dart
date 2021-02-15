@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'client/api.dart';
 
 class SettingsMenuArgs {}
 
@@ -22,6 +23,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
   _SettingsMenuState() : super();
 
   bool _firstLoad = true;
+  String _currentTemp;
   List<SettingsData> _settingsData = List.generate(8, (index) {
     return new SettingsData(-1, "Loading", "...", "loading");
   });
@@ -29,10 +31,17 @@ class _SettingsMenuState extends State<SettingsMenu> {
   void GetSettings(SessionData sessionData) async {
     try {
       var res = await sessionData.client.status();
-
       if (!mounted) {
         return;
       }
+      var args = Args9();
+      if (res.stations.length > 0) {
+        args.hash = res.stations[0].hash;
+        args.key = "curr_temp";
+        var res_temp = await sessionData.client.load(args);
+        _currentTemp = res_temp;
+      }
+
       setState(() {
         _settingsData = List.generate((res.stations.length), (index) {
           return new SettingsData(
@@ -41,6 +50,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
               res.stations[index].hash,
               res.stations[index].status.value);
         });
+
 
         _settingsData.sort((a, b) => a.id.compareTo(b.id));
         _firstLoad = false;
@@ -99,7 +109,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           child: RaisedButton(
                             padding: EdgeInsets.zero,
                             onPressed: () {},
-                            child: Text("___"),
+                            child: Text("$_currentTemp"),
                           ),
                         )
                       ]),
@@ -139,7 +149,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         return new TableRow(children: [
                           Text("${_settingsData[index].name}"),
                           Text(
-                            "___.___.___.___",
+                            "${_settingsData[index].hash}",
                             textAlign: TextAlign.center,
                           ),
                           Text(

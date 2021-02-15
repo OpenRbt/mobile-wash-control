@@ -21,6 +21,7 @@ class EditPostMenu extends StatefulWidget {
 class _EditPostMenuState extends State<EditPostMenu> {
   bool _firstLoad = true;
   Timer _updateBalanceTimer;
+  int _service_balance = 0;
   int _balance = 0;
   int _current_program = -1;
 
@@ -56,7 +57,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
       _balance = res.moneyReport.coins + res.moneyReport.banknotes;
-
+      _service_balance = res.moneyReport.service;
       if (!mounted) {
         return;
       }
@@ -64,6 +65,17 @@ class _EditPostMenuState extends State<EditPostMenu> {
     } catch (e) {
       print(
           "Exception when calling DefaultApi->/station-report-current-money: $e\n");
+    }
+  }
+
+  void _addServiceMoney(PostMenuArgs postMenuArgs) async {
+    try {
+      var args = Args2();
+      args.hash = postMenuArgs.hash;
+      args.amount = 10;
+      var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
+    } catch (e) {
+      print("Exception when calling DefaultApi->/add-service-amount: $e\n");
     }
   }
 
@@ -148,7 +160,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 fit: BoxFit.fitHeight,
                 child: Padding(
                   padding: EdgeInsets.all(2),
-                  child: Text("${_balance.toString()}"),
+                  child: Text("$_service_balance"),
                 ),
               ),
               decoration: BoxDecoration(
@@ -206,18 +218,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
                         color: Colors.lightGreen,
                         splashColor: Colors.lightGreenAccent,
                         onPressed: () {
-                          setState(() {
-                            try {
-                              var args = Args2();
-                              args.hash = postMenuArgs.hash;
-                              args.amount = 10;
-                              var res = postMenuArgs.sessionData.client
-                                  .addServiceAmount(args);
-                            } catch (e) {
-                              print(
-                                  "Exception when calling DefaultApi->/add-service-amount: $e\n");
-                            }
-                          });
+                          _addServiceMoney(postMenuArgs);
                         },
                       ),
                     )),

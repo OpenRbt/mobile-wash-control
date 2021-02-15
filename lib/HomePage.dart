@@ -14,16 +14,17 @@ class HomePageData {
   final String hash;
   final String status;
   final String info;
+  final int currentBalance;
   final int programID;
 
-  HomePageData(
-      this.id, this.name, this.hash, this.status, this.info, this.programID);
+  HomePageData(this.id, this.name, this.hash, this.status, this.info,
+      this.currentBalance, this.programID);
 }
 
 class _HomePageState extends State<HomePage> {
   bool _firstLoad = true;
   List<HomePageData> _homePageData = List.generate(8, (index) {
-    return new HomePageData(-1, "Loading...", "...", "...", "...", -1);
+    return new HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
   });
 
   final List<String> _buttonLabel = ["П", "Ш", "О", "В", "С", "| |"];
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     try {
       var res = await sessionData.client.status();
 
-      if (!mounted){
+      if (!mounted) {
         return;
       }
       _homePageData = List.generate((res.stations.length), (index) {
@@ -42,13 +43,13 @@ class _HomePageState extends State<HomePage> {
             res.stations[index].hash,
             res.stations[index].status.toString(),
             res.stations[index].info,
+            res.stations[index].currentBalance,
             res.stations[index].currentProgram);
       });
 
       _homePageData.sort((a, b) => a.id.compareTo(b.id));
       _firstLoad = false;
-      setState(() {
-      });
+      setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
     }
@@ -57,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
-    
+
     if (_firstLoad) {
       GetStations(sessionData);
     }
@@ -86,17 +87,17 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.lightGreen,
                         highlightColor: Colors.lightGreenAccent,
                         onPressed: () {
-                          var args = PostMenuArgs(
-                              _homePageData[index].id,_homePageData[index].hash, sessionData);
+                          var args = PostMenuArgs(_homePageData[index].id,
+                              _homePageData[index].hash, sessionData);
                           Navigator.pushNamed(context, "/home/editPost",
                               arguments: args);
                         },
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("${_homePageData[index].id}"),
                             Text(_homePageData[index].name),
                             Text(
-                                "PROGRAM: ${_homePageData[index].programID ?? '__'}"),
+                                "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
                           ],
                         ),
                       ),

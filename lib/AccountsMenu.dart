@@ -9,28 +9,37 @@ class AccountsMenu extends StatefulWidget {
 }
 
 class AccountInfo {
-  String User;
-  String Pin;
-  String Status;
-  AccountInfo(this.User, this.Pin, this.Status);
+  String login;
+  String firstName;
+  String middleName;
+  String lastName;
+  bool isAdmin;
+  bool isOperator;
+  bool isEngineer;
+  AccountInfo(this.login, this.firstName, this.middleName, this.lastName,
+      this.isAdmin, this.isEngineer, this.isOperator);
 }
 
 class _AccountsMenuState extends State<AccountsMenu> {
   List<AccountInfo> _accounts = List();
   bool _firstLoad = true;
 
-  void GetUsers(SessionData sessionData) async {
+  void _getUsers(SessionData sessionData) async {
     try {
       var res = await sessionData.client.getUsers();
 
       if (!mounted) {
         return;
       }
-      for (var user in res.users) {
+      for (int i = 0; i < res.users.length; i++) {
         _accounts.add(AccountInfo(
-            "${user.login} | ${user.lastName} ${user.lastName} ${user.firstName} ${user.middleName}",
-            "TODO",
-            "TODO"));
+            res.users[i].login,
+            res.users[i].firstName,
+            res.users[i].middleName,
+            res.users[i].lastName,
+            res.users[i].isAdmin,
+            res.users[i].isEngineer,
+            res.users[i].isOperator));
       }
 
       setState(() {});
@@ -40,13 +49,12 @@ class _AccountsMenuState extends State<AccountsMenu> {
   }
 
   _AccountsMenuState() : super();
-
   @override
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
 
     if (_firstLoad) {
-      GetUsers(sessionData);
+      _getUsers(sessionData);
       _firstLoad = false;
     }
 
@@ -56,6 +64,11 @@ class _AccountsMenuState extends State<AccountsMenu> {
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
+
+    //TODO: add change user window !!!
+    //TODO: add new user window !!!
+    //TODO: add orientation support !!
+    //TODO: remove buttons "Сохранить" | "Отменить" !
     return Scaffold(
       appBar: appBar,
       drawer: prepareDrawer(context, Pages.Accounts, sessionData),
@@ -72,23 +85,30 @@ class _AccountsMenuState extends State<AccountsMenu> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: screenW / 3,
+                        width: screenW / 4,
                         child: Text(
-                          "Список пользователей",
+                          "Фамилия",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ),
                       SizedBox(
-                        width: screenW / 3 - 20,
-                        child: Text("Пароль",
+                        width: screenW / 4,
+                        child: Text("Имя",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
                       SizedBox(
-                        width: screenW / 3,
+                        width: screenW / 4,
+                        child: Text("Отчество",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      ),
+                      SizedBox(
+                        width: screenW / 4,
                         child: Text("Статус",
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -98,19 +118,23 @@ class _AccountsMenuState extends State<AccountsMenu> {
                   ),
                   Table(
                       border: TableBorder.all(),
-                      defaultColumnWidth: FixedColumnWidth(screenW / 3 - 10),
+                      //defaultColumnWidth: FixedColumnWidth(screenW / 4),
                       children: List.generate(_accounts.length, (index) {
                         return new TableRow(children: [
                           Text(
-                            "${_accounts[index].User}",
+                            "${_accounts[index].lastName}",
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "${_accounts[index].Pin}",
+                            "${_accounts[index].firstName}",
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "${_accounts[index].Status}",
+                            "${_accounts[index].middleName}",
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "${_accounts[index].isAdmin ? "Админ" : (_accounts[index].isOperator ? "Оператор" : (_accounts[index].isEngineer) ? "Инженер" : "USER")}",
                             textAlign: TextAlign.center,
                           )
                         ]);
