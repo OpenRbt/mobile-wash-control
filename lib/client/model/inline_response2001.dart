@@ -2,25 +2,25 @@ part of swagger.api;
 
 class InlineResponse2001 {
   
-  List<RelayConfig> relays = [];
+  List<InlineResponse2001Buttons> buttons = [];
   
   InlineResponse2001();
 
   @override
   String toString() {
-    return 'InlineResponse2001[relays=$relays, ]';
+    return 'InlineResponse2001[buttons=$buttons, ]';
   }
 
   InlineResponse2001.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
-    relays =
-      RelayConfig.listFromJson(json['relays'])
+    buttons =
+      InlineResponse2001Buttons.listFromJson(json['buttons'])
 ;
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'relays': relays
+      'buttons': buttons
      };
   }
 

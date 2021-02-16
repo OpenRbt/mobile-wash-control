@@ -10,14 +10,11 @@ class RelayConfig {
 
   int timeoff = null;
   
-
-  int prfelight = null;
-  
   RelayConfig();
 
   @override
   String toString() {
-    return 'RelayConfig[id=$id, timeon=$timeon, timeoff=$timeoff, prfelight=$prfelight, ]';
+    return 'RelayConfig[id=$id, timeon=$timeon, timeoff=$timeoff, ]';
   }
 
   RelayConfig.fromJson(Map<String, dynamic> json) {
@@ -31,17 +28,13 @@ class RelayConfig {
     timeoff =
         json['timeoff']
     ;
-    prfelight =
-        json['prfelight']
-    ;
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'timeon': timeon,
-      'timeoff': timeoff,
-      'prfelight': prfelight
+      'timeoff': timeoff
      };
   }
 

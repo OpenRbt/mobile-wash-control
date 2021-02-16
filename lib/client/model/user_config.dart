@@ -1,3 +1,4 @@
+
 part of swagger.api;
 
 class UserConfig {
@@ -56,7 +57,7 @@ class UserConfig {
     var map = new Map<String, UserConfig>();
     if (json != null && json.length > 0) {
       json.forEach((String key, Map<String, dynamic> value) =>
-          map[key] = new UserConfig.fromJson(value));
+      map[key] = new UserConfig.fromJson(value));
     }
     return map;
   }

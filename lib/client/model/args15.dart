@@ -2,39 +2,27 @@ part of swagger.api;
 
 class Args15 {
   
-  int stationID = null;
-   // range from 1 to //
-
-  int programID = null;
-   // range from 1 to //
-
-  String name = null;
+  Hash hash = null;
   
   Args15();
 
   @override
   String toString() {
-    return 'Args15[stationID=$stationID, programID=$programID, name=$name, ]';
+    return 'Args15[hash=$hash, ]';
   }
 
   Args15.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
-    stationID =
-        json['stationID']
-    ;
-    programID =
-        json['programID']
-    ;
-    name =
-        json['name']
-    ;
+    hash =
+      
+      
+      new Hash.fromJson(json['hash'])
+;
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'stationID': stationID,
-      'programID': programID,
-      'name': name
+      'hash': hash
      };
   }
 

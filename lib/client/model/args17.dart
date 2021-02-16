@@ -5,16 +5,13 @@ class Args17 {
   int stationID = null;
    // range from 1 to //
 
-  int programID = null;
-   // range from 1 to //
-
-  List<RelayConfig> relays = [];
+  List<InlineResponse2001Buttons> buttons = [];
   
   Args17();
 
   @override
   String toString() {
-    return 'Args17[stationID=$stationID, programID=$programID, relays=$relays, ]';
+    return 'Args17[stationID=$stationID, buttons=$buttons, ]';
   }
 
   Args17.fromJson(Map<String, dynamic> json) {
@@ -22,19 +19,15 @@ class Args17 {
     stationID =
         json['stationID']
     ;
-    programID =
-        json['programID']
-    ;
-    relays =
-      RelayConfig.listFromJson(json['relays'])
+    buttons =
+      InlineResponse2001Buttons.listFromJson(json['buttons'])
 ;
   }
 
   Map<String, dynamic> toJson() {
     return {
       'stationID': stationID,
-      'programID': programID,
-      'relays': relays
+      'buttons': buttons
      };
   }
 

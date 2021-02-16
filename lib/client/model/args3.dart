@@ -5,6 +5,9 @@ class Args3 {
   int id = null;
   
 
+  int preflightSec = null;
+  
+
   String name = null;
   
 
@@ -14,13 +17,16 @@ class Args3 {
 
   @override
   String toString() {
-    return 'Args3[id=$id, name=$name, hash=$hash, ]';
+    return 'Args3[id=$id, preflightSec=$preflightSec, name=$name, hash=$hash, ]';
   }
 
   Args3.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     id =
         json['id']
+    ;
+    preflightSec =
+        json['preflightSec']
     ;
     name =
         json['name']
@@ -33,6 +39,7 @@ class Args3 {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'preflightSec': preflightSec,
       'name': name,
       'hash': hash
      };

@@ -2,7 +2,7 @@ part of swagger.api;
 
 class RelayReport {
   
-  String hash = null;
+  Hash hash = null;
   
 
   List<RelayStat> relayStats = [];
@@ -19,7 +19,7 @@ class RelayReport {
     hash =
       
       
-      json['hash']
+      new Hash.fromJson(json['hash'])
 ;
     relayStats =
       RelayStat.listFromJson(json['relayStats'])

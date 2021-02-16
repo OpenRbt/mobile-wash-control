@@ -17,54 +17,20 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
     return false;
   });
 
-  /*List<String> _ProgramsName = [
-    "Пена",
-    "Вода + Шампунь",
-    "Ополаскивание",
-    "Воск",
-    "Сушка и блеск",
-    "Пауза"
-  ]*/
-
-  List<ProgramInfo>
-      _programs/*= [
-    ProgramInfo()..id = 1..name = 'test1',
-    ProgramInfo()..id = 2..name = 'test2',
-  ]*/
-      ;
-
-  List<String> _prices/*= ['11', '22']*/;
-  List<StationStatus> _stations/*= [StationStatus()..id = 5..hash = 'test']*/;
-  StationStatus _currentStation;
+  List<Program> _programs/*
+  = [Program()..name = 'test1'..price = 11
+    ,Program()..name = 'test2'..price = 22]*/;
   bool _firstLoad = true;
 
   void GetData(SessionData sessionData) async {
     try {
-      if (_firstLoad) {
-        StatusReport status = await sessionData.client.status();
-        _stations = status.stations ?? [];
-        _firstLoad = false;
-        return;
-      }
-
       var args14 = Args14();
-      args14.stationID = _currentStation.id;
       _programs = await sessionData.client.programs(args14);
-      StatusReport status = await sessionData.client.status();
-      var stationStatus =
-          status.stations.where((st) => st.id == _currentStation.id).single;
-      var args9 = Args9();
-      args9.hash = stationStatus.hash;
-      for (int i = 0; i < _programs.length; i++) {
-        args9.key = _programs[i].name;
-        args9.hash = _currentStation.hash;
-        var price = await sessionData.client.load(args9);
-        _prices.add(price);
-      }
-      if (!mounted) {
+      _firstLoad = false;
+      /*if (!mounted) {
         return;
       }
-      setState(() {}); //TODO: check if it is needed
+      setState(() {});*/ //TODO: check if it is needed
     } catch (e) {
       print("Exception when calling GetData in ProgramsMenu: $e\n");
     }
@@ -102,29 +68,8 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
 
   List<Widget> buildChildren(
       SessionData sessionData, double screenW, double screenH) {
-    return [
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text('Посты:'),
-        SizedBox(width: 20),
-        DropdownButton(
-            value: _currentStation,
-            onChanged: (newValue) {
-              setState(() {
-                _currentStation = newValue;
-                if (_currentStation != null) GetData(sessionData);
-              });
-            },
-            items: _stations == null
-                ? []
-                : List.generate(_stations.length, (index) {
-                    return DropdownMenuItem(
-                        value: _stations[index],
-                        child: Text("${_stations[index].id} пост"));
-                  })
-              ..add(DropdownMenuItem<StationStatus>(
-                  value: null, child: Text("--------"))))
-      ])
-    ]..addAll(_programs == null
+    var prices = _programs?.map((e) => e.price)?.toList();
+    return _programs == null || _programs.length == 0
         ? [Center(child: Text('Нет программ'))]
         : List.generate(_programs.length, (index) {
             var nameController = TextEditingController();
@@ -135,7 +80,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
 
             var priceController = TextEditingController();
             priceController.value = TextEditingValue(
-              text: _prices[index],
+              text: prices[index].toString(),
             );
             _controllers.add(priceController);
 
@@ -150,16 +95,14 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                       decoration: InputDecoration(border: OutlineInputBorder()),
                       controller: nameController,
                       onSubmitted: (newValue) async {
+                        var previousName = _programs[index].name;
                         try {
-                          var args = Args15();
-                          args.stationID = _currentStation.id;
-                          args.programID = _programs[index].id;
-                          args.name = newValue;
-                          await sessionData.client.setProgramName(args);
                           _programs[index].name = newValue;
+                          await sessionData.client.setProgram(_programs[index]);
                         } catch (e) {
+                          _programs[index].name = previousName;
                           print(
-                              "Exception when calling DefaultApi->setProgramName in ProgramsMenu: $e\n");
+                              "Exception when calling DefaultApi->setProgram in ProgramsMenu: $e\n");
                         }
                       }),
                 ),
@@ -190,17 +133,15 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                                 InputDecoration(border: OutlineInputBorder()),
                             controller: priceController,
                             onSubmitted: (newValue) async {
+                              var previousPrice = _programs[index].price;
                               try {
-                                var args = Args8();
-                                args.hash = _currentStation.hash;
-                                args.keyPair = KeyPair()
-                                  ..key = _programs[index].name
-                                  ..value = newValue;
-                                await sessionData.client.save(args);
-                                _prices[index] = newValue;
+                                _programs[index].price = int.parse(newValue);
+                                await sessionData.client.setProgram(_programs[index]);
+                                setState((){});
                               } catch (e) {
+                                _programs[index].price = previousPrice;
                                 print(
-                                    "Exception when calling DefaultApi->save in ProgramsMenu: $e\n");
+                                    "Exception when calling DefaultApi->setProgram in ProgramsMenu: $e\n");
                               }
                             }),
                       ),
@@ -244,8 +185,29 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                 ),
               ],
             );
-          }));
+          });
   }
+
+  /*Widget generateDropdownButton(StationStatus _currentStation, SessionData sessionData)
+  {
+    return DropdownButton(
+        value: _currentStation,
+        onChanged: (newValue) {
+          setState(() {
+            _currentStation = newValue;
+            if (_currentStation != null) GetData(sessionData);
+          });
+        },
+        items: _stations == null
+            ? []
+            : List.generate(_stations.length, (index) {
+          return DropdownMenuItem(
+              value: _stations[index],
+              child: Text("${_stations[index].id} пост"));
+        })
+          ..add(DropdownMenuItem<StationStatus>(
+              value: null, child: Text("--------"))));
+  }*/
 
   List<TextEditingController> _controllers = [];
   @override

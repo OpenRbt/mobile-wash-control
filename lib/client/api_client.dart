@@ -98,6 +98,8 @@ class ApiClient {
           return new InlineResponse200.fromJson(value);
         case 'InlineResponse2001':
           return new InlineResponse2001.fromJson(value);
+        case 'InlineResponse2001Buttons':
+          return new InlineResponse2001Buttons.fromJson(value);
         case 'InlineResponse409':
           return new InlineResponse409.fromJson(value);
         case 'IsAdmin':
@@ -120,14 +122,18 @@ class ApiClient {
           return new MoneyReport.fromJson(value);
         case 'Password':
           return new Password.fromJson(value);
-        case 'ProgramInfo':
-          return new ProgramInfo.fromJson(value);
+        case 'Program':
+          return new Program.fromJson(value);
         case 'RelayConfig':
           return new RelayConfig.fromJson(value);
         case 'RelayReport':
           return new RelayReport.fromJson(value);
         case 'RelayStat':
           return new RelayStat.fromJson(value);
+        case 'StationPrograms':
+          return new StationPrograms.fromJson(value);
+        case 'StationProgramsPrograms':
+          return new StationProgramsPrograms.fromJson(value);
         case 'StationReport':
           return new StationReport.fromJson(value);
         case 'StationStatus':

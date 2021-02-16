@@ -17,7 +17,7 @@ class MoneyReport {
   int service = null;
   
 
-  String hash = null;
+  Hash hash = null;
   
   MoneyReport();
 
@@ -46,7 +46,7 @@ class MoneyReport {
     hash =
       
       
-      json['hash']
+      new Hash.fromJson(json['hash'])
 ;
   }
 

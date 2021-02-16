@@ -4,14 +4,11 @@ class Args16 {
   
   int stationID = null;
    // range from 1 to //
-
-  int programID = null;
-   // range from 1 to //
   Args16();
 
   @override
   String toString() {
-    return 'Args16[stationID=$stationID, programID=$programID, ]';
+    return 'Args16[stationID=$stationID, ]';
   }
 
   Args16.fromJson(Map<String, dynamic> json) {
@@ -19,15 +16,11 @@ class Args16 {
     stationID =
         json['stationID']
     ;
-    programID =
-        json['programID']
-    ;
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'stationID': stationID,
-      'programID': programID
+      'stationID': stationID
      };
   }
 
