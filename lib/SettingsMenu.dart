@@ -23,7 +23,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
   _SettingsMenuState() : super();
 
   bool _firstLoad = true;
-  String _currentTemp;
+  String _currentTemp = "__";
   List<SettingsData> _settingsData = List.generate(8, (index) {
     return new SettingsData(-1, "Loading", "...", "loading");
   });
@@ -38,10 +38,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
       if (res.stations.length > 0) {
         args.hash = res.stations[0].hash;
         args.key = "curr_temp";
-        var res_temp = await sessionData.client.load(args);
-        _currentTemp = res_temp;
+        var resTemp = await sessionData.client.load(args);
+        _currentTemp = resTemp ?? _currentTemp;
       }
-
       setState(() {
         _settingsData = List.generate((res.stations.length), (index) {
           return new SettingsData(
@@ -50,7 +49,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
               res.stations[index].hash,
               res.stations[index].status.value);
         });
-
 
         _settingsData.sort((a, b) => a.id.compareTo(b.id));
         _firstLoad = false;
@@ -103,9 +101,13 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         SizedBox(
                           width: 5,
                         ),
-                        Text("Tемп. ", style: TextStyle(fontSize: 16)),
+                        Text(
+                          "Tемп. ",
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
                         SizedBox(
-                          width: 40,
+                          width: 80,
                           child: RaisedButton(
                             padding: EdgeInsets.zero,
                             onPressed: () {},
@@ -161,22 +163,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                     : Colors.red),
                           )
                         ]);
-
-                        // return new TableRow(children: [
-                        //   Text(" Пост $index"),
-                        //   Text(
-                        //     "192.168.0.16$index",
-                        //     textAlign: TextAlign.center,
-                        //   ),
-                        //   Text(
-                        //     index % 2 == 0 ? "Активный" : "Неактивный",
-                        //     textAlign: TextAlign.center,
-                        //     style: TextStyle(
-                        //         color: index % 2 == 0
-                        //             ? Colors.lightGreen
-                        //             : Colors.red),
-                        //   )
-                        // ]);
                       })),
                   SizedBox(
                     height: 25,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 
-class AccountsMenuArgs {}
+class AccountsMenuEditArgs {
+  AccountInfo targetUser;
+  SessionData sessionData;
+}
 
 class AccountsMenu extends StatefulWidget {
   @override
@@ -65,124 +68,196 @@ class _AccountsMenuState extends State<AccountsMenu> {
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
 
-    //TODO: add change user window !!!
-    //TODO: add new user window !!!
+    //TODO: Connect subPages to API !!!
     //TODO: add orientation support !!
-    //TODO: remove buttons "Сохранить" | "Отменить" !
     return Scaffold(
       appBar: appBar,
       drawer: prepareDrawer(context, Pages.Accounts, sessionData),
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return new ListView(
+          return new Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: screenW / 4,
-                        child: Text(
-                          "Фамилия",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        width: screenW / 4,
-                        child: Text("Имя",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                      ),
-                      SizedBox(
-                        width: screenW / 4,
-                        child: Text("Отчество",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                      ),
-                      SizedBox(
-                        width: screenW / 4,
-                        child: Text("Статус",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                      )
-                    ],
-                  ),
-                  Table(
-                      border: TableBorder.all(),
-                      //defaultColumnWidth: FixedColumnWidth(screenW / 4),
-                      children: List.generate(_accounts.length, (index) {
-                        return new TableRow(children: [
-                          Text(
-                            "${_accounts[index].lastName}",
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "${_accounts[index].firstName}",
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "${_accounts[index].middleName}",
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "${_accounts[index].isAdmin ? "Админ" : (_accounts[index].isOperator ? "Оператор" : (_accounts[index].isEngineer) ? "Инженер" : "USER")}",
-                            textAlign: TextAlign.center,
-                          )
-                        ]);
-                      })),
                   SizedBox(
-                    height: 25,
+                    height: 50,
+                    width: screenW / 9 * 2,
+                    child: Text(
+                      "Фамилия",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: screenW / 3,
-                          child: RaisedButton(
-                            color: Colors.lightGreen,
-                            textColor: Colors.white,
-                            disabledColor: Colors.grey,
-                            disabledTextColor: Colors.black,
-                            padding: EdgeInsets.all(8.0),
-                            splashColor: Colors.lightGreenAccent,
-                            onPressed: () {},
-                            child: Text("Сохранить",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold)),
-                          ),
-                        ),
-                        SizedBox(
-                          width: screenW / 6,
-                        ),
-                        SizedBox(
-                          height: 50,
-                          width: screenW / 3,
-                          child: RaisedButton(
-                            color: Colors.lightGreen,
-                            textColor: Colors.white,
-                            disabledColor: Colors.grey,
-                            disabledTextColor: Colors.black,
-                            padding: EdgeInsets.all(8.0),
-                            splashColor: Colors.lightGreenAccent,
-                            onPressed: () {},
-                            child: Text("Отменить",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold)),
-                          ),
-                        )
-                      ])
+                  SizedBox(
+                    height: 50,
+                    width: screenW / 9 * 2,
+                    child: Text("Имя",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold)),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: screenW / 9 * 2,
+                    child: Text("Отчество",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold)),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: screenW / 9 * 2,
+                    child: Text("Статус",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold)),
+                  ),
                 ],
+              ),
+              SizedBox(
+                height: screenH - appBar.preferredSize.height - 200,
+                child: ListView(
+                  children: List.generate(_accounts.length + 1, (index) {
+                    if (index < _accounts.length) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black38)),
+                                child: Text(
+                                  "${_accounts[index].firstName}",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black38)),
+                                child: Text(
+                                  "${_accounts[index].lastName}",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black38)),
+                                child: Text(
+                                  "${_accounts[index].middleName}",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9 * 2,
+                              child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.black38)),
+                                  child: Text(
+                                    "${_accounts[index].isAdmin ? "Админ" : (_accounts[index].isOperator ? "Оператор" : (_accounts[index].isEngineer) ? "Инженер" : "USER")}",
+                                    textAlign: TextAlign.center,
+                                  ))),
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9,
+                              child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.black38)),
+                                  child: IconButton(
+                                    icon: Icon(Icons.more_horiz),
+                                    onPressed: () {
+                                      var args = AccountsMenuEditArgs();
+                                      args.sessionData = sessionData;
+                                      args.targetUser = _accounts[index];
+                                      Navigator.pushNamed(
+                                          context, "/home/accounts/edit",
+                                          arguments: args);
+                                    },
+                                  ))),
+                        ],
+                      );
+                    } else {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black38)),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black38)),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black38)),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9 * 2,
+                              child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.black38)),
+                                  child: Text(
+                                    "",
+                                    textAlign: TextAlign.center,
+                                  ))),
+                          SizedBox(
+                              height: 50,
+                              width: screenW / 9,
+                              child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.black38)),
+                                  child: IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, "/home/accounts/add",
+                                          arguments: sessionData);
+                                    },
+                                  ))),
+                        ],
+                      );
+                    }
+                  }),
+                ),
               ),
             ],
           );
