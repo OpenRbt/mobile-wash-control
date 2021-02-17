@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'AccountsMenu.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import "client/api.dart";
 
 class AccountsMenuEdit extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class AccountsMenuEdit extends StatefulWidget {
 
 class _AccountsMenuEditState extends State<AccountsMenuEdit> {
   bool _notLoaded = true;
+  bool _inUpdate = false;
 
   bool _loginNotValid = false;
   List<TextEditingController> _inputControllers;
@@ -69,7 +71,28 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
     setState(() {});
   }
 
-  void _updateUser(SessionData sessionData) async {}
+  void _updateUser(SessionData sessionData) async {
+    _inUpdate = true;
+    setState(() {});
+    try {
+      var args = Args21();
+      args.login = _inputControllers[0].value.text;
+      args.firstName = _inputControllers[1].value.text;
+      if (args.firstName.length < 1) args.firstName = " ";
+      args.lastName = _inputControllers[2].value.text;
+      if (args.lastName.length < 1) args.lastName = " ";
+      args.middleName = _inputControllers[3].value.text;
+      if (args.middleName.length < 1) args.middleName = " ";
+      args.isAdmin = _inputTriggers[0];
+      args.isOperator = _inputTriggers[1];
+      args.isEngineer = _inputTriggers[2];
+      var res = sessionData.client.updateUser(args);
+    } catch (e) {
+      print("Exception when calling DefaultApi->User(put): $e\n");
+    }
+    _inUpdate = false;
+    setState(() {});
+  }
 
   _AccountsMenuEditState() : super();
   @override
@@ -86,6 +109,14 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
+    if (_inUpdate) {
+      _inUpdate = false;
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text("Изменение пользователя"),
+              ));
+    }
     return Scaffold(
       appBar: appBar,
       body: OrientationBuilder(
@@ -121,25 +152,26 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                               child: Padding(
                                 padding: EdgeInsets.all(10),
                                 child: TextField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp("[a-zA-Z0-9_]"))
-                                    ],
-                                    controller: _inputControllers[index],
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(10),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: _loginNotValid
-                                                    ? Colors.red
-                                                    : Colors.grey)),
-                                        helperText:
-                                            "Логин не менее 4х символов",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: _loginNotValid
-                                                    ? Colors.red
-                                                    : Colors.grey)))),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp("[a-zA-Z0-9_]"))
+                                  ],
+                                  controller: _inputControllers[index],
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(10),
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: _loginNotValid
+                                                  ? Colors.red
+                                                  : Colors.grey)),
+                                      helperText: "Логин не менее 4х символов",
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: _loginNotValid
+                                                  ? Colors.red
+                                                  : Colors.grey))),
+                                  enabled: false,
+                                ),
                               ))
                         ],
                       );
@@ -342,17 +374,17 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                     height: 50,
                     width: screenW / 3,
                     child: RaisedButton(
-                      onPressed: () {
+                      onPressed: _inUpdate ? null : () {
                         _updateUser(accountsMenuEditArgs.sessionData);
                       },
-                      child: Text("Сохранить"),
+                      child: Text(_inUpdate ? "Сохранение..." :"Сохранить"),
                     ),
                   ),
                   SizedBox(
                     height: 50,
                     width: screenW / 3,
                     child: RaisedButton(
-                      onPressed: () {
+                      onPressed:_inUpdate ? null :  () {
                         _setData(accountsMenuEditArgs.targetUser);
                       },
                       child: Text("Отменить"),

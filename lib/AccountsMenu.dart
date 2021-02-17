@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'dart:convert';
 
 class AccountsMenuEditArgs {
   AccountInfo targetUser;
@@ -28,6 +29,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
   bool _firstLoad = true;
 
   void _getUsers(SessionData sessionData) async {
+    _accounts = List();
     try {
       var res = await sessionData.client.getUsers();
 
@@ -184,8 +186,10 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                       args.sessionData = sessionData;
                                       args.targetUser = _accounts[index];
                                       Navigator.pushNamed(
-                                          context, "/home/accounts/edit",
-                                          arguments: args);
+                                              context, "/home/accounts/edit",
+                                              arguments: args)
+                                          .then((value) =>
+                                              _getUsers(sessionData));
                                     },
                                   ))),
                         ],
@@ -249,8 +253,10 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                     icon: Icon(Icons.add),
                                     onPressed: () {
                                       Navigator.pushNamed(
-                                          context, "/home/accounts/add",
-                                          arguments: sessionData);
+                                              context, "/home/accounts/add",
+                                              arguments: sessionData)
+                                          .then((value) =>
+                                              _getUsers(sessionData));
                                     },
                                   ))),
                         ],

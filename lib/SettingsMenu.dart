@@ -35,13 +35,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
         return;
       }
       var args = Args9();
-      if (res.stations.length > 0) {
-        args.hash = res.stations[0].hash;
-        args.key = "curr_temp";
-        var resTemp = await sessionData.client.load(args);
-        _currentTemp = resTemp ?? _currentTemp;
-      }
-      setState(() {
         _settingsData = List.generate((res.stations.length), (index) {
           return new SettingsData(
               res.stations[index].id,
@@ -52,10 +45,25 @@ class _SettingsMenuState extends State<SettingsMenu> {
 
         _settingsData.sort((a, b) => a.id.compareTo(b.id));
         _firstLoad = false;
-      });
+
+      if (res.stations.length > 0) {
+        for (int i = 0 ; i < res.stations.length; i++){
+          if (res.stations[i].hash != null && res.stations[i].hash.length > 0){
+            args.hash = res.stations[i].hash;
+            args.key = "curr_temp";
+            var resTemp = await sessionData.client.load(args);
+            _currentTemp = resTemp ?? _currentTemp;
+            break;
+          }
+        }
+
+      }
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
     }
+
+    setState(() {
+    });
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'AccountsMenu.dart';
+import 'client/api.dart';
 
 class AccountsMenuAdd extends StatefulWidget {
   @override
@@ -9,12 +10,12 @@ class AccountsMenuAdd extends StatefulWidget {
 }
 
 class _AccountsMenuAddState extends State<AccountsMenuAdd> {
-  bool _loginNotValid = false;
+  bool _inUpdate = false;
   List<TextEditingController> _inputControllers;
   List<bool> _inputTriggers = List.filled(3, false);
   void initState() {
     super.initState();
-    _inputControllers = List.generate(4, (index) {
+    _inputControllers = List.generate(5, (index) {
       var controller = new TextEditingController();
       switch (index) {
         case 0: //login controller
@@ -25,10 +26,6 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                 selection: TextSelection(
                     baseOffset: text.length, extentOffset: text.length),
                 composing: TextRange.empty);
-            _loginNotValid = (controller.value.text.isEmpty ||
-                    controller.value.text.length < 4)
-                ? true
-                : false;
           });
           break;
         case 1: //firstName controller
@@ -39,6 +36,16 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
           break;
         case 3: //middleName controller
           controller.addListener(() {});
+          break;
+        case 4: //password controller
+          controller.addListener(() {
+            final text = controller.text.toLowerCase();
+            controller.value = controller.value.copyWith(
+                text: text,
+                selection: TextSelection(
+                    baseOffset: text.length, extentOffset: text.length),
+                composing: TextRange.empty);
+          });
           break;
         default:
           break;
@@ -54,7 +61,41 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
     super.dispose();
   }
 
-  void _addUser(SessionData sessionData) async {}
+  void _addUser(SessionData sessionData) async {
+    _inUpdate = true;
+    setState(() {});
+    try {
+      print("send start");
+      var args = Args22();
+      args.login = _inputControllers[0].value.text;
+      if (args.login.length < 4) {
+        print("login length fail");
+        return;
+      }
+      args.firstName = _inputControllers[1].value.text;
+      if (args.firstName.length < 1) args.firstName = " ";
+      args.lastName = _inputControllers[2].value.text;
+      if (args.lastName.length < 1) args.lastName = " ";
+      args.middleName = _inputControllers[3].value.text;
+      if (args.middleName.length < 1) args.middleName = " ";
+      args.password = _inputControllers[4].value.text;
+      if (args.password.length < 4) {
+        print("pass length fail");
+        return;
+      }
+      args.isAdmin = _inputTriggers[0];
+      args.isOperator = _inputTriggers[1];
+      args.isEngineer = _inputTriggers[2];
+      var res =  await sessionData.client.createUser(args);
+      //var res = sessionData.client.updateUser(args);
+      print("end send");
+      initState();
+    } catch (e) {
+      print("Exception when calling DefaultApi->User(put): $e\n");
+    }
+    _inUpdate = false;
+    setState(() {});
+  }
 
   _AccountsMenuAddState() : super();
   @override
@@ -79,7 +120,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: List.generate(7, (index) {
+                children: List.generate(8, (index) {
                   switch (index) {
                     case 0: //login
                       return Row(
@@ -109,18 +150,9 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                                     controller: _inputControllers[index],
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(10),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: _loginNotValid
-                                                    ? Colors.red
-                                                    : Colors.grey)),
+                                        border: OutlineInputBorder(),
                                         helperText:
-                                            "Логин не менее 4х символов",
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: _loginNotValid
-                                                    ? Colors.red
-                                                    : Colors.grey)))),
+                                            "Логин не менее 4х символов",)),
                               ))
                         ],
                       );
@@ -215,7 +247,42 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                         ],
                       );
                       break;
-                    case 4: //isAdmin
+                    case 4: //password
+                      return Row(
+                        children: [
+                          SizedBox(
+                            height: 75,
+                            width: screenW / 3,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                "Пин код",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.end,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                              height: 75,
+                              width: screenW - screenW / 3,
+                              child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: TextField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp("[0-9]"))
+                                  ],
+                                  controller: _inputControllers[index],
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(10),
+                                      helperText: "Пин не менее 4х символов",
+                                      border: OutlineInputBorder()),
+                                ),
+                              ))
+                        ],
+                      );
+                      break;
+                    case 5: //isAdmin
                       return Row(
                         children: [
                           SizedBox(
@@ -246,7 +313,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                         ],
                       );
                       break;
-                    case 5: //isOperator
+                    case 6: //isOperator
                       return Row(
                         children: [
                           SizedBox(
@@ -277,7 +344,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                         ],
                       );
                       break;
-                    case 6: //isEngineer
+                    case 7: //isEngineer
                       return Row(
                         children: [
                           SizedBox(
@@ -324,8 +391,9 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                     width: screenW / 3,
                     child: RaisedButton(
                       onPressed: () {
+                        print("AddUser");
                         _addUser(sessionData);
-                        Navigator.pop(context,true);
+                        //Navigator.pop(context, true);
                       },
                       child: Text("Сохранить"),
                     ),
@@ -334,7 +402,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                     height: 50,
                     width: screenW / 3,
                     child: RaisedButton(
-                      onPressed: (){
+                      onPressed: () {
                         Navigator.pop(context);
                       },
                       child: Text("Отмена"),

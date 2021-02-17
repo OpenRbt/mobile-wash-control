@@ -26,7 +26,7 @@ class UserConfig {
   UserConfig.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     login = json['login'];
-    firstName = json['firstName'];
+    firstName =  json['firstName'];
     middleName = json['middleName'];
     lastName = json['lastName'];
     isAdmin = json['isAdmin'];

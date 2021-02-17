@@ -1,29 +1,29 @@
 part of swagger.api;
 
 class Args22 {
-  
-  Login login = null;
+
+  String login = null;
+
+
+  String firstName = null;
+
+
+  String middleName = null;
+
+
+  String lastName = null;
+
+
+  bool isAdmin = null;
+
+
+  bool isOperator = null;
+
+
+  bool isEngineer = null;
   
 
-  FirstName firstName = null;
-  
-
-  MiddleName middleName = null;
-  
-
-  LastName lastName = null;
-  
-
-  IsAdmin isAdmin = null;
-  
-
-  IsOperator isOperator = null;
-  
-
-  IsEngineer isEngineer = null;
-  
-
-  Password password = null;
+  String password = null;
   
   Args22();
 
@@ -37,42 +37,42 @@ class Args22 {
     login =
       
       
-      new Login.fromJson(json['login'])
+      json['login']
 ;
     firstName =
       
       
-      new FirstName.fromJson(json['firstName'])
+      json['firstName']
 ;
     middleName =
       
       
-      new MiddleName.fromJson(json['middleName'])
+      json['middleName']
 ;
     lastName =
       
       
-      new LastName.fromJson(json['lastName'])
+     json['lastName']
 ;
     isAdmin =
       
       
-      new IsAdmin.fromJson(json['isAdmin'])
+     json['isAdmin']
 ;
     isOperator =
       
       
-      new IsOperator.fromJson(json['isOperator'])
+      json['isOperator']
 ;
     isEngineer =
       
       
-      new IsEngineer.fromJson(json['isEngineer'])
+      json['isEngineer']
 ;
     password =
       
       
-      new Password.fromJson(json['password'])
+     json['password']
 ;
   }
 
