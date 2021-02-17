@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
             res.stations[index].id,
             res.stations[index].name,
             res.stations[index].hash,
-            res.stations[index].status.toString(),
+            res.stations[index].status.value,
             res.stations[index].info,
             res.stations[index].currentBalance,
             res.stations[index].currentProgram);
@@ -84,8 +84,8 @@ class _HomePageState extends State<HomePage> {
                       height: 50,
                       width: 165,
                       child: RaisedButton(
-                        color: Colors.lightGreen,
-                        highlightColor: Colors.lightGreenAccent,
+                        color: _homePageData[index].status == "online" ?  Colors.lightGreen : Colors.red,
+                        highlightColor: _homePageData[index].status == "online" ?  Colors.lightGreenAccent : Colors.redAccent,
                         onPressed: () {
                           var args = PostMenuArgs(_homePageData[index].id,
                               _homePageData[index].hash, sessionData);

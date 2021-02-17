@@ -69,9 +69,8 @@ class _AccountsMenuState extends State<AccountsMenu> {
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
-
-    //TODO: Connect subPages to API !!!
-    //TODO: add orientation support !!
+    //TODO: improve interaction with subpages (indication of actions)
+    //TODO: add orientation support !
     return Scaffold(
       appBar: appBar,
       drawer: prepareDrawer(context, Pages.Accounts, sessionData),

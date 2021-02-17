@@ -3,7 +3,14 @@ import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'client/api.dart';
 
-enum Pages { Main, Posts, Programs, Settings, Accounts, Statistics }
+enum Pages {
+  Main,
+  // Posts,
+  Programs,
+  Settings,
+  Accounts,
+  Statistics
+}
 
 class SessionData {
   final DefaultApi client;
@@ -14,7 +21,7 @@ Widget prepareDrawer(
     BuildContext context, Pages selectedPage, SessionData sessionData) {
   var texts = [
     "Главная",
-    "Посты",
+    // "Посты",
     "Программы",
     "Настройки",
     "Учетки",
@@ -24,7 +31,7 @@ Widget prepareDrawer(
 
   var routes = [
     "/home",
-    "/home/posts",
+    // "/home/posts",
     "/home/programs",
     "/home/settings",
     "/home/accounts",

@@ -53,6 +53,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
             args.key = "curr_temp";
             var resTemp = await sessionData.client.load(args);
             _currentTemp = resTemp ?? _currentTemp;
+            _currentTemp =  _currentTemp.replaceAll(String.fromCharCode(34), '');
             break;
           }
         }
