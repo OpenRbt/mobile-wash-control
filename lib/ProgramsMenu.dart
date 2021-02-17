@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'package:flutter/services.dart';
+import 'DozatronsMenu.dart';
 
 class ProgramsMenuArgs {}
 
@@ -17,9 +18,22 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
     return false;
   });
 
-  List<Program> _programs/*
-  = [Program()..name = 'test1'..price = 11
-    ,Program()..name = 'test2'..price = 22]*/;
+  List<Program> _programs/* = [
+    Program()..name = 'test'..price = 11..preflightEnabled = true..preflightRelays = [
+      RelayConfig()..timeoff = 800..timeon = 200..id = 1
+      , RelayConfig()..timeoff = 600..timeon = 400..id = 2
+    ] ..relays = [
+      RelayConfig()..timeoff = 800..timeon = 200..id = 1
+      , RelayConfig()..timeoff = 600..timeon = 400..id = 2
+    ]
+    , Program()..name = 'test2'..price = 22..preflightEnabled = false..preflightRelays = [
+      RelayConfig()..timeoff = 400..timeon = 600..id = 3
+      , RelayConfig()..timeoff = 500..timeon = 500..id = 4
+    ]..relays = [
+      RelayConfig()..timeoff = 400..timeon = 600..id = 3
+      , RelayConfig()..timeoff = 500..timeon = 500..id = 4
+    ]
+  ]*/;
   bool _firstLoad = true;
 
   void GetData(SessionData sessionData) async {
@@ -30,7 +44,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
       /*if (!mounted) {
         return;
       }
-      setState(() {});*/ //TODO: check if it is needed
+      setState(() {});*/ //TODO: uncomment if it is needed
     } catch (e) {
       print("Exception when calling GetData in ProgramsMenu: $e\n");
     }
@@ -84,7 +98,10 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
             );
             _controllers.add(priceController);
 
-            return new Row(
+            return new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -184,7 +201,35 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                   ),
                 ),
               ],
-            );
+            ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+      SizedBox(
+      height: 75,
+      width: screenW,
+      child: Padding(
+      padding: EdgeInsets.all(10),
+      child:RaisedButton(
+                      color: Colors.lightGreen,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(8.0),
+                      splashColor: Colors.lightGreenAccent,
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: Text("Реле", style: TextStyle(fontSize: 40)),
+                      ),
+                      onPressed: () {
+                        var args = RelaysMenuArgs(_programs[index], sessionData);
+                        Navigator.pushNamed(context, "/home/relays",
+                            arguments: args);
+                      },
+                    )))
+                  ]
+              )]);
           });
   }
 

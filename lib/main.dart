@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
         "/home/programs": (context) => ProgramsMenu(),
         "/home/settings": (context) => SettingsMenu(),
         "/home/statistics": (context) => StatisticsMenu(),
-        "/home/dozatrons": (context) => DozatronsMenu(),
+        "/home/relays": (context) => RelaysMenu(),
         "/home/posts": (context) => PostsMenu(),
         "/home/accounts": (context) => AccountsMenu(),
         "/home/accounts/edit": (context) => AccountsMenuEdit(),

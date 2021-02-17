@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'client/api.dart';
 
-enum Pages { Main, Posts, Programs, Dozatrons, Settings, Accounts, Statistics }
+enum Pages { Main, Posts, Programs, Settings, Accounts, Statistics }
 
 class SessionData {
   final DefaultApi client;
@@ -16,7 +16,6 @@ Widget prepareDrawer(
     "Главная",
     "Посты",
     "Программы",
-    "Дозатроны",
     "Настройки",
     "Учетки",
     "Статистика",
@@ -27,7 +26,6 @@ Widget prepareDrawer(
     "/home",
     "/home/posts",
     "/home/programs",
-    "/home/dozatrons",
     "/home/settings",
     "/home/accounts",
     "/home/statistics",
@@ -68,10 +66,10 @@ Widget prepareDrawer(
                             Expanded(
                               child: ListView.separated(
                                 shrinkWrap: true,
-                                itemCount: 8,
+                                itemCount: texts.length,
                                 //clipBehavior: Clip.antiAlias,
                                 itemBuilder: (BuildContext context, int index) {
-                                  var onTap = index == 7
+                                  var onTap = index == texts.length - 1
                                       ? () {
                                           showDialog(
                                               context: context,
