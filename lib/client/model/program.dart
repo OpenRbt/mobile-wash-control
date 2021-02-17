@@ -3,7 +3,7 @@ part of swagger.api;
 class Program {
   
   int id = null;
-  
+   // range from 1 to //
 
   String name = null;
   

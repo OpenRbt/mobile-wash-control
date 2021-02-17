@@ -26,7 +26,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -78,7 +78,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -106,7 +106,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'CardReaderConfig') as CardReaderConfig ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'CardReaderConfig') as CardReaderConfig ;
     } else {
       return null;
     }
@@ -130,7 +130,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -158,7 +158,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'CardReaderConfig') as CardReaderConfig ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'CardReaderConfig') as CardReaderConfig ;
     } else {
       return null;
     }
@@ -182,7 +182,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = ["pinCode"];
@@ -210,7 +210,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'Args6') as Args6 ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Args6') as Args6 ;
     } else {
       return null;
     }
@@ -234,7 +234,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -286,7 +286,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = ["pinCode"];
@@ -335,7 +335,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -384,7 +384,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = ["pinCode"];
@@ -412,7 +412,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'UserConfig') as UserConfig ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'UserConfig') as UserConfig ;
     } else {
       return null;
     }
@@ -433,7 +433,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = ["pinCode"];
@@ -460,8 +460,9 @@ class DefaultApi {
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(response.body, 'UsersReport') as UsersReport ;
+      return
+          // apiClient.deserialize(utf8.decode(response.bodyBytes), 'UsersReport') as UsersReport ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes) , 'UsersReport') as UsersReport ;
     } else {
       return null;
     }
@@ -482,7 +483,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -510,7 +511,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'String') as String ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'String') as String ;
     } else {
       return null;
     }
@@ -531,7 +532,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -559,7 +560,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'KasseConfig') as KasseConfig ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'KasseConfig') as KasseConfig ;
     } else {
       return null;
     }
@@ -583,7 +584,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -611,7 +612,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'String') as String ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'String') as String ;
     } else {
       return null;
     }
@@ -635,7 +636,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -663,7 +664,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'MoneyReport') as MoneyReport ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'MoneyReport') as MoneyReport ;
     } else {
       return null;
     }
@@ -687,7 +688,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -715,7 +716,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'RelayReport') as RelayReport ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'RelayReport') as RelayReport ;
     } else {
       return null;
     }
@@ -739,7 +740,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -791,7 +792,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -819,7 +820,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'InlineResponse200') as InlineResponse200 ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'InlineResponse200') as InlineResponse200 ;
     } else {
       return null;
     }
@@ -843,7 +844,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -871,7 +872,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-        (apiClient.deserialize(response.body, 'List<Program>') as List).map((item) => item as Program).toList();
+        (apiClient.deserialize(utf8.decode(response.bodyBytes), 'List<Program>') as List).map((item) => item as Program).toList();
     } else {
       return null;
     }
@@ -895,7 +896,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -947,7 +948,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = ["pinCode"];
@@ -999,7 +1000,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1051,7 +1052,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1103,7 +1104,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1155,7 +1156,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1207,7 +1208,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1259,7 +1260,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1311,7 +1312,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1363,7 +1364,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1415,7 +1416,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1443,7 +1444,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'InlineResponse2001') as InlineResponse2001 ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'InlineResponse2001') as InlineResponse2001 ;
     } else {
       return null;
     }
@@ -1467,7 +1468,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1495,7 +1496,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'int') as int ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'int') as int ;
     } else {
       return null;
     }
@@ -1519,7 +1520,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1547,7 +1548,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'StationPrograms') as StationPrograms ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationPrograms') as StationPrograms ;
     } else {
       return null;
     }
@@ -1571,7 +1572,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1599,7 +1600,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'StationReport') as StationReport ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationReport') as StationReport ;
     } else {
       return null;
     }
@@ -1623,7 +1624,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1651,7 +1652,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'StationReport') as StationReport ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationReport') as StationReport ;
     } else {
       return null;
     }
@@ -1672,7 +1673,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1700,7 +1701,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-        (apiClient.deserialize(response.body, 'List<StationsVariables>') as List).map((item) => item as StationsVariables).toList();
+        (apiClient.deserialize(utf8.decode(response.bodyBytes), 'List<StationsVariables>') as List).map((item) => item as StationsVariables).toList();
     } else {
       return null;
     }
@@ -1721,7 +1722,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = [];
@@ -1749,7 +1750,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'StatusReport') as StatusReport ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StatusReport') as StatusReport ;
     } else {
       return null;
     }
@@ -1770,7 +1771,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = ["pinCode"];
@@ -1798,7 +1799,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'StatusCollectionReport') as StatusCollectionReport ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StatusCollectionReport') as StatusCollectionReport ;
     } else {
       return null;
     }
@@ -1822,7 +1823,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = ["pinCode"];
@@ -1850,7 +1851,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'Args6') as Args6 ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Args6') as Args6 ;
     } else {
       return null;
     }
@@ -1874,7 +1875,7 @@ class DefaultApi {
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
     
-    List<String> contentTypes = ["application/json"];
+    List<String> contentTypes = ["application/json; charset=utf-8"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
     List<String> authNames = ["pinCode"];
@@ -1902,7 +1903,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(response.body, 'Args6') as Args6 ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Args6') as Args6 ;
     } else {
       return null;
     }

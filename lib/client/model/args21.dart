@@ -1,24 +1,24 @@
 part of swagger.api;
 
 class Args21 {
-
+  
   String login = null;
   
 
   String firstName = null;
-
+  
 
   String middleName = null;
-
+  
 
   String lastName = null;
   
 
   bool isAdmin = null;
-
+  
 
   bool isOperator = null;
-
+  
 
   bool isEngineer = null;
   
@@ -34,7 +34,7 @@ class Args21 {
     login =
       
       
-     json['login']
+      json['login']
 ;
     firstName =
       
@@ -59,7 +59,7 @@ class Args21 {
     isOperator =
       
       
-     json['isOperator']
+      json['isOperator']
 ;
     isEngineer =
       

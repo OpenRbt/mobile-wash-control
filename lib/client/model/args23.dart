@@ -2,7 +2,7 @@ part of swagger.api;
 
 class Args23 {
   
-  Login login = null;
+  String login = null;
   
   Args23();
 
@@ -16,7 +16,7 @@ class Args23 {
     login =
       
       
-      new Login.fromJson(json['login'])
+      json['login']
 ;
   }
 

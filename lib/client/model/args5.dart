@@ -1,7 +1,7 @@
 part of swagger.api;
 
 class Args5 {
-
+  
   String hash = null;
   
   Args5();
