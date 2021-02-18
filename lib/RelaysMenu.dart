@@ -22,10 +22,10 @@ class _RelaysMenuState extends State<RelaysMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final RelaysMenuArgs dozatronsMenuArgs =
+    final RelaysMenuArgs relaysMenuArgs =
         ModalRoute.of(context).settings.arguments;
-    final sessionData = dozatronsMenuArgs.sessionData;
-    _program = dozatronsMenuArgs.currentProgram;
+    final sessionData = relaysMenuArgs.sessionData;
+    _program = relaysMenuArgs.currentProgram;
 
     final AppBar appBar = AppBar(
       title: Text("Реле"),
@@ -119,12 +119,12 @@ class _RelaysMenuState extends State<RelaysMenu> {
               }
             },
           ))
-          ..addAll(buildRelayList(
-              sessionData, _program.preflightRelays, screenW)));
+          ..addAll(
+              buildRelayList(sessionData, _program.preflightRelays, screenW)));
   }
 
-  List<Widget> buildRelayList(SessionData sessionData, List<RelayConfig> relays,
-      double screenW) {
+  List<Widget> buildRelayList(
+      SessionData sessionData, List<RelayConfig> relays, double screenW) {
     return List.generate(relays.length, (index) {
       var relay = relays[index];
 
@@ -163,7 +163,7 @@ class _RelaysMenuState extends State<RelaysMenu> {
                   SizedBox(
                     height: 60,
                     width: screenW / 4,
-                    child: TextField(
+                    child: buildForm(
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly,
@@ -171,38 +171,17 @@ class _RelaysMenuState extends State<RelaysMenu> {
                         controller: percentController,
                         decoration:
                             InputDecoration(border: OutlineInputBorder()),
+                        validator: (valueString) {
+                          int value = int.tryParse(valueString);
+                          if (value == null || value < 0 || value > 100) {
+                            return 'Ввод ограничен значениями от 0 до 100';
+                          }
+                          return null;
+                        },
                         onSubmitted: (newValueString) async {
                           var previousValue = on;
                           try {
-                            int newValue = int.tryParse(newValueString);
-                            if (newValue == null || newValue < 0 || newValue > 100) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text("Ошибка"),
-                                    content: Text(
-                                        "Неверное значение поля"),
-                                    actionsPadding:
-                                    EdgeInsets.all(10),
-                                    actions: [
-                                      RaisedButton(
-                                        color:
-                                        Colors.lightGreen,
-                                        textColor:
-                                        Colors.white,
-                                        disabledColor:
-                                        Colors.grey,
-                                        disabledTextColor:
-                                        Colors.black,
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Ок"),
-                                      )
-                                    ],
-                                  ));
-                              return;
-                            }
+                            int newValue = int.parse(newValueString);
                             var timeon = newValue * _timeConstant ~/ 100;
                             var timeoff = _timeConstant - timeon;
                             /*print('before');
@@ -212,11 +191,13 @@ class _RelaysMenuState extends State<RelaysMenu> {
                             /*print('after');
                             print(relay);*/
                             await sessionData.client.setProgram(_program);
+                            return null;
                           } catch (e) {
                             relay.timeon = previousValue * _timeConstant ~/ 100;
                             relay.timeoff = _timeConstant - relay.timeon;
                             print(
                                 "Exception when calling DefaultApi->setProgram in DozatronsMenu: $e\n");
+                            return 'Произошла ошибка при вызове апи';
                           }
                         }),
                   ),

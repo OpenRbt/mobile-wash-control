@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'client/api.dart';
+import 'package:flutter/services.dart';
 
 enum Pages {
   Main,
@@ -165,3 +166,88 @@ class MyScrollingBehavior extends ScrollBehavior {
     return child;
   }
 }
+
+Widget buildForm(
+    {List<TextInputFormatter> inputFormatters,
+    InputDecoration decoration,
+    TextInputType keyboardType,
+    TextEditingController controller,
+    String Function(String) validator,
+    @required Future<String> Function(String) onSubmitted}) {
+  return Builder(builder: (BuildContext context) {
+    return TextField(
+        keyboardType: keyboardType ?? null,
+        inputFormatters: inputFormatters ?? null,
+        decoration: decoration ?? null,
+        controller: controller ?? null,
+        onSubmitted: (newValue) async {
+          var valid = validator == null ? null : validator(newValue);
+          if (valid == null) {
+            var err = await onSubmitted(newValue);
+            if (err == null)
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text('Обработка данных...')));
+            else
+              showErrorDialog(context, err);
+          } else
+            showErrorDialog(context, valid);
+        });
+  });
+}
+
+void showErrorDialog(BuildContext context, String text) {
+  showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text("Ошибка"),
+            content: Text(text),
+            actionsPadding: EdgeInsets.all(10),
+            actions: [
+              RaisedButton(
+                color: Colors.lightGreen,
+                textColor: Colors.white,
+                disabledColor: Colors.grey,
+                disabledTextColor: Colors.black,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Ок"),
+              )
+            ],
+          ));
+}
+
+/*class CustomForm extends StatefulWidget {
+  CustomForm({bool Function(String) this.validator});
+  final bool Function(String) validator;
+
+  @override
+  CustomFormState createState() => CustomFormState();
+}
+class CustomFormState extends State<CustomForm> {
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child:
+          TextFormField(
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+              if (value != '100') {
+                return 'Please enter 100 text';
+              }
+              return null;
+            },
+            onFieldSubmitted: (value) {
+            if (_formKey.currentState.validate()) {
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text('Processing Data')));
+            }
+          },
+          ),
+    );
+  }
+}*/

@@ -7,7 +7,7 @@ import 'package:mobile_wash_control/client/api.dart';
 import 'package:mobile_wash_control/AccountsMenu.dart';
 import 'package:mobile_wash_control/AuthPage.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/DozatronsMenu.dart';
+import 'package:mobile_wash_control/RelaysMenu.dart';
 import 'package:mobile_wash_control/HomePage.dart';
 import 'package:mobile_wash_control/EditPostMenu.dart';
 import 'package:mobile_wash_control/PostsMenu.dart';
