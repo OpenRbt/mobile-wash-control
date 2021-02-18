@@ -1,9 +1,9 @@
 import 'dart:core';
 import 'package:mobile_wash_control/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/AccountsMenuEdit.dart';
+import 'package:mobile_wash_control/SettingsMenuKasse.dart';
+import 'package:mobile_wash_control/SettingsMenuPost.dart';
 import 'package:mobile_wash_control/client/api.dart';
-//import 'dart:io';
-
 import 'package:mobile_wash_control/AccountsMenu.dart';
 import 'package:mobile_wash_control/AuthPage.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
@@ -60,12 +60,14 @@ class MyApp extends StatelessWidget {
         "/home/editPost": (context) => EditPostMenu(),
         "/home/programs": (context) => ProgramsMenu(),
         "/home/settings": (context) => SettingsMenu(),
+        "/home/settings/post": (context) => SettingsMenuPost(),
+        "/home/settings/kasse": (context) => SettingsMenuKasse(),
         "/home/statistics": (context) => StatisticsMenu(),
         "/home/relays": (context) => RelaysMenu(),
         "/home/posts": (context) => PostsMenu(),
         "/home/accounts": (context) => AccountsMenu(),
         "/home/accounts/edit": (context) => AccountsMenuEdit(),
-        "/home/accounts/add":(context)=>AccountsMenuAdd()
+        "/home/accounts/add": (context) => AccountsMenuAdd()
       },
       //home: MyHomePage(title: 'Welcome'),
     );
@@ -204,7 +206,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     onTap: _serversValid[index]
                         ? () {
-                      var args = AuthArgs("http://" + _servers[index] + ":8020");
+                            var args =
+                                AuthArgs("http://" + _servers[index] + ":8020");
                             Navigator.pushNamed(context, "/auth",
                                 arguments: args);
                           }
