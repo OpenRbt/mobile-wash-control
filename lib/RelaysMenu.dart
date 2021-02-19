@@ -134,6 +134,7 @@ class _RelaysMenuState extends State<RelaysMenu> {
       percentController.value = TextEditingValue(
         text: on.toString(),
       );
+      percentController.selection = TextSelection.fromPosition(TextPosition(offset: percentController.text.length));
       _controllers.add(percentController);
 
       return new Row(
@@ -164,6 +165,7 @@ class _RelaysMenuState extends State<RelaysMenu> {
                     height: 60,
                     width: screenW / 4,
                     child: buildForm(
+                      style: TextStyle(fontSize: 24),
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly,
@@ -182,14 +184,8 @@ class _RelaysMenuState extends State<RelaysMenu> {
                           var previousValue = on;
                           try {
                             int newValue = int.parse(newValueString);
-                            var timeon = newValue * _timeConstant ~/ 100;
-                            var timeoff = _timeConstant - timeon;
-                            /*print('before');
-                            print(relay);*/
-                            relay.timeon = timeon;
-                            relay.timeoff = timeoff;
-                            /*print('after');
-                            print(relay);*/
+                            relay.timeon = newValue * _timeConstant ~/ 100;
+                            relay.timeoff = _timeConstant - relay.timeon;
                             await sessionData.client.setProgram(_program);
                             return null;
                           } catch (e) {

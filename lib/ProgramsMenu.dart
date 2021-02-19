@@ -14,14 +14,11 @@ class ProgramsMenu extends StatefulWidget {
 class _ProgramsMenuState extends State<ProgramsMenu> {
   _ProgramsMenuState() : super();
 
-  List<bool> _ProgramsCheckbox = List.generate(20, (index) {
-    return false;
-  });
-
-  List<Program> _programs /*= [
+  List<Program>
+      _programs/*= [
     Program()
       ..name = 'test'
-      ..price = 11
+      ..price = 1
       ..preflightEnabled = true
       ..preflightRelays = [
         RelayConfig()
@@ -45,7 +42,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
       ],
     Program()
       ..name = 'test2'
-      ..price = 22
+      ..price = 2
       ..preflightEnabled = false
       ..preflightRelays = [
         RelayConfig()
@@ -67,20 +64,19 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
           ..timeon = 500
           ..id = 4
       ]
-  ]*/;
+  ]*/
+      ;
   bool _firstLoad = true;
 
-  void GetData(SessionData sessionData) async {
+  Future<String> GetData(SessionData sessionData) async {
     try {
       var args14 = Args14();
       _programs = await sessionData.client.programs(args14);
       _firstLoad = false;
-      /*if (!mounted) {
-        return;
-      }
-      setState(() {});*/ //TODO: uncomment if it is needed
+      return null;
     } catch (e) {
       print("Exception when calling GetData in ProgramsMenu: $e\n");
+      return 'Произошла ошибка при вызове апи';
     }
   }
 
@@ -103,12 +99,21 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
       drawer: prepareDrawer(context, Pages.Programs, sessionData),
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return new SizedBox(
-            height: screenH - appBar.preferredSize.height,
-            width: screenW,
-            child: ListView(
-                children: buildChildren(sessionData, screenW, screenH)),
-          );
+          return new SafeArea(
+              child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      var err = await GetData(sessionData);
+                      await Future.delayed(Duration(milliseconds: 500));
+                      if (err != null)
+                        showErrorDialog(context, err);
+                      else
+                        setState(() {});
+                    },
+                    child: ListView(
+                        children: buildChildren(sessionData, screenW, screenH)),
+                  )));
         },
       ),
     );
@@ -124,12 +129,16 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
             nameController.value = TextEditingValue(
               text: _programs[index].name,
             );
+            nameController.selection = TextSelection.fromPosition(
+                TextPosition(offset: nameController.text.length));
             _controllers.add(nameController);
 
             var priceController = TextEditingController();
             priceController.value = TextEditingValue(
               text: prices[index].toString(),
             );
+            priceController.selection = TextSelection.fromPosition(
+                TextPosition(offset: priceController.text.length));
             _controllers.add(priceController);
 
             return new Column(
@@ -144,6 +153,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                         height: 75,
                         width: screenW / 4,
                         child: buildForm(
+                            style: TextStyle(fontSize: 24),
                             decoration:
                                 InputDecoration(border: OutlineInputBorder()),
                             controller: nameController,
@@ -181,6 +191,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                               height: 75,
                               width: screenW / 9,
                               child: buildForm(
+                                  style: TextStyle(fontSize: 24),
                                   keyboardType: TextInputType.number,
                                   inputFormatters: <TextInputFormatter>[
                                     FilteringTextInputFormatter.digitsOnly,
@@ -188,14 +199,13 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder()),
                                   controller: priceController,
-                                  onSubmitted: (newValue) async {
+                                  onSubmitted: (newValueString) async {
                                     var previousPrice = _programs[index].price;
                                     try {
-                                      _programs[index].price =
-                                          int.parse(newValue);
+                                      var newValue = int.parse(newValueString);
+                                      _programs[index].price = newValue;
                                       await sessionData.client
                                           .setProgram(_programs[index]);
-                                      setState(() {});
                                       return null;
                                     } catch (e) {
                                       _programs[index].price = previousPrice;
@@ -232,12 +242,11 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                                 'Активный',
                               ),
                             ),
-                            value: _ProgramsCheckbox[index],
+                            value: false,
                             onChanged: (newValue) {
                               setState(() {
                                 //TODO: add real logic
                                 print('Checkbox pressed');
-                                //_ProgramsCheckbox[index] = !_ProgramsCheckbox[index];
                               });
                             },
                           ),

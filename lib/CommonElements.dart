@@ -54,9 +54,9 @@ Widget prepareDrawer(
 
   return SafeArea(
       minimum: const EdgeInsets.only(
-          top: 16.0,
+          top: 8.0,
           bottom:
-              16.0), //TODO: check if actually needed on devices with different designs
+              8.0), //TODO: check if actually needed on devices with different designs
       child: ScrollConfiguration(
           behavior: MyScrollingBehavior(),
           child: FittedBox(
@@ -70,7 +70,9 @@ Widget prepareDrawer(
                       painter: MyPainter(context),
                       child: ListTileTheme(
                           style: ListTileStyle.drawer,
-                          child: Flex(direction: Axis.horizontal, children: [
+                          child: Flex(
+                              direction: Axis.horizontal,
+                              children: [
                             Expanded(
                               child: ListView.separated(
                                 shrinkWrap: true,
@@ -125,7 +127,7 @@ Widget prepareDrawer(
                                 separatorBuilder:
                                     (BuildContext context, int index) {
                                   return SizedBox(
-                                    height: screenHeight / 24,
+                                    height: screenHeight / (texts.length - 1) - (16 * texts.length),
                                   );
                                 },
                               ),
@@ -168,14 +170,16 @@ class MyScrollingBehavior extends ScrollBehavior {
 }
 
 Widget buildForm(
-    {List<TextInputFormatter> inputFormatters,
+    {       TextStyle style,
+      TextInputType keyboardType,
+      List<TextInputFormatter> inputFormatters,
     InputDecoration decoration,
-    TextInputType keyboardType,
     TextEditingController controller,
     String Function(String) validator,
     @required Future<String> Function(String) onSubmitted}) {
   return Builder(builder: (BuildContext context) {
     return TextField(
+      style: style ?? null,
         keyboardType: keyboardType ?? null,
         inputFormatters: inputFormatters ?? null,
         decoration: decoration ?? null,
@@ -216,38 +220,3 @@ void showErrorDialog(BuildContext context, String text) {
             ],
           ));
 }
-
-/*class CustomForm extends StatefulWidget {
-  CustomForm({bool Function(String) this.validator});
-  final bool Function(String) validator;
-
-  @override
-  CustomFormState createState() => CustomFormState();
-}
-class CustomFormState extends State<CustomForm> {
-  final _formKey = GlobalKey<FormState>();
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child:
-          TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter some text';
-              }
-              if (value != '100') {
-                return 'Please enter 100 text';
-              }
-              return null;
-            },
-            onFieldSubmitted: (value) {
-            if (_formKey.currentState.validate()) {
-              Scaffold.of(context)
-                  .showSnackBar(SnackBar(content: Text('Processing Data')));
-            }
-          },
-          ),
-    );
-  }
-}*/
