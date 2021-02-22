@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'client/api.dart';
+import "package:mobile_wash_control/SettingsMenuPost.dart";
 
 class SettingsMenuArgs {}
 
@@ -24,7 +25,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
 
   bool _firstLoad = true;
   String _currentTemp = "__";
-  List<SettingsData> _settingsData = List.generate(8, (index) {
+  List<SettingsData> _settingsData = List.generate(10, (index) {
     return new SettingsData(-1, "Loading", "...", "loading");
   });
 
@@ -97,6 +98,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                       children: [
                         Text("Дата ", style: TextStyle(fontSize: 16)),
                         SizedBox(
+                          height: 40,
                           width: 80,
                           child: RaisedButton(
                             padding: EdgeInsets.zero,
@@ -106,6 +108,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           ),
                         ),
                         SizedBox(
+                          height: 40,
                           width: 5,
                         ),
                         Text(
@@ -114,6 +117,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(
+                          height: 40,
                           width: 80,
                           child: RaisedButton(
                             padding: EdgeInsets.zero,
@@ -127,6 +131,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
+                        height: 40,
                         width: screenW / 7 * 2,
                         child: Text(
                           "Список постов",
@@ -136,6 +141,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         ),
                       ),
                       SizedBox(
+                        height: 40,
                         width: screenW / 7 * 2,
                         child: Text("Адрес",
                             textAlign: TextAlign.center,
@@ -143,6 +149,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
                       SizedBox(
+                        height: 40,
                         width: screenW / 7 * 2,
                         child: Text("Статус",
                             textAlign: TextAlign.center,
@@ -152,7 +159,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     ],
                   ),
                   SizedBox(
-                      height: screenH / 3 * 2 - appBar.preferredSize.height,
+                      height: screenH - appBar.preferredSize.height - 80-125,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey)),
@@ -167,6 +174,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                   width: screenW / 7 * 2,
                                   child: DecoratedBox(
                                       decoration: BoxDecoration(
+                                        color: index % 2 == 0 ? Colors.white : Colors.black12,
                                           border: Border.all(
                                               color: Colors.black38)),
                                       child: Center(
@@ -180,6 +188,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                   width: screenW / 7 * 2,
                                   child: DecoratedBox(
                                       decoration: BoxDecoration(
+                                          color: index % 2 == 0 ? Colors.white : Colors.black12,
                                           border: Border.all(
                                               color: Colors.black38)),
                                       child: Center(
@@ -193,6 +202,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                   width: screenW / 7 * 2,
                                   child: DecoratedBox(
                                       decoration: BoxDecoration(
+                                          color: index % 2 == 0 ? Colors.white : Colors.black12,
                                           border: Border.all(
                                               color: Colors.black38)),
                                       child: Center(
@@ -213,14 +223,18 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                   width: screenW / 7,
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
+                                        color: index % 2 == 0 ? Colors.white : Colors.black12,
                                         border:
                                             Border.all(color: Colors.black38)),
                                     child: IconButton(
                                       icon: Icon(Icons.more_horiz),
                                       onPressed: () {
+                                        var args = SettingsMenuPostArgs(
+                                            _settingsData[index].id,
+                                            sessionData);
                                         Navigator.pushNamed(
                                             context, "/home/settings/post",
-                                            arguments: sessionData);
+                                            arguments: args);
                                       },
                                     ),
                                   ),
@@ -259,12 +273,3 @@ class _SettingsMenuState extends State<SettingsMenu> {
   }
 }
 
-TableRow createTableRow(List values) {
-  List<TableCell> result = [];
-  for (var val in values) {
-    result.add(TableCell(
-      verticalAlignment: TableCellVerticalAlignment.middle,
-      child: Center(child: Text(val.toString())),
-    ));
-  }
-}

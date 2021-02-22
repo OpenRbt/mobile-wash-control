@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'dart:convert';
 
 class AccountsMenuEditArgs {
   AccountInfo targetUser;

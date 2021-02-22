@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'AccountsMenu.dart';
 import 'client/api.dart';
 
 class AccountsMenuAdd extends StatefulWidget {
