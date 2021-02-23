@@ -24,6 +24,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
   int _service_balance = 0;
   int _balance = 0;
   int _current_program = -1;
+  bool _program_execution_side = false; //TODO: get it from api
 
   @override
   void initState() {
@@ -283,6 +284,28 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 }
               },
             ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: SizedBox(
+            height: 50,
+            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+            child: DropdownButton(
+              isExpanded: true,
+                value: _program_execution_side,
+                onChanged: (newValue) {
+                  setState(() {
+                    _program_execution_side = newValue;
+                  });
+                },
+                items: [DropdownMenuItem(
+                      value: false,
+                      child: Text("Локально")),
+                  DropdownMenuItem(
+                      value: true,
+                      child: Text("На сервере"))]
+                ),
           ),
         ),
       ],
