@@ -9,7 +9,6 @@ class AccountsMenuEdit extends StatefulWidget {
   _AccountsMenuEditState createState() => _AccountsMenuEditState();
 }
 
-//TODO: Display message on complete/error
 class _AccountsMenuEditState extends State<AccountsMenuEdit> {
   bool _notLoaded = true;
   bool _inUpdate = false;
@@ -72,7 +71,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
     setState(() {});
   }
 
-  void _updateUser(SessionData sessionData) async {
+  void _updateUser(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
     setState(() {});
     try {
@@ -88,8 +87,12 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
       args.isOperator = _inputTriggers[1];
       args.isEngineer = _inputTriggers[2];
       var res = sessionData.client.updateUser(args);
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Пользователь успешно изменен")));
     } catch (e) {
       print("Exception when calling DefaultApi->User(put): $e\n");
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Произошла ошибка при сохранении")));
     }
     _inUpdate = false;
     setState(() {});
@@ -375,19 +378,34 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                     height: 50,
                     width: screenW / 3,
                     child: RaisedButton(
-                      onPressed: _inUpdate ? null : () {
-                        _updateUser(accountsMenuEditArgs.sessionData);
-                      },
-                      child: Text(_inUpdate ? "Сохранение..." :"Сохранить"),
+                      color: Colors.lightGreen,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      splashColor: Colors.lightGreenAccent,
+                      onPressed: _inUpdate
+                          ? null
+                          : () {
+                              _updateUser(
+                                  accountsMenuEditArgs.sessionData, context);
+                            },
+                      child: Text(_inUpdate ? "Сохранение..." : "Сохранить"),
                     ),
                   ),
                   SizedBox(
                     height: 50,
                     width: screenW / 3,
                     child: RaisedButton(
-                      onPressed:_inUpdate ? null :  () {
-                        _setData(accountsMenuEditArgs.targetUser);
-                      },
+                      color: Colors.lightGreen,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      splashColor: Colors.lightGreenAccent,
+                      onPressed: _inUpdate
+                          ? null
+                          : () {
+                              _setData(accountsMenuEditArgs.targetUser);
+                            },
                       child: Text("Отменить"),
                     ),
                   ),

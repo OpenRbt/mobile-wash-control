@@ -68,8 +68,6 @@ class _AccountsMenuState extends State<AccountsMenu> {
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
-    //TODO: improve interaction with subpages (indication of actions)
-    //TODO: add orientation support !
     return Scaffold(
       appBar: appBar,
       drawer: prepareDrawer(context, Pages.Accounts, sessionData),
@@ -84,7 +82,18 @@ class _AccountsMenuState extends State<AccountsMenu> {
                 children: [
                   SizedBox(
                     height: 50,
-                    width: screenW / 9 * 2,
+                    width: screenW > screenH ? screenW / 11 * 2 : 0,
+                    child: Text(
+                      screenW > screenH ? "Логин" : "",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width:
+                        screenW > screenH ? screenW / 11 * 2 : screenW / 9 * 2,
                     child: Text(
                       "Фамилия",
                       textAlign: TextAlign.center,
@@ -94,7 +103,8 @@ class _AccountsMenuState extends State<AccountsMenu> {
                   ),
                   SizedBox(
                     height: 50,
-                    width: screenW / 9 * 2,
+                    width:
+                        screenW > screenH ? screenW / 11 * 2 : screenW / 9 * 2,
                     child: Text("Имя",
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -102,7 +112,8 @@ class _AccountsMenuState extends State<AccountsMenu> {
                   ),
                   SizedBox(
                     height: 50,
-                    width: screenW / 9 * 2,
+                    width:
+                        screenW > screenH ? screenW / 11 * 2 : screenW / 9 * 2,
                     child: Text("Отчество",
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -110,7 +121,8 @@ class _AccountsMenuState extends State<AccountsMenu> {
                   ),
                   SizedBox(
                     height: 50,
-                    width: screenW / 9 * 2,
+                    width:
+                        screenW > screenH ? screenW / 11 * 2 : screenW / 9 * 2,
                     child: Text("Статус",
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -119,7 +131,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
                 ],
               ),
               SizedBox(
-                height: screenH - appBar.preferredSize.height - 200,
+                height: screenH - appBar.preferredSize.height - 91,
                 child: ListView(
                   children: List.generate(_accounts.length + 1, (index) {
                     if (index < _accounts.length) {
@@ -128,7 +140,22 @@ class _AccountsMenuState extends State<AccountsMenu> {
                         children: [
                           SizedBox(
                               height: 50,
-                              width: screenW / 9 * 2,
+                              width: screenW > screenH ? screenW / 11 * 2 : 0,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black38)),
+                                child: Text(
+                                  screenW > screenH
+                                      ? "${_accounts[index].login}"
+                                      : "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                          SizedBox(
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.black38)),
@@ -139,7 +166,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                               )),
                           SizedBox(
                               height: 50,
-                              width: screenW / 9 * 2,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.black38)),
@@ -150,7 +179,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                               )),
                           SizedBox(
                               height: 50,
-                              width: screenW / 9 * 2,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.black38)),
@@ -161,7 +192,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                               )),
                           SizedBox(
                               height: 50,
-                              width: screenW / 9 * 2,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
                               child: DecoratedBox(
                                   decoration: BoxDecoration(
                                       border:
@@ -172,7 +205,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   ))),
                           SizedBox(
                               height: 50,
-                              width: screenW / 9,
+                              width: screenW > screenH
+                                  ? screenW / 11
+                                  : screenW / 9,
                               child: DecoratedBox(
                                   decoration: BoxDecoration(
                                       border:
@@ -198,7 +233,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
                         children: [
                           SizedBox(
                               height: 50,
-                              width: screenW / 9 * 2,
+                              width: screenW > screenH ? screenW / 11 * 2 : 0,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.black38)),
@@ -209,7 +244,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                               )),
                           SizedBox(
                               height: 50,
-                              width: screenW / 9 * 2,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.black38)),
@@ -220,7 +257,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                               )),
                           SizedBox(
                               height: 50,
-                              width: screenW / 9 * 2,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.black38)),
@@ -231,18 +270,35 @@ class _AccountsMenuState extends State<AccountsMenu> {
                               )),
                           SizedBox(
                               height: 50,
-                              width: screenW / 9 * 2,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
                               child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    "",
-                                    textAlign: TextAlign.center,
-                                  ))),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black38)),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
                           SizedBox(
                               height: 50,
-                              width: screenW / 9,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black38)),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                          SizedBox(
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11
+                                  : screenW / 9,
                               child: DecoratedBox(
                                   decoration: BoxDecoration(
                                       border:

@@ -17,15 +17,11 @@ class AuthArgs {
 class _AuthPageState extends State<AuthPage> {
   _AuthPageState() : super();
   final int _maxPinLength = 4;
-
-
   String _host;
   var _sessionData;
-  var _currentDisplayPos = 0;
-  List<String> _displayedSymbols = <String>['x', 'x', 'x', 'x'];
   String _currentPin = "";
 
-  void _loadPage(){
+  void _loadPage() {
     SystemChrome.setPreferredOrientations([]);
     Navigator.pop(context);
     Navigator.pushNamed(context, "/home", arguments: _sessionData);
@@ -37,7 +33,7 @@ class _AuthPageState extends State<AuthPage> {
       _sessionData.client.apiClient.basePath = _host;
       _sessionData.client.apiClient.addDefaultHeader("Pin", _currentPin);
       var res = await _sessionData.client.getUser();
-      if (res != null){
+      if (res != null) {
         _loadPage();
       }
       print(res);
@@ -46,17 +42,10 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-  void _authCheck(SessionData sessionData) {
-    if (_displayedSymbols.toString() == "[0, 0, 0, 0]") {
-      SystemChrome.setPreferredOrientations([]);
-      Navigator.pop(context);
-    }
-  }
 
   //TODO: Add horizontal layout
   @override
   Widget build(BuildContext context) {
-    //final SessionData sessionData = ModalRoute.of(context).settings.arguments;
     final AuthArgs authArgs = ModalRoute.of(context).settings.arguments;
     _host = authArgs.Host;
     double screenH = MediaQuery.of(context).size.height;
@@ -178,33 +167,6 @@ class _AuthPageState extends State<AuthPage> {
             }
           },
         ));
-  }
-
-  void _deleteSymbol() {
-    if (_currentDisplayPos == 4)
-      _displayedSymbols[3] = 'x';
-    else
-      _displayedSymbols[_currentDisplayPos] = 'x';
-    _currentDisplayPos--;
-    if (_currentDisplayPos < 0) _currentDisplayPos = 0;
-  }
-
-  void _addSymbol(String text) {
-    if (_currentDisplayPos == 4)
-      _displayedSymbols[3] = text;
-    else
-      _displayedSymbols[_currentDisplayPos] = text;
-    _currentDisplayPos++;
-    if (_currentDisplayPos > 4) _currentDisplayPos = 4;
-  }
-
-  String _toDisplay(List<String> values) {
-    int lastNumberIndex = _currentDisplayPos - 1;
-    var res = '';
-    for (int i = 0; i <= lastNumberIndex; i++)
-      res += i == lastNumberIndex ? values[lastNumberIndex].toString() : '*';
-    for (int i = lastNumberIndex + 1; i < 4; i++) res += ' ';
-    return res;
   }
 
   void _deleteSymbolAlt() {

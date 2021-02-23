@@ -64,7 +64,8 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
     }
   }
 
-  void _saveCardReader(SettingsMenuPostArgs settingsMenuPostArgs) async {
+  void _saveCardReader(
+      SettingsMenuPostArgs settingsMenuPostArgs, BuildContext context) async {
     try {
       var args = CardReaderConfig();
       args.stationID = settingsMenuPostArgs.stationID;
@@ -77,22 +78,25 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
           : " ";
       var res = await settingsMenuPostArgs.sessionData.client
           .setCardReaderConfig(args);
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Настройки кардридера сохранены")));
     } catch (e) {
       print("Exception when calling DefaultApi->/set-card-reader-config: $e\n");
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Произошла ошибка при сохранении")));
     }
   }
 
   void _getButtons(SettingsMenuPostArgs settingsMenuPostArgs) async {
-    try{
+    try {
       var args = Args14();
-      args.stationID = settingsMenuPostArgs.stationID;
       var res = await settingsMenuPostArgs.sessionData.client.programs(args);
 
       _programValues = ["------------"];
-      for(int i = 0 ; i < res.length; i++){
-      _programValues.add(res[i].id.toString());
+      for (int i = 0; i < res.length; i++) {
+        _programValues.add(res[i].id.toString());
       }
-    } catch (e){
+    } catch (e) {
       print("Exception when calling DefaultApi->/programs: $e\n");
     }
 
@@ -101,8 +105,9 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.stationID = settingsMenuPostArgs.stationID;
       var res =
           await settingsMenuPostArgs.sessionData.client.stationButton(args);
-      for (int i = 0; i < res.buttons.length; i++){
-        _dropDownPrograms[res.buttons[i].buttonID-1] =res.buttons[i].programID.toString();
+      for (int i = 0; i < res.buttons.length; i++) {
+        _dropDownPrograms[res.buttons[i].buttonID - 1] =
+            res.buttons[i].programID.toString();
       }
 
       setState(() {});
@@ -111,27 +116,30 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
     }
   }
 
-  void _saveButtons(SettingsMenuPostArgs settingsMenuPostArgs) async {
-    try{
-
+  void _saveButtons(
+      SettingsMenuPostArgs settingsMenuPostArgs, BuildContext context) async {
+    try {
       var args = Args17();
       args.stationID = settingsMenuPostArgs.stationID;
       List<InlineResponse2001Buttons> buttons = List();
-      for (int i = 0 ; i < 6; i++){
-        if (_dropDownPrograms[i] != _programValues[0]){
+      for (int i = 0; i < 6; i++) {
+        if (_dropDownPrograms[i] != _programValues[0]) {
           var value = InlineResponse2001Buttons();
           value.programID = int.parse(_dropDownPrograms[i]);
-          value.buttonID = i+1;
+          value.buttonID = i + 1;
           buttons.add(value);
         }
       }
       args.buttons = buttons;
-
-      var res = await settingsMenuPostArgs.sessionData.client.setStationButton(args);
-    }catch(e){
+      var res =
+          await settingsMenuPostArgs.sessionData.client.setStationButton(args);
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Настройки кнопок сохранены")));
+    } catch (e) {
       print("Exception when calling DefaultApi->/set-station-button: $e\n");
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Произошла ошибка при сохранении")));
     }
-
   }
 
   @override
@@ -250,7 +258,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                           width: screenW / 3,
                           child: RaisedButton(
                             onPressed: () {
-                              _saveCardReader(settingsMenuPostArgs);
+                              _saveCardReader(settingsMenuPostArgs, context);
                             },
                             child: Text("Сохранить кардридер"),
                           ),
@@ -292,7 +300,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                               value: _dropDownPrograms[index],
                               isExpanded: true,
                               items:
-                              List.generate(_programValues.length, (index) {
+                                  List.generate(_programValues.length, (index) {
                                 return DropdownMenuItem(
                                     value: _programValues[index],
                                     child: Text(
@@ -319,7 +327,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                       width: screenW / 3,
                       child: RaisedButton(
                         onPressed: () {
-                          _saveButtons(settingsMenuPostArgs);
+                          _saveButtons(settingsMenuPostArgs, context);
                         },
                         child: Text("Сохранить кнопки"),
                       ),

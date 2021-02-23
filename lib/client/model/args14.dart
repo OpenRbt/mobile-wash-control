@@ -1,7 +1,6 @@
 part of swagger.api;
 
 class Args14 {
-  int stationID = null;
   int programID = null;
    // range from 1 to //
   Args14();
@@ -16,13 +15,11 @@ class Args14 {
     programID =
         json['programID']
     ;
-    stationID = json['stationID'];
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'programID': programID,
-      'stationID' : stationID
+      'programID': programID
      };
   }
 

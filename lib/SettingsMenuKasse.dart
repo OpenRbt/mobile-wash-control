@@ -7,8 +7,9 @@ class SettingsMenuKasse extends StatefulWidget {
   @override
   _SettingsMenuKasseState createState() => _SettingsMenuKasseState();
 }
-//TODO: Display message on complete/error
+
 class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
+  bool _inUpdate = false;
   bool _firstLoad = true;
   _SettingsMenuKasseState() : super();
   List<String> _taxValues = ["TAX_VAT110", "TAX_VAT0", "TAX_NO", "TAX_VAT120"];
@@ -51,7 +52,8 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
     }
   }
 
-  void _setKasse(SessionData sessionData) {
+  void _setKasse(SessionData sessionData, BuildContext context) async {
+    _inUpdate = true;
     try {
       if (_inputControllers[2].value.text.length != 12) {
         return;
@@ -63,10 +65,15 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
       args.cashier = _inputControllers[1].value.text;
       args.cashierINN = _inputControllers[2].value.text;
 
-      var res = sessionData.client.setKasse(args);
+      var res = await sessionData.client.setKasse(args);
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Настройки кассы успешно сохранены")));
     } catch (e) {
       print("Exception when calling DefaultApi->set-kasse: $e\n");
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Произошла ошибка сохранении")));
     }
+    _inUpdate = false;
   }
 
   @override
@@ -209,9 +216,11 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
                       height: 50,
                       width: screenW / 3,
                       child: RaisedButton(
-                        onPressed: () {
-                          _setKasse(sessionData);
-                        },
+                        onPressed: _inUpdate
+                            ? null
+                            : () {
+                                _setKasse(sessionData, context);
+                              },
                         child: Text("Сохранить"),
                       ),
                     ),
@@ -219,9 +228,11 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
                       height: 50,
                       width: screenW / 3,
                       child: RaisedButton(
-                        onPressed: () {
-                          _getKasse(sessionData);
-                        },
+                        onPressed: _inUpdate
+                            ? null
+                            : () {
+                                _getKasse(sessionData);
+                              },
                         child: Text("Отменить"),
                       ),
                     ),

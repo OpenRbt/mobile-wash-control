@@ -219,7 +219,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: _buildScanButton(),
     );
   }
 
@@ -235,20 +234,6 @@ class _MyHomePageState extends State<MyHomePage> {
           : () {
               print("cant_scan");
             },
-    );
-  }
-
-  //TODO: remove after all pages implementations
-  Widget _buildScanButton() {
-    return new FloatingActionButton(
-      backgroundColor: Colors.lightGreen,
-      splashColor: Colors.lightGreenAccent,
-      onPressed: () {
-        Navigator.pushNamed(context, '/home',
-            arguments: SessionData(DefaultApi()));
-      },
-      tooltip: '',
-      child: Icon(Icons.home),
     );
   }
 }

@@ -254,8 +254,8 @@ class _SettingsMenuState extends State<SettingsMenu> {
                       textColor: Colors.white,
                       disabledColor: Colors.grey,
                       disabledTextColor: Colors.black,
-                      padding: EdgeInsets.all(8.0),
                       splashColor: Colors.lightGreenAccent,
+                      padding: EdgeInsets.all(8.0),
                       child: Text("Настройки кассы"),
                       onPressed: () {
                         Navigator.pushNamed(context, "/home/settings/kasse",

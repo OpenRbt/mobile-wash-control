@@ -8,13 +8,12 @@ class AccountsMenuAdd extends StatefulWidget {
   _AccountsMenuAddState createState() => _AccountsMenuAddState();
 }
 
-//TODO: Display message on complete/error
 class _AccountsMenuAddState extends State<AccountsMenuAdd> {
   bool _inUpdate = false;
   List<TextEditingController> _inputControllers;
   List<bool> _inputTriggers = List.filled(3, false);
-  void initState() {
-    super.initState();
+
+  void pageInit() {
     _inputControllers = List.generate(5, (index) {
       var controller = new TextEditingController();
       switch (index) {
@@ -54,6 +53,11 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
     });
   }
 
+  void initState() {
+    super.initState();
+    pageInit();
+  }
+
   void dispose() {
     for (var controller in _inputControllers) {
       controller.dispose();
@@ -61,16 +65,15 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
     super.dispose();
   }
 
-  void _addUser(SessionData sessionData) async {
+  void _addUser(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
     setState(() {});
     try {
-      print("send start");
       var args = Args22();
       args.login = _inputControllers[0].value.text;
       if (args.login.length < 4) {
         print("login length fail");
-        return;
+        throw "login length error";
       }
       args.firstName = _inputControllers[1].value.text;
       if (args.firstName.length < 1) args.firstName = " ";
@@ -81,17 +84,19 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
       args.password = _inputControllers[4].value.text;
       if (args.password.length < 4) {
         print("pass length fail");
-        return;
+        throw "pass length error";
       }
       args.isAdmin = _inputTriggers[0];
       args.isOperator = _inputTriggers[1];
       args.isEngineer = _inputTriggers[2];
-      var res =  await sessionData.client.createUser(args);
-      //var res = sessionData.client.updateUser(args);
-      print("end send");
-      initState();
+      var res = await sessionData.client.createUser(args);
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Пользователь добавлен")));
+      pageInit();
     } catch (e) {
       print("Exception when calling DefaultApi->User(put): $e\n");
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Произошла ошибка при добавлении")));
     }
     _inUpdate = false;
     setState(() {});
@@ -149,10 +154,10 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                                     ],
                                     controller: _inputControllers[index],
                                     decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(10),
-                                        border: OutlineInputBorder(),
-                                        helperText:
-                                            "Логин не менее 4х символов",)),
+                                      contentPadding: EdgeInsets.all(10),
+                                      border: OutlineInputBorder(),
+                                      helperText: "Логин не менее 4х символов",
+                                    )),
                               ))
                         ],
                       );
@@ -268,6 +273,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                               child: Padding(
                                 padding: EdgeInsets.all(10),
                                 child: TextField(
+                                  keyboardType: TextInputType.phone,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
                                         RegExp("[0-9]"))
@@ -390,11 +396,17 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                     height: 50,
                     width: screenW / 3,
                     child: RaisedButton(
-                      onPressed: () {
-                        print("AddUser");
-                        _addUser(sessionData);
-                        //Navigator.pop(context, true);
-                      },
+                      color: Colors.lightGreen,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      splashColor: Colors.lightGreenAccent,
+                      onPressed: _inUpdate
+                          ? null
+                          : () {
+                              _addUser(sessionData, context);
+                              //Navigator.pop(context, true);
+                            },
                       child: Text("Сохранить"),
                     ),
                   ),
@@ -402,6 +414,11 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                     height: 50,
                     width: screenW / 3,
                     child: RaisedButton(
+                      color: Colors.lightGreen,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      splashColor: Colors.lightGreenAccent,
                       onPressed: () {
                         Navigator.pop(context);
                       },
