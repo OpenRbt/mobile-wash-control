@@ -11,13 +11,16 @@ class StationPrograms {
   int preflightSec = null;
   
 
+  RelayBoard relayBoard = null;
+  
+
   List<StationProgramsPrograms> programs = [];
   
   StationPrograms();
 
   @override
   String toString() {
-    return 'StationPrograms[stationID=$stationID, name=$name, preflightSec=$preflightSec, programs=$programs, ]';
+    return 'StationPrograms[stationID=$stationID, name=$name, preflightSec=$preflightSec, relayBoard=$relayBoard, programs=$programs, ]';
   }
 
   StationPrograms.fromJson(Map<String, dynamic> json) {
@@ -31,6 +34,11 @@ class StationPrograms {
     preflightSec =
         json['preflightSec']
     ;
+    relayBoard =
+      
+      
+      new RelayBoard.fromJson(json['relayBoard'])
+;
     programs =
       StationProgramsPrograms.listFromJson(json['programs'])
 ;
@@ -41,6 +49,7 @@ class StationPrograms {
       'stationID': stationID,
       'name': name,
       'preflightSec': preflightSec,
+      'relayBoard': relayBoard,
       'programs': programs
      };
   }

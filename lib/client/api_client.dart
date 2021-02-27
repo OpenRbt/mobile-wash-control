@@ -124,12 +124,16 @@ class ApiClient {
           return new Password.fromJson(value);
         case 'Program':
           return new Program.fromJson(value);
+        case 'RelayBoard':
+           return new RelayBoard.fromJson(value);
         case 'RelayConfig':
           return new RelayConfig.fromJson(value);
         case 'RelayReport':
           return new RelayReport.fromJson(value);
         case 'RelayStat':
           return new RelayStat.fromJson(value);
+        case 'StationConfig':
+          return new StationConfig.fromJson(value);
         case 'StationPrograms':
           return new StationPrograms.fromJson(value);
         case 'StationProgramsPrograms':
