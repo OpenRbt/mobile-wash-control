@@ -7,15 +7,15 @@ class DefaultApi {
 
   DefaultApi([ApiClient apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future addServiceAmount(Args2 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -25,7 +25,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -34,40 +34,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<CardReaderConfig> cardReaderConfig(Args18 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -77,7 +77,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -86,40 +86,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'CardReaderConfig') as CardReaderConfig ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'CardReaderConfig') as CardReaderConfig ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<CardReaderConfig> cardReaderConfigByHash(Args19 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -129,7 +129,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -138,40 +138,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'CardReaderConfig') as CardReaderConfig ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'CardReaderConfig') as CardReaderConfig ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<Args6> createUser(Args22 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -181,7 +181,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -190,40 +190,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Args6') as Args6 ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'Args6') as Args6 ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future delStation(Args4 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -233,7 +233,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -242,40 +242,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future deleteUser(Args23 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -285,7 +285,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -294,34 +294,34 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'DELETE',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'DELETE',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future getPing() async {
     Object postBody = null;
 
@@ -334,7 +334,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -343,34 +343,34 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'GET',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<UserConfig> getUser() async {
     Object postBody = null;
 
@@ -383,7 +383,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -392,34 +392,34 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'GET',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'UserConfig') as UserConfig ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'UserConfig') as UserConfig ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<UsersReport> getUsers() async {
     Object postBody = null;
 
@@ -432,7 +432,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -441,34 +441,34 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'GET',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'UsersReport') as UsersReport ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'UsersReport') as UsersReport ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<String> info() async {
     Object postBody = null;
 
@@ -481,7 +481,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -490,34 +490,34 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'GET',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'String') as String ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'String') as String ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<KasseConfig> kasse() async {
     Object postBody = null;
 
@@ -530,7 +530,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -539,40 +539,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'KasseConfig') as KasseConfig ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'KasseConfig') as KasseConfig ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<String> load(Args9 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -582,7 +582,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -591,40 +591,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'String') as String ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'String') as String ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<MoneyReport> loadMoney(Args7 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -634,7 +634,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -643,40 +643,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'MoneyReport') as MoneyReport ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'MoneyReport') as MoneyReport ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<RelayReport> loadRelay(Args5 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -686,7 +686,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -695,40 +695,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'RelayReport') as RelayReport ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'RelayReport') as RelayReport ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future openStation(Args13 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -738,7 +738,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -747,40 +747,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<InlineResponse200> ping(Args10 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -790,7 +790,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -799,40 +799,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'InlineResponse200') as InlineResponse200 ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'InlineResponse200') as InlineResponse200 ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<List<Program>> programs(Args14 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -842,7 +842,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -851,40 +851,92 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
+      return
         (apiClient.deserialize(utf8.decode(response.bodyBytes), 'List<Program>') as List).map((item) => item as Program).toList();
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
+  Future runProgram(Args24 args) async {
+    Object postBody = args;
+
+    // verify required params are set
+    if(args == null) {
+      throw new ApiException(400, "Missing required param: args");
+    }
+
+    // create path and map variables
+    String path = "/run-program".replaceAll("{format}","json");
+
+    // query params
+    List<QueryParam> queryParams = [];
+    Map<String, String> headerParams = {};
+    Map<String, String> formParams = {};
+
+    List<String> contentTypes = ["application/json"];
+
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+    List<String> authNames = [];
+
+    if(contentType.startsWith("multipart/form-data")) {
+      bool hasFields = false;
+      MultipartRequest mp = new MultipartRequest(null, null);
+
+      if(hasFields)
+        postBody = mp;
+    }
+    else {
+    }
+
+    var response = await apiClient.invokeAPI(path,
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
+
+    if(response.statusCode >= 400) {
+      throw new ApiException(response.statusCode, response.body);
+    } else if(response.body != null) {
+      return
+        ;
+    } else {
+      return ;
+    }
+  }
+  ///
+  ///
+  ///
   Future save(Args8 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -894,7 +946,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -903,40 +955,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future saveCollection(Args6 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -946,7 +998,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -955,40 +1007,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future saveIfNotExists(Args12 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -998,7 +1050,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1007,40 +1059,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future saveMoney(MoneyReport args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1050,7 +1102,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1059,40 +1111,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future saveRelay(RelayReport args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1102,7 +1154,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1111,40 +1163,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future setCardReaderConfig(CardReaderConfig args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1154,7 +1206,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1163,40 +1215,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future setKasse(KasseConfig args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1206,7 +1258,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1215,40 +1267,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future setProgram(Program args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1258,7 +1310,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1267,40 +1319,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future setStation(StationConfig args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1310,7 +1362,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1319,40 +1371,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future setStationButton(Args17 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1362,7 +1414,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1371,40 +1423,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          ;
+      return
+        ;
     } else {
       return ;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<StationConfig> station(Args3 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1414,7 +1466,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1423,40 +1475,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationConfig') as StationConfig ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationConfig') as StationConfig ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<InlineResponse2001> stationButton(Args16 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1466,7 +1518,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1475,40 +1527,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'InlineResponse2001') as InlineResponse2001 ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'InlineResponse2001') as InlineResponse2001 ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<int> stationByHash(Args11 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1518,7 +1570,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1527,40 +1579,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'int') as int ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'int') as int ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<StationPrograms> stationProgramByHash(Args15 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1570,7 +1622,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1579,40 +1631,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationPrograms') as StationPrograms ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationPrograms') as StationPrograms ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<StationReport> stationReportCurrentMoney(Args1 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1622,7 +1674,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1631,40 +1683,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationReport') as StationReport ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationReport') as StationReport ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<StationReport> stationReportDates(Args args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1674,7 +1726,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1683,34 +1735,34 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationReport') as StationReport ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationReport') as StationReport ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<List<StationsVariables>> stationsVariables() async {
     Object postBody = null;
 
@@ -1723,7 +1775,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1732,34 +1784,34 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
+      return
         (apiClient.deserialize(utf8.decode(response.bodyBytes), 'List<StationsVariables>') as List).map((item) => item as StationsVariables).toList();
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<StatusReport> status() async {
     Object postBody = null;
 
@@ -1772,7 +1824,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1781,34 +1833,34 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'GET',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StatusReport') as StatusReport ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'StatusReport') as StatusReport ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<StatusCollectionReport> statusCollection() async {
     Object postBody = null;
 
@@ -1821,7 +1873,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1830,40 +1882,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'GET',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StatusCollectionReport') as StatusCollectionReport ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'StatusCollectionReport') as StatusCollectionReport ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<Args6> updateUser(Args21 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1873,7 +1925,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1882,40 +1934,40 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'PUT',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'PUT',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Args6') as Args6 ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'Args6') as Args6 ;
     } else {
       return null;
     }
   }
-  /// 
   ///
-  /// 
+  ///
+  ///
   Future<Args6> updateUserPassword(Args20 args) async {
     Object postBody = args;
 
     // verify required params are set
     if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+      throw new ApiException(400, "Missing required param: args");
     }
 
     // create path and map variables
@@ -1925,7 +1977,7 @@ class DefaultApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    
+
     List<String> contentTypes = ["application/json"];
 
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -1934,27 +1986,27 @@ class DefaultApi {
     if(contentType.startsWith("multipart/form-data")) {
       bool hasFields = false;
       MultipartRequest mp = new MultipartRequest(null, null);
-      
+
       if(hasFields)
         postBody = mp;
     }
     else {
-          }
+    }
 
     var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
+        'POST',
+        queryParams,
+        postBody,
+        headerParams,
+        formParams,
+        contentType,
+        authNames);
 
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Args6') as Args6 ;
+      return
+        apiClient.deserialize(utf8.decode(response.bodyBytes), 'Args6') as Args6 ;
     } else {
       return null;
     }

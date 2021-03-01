@@ -7,8 +7,10 @@ import 'dart:async';
 class PostMenuArgs {
   final int postID;
   final String hash;
+  final int currentProgramID;
+  final List<Program> programs;
   final SessionData sessionData;
-  PostMenuArgs(this.postID, this.hash, this.sessionData);
+  PostMenuArgs(this.postID, this.hash, this.currentProgramID, this.programs, this.sessionData);
 }
 
 class EditPostMenu extends StatefulWidget {
@@ -24,7 +26,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
   int _service_balance = 0;
   int _balance = 0;
   int _current_program = -1;
-  bool _program_execution_side = false; //TODO: get it from api
+  bool _program_execution_server_side = false; //TODO: get it from api?
 
   @override
   void initState() {
@@ -45,6 +47,28 @@ class _EditPostMenuState extends State<EditPostMenu> {
     "сушка и блеск",
     "пауза"
   ];
+
+  void _runProgram(SessionData sessionData, String postHash, int programID) async {
+    try {
+      var res1 = await sessionData.client.status();
+      if (_program_execution_server_side) {
+        var args = Args24();
+        args.hash = postHash;
+        args.programID = programID;
+        await sessionData.client.runProgram(args);
+      }
+      else {
+        //? TODO
+      }
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    } catch (e) {
+      print(
+          "Exception when calling DefaultApi->/station-report-current-money: $e\n");
+    }
+  }
 
   void _getBalance(SessionData sessionData, int postID) async {
     try {
@@ -293,10 +317,10 @@ class _EditPostMenuState extends State<EditPostMenu> {
             width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
             child: DropdownButton(
               isExpanded: true,
-                value: _program_execution_side,
+                value: _program_execution_server_side,
                 onChanged: (newValue) {
                   setState(() {
-                    _program_execution_side = newValue;
+                    _program_execution_server_side = newValue;
                   });
                 },
                 items: [DropdownMenuItem(

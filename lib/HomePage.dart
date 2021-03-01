@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/client/api.dart';
 
 import 'EditPostMenu.dart';
 
@@ -27,11 +28,15 @@ class _HomePageState extends State<HomePage> {
     return new HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
   });
 
+  List<Program> _programs;
+
   final List<String> _buttonLabel = ["П", "Ш", "О", "В", "С", "| |"];
 
   void GetStations(SessionData sessionData) async {
     try {
       var res = await sessionData.client.status();
+      var args14 = Args14();
+      _programs = await sessionData.client.programs(args14);
 
       if (!mounted) {
         return;
@@ -88,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                         highlightColor: _homePageData[index].status == "online" ?  Colors.lightGreenAccent : Colors.redAccent,
                         onPressed: () {
                           var args = PostMenuArgs(_homePageData[index].id,
-                              _homePageData[index].hash, sessionData);
+                              _homePageData[index].hash, _homePageData[index].programID, _programs, sessionData);
                           Navigator.pushNamed(context, "/home/editPost",
                               arguments: args);
                         },

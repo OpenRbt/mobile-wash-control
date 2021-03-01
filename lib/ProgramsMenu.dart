@@ -85,7 +85,10 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
 
     if (_firstLoad) {
-      GetData(sessionData);
+      GetData(sessionData).then((err) {
+        if (err != null)
+          showErrorDialog(context, err);
+      });
     }
 
     final AppBar appBar = AppBar(

@@ -22,7 +22,6 @@ Widget prepareDrawer(
     BuildContext context, Pages selectedPage, SessionData sessionData) {
   var texts = [
     "Главная",
-    // "Посты",
     "Программы",
     "Настройки",
     "Учетки",
@@ -32,7 +31,6 @@ Widget prepareDrawer(
 
   var routes = [
     "/home",
-    // "/home/posts",
     "/home/programs",
     "/home/settings",
     "/home/accounts",

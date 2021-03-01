@@ -31,6 +31,7 @@ part 'model/args20.dart';
 part 'model/args21.dart';
 part 'model/args22.dart';
 part 'model/args23.dart';
+part 'model/args24.dart';
 part 'model/args3.dart';
 part 'model/args4.dart';
 part 'model/args5.dart';

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 
+// CURRENTLY UNUSED
+
 class PostsMenuArgs {}
 
 class PostsMenu extends StatefulWidget {
