@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: "/home",
+      initialRoute: "/",
       routes: {
         "/auth": (context) => AuthPage(),
         "/": (context) => MyHomePage(title: "Главная страница"),
