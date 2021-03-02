@@ -14,65 +14,18 @@ class ProgramsMenu extends StatefulWidget {
 class _ProgramsMenuState extends State<ProgramsMenu> {
   _ProgramsMenuState() : super();
 
-  List<Program>
-      _programs/*= [
-    Program()
-      ..name = 'test'
-      ..price = 1
-      ..preflightEnabled = true
-      ..preflightRelays = [
-        RelayConfig()
-          ..timeoff = 800
-          ..timeon = 200
-          ..id = 1,
-        RelayConfig()
-          ..timeoff = 600
-          ..timeon = 400
-          ..id = 2
-      ]
-      ..relays = [
-        RelayConfig()
-          ..timeoff = 800
-          ..timeon = 200
-          ..id = 1,
-        RelayConfig()
-          ..timeoff = 600
-          ..timeon = 400
-          ..id = 2
-      ],
-    Program()
-      ..name = 'test2'
-      ..price = 2
-      ..preflightEnabled = false
-      ..preflightRelays = [
-        RelayConfig()
-          ..timeoff = 400
-          ..timeon = 600
-          ..id = 3,
-        RelayConfig()
-          ..timeoff = 500
-          ..timeon = 500
-          ..id = 4
-      ]
-      ..relays = [
-        RelayConfig()
-          ..timeoff = 400
-          ..timeon = 600
-          ..id = 3,
-        RelayConfig()
-          ..timeoff = 500
-          ..timeon = 500
-          ..id = 4
-      ]
-  ]*/
-      ;
+  List<Program> _programs;
   bool _firstLoad = true;
 
   Future<String> GetData(SessionData sessionData) async {
     try {
       var args14 = Args14();
       _programs = await sessionData.client.programs(args14);
+      if (!mounted) {
+        return null;
+      }
       _firstLoad = false;
+      setState(() {});
       return null;
     } catch (e) {
       print("Exception when calling GetData in ProgramsMenu: $e\n");
@@ -85,10 +38,8 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
 
     if (_firstLoad) {
-      GetData(sessionData).then((err) {
-        if (err != null)
-          showErrorDialog(context, err);
-      });
+      GetData(sessionData);
+      //TODO: return some error if unsuccessful (snackbar)?
     }
 
     final AppBar appBar = AppBar(
@@ -124,13 +75,13 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
 
   List<Widget> buildChildren(
       SessionData sessionData, double screenW, double screenH) {
-    var prices = _programs?.map((e) => e.price)?.toList();
+    var prices = _programs?.map((e) => e.price  ?? 0)?.toList();
     return _programs == null || _programs.length == 0
         ? [Center(child: Text('Нет программ'))]
         : List.generate(_programs.length, (index) {
             var nameController = TextEditingController();
             nameController.value = TextEditingValue(
-              text: _programs[index].name,
+              text: _programs[index].name ?? "no name",
             );
             nameController.selection = TextSelection.fromPosition(
                 TextPosition(offset: nameController.text.length));
@@ -161,7 +112,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                                 InputDecoration(border: OutlineInputBorder()),
                             controller: nameController,
                             onSubmitted: (newValue) async {
-                              var previousName = _programs[index].name;
+                              var previousName = _programs[index].name ?? "no name";
                               try {
                                 _programs[index].name = newValue;
                                 await sessionData.client
@@ -203,7 +154,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                                       border: OutlineInputBorder()),
                                   controller: priceController,
                                   onSubmitted: (newValueString) async {
-                                    var previousPrice = _programs[index].price;
+                                    var previousPrice = _programs[index].price ?? 0;
                                     try {
                                       var newValue = int.parse(newValueString);
                                       _programs[index].price = newValue;
@@ -289,27 +240,6 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                 ]);
           });
   }
-
-  /*Widget generateDropdownButton(StationStatus _currentStation, SessionData sessionData)
-  {
-    return DropdownButton(
-        value: _currentStation,
-        onChanged: (newValue) {
-          setState(() {
-            _currentStation = newValue;
-            if (_currentStation != null) GetData(sessionData);
-          });
-        },
-        items: _stations == null
-            ? []
-            : List.generate(_stations.length, (index) {
-          return DropdownMenuItem(
-              value: _stations[index],
-              child: Text("${_stations[index].id} пост"));
-        })
-          ..add(DropdownMenuItem<StationStatus>(
-              value: null, child: Text("--------"))));
-  }*/
 
   List<TextEditingController> _controllers = [];
   @override

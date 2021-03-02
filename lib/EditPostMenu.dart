@@ -25,8 +25,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
   Timer _updateBalanceTimer;
   int _service_balance = 0;
   int _balance = 0;
-  int _current_program = -1;
-  bool _program_execution_server_side = false; //TODO: get it from api?
+  int _current_program_index = -1;
+  bool _program_execution_server_side = true;
 
   @override
   void initState() {
@@ -34,12 +34,12 @@ class _EditPostMenuState extends State<EditPostMenu> {
   }
 
   void dispose() {
-    if (_updateBalanceTimer.isActive) _updateBalanceTimer.cancel();
+    if (_updateBalanceTimer != null && _updateBalanceTimer.isActive) _updateBalanceTimer.cancel();
     super.dispose();
   }
 
   List<bool> _checkboxList = [false, false, false, false, false, false];
-  final List<String> _buttonNames = [
+  List<String> _buttonNames = [
     "пена",
     "вода + шампунь",
     "ополаскивание",
@@ -48,36 +48,14 @@ class _EditPostMenuState extends State<EditPostMenu> {
     "пауза"
   ];
 
-  void _runProgram(SessionData sessionData, String postHash, int programID) async {
-    try {
-      var res1 = await sessionData.client.status();
-      if (_program_execution_server_side) {
-        var args = Args24();
-        args.hash = postHash;
-        args.programID = programID;
-        await sessionData.client.runProgram(args);
-      }
-      else {
-        //? TODO
-      }
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    } catch (e) {
-      print(
-          "Exception when calling DefaultApi->/station-report-current-money: $e\n");
-    }
-  }
-
   void _getBalance(SessionData sessionData, int postID) async {
     try {
       var res1 = await sessionData.client.status();
-      _current_program = res1.stations
+      _current_program_index = res1.stations
           .where((element) => element.id == postID)
           .last
           .currentProgram;
-      _current_program = _current_program ?? -1;
+      _current_program_index = _current_program_index ?? 1;
       var args = Args1();
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
@@ -108,17 +86,26 @@ class _EditPostMenuState extends State<EditPostMenu> {
   Widget build(BuildContext context) {
     final PostMenuArgs postMenuArgs = ModalRoute.of(context).settings.arguments;
 
+    final AppBar appBar = AppBar(
+      title: Text("Пост: ${postMenuArgs.postID} | Баланс: $_balance руб"),
+    );
+
     if (_firstLoad) {
       _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
       _updateBalanceTimer = new Timer.periodic(Duration(seconds: 15), (timer) {
         _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
       });
+
+      if (postMenuArgs.programs != null) {
+        _buttonNames = postMenuArgs.programs.map((e) => e.name ?? "").toList();
+        _checkboxList = List.filled(_buttonNames.length, false);
+        _current_program_index =
+            postMenuArgs.programs.indexWhere((element) => element.id ==
+                (postMenuArgs.currentProgramID ?? 1));
+        _checkboxList[_current_program_index] = true;
+      }
       _firstLoad = false;
     }
-
-    final AppBar appBar = AppBar(
-      title: Text("Пост: ${postMenuArgs.postID} | Баланс: $_balance руб"),
-    );
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
@@ -154,8 +141,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
           ),
           Row(
             children: [
-              _getButtonsColumn(isPortrait, screenW),
-              _getCheckBoxColumn(isPortrait, screenW)
+              _getButtonsColumn(isPortrait, screenW, postMenuArgs),
+              _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)
             ],
           )
         ],
@@ -165,8 +152,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
           fit: BoxFit.fill,
           child: Row(children: [
             _getMainColumn(isPortrait, screenW, postMenuArgs),
-            _getButtonsColumn(isPortrait, screenW),
-            _getCheckBoxColumn(isPortrait, screenW)
+            _getButtonsColumn(isPortrait, screenW, postMenuArgs),
+            _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)
           ]));
     }
   }
@@ -320,7 +307,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 value: _program_execution_server_side,
                 onChanged: (newValue) {
                   setState(() {
-                    _program_execution_server_side = newValue;
+                    if (newValue != true)
+                      showErrorDialog(context, "Поддерживаются только платы 2 ревизии");
                   });
                 },
                 items: [DropdownMenuItem(
@@ -336,7 +324,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
     );
   }
 
-  Widget _getButtonsColumn(bool isPortrait, double screenW) {
+  Widget _getButtonsColumn(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
       children: List.generate(6, (index) {
         return Padding(
@@ -344,13 +332,13 @@ class _EditPostMenuState extends State<EditPostMenu> {
             child: SizedBox(
               height: 50,
               width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-              child: _getListButton(index),
+              child: _getListButton(index, postMenuArgs),
             ));
       }),
     );
   }
 
-  Widget _getCheckBoxColumn(bool isPortrait, double screenW) {
+  Widget _getCheckBoxColumn(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
       children: List.generate(6, (index) {
         return Padding(
@@ -358,13 +346,13 @@ class _EditPostMenuState extends State<EditPostMenu> {
             child: SizedBox(
               height: 50,
               width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-              child: _getCheckBox(index),
+              child: _getCheckBox(index, postMenuArgs),
             ));
       }),
     );
   }
 
-  Widget _getCheckBox(int index) {
+  Widget _getCheckBox(int index, PostMenuArgs postMenuArgs) {
     return CheckboxListTile(
       controlAffinity: ListTileControlAffinity.trailing,
       title: Text(
@@ -372,23 +360,53 @@ class _EditPostMenuState extends State<EditPostMenu> {
         style: TextStyle(fontSize: 15),
       ),
       value: _checkboxList[index],
-      onChanged: (newValue) {
-        setState(() {
-          _checkboxList[index] = !_checkboxList[index];
-        });
+      onChanged: (newValue) async {
+        if (index != _current_program_index) {
+          try {
+            var args = Args24();
+            args.hash = postMenuArgs.hash;
+            args.programID = postMenuArgs.programs[index].id ?? 1;
+            await postMenuArgs.sessionData.client.runProgram(args);
+            setState(() {
+              _checkboxList[_current_program_index] = false;
+              _checkboxList[index] = true;
+              _current_program_index = index;
+            });
+          } catch (e) {
+            print(
+                "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+          }
+        }
       },
     );
   }
 
-  Widget _getListButton(int index) {
+  Widget _getListButton(int index, PostMenuArgs postMenuArgs) {
     return new RaisedButton(
       color:
-          (_current_program - 1) == index ? Colors.lightGreen : Colors.white10,
+      _current_program_index == index ? Colors.lightGreen : Colors.white10,
       textColor: Colors.white,
       disabledColor: Colors.grey,
       disabledTextColor: Colors.black,
       splashColor: Colors.lightGreenAccent,
-      onPressed: () {},
+      onPressed: () async {
+        if (index != _current_program_index) {
+          try {
+            var args = Args24();
+            args.hash = postMenuArgs.hash;
+            args.programID = postMenuArgs.programs[index].id ?? 1;
+            await postMenuArgs.sessionData.client.runProgram(args);
+            setState(() {
+              _checkboxList[_current_program_index] = false;
+              _checkboxList[index] = true;
+              _current_program_index = index;
+            });
+          } catch (e) {
+            print(
+                "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+          }
+        }
+      },
       child: Text(
         _buttonNames[index],
         style: TextStyle(fontSize: 15),

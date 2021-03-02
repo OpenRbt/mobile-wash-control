@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisSpacing: 10,
               crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
               childAspectRatio: 1,
-              children: List.generate(_homePageData.length, (index) {
+              children: List.generate(_homePageData?.length ?? 0, (index) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

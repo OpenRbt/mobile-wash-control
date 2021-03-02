@@ -125,8 +125,14 @@ class _RelaysMenuState extends State<RelaysMenu> {
 
   List<Widget> buildRelayList(
       SessionData sessionData, List<RelayConfig> relays, double screenW) {
+    if (relays == null)
+      return [];
     return List.generate(relays.length, (index) {
       var relay = relays[index];
+
+      relay.id = relay.id ?? 1;
+      relay.timeon = relay.timeon ?? 0;
+      relay.timeoff = relay.timeoff ?? 0;
 
       int on = 100 * relay.timeon ~/ (relay.timeon + relay.timeoff);
 
@@ -192,7 +198,7 @@ class _RelaysMenuState extends State<RelaysMenu> {
                             relay.timeon = previousValue * _timeConstant ~/ 100;
                             relay.timeoff = _timeConstant - relay.timeon;
                             print(
-                                "Exception when calling DefaultApi->setProgram in DozatronsMenu: $e\n");
+                                "Exception when calling DefaultApi->setProgram in RelaysMenu: $e\n");
                             return 'Произошла ошибка при вызове апи';
                           }
                         }),
