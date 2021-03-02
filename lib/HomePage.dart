@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
-import 'EditPostMenu.dart';
+import 'PostMenuEdit.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();

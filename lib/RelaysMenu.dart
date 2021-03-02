@@ -105,7 +105,7 @@ class _RelaysMenuState extends State<RelaysMenu> {
             title: Text(
               'Прокачка',
             ),
-            value: _program.preflightEnabled,
+            value: _program.preflightEnabled ?? false,
             onChanged: (newValue) async {
               var previousValue = _program.preflightEnabled;
               try {

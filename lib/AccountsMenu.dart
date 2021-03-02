@@ -52,7 +52,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
     }
   }
 
-  _AccountsMenuState() : super();
+  //TODO: add refresh indicator (Kronusol)
   @override
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
@@ -143,6 +143,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                               width: screenW > screenH ? screenW / 11 * 2 : 0,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
                                     border: Border.all(color: Colors.black38)),
                                 child: Text(
                                   screenW > screenH
@@ -158,6 +161,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
                                     border: Border.all(color: Colors.black38)),
                                 child: Text(
                                   "${_accounts[index].firstName}",
@@ -171,6 +177,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
                                     border: Border.all(color: Colors.black38)),
                                 child: Text(
                                   "${_accounts[index].lastName}",
@@ -184,6 +193,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
                                     border: Border.all(color: Colors.black38)),
                                 child: Text(
                                   "${_accounts[index].middleName}",
@@ -197,6 +209,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9 * 2,
                               child: DecoratedBox(
                                   decoration: BoxDecoration(
+                                      color: index % 2 == 0
+                                          ? Colors.white
+                                          : Colors.black12,
                                       border:
                                           Border.all(color: Colors.black38)),
                                   child: Text(
@@ -210,6 +225,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9,
                               child: DecoratedBox(
                                   decoration: BoxDecoration(
+                                      color: index % 2 == 0
+                                          ? Colors.white
+                                          : Colors.black12,
                                       border:
                                           Border.all(color: Colors.black38)),
                                   child: IconButton(
@@ -236,6 +254,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                               width: screenW > screenH ? screenW / 11 * 2 : 0,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
                                     border: Border.all(color: Colors.black38)),
                                 child: Text(
                                   "",
@@ -249,6 +270,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
                                     border: Border.all(color: Colors.black38)),
                                 child: Text(
                                   "",
@@ -262,6 +286,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
                                     border: Border.all(color: Colors.black38)),
                                 child: Text(
                                   "",
@@ -275,6 +302,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
                                     border: Border.all(color: Colors.black38)),
                                 child: Text(
                                   "",
@@ -288,6 +318,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
                                     border: Border.all(color: Colors.black38)),
                                 child: Text(
                                   "",
@@ -301,6 +334,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   : screenW / 9,
                               child: DecoratedBox(
                                   decoration: BoxDecoration(
+                                      color: index % 2 == 0
+                                          ? Colors.white
+                                          : Colors.black12,
                                       border:
                                           Border.all(color: Colors.black38)),
                                   child: IconButton(

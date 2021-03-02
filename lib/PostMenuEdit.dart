@@ -97,11 +97,13 @@ class _EditPostMenuState extends State<EditPostMenu> {
       });
 
       if (postMenuArgs.programs != null) {
+        if (postMenuArgs.programs.length > 0)
         _buttonNames = postMenuArgs.programs.map((e) => e.name ?? "").toList();
         _checkboxList = List.filled(_buttonNames.length, false);
         _current_program_index =
             postMenuArgs.programs.indexWhere((element) => element.id ==
                 (postMenuArgs.currentProgramID ?? 1));
+        if (_current_program_index != -1)
         _checkboxList[_current_program_index] = true;
       }
       _firstLoad = false;
@@ -359,7 +361,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
         'Активный',
         style: TextStyle(fontSize: 15),
       ),
-      value: _checkboxList[index],
+      value:index < _checkboxList.length ? _checkboxList[index] : false,
       onChanged: (newValue) async {
         if (index != _current_program_index) {
           try {
@@ -408,7 +410,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
         }
       },
       child: Text(
-        _buttonNames[index],
+        "${index < _buttonNames.length ? _buttonNames[index] : ""}",
         style: TextStyle(fontSize: 15),
       ),
     );

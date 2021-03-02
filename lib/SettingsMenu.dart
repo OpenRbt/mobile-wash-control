@@ -29,7 +29,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
     return new SettingsData(-1, "Loading", "...", "loading");
   });
 
-  void GetSettings(SessionData sessionData) async {
+  void getSettings(SessionData sessionData) async {
     try {
       var res = await sessionData.client.status();
       if (!mounted) {
@@ -66,13 +66,14 @@ class _SettingsMenuState extends State<SettingsMenu> {
     setState(() {});
   }
 
+  //TODO: add refresh indicator (Kronusol)
   @override
   Widget build(BuildContext context) {
     final DateTime currentTime = DateTime.now();
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
 
     if (_firstLoad) {
-      GetSettings(sessionData);
+      getSettings(sessionData);
     }
 
     final AppBar appBar = AppBar(

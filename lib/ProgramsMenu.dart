@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/ProgramMenuEdit.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'package:flutter/services.dart';
 import 'RelaysMenu.dart';
-
-class ProgramsMenuArgs {}
 
 class ProgramsMenu extends StatefulWidget {
   @override
@@ -53,29 +52,195 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
       drawer: prepareDrawer(context, Pages.Programs, sessionData),
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return new SafeArea(
-              child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      var err = await GetData(sessionData);
-                      await Future.delayed(Duration(milliseconds: 500));
-                      if (err != null)
-                        showErrorDialog(context, err);
-                      else
-                        setState(() {});
-                    },
-                    child: ListView(
-                        children: buildChildren(sessionData, screenW, screenH)),
-                  )));
+          return new SizedBox(
+              height: screenH - appBar.preferredSize.height,
+              child: RefreshIndicator(
+                  onRefresh: () async {
+                    var err = await GetData(sessionData);
+                    await Future.delayed(Duration(milliseconds: 500));
+                    if (err != null)
+                      showErrorDialog(context, err);
+                    else
+                      setState(() {});
+                  },
+                  child: Column(children: [
+                    SizedBox(
+                      height: 50,
+                      width: screenW,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 50,
+                            width: screenW / 7 * 2,
+                            child: Text(
+                              "Название",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: screenW / 7 * 2,
+                            child: Text(
+                              "Цена",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: screenW / 7 * 2,
+                            child: Text(
+                              "Активная",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: screenH - appBar.preferredSize.height - 91,
+                      width: screenW,
+                      child: ListView(
+                          //children: buildChildren(sessionData, screenW, screenH)),
+                          children:
+                              programsTable(sessionData, screenW, screenH)),
+                    ),
+                  ])));
         },
       ),
     );
   }
 
+  List<Widget> programsTable(
+      SessionData sessionData, double screenW, double screenH) {
+    return List.generate((_programs != null ? _programs.length : 0) + 1,
+        (index) {
+      if (index < _programs.length) {
+        return Row(
+          children: [
+            SizedBox(
+                height: 50,
+                width: screenW / 7 * 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      color: index % 2 == 0 ? Colors.white : Colors.black12,
+                      border: Border.all(color: Colors.black38)),
+                  child: Text(
+                    _programs[index].name ?? "no name",
+                    textAlign: TextAlign.center,
+                  ),
+                )),
+            SizedBox(
+                height: 50,
+                width: screenW / 7 * 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      color: index % 2 == 0 ? Colors.white : Colors.black12,
+                      border: Border.all(color: Colors.black38)),
+                  child: Text(
+                    "${_programs[index].price ?? 0}",
+                    textAlign: TextAlign.center,
+                  ),
+                )),
+            SizedBox(
+                height: 50,
+                width: screenW / 7 * 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      color: index % 2 == 0 ? Colors.lightGreen : Colors.red,
+                      border: Border.all(color: Colors.black38)),
+                  child: Center(
+                    //TODO: get active status (Kronusol)
+                      child: Text(index % 2 == 0 ? "Active" : "Disabled",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 15))),
+                )),
+            SizedBox(
+                height: 50,
+                width: screenW / 7,
+                child: DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: index % 2 == 0 ? Colors.white : Colors.black12,
+                        border: Border.all(color: Colors.black38)),
+                    child: IconButton(
+                      icon: Icon(Icons.more_horiz),
+                      onPressed: () {
+                        var args =
+                            ProgramMenuEditArgs(_programs[index], sessionData);
+                        Navigator.pushNamed(context, "/home/programs/edit",
+                            arguments: args);
+                      },
+                    ))),
+          ],
+        );
+      } else {
+        return Row(
+          children: [
+            SizedBox(
+                height: 50,
+                width: screenW / 7 * 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      color: index % 2 == 0 ? Colors.white : Colors.black12,
+                      border: Border.all(color: Colors.black38)),
+                  child: Text(
+                    "",
+                    textAlign: TextAlign.center,
+                  ),
+                )),
+            SizedBox(
+                height: 50,
+                width: screenW / 7 * 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      color: index % 2 == 0 ? Colors.white : Colors.black12,
+                      border: Border.all(color: Colors.black38)),
+                  child: Text(
+                    "",
+                    textAlign: TextAlign.center,
+                  ),
+                )),
+            SizedBox(
+                height: 50,
+                width: screenW / 7 * 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      color: index % 2 == 0 ? Colors.white : Colors.black12,
+                      border: Border.all(color: Colors.black38)),
+                  child: FlatButton(
+                    color: Colors.white,
+                  ),
+                )),
+            SizedBox(
+                height: 50,
+                width: screenW / 7,
+                child: DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: index % 2 == 0 ? Colors.white : Colors.black12,
+                        border: Border.all(color: Colors.black38)),
+                    child: IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/home/programs/add",
+                            arguments: sessionData);
+                      },
+                    ))),
+          ],
+        );
+      }
+    });
+  }
+
+  //TODO: remove after final implementation of ProgramsMenuAdd, ProgramsMenuEdit (Kronusol)
   List<Widget> buildChildren(
       SessionData sessionData, double screenW, double screenH) {
-    var prices = _programs?.map((e) => e.price  ?? 0)?.toList();
+    var prices = _programs?.map((e) => e.price ?? 0)?.toList();
     return _programs == null || _programs.length == 0
         ? [Center(child: Text('Нет программ'))]
         : List.generate(_programs.length, (index) {
@@ -112,7 +277,8 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                                 InputDecoration(border: OutlineInputBorder()),
                             controller: nameController,
                             onSubmitted: (newValue) async {
-                              var previousName = _programs[index].name ?? "no name";
+                              var previousName =
+                                  _programs[index].name ?? "no name";
                               try {
                                 _programs[index].name = newValue;
                                 await sessionData.client
@@ -154,7 +320,8 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                                       border: OutlineInputBorder()),
                                   controller: priceController,
                                   onSubmitted: (newValueString) async {
-                                    var previousPrice = _programs[index].price ?? 0;
+                                    var previousPrice =
+                                        _programs[index].price ?? 0;
                                     try {
                                       var newValue = int.parse(newValueString);
                                       _programs[index].price = newValue;
