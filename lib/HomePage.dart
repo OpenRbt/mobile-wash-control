@@ -16,10 +16,10 @@ class HomePageData {
   final String status;
   final String info;
   final int currentBalance;
-  final int programID;
+  int currentProgramID;
 
   HomePageData(this.id, this.name, this.hash, this.status, this.info,
-      this.currentBalance, this.programID);
+      this.currentBalance, this.currentProgramID);
 }
 
 class _HomePageState extends State<HomePage> {
@@ -63,7 +63,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
-
     if (_firstLoad) {
       GetStations(sessionData);
     }
@@ -82,6 +81,10 @@ class _HomePageState extends State<HomePage> {
               crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
               childAspectRatio: 1,
               children: List.generate(_homePageData?.length ?? 0, (index) {
+                var activeProgramIndex = _programs?.indexWhere((element) =>
+                        (element.id ?? 1) ==
+                        (_homePageData[index].currentProgramID ?? 1)) ??
+                    -1;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -89,13 +92,29 @@ class _HomePageState extends State<HomePage> {
                       height: 50,
                       width: 165,
                       child: RaisedButton(
-                        color: _homePageData[index].status == "online" ?  Colors.lightGreen : Colors.red,
-                        highlightColor: _homePageData[index].status == "online" ?  Colors.lightGreenAccent : Colors.redAccent,
+                        color: _homePageData[index].status == "online"
+                            ? Colors.lightGreen
+                            : Colors.red,
+                        highlightColor: _homePageData[index].status == "online"
+                            ? Colors.lightGreenAccent
+                            : Colors.redAccent,
                         onPressed: () {
-                          var args = PostMenuArgs(_homePageData[index].id,
-                              _homePageData[index].hash, _homePageData[index].programID, _programs, sessionData);
+                          var args = PostMenuArgs(
+                              _homePageData[index].id,
+                              _homePageData[index].hash,
+                              _homePageData[index].currentProgramID,
+                              _programs,
+                              sessionData);
                           Navigator.pushNamed(context, "/home/editPost",
-                              arguments: args);
+                                  arguments: args)
+                              .then((value) {
+                            if (value != -1)
+                              _homePageData[index].currentProgramID =
+                                  _programs[value ?? 1].id;
+                            else
+                              _homePageData[index].currentProgramID = -1;
+                            setState(() {});
+                          });
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -114,19 +133,60 @@ class _HomePageState extends State<HomePage> {
                           child: GridView.count(
                             physics: NeverScrollableScrollPhysics(),
                             crossAxisCount: 3,
-                            children: List.generate(6, (btn) {
+                            children: List.generate(6, (btnIndex) {
                               return SizedBox(
                                   height: 50,
                                   width: 200,
                                   child: Padding(
                                     padding: EdgeInsets.all(5),
                                     child: RaisedButton(
-                                      color: btn + 1 ==
-                                              _homePageData[index].programID
+                                      color: btnIndex == activeProgramIndex
                                           ? Colors.lightGreenAccent
                                           : Colors.white,
-                                      onPressed: () {},
-                                      child: Text(_buttonLabel[btn]),
+                                      onPressed: () async {
+                                        if (btnIndex <
+                                            (_programs?.length ?? 0)) {
+                                          if (btnIndex != activeProgramIndex) {
+                                            try {
+                                              var args = Args24();
+                                              args.hash =
+                                                  _homePageData[index].hash;
+                                              args.programID =
+                                                  _programs[btnIndex].id ?? 1;
+                                              await sessionData.client
+                                                  .runProgram(args);
+                                              setState(() {
+                                                _homePageData[index]
+                                                        .currentProgramID =
+                                                    _programs[btnIndex].id ?? 1;
+                                              });
+                                            } catch (e) {
+                                              print(
+                                                  "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+                                            }
+                                          } else {
+                                            try {
+                                              var args = Args24();
+                                              args.hash =
+                                                  _homePageData[index].hash;
+                                              args.programID = -1;
+                                              await sessionData.client
+                                                  .runProgram(args);
+                                              setState(() {
+                                                _homePageData[index]
+                                                    .currentProgramID = -1;
+                                              });
+                                            } catch (e) {
+                                              print(
+                                                  "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+                                            }
+                                          }
+                                        }
+                                      },
+                                      child: Text(
+                                          btnIndex < (_programs?.length ?? 0)
+                                              ? _buttonLabel[btnIndex]
+                                              : ""),
                                     ),
                                   ));
                             }),

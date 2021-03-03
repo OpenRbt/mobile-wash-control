@@ -35,7 +35,6 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
   @override
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
-
     if (_firstLoad) {
       GetData(sessionData);
       //TODO: return some error if unsuccessful (snackbar)?
@@ -121,7 +120,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
       SessionData sessionData, double screenW, double screenH) {
     return List.generate((_programs != null ? _programs.length : 0) + 1,
         (index) {
-      if (index < _programs.length) {
+      if (index < (_programs?.length ?? 0)) {
         return Row(
           children: [
             SizedBox(
@@ -241,7 +240,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
   List<Widget> buildChildren(
       SessionData sessionData, double screenW, double screenH) {
     var prices = _programs?.map((e) => e.price ?? 0)?.toList();
-    return _programs == null || _programs.length == 0
+    return _programs == null || (_programs != null && _programs.length == 0)
         ? [Center(child: Text('Нет программ'))]
         : List.generate(_programs.length, (index) {
             var nameController = TextEditingController();
