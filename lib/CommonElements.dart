@@ -15,6 +15,7 @@ enum Pages {
 
 class SessionData {
   final DefaultApi client;
+
   SessionData(this.client);
 }
 
@@ -51,10 +52,8 @@ Widget prepareDrawer(
   var isPortrait = screenWidth < screenHeight;
 
   return SafeArea(
-      minimum: const EdgeInsets.only(
-          top: 8.0,
-          bottom:
-              8.0), //TODO: check if actually needed on devices with different designs
+      minimum: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+      //TODO: check if actually needed on devices with different designs
       child: ScrollConfiguration(
           behavior: MyScrollingBehavior(),
           child: FittedBox(
@@ -68,9 +67,7 @@ Widget prepareDrawer(
                       painter: MyPainter(context),
                       child: ListTileTheme(
                           style: ListTileStyle.drawer,
-                          child: Flex(
-                              direction: Axis.horizontal,
-                              children: [
+                          child: Flex(direction: Axis.horizontal, children: [
                             Expanded(
                               child: ListView.separated(
                                 shrinkWrap: true,
@@ -125,7 +122,8 @@ Widget prepareDrawer(
                                 separatorBuilder:
                                     (BuildContext context, int index) {
                                   return SizedBox(
-                                    height: screenHeight / (texts.length - 1) - (16 * texts.length),
+                                    height: screenHeight / (texts.length - 1) -
+                                        (16 * texts.length),
                                   );
                                 },
                               ),
@@ -168,16 +166,16 @@ class MyScrollingBehavior extends ScrollBehavior {
 }
 
 Widget buildForm(
-    {       TextStyle style,
-      TextInputType keyboardType,
-      List<TextInputFormatter> inputFormatters,
+    {TextStyle style,
+    TextInputType keyboardType,
+    List<TextInputFormatter> inputFormatters,
     InputDecoration decoration,
     TextEditingController controller,
     String Function(String) validator,
     @required Future<String> Function(String) onSubmitted}) {
   return Builder(builder: (BuildContext context) {
     return TextField(
-      style: style ?? null,
+        style: style ?? null,
         keyboardType: keyboardType ?? null,
         inputFormatters: inputFormatters ?? null,
         decoration: decoration ?? null,

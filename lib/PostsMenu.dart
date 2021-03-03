@@ -33,7 +33,7 @@ class _PostsMenuState extends State<PostsMenu> {
     return Scaffold(
       appBar: appBar,
       // drawer: prepareDrawer(context, Pages.Posts,sessionData),
-      drawer: prepareDrawer(context, Pages.Main,sessionData), //tmp
+      drawer: prepareDrawer(context, Pages.Main, sessionData), //tmp
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new SizedBox(

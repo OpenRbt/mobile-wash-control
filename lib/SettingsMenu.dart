@@ -66,7 +66,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
     setState(() {});
   }
 
-  //TODO: add refresh indicator (Kronusol)
   @override
   Widget build(BuildContext context) {
     final DateTime currentTime = DateTime.now();
@@ -87,7 +86,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
       drawer: prepareDrawer(context, Pages.Settings, sessionData),
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return new ListView(
+          return ListView(
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -125,6 +124,21 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             onPressed: () {},
                             child: Text("$_currentTemp"),
                           ),
+                        ),
+                        SizedBox(
+                          height: 40,
+                          width: 5,
+                        ),
+                        SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              getSettings(sessionData);
+                            },
+                            icon: Icon(Icons.refresh),
+                          ),
                         )
                       ]),
                   Row(
@@ -160,7 +174,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     ],
                   ),
                   SizedBox(
-                      height: screenH - appBar.preferredSize.height - 80-125,
+                      height: screenH - appBar.preferredSize.height - 80 - 125,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey)),
@@ -175,7 +189,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                   width: screenW / 7 * 2,
                                   child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                        color: index % 2 == 0 ? Colors.white : Colors.black12,
+                                          color: index % 2 == 0
+                                              ? Colors.white
+                                              : Colors.black12,
                                           border: Border.all(
                                               color: Colors.black38)),
                                       child: Center(
@@ -189,7 +205,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                   width: screenW / 7 * 2,
                                   child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                          color: index % 2 == 0 ? Colors.white : Colors.black12,
+                                          color: index % 2 == 0
+                                              ? Colors.white
+                                              : Colors.black12,
                                           border: Border.all(
                                               color: Colors.black38)),
                                       child: Center(
@@ -203,7 +221,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                   width: screenW / 7 * 2,
                                   child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                          color: index % 2 == 0 ? Colors.white : Colors.black12,
+                                          color: index % 2 == 0
+                                              ? Colors.white
+                                              : Colors.black12,
                                           border: Border.all(
                                               color: Colors.black38)),
                                       child: Center(
@@ -224,7 +244,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                   width: screenW / 7,
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
-                                        color: index % 2 == 0 ? Colors.white : Colors.black12,
+                                        color: index % 2 == 0
+                                            ? Colors.white
+                                            : Colors.black12,
                                         border:
                                             Border.all(color: Colors.black38)),
                                     child: IconButton(
@@ -273,4 +295,3 @@ class _SettingsMenuState extends State<SettingsMenu> {
     );
   }
 }
-

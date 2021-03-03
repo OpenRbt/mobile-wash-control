@@ -10,6 +10,7 @@ class SettingsMenuPost extends StatefulWidget {
 class SettingsMenuPostArgs {
   final int stationID;
   final SessionData sessionData;
+
   SettingsMenuPostArgs(this.stationID, this.sessionData);
 }
 

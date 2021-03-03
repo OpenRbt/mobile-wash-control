@@ -177,8 +177,6 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                           child: Wrap(
                               children: List.generate(
                                   8, (index) => createMoto(index + 1))))
-
-
                     ])));
           },
         ));

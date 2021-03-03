@@ -8,7 +8,6 @@ import 'package:mobile_wash_control/SettingsMenuPost.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'package:mobile_wash_control/AccountsMenu.dart';
 import 'package:mobile_wash_control/AuthPage.dart';
-import 'package:mobile_wash_control/RelaysMenu.dart';
 import 'package:mobile_wash_control/HomePage.dart';
 import 'package:mobile_wash_control/PostMenuEdit.dart';
 import 'package:mobile_wash_control/PostsMenu.dart';
@@ -52,8 +51,6 @@ class MyApp extends StatelessWidget {
         "/home/settings/post": (context) => SettingsMenuPost(),
         "/home/settings/kasse": (context) => SettingsMenuKasse(),
         "/home/statistics": (context) => StatisticsMenu(),
-        //TODO: remove "RelaysMenu" (Kronusol)
-        "/home/relays": (context) => RelaysMenu(),
         "/home/posts": (context) => PostsMenu(),
         "/home/accounts": (context) => AccountsMenu(),
         "/home/accounts/edit": (context) => AccountsMenuEdit(),

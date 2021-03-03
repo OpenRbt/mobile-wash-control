@@ -11,6 +11,7 @@ class SettingsMenuKasse extends StatefulWidget {
 class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
   bool _inUpdate = false;
   bool _firstLoad = true;
+
   _SettingsMenuKasseState() : super();
   List<String> _taxValues = ["TAX_VAT110", "TAX_VAT0", "TAX_NO", "TAX_VAT120"];
   String _dropDownValue = "TAX_NO";

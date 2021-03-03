@@ -16,6 +16,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
   bool _loginNotValid = false;
   List<TextEditingController> _inputControllers;
   List<bool> _inputTriggers = List.filled(3, false);
+
   void initState() {
     super.initState();
     _inputControllers = List.generate(4, (index) {
@@ -99,6 +100,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
   }
 
   _AccountsMenuEditState() : super();
+
   @override
   Widget build(BuildContext context) {
     final AccountsMenuEditArgs accountsMenuEditArgs =

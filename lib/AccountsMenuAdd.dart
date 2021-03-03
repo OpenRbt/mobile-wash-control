@@ -92,7 +92,14 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
       var res = await sessionData.client.createUser(args);
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text("Пользователь добавлен")));
-      pageInit();
+
+      for (var field in _inputControllers) {
+        field.text = "";
+      }
+
+      for (var field in _inputTriggers) {
+        field = false;
+      }
     } catch (e) {
       print("Exception when calling DefaultApi->User(put): $e\n");
       Scaffold.of(context).showSnackBar(
@@ -103,6 +110,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
   }
 
   _AccountsMenuAddState() : super();
+
   @override
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;

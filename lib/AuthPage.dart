@@ -42,7 +42,6 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-
   //TODO: Add horizontal layout
   @override
   Widget build(BuildContext context) {

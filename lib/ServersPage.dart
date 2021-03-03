@@ -5,8 +5,9 @@ class ServersPage extends StatelessWidget {
   final List<String> servers;
   List<bool> serversValid;
   var _client = DefaultApi();
-  ServersPage({Key key, @required this.servers, @required this.serversValid}) : super(key: key);
 
+  ServersPage({Key key, @required this.servers, @required this.serversValid})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

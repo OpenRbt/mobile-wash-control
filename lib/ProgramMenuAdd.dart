@@ -1,29 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/client/api.dart';
 
 class ProgramMenuAdd extends StatefulWidget {
   @override
   _ProgramMenuAddState createState() => _ProgramMenuAddState();
 }
-//TODO: connect to api (Kronusol)
+
 class _ProgramMenuAddState extends State<ProgramMenuAdd> {
   final int _maxPercent = 100;
+  final int _maxMotor = 150;
+  final int _relayCount = 11;
+  final int _relayTime = 1000;
+  bool _preflight = false;
+  bool _inUpdate = false;
 
   List<TextEditingController> _program;
   List<TextEditingController> _relays;
   List<TextEditingController> _relaysPreflight;
+  List<TextEditingController> _motors;
 
-  void initState() {
-    super.initState();
+  void initInputs() {
     _program = List.generate(2, (index) {
       var controller = new TextEditingController();
       switch (index) {
+        case 1:
+          controller.addListener(() {
+            final text = controller.text.toLowerCase();
+            if (text.length > 0) {
+              int value = int.tryParse(text);
+              value = value ?? 0;
+              controller.value = controller.value.copyWith(
+                  text: value.toString(),
+                  selection: TextSelection(
+                      baseOffset: value.toString().length,
+                      extentOffset: value.toString().length),
+                  composing: TextRange.empty);
+            }
+          });
+          break;
         default:
           break;
       }
       return controller;
     });
-    _relays = List.generate(10, (index) {
+    _motors = List.generate(2, (index) {
+      var controller = new TextEditingController();
+      switch (index) {
+        default:
+          controller.addListener(() {
+            final text = controller.text.toLowerCase();
+            if (text.length > 0) {
+              int value = int.tryParse(text);
+              value = value ?? 0;
+              value = value > _maxMotor ? _maxMotor : value;
+              controller.value = controller.value.copyWith(
+                  text: value.toString(),
+                  selection: TextSelection(
+                      baseOffset: value.toString().length,
+                      extentOffset: value.toString().length),
+                  composing: TextRange.empty);
+            }
+          });
+          break;
+      }
+      return controller;
+    });
+    _relays = List.generate(_relayCount, (index) {
       var controller = new TextEditingController();
       switch (index) {
         default:
@@ -45,7 +89,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
       }
       return controller;
     });
-    _relaysPreflight = List.generate(10, (index) {
+    _relaysPreflight = List.generate(_relayCount, (index) {
       var controller = new TextEditingController();
       switch (index) {
         default:
@@ -69,7 +113,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
     });
   }
 
-  void dispose() {
+  void disposeInputs() {
     for (var controller in _relays) {
       controller.dispose();
     }
@@ -79,7 +123,93 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
     for (var controller in _program) {
       controller.dispose();
     }
+    for (var controller in _motors) {
+      controller.dispose();
+    }
+  }
+
+  void initState() {
+    super.initState();
+    initInputs();
+  }
+
+  void dispose() {
     super.dispose();
+    disposeInputs();
+  }
+
+  void saveProgram(SessionData sessionData, BuildContext context) async {
+    _inUpdate = true;
+    try {
+      var argstmp = Args14();
+      var tmp = await sessionData.client.programs(argstmp);
+      int maxID = 1;
+      if (tmp != null && tmp.isNotEmpty) {
+        tmp.sort((a, b) => a.id.compareTo(b.id));
+        maxID = tmp.last.id + 1;
+        print(maxID);
+      }
+
+      var args = Program();
+      args.id = maxID;
+      args.motorSpeedPercent = int.tryParse(_motors[0].value.text) ?? 0;
+      args.name = _program[0].value.text;
+      args.price = int.tryParse(_program[1].value.text) ?? 0;
+      args.preflightEnabled = _preflight;
+      args.preflightMotorSpeedPercent =
+          int.tryParse(_motors[1].value.text) ?? 0;
+
+      List<RelayConfig> relays = List();
+      List<RelayConfig> relaysPreflight = List();
+      for (int i = 0; i < _relayCount; i++) {
+        if (_relays[i].value.text.isNotEmpty) {
+          var tmp = RelayConfig();
+          tmp.id = i + 1;
+          tmp.timeon =
+              (_relayTime * (int.tryParse(_relays[i].value.text) / 100))
+                  .round();
+          tmp.timeoff = _relayTime - tmp.timeon;
+          relays.add(tmp);
+        }
+        if (_preflight && _relaysPreflight[i].value.text.isNotEmpty) {
+          var tmp = RelayConfig();
+          tmp.id = i + 1;
+          tmp.timeon = (_relayTime *
+                  (double.tryParse(_relaysPreflight[i].value.text) / 100))
+              .round();
+          tmp.timeoff = _relayTime - tmp.timeon;
+          relaysPreflight.add(tmp);
+        }
+      }
+      args.relays = relays;
+      args.preflightRelays = relaysPreflight;
+
+      print(args);
+      var res = await sessionData.client.setProgram(args);
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Программа добавлена")));
+
+      for (var field in _relays) {
+        field.text = "";
+      }
+
+      for (var field in _relaysPreflight) {
+        field.text = "";
+      }
+
+      for (var field in _program) {
+        field.text = "";
+      }
+
+      for (var field in _motors) {
+        field.text = "";
+      }
+    } catch (e) {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Произошла ошибка при сохранении")));
+    }
+    setState(() {});
+    _inUpdate = false;
   }
 
   @override
@@ -142,7 +272,12 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                             child: Padding(
                               padding: EdgeInsets.all(10),
                               child: TextField(
-                                controller: _program[0],
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9]"))
+                                ],
+                                keyboardType: TextInputType.phone,
+                                controller: _program[1],
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(10),
                                     border: OutlineInputBorder()),
@@ -164,6 +299,78 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                 Divider(
                   color: Colors.lightGreen,
                   thickness: 3,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      width: screenW / 9 * 4,
+                      child: Center(
+                        child: Text("Мотор %",
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                      width: screenW / 9,
+                    ),
+                    SizedBox(
+                      height: 50,
+                      width: screenW / 9 * 4,
+                      child: Center(
+                        child: Text("Мотор прокачки %",
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 4,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black38)),
+                          child: TextField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+                            ],
+                            keyboardType: TextInputType.phone,
+                            style: TextStyle(fontSize: 20),
+                            controller: _motors[0],
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                          ),
+                        )),
+                    SizedBox(
+                      height: 50,
+                      width: screenW / 9,
+                    ),
+                    SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 4,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black38)),
+                          child: TextField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+                            ],
+                            keyboardType: TextInputType.phone,
+                            style: TextStyle(fontSize: 20),
+                            controller: _motors[1],
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                          ),
+                        )),
+                  ],
                 ),
                 Row(
                   children: [
@@ -236,7 +443,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                   ],
                 ),
                 Column(
-                  children: List.generate(10, (index) {
+                  children: List.generate(_relayCount, (index) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -264,6 +471,11 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                                       : Colors.black12,
                                   border: Border.all(color: Colors.black38)),
                               child: TextField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9]"))
+                                ],
+                                keyboardType: TextInputType.phone,
                                 style: TextStyle(fontSize: 20),
                                 controller: _relays[index],
                                 decoration: InputDecoration(
@@ -299,6 +511,11 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                                       : Colors.black12,
                                   border: Border.all(color: Colors.black38)),
                               child: TextField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9]"))
+                                ],
+                                keyboardType: TextInputType.phone,
                                 style: TextStyle(
                                   fontSize: 20,
                                 ),
@@ -329,7 +546,11 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                         disabledColor: Colors.grey,
                         disabledTextColor: Colors.black,
                         splashColor: Colors.lightGreenAccent,
-                        onPressed: () {},
+                        onPressed: _inUpdate
+                            ? null
+                            : () {
+                                saveProgram(sessionData, context);
+                              },
                         child: Text("Сохранить"),
                       ),
                     ),
@@ -342,10 +563,12 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                         disabledColor: Colors.grey,
                         disabledTextColor: Colors.black,
                         splashColor: Colors.lightGreenAccent,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text("Отмена"),
+                        onPressed: _inUpdate
+                            ? null
+                            : () {
+                                Navigator.pop(context);
+                              },
+                        child: Text("Отменить"),
                       ),
                     ),
                   ],
