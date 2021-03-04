@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
+import 'dart:async';
 
 import 'PostMenuEdit.dart';
 
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   List<HomePageData> _homePageData = List.generate(8, (index) {
     return new HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
   });
+  Timer _updateTimer;
 
   List<Program> _programs;
 
@@ -53,10 +55,9 @@ class _HomePageState extends State<HomePage> {
       });
 
       _homePageData.sort((a, b) => a.id.compareTo(b.id));
-      _firstLoad = false;
       setState(() {});
     } catch (e) {
-      print("Exception when calling DefaultApi->Status: $e\n");
+      print("Exception when calling DefaultApi->Status in HomePage: $e\n");
     }
   }
 
@@ -65,6 +66,10 @@ class _HomePageState extends State<HomePage> {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
     if (_firstLoad) {
       GetStations(sessionData);
+      _updateTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+        GetStations(sessionData);
+      });
+      _firstLoad = false;
     }
 
     return Scaffold(
@@ -201,5 +206,13 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ));
+  }
+
+  @override
+  void dispose() {
+    if (_updateTimer != null && _updateTimer.isActive) {
+      _updateTimer.cancel();
+    }
+    super.dispose();
   }
 }

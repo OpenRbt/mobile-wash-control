@@ -4,14 +4,7 @@ import 'dart:io';
 import 'client/api.dart';
 import 'package:flutter/services.dart';
 
-enum Pages {
-  Main,
-  // Posts,
-  Programs,
-  Settings,
-  Accounts,
-  Statistics
-}
+enum Pages { Main, Programs, Settings, Accounts, Statistics }
 
 class SessionData {
   final DefaultApi client;
@@ -53,7 +46,6 @@ Widget prepareDrawer(
 
   return SafeArea(
       minimum: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-      //TODO: check if actually needed on devices with different designs
       child: ScrollConfiguration(
           behavior: MyScrollingBehavior(),
           child: FittedBox(
@@ -109,7 +101,8 @@ Widget prepareDrawer(
                                                   ));
                                         }
                                       : () {
-                                          //Navigator.of(context).pop(); //Closing current screen
+                                          Navigator.of(context)
+                                              .pop(); //Closing current screen
                                           Navigator.pop(
                                               context); //Closing Drawer
                                           Navigator.pushNamed(
@@ -122,8 +115,8 @@ Widget prepareDrawer(
                                 separatorBuilder:
                                     (BuildContext context, int index) {
                                   return SizedBox(
-                                    height: screenHeight / (texts.length - 1) -
-                                        (16 * texts.length),
+                                    height:
+                                        screenHeight / (isPortrait ? 12 : 24),
                                   );
                                 },
                               ),

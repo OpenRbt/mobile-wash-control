@@ -60,54 +60,56 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                     else
                       setState(() {});
                   },
-                  child: Column(children: [
-                    SizedBox(
-                      height: 50,
-                      width: screenW,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 7 * 2,
-                            child: Text(
-                              "Название",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                  child: ListView(children: [
+                    Column(children: [
+                      SizedBox(
+                        height: 50,
+                        width: screenW,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: screenW / 7 * 2,
+                              child: Text(
+                                "Название",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 7 * 2,
-                            child: Text(
-                              "Цена",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            SizedBox(
+                              height: 50,
+                              width: screenW / 7 * 2,
+                              child: Text(
+                                "Цена",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 7 * 2,
-                            child: Text(
-                              "Активная",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            SizedBox(
+                              height: 50,
+                              width: screenW / 7 * 2,
+                              child: Text(
+                                "Активная",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: screenH - appBar.preferredSize.height - 91,
-                      width: screenW,
-                      child: ListView(
-                          //children: buildChildren(sessionData, screenW, screenH)),
-                          children:
-                              programsTable(sessionData, screenW, screenH)),
-                    ),
+                      SizedBox(
+                        height: screenH - appBar.preferredSize.height - 91,
+                        width: screenW,
+                        child: ListView(
+                            //children: buildChildren(sessionData, screenW, screenH)),
+                            children:
+                                programsTable(sessionData, screenW, screenH)),
+                      ),
+                    ])
                   ])));
         },
       ),
