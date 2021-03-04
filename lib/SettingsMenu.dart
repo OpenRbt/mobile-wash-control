@@ -54,7 +54,10 @@ class _SettingsMenuState extends State<SettingsMenu> {
             args.key = "curr_temp";
             var resTemp = await sessionData.client.load(args);
             _currentTemp = resTemp ?? _currentTemp;
-            _currentTemp = _currentTemp.replaceAll(String.fromCharCode(34), '');
+
+            _currentTemp = double.tryParse(
+                    _currentTemp.replaceAll(String.fromCharCode(34), ''))
+                .toString();
             break;
           }
         }
@@ -96,10 +99,17 @@ class _SettingsMenuState extends State<SettingsMenu> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Дата ", style: TextStyle(fontSize: 16)),
                         SizedBox(
-                          height: 40,
-                          width: 80,
+                          height: 50,
+                          width: screenW / 9 * 2,
+                          child: Center(
+                            child:
+                                Text("Дата ", style: TextStyle(fontSize: 16)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: screenW / 9 * 2,
                           child: RaisedButton(
                             padding: EdgeInsets.zero,
                             onPressed: () {},
@@ -108,30 +118,25 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           ),
                         ),
                         SizedBox(
-                          height: 40,
-                          width: 5,
-                        ),
-                        Text(
-                          "Tемп. ",
-                          style: TextStyle(fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: 40,
-                          width: 80,
-                          child: RaisedButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () {},
-                            child: Text("$_currentTemp"),
+                          height: 50,
+                          width: screenW / 9 * 2,
+                          child: Center(
+                            child:
+                                Text("Tемп ", style: TextStyle(fontSize: 16)),
                           ),
                         ),
                         SizedBox(
-                          height: 40,
-                          width: 5,
+                          height: 50,
+                          width: screenW / 9 * 2,
+                          child: RaisedButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {},
+                            child: Text("${_currentTemp}"),
+                          ),
                         ),
                         SizedBox(
-                          height: 40,
-                          width: 40,
+                          height: 50,
+                          width: screenW / 9,
                           child: IconButton(
                             padding: EdgeInsets.zero,
                             onPressed: () {
@@ -146,127 +151,120 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 40,
+                        height: 50,
                         width: screenW / 7 * 2,
-                        child: Text(
-                          "Список постов",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                        child: Center(
+                          child: Text(
+                            "Список постов",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       SizedBox(
-                        height: 40,
+                        height: 50,
                         width: screenW / 7 * 2,
-                        child: Text("Адрес",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        child: Center(
+                          child: Text("Адрес",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                        ),
                       ),
                       SizedBox(
-                        height: 40,
+                        height: 50,
                         width: screenW / 7 * 2,
-                        child: Text("Статус",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        child: Center(
+                          child: Text("Статус",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                        ),
                       )
                     ],
                   ),
-                  SizedBox(
-                      height: screenH - appBar.preferredSize.height - 80 - 125,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey)),
-                        child: ListView(
-                          children:
-                              List.generate(_settingsData.length, (index) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 50,
-                                  width: screenW / 7 * 2,
-                                  child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          color: index % 2 == 0
-                                              ? Colors.white
-                                              : Colors.black12,
-                                          border: Border.all(
-                                              color: Colors.black38)),
-                                      child: Center(
-                                        child: Text(
-                                          "${_settingsData[index].name}",
-                                        ),
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                  width: screenW / 7 * 2,
-                                  child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          color: index % 2 == 0
-                                              ? Colors.white
-                                              : Colors.black12,
-                                          border: Border.all(
-                                              color: Colors.black38)),
-                                      child: Center(
-                                        child: Text(
-                                          "${_settingsData[index].hash}",
-                                        ),
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                  width: screenW / 7 * 2,
-                                  child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          color: index % 2 == 0
-                                              ? Colors.white
-                                              : Colors.black12,
-                                          border: Border.all(
-                                              color: Colors.black38)),
-                                      child: Center(
-                                        child: Text(
-                                          "${_settingsData[index].status}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color:
-                                                  _settingsData[index].status ==
-                                                          "online"
-                                                      ? Colors.lightGreen
-                                                      : Colors.red),
-                                        ),
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                  width: screenW / 7,
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: index % 2 == 0
-                                            ? Colors.white
-                                            : Colors.black12,
-                                        border:
-                                            Border.all(color: Colors.black38)),
-                                    child: IconButton(
-                                      icon: Icon(Icons.more_horiz),
-                                      onPressed: () {
-                                        var args = SettingsMenuPostArgs(
-                                            _settingsData[index].id,
-                                            sessionData);
-                                        Navigator.pushNamed(
-                                            context, "/home/settings/post",
-                                            arguments: args);
-                                      },
-                                    ),
+                  Column(
+                    children: List.generate(_settingsData.length, (index) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 50,
+                            width: screenW / 7 * 2,
+                            child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
+                                    border: Border.all(color: Colors.black38)),
+                                child: Center(
+                                  child: Text(
+                                    "${_settingsData[index].name}",
                                   ),
-                                ),
-                              ],
-                            );
-                          }),
-                        ),
-                      )),
+                                )),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: screenW / 7 * 2,
+                            child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
+                                    border: Border.all(color: Colors.black38)),
+                                child: Center(
+                                  child: Text(
+                                    "${_settingsData[index].hash}",
+                                  ),
+                                )),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: screenW / 7 * 2,
+                            child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    color: index % 2 == 0
+                                        ? Colors.white
+                                        : Colors.black12,
+                                    border: Border.all(color: Colors.black38)),
+                                child: Center(
+                                  child: Text(
+                                    "${_settingsData[index].status}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: _settingsData[index].status ==
+                                                "online"
+                                            ? Colors.lightGreen
+                                            : Colors.red),
+                                  ),
+                                )),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: screenW / 7,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38)),
+                              child: IconButton(
+                                icon: Icon(Icons.more_horiz),
+                                onPressed: () {
+                                  var args = SettingsMenuPostArgs(
+                                      _settingsData[index].id, sessionData);
+                                  Navigator.pushNamed(
+                                      context, "/home/settings/post",
+                                      arguments: args);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+                  ),
                   SizedBox(
                     height: 25,
                   ),
@@ -285,6 +283,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             arguments: sessionData);
                       },
                     ),
+                  ),
+                  SizedBox(
+                    height: 25,
                   ),
                 ],
               ),
