@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       height: 50,
                       width: 165,
-                      child: RaisedButton(
+                      child: FlatButton(
                         color: _homePageData[index].status == "online"
                             ? Colors.lightGreen
                             : Colors.red,
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                                   width: 200,
                                   child: Padding(
                                     padding: EdgeInsets.all(5),
-                                    child: RaisedButton(
+                                    child: FlatButton(
                                       color: btnIndex == activeProgramIndex
                                           ? Colors.lightGreenAccent
                                           : Colors.white,

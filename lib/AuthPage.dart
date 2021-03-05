@@ -23,11 +23,10 @@ class _AuthPageState extends State<AuthPage> {
 
   void _loadPage() {
     SystemChrome.setPreferredOrientations([]);
-    Navigator.pop(context);
-    Navigator.pushNamed(context, "/home", arguments: _sessionData);
+    Navigator.pushReplacementNamed(context, "/home",arguments: _sessionData);
   }
 
-  void _authCheckAlt() async {
+  void _authCheck() async {
     try {
       _sessionData = new SessionData(DefaultApi());
       _sessionData.client.apiClient.basePath = _host;
@@ -71,7 +70,7 @@ class _AuthPageState extends State<AuthPage> {
                     width: screenW / 4 * 3,
                     child: DecoratedBox(
                       child: Center(
-                          child: Text(_toDisplayAlt(),
+                          child: Text(_toDisplay(),
                               // child: Text(_toDisplay(_displayedSymbols),
                               style: TextStyle(fontSize: 40))),
                       decoration: BoxDecoration(
@@ -148,18 +147,18 @@ class _AuthPageState extends State<AuthPage> {
           onPressed: () {
             switch (text) {
               case 'Ок':
-                _authCheckAlt();
+                _authCheck();
                 // _authCheck(sessionData);
                 break;
               case 'с':
                 setState(() {
-                  _deleteSymbolAlt();
+                  _deleteSymbol();
                   // _deleteSymbol();
                 });
                 break;
               default:
                 setState(() {
-                  _addSymbolAlt(text);
+                  _addSymbol(text);
                   // _addSymbol(text);
                 });
                 break;
@@ -168,7 +167,7 @@ class _AuthPageState extends State<AuthPage> {
         ));
   }
 
-  void _deleteSymbolAlt() {
+  void _deleteSymbol() {
     if (_currentPin.length > 1) {
       _currentPin = _currentPin.substring(0, _currentPin.length - 1);
     } else {
@@ -176,13 +175,13 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-  void _addSymbolAlt(String symbol) {
+  void _addSymbol(String symbol) {
     if (_currentPin.length < _maxPinLength) {
       _currentPin += symbol;
     }
   }
 
-  String _toDisplayAlt() {
+  String _toDisplay() {
     var res = "";
     if (_currentPin.length > 0) {
       return _currentPin

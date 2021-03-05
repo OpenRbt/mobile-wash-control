@@ -99,14 +99,10 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: screenH - appBar.preferredSize.height - 91,
-                        width: screenW,
-                        child: ListView(
-                            //children: buildChildren(sessionData, screenW, screenH)),
-                            children:
-                                programsTable(sessionData, screenW, screenH)),
-                      ),
+                      Column(
+                          //children: buildChildren(sessionData, screenW, screenH)),
+                          children:
+                              programsTable(sessionData, screenW, screenH)),
                     ])
                   ])));
         },

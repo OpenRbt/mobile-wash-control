@@ -101,12 +101,11 @@ Widget prepareDrawer(
                                                   ));
                                         }
                                       : () {
-                                          Navigator.of(context)
-                                              .pop(); //Closing current screen
                                           Navigator.pop(
                                               context); //Closing Drawer
-                                          Navigator.pushNamed(
-                                              context, routes[index],
+                                          Navigator.pushReplacementNamed(
+                                              Navigator.of(context).context,
+                                              routes[index],
                                               arguments: sessionData);
                                         };
                                   return ListTile(
@@ -185,14 +184,15 @@ class ValueWrapper {
   ValueWrapper(this.value);
 }
 
-void showErrorSnackBar(GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnackBarActive, {String text}) async {
+void showErrorSnackBar(
+    GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnackBarActive,
+    {String text}) async {
   if (isSnackBarActive.value) {
     return;
   }
-  if (scaffoldKey.currentState == null){
+  if (scaffoldKey.currentState == null) {
     await Future.delayed(Duration(milliseconds: 200));
-    if (scaffoldKey.currentState == null)
-      return;
+    if (scaffoldKey.currentState == null) return;
   }
   isSnackBarActive.value = true;
   scaffoldKey.currentState
