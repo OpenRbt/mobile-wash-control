@@ -22,6 +22,8 @@ class SettingsMenu extends StatefulWidget {
 
 class _SettingsMenuState extends State<SettingsMenu> {
   _SettingsMenuState() : super();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
 
   bool _firstLoad = true;
   String _currentTemp = "__";
@@ -64,6 +66,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
       }
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
+      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
 
     setState(() {});
@@ -85,6 +88,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: appBar,
       drawer: prepareDrawer(context, Pages.Settings, sessionData),
       body: OrientationBuilder(

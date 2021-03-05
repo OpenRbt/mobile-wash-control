@@ -10,23 +10,24 @@ class ProgramsMenu extends StatefulWidget {
 
 class _ProgramsMenuState extends State<ProgramsMenu> {
   _ProgramsMenuState() : super();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
 
   List<Program> _programs;
   bool _firstLoad = true;
 
-  Future<String> GetData(SessionData sessionData) async {
+  Future<void> GetData(SessionData sessionData) async {
     try {
       var args14 = Args14();
       _programs = await sessionData.client.programs(args14);
       if (!mounted) {
-        return null;
+        return;
       }
       _firstLoad = false;
       setState(() {});
-      return null;
     } catch (e) {
       print("Exception when calling GetData in ProgramsMenu: $e\n");
-      return 'Произошла ошибка при вызове апи';
+      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
   }
 
@@ -35,7 +36,6 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
     if (_firstLoad) {
       GetData(sessionData);
-      //TODO: return some error if unsuccessful (snackbar)?
     }
 
     final AppBar appBar = AppBar(
@@ -45,6 +45,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: appBar,
       drawer: prepareDrawer(context, Pages.Programs, sessionData),
       body: OrientationBuilder(
@@ -53,12 +54,9 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
               height: screenH - appBar.preferredSize.height,
               child: RefreshIndicator(
                   onRefresh: () async {
-                    var err = await GetData(sessionData);
+                    await GetData(sessionData);
                     await Future.delayed(Duration(milliseconds: 500));
-                    if (err != null)
-                      showErrorDialog(context, err);
-                    else
-                      setState(() {});
+                    setState(() {});
                   },
                   child: ListView(children: [
                     Column(children: [

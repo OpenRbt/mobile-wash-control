@@ -25,6 +25,9 @@ class AccountInfo {
 }
 
 class _AccountsMenuState extends State<AccountsMenu> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
+
   List<AccountInfo> _accounts = List();
   bool _firstLoad = true;
 
@@ -50,6 +53,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->/users: $e\n");
+      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
   }
 
@@ -69,6 +73,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: appBar,
       drawer: prepareDrawer(context, Pages.Accounts, sessionData),
       body: OrientationBuilder(

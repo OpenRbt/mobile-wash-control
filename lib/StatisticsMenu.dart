@@ -9,6 +9,9 @@ class StatisticsMenu extends StatefulWidget {
 
 class _StatisticsMenuState extends State<StatisticsMenu> {
   _StatisticsMenuState() : super();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
+
   bool _firstLoad = true;
   bool _updating = false;
   List<StationReport> _reports = new List();
@@ -38,6 +41,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
         reports.add(await reportsTmp[i]);
       } catch (e) {
         print("Exception when calling DefaultApi->/station-report-dates: $e\n");
+        showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
       }
     }
     print("Recieved reports: ${reports.length}");
@@ -105,6 +109,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
+        key: _scaffoldKey,
         appBar: appBar,
         drawer: prepareDrawer(context, Pages.Statistics, sessionData),
         body: OrientationBuilder(

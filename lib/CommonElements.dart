@@ -158,36 +158,6 @@ class MyScrollingBehavior extends ScrollBehavior {
   }
 }
 
-Widget buildForm(
-    {TextStyle style,
-    TextInputType keyboardType,
-    List<TextInputFormatter> inputFormatters,
-    InputDecoration decoration,
-    TextEditingController controller,
-    String Function(String) validator,
-    @required Future<String> Function(String) onSubmitted}) {
-  return Builder(builder: (BuildContext context) {
-    return TextField(
-        style: style ?? null,
-        keyboardType: keyboardType ?? null,
-        inputFormatters: inputFormatters ?? null,
-        decoration: decoration ?? null,
-        controller: controller ?? null,
-        onSubmitted: (newValue) async {
-          var valid = validator == null ? null : validator(newValue);
-          if (valid == null) {
-            var err = await onSubmitted(newValue);
-            if (err == null)
-              Scaffold.of(context)
-                  .showSnackBar(SnackBar(content: Text('Обработка данных...')));
-            else
-              showErrorDialog(context, err);
-          } else
-            showErrorDialog(context, valid);
-        });
-  });
-}
-
 void showErrorDialog(BuildContext context, String text) {
   showDialog(
       context: context,
@@ -208,4 +178,33 @@ void showErrorDialog(BuildContext context, String text) {
               )
             ],
           ));
+}
+
+class ValueWrapper {
+  var value;
+  ValueWrapper(this.value);
+}
+
+void showErrorSnackBar(GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnackBarActive, {String text}) async {
+  if (isSnackBarActive.value) {
+    return;
+  }
+  if (scaffoldKey.currentState == null){
+    await Future.delayed(Duration(milliseconds: 200));
+    if (scaffoldKey.currentState == null)
+      return;
+  }
+  isSnackBarActive.value = true;
+  scaffoldKey.currentState
+      .showSnackBar(SnackBar(
+        content: Text(text ?? ('Ошибка при запросе к апи ')),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
+      ))
+      .closed
+      .then((SnackBarClosedReason reason) {
+    isSnackBarActive.value = false;
+  }).timeout(Duration(seconds: 4), onTimeout: () {
+    isSnackBarActive.value = false;
+  });
 }

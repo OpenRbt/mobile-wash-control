@@ -24,10 +24,15 @@ class HomePageData {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
+
   bool _firstLoad = true;
-  List<HomePageData> _homePageData = List.generate(8, (index) {
+  List<HomePageData>
+      _homePageData /* = List.generate(8, (index) {
     return new HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
-  });
+  })*/
+      ;
   Timer _updateTimer;
 
   List<Program> _programs;
@@ -58,6 +63,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->Status in HomePage: $e\n");
+      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
   }
 
@@ -73,6 +79,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Главная"),
         ),
@@ -110,6 +117,7 @@ class _HomePageState extends State<HomePage> {
                               _homePageData[index].currentProgramID,
                               _programs,
                               sessionData);
+                          _updateTimer.cancel();
                           Navigator.pushNamed(context, "/home/editPost",
                                   arguments: args)
                               .then((value) {
@@ -118,6 +126,10 @@ class _HomePageState extends State<HomePage> {
                                   _programs[value ?? 1].id;
                             else
                               _homePageData[index].currentProgramID = -1;
+                            _updateTimer = new Timer.periodic(
+                                Duration(seconds: 1), (timer) {
+                              GetStations(sessionData);
+                            });
                             setState(() {});
                           });
                         },

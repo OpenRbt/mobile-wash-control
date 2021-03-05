@@ -23,6 +23,8 @@ class EditPostMenu extends StatefulWidget {
 }
 
 class _EditPostMenuState extends State<EditPostMenu> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
   bool _firstLoad = true;
   Timer _updateBalanceTimer;
   int _service_balance = 0;
@@ -41,15 +43,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
     super.dispose();
   }
 
-  List<bool> _checkboxList = [false, false, false, false, false, false];
-  List<String> _buttonNames = [
-    "пена",
-    "вода + шампунь",
-    "ополаскивание",
-    "воск",
-    "сушка и блеск",
-    "пауза"
-  ];
+  List<bool> _checkboxList;
+  List<String> _buttonNames;
 
   void _getBalance(SessionData sessionData, int postID) async {
     try {
@@ -71,6 +66,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
     } catch (e) {
       print(
           "Exception when calling DefaultApi->/station-report-current-money: $e\n");
+      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
   }
 
@@ -82,6 +78,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
     } catch (e) {
       print("Exception when calling DefaultApi->/add-service-amount: $e\n");
+      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
   }
 
@@ -101,6 +98,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       } catch (e) {
         print(
             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+        showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
       }
     } else {
       try {
@@ -116,6 +114,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       } catch (e) {
         print(
             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+        showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
       }
     }
   }
@@ -160,6 +159,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
           return false;
         },
         child: Scaffold(
+          key: _scaffoldKey,
           appBar: appBar,
           body: OrientationBuilder(
             builder: (context, orientation) {
@@ -209,7 +209,11 @@ class _EditPostMenuState extends State<EditPostMenu> {
           padding: EdgeInsets.all(10),
           child: SizedBox(
             height: 50,
-            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+            width: isPortrait
+                ? screenW / 2 - 20
+                : ((postMenuArgs.programs?.length ?? 0) > 0
+                    ? screenW / 3 - 20
+                    : screenW - 100),
             child: DecoratedBox(
               child: FittedBox(
                 fit: BoxFit.fitHeight,
@@ -306,6 +310,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 } catch (e) {
                   print(
                       "Exception when calling DefaultApi->/save-collection: $e\n");
+                  showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
                 }
               },
             ),
@@ -335,6 +340,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 } catch (e) {
                   print(
                       "Exception when calling DefaultApi->/open-station: $e\n");
+                  showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
                 }
               },
             ),
