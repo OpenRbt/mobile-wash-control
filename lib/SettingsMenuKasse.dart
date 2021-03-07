@@ -56,8 +56,8 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
   void _setKasse(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
     try {
-      if (_inputControllers[2].value.text.length != 12) {
-        return;
+      if (_inputControllers[1].value.text.length > 0 && _inputControllers[2].value.text.length != 12) {
+        throw Exception("");
       }
 
       var args = KasseConfig();
@@ -72,7 +72,11 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
     } catch (e) {
       print("Exception when calling DefaultApi->set-kasse: $e\n");
       Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text("Произошла ошибка сохранении")));
+          .showSnackBar(SnackBar(
+        content: Text('Произошла ошибка при сохранении'),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
+      ));
     }
     _inUpdate = false;
   }

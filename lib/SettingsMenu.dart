@@ -164,7 +164,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             height: 50,
                             width: screenW / 7 * 2,
                             child: Center(
-                              child: Text("Адрес",
+                              child: Text("Хэш",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15,
@@ -260,8 +260,11 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                       var args = SettingsMenuPostArgs(
                                           _settingsData[index].id, sessionData);
                                       Navigator.pushNamed(
-                                          context, "/home/settings/post",
-                                          arguments: args);
+                                              context, "/home/settings/post",
+                                              arguments: args)
+                                          .then((value) {
+                                        getSettings(sessionData);
+                                      });
                                     },
                                   ),
                                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import "client/api.dart";
 
@@ -18,7 +19,6 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
   _SettingsMenuPostState() : super();
   bool _firstLoad = true;
   List<String> _readerValues = ["NOT_USED", "VENDOTEK", "PAYMENT_WORLD"];
-  List<InlineResponse2001Buttons> _listButtons = List();
   String _dropDownCardReader = "NOT_USED";
 
   List<String> _dropDownPrograms = List.filled(7, "------------");
@@ -28,7 +28,9 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
   void initState() {
     super.initState();
-    _inputControllers = List.generate(2, (index) {
+    //0-1 CardReader inputs
+    //2-4 Post inputs
+    _inputControllers = List.generate(5, (index) {
       var controller = new TextEditingController();
       switch (index) {
         default:
@@ -43,6 +45,42 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       controller.dispose();
     }
     super.dispose();
+  }
+
+  void _getPost(SettingsMenuPostArgs settingsMenuPostArgs) async {
+    try {
+      var args = Args3();
+      args.id = settingsMenuPostArgs.stationID;
+
+      var res = await settingsMenuPostArgs.sessionData.client.station(args);
+      if (!mounted) {
+        return;
+      }
+      _inputControllers[2].text = res.name ?? "";
+      _inputControllers[3].text = res.hash ?? "";
+      _inputControllers[4].text = res.preflightSec ?? "";
+    } catch (e) {
+      print("Exception when calling DefaultApi->/station: $e\n");
+    }
+  }
+
+  void _savePost(
+      SettingsMenuPostArgs settingsMenuPostArgs, BuildContext context) async {
+    try {
+      var args = StationConfig();
+      args.id = settingsMenuPostArgs.stationID;
+      args.name = _inputControllers[2].value.text ?? "";
+      args.hash = _inputControllers[3].value.text ?? "";
+      args.preflightSec = int.tryParse(_inputControllers[4].value.text) ?? 0;
+
+      var res = await settingsMenuPostArgs.sessionData.client.setStation(args);
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Настройки станции сохранены")));
+    } catch (e) {
+      print("Exception when calling DefaultApi->/set-station: $e\n");
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Произошла ошибка при сохранении")));
+    }
   }
 
   void _getCardReader(SettingsMenuPostArgs settingsMenuPostArgs) async {
@@ -93,6 +131,9 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       var args = Args14();
       var res = await settingsMenuPostArgs.sessionData.client.programs(args);
 
+      if (!mounted) {
+        return;
+      }
       _programValues = ["------------"];
       for (int i = 0; i < res.length; i++) {
         _programValues.add(res[i].id.toString());
@@ -106,6 +147,10 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.stationID = settingsMenuPostArgs.stationID;
       var res =
           await settingsMenuPostArgs.sessionData.client.stationButton(args);
+
+      if (!mounted) {
+        return;
+      }
       for (int i = 0; i < res.buttons.length; i++) {
         _dropDownPrograms[res.buttons[i].buttonID - 1] =
             res.buttons[i].programID.toString();
@@ -154,6 +199,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
     double screenW = MediaQuery.of(context).size.width;
 
     if (_firstLoad) {
+      _getPost(settingsMenuPostArgs);
       _getCardReader(settingsMenuPostArgs);
       _getButtons(settingsMenuPostArgs);
       _firstLoad = false;
@@ -167,6 +213,137 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
             height: screenH - appBar.preferredSize.height,
             child: ListView(
               children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                            height: 75,
+                            width: screenW / 3,
+                            child: Center(
+                              child: Text("ID",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
+                            )),
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: Center(
+                            child: Text("${settingsMenuPostArgs.stationID}"),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                            height: 75,
+                            width: screenW / 3,
+                            child: Center(
+                              child: Text("Имя",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
+                            )),
+                        SizedBox(
+                            height: 75,
+                            width: screenW / 3 * 2,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: TextField(
+                                controller: _inputControllers[2],
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    border: OutlineInputBorder()),
+                              ),
+                            ))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                            height: 75,
+                            width: screenW / 3,
+                            child: Center(
+                              child: Text("Хэш",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
+                            )),
+                        SizedBox(
+                            height: 75,
+                            width: screenW / 3 * 2,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: TextField(
+                                controller: _inputControllers[3],
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    border: OutlineInputBorder()),
+                              ),
+                            ))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                            height: 75,
+                            width: screenW / 3,
+                            child: Center(
+                              child: Text("Прокачка",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
+                            )),
+                        SizedBox(
+                            height: 75,
+                            width: screenW / 3 * 2,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: TextField(
+                                controller: _inputControllers[4],
+                                keyboardType: TextInputType.phone,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9_]"))
+                                ],
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    border: OutlineInputBorder()),
+                              ),
+                            ))
+                      ],
+                    ),
+                    Wrap(
+                      direction: Axis.horizontal,
+                      alignment: WrapAlignment.center,
+                      spacing: 25,
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          width: screenW / 3,
+                          child: RaisedButton(
+                            onPressed: () {
+                              _savePost(settingsMenuPostArgs, context);
+                            },
+                            child: Text("Сохранить настройки"),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: screenW / 3,
+                          child: RaisedButton(
+                            onPressed: () {
+                              _getPost(settingsMenuPostArgs);
+                            },
+                            child: Text("Отменить"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Divider(
+                  color: Colors.lightGreen,
+                  thickness: 3,
+                ),
                 Column(
                   children: [
                     Row(

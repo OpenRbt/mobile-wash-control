@@ -14,7 +14,7 @@ class StationConfig {
   String hash = null;
   
 
-  RelayBoard relayBoard = null;
+  String relayBoard = null;
   
   StationConfig();
 
@@ -40,7 +40,7 @@ class StationConfig {
     relayBoard =
       
       
-      new RelayBoard.fromJson(json['relayBoard'])
+     json['relayBoard']
 ;
   }
 

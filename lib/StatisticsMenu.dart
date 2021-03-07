@@ -165,10 +165,10 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                         ]..addAll(List.generate(_reports.length, (index) {
                             return createTableRow([
                               index + 1,
-                              _reports[index].moneyReport.banknotes,
-                              _reports[index].moneyReport.electronical,
-                              _reports[index].moneyReport.service,
-                              _reports[index].moneyReport.carsTotal,
+                              _reports[index].moneyReport.banknotes ?? 0,
+                              _reports[index].moneyReport.electronical ?? 0,
+                              _reports[index].moneyReport.service ?? 0,
+                              _reports[index].moneyReport.carsTotal ?? 0,
                               0
                             ]);
                           })),

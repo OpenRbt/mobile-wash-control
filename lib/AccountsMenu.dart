@@ -95,11 +95,13 @@ class _AccountsMenuState extends State<AccountsMenu> {
                       SizedBox(
                         height: 50,
                         width: screenW > screenH ? screenW / 11 * 2 : 0,
-                        child: Text(
-                          screenW > screenH ? "Логин" : "",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                        child: Center(
+                          child: Text(
+                            screenW > screenH ? "Логин" : "",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -107,11 +109,13 @@ class _AccountsMenuState extends State<AccountsMenu> {
                         width: screenW > screenH
                             ? screenW / 11 * 2
                             : screenW / 9 * 2,
-                        child: Text(
-                          "Фамилия",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                        child: Center(
+                          child: Text(
+                            "Фамилия",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -119,30 +123,36 @@ class _AccountsMenuState extends State<AccountsMenu> {
                         width: screenW > screenH
                             ? screenW / 11 * 2
                             : screenW / 9 * 2,
-                        child: Text("Имя",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        child: Center(
+                          child: Text("Имя",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                        ),
                       ),
                       SizedBox(
                         height: 50,
                         width: screenW > screenH
                             ? screenW / 11 * 2
                             : screenW / 9 * 2,
-                        child: Text("Отчество",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        child: Center(
+                          child: Text("Отчество",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                        ),
                       ),
                       SizedBox(
                         height: 50,
                         width: screenW > screenH
                             ? screenW / 11 * 2
                             : screenW / 9 * 2,
-                        child: Text("Статус",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        child: Center(
+                          child: Text("Статус",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                        ),
                       ),
                     ],
                   ),

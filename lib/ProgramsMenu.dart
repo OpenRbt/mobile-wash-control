@@ -69,31 +69,40 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                             SizedBox(
                               height: 50,
                               width: screenW / 7 * 2,
-                              child: Text(
-                                "Название",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              child: Center(
+                                child: Text(
+                                  "Название",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                             SizedBox(
                               height: 50,
                               width: screenW / 7 * 2,
-                              child: Text(
-                                "Цена",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              child: Center(
+                                child: Text(
+                                  "Цена",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                             SizedBox(
                               height: 50,
                               width: screenW / 7 * 2,
-                              child: Text(
-                                "Активная",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              child: Center(
+                                child: Text(
+                                  "Прокачка",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                           ],
@@ -146,11 +155,20 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                 width: screenW / 7 * 2,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                      color: index % 2 == 0 ? Colors.lightGreen : Colors.red,
+                      color: (_programs[index].preflightEnabled != null)
+                          ? (_programs[index].preflightEnabled
+                              ? Colors.lightGreen
+                              : Colors.red)
+                          : Colors.red,
                       border: Border.all(color: Colors.black38)),
                   child: Center(
                       //TODO: get active status (Kronusol)
-                      child: Text(index % 2 == 0 ? "Active" : "Disabled",
+                      child: Text(
+                          (_programs[index].preflightEnabled != null)
+                              ? (_programs[index].preflightEnabled
+                                  ? "Включена"
+                                  : "Отключена")
+                              : "Отключена",
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white, fontSize: 15))),
                 )),
