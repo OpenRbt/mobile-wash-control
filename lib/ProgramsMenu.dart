@@ -18,7 +18,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
 
   Future<void> GetData(SessionData sessionData) async {
     try {
-      var args14 = Args14();
+      var args14 = ProgramsArgs();
       _programs = await sessionData.client.programs(args14);
       if (!mounted) {
         return;

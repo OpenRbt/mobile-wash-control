@@ -36,7 +36,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
       if (!mounted) {
         return;
       }
-      var args = Args9();
+      var args = LoadArgs();
       _settingsData = List.generate((res.stations.length), (index) {
         return new SettingsData(
             res.stations[index].id,

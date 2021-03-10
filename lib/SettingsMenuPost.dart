@@ -49,7 +49,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
   void _getPost(SettingsMenuPostArgs settingsMenuPostArgs) async {
     try {
-      var args = Args3();
+      var args = StationArgs();
       args.id = settingsMenuPostArgs.stationID;
 
       var res = await settingsMenuPostArgs.sessionData.client.station(args);
@@ -85,7 +85,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
   void _getCardReader(SettingsMenuPostArgs settingsMenuPostArgs) async {
     try {
-      var args = Args18();
+      var args = CardReaderConfigArgs();
       args.stationID = settingsMenuPostArgs.stationID;
       var res =
           await settingsMenuPostArgs.sessionData.client.cardReaderConfig(args);
@@ -128,7 +128,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
   void _getButtons(SettingsMenuPostArgs settingsMenuPostArgs) async {
     try {
-      var args = Args14();
+      var args = ProgramsArgs();
       var res = await settingsMenuPostArgs.sessionData.client.programs(args);
 
       if (!mounted) {
@@ -143,7 +143,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
     }
 
     try {
-      var args = Args16();
+      var args = StationButtonArgs();
       args.stationID = settingsMenuPostArgs.stationID;
       var res =
           await settingsMenuPostArgs.sessionData.client.stationButton(args);
@@ -165,7 +165,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
   void _saveButtons(
       SettingsMenuPostArgs settingsMenuPostArgs, BuildContext context) async {
     try {
-      var args = Args17();
+      var args = SetStationButtonsArgs();
       args.stationID = settingsMenuPostArgs.stationID;
       List<InlineResponse2001Buttons> buttons = List();
       for (int i = 0; i < 6; i++) {

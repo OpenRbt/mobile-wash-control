@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
   void GetStations(SessionData sessionData) async {
     try {
       var res = await sessionData.client.status();
-      var args14 = Args14();
+      var args14 = ProgramsArgs();
       _programs = await sessionData.client.programs(args14);
 
       if (!mounted) {
@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                                             (_programs?.length ?? 0)) {
                                           if (btnIndex != activeProgramIndex) {
                                             try {
-                                              var args = Args24();
+                                              var args = RunProgramArgs();
                                               args.hash =
                                                   _homePageData[index].hash;
                                               args.programID =
@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                                             }
                                           } else {
                                             try {
-                                              var args = Args24();
+                                              var args = RunProgramArgs();
                                               args.hash =
                                                   _homePageData[index].hash;
                                               args.programID = -1;

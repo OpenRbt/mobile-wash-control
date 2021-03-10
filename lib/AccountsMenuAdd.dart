@@ -69,7 +69,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
     _inUpdate = true;
     setState(() {});
     try {
-      var args = Args22();
+      var args = CreateUserArgs();
       args.login = _inputControllers[0].value.text;
       if (args.login.length < 4) {
         print("login length fail");

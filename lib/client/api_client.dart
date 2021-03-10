@@ -38,54 +38,6 @@ class ApiClient {
           return value is bool ? value : '$value'.toLowerCase() == 'true';
         case 'double':
           return value is double ? value : double.parse('$value');
-        case 'Args':
-          return new Args.fromJson(value);
-        case 'Args1':
-          return new Args1.fromJson(value);
-        case 'Args10':
-          return new Args10.fromJson(value);
-        case 'Args11':
-          return new Args11.fromJson(value);
-        case 'Args12':
-          return new Args12.fromJson(value);
-        case 'Args13':
-          return new Args13.fromJson(value);
-        case 'Args14':
-          return new Args14.fromJson(value);
-        case 'Args15':
-          return new Args15.fromJson(value);
-        case 'Args16':
-          return new Args16.fromJson(value);
-        case 'Args17':
-          return new Args17.fromJson(value);
-        case 'Args18':
-          return new Args18.fromJson(value);
-        case 'Args19':
-          return new Args19.fromJson(value);
-        case 'Args2':
-          return new Args2.fromJson(value);
-        case 'Args20':
-          return new Args20.fromJson(value);
-        case 'Args21':
-          return new Args21.fromJson(value);
-        case 'Args22':
-          return new Args22.fromJson(value);
-        case 'Args23':
-          return new Args23.fromJson(value);
-        case 'Args3':
-          return new Args3.fromJson(value);
-        case 'Args4':
-          return new Args4.fromJson(value);
-        case 'Args5':
-          return new Args5.fromJson(value);
-        case 'Args6':
-          return new Args6.fromJson(value);
-        case 'Args7':
-          return new Args7.fromJson(value);
-        case 'Args8':
-          return new Args8.fromJson(value);
-        case 'Args9':
-          return new Args9.fromJson(value);
         case 'CardReaderConfig':
           return new CardReaderConfig.fromJson(value);
         case 'CollectionReport':
@@ -94,14 +46,6 @@ class ApiClient {
           return new FirstName.fromJson(value);
         case 'Hash':
           return new Hash.fromJson(value);
-        case 'InlineResponse200':
-          return new InlineResponse200.fromJson(value);
-        case 'InlineResponse2001':
-          return new InlineResponse2001.fromJson(value);
-        case 'InlineResponse2001Buttons':
-          return new InlineResponse2001Buttons.fromJson(value);
-        case 'InlineResponse409':
-          return new InlineResponse409.fromJson(value);
         case 'IsAdmin':
           return new IsAdmin.fromJson(value);
         case 'IsEngineer':
@@ -136,8 +80,6 @@ class ApiClient {
           return new StationConfig.fromJson(value);
         case 'StationPrograms':
           return new StationPrograms.fromJson(value);
-        case 'StationProgramsPrograms':
-          return new StationProgramsPrograms.fromJson(value);
         case 'StationReport':
           return new StationReport.fromJson(value);
         case 'StationStatus':

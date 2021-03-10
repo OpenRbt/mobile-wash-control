@@ -27,7 +27,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
     List<StationReport> reports = new List();
     for (int i = 0; i < 8; i++) {
       try {
-        var args = Args();
+        var args = StationReportDatesArgs();
         args.id = i + 1;
         args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
         args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;

@@ -76,7 +76,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
     _inUpdate = true;
     setState(() {});
     try {
-      var args = Args21();
+      var args = UpdateUserArgs();
       args.login = _inputControllers[0].value.text;
       args.firstName = _inputControllers[1].value.text;
       if (args.firstName.length < 1) args.firstName = " ";

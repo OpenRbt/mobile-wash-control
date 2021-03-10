@@ -54,7 +54,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
           .last
           .currentProgram;
       _current_program_index = _current_program_index ?? 1;
-      var args = Args1();
+      var args = StationReportCurrentMoneyArgs();
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
       _balance = res.moneyReport.coins + res.moneyReport.banknotes;
@@ -72,7 +72,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   void _addServiceMoney(PostMenuArgs postMenuArgs) async {
     try {
-      var args = Args2();
+      var args = AddServiceAmountArgs();
       args.hash = postMenuArgs.hash;
       args.amount = 10;
       var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
@@ -82,10 +82,11 @@ class _EditPostMenuState extends State<EditPostMenu> {
     }
   }
 
+  //TODO: add preflight parameter
   void _programButtonListener(index, PostMenuArgs postMenuArgs) async {
     if (index != _current_program_index) {
       try {
-        var args = Args24();
+        var args = RunProgramArgs();
         args.hash = postMenuArgs.hash;
         args.programID = postMenuArgs.programs[index].id ?? 1;
         await postMenuArgs.sessionData.client.runProgram(args);
@@ -102,7 +103,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       }
     } else {
       try {
-        var args = Args24();
+        var args = RunProgramArgs();
         args.hash = postMenuArgs.hash;
         args.programID = -1;
         await postMenuArgs.sessionData.client.runProgram(args);
@@ -303,7 +304,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
               ),
               onPressed: () {
                 try {
-                  var args = Args6();
+                  var args = SaveCollectionArgs();
                   args.id = postMenuArgs.postID;
                   var res =
                       postMenuArgs.sessionData.client.saveCollection(args);
@@ -334,7 +335,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
               ),
               onPressed: () {
                 try {
-                  var args = Args13();
+                  var args = OpenStationArgs();
                   args.stationID = postMenuArgs.postID;
                   var res = postMenuArgs.sessionData.client.openStation(args);
                 } catch (e) {

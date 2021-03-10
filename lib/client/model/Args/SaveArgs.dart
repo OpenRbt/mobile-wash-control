@@ -1,20 +1,20 @@
 part of swagger.api;
 
-class Args8 {
+class SaveArgs {
   
   String hash = null;
   
 
   KeyPair keyPair = null;
   
-  Args8();
+  SaveArgs();
 
   @override
   String toString() {
     return 'Args8[hash=$hash, keyPair=$keyPair, ]';
   }
 
-  Args8.fromJson(Map<String, dynamic> json) {
+  SaveArgs.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     hash =
       
@@ -35,14 +35,14 @@ class Args8 {
      };
   }
 
-  static List<Args8> listFromJson(List<dynamic> json) {
-    return json == null ? new List<Args8>() : json.map((value) => new Args8.fromJson(value)).toList();
+  static List<SaveArgs> listFromJson(List<dynamic> json) {
+    return json == null ? new List<SaveArgs>() : json.map((value) => new SaveArgs.fromJson(value)).toList();
   }
 
-  static Map<String, Args8> mapFromJson(Map<String, Map<String, dynamic>> json) {
-    var map = new Map<String, Args8>();
+  static Map<String, SaveArgs> mapFromJson(Map<String, Map<String, dynamic>> json) {
+    var map = new Map<String, SaveArgs>();
     if (json != null && json.length > 0) {
-      json.forEach((String key, Map<String, dynamic> value) => map[key] = new Args8.fromJson(value));
+      json.forEach((String key, Map<String, dynamic> value) => map[key] = new SaveArgs.fromJson(value));
     }
     return map;
   }

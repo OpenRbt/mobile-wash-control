@@ -1,6 +1,6 @@
 part of swagger.api;
 
-class Args21 {
+class UpdateUserArgs {
   
   String login = null;
   
@@ -22,14 +22,14 @@ class Args21 {
 
   bool isEngineer = null;
   
-  Args21();
+  UpdateUserArgs();
 
   @override
   String toString() {
     return 'Args21[login=$login, firstName=$firstName, middleName=$middleName, lastName=$lastName, isAdmin=$isAdmin, isOperator=$isOperator, isEngineer=$isEngineer, ]';
   }
 
-  Args21.fromJson(Map<String, dynamic> json) {
+  UpdateUserArgs.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     login =
       
@@ -80,14 +80,14 @@ class Args21 {
      };
   }
 
-  static List<Args21> listFromJson(List<dynamic> json) {
-    return json == null ? new List<Args21>() : json.map((value) => new Args21.fromJson(value)).toList();
+  static List<UpdateUserArgs> listFromJson(List<dynamic> json) {
+    return json == null ? new List<UpdateUserArgs>() : json.map((value) => new UpdateUserArgs.fromJson(value)).toList();
   }
 
-  static Map<String, Args21> mapFromJson(Map<String, Map<String, dynamic>> json) {
-    var map = new Map<String, Args21>();
+  static Map<String, UpdateUserArgs> mapFromJson(Map<String, Map<String, dynamic>> json) {
+    var map = new Map<String, UpdateUserArgs>();
     if (json != null && json.length > 0) {
-      json.forEach((String key, Map<String, dynamic> value) => map[key] = new Args21.fromJson(value));
+      json.forEach((String key, Map<String, dynamic> value) => map[key] = new UpdateUserArgs.fromJson(value));
     }
     return map;
   }
