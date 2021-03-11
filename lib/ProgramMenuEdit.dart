@@ -6,9 +6,10 @@ import 'package:mobile_wash_control/client/api.dart';
 
 class ProgramMenuEditArgs {
   final int programID;
+  final String programName;
   final SessionData sessionData;
 
-  ProgramMenuEditArgs(this.programID, this.sessionData);
+  ProgramMenuEditArgs(this.programID, this.programName, this.sessionData);
 }
 
 class ProgramMenuEdit extends StatefulWidget {
@@ -164,14 +165,17 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
 
       for (int i = 0; i < res[0].relays.length; i++) {
         int id = res[0].relays[i].id - 1;
-        int percent = (res[0].relays[i].timeon / _relayTime * 100).round();
+        var timeon = res[0].relays[i].timeon ?? 0;
+        var timeoff = res[0].relays[i].timeoff ?? 0;
+        int percent = (100 * timeon / (timeon + timeoff)).round();
         _relays[id].text = percent.toString();
       }
 
       for (int i = 0; i < res[0].preflightRelays.length; i++) {
         int id = res[0].preflightRelays[i].id - 1;
-        int percent =
-            (res[0].preflightRelays[i].timeon / _relayTime * 100).round();
+        var timeon = res[0].preflightRelays[i].timeon ?? 0;
+        var timeoff = res[0].preflightRelays[i].timeoff ?? 0;
+        int percent = (100 * timeon / (timeon + timeoff)).round();
         _relaysPreflight[id].text = percent.toString();
       }
     } catch (e) {}
@@ -231,7 +235,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
     final ProgramMenuEditArgs programMenuEditArgs =
         ModalRoute.of(context).settings.arguments;
     final AppBar appBar = AppBar(
-      title: Text("Программа ${programMenuEditArgs.programID}"),
+      title: Text("Программа ${programMenuEditArgs.programName}"),
     );
 
     if (_firstLoad) {

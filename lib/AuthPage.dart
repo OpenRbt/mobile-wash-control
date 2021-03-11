@@ -15,6 +15,9 @@ class AuthArgs {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
+
   _AuthPageState() : super();
   final int _maxPinLength = 4;
   String _host;
@@ -23,7 +26,7 @@ class _AuthPageState extends State<AuthPage> {
 
   void _loadPage() {
     SystemChrome.setPreferredOrientations([]);
-    Navigator.pushReplacementNamed(context, "/home",arguments: _sessionData);
+    Navigator.pushReplacementNamed(context, "/home", arguments: _sessionData);
   }
 
   void _authCheck() async {
@@ -34,10 +37,14 @@ class _AuthPageState extends State<AuthPage> {
       var res = await _sessionData.client.getUser();
       if (res != null) {
         _loadPage();
+      } else {
+        showErrorSnackBar(_scaffoldKey, _isSnackBarActive,
+            text: 'Введены неверные данные');
       }
       print(res);
     } catch (e) {
       print("Exception when calling DefaultApi->/user: $e\n");
+      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
   }
 
@@ -54,75 +61,79 @@ class _AuthPageState extends State<AuthPage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    return WillPopScope(onWillPop: () async {
-      SystemNavigator.pop();
-      return false;
-    }, child: Scaffold(body: SafeArea(child: OrientationBuilder(
-      builder: (context, orientation) {
-        return new Container(
-            width: screenW,
-            height: screenH,
-            child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ListView(children: [
-                  Container(
-                    height: 62,
-                    width: screenW / 4 * 3,
-                    child: DecoratedBox(
-                      child: Center(
-                          child: Text(_toDisplay(),
-                              // child: Text(_toDisplay(_displayedSymbols),
-                              style: TextStyle(fontSize: 40))),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _keyPadKey('1', screenW, screenH),
-                      _keyPadKey('2', screenW, screenH),
-                      _keyPadKey('3', screenW, screenH)
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _keyPadKey('4', screenW, screenH),
-                      _keyPadKey('5', screenW, screenH),
-                      _keyPadKey('6', screenW, screenH)
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _keyPadKey('7', screenW, screenH),
-                      _keyPadKey('8', screenW, screenH),
-                      _keyPadKey('9', screenW, screenH)
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _keyPadKey('с', screenW, screenH), // russian
-                      _keyPadKey('0', screenW, screenH),
-                      _keyPadKey(
-                        'Ок',
-                        screenW,
-                        screenH,
-                      ) // russian
-                    ],
-                  )
-                ])));
-      },
-    ))));
+    return WillPopScope(
+        onWillPop: () async {
+          SystemNavigator.pop();
+          return false;
+        },
+        child: Scaffold(
+            key: _scaffoldKey,
+            body: SafeArea(child: OrientationBuilder(
+              builder: (context, orientation) {
+                return new Container(
+                    width: screenW,
+                    height: screenH,
+                    child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ListView(children: [
+                          Container(
+                            height: 62,
+                            width: screenW / 4 * 3,
+                            child: DecoratedBox(
+                              child: Center(
+                                  child: Text(_toDisplay(),
+                                      // child: Text(_toDisplay(_displayedSymbols),
+                                      style: TextStyle(fontSize: 40))),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _keyPadKey('1', screenW, screenH),
+                              _keyPadKey('2', screenW, screenH),
+                              _keyPadKey('3', screenW, screenH)
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _keyPadKey('4', screenW, screenH),
+                              _keyPadKey('5', screenW, screenH),
+                              _keyPadKey('6', screenW, screenH)
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _keyPadKey('7', screenW, screenH),
+                              _keyPadKey('8', screenW, screenH),
+                              _keyPadKey('9', screenW, screenH)
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _keyPadKey('с', screenW, screenH), // russian
+                              _keyPadKey('0', screenW, screenH),
+                              _keyPadKey(
+                                'Ок',
+                                screenW,
+                                screenH,
+                              ) // russian
+                            ],
+                          )
+                        ])));
+              },
+            ))));
   }
 
   Widget _keyPadKey(

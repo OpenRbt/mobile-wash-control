@@ -183,7 +183,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                       icon: Icon(Icons.more_horiz),
                       onPressed: () {
                         var args = ProgramMenuEditArgs(
-                            _programs[index].id, sessionData);
+                            _programs[index].id, _programs[index].name, sessionData);
                         Navigator.pushNamed(context, "/home/programs/edit",
                                 arguments: args)
                             .then((value) => GetData(sessionData));
