@@ -14,9 +14,9 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
 
   bool _firstLoad = true;
   bool _updating = false;
-  List<StationReport> _reports = new List();
+  Map<int,StationReport> _reports = new Map();
   DateTime _startDate = DateTime.now().add(new Duration(days: -31));
-  DateTime _endDate = DateTime.now();
+  DateTime _endDate = DateTime.now().add(new Duration(days: 1));
 
   void _GetStatistics(SessionData sessionData) async {
     if (_updating) {
@@ -38,21 +38,28 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
 
     for (int i = 0; i < reportsTmp.length; i++) {
       try {
-        reports.add(await reportsTmp[i]);
+        _reports.addAll({(i + 1): await reportsTmp[i]});
+      } on ApiException catch (e) {
+        if (e.code != 404) {
+          print(
+              "Exception when calling DefaultApi->/station-report-dates: $e\n");
+          showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+        }
       } catch (e) {
-        print("Exception when calling DefaultApi->/station-report-dates: $e\n");
-        showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+        if (!(e is ApiException)) {
+          print("Other Exception: $e\n");
+        }
+        //showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
       }
     }
-    print("Recieved reports: ${reports.length}");
+    print("Recieved reports: ${_reports.length}");
     if (!mounted) {
       return;
     }
 
-    setState(() {
-      _reports = reports;
-    });
     _updating = false;
+    setState(() {
+    });
   }
 
   Future<Null> _selectStartDate(BuildContext context) async {
@@ -164,11 +171,12 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                           ])
                         ]..addAll(List.generate(_reports.length, (index) {
                             return createTableRow([
-                              index + 1,
-                              _reports[index].moneyReport.banknotes ?? 0,
-                              _reports[index].moneyReport.electronical ?? 0,
-                              _reports[index].moneyReport.service ?? 0,
-                              _reports[index].moneyReport.carsTotal ?? 0,
+                              _reports.keys.elementAt(index),
+                              (_reports.values.elementAt(index).moneyReport.banknotes ?? 0) +
+                                  (_reports.values.elementAt(index).moneyReport.coins ?? 0),
+                              _reports.values.elementAt(index).moneyReport.electronical ?? 0,
+                              _reports.values.elementAt(index).moneyReport.service ?? 0,
+                              _reports.values.elementAt(index).moneyReport.carsTotal ?? 0,
                               0
                             ]);
                           })),
