@@ -11,8 +11,9 @@ class SettingsMenuPost extends StatefulWidget {
 class SettingsMenuPostArgs {
   final int stationID;
   final SessionData sessionData;
+  final List<String> availableHashes;
 
-  SettingsMenuPostArgs(this.stationID, this.sessionData);
+  SettingsMenuPostArgs(this.stationID, this.availableHashes, this.sessionData);
 }
 
 class _SettingsMenuPostState extends State<SettingsMenuPost> {
@@ -22,8 +23,8 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
   String _dropDownCardReader = "NOT_USED";
 
   List<String> _dropDownPrograms = List.filled(7, "------------");
-  List<String> _programValues = ["------------"];
-
+  List<String> _programIDs = ["------------"];
+  List<String> _programNames = ["------------"];
   List<TextEditingController> _inputControllers;
 
   void initState() {
@@ -134,9 +135,11 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       if (!mounted) {
         return;
       }
-      _programValues = ["------------"];
+      _programIDs = ["------------"];
+      _programNames = ["------------"];
       for (int i = 0; i < res.length; i++) {
-        _programValues.add(res[i].id.toString());
+        _programIDs.add(res[i].id.toString());
+        _programNames.add(res[i].name);
       }
     } catch (e) {
       print("Exception when calling DefaultApi->/programs: $e\n");
@@ -152,6 +155,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
         return;
       }
       for (int i = 0; i < res.buttons.length; i++) {
+        // TODO button with known programs should be set here, button = programid and buttonid
         _dropDownPrograms[res.buttons[i].buttonID - 1] =
             res.buttons[i].programID.toString();
       }
@@ -169,7 +173,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.stationID = settingsMenuPostArgs.stationID;
       List<InlineResponse2001Buttons> buttons = List();
       for (int i = 0; i < 6; i++) {
-        if (_dropDownPrograms[i] != _programValues[0]) {
+        if (_dropDownPrograms[i] != _programIDs[0]) {
           var value = InlineResponse2001Buttons();
           value.programID = int.parse(_dropDownPrograms[i]);
           value.buttonID = i + 1;
@@ -204,6 +208,8 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       _getButtons(settingsMenuPostArgs);
       _firstLoad = false;
     }
+
+    var availableHashes = settingsMenuPostArgs.availableHashes;
 
     return Scaffold(
       appBar: appBar,
@@ -273,12 +279,22 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                             width: screenW / 3 * 2,
                             child: Padding(
                               padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[3],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
-                              ),
+                              child: DropdownButton(
+                                value: _inputControllers[3].text,
+                                isExpanded: true,
+                                items:
+                                List.generate(availableHashes.length, (index) {
+                                  return DropdownMenuItem(
+                                      value: availableHashes[index],
+                                      child: Text(
+                                        "${availableHashes[index]}",
+                                        textAlign: TextAlign.end,
+                                      ));
+                                }),
+                                onChanged: (newValue) {
+                                  _inputControllers[3].text = newValue;
+                                  setState(() {});
+                                }),
                             ))
                       ],
                     ),
@@ -478,11 +494,11 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                               value: _dropDownPrograms[index],
                               isExpanded: true,
                               items:
-                                  List.generate(_programValues.length, (index) {
+                                  List.generate(_programIDs.length, (index) {
                                 return DropdownMenuItem(
-                                    value: _programValues[index],
+                                    value: _programIDs[index],
                                     child: Text(
-                                      "${_programValues[index]}",
+                                      "${_programNames[index]}",
                                       textAlign: TextAlign.end,
                                     ));
                               }),

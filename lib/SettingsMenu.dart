@@ -27,7 +27,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
   bool _firstLoad = true;
   String _currentTemp = "__";
   List<SettingsData> _settingsData = List.generate(10, (index) {
-    return new SettingsData(-1, "Loading", "...", "loading");
+    return new SettingsData(-1, "Loading", "$index", "loading");
   });
 
   void getSettings(SessionData sessionData) async {
@@ -258,7 +258,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                     icon: Icon(Icons.more_horiz),
                                     onPressed: () {
                                       var args = SettingsMenuPostArgs(
-                                          _settingsData[index].id, sessionData);
+                                          _settingsData[index].id, _settingsData.map((e) => e.hash).toList(), sessionData);
                                       Navigator.pushNamed(
                                               context, "/home/settings/post",
                                               arguments: args)
