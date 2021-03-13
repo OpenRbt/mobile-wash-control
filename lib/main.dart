@@ -71,6 +71,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _scanMSG = "";
+  String _localIP = "";
+  String _scanIP = "";
+  int _pos = 0;
   bool _wifi = false;
   bool _canScan = true;
   List<String> _servers = new List<String>();
@@ -78,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final DefaultApi _api = DefaultApi();
 
   void _scanLan() async {
+    _pos = 0;
     setState(() {
       _canScan = false;
     });
@@ -87,12 +91,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     int level = await Wifi.level;
     String localIp = await Wifi.ip;
-
+    _localIP = localIp;
+    _scanIP = localIp.substring(0, localIp.lastIndexOf('.'));
     _wifi = level > 0;
     if (_wifi) {
       final stream = NetworkAnalyzer.discover2(
-          localIp.substring(0, localIp.lastIndexOf('.')), 8020);
+          localIp.substring(0, localIp.lastIndexOf('.')), 8020,
+          timeout: Duration(milliseconds: 200));
       stream.listen((NetworkAddress address) {
+        _pos++;
+        setState(() {});
         if (address.exists) {
           _servers.add("${address.ip}");
         }
@@ -144,6 +152,18 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             SizedBox(
+                height: 105,
+                width: screenW,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "IP: $_localIP\nSCAN: $_scanIP.*\nPOS: $_pos",
+                      style: TextStyle(fontSize: 30),
+                    ),
+                  ],
+                )),
+            SizedBox(
                 height: 100,
                 width: screenW,
                 child: Column(
@@ -157,8 +177,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 )),
             SizedBox(
-              height: screenH - appBar.preferredSize.height - 150,
-              child: ListView.separated(
+              height: screenH - appBar.preferredSize.height - 150 - 105,
+              child: (_servers.length > 0 && _serversValid.length == _servers.length)  ?  ListView.separated( //TODO: remove after
                 separatorBuilder: (BuildContext context, int index) {
                   return Divider(
                     height: 5,
@@ -190,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         : null,
                   );
                 },
-              ),
+              ) : Center(),
             )
           ],
         ),

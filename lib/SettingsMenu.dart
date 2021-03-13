@@ -30,9 +30,15 @@ class _SettingsMenuState extends State<SettingsMenu> {
     return new SettingsData(-1, "Loading", "$index", "loading");
   });
 
+  List<String> _availableHashes = List();
+
   void getSettings(SessionData sessionData) async {
     try {
       var res = await sessionData.client.status();
+      var tmp = res.stations.where((element) => element.hash != null).toList();
+      _availableHashes = List();
+      tmp.forEach((element) {_availableHashes.add(element.hash);});
+      res.stations = res.stations.where((element) => element.id != null).toList();
       if (!mounted) {
         return;
       }
@@ -258,7 +264,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                     icon: Icon(Icons.more_horiz),
                                     onPressed: () {
                                       var args = SettingsMenuPostArgs(
-                                          _settingsData[index].id, _settingsData.map((e) => e.hash).toList(), sessionData);
+                                          _settingsData[index].id, _availableHashes, sessionData);
                                       Navigator.pushNamed(
                                               context, "/home/settings/post",
                                               arguments: args)

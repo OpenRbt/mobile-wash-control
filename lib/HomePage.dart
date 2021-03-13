@@ -42,29 +42,30 @@ class _HomePageState extends State<HomePage> {
   void GetStations(SessionData sessionData) async {
     try {
       var res = await sessionData.client.status();
-      var args14 = ProgramsArgs();
-      _programs = await sessionData.client.programs(args14);
-
+      res.stations = res.stations.where((element) => element.id != null).toList();
       if (!mounted) {
         return;
       }
       _homePageData = List.generate((res.stations.length), (index) {
         return new HomePageData(
-            res.stations[index].id,
-            res.stations[index].name,
-            res.stations[index].hash,
-            res.stations[index].status.value,
-            res.stations[index].info,
-            res.stations[index].currentBalance,
-            res.stations[index].currentProgram);
+            res.stations[index].id ?? index,
+            res.stations[index].name?? "Station ${index + 1}",
+            res.stations[index].hash ?? "",
+            res.stations[index].status.value?? "",
+            res.stations[index].info?? "",
+            res.stations[index].currentBalance ?? 0,
+            res.stations[index].currentProgram ?? -1);
       });
 
       _homePageData.sort((a, b) => a.id.compareTo(b.id));
-      setState(() {});
+
+      var args14 = ProgramsArgs();
+      _programs = await sessionData.client.programs(args14);
     } catch (e) {
       print("Exception when calling DefaultApi->Status in HomePage: $e\n");
       showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
+    setState(() {});
   }
 
   @override
