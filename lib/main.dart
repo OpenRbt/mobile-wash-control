@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:http/http.dart';
 import 'package:mobile_wash_control/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/AccountsMenuEdit.dart';
 import 'package:mobile_wash_control/ProgramMenuAdd.dart';
@@ -95,39 +96,64 @@ class _MyHomePageState extends State<MyHomePage> {
     _scanIP = localIp.substring(0, localIp.lastIndexOf('.'));
     _wifi = level > 0;
     if (_wifi) {
-      final stream = NetworkAnalyzer.discover2(
-          localIp.substring(0, localIp.lastIndexOf('.')), 8020,
-          timeout: Duration(milliseconds: 200));
-      stream.listen((NetworkAddress address) {
-        _pos++;
-        setState(() {});
-        if (address.exists) {
-          _servers.add("${address.ip}");
-        }
-      }).onDone(() async {
-        _serversValid = List.generate(_servers.length, (index) {
-          return false;
-        });
-        for (int i = 0; i < _servers.length; i++) {
-          _api.apiClient.basePath = "http://" + _servers[i] + ":8020";
-          _serversValid[i] = true;
-
-          try {
-            var res = await _api.getPing();
-            print(res);
-          } catch (e) {
-            _serversValid[i] = false;
-            print("Exception when calling DefaultApi->getPing: $e\n");
-          }
-        }
-
-        setState(() {
-          _scanMSG = _servers.length > 0
-              ? "Доступные серверы: "
-              : "Не найдено серверов";
-          _canScan = true;
-        });
+      var subIPS = List.generate(256, (index) {
+        return "$index";
       });
+
+      subIPS.forEach((element) async {
+        print("Try to http://${_scanIP}.${element}:8020/ping");
+        var client = Client();
+        try {
+          var res = await get("http://${_scanIP}.${element}:8020/ping");
+          print(res.statusCode);
+          if (res.statusCode == 200) {
+            _servers.add("${_scanIP}.${element}");
+            setState(() {
+              _serversValid = List.filled(_servers.length, true); //TODO: remove
+            });
+          }
+        } catch (e) {} finally {
+          client.close();
+        }
+      });
+
+      _canScan = true;
+
+      // final stream = NetworkAnalyzer.discover2(
+      //     localIp.substring(0, localIp.lastIndexOf('.')), 8020,
+      //     timeout: Duration(milliseconds: 200));
+      // stream.listen((NetworkAddress address) {
+      //   _pos++;
+      //   setState(() {});
+      //   if (address.exists) {
+      //     _servers.add("${address.ip}");
+      //   }
+      // }).onDone(() async {
+      //   _serversValid = List.generate(_servers.length, (index) {
+      //     return false;
+      //   });
+      //   for (int i = 0; i < _servers.length; i++) {
+      //     _api.apiClient.basePath = "http://" + _servers[i] + ":8020";
+      //     _serversValid[i] = true;
+      //
+      //     try {
+      //       var res = await _api.getPing();
+      //       print(res);
+      //     } catch (e) {
+      //       _serversValid[i] = false;
+      //       print("Exception when calling DefaultApi->getPing: $e\n");
+      //     }
+      //   }
+      //
+      //   setState(() {
+      //     _scanMSG = _servers.length > 0
+      //         ? "Доступные серверы: "
+      //         : "Не найдено серверов";
+      //     _canScan = true;
+      //   });
+      // }
+      // );
+      //
     } else {
       setState(() {
         _scanMSG = "Нет подключения к WiFi";
@@ -178,39 +204,46 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
             SizedBox(
               height: screenH - appBar.preferredSize.height - 150 - 105,
-              child: (_servers.length > 0 && _serversValid.length == _servers.length)  ?  ListView.separated( //TODO: remove after
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider(
-                    height: 5,
-                    color: Colors.black38,
-                    thickness: 5,
-                  );
-                },
-                itemCount: _servers.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    tileColor: Colors.black12,
-                    title: Text(
-                      "Server: " + _servers[index],
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    trailing: Icon(
-                      _serversValid[index] ? Icons.check_circle : Icons.circle,
-                      color:
-                          _serversValid[index] ? Colors.lightGreen : Colors.red,
-                      size: 30,
-                    ),
-                    onTap: _serversValid[index]
-                        ? () {
-                            var args =
-                                AuthArgs("http://" + _servers[index] + ":8020");
-                            Navigator.pushNamed(context, "/auth",
-                                arguments: args);
-                          }
-                        : null,
-                  );
-                },
-              ) : Center(),
+              child: (_servers.length > 0 &&
+                      _serversValid.length == _servers.length)
+                  ? ListView.separated(
+                      //TODO: remove after
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Divider(
+                          height: 5,
+                          color: Colors.black38,
+                          thickness: 5,
+                        );
+                      },
+                      itemCount: _servers.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          tileColor: Colors.black12,
+                          title: Text(
+                            "Server: " + _servers[index],
+                            style: TextStyle(fontSize: 30),
+                          ),
+                          trailing: Icon(
+                            _serversValid[index]
+                                ? Icons.check_circle
+                                : Icons.circle,
+                            color: _serversValid[index]
+                                ? Colors.lightGreen
+                                : Colors.red,
+                            size: 30,
+                          ),
+                          onTap: _serversValid[index]
+                              ? () {
+                                  var args = AuthArgs(
+                                      "http://" + _servers[index] + ":8020");
+                                  Navigator.pushNamed(context, "/auth",
+                                      arguments: args);
+                                }
+                              : null,
+                        );
+                      },
+                    )
+                  : Center(),
             )
           ],
         ),

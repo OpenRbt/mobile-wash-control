@@ -30,7 +30,6 @@ class _EditPostMenuState extends State<EditPostMenu> {
   int _service_balance = 0;
   int _balance = 0;
   int _current_program_index = -1;
-  bool _program_execution_server_side = true;
 
   @override
   void initState() {
@@ -345,27 +344,6 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 }
               },
             ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: SizedBox(
-            height: 50,
-            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-            child: DropdownButton(
-                isExpanded: true,
-                value: _program_execution_server_side,
-                onChanged: (newValue) {
-                  setState(() {
-                    if (newValue != true)
-                      showErrorDialog(
-                          context, "Поддерживаются только платы 2 ревизии");
-                  });
-                },
-                items: [
-                  DropdownMenuItem(value: false, child: Text("Локально")),
-                  DropdownMenuItem(value: true, child: Text("На сервере"))
-                ]),
           ),
         ),
       ],

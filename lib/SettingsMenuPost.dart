@@ -27,6 +27,12 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
   List<String> _programNames = ["------------"];
   List<TextEditingController> _inputControllers;
 
+  String _relayboardValue = "localGPIO";
+  Map<String, String> _dropdownRelayBoard = {
+    "localGPIO": "Локально",
+    "danBoard": "На сервере"
+  };
+
   void initState() {
     super.initState();
     //0-1 CardReader inputs
@@ -57,6 +63,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       if (!mounted) {
         return;
       }
+      _relayboardValue = res.relayBoard ?? "localGPIO";
       _inputControllers[2].text = res.name ?? "";
       _inputControllers[3].text = res.hash ?? "";
       _inputControllers[4].text = res.preflightSec ?? "";
@@ -72,6 +79,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.id = settingsMenuPostArgs.stationID;
       args.name = _inputControllers[2].value.text ?? "";
       args.hash = _inputControllers[3].value.text ?? "";
+      args.relayBoard = _relayboardValue;
       args.preflightSec = int.tryParse(_inputControllers[4].value.text) ?? 0;
 
       var res = await settingsMenuPostArgs.sessionData.client.setStation(args);
@@ -211,7 +219,8 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
     List<String> availableHashes = List();
     availableHashes.add("");
-    availableHashes.addAll(settingsMenuPostArgs.availableHashes.where((element) => element != null));
+    availableHashes.addAll(settingsMenuPostArgs.availableHashes
+        .where((element) => element != null));
 
     return Scaffold(
       appBar: appBar,
@@ -282,21 +291,21 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                             child: Padding(
                               padding: EdgeInsets.all(10),
                               child: DropdownButton(
-                                value: _inputControllers[3].text,
-                                isExpanded: true,
-                                items:
-                                List.generate(availableHashes.length, (index) {
-                                  return DropdownMenuItem(
-                                      value: availableHashes[index],
-                                      child: Text(
-                                        "${availableHashes[index]}",
-                                        textAlign: TextAlign.end,
-                                      ));
-                                }),
-                                onChanged: (newValue) {
-                                  _inputControllers[3].text = newValue;
-                                  setState(() {});
-                                }),
+                                  value: _inputControllers[3].text,
+                                  isExpanded: true,
+                                  items: List.generate(availableHashes.length,
+                                      (index) {
+                                    return DropdownMenuItem(
+                                        value: availableHashes[index],
+                                        child: Text(
+                                          "${availableHashes[index]}",
+                                          textAlign: TextAlign.end,
+                                        ));
+                                  }),
+                                  onChanged: (newValue) {
+                                    _inputControllers[3].text = newValue;
+                                    setState(() {});
+                                  }),
                             ))
                       ],
                     ),
@@ -327,6 +336,46 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                                     border: OutlineInputBorder()),
                               ),
                             ))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                            height: 75,
+                            width: screenW / 3,
+                            child: Center(
+                              child: Text("Выполнение",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
+                            )),
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: DropdownButton(
+                            isExpanded: true,
+                            value: _relayboardValue,
+                            onChanged: (newValue) {
+                              _relayboardValue = newValue;
+                              setState(() {});
+                              // setState(() {
+                              //   if (newValue != true)
+                              //     showErrorDialog(context,
+                              //         "Поддерживаются только платы 2 ревизии");
+                              // });
+                            },
+                            items: List.generate(_dropdownRelayBoard.length,
+                                (index) {
+                              return DropdownMenuItem(
+                                value:
+                                    _dropdownRelayBoard.keys.elementAt(index),
+                                child: Center(
+                                  child: Text(_dropdownRelayBoard.values
+                                      .elementAt(index)),
+                                ),
+                              );
+                            }),
+                          ),
+                        )
                       ],
                     ),
                     Wrap(
@@ -495,8 +544,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                           child: DropdownButton(
                               value: _dropDownPrograms[index],
                               isExpanded: true,
-                              items:
-                                  List.generate(_programIDs.length, (index) {
+                              items: List.generate(_programIDs.length, (index) {
                                 return DropdownMenuItem(
                                     value: _programIDs[index],
                                     child: Text(
