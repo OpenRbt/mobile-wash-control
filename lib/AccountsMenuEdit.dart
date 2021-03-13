@@ -74,7 +74,6 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
 
   void _updateUser(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
-    setState(() {});
     try {
       var args = UpdateUserArgs();
       args.login = _inputControllers[0].value.text;
@@ -87,13 +86,16 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
       args.isAdmin = _inputTriggers[0];
       args.isOperator = _inputTriggers[1];
       args.isEngineer = _inputTriggers[2];
-      var res = sessionData.client.updateUser(args);
+      var res = await sessionData.client.updateUser(args);
       Scaffold.of(context).showSnackBar(
           SnackBar(content: Text("Пользователь успешно изменен")));
-    } catch (e) {
+    }
+    catch (e) {
+      if (e is Exception){
       print("Exception when calling DefaultApi->User(put): $e\n");
       Scaffold.of(context).showSnackBar(
           SnackBar(content: Text("Произошла ошибка при сохранении")));
+      }
     }
     _inUpdate = false;
     setState(() {});

@@ -80,9 +80,8 @@ class _AccountsMenuState extends State<AccountsMenu> {
         builder: (context, orientation) {
           return RefreshIndicator(
             onRefresh: () async {
-              var err = await _getUsers(sessionData);
               await Future.delayed(Duration(milliseconds: 500));
-              setState(() {});
+              _getUsers(sessionData);
             },
             child: ListView(children: [
               new Column(

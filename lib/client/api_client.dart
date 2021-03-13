@@ -30,6 +30,16 @@ class ApiClient {
   dynamic _deserialize(dynamic value, String targetType) {
     try {
       switch (targetType) {
+        case 'UserResponse':
+          return new SaveCollectionArgs.fromJson(value); //TODO: replace with UserResponseModel
+        case 'InlineResponse200':
+          return new InlineResponse200.fromJson(value);
+        case 'InlineResponse2001':
+          return new InlineResponse2001.fromJson(value);
+        case 'InlineResponse2001Buttons':
+          return new InlineResponse2001Buttons.fromJson(value);
+        case 'InlineResponse409':
+          return new InlineResponse409.fromJson(value);
         case 'String':
           return '$value';
         case 'int':

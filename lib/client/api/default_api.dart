@@ -165,8 +165,9 @@ class DefaultApi {
   }
   /// 
   ///
-  /// 
-  Future<Object> createUser(CreateUserArgs args) async {
+  ///
+  /// TODO: Add UserResponseModel
+  Future<SaveCollectionArgs> createUser(CreateUserArgs args) async {
     Object postBody = args;
 
     // verify required params are set
@@ -210,7 +211,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Object') as Object ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'UserResponse') as SaveCollectionArgs ;
     } else {
       return null;
     }
@@ -1547,7 +1548,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Object') as Object ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'InlineResponse2001') as InlineResponse2001 ;
     } else {
       return null;
     }
@@ -1909,8 +1910,9 @@ class DefaultApi {
   }
   /// 
   ///
-  /// 
-  Future<Object> updateUser(UpdateUserArgs args) async {
+  ///
+  /// TODO: Add UserResponceModel
+  Future<SaveCollectionArgs> updateUser(UpdateUserArgs args) async {
     Object postBody = args;
 
     // verify required params are set
@@ -1954,7 +1956,7 @@ class DefaultApi {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
       return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Object') as Object ;
+          apiClient.deserialize(utf8.decode(response.bodyBytes), 'UserResponse') as SaveCollectionArgs ;
     } else {
       return null;
     }

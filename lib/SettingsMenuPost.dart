@@ -209,7 +209,9 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       _firstLoad = false;
     }
 
-    var availableHashes = settingsMenuPostArgs.availableHashes;
+    List<String> availableHashes = List();
+    availableHashes.add("");
+    availableHashes.addAll(settingsMenuPostArgs.availableHashes.where((element) => element != null));
 
     return Scaffold(
       appBar: appBar,
