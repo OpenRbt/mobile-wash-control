@@ -158,7 +158,8 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.stationID = settingsMenuPostArgs.stationID;
       var res =
           await settingsMenuPostArgs.sessionData.client.stationButton(args);
-
+      res.buttons =
+          res.buttons.where((element) => element.buttonID != null).toList();
       if (!mounted) {
         return;
       }

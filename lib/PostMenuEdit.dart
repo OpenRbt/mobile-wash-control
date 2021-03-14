@@ -8,13 +8,14 @@ class PostMenuArgs {
   final int postID;
   final String hash;
   final int currentProgramID;
+  final List<InlineResponse2001Buttons> buttonPrograms;
   final List<Program> programs;
   final SessionData sessionData;
 
-  PostMenuArgs(this.postID, this.hash, this.currentProgramID, this.programs,
-      this.sessionData);
+  PostMenuArgs(this.postID, this.hash, this.currentProgramID,
+      this.buttonPrograms, this.programs, this.sessionData);
 }
-
+//TODO: Buttons rework and fix
 class EditPostMenu extends StatefulWidget {
   EditPostMenu({Key key}) : super(key: key);
 
@@ -62,10 +63,17 @@ class _EditPostMenuState extends State<EditPostMenu> {
         return;
       }
       setState(() {});
+    } on ApiException catch (e) {
+      if (e.code != 404) {
+        print(
+            "Exception when calling DefaultApi->/station-report-current-money: $e\n");
+        showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+      }
     } catch (e) {
-      print(
-          "Exception when calling DefaultApi->/station-report-current-money: $e\n");
-      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+      if (!(e is ApiException)) {
+        print("Other Exception: $e\n");
+      }
+      //showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
   }
 
@@ -87,7 +95,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
       try {
         var args = RunProgramArgs();
         args.hash = postMenuArgs.hash;
-        args.programID = postMenuArgs.programs[index].id ?? 1;
+        // args.programID = postMenuArgs.programs[index].id ?? 1;
+        args.preflight = false; //TODO: use preflight trigger
         await postMenuArgs.sessionData.client.runProgram(args);
         setState(() {
           if (_current_program_index != -1)
@@ -105,6 +114,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
         var args = RunProgramArgs();
         args.hash = postMenuArgs.hash;
         args.programID = -1;
+        args.preflight = false; //TODO: use preflight trigger
         await postMenuArgs.sessionData.client.runProgram(args);
         setState(() {
           if (_current_program_index != -1)
@@ -133,8 +143,21 @@ class _EditPostMenuState extends State<EditPostMenu> {
         _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
       });
 
-      if (postMenuArgs.programs != null && postMenuArgs.programs.length > 0) {
-        _buttonNames = postMenuArgs.programs.map((e) => e.name ?? "").toList();
+      if (postMenuArgs.buttonPrograms != null &&
+          postMenuArgs.buttonPrograms.length > 0) {
+        _buttonNames = List();
+        for (int i = 0; i < postMenuArgs.buttonPrograms.length; i++) {
+          try {
+            _buttonNames.add(postMenuArgs.programs
+                .where((element) =>
+                    element.id == postMenuArgs.buttonPrograms[i].programID)
+                .first
+                .name);
+          } catch (e) {
+            _buttonNames.add("NOT FOUND");
+          }
+        }
+        //_buttonNames = postMenuArgs.programs.map((e) => e.name ?? "").toList();
         _checkboxList = List.filled(_buttonNames.length, false);
         _current_program_index = postMenuArgs.programs.indexWhere((element) =>
             (element.id ?? 1) == (postMenuArgs.currentProgramID ?? 1));
@@ -211,7 +234,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
             height: 50,
             width: isPortrait
                 ? screenW / 2 - 20
-                : ((postMenuArgs.programs?.length ?? 0) > 0
+                : ((postMenuArgs.buttonPrograms?.length ?? 0) > 0
                     ? screenW / 3 - 20
                     : screenW - 100),
             child: DecoratedBox(
@@ -302,16 +325,55 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 style: TextStyle(fontSize: 15),
               ),
               onPressed: () {
-                try {
-                  var args = SaveCollectionArgs();
-                  args.id = postMenuArgs.postID;
-                  var res =
-                      postMenuArgs.sessionData.client.saveCollection(args);
-                } catch (e) {
-                  print(
-                      "Exception when calling DefaultApi->/save-collection: $e\n");
-                  showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
-                }
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text("Инакссировать?"),
+                          content: Text("Вы уверены?"),
+                          actionsPadding: EdgeInsets.all(10),
+                          actions: [
+                            RaisedButton(
+                              color: Colors.lightGreen,
+                              textColor: Colors.white,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              onPressed: () async {
+                                try {
+                                  var args = SaveCollectionArgs();
+                                  args.id = postMenuArgs.postID;
+                                  var res = await postMenuArgs
+                                      .sessionData.client
+                                      .saveCollection(args);
+                                } on ApiException catch (e) {
+                                  if (e.code != 404) {
+                                    print(
+                                        "Exception when calling DefaultApi->/save-collection: $e\n");
+                                    showErrorSnackBar(
+                                        _scaffoldKey, _isSnackBarActive);
+                                  }
+                                } catch (e) {
+                                  if (!(e is ApiException)) {
+                                    print("Other Exception: $e\n");
+                                  }
+                                }
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                    content: Text("Пост проинкассирован")));
+                                Navigator.pop(context);
+                              },
+                              child: Text("Да"),
+                            ),
+                            RaisedButton(
+                              color: Colors.white,
+                              textColor: Colors.black,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Нет"),
+                            )
+                          ],
+                        ));
               },
             ),
           ),
@@ -353,7 +415,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
   Widget _getButtonsColumn(
       bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
-      children: List.generate(postMenuArgs.programs?.length ?? 0, (index) {
+      children:
+          List.generate(postMenuArgs.buttonPrograms?.length ?? 0, (index) {
         return Padding(
             padding: EdgeInsets.all(10),
             child: SizedBox(
@@ -368,7 +431,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
   Widget _getCheckBoxColumn(
       bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
-      children: List.generate(postMenuArgs.programs?.length ?? 0, (index) {
+      children:
+          List.generate(postMenuArgs.buttonPrograms?.length ?? 0, (index) {
         return Padding(
             padding: EdgeInsets.all(10),
             child: SizedBox(
@@ -396,9 +460,10 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   Widget _getListButton(int index, PostMenuArgs postMenuArgs) {
     return new RaisedButton(
-      color: (_current_program_index ?? 1) == index
-          ? Colors.lightGreen
-          : Colors.white10,
+      color: Colors.white10,
+      // color: _current_program_index  == index
+      //     ? Colors.lightGreen
+      //     : Colors.white10,
       textColor: Colors.white,
       disabledColor: Colors.grey,
       disabledTextColor: Colors.black,

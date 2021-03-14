@@ -29,35 +29,79 @@ class _HomePageState extends State<HomePage> {
 
   bool _firstLoad = true;
   List<HomePageData>
-      _homePageData /* = List.generate(8, (index) {
+      _homePageData  = List.generate(12, (index) {
     return new HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
-  })*/
+  })
       ;
   Timer _updateTimer;
 
   List<Program> _programs;
+  Map<int, List<InlineResponse2001Buttons>> _stationProgramsButtons = Map();
 
-  final List<String> _buttonLabel = ["П", "Ш", "О", "В", "С", "| |"];
+  Map<int, List<int>> _stationPrograms = Map();
+  Map<int, List<String>> _stationLabels = Map();
 
   void GetStations(SessionData sessionData) async {
     try {
       var res = await sessionData.client.status();
-      res.stations = res.stations.where((element) => element.id != null).toList();
+      res.stations =
+          res.stations.where((element) => element.id != null).toList();
       if (!mounted) {
         return;
       }
       _homePageData = List.generate((res.stations.length), (index) {
         return new HomePageData(
-            res.stations[index].id ?? index,
-            res.stations[index].name?? "Station ${index + 1}",
+            res.stations[index].id ?? index + 1,
+            res.stations[index].name ?? "Station ${index + 1}",
             res.stations[index].hash ?? "",
-            res.stations[index].status.value?? "",
-            res.stations[index].info?? "",
+            res.stations[index].status.value ?? "",
+            res.stations[index].info ?? "",
             res.stations[index].currentBalance ?? 0,
             res.stations[index].currentProgram ?? -1);
       });
 
       _homePageData.sort((a, b) => a.id.compareTo(b.id));
+
+      for (int i = 0; i < _homePageData.length; i++) {
+        try {
+          var args = StationButtonArgs();
+          args.stationID = _homePageData[i].id;
+          var res = await sessionData.client.stationButton(args);
+          List<int> buttonsID = List();
+          List<int> tmp = List();
+          List<String> tmp_labels = List();
+          if (res.buttons != null) {
+            _stationProgramsButtons.addAll({i+1: res.buttons});
+            for (int i = 0; i < res.buttons.length; i++) {
+              if (res.buttons[i].buttonID != null) {
+                tmp.add(res.buttons[i].programID);
+                Program program = _programs
+                    .where((element) => element.id == res.buttons[i].programID)
+                    .first;
+                if (program != null) {
+                  String label = program.name.length > 0 ? program.name[0] : "";
+                  if (program.name.length > 0 &&
+                      program.name.lastIndexOf(" ") > 0 &&
+                      program.name.lastIndexOf(" ") < program.name.length) {
+                    label += program.name[program.name.lastIndexOf(" ") + 1];
+                  }
+                  tmp_labels.add(label);
+                }
+              }
+            }
+          }else{
+            _stationProgramsButtons.addAll({i :List()});
+          }
+          _stationPrograms.addAll({_homePageData[i].id: tmp});
+          _stationLabels.addAll({_homePageData[i].id: tmp_labels});
+
+          // if (_stationPrograms.length > 0) {
+          //   print(_stationPrograms);
+          //   print(_stationLabels);
+          // }
+        } catch (e) {}
+      }
+
 
       var args14 = ProgramsArgs();
       _programs = await sessionData.client.programs(args14);
@@ -111,11 +155,14 @@ class _HomePageState extends State<HomePage> {
                         highlightColor: _homePageData[index].status == "online"
                             ? Colors.lightGreenAccent
                             : Colors.redAccent,
-                        onPressed: () {
+                        disabledColor: Colors.red,
+                        disabledTextColor: Colors.black,
+                        onPressed: _homePageData[index].id == -1  ? null : () {
                           var args = PostMenuArgs(
                               _homePageData[index].id,
                               _homePageData[index].hash,
                               _homePageData[index].currentProgramID,
+                              _stationProgramsButtons[_homePageData[index].id],
                               _programs,
                               sessionData);
                           _updateTimer.cancel();
@@ -153,60 +200,74 @@ class _HomePageState extends State<HomePage> {
                             crossAxisCount: 3,
                             children: List.generate(6, (btnIndex) {
                               return SizedBox(
-                                  height: 50,
-                                  width: 200,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: FlatButton(
-                                      color: btnIndex == activeProgramIndex
-                                          ? Colors.lightGreenAccent
-                                          : Colors.white,
-                                      onPressed: () async {
-                                        if (btnIndex <
-                                            (_programs?.length ?? 0)) {
-                                          if (btnIndex != activeProgramIndex) {
-                                            try {
-                                              var args = RunProgramArgs();
-                                              args.hash =
-                                                  _homePageData[index].hash;
-                                              args.programID =
-                                                  _programs[btnIndex].id ?? 1;
-                                              await sessionData.client
-                                                  .runProgram(args);
-                                              setState(() {
-                                                _homePageData[index]
-                                                        .currentProgramID =
-                                                    _programs[btnIndex].id ?? 1;
-                                              });
-                                            } catch (e) {
-                                              print(
-                                                  "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-                                            }
-                                          } else {
-                                            try {
-                                              var args = RunProgramArgs();
-                                              args.hash =
-                                                  _homePageData[index].hash;
-                                              args.programID = -1;
-                                              await sessionData.client
-                                                  .runProgram(args);
-                                              setState(() {
-                                                _homePageData[index]
-                                                    .currentProgramID = -1;
-                                              });
-                                            } catch (e) {
-                                              print(
-                                                  "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-                                            }
-                                          }
-                                        }
-                                      },
-                                      child: Text(
-                                          btnIndex < (_programs?.length ?? 0)
-                                              ? _buttonLabel[btnIndex]
-                                              : ""),
-                                    ),
-                                  ));
+                                height: 50,
+                                width: 200,
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: FlatButton(
+                                    padding: EdgeInsets.zero,
+                                    color: (_stationPrograms[index +1] != null &&
+                                        _stationPrograms[index +1].length > 0
+                                        && btnIndex < _stationPrograms[index +1].length
+                                        && _stationPrograms[index + 1][btnIndex] == activeProgramIndex
+                                    )
+                                        ? Colors.lightGreenAccent
+                                        : Colors.white,
+                                    onPressed: () {},
+                                    //   () async {
+                                    //   if (btnIndex < (_programs?.length ?? 0)) {
+                                    //     if (btnIndex != activeProgramIndex) {
+                                    //       try {
+                                    //         var args = RunProgramArgs();
+                                    //         args.hash =
+                                    //             _homePageData[index].hash;
+                                    //         args.programID =
+                                    //             _programs[btnIndex].id ?? 1;
+                                    //         await sessionData.client
+                                    //             .runProgram(args);
+                                    //         setState(() {
+                                    //           _homePageData[index]
+                                    //                   .currentProgramID =
+                                    //               _programs[btnIndex].id ?? 1;
+                                    //         });
+                                    //       } catch (e) {
+                                    //         print(
+                                    //             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+                                    //       }
+                                    //     } else {
+                                    //       try {
+                                    //         var args = RunProgramArgs();
+                                    //         args.hash =
+                                    //             _homePageData[index].hash;
+                                    //         args.programID = -1;
+                                    //         await sessionData.client
+                                    //             .runProgram(args);
+                                    //         setState(() {
+                                    //           _homePageData[index]
+                                    //               .currentProgramID = -1;
+                                    //         });
+                                    //       } catch (e) {
+                                    //         print(
+                                    //             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+                                    //       }
+                                    //     }
+                                    //   }
+                                    // },
+                                    child: Text(
+                                        _stationLabels[index + 1] != null
+                                            ? (_stationLabels[index + 1].length > 0 && btnIndex < _stationLabels[index + 1].length
+                                                ? _stationLabels[index + 1]
+                                                        [btnIndex] ??
+                                                    " "
+                                                : " ")
+                                            : " "
+                                        // btnIndex < (_programs?.length ?? 0)
+                                        //     ? _buttonLabel[btnIndex]
+                                        //     : ""
+                                        ),
+                                  ),
+                                ),
+                              );
                             }),
                           ),
                           decoration: BoxDecoration(

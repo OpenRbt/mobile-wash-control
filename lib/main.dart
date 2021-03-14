@@ -79,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _canScan = true;
   List<String> _servers = new List<String>();
   List<bool> _serversValid = new List<bool>();
-  final DefaultApi _api = DefaultApi();
 
   void _scanLan() async {
     _pos = 0;
@@ -104,11 +103,13 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Try to http://${_scanIP}.${element}:8020/ping");
         var client = Client();
         try {
+          _pos++;
           var res = await get("http://${_scanIP}.${element}:8020/ping");
           print(res.statusCode);
           if (res.statusCode == 200) {
             _servers.add("${_scanIP}.${element}");
             setState(() {
+              _canScan = _pos == 256;
               _serversValid = List.filled(_servers.length, true); //TODO: remove
             });
           }
@@ -117,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       });
 
-      _canScan = true;
 
       // final stream = NetworkAnalyzer.discover2(
       //     localIp.substring(0, localIp.lastIndexOf('.')), 8020,
