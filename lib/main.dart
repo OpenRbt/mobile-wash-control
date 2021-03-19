@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:io';
 import 'package:http/http.dart';
 import 'package:mobile_wash_control/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/AccountsMenuEdit.dart';
@@ -6,7 +7,6 @@ import 'package:mobile_wash_control/ProgramMenuAdd.dart';
 import 'package:mobile_wash_control/ProgramMenuEdit.dart';
 import 'package:mobile_wash_control/SettingsMenuKasse.dart';
 import 'package:mobile_wash_control/SettingsMenuPost.dart';
-import 'package:mobile_wash_control/client/api.dart';
 import 'package:mobile_wash_control/AccountsMenu.dart';
 import 'package:mobile_wash_control/AuthPage.dart';
 import 'package:mobile_wash_control/HomePage.dart';
@@ -18,12 +18,13 @@ import 'package:mobile_wash_control/SettingsMenu.dart';
 import 'package:mobile_wash_control/StatisticsMenu.dart';
 
 import 'package:wifi/wifi.dart';
-import 'package:ping_discover_network/ping_discover_network.dart';
 
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -72,7 +73,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _scanMSG = "";
-  String _localIP = "";
+  String _localIP = "0.0.0.0";
   String _scanIP = "";
   int _pos = 0;
   bool _wifi = false;
@@ -92,68 +93,43 @@ class _MyHomePageState extends State<MyHomePage> {
     int level = await Wifi.level;
     String localIp = await Wifi.ip;
     _localIP = localIp;
-    _scanIP = localIp.substring(0, localIp.lastIndexOf('.'));
+    _scanIP = localIp.substring(
+      0,
+      localIp.lastIndexOf('.'),
+    );
     _wifi = level > 0;
     if (_wifi) {
+      List<String> _serversTMP = new List();
+      List<bool> _serversValidTMP = new List();
       var subIPS = List.generate(256, (index) {
         return "$index";
       });
 
-      subIPS.forEach((element) async {
+      var client = HttpClient();
+      client.connectionTimeout = Duration(milliseconds: 100);
+
+      await Future.forEach(subIPS, (element) async {
         print("Try to http://${_scanIP}.${element}:8020/ping");
-        var client = Client();
         try {
-          _pos++;
-          var res = await get("http://${_scanIP}.${element}:8020/ping");
-          print(res.statusCode);
-          if (res.statusCode == 200) {
-            _servers.add("${_scanIP}.${element}");
-            setState(() {
-              _canScan = _pos == 256;
-              _serversValid = List.filled(_servers.length, true); //TODO: remove
-            });
+          setState(() {
+            _pos++;
+          });
+          final request =
+              await client.get("${_scanIP}.${element}", 8020, "/ping");
+          final response = await request.close();
+          if (response.statusCode == 200) {
+            _serversTMP.add("${_scanIP}.${element}");
           }
-        } catch (e) {} finally {
-          client.close();
-        }
+        } catch (e) {}
+      }).then((value) {
+        _canScan = true;
+        _serversValidTMP = List.filled(_serversTMP.length, true); //TODO: remove
+        _servers = _serversTMP;
+        _serversValid = _serversValidTMP;
+        setState(() {});
       });
 
-
-      // final stream = NetworkAnalyzer.discover2(
-      //     localIp.substring(0, localIp.lastIndexOf('.')), 8020,
-      //     timeout: Duration(milliseconds: 200));
-      // stream.listen((NetworkAddress address) {
-      //   _pos++;
-      //   setState(() {});
-      //   if (address.exists) {
-      //     _servers.add("${address.ip}");
-      //   }
-      // }).onDone(() async {
-      //   _serversValid = List.generate(_servers.length, (index) {
-      //     return false;
-      //   });
-      //   for (int i = 0; i < _servers.length; i++) {
-      //     _api.apiClient.basePath = "http://" + _servers[i] + ":8020";
-      //     _serversValid[i] = true;
-      //
-      //     try {
-      //       var res = await _api.getPing();
-      //       print(res);
-      //     } catch (e) {
-      //       _serversValid[i] = false;
-      //       print("Exception when calling DefaultApi->getPing: $e\n");
-      //     }
-      //   }
-      //
-      //   setState(() {
-      //     _scanMSG = _servers.length > 0
-      //         ? "Доступные серверы: "
-      //         : "Не найдено серверов";
-      //     _canScan = true;
-      //   });
-      // }
-      // );
-      //
+      client.close();
     } else {
       setState(() {
         _scanMSG = "Нет подключения к WiFi";
@@ -175,35 +151,53 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: appBar,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-                height: 105,
-                width: screenW,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "IP: $_localIP\nSCAN: $_scanIP.*\nPOS: $_pos",
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ],
-                )),
+              height: 75,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "IP: $_localIP\nTARGET: $_scanIP.*\nSCANNING: ${_scanIP}.${_pos}",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  !_canScan
+                      ? SizedBox(
+                          height: 20,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.black26, width: 2),
+                            ),
+                            child: LinearProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation(Colors.lightGreen),
+                              backgroundColor: Colors.black12,
+                              value: _pos / 256,
+                            ),
+                          ),
+                        )
+                      : SizedBox()
+                ],
+              ),
+            ),
             SizedBox(
-                height: 100,
-                width: screenW,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildServersButton(),
-                    Text(
-                      _canScan ? _scanMSG : "",
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ],
-                )),
+              height: 100,
+              width: screenW,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildServersButton(),
+                  Text(
+                    _canScan ? _scanMSG : "",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(
-              height: screenH - appBar.preferredSize.height - 150 - 105,
+              height: screenH - appBar.preferredSize.height - 141 - 75,
               child: (_servers.length > 0 &&
                       _serversValid.length == _servers.length)
                   ? ListView.separated(

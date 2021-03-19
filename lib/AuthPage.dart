@@ -31,7 +31,9 @@ class _AuthPageState extends State<AuthPage> {
 
   void _authCheck() async {
     try {
-      _sessionData = new SessionData(DefaultApi());
+      _sessionData = new SessionData(
+        DefaultApi(),
+      );
       _sessionData.client.apiClient.basePath = _host;
       _sessionData.client.apiClient.addDefaultHeader("Pin", _currentPin);
       var res = await _sessionData.client.getUser();
@@ -62,78 +64,87 @@ class _AuthPageState extends State<AuthPage> {
     ]);
 
     return WillPopScope(
-        onWillPop: () async {
-          SystemNavigator.pop();
-          return false;
-        },
-        child: Scaffold(
-            key: _scaffoldKey,
-            body: SafeArea(child: OrientationBuilder(
-              builder: (context, orientation) {
-                return new Container(
-                    width: screenW,
-                    height: screenH,
-                    child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ListView(children: [
-                          Container(
-                            height: 62,
-                            width: screenW / 4 * 3,
-                            child: DecoratedBox(
-                              child: Center(
-                                  child: Text(_toDisplay(),
-                                      // child: Text(_toDisplay(_displayedSymbols),
-                                      style: TextStyle(fontSize: 40))),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Colors.black),
-                              ),
-                            ),
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return false;
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: SafeArea(
+          child: OrientationBuilder(
+            builder: (context, orientation) {
+              return new Container(
+                width: screenW,
+                height: screenH,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListView(children: [
+                    Container(
+                      height: 62,
+                      width: screenW / 4 * 3,
+                      child: DecoratedBox(
+                        child: Center(
+                          child: Text(
+                            _toDisplay(),
+                            // child: Text(_toDisplay(_displayedSymbols),
+                            style: TextStyle(fontSize: 40),
                           ),
-                          SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              _keyPadKey('1', screenW, screenH),
-                              _keyPadKey('2', screenW, screenH),
-                              _keyPadKey('3', screenW, screenH)
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              _keyPadKey('4', screenW, screenH),
-                              _keyPadKey('5', screenW, screenH),
-                              _keyPadKey('6', screenW, screenH)
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              _keyPadKey('7', screenW, screenH),
-                              _keyPadKey('8', screenW, screenH),
-                              _keyPadKey('9', screenW, screenH)
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              _keyPadKey('с', screenW, screenH), // russian
-                              _keyPadKey('0', screenW, screenH),
-                              _keyPadKey(
-                                'Ок',
-                                screenW,
-                                screenH,
-                              ) // russian
-                            ],
-                          )
-                        ])));
-              },
-            ))));
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _keyPadKey('1', screenW, screenH),
+                        _keyPadKey('2', screenW, screenH),
+                        _keyPadKey('3', screenW, screenH)
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _keyPadKey('4', screenW, screenH),
+                        _keyPadKey('5', screenW, screenH),
+                        _keyPadKey('6', screenW, screenH)
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _keyPadKey('7', screenW, screenH),
+                        _keyPadKey('8', screenW, screenH),
+                        _keyPadKey('9', screenW, screenH)
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _keyPadKey('с', screenW, screenH), // russian
+                        _keyPadKey('0', screenW, screenH),
+                        _keyPadKey(
+                          'Ок',
+                          screenW,
+                          screenH,
+                        ) // russian
+                      ],
+                    )
+                  ]),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _keyPadKey(
@@ -142,40 +153,45 @@ class _AuthPageState extends State<AuthPage> {
     double screenH,
   ) {
     return Container(
-        width: screenW / 4,
-        height: 80,
-        padding: EdgeInsets.all(2),
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: Colors.black, width: 2.0, style: BorderStyle.solid)),
-          color: Colors.white,
-          elevation: 4,
-          child: FittedBox(
-              fit: BoxFit.fitWidth,
-              child: Text(text,
-                  style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold))),
-          onPressed: () {
-            switch (text) {
-              case 'Ок':
-                _authCheck();
-                // _authCheck(sessionData);
-                break;
-              case 'с':
-                setState(() {
-                  _deleteSymbol();
-                  // _deleteSymbol();
-                });
-                break;
-              default:
-                setState(() {
-                  _addSymbol(text);
-                  // _addSymbol(text);
-                });
-                break;
-            }
-          },
-        ));
+      width: screenW / 4,
+      height: 80,
+      padding: EdgeInsets.all(2),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+              color: Colors.black, width: 2.0, style: BorderStyle.solid),
+        ),
+        color: Colors.white,
+        elevation: 4,
+        child: FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+          ),
+        ),
+        onPressed: () {
+          switch (text) {
+            case 'Ок':
+              _authCheck();
+              // _authCheck(sessionData);
+              break;
+            case 'с':
+              setState(() {
+                _deleteSymbol();
+                // _deleteSymbol();
+              });
+              break;
+            default:
+              setState(() {
+                _addSymbol(text);
+                // _addSymbol(text);
+              });
+              break;
+          }
+        },
+      ),
+    );
   }
 
   void _deleteSymbol() {

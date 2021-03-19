@@ -28,53 +28,41 @@ class _HomePageState extends State<HomePage> {
   var _isSnackBarActive = ValueWrapper(false);
 
   bool _firstLoad = true;
-  List<HomePageData>
-      _homePageData  = List.generate(12, (index) {
-    return new HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
-  })
-      ;
+  List<HomePageData> _homePageData = List.generate(12, (index) {
+    return HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
+  });
   Timer _updateTimer;
+  Timer _updateLabelsTimer;
 
   List<Program> _programs;
   Map<int, List<InlineResponse2001Buttons>> _stationProgramsButtons = Map();
 
-  Map<int, List<int>> _stationPrograms = Map();
-  Map<int, List<String>> _stationLabels = Map();
+  Map<int, Map<int, String>> _stationLabels = Map();
+  void initState() {
+    super.initState();
+  }
 
-  void GetStations(SessionData sessionData) async {
+  void _getLabels(SessionData sessionData) async {
     try {
-      var res = await sessionData.client.status();
-      res.stations =
-          res.stations.where((element) => element.id != null).toList();
       if (!mounted) {
         return;
       }
-      _homePageData = List.generate((res.stations.length), (index) {
-        return new HomePageData(
-            res.stations[index].id ?? index + 1,
-            res.stations[index].name ?? "Station ${index + 1}",
-            res.stations[index].hash ?? "",
-            res.stations[index].status.value ?? "",
-            res.stations[index].info ?? "",
-            res.stations[index].currentBalance ?? 0,
-            res.stations[index].currentProgram ?? -1);
-      });
-
-      _homePageData.sort((a, b) => a.id.compareTo(b.id));
+      var args14 = ProgramsArgs();
+      _programs = await sessionData.client.programs(args14);
 
       for (int i = 0; i < _homePageData.length; i++) {
         try {
           var args = StationButtonArgs();
           args.stationID = _homePageData[i].id;
           var res = await sessionData.client.stationButton(args);
-          List<int> buttonsID = List();
-          List<int> tmp = List();
-          List<String> tmp_labels = List();
+
+          Map<int, String> labels = Map();
+
           if (res.buttons != null) {
-            _stationProgramsButtons.addAll({i+1: res.buttons});
+            _stationProgramsButtons[i + 1] = res.buttons;
+
             for (int i = 0; i < res.buttons.length; i++) {
               if (res.buttons[i].buttonID != null) {
-                tmp.add(res.buttons[i].programID);
                 Program program = _programs
                     .where((element) => element.id == res.buttons[i].programID)
                     .first;
@@ -85,26 +73,43 @@ class _HomePageState extends State<HomePage> {
                       program.name.lastIndexOf(" ") < program.name.length) {
                     label += program.name[program.name.lastIndexOf(" ") + 1];
                   }
-                  tmp_labels.add(label);
+                  labels[res.buttons[i].buttonID - 1] = label;
                 }
               }
             }
-          }else{
-            _stationProgramsButtons.addAll({i :List()});
           }
-          _stationPrograms.addAll({_homePageData[i].id: tmp});
-          _stationLabels.addAll({_homePageData[i].id: tmp_labels});
-
-          // if (_stationPrograms.length > 0) {
-          //   print(_stationPrograms);
-          //   print(_stationLabels);
-          // }
+          _stationLabels[_homePageData[i].id] = labels;
         } catch (e) {}
       }
+    } catch (e) {
+      print("Exception when calling DefaultApi->Status in HomePage: $e\n");
+      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+    }
+    setState(() {});
+  }
 
+  void _getStations(SessionData sessionData) async {
+    try {
+      var res = await sessionData.client.status();
+      res.stations =
+          res.stations.where((element) => element.id != null).toList();
+      if (!mounted) {
+        return;
+      }
+      _homePageData = List.generate((res.stations.length), (index) {
+        return HomePageData(
+            res.stations[index].id ?? index + 1,
+            res.stations[index].name ?? "Station ${index + 1}",
+            res.stations[index].hash ?? "",
+            res.stations[index].status.value ?? "",
+            res.stations[index].info ?? "",
+            res.stations[index].currentBalance ?? 0,
+            res.stations[index].currentProgram ?? -1);
+      });
 
-      var args14 = ProgramsArgs();
-      _programs = await sessionData.client.programs(args14);
+      _homePageData.sort(
+        (a, b) => a.id.compareTo(b.id),
+      );
     } catch (e) {
       print("Exception when calling DefaultApi->Status in HomePage: $e\n");
       showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
@@ -116,176 +121,173 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
     if (_firstLoad) {
-      GetStations(sessionData);
-      _updateTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-        GetStations(sessionData);
+      _getStations(sessionData);
+      _getLabels(sessionData);
+      _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        _getStations(sessionData);
+      });
+      _updateLabelsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+        _getLabels(sessionData);
       });
       _firstLoad = false;
     }
 
     return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text("Главная"),
-        ),
-        drawer: prepareDrawer(context, Pages.Main, sessionData),
-        body: OrientationBuilder(
-          builder: (context, orientation) {
-            return GridView.count(
-              padding: const EdgeInsets.all(10),
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
-              childAspectRatio: 1,
-              children: List.generate(_homePageData?.length ?? 0, (index) {
-                var activeProgramIndex = _programs?.indexWhere((element) =>
-                        (element.id ?? 1) ==
-                        (_homePageData[index].currentProgramID ?? 1)) ??
-                    -1;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      height: 50,
-                      width: 165,
-                      child: FlatButton(
-                        color: _homePageData[index].status == "online"
-                            ? Colors.lightGreen
-                            : Colors.red,
-                        highlightColor: _homePageData[index].status == "online"
-                            ? Colors.lightGreenAccent
-                            : Colors.redAccent,
-                        disabledColor: Colors.red,
-                        disabledTextColor: Colors.black,
-                        onPressed: _homePageData[index].id == -1  ? null : () {
-                          var args = PostMenuArgs(
-                              _homePageData[index].id,
-                              _homePageData[index].hash,
-                              _homePageData[index].currentProgramID,
-                              _stationProgramsButtons[_homePageData[index].id],
-                              _programs,
-                              sessionData);
-                          _updateTimer.cancel();
-                          Navigator.pushNamed(context, "/home/editPost",
-                                  arguments: args)
-                              .then((value) {
-                            if (value != -1)
-                              _homePageData[index].currentProgramID =
-                                  _programs[value ?? 1].id;
-                            else
-                              _homePageData[index].currentProgramID = -1;
-                            _updateTimer = new Timer.periodic(
-                                Duration(seconds: 1), (timer) {
-                              GetStations(sessionData);
-                            });
-                            setState(() {});
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(_homePageData[index].name),
-                            Text(
-                                "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
-                          ],
-                        ),
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text("Главная"),
+      ),
+      drawer: prepareDrawer(context, Pages.Main, sessionData),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return GridView.count(
+            padding: const EdgeInsets.all(10),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
+            childAspectRatio: 1,
+            children: List.generate(_homePageData?.length ?? 0, (index) {
+              var activeProgramIndex = _homePageData[index].currentProgramID;
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    width: 165,
+                    child: FlatButton(
+                      color: _homePageData[index].status == "online"
+                          ? Colors.lightGreen
+                          : Colors.red,
+                      highlightColor: _homePageData[index].status == "online"
+                          ? Colors.lightGreenAccent
+                          : Colors.redAccent,
+                      disabledColor: Colors.red,
+                      disabledTextColor: Colors.black,
+                      onPressed: _homePageData[index].id == -1
+                          ? null
+                          : () {
+                              var args = PostMenuArgs(
+                                  _homePageData[index].id,
+                                  _homePageData[index].hash,
+                                  _homePageData[index].currentProgramID,
+                                  _stationProgramsButtons[
+                                      _homePageData[index].id],
+                                  _programs,
+                                  sessionData);
+                              _updateTimer.cancel();
+                              _updateLabelsTimer.cancel();
+                              Navigator.pushNamed(context, "/home/editPost",
+                                      arguments: args)
+                                  .then((value) {
+                                _getStations(sessionData);
+                                _updateTimer = Timer.periodic(
+                                    Duration(seconds: 1), (timer) {
+                                  _getStations(sessionData);
+                                  _updateLabelsTimer = Timer.periodic(
+                                      Duration(seconds: 10), (timer) {
+                                    _getLabels(sessionData);
+                                  });
+                                });
+                                setState(() {});
+                              });
+                            },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(_homePageData[index].name),
+                          Text(
+                              "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
+                        ],
                       ),
                     ),
-                    SizedBox(
-                      height: 115,
-                      width: 165,
-                      child: DecoratedBox(
-                          child: GridView.count(
-                            physics: NeverScrollableScrollPhysics(),
-                            crossAxisCount: 3,
-                            children: List.generate(6, (btnIndex) {
-                              return SizedBox(
-                                height: 50,
-                                width: 200,
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: FlatButton(
-                                    padding: EdgeInsets.zero,
-                                    color: (_stationPrograms[index +1] != null &&
-                                        _stationPrograms[index +1].length > 0
-                                        && btnIndex < _stationPrograms[index +1].length
-                                        && _stationPrograms[index + 1][btnIndex] == activeProgramIndex
-                                    )
-                                        ? Colors.lightGreenAccent
-                                        : Colors.white,
-                                    onPressed: () {},
-                                    //   () async {
-                                    //   if (btnIndex < (_programs?.length ?? 0)) {
-                                    //     if (btnIndex != activeProgramIndex) {
-                                    //       try {
-                                    //         var args = RunProgramArgs();
-                                    //         args.hash =
-                                    //             _homePageData[index].hash;
-                                    //         args.programID =
-                                    //             _programs[btnIndex].id ?? 1;
-                                    //         await sessionData.client
-                                    //             .runProgram(args);
-                                    //         setState(() {
-                                    //           _homePageData[index]
-                                    //                   .currentProgramID =
-                                    //               _programs[btnIndex].id ?? 1;
-                                    //         });
-                                    //       } catch (e) {
-                                    //         print(
-                                    //             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-                                    //       }
-                                    //     } else {
-                                    //       try {
-                                    //         var args = RunProgramArgs();
-                                    //         args.hash =
-                                    //             _homePageData[index].hash;
-                                    //         args.programID = -1;
-                                    //         await sessionData.client
-                                    //             .runProgram(args);
-                                    //         setState(() {
-                                    //           _homePageData[index]
-                                    //               .currentProgramID = -1;
-                                    //         });
-                                    //       } catch (e) {
-                                    //         print(
-                                    //             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-                                    //       }
-                                    //     }
-                                    //   }
-                                    // },
-                                    child: Text(
-                                        _stationLabels[index + 1] != null
-                                            ? (_stationLabels[index + 1].length > 0 && btnIndex < _stationLabels[index + 1].length
-                                                ? _stationLabels[index + 1]
-                                                        [btnIndex] ??
-                                                    " "
-                                                : " ")
-                                            : " "
-                                        // btnIndex < (_programs?.length ?? 0)
-                                        //     ? _buttonLabel[btnIndex]
-                                        //     : ""
-                                        ),
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black26,
-                          )),
-                    )
-                  ],
-                );
-              }),
-            );
-          },
-        ));
+                  ),
+                  SizedBox(
+                    height: 115,
+                    width: 165,
+                    child: DecoratedBox(
+                      child: GridView.count(
+                        physics: NeverScrollableScrollPhysics(),
+                        crossAxisCount: 3,
+                        children: List.generate(6, (btnIndex) {
+                          return SizedBox(
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: FlatButton(
+                                padding: EdgeInsets.zero,
+                                color: (btnIndex + 1 == activeProgramIndex)
+                                    ? Colors.lightGreenAccent
+                                    : Colors.white,
+                                onPressed: () {},
+                                //   () async {
+                                //   if (btnIndex < (_programs?.length ?? 0)) {
+                                //     if (btnIndex != activeProgramIndex) {
+                                //       try {
+                                //         var args = RunProgramArgs();
+                                //         args.hash =
+                                //             _homePageData[index].hash;
+                                //         args.programID =
+                                //             _programs[btnIndex].id ?? 1;
+                                //         await sessionData.client
+                                //             .runProgram(args);
+                                //         setState(() {
+                                //           _homePageData[index]
+                                //                   .currentProgramID =
+                                //               _programs[btnIndex].id ?? 1;
+                                //         });
+                                //       } catch (e) {
+                                //         print(
+                                //             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+                                //       }
+                                //     } else {
+                                //       try {
+                                //         var args = RunProgramArgs();
+                                //         args.hash =
+                                //             _homePageData[index].hash;
+                                //         args.programID = -1;
+                                //         await sessionData.client
+                                //             .runProgram(args);
+                                //         setState(() {
+                                //           _homePageData[index]
+                                //               .currentProgramID = -1;
+                                //         });
+                                //       } catch (e) {
+                                //         print(
+                                //             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+                                //       }
+                                //     }
+                                //   }
+                                // },
+                                child: Text(_stationLabels[index + 1] != null
+                                    ? (_stationLabels[index + 1][btnIndex] ??
+                                        "")
+                                    : ""),
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black26,
+                      ),
+                    ),
+                  )
+                ],
+              );
+            }),
+          );
+        },
+      ),
+    );
   }
 
   @override
   void dispose() {
     if (_updateTimer != null && _updateTimer.isActive) {
       _updateTimer.cancel();
+    }
+    if (_updateLabelsTimer != null && _updateLabelsTimer.isActive) {
+      _updateLabelsTimer.cancel();
     }
     super.dispose();
   }

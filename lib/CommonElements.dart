@@ -31,13 +31,13 @@ Widget prepareDrawer(
     "/home/statistics",
   ];
 
-  var styles = new List.filled(texts.length, TextStyle(fontSize: 30));
+  var styles = new List.filled(texts.length, TextStyle(fontSize: 30),);
   styles[selectedPage.index] =
       TextStyle(fontSize: 40, fontWeight: FontWeight.bold);
 
   var textElements = [];
   for (int i = 0; i < texts.length; i++) {
-    textElements.add(Text(texts[i], style: styles[i]));
+    textElements.add(Text(texts[i], style: styles[i]),);
   }
 
   var screenWidth = MediaQuery.of(context).size.width;
@@ -96,9 +96,9 @@ Widget prepareDrawer(
                                                             Navigator.pop(
                                                                 context);
                                                           },
-                                                          child: Text("Нет"))
+                                                          child: Text("Нет"),)
                                                     ],
-                                                  ));
+                                                  ),);
                                         }
                                       : () {
                                           Navigator.pop(
@@ -120,7 +120,7 @@ Widget prepareDrawer(
                                 },
                               ),
                             )
-                          ])))))));
+                          ]),),),),),),);
 }
 
 class MyPainter extends CustomPainter {
@@ -176,7 +176,7 @@ void showErrorDialog(BuildContext context, String text) {
                 child: Text("Ок"),
               )
             ],
-          ));
+          ),);
 }
 
 class ValueWrapper {
@@ -191,16 +191,16 @@ void showErrorSnackBar(
     return;
   }
   if (scaffoldKey.currentState == null) {
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: 200),);
     if (scaffoldKey.currentState == null) return;
   }
   isSnackBarActive.value = true;
   scaffoldKey.currentState
       .showSnackBar(SnackBar(
-        content: Text(text ?? ('Ошибка при запросе к апи ')),
+        content: Text(text ?? ('Ошибка при запросе к апи '),),
         backgroundColor: Colors.redAccent,
         duration: Duration(seconds: 2),
-      ))
+      ),)
       .closed
       .then((SnackBarClosedReason reason) {
     isSnackBarActive.value = false;

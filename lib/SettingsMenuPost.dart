@@ -83,12 +83,14 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.preflightSec = int.tryParse(_inputControllers[4].value.text) ?? 0;
 
       var res = await settingsMenuPostArgs.sessionData.client.setStation(args);
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text("Настройки станции сохранены")));
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Настройки станции сохранены"),
+      ));
     } catch (e) {
       print("Exception when calling DefaultApi->/set-station: $e\n");
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Произошла ошибка при сохранении")));
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Произошла ошибка при сохранении"),
+      ));
     }
   }
 
@@ -126,12 +128,14 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
           : " ";
       var res = await settingsMenuPostArgs.sessionData.client
           .setCardReaderConfig(args);
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Настройки кардридера сохранены")));
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Настройки кардридера сохранены"),
+      ));
     } catch (e) {
       print("Exception when calling DefaultApi->/set-card-reader-config: $e\n");
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Произошла ошибка при сохранении")));
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Произошла ошибка при сохранении"),
+      ));
     }
   }
 
@@ -146,7 +150,9 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       _programIDs = ["------------"];
       _programNames = ["------------"];
       for (int i = 0; i < res.length; i++) {
-        _programIDs.add(res[i].id.toString());
+        _programIDs.add(
+          res[i].id.toString(),
+        );
         _programNames.add(res[i].name);
       }
     } catch (e) {
@@ -192,12 +198,14 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.buttons = buttons;
       var res =
           await settingsMenuPostArgs.sessionData.client.setStationButton(args);
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text("Настройки кнопок сохранены")));
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Настройки кнопок сохранены"),
+      ));
     } catch (e) {
       print("Exception when calling DefaultApi->/set-station-button: $e\n");
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Произошла ошибка при сохранении")));
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Произошла ошибка при сохранении"),
+      ));
     }
   }
 
@@ -220,8 +228,9 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
     List<String> availableHashes = List();
     availableHashes.add("");
-    availableHashes.addAll(settingsMenuPostArgs.availableHashes
-        .where((element) => element != null));
+    availableHashes.addAll(
+      settingsMenuPostArgs.availableHashes.where((element) => element != null),
+    );
 
     return Scaffold(
       appBar: appBar,
@@ -236,13 +245,14 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("ID",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("ID",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
                           height: 75,
                           width: screenW / 3 * 2,
@@ -255,100 +265,111 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Имя",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Имя",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3 * 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[2],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: _inputControllers[2],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                       ],
                     ),
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Хэш",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Хэш",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3 * 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: DropdownButton(
-                                  value: _inputControllers[3].text,
-                                  isExpanded: true,
-                                  items: List.generate(availableHashes.length,
-                                      (index) {
-                                    return DropdownMenuItem(
-                                        value: availableHashes[index],
-                                        child: Text(
-                                          "${availableHashes[index]}",
-                                          textAlign: TextAlign.end,
-                                        ));
-                                  }),
-                                  onChanged: (newValue) {
-                                    _inputControllers[3].text = newValue;
-                                    setState(() {});
-                                  }),
-                            ))
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: DropdownButton(
+                                value: _inputControllers[3].text,
+                                isExpanded: true,
+                                items: List.generate(availableHashes.length,
+                                    (index) {
+                                  return DropdownMenuItem(
+                                    value: availableHashes[index],
+                                    child: Text(
+                                      "${availableHashes[index]}",
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  );
+                                }),
+                                onChanged: (newValue) {
+                                  _inputControllers[3].text = newValue;
+                                  setState(() {});
+                                }),
+                          ),
+                        )
                       ],
                     ),
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Прокачка",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Прокачка",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3 * 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[4],
-                                keyboardType: TextInputType.phone,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp("[0-9_]"))
-                                ],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: _inputControllers[4],
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9_]"),
+                                )
+                              ],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                       ],
                     ),
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Выполнение",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Выполнение",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
                           height: 75,
                           width: screenW / 3 * 2,
@@ -370,8 +391,9 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                                 value:
                                     _dropdownRelayBoard.keys.elementAt(index),
                                 child: Center(
-                                  child: Text(_dropdownRelayBoard.values
-                                      .elementAt(index)),
+                                  child: Text(
+                                    _dropdownRelayBoard.values.elementAt(index),
+                                  ),
                                 ),
                               );
                             }),
@@ -417,13 +439,14 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Кардридер",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Кардридер",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
                           height: 75,
                           width: screenW / 3 * 2,
@@ -433,11 +456,12 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                               items:
                                   List.generate(_readerValues.length, (index) {
                                 return DropdownMenuItem(
-                                    value: _readerValues[index],
-                                    child: Text(
-                                      "${_readerValues[index]}",
-                                      textAlign: TextAlign.end,
-                                    ));
+                                  value: _readerValues[index],
+                                  child: Text(
+                                    "${_readerValues[index]}",
+                                    textAlign: TextAlign.end,
+                                  ),
+                                );
                               }),
                               onChanged: (newValue) {
                                 _dropDownCardReader = newValue;
@@ -449,49 +473,55 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Хост",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Хост",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3 * 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[0],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: _inputControllers[0],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                       ],
                     ),
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Порт",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Порт",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3 * 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[1],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: _inputControllers[1],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                       ],
                     ),
                     Wrap(
@@ -532,13 +562,14 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                     return Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Кнопка ${index + 1}",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Кнопка ${index + 1}",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
                           height: 75,
                           width: screenW / 3 * 2,
@@ -547,11 +578,12 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                               isExpanded: true,
                               items: List.generate(_programIDs.length, (index) {
                                 return DropdownMenuItem(
-                                    value: _programIDs[index],
-                                    child: Text(
-                                      "${_programNames[index]}",
-                                      textAlign: TextAlign.end,
-                                    ));
+                                  value: _programIDs[index],
+                                  child: Text(
+                                    "${_programNames[index]}",
+                                    textAlign: TextAlign.end,
+                                  ),
+                                );
                               }),
                               onChanged: (newValue) {
                                 _dropDownPrograms[index] = newValue;

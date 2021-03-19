@@ -56,7 +56,8 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
   void _setKasse(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
     try {
-      if (_inputControllers[1].value.text.length > 0 && _inputControllers[2].value.text.length != 12) {
+      if (_inputControllers[1].value.text.length > 0 &&
+          _inputControllers[2].value.text.length != 12) {
         throw Exception("");
       }
 
@@ -68,15 +69,19 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
 
       var res = await sessionData.client.setKasse(args);
       Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Настройки кассы успешно сохранены")));
+        SnackBar(
+          content: Text("Настройки кассы успешно сохранены"),
+        ),
+      );
     } catch (e) {
       print("Exception when calling DefaultApi->set-kasse: $e\n");
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(
-        content: Text('Произошла ошибка при сохранении'),
-        backgroundColor: Colors.redAccent,
-        duration: Duration(seconds: 2),
-      ));
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Произошла ошибка при сохранении'),
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
     _inUpdate = false;
   }
@@ -101,152 +106,165 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new SizedBox(
-              height: screenH - appBar.preferredSize.height,
-              child: ListView(children: [
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("TAX",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
-                        SizedBox(
-                          height: 75,
-                          width: screenW / 3 * 2,
-                          child: DropdownButton(
-                              value: _dropDownValue,
-                              isExpanded: true,
-                              items: List.generate(_taxValues.length, (index) {
-                                return DropdownMenuItem(
-                                    value: _taxValues[index],
-                                    child: Text(
-                                      "${_taxValues[index]}",
-                                      textAlign: TextAlign.end,
-                                    ));
-                              }),
-                              onChanged: (newValue) {
-                                _dropDownValue = newValue;
-                                setState(() {});
-                              }),
+            height: screenH - appBar.preferredSize.height,
+            child: ListView(children: [
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 75,
+                        width: screenW / 3,
+                        child: Center(
+                          child: Text("TAX",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.center),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("ReceiptItem",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
-                        SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[0],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
-                              ),
-                            ))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Cashier",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
-                        SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[1],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
-                              ),
-                            ))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("CashierINN",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
-                        SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                maxLength: 12,
-                                controller: _inputControllers[2],
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp("[0-9_]"))
-                                ],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
-                              ),
-                            ))
-                      ],
-                    ),
-                    Wrap(
-                      direction: Axis.horizontal,
-                      alignment: WrapAlignment.center,
-                      spacing: 25,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: screenW / 3,
-                          child: RaisedButton(
-                            onPressed: _inUpdate
-                                ? null
-                                : () {
-                                    _setKasse(sessionData, context);
-                                  },
-                            child: Text("Сохранить"),
+                      ),
+                      SizedBox(
+                        height: 75,
+                        width: screenW / 3 * 2,
+                        child: DropdownButton(
+                            value: _dropDownValue,
+                            isExpanded: true,
+                            items: List.generate(_taxValues.length, (index) {
+                              return DropdownMenuItem(
+                                value: _taxValues[index],
+                                child: Text(
+                                  "${_taxValues[index]}",
+                                  textAlign: TextAlign.end,
+                                ),
+                              );
+                            }),
+                            onChanged: (newValue) {
+                              _dropDownValue = newValue;
+                              setState(() {});
+                            }),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 75,
+                        width: screenW / 3,
+                        child: Center(
+                          child: Text("ReceiptItem",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.center),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 75,
+                        width: screenW - screenW / 3,
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: TextField(
+                            controller: _inputControllers[0],
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              border: OutlineInputBorder(),
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          height: 50,
-                          width: screenW / 3,
-                          child: RaisedButton(
-                            onPressed: _inUpdate
-                                ? null
-                                : () {
-                                    _getKasse(sessionData);
-                                  },
-                            child: Text("Отменить"),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 75,
+                        width: screenW / 3,
+                        child: Center(
+                          child: Text("Cashier",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.center),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 75,
+                        width: screenW - screenW / 3,
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: TextField(
+                            controller: _inputControllers[1],
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              border: OutlineInputBorder(),
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ]));
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 75,
+                        width: screenW / 3,
+                        child: Center(
+                          child: Text("CashierINN",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.center),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 75,
+                        width: screenW - screenW / 3,
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: TextField(
+                            maxLength: 12,
+                            controller: _inputControllers[2],
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp("[0-9_]"),
+                              )
+                            ],
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.center,
+                    spacing: 25,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 3,
+                        child: RaisedButton(
+                          onPressed: _inUpdate
+                              ? null
+                              : () {
+                                  _setKasse(sessionData, context);
+                                },
+                          child: Text("Сохранить"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 3,
+                        child: RaisedButton(
+                          onPressed: _inUpdate
+                              ? null
+                              : () {
+                                  _getKasse(sessionData);
+                                },
+                          child: Text("Отменить"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ]),
+          );
         },
       ),
     );

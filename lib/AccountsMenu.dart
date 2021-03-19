@@ -40,14 +40,16 @@ class _AccountsMenuState extends State<AccountsMenu> {
         return;
       }
       for (int i = 0; i < res.users.length; i++) {
-        _accounts.add(AccountInfo(
-            res.users[i].login,
-            res.users[i].firstName,
-            res.users[i].middleName,
-            res.users[i].lastName,
-            res.users[i].isAdmin,
-            res.users[i].isEngineer,
-            res.users[i].isOperator));
+        _accounts.add(
+          AccountInfo(
+              res.users[i].login,
+              res.users[i].firstName,
+              res.users[i].middleName,
+              res.users[i].lastName,
+              res.users[i].isAdmin,
+              res.users[i].isEngineer,
+              res.users[i].isOperator),
+        );
       }
 
       setState(() {});
@@ -80,7 +82,9 @@ class _AccountsMenuState extends State<AccountsMenu> {
         builder: (context, orientation) {
           return RefreshIndicator(
             onRefresh: () async {
-              await Future.delayed(Duration(milliseconds: 500));
+              await Future.delayed(
+                Duration(milliseconds: 500),
+              );
               _getUsers(sessionData);
             },
             child: ListView(children: [
@@ -123,10 +127,12 @@ class _AccountsMenuState extends State<AccountsMenu> {
                             ? screenW / 11 * 2
                             : screenW / 9 * 2,
                         child: Center(
-                          child: Text("Имя",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                          child: Text(
+                            "Имя",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -135,10 +141,12 @@ class _AccountsMenuState extends State<AccountsMenu> {
                             ? screenW / 11 * 2
                             : screenW / 9 * 2,
                         child: Center(
-                          child: Text("Отчество",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                          child: Text(
+                            "Отчество",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -147,10 +155,12 @@ class _AccountsMenuState extends State<AccountsMenu> {
                             ? screenW / 11 * 2
                             : screenW / 9 * 2,
                         child: Center(
-                          child: Text("Статус",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                          child: Text(
+                            "Статус",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ],
@@ -162,114 +172,123 @@ class _AccountsMenuState extends State<AccountsMenu> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH ? screenW / 11 * 2 : 0,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    screenW > screenH
-                                        ? "${_accounts[index].login}"
-                                        : "",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )),
+                              height: 50,
+                              width: screenW > screenH ? screenW / 11 * 2 : 0,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  screenW > screenH
+                                      ? "${_accounts[index].login}"
+                                      : "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11 * 2
-                                    : screenW / 9 * 2,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    "${_accounts[index].firstName}",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  "${_accounts[index].firstName}",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11 * 2
-                                    : screenW / 9 * 2,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    "${_accounts[index].lastName}",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  "${_accounts[index].lastName}",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11 * 2
-                                    : screenW / 9 * 2,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    "${_accounts[index].middleName}",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  "${_accounts[index].middleName}",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11 * 2
-                                    : screenW / 9 * 2,
-                                child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: index % 2 == 0
-                                            ? Colors.white
-                                            : Colors.black12,
-                                        border:
-                                            Border.all(color: Colors.black38)),
-                                    child: Text(
-                                      "${_accounts[index].isAdmin ? "Админ" : (_accounts[index].isOperator ? "Оператор" : (_accounts[index].isEngineer) ? "Инженер" : "USER")}",
-                                      textAlign: TextAlign.center,
-                                    ))),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  "${_accounts[index].isAdmin ? "Админ" : (_accounts[index].isOperator ? "Оператор" : (_accounts[index].isEngineer) ? "Инженер" : "USER")}",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11
-                                    : screenW / 9,
-                                child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: index % 2 == 0
-                                            ? Colors.white
-                                            : Colors.black12,
-                                        border:
-                                            Border.all(color: Colors.black38)),
-                                    child: IconButton(
-                                      icon: Icon(Icons.more_horiz),
-                                      onPressed: () {
-                                        var args = AccountsMenuEditArgs();
-                                        args.sessionData = sessionData;
-                                        args.targetUser = _accounts[index];
-                                        Navigator.pushNamed(
-                                                context, "/home/accounts/edit",
-                                                arguments: args)
-                                            .then((value) =>
-                                                _getUsers(sessionData));
-                                      },
-                                    ))),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11
+                                  : screenW / 9,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: IconButton(
+                                  icon: Icon(Icons.more_horiz),
+                                  onPressed: () {
+                                    var args = AccountsMenuEditArgs();
+                                    args.sessionData = sessionData;
+                                    args.targetUser = _accounts[index];
+                                    Navigator.pushNamed(
+                                            context, "/home/accounts/edit",
+                                            arguments: args)
+                                        .then(
+                                      (value) => _getUsers(sessionData),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       } else {
@@ -277,110 +296,118 @@ class _AccountsMenuState extends State<AccountsMenu> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH ? screenW / 11 * 2 : 0,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    "",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )),
+                              height: 50,
+                              width: screenW > screenH ? screenW / 11 * 2 : 0,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11 * 2
-                                    : screenW / 9 * 2,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    "",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11 * 2
-                                    : screenW / 9 * 2,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    "",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11 * 2
-                                    : screenW / 9 * 2,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    "",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11 * 2
-                                    : screenW / 9 * 2,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: Text(
-                                    "",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11 * 2
+                                  : screenW / 9 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                             SizedBox(
-                                height: 50,
-                                width: screenW > screenH
-                                    ? screenW / 11
-                                    : screenW / 9,
-                                child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: index % 2 == 0
-                                            ? Colors.white
-                                            : Colors.black12,
-                                        border:
-                                            Border.all(color: Colors.black38)),
-                                    child: IconButton(
-                                      icon: Icon(Icons.add),
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                                context, "/home/accounts/add",
-                                                arguments: sessionData)
-                                            .then((value) =>
-                                                _getUsers(sessionData));
-                                      },
-                                    ))),
+                              height: 50,
+                              width: screenW > screenH
+                                  ? screenW / 11
+                                  : screenW / 9,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: IconButton(
+                                  icon: Icon(Icons.add),
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                            context, "/home/accounts/add",
+                                            arguments: sessionData)
+                                        .then(
+                                      (value) => _getUsers(sessionData),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       }

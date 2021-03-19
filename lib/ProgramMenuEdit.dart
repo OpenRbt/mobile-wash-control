@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
@@ -222,10 +221,16 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
 
       var res = await programMenuEditArgs.sessionData.client.setProgram(args);
       Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Изменения программы успешно сохранены")));
+        SnackBar(
+          content: Text("Изменения программы успешно сохранены"),
+        ),
+      );
     } catch (e) {
       Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Произошла ошибка при сохранении")));
+        SnackBar(
+          content: Text("Произошла ошибка при сохранении"),
+        ),
+      );
     }
     _inUpdate = false;
   }
@@ -259,68 +264,76 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Название",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Название",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3 * 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _program[0],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: _program[0],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                       ],
                     ),
                     Row(
                       children: [
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Center(
-                              child: Text("Цена",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
-                            )),
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("Цена",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
                         SizedBox(
-                            height: 75,
-                            width: screenW / 3 * 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp("[0-9]"))
-                                ],
-                                keyboardType: TextInputType.phone,
-                                controller: _program[1],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder()),
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]"),
+                                )
+                              ],
+                              keyboardType: TextInputType.phone,
+                              controller: _program[1],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                       ],
                     ),
                     Center(
-                        child: CheckboxListTile(
-                      contentPadding: EdgeInsets.only(left: 5, right: 5),
-                      title: Text(
-                        'Прокачка',
+                      child: CheckboxListTile(
+                        contentPadding: EdgeInsets.only(left: 5, right: 5),
+                        title: Text(
+                          'Прокачка',
+                        ),
+                        value: _preflight,
+                        onChanged: (newValue) {
+                          _preflight = newValue;
+                          setState(() {});
+                        },
                       ),
-                      value: _preflight,
-                      onChanged: (newValue) {
-                        _preflight = newValue;
-                        setState(() {});
-                      },
-                    )),
+                    ),
                   ],
                 ),
                 Divider(
@@ -356,47 +369,55 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                 Row(
                   children: [
                     SizedBox(
-                        height: 50,
-                        width: screenW / 9 * 4,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black38)),
-                          child: TextField(
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp("[0-9]"))
-                            ],
-                            keyboardType: TextInputType.phone,
-                            style: TextStyle(fontSize: 20),
-                            controller: _motors[0],
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.zero,
-                            ),
+                      height: 50,
+                      width: screenW / 9 * 4,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black38),
+                        ),
+                        child: TextField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp("[0-9]"),
+                            )
+                          ],
+                          keyboardType: TextInputType.phone,
+                          style: TextStyle(fontSize: 20),
+                          controller: _motors[0],
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: 50,
                       width: screenW / 9,
                     ),
                     SizedBox(
-                        height: 50,
-                        width: screenW / 9 * 4,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black38)),
-                          child: TextField(
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp("[0-9]"))
-                            ],
-                            keyboardType: TextInputType.phone,
-                            style: TextStyle(fontSize: 20),
-                            controller: _motors[1],
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.zero,
-                            ),
+                      height: 50,
+                      width: screenW / 9 * 4,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black38),
+                        ),
+                        child: TextField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp("[0-9]"),
+                            )
+                          ],
+                          keyboardType: TextInputType.phone,
+                          style: TextStyle(fontSize: 20),
+                          controller: _motors[1],
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Row(
@@ -475,83 +496,95 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
-                                  border: Border.all(color: Colors.black38)),
-                              child: Center(
-                                  child: Text("${index + 1}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center)),
-                            )),
+                          height: 50,
+                          width: screenW / 9 * 2,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: index % 2 == 0
+                                  ? Colors.white
+                                  : Colors.black12,
+                              border: Border.all(color: Colors.black38),
+                            ),
+                            child: Center(
+                              child: Text("${index + 1}",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
+                            ),
+                          ),
+                        ),
                         SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
-                                  border: Border.all(color: Colors.black38)),
-                              child: TextField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp("[0-9]"))
-                                ],
-                                keyboardType: TextInputType.phone,
-                                style: TextStyle(fontSize: 20),
-                                controller: _relays[index],
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.zero,
-                                ),
+                          height: 50,
+                          width: screenW / 9 * 2,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: index % 2 == 0
+                                  ? Colors.white
+                                  : Colors.black12,
+                              border: Border.all(color: Colors.black38),
+                            ),
+                            child: TextField(
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]"),
+                                )
+                              ],
+                              keyboardType: TextInputType.phone,
+                              style: TextStyle(fontSize: 20),
+                              controller: _relays[index],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.zero,
                               ),
-                            )),
+                            ),
+                          ),
+                        ),
                         SizedBox(
                           height: 50,
                           width: screenW / 9,
                         ),
                         SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
-                                  border: Border.all(color: Colors.black38)),
-                              child: Center(
-                                  child: Text("${index + 1}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center)),
-                            )),
+                          height: 50,
+                          width: screenW / 9 * 2,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: index % 2 == 0
+                                  ? Colors.white
+                                  : Colors.black12,
+                              border: Border.all(color: Colors.black38),
+                            ),
+                            child: Center(
+                              child: Text("${index + 1}",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
+                            ),
+                          ),
+                        ),
                         SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
-                                  border: Border.all(color: Colors.black38)),
-                              child: TextField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp("[0-9]"))
-                                ],
-                                keyboardType: TextInputType.phone,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                                controller: _relaysPreflight[index],
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.zero,
-                                ),
+                          height: 50,
+                          width: screenW / 9 * 2,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: index % 2 == 0
+                                  ? Colors.white
+                                  : Colors.black12,
+                              border: Border.all(color: Colors.black38),
+                            ),
+                            child: TextField(
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]"),
+                                )
+                              ],
+                              keyboardType: TextInputType.phone,
+                              style: TextStyle(
+                                fontSize: 20,
                               ),
-                            )),
+                              controller: _relaysPreflight[index],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.zero,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     );
                   }),

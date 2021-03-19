@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 
@@ -59,10 +58,13 @@ class _PostsMenuState extends State<PostsMenu> {
                           },
                           items: [
                             DropdownMenuItem(
-                                value: "$index пост",
-                                child: Text("$index пост")),
+                              value: "$index пост",
+                              child: Text("$index пост"),
+                            ),
                             DropdownMenuItem(
-                                value: "--------", child: Text("--------")),
+                              value: "--------",
+                              child: Text("--------"),
+                            ),
                           ],
                         ),
                       ),
@@ -86,8 +88,9 @@ class _PostsMenuState extends State<PostsMenu> {
                             height: 25,
                             width: screenW / 6,
                             child: TextField(
-                              decoration:
-                                  InputDecoration(border: OutlineInputBorder()),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           )
                         ],

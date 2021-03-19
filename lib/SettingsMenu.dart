@@ -37,8 +37,11 @@ class _SettingsMenuState extends State<SettingsMenu> {
       var res = await sessionData.client.status();
       var tmp = res.stations.where((element) => element.hash != null).toList();
       _availableHashes = List();
-      tmp.forEach((element) {_availableHashes.add(element.hash);});
-      res.stations = res.stations.where((element) => element.id != null).toList();
+      tmp.forEach((element) {
+        _availableHashes.add(element.hash);
+      });
+      res.stations =
+          res.stations.where((element) => element.id != null).toList();
       if (!mounted) {
         return;
       }
@@ -51,7 +54,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
             res.stations[index].status.value);
       });
 
-      _settingsData.sort((a, b) => a.id.compareTo(b.id));
+      _settingsData.sort(
+        (a, b) => a.id.compareTo(b.id),
+      );
       _firstLoad = false;
 
       if (res.stations.length > 0) {
@@ -63,8 +68,8 @@ class _SettingsMenuState extends State<SettingsMenu> {
             _currentTemp = resTemp ?? _currentTemp;
 
             _currentTemp = double.tryParse(
-                    _currentTemp.replaceAll(String.fromCharCode(34), ''))
-                .toString();
+              _currentTemp.replaceAll(String.fromCharCode(34), ''),
+            ).toString();
             break;
           }
         }
@@ -99,212 +104,225 @@ class _SettingsMenuState extends State<SettingsMenu> {
       body: OrientationBuilder(
         builder: (context, orientation) {
           return RefreshIndicator(
-              onRefresh: () async {
-                var tmp = await getSettings(sessionData);
-                await Future.delayed(Duration(milliseconds: 500));
-                setState(() {});
-              },
-              child: ListView(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 50,
-                              width: screenW / 9 * 2,
-                              child: Center(
-                                child: Text("Дата ",
-                                    style: TextStyle(fontSize: 16)),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 50,
-                              width: screenW / 9 * 2,
-                              child: RaisedButton(
-                                padding: EdgeInsets.zero,
-                                onPressed: () {},
-                                child: Text(
-                                    "${currentTime.day}.${currentTime.month}.${currentTime.year}"),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 50,
-                              width: screenW / 9 * 2,
-                              child: Center(
-                                child: Text("Tемп ",
-                                    style: TextStyle(fontSize: 16)),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 50,
-                              width: screenW / 9 * 2,
-                              child: RaisedButton(
-                                padding: EdgeInsets.zero,
-                                onPressed: () {},
-                                child: Text("${_currentTemp}"),
-                              ),
-                            ),
-                          ]),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+            onRefresh: () async {
+              var tmp = await getSettings(sessionData);
+              await Future.delayed(
+                Duration(milliseconds: 500),
+              );
+              setState(() {});
+            },
+            child: ListView(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(
                             height: 50,
-                            width: screenW / 7 * 2,
+                            width: screenW / 9 * 2,
                             child: Center(
                               child: Text(
-                                "Список постов",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                "Дата ",
+                                style: TextStyle(fontSize: 16),
                               ),
                             ),
                           ),
                           SizedBox(
                             height: 50,
-                            width: screenW / 7 * 2,
-                            child: Center(
-                              child: Text("Хэш",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
+                            width: screenW / 9 * 2,
+                            child: RaisedButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {},
+                              child: Text(
+                                  "${currentTime.day}.${currentTime.month}.${currentTime.year}"),
                             ),
                           ),
                           SizedBox(
                             height: 50,
-                            width: screenW / 7 * 2,
+                            width: screenW / 9 * 2,
                             child: Center(
-                              child: Text("Статус",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
+                              child: Text(
+                                "Tемп ",
+                                style: TextStyle(fontSize: 16),
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: List.generate(_settingsData.length, (index) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 50,
-                                width: screenW / 7 * 2,
-                                child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: index % 2 == 0
-                                            ? Colors.white
-                                            : Colors.black12,
-                                        border:
-                                            Border.all(color: Colors.black38)),
-                                    child: Center(
-                                      child: Text(
-                                        "${_settingsData[index].name}",
-                                      ),
-                                    )),
-                              ),
-                              SizedBox(
-                                height: 50,
-                                width: screenW / 7 * 2,
-                                child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: index % 2 == 0
-                                            ? Colors.white
-                                            : Colors.black12,
-                                        border:
-                                            Border.all(color: Colors.black38)),
-                                    child: Center(
-                                      child: Text(
-                                        "${_settingsData[index].hash}",
-                                      ),
-                                    )),
-                              ),
-                              SizedBox(
-                                height: 50,
-                                width: screenW / 7 * 2,
-                                child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: index % 2 == 0
-                                            ? Colors.white
-                                            : Colors.black12,
-                                        border:
-                                            Border.all(color: Colors.black38)),
-                                    child: Center(
-                                      child: Text(
-                                        "${_settingsData[index].status}",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color:
-                                                _settingsData[index].status ==
-                                                        "online"
-                                                    ? Colors.lightGreen
-                                                    : Colors.red),
-                                      ),
-                                    )),
-                              ),
-                              SizedBox(
-                                height: 50,
-                                width: screenW / 7,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: index % 2 == 0
-                                          ? Colors.white
-                                          : Colors.black12,
-                                      border:
-                                          Border.all(color: Colors.black38)),
-                                  child: IconButton(
-                                    icon: Icon(Icons.more_horiz),
-                                    onPressed: () {
-                                      var args = SettingsMenuPostArgs(
-                                          _settingsData[index].id, _availableHashes, sessionData);
-                                      Navigator.pushNamed(
-                                              context, "/home/settings/post",
-                                              arguments: args)
-                                          .then((value) {
-                                        getSettings(sessionData);
-                                      });
-                                    },
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: screenW / 9 * 2,
+                            child: RaisedButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {},
+                              child: Text("${_currentTemp}"),
+                            ),
+                          ),
+                        ]),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          width: screenW / 7 * 2,
+                          child: Center(
+                            child: Text(
+                              "Список постов",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: screenW / 7 * 2,
+                          child: Center(
+                            child: Text(
+                              "Хэш",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: screenW / 7 * 2,
+                          child: Center(
+                            child: Text(
+                              "Статус",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: List.generate(_settingsData.length, (index) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: screenW / 7 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${_settingsData[index].name}",
                                   ),
                                 ),
                               ),
-                            ],
-                          );
-                        }),
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: screenW / 7 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${_settingsData[index].hash}",
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: screenW / 7 * 2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${_settingsData[index].status}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: _settingsData[index].status ==
+                                                "online"
+                                            ? Colors.lightGreen
+                                            : Colors.red),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: screenW / 7,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: IconButton(
+                                  icon: Icon(Icons.more_horiz),
+                                  onPressed: () {
+                                    var args = SettingsMenuPostArgs(
+                                        _settingsData[index].id,
+                                        _availableHashes,
+                                        sessionData);
+                                    Navigator.pushNamed(
+                                            context, "/home/settings/post",
+                                            arguments: args)
+                                        .then((value) {
+                                      getSettings(sessionData);
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    SizedBox(
+                      height: 50,
+                      child: RaisedButton(
+                        color: Colors.lightGreen,
+                        textColor: Colors.white,
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.black,
+                        splashColor: Colors.lightGreenAccent,
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Настройки кассы"),
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/home/settings/kasse",
+                              arguments: sessionData);
+                        },
                       ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      SizedBox(
-                        height: 50,
-                        child: RaisedButton(
-                          color: Colors.lightGreen,
-                          textColor: Colors.white,
-                          disabledColor: Colors.grey,
-                          disabledTextColor: Colors.black,
-                          splashColor: Colors.lightGreenAccent,
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("Настройки кассы"),
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/home/settings/kasse",
-                                arguments: sessionData);
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                    ],
-                  ),
-                ],
-              ));
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
         },
       ),
     );

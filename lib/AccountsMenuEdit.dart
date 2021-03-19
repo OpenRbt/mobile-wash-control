@@ -87,14 +87,15 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
       args.isOperator = _inputTriggers[1];
       args.isEngineer = _inputTriggers[2];
       var res = await sessionData.client.updateUser(args);
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Пользователь успешно изменен")));
-    }
-    catch (e) {
-      if (e is Exception){
-      print("Exception when calling DefaultApi->User(put): $e\n");
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Произошла ошибка при сохранении")));
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Пользователь успешно изменен"),
+      ));
+    } catch (e) {
+      if (e is Exception) {
+        print("Exception when calling DefaultApi->User(put): $e\n");
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("Произошла ошибка при сохранении"),
+        ));
       }
     }
     _inUpdate = false;
@@ -120,10 +121,11 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
     if (_inUpdate) {
       _inUpdate = false;
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text("Изменение пользователя"),
-              ));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Изменение пользователя"),
+        ),
+      );
     }
     return Scaffold(
       appBar: appBar,
@@ -155,32 +157,36 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                             ),
                           ),
                           SizedBox(
-                              height: 75,
-                              width: screenW - screenW / 3,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: TextField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp("[a-zA-Z0-9_]"))
-                                  ],
-                                  controller: _inputControllers[index],
-                                  decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(10),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: _loginNotValid
-                                                  ? Colors.red
-                                                  : Colors.grey)),
-                                      helperText: "Логин не менее 4х символов",
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: _loginNotValid
-                                                  ? Colors.red
-                                                  : Colors.grey))),
-                                  enabled: false,
-                                ),
-                              ))
+                            height: 75,
+                            width: screenW - screenW / 3,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: TextField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                    RegExp("[a-zA-Z0-9_]"),
+                                  )
+                                ],
+                                controller: _inputControllers[index],
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: _loginNotValid
+                                              ? Colors.red
+                                              : Colors.grey),
+                                    ),
+                                    helperText: "Логин не менее 4х символов",
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: _loginNotValid
+                                              ? Colors.red
+                                              : Colors.grey),
+                                    )),
+                                enabled: false,
+                              ),
+                            ),
+                          )
                         ],
                       );
                       break;
@@ -200,17 +206,19 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                             ),
                           ),
                           SizedBox(
-                              height: 75,
-                              width: screenW - screenW / 3,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: TextField(
-                                  controller: _inputControllers[index],
-                                  decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(10),
-                                      border: OutlineInputBorder()),
+                            height: 75,
+                            width: screenW - screenW / 3,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: TextField(
+                                controller: _inputControllers[index],
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(10),
+                                  border: OutlineInputBorder(),
                                 ),
-                              ))
+                              ),
+                            ),
+                          )
                         ],
                       );
                       break;
@@ -230,17 +238,19 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                             ),
                           ),
                           SizedBox(
-                              height: 75,
-                              width: screenW - screenW / 3,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: TextField(
-                                  controller: _inputControllers[index],
-                                  decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(10),
-                                      border: OutlineInputBorder()),
+                            height: 75,
+                            width: screenW - screenW / 3,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: TextField(
+                                controller: _inputControllers[index],
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(10),
+                                  border: OutlineInputBorder(),
                                 ),
-                              ))
+                              ),
+                            ),
+                          )
                         ],
                       );
                       break;
@@ -260,17 +270,19 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                             ),
                           ),
                           SizedBox(
-                              height: 75,
-                              width: screenW - screenW / 3,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: TextField(
-                                  controller: _inputControllers[index],
-                                  decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(10),
-                                      border: OutlineInputBorder()),
+                            height: 75,
+                            width: screenW - screenW / 3,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: TextField(
+                                controller: _inputControllers[index],
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(10),
+                                  border: OutlineInputBorder(),
                                 ),
-                              ))
+                              ),
+                            ),
+                          )
                         ],
                       );
                       break;
@@ -290,18 +302,19 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                             ),
                           ),
                           SizedBox(
-                              height: 75,
-                              width: screenW - screenW / 3,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Checkbox(
-                                  value: _inputTriggers[0],
-                                  onChanged: (newValue) {
-                                    _inputTriggers[0] = !_inputTriggers[0];
-                                    setState(() {});
-                                  },
-                                ),
-                              ))
+                            height: 75,
+                            width: screenW - screenW / 3,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Checkbox(
+                                value: _inputTriggers[0],
+                                onChanged: (newValue) {
+                                  _inputTriggers[0] = !_inputTriggers[0];
+                                  setState(() {});
+                                },
+                              ),
+                            ),
+                          )
                         ],
                       );
                       break;
@@ -321,18 +334,19 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                             ),
                           ),
                           SizedBox(
-                              height: 75,
-                              width: screenW - screenW / 3,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Checkbox(
-                                  value: _inputTriggers[1],
-                                  onChanged: (newValue) {
-                                    _inputTriggers[1] = !_inputTriggers[1];
-                                    setState(() {});
-                                  },
-                                ),
-                              ))
+                            height: 75,
+                            width: screenW - screenW / 3,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Checkbox(
+                                value: _inputTriggers[1],
+                                onChanged: (newValue) {
+                                  _inputTriggers[1] = !_inputTriggers[1];
+                                  setState(() {});
+                                },
+                              ),
+                            ),
+                          )
                         ],
                       );
                       break;
@@ -352,18 +366,19 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                             ),
                           ),
                           SizedBox(
-                              height: 75,
-                              width: screenW - screenW / 3,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Checkbox(
-                                  value: _inputTriggers[2],
-                                  onChanged: (newValue) {
-                                    _inputTriggers[2] = !_inputTriggers[2];
-                                    setState(() {});
-                                  },
-                                ),
-                              ))
+                            height: 75,
+                            width: screenW - screenW / 3,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Checkbox(
+                                value: _inputTriggers[2],
+                                onChanged: (newValue) {
+                                  _inputTriggers[2] = !_inputTriggers[2];
+                                  setState(() {});
+                                },
+                              ),
+                            ),
+                          )
                         ],
                       );
                       break;

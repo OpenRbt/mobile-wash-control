@@ -15,6 +15,7 @@ class PostMenuArgs {
   PostMenuArgs(this.postID, this.hash, this.currentProgramID,
       this.buttonPrograms, this.programs, this.sessionData);
 }
+
 //TODO: Buttons rework and fix
 class EditPostMenu extends StatefulWidget {
   EditPostMenu({Key key}) : super(key: key);
@@ -28,9 +29,9 @@ class _EditPostMenuState extends State<EditPostMenu> {
   var _isSnackBarActive = ValueWrapper(false);
   bool _firstLoad = true;
   Timer _updateBalanceTimer;
-  int _service_balance = 0;
+  int _serviceBalance = 0;
   int _balance = 0;
-  int _current_program_index = -1;
+  int _currentProgram = -1;
 
   @override
   void initState() {
@@ -44,25 +45,28 @@ class _EditPostMenuState extends State<EditPostMenu> {
   }
 
   List<bool> _checkboxList;
-  List<String> _buttonNames;
+  Map<int, String> _buttonNames = Map();
 
   void _getBalance(SessionData sessionData, int postID) async {
     try {
       var res1 = await sessionData.client.status();
-      _current_program_index = res1.stations
+      _currentProgram = res1.stations
           .where((element) => element.id == postID)
           .last
           .currentProgram;
-      _current_program_index = _current_program_index ?? 1;
+      _balance = res1.stations
+          .where((element) => element.id == postID)
+          .last
+          .currentBalance;
+      _currentProgram = _currentProgram ?? -1;
       var args = StationReportCurrentMoneyArgs();
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
-      _balance = res.moneyReport.coins + res.moneyReport.banknotes;
-      _service_balance = res.moneyReport.service;
+      // _balance = res.moneyReport.coins + res.moneyReport.banknotes;
+      _serviceBalance = res.moneyReport.service;
       if (!mounted) {
         return;
       }
-      setState(() {});
     } on ApiException catch (e) {
       if (e.code != 404) {
         print(
@@ -75,6 +79,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       }
       //showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
+    setState(() {});
   }
 
   void _addServiceMoney(PostMenuArgs postMenuArgs) async {
@@ -91,7 +96,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   //TODO: add preflight parameter
   void _programButtonListener(index, PostMenuArgs postMenuArgs) async {
-    if (index != _current_program_index) {
+    if (index != _currentProgram) {
       try {
         var args = RunProgramArgs();
         args.hash = postMenuArgs.hash;
@@ -99,10 +104,10 @@ class _EditPostMenuState extends State<EditPostMenu> {
         args.preflight = false; //TODO: use preflight trigger
         await postMenuArgs.sessionData.client.runProgram(args);
         setState(() {
-          if (_current_program_index != -1)
-            _checkboxList[_current_program_index ?? 1] = false;
+          if (_currentProgram != -1)
+            _checkboxList[_currentProgram ?? 1] = false;
           _checkboxList[index] = true;
-          _current_program_index = index;
+          _currentProgram = index;
         });
       } catch (e) {
         print(
@@ -117,9 +122,9 @@ class _EditPostMenuState extends State<EditPostMenu> {
         args.preflight = false; //TODO: use preflight trigger
         await postMenuArgs.sessionData.client.runProgram(args);
         setState(() {
-          if (_current_program_index != -1)
-            _checkboxList[_current_program_index ?? 1] = false;
-          _current_program_index = -1;
+          if (_currentProgram != -1)
+            _checkboxList[_currentProgram ?? 1] = false;
+          _currentProgram = -1;
         });
       } catch (e) {
         print(
@@ -134,35 +139,40 @@ class _EditPostMenuState extends State<EditPostMenu> {
     final PostMenuArgs postMenuArgs = ModalRoute.of(context).settings.arguments;
 
     final AppBar appBar = AppBar(
-      title: Text("Пост: ${postMenuArgs.postID} | Баланс: $_balance руб"),
+      title:
+          Text("Пост: ${postMenuArgs.postID} | Баланс: ${_balance ?? 0} руб"),
     );
 
     if (_firstLoad) {
-      _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
-      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 15), (timer) {
+      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 10), (timer) {
         _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
       });
 
       if (postMenuArgs.buttonPrograms != null &&
           postMenuArgs.buttonPrograms.length > 0) {
-        _buttonNames = List();
+        _buttonNames = Map();
         for (int i = 0; i < postMenuArgs.buttonPrograms.length; i++) {
           try {
-            _buttonNames.add(postMenuArgs.programs
-                .where((element) =>
-                    element.id == postMenuArgs.buttonPrograms[i].programID)
-                .first
-                .name);
+            _buttonNames[postMenuArgs.buttonPrograms[i].buttonID - 1] =
+                postMenuArgs
+                        .programs
+                        .where((element) =>
+                            element.id ==
+                            postMenuArgs.buttonPrograms[i].programID)
+                        .first
+                        .name ??
+                    "NOT FOUND";
           } catch (e) {
-            _buttonNames.add("NOT FOUND");
+            _buttonNames[i] = "NOT FOUND";
           }
         }
         //_buttonNames = postMenuArgs.programs.map((e) => e.name ?? "").toList();
         _checkboxList = List.filled(_buttonNames.length, false);
-        _current_program_index = postMenuArgs.programs.indexWhere((element) =>
-            (element.id ?? 1) == (postMenuArgs.currentProgramID ?? 1));
-        if (_current_program_index != -1)
-          _checkboxList[_current_program_index] = true;
+        _currentProgram = postMenuArgs.programs.indexWhere(
+          (element) =>
+              (element.id ?? -1) == (postMenuArgs.currentProgramID ?? -1),
+        );
+        if (_currentProgram != -1) _checkboxList[_currentProgram] = true;
       }
       _firstLoad = false;
     }
@@ -177,22 +187,24 @@ class _EditPostMenuState extends State<EditPostMenu> {
     }
 
     return WillPopScope(
-        onWillPop: () async {
-          Navigator.pop(context, _current_program_index);
-          return false;
-        },
-        child: Scaffold(
-          key: _scaffoldKey,
-          appBar: appBar,
-          body: OrientationBuilder(
-            builder: (context, orientation) {
-              return new SizedBox(
-                  height: screenH - appBar.preferredSize.height,
-                  width: screenW,
-                  child: _getMenu(screenH > screenW, screenW, postMenuArgs));
-            },
-          ),
-        ));
+      onWillPop: () async {
+        Navigator.pop(context, _currentProgram);
+        return false;
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: appBar,
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            return new SizedBox(
+              height: screenH - appBar.preferredSize.height,
+              width: screenW,
+              child: _getMenu(screenH > screenW, screenW, postMenuArgs),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   Widget _getMenu(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
@@ -215,12 +227,13 @@ class _EditPostMenuState extends State<EditPostMenu> {
       );
     } else {
       return new FittedBox(
-          fit: BoxFit.fill,
-          child: Row(children: [
-            _getMainColumn(isPortrait, screenW, postMenuArgs),
-            _getButtonsColumn(isPortrait, screenW, postMenuArgs),
-            _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)
-          ]));
+        fit: BoxFit.fill,
+        child: Row(children: [
+          _getMainColumn(isPortrait, screenW, postMenuArgs),
+          _getButtonsColumn(isPortrait, screenW, postMenuArgs),
+          _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)
+        ]),
+      );
     }
   }
 
@@ -242,7 +255,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 fit: BoxFit.fitHeight,
                 child: Padding(
                   padding: EdgeInsets.all(2),
-                  child: Text("$_service_balance"),
+                  child: Text("$_serviceBalance"),
                 ),
               ),
               decoration: BoxDecoration(
@@ -274,7 +287,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
               //             setState(() {});
               //           },
               //         ),
-              //       )),
+              //       ),),
               // ),
               SizedBox(
                 height: 50,
@@ -291,19 +304,20 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 height: 50,
                 width: isPortrait ? 50 : (screenW / 3 - 20) / 6,
                 child: Align(
-                    alignment: Alignment.center,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: IconButton(
-                        iconSize: 75,
-                        icon: Icon(Icons.add_circle_outline),
-                        color: Colors.lightGreen,
-                        splashColor: Colors.lightGreenAccent,
-                        onPressed: () {
-                          _addServiceMoney(postMenuArgs);
-                        },
-                      ),
-                    )),
+                  alignment: Alignment.center,
+                  child: FittedBox(
+                    fit: BoxFit.fill,
+                    child: IconButton(
+                      iconSize: 75,
+                      icon: Icon(Icons.add_circle_outline),
+                      color: Colors.lightGreen,
+                      splashColor: Colors.lightGreenAccent,
+                      onPressed: () {
+                        _addServiceMoney(postMenuArgs);
+                      },
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -326,54 +340,57 @@ class _EditPostMenuState extends State<EditPostMenu> {
               ),
               onPressed: () {
                 showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          title: Text("Инакссировать?"),
-                          content: Text("Вы уверены?"),
-                          actionsPadding: EdgeInsets.all(10),
-                          actions: [
-                            RaisedButton(
-                              color: Colors.lightGreen,
-                              textColor: Colors.white,
-                              disabledColor: Colors.grey,
-                              disabledTextColor: Colors.black,
-                              onPressed: () async {
-                                try {
-                                  var args = SaveCollectionArgs();
-                                  args.id = postMenuArgs.postID;
-                                  var res = await postMenuArgs
-                                      .sessionData.client
-                                      .saveCollection(args);
-                                } on ApiException catch (e) {
-                                  if (e.code != 404) {
-                                    print(
-                                        "Exception when calling DefaultApi->/save-collection: $e\n");
-                                    showErrorSnackBar(
-                                        _scaffoldKey, _isSnackBarActive);
-                                  }
-                                } catch (e) {
-                                  if (!(e is ApiException)) {
-                                    print("Other Exception: $e\n");
-                                  }
-                                }
-                                _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                    content: Text("Пост проинкассирован")));
-                                Navigator.pop(context);
-                              },
-                              child: Text("Да"),
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text("Инакссировать?"),
+                    content: Text("Вы уверены?"),
+                    actionsPadding: EdgeInsets.all(10),
+                    actions: [
+                      RaisedButton(
+                        color: Colors.lightGreen,
+                        textColor: Colors.white,
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.black,
+                        onPressed: () async {
+                          try {
+                            var args = SaveCollectionArgs();
+                            args.id = postMenuArgs.postID;
+                            var res = await postMenuArgs.sessionData.client
+                                .saveCollection(args);
+                          } on ApiException catch (e) {
+                            if (e.code != 404) {
+                              print(
+                                  "Exception when calling DefaultApi->/save-collection: $e\n");
+                              showErrorSnackBar(
+                                  _scaffoldKey, _isSnackBarActive);
+                            }
+                          } catch (e) {
+                            if (!(e is ApiException)) {
+                              print("Other Exception: $e\n");
+                            }
+                          }
+                          _scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text("Пост проинкассирован"),
                             ),
-                            RaisedButton(
-                              color: Colors.white,
-                              textColor: Colors.black,
-                              disabledColor: Colors.grey,
-                              disabledTextColor: Colors.black,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("Нет"),
-                            )
-                          ],
-                        ));
+                          );
+                          Navigator.pop(context);
+                        },
+                        child: Text("Да"),
+                      ),
+                      RaisedButton(
+                        color: Colors.white,
+                        textColor: Colors.black,
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.black,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Нет"),
+                      )
+                    ],
+                  ),
+                );
               },
             ),
           ),
@@ -415,15 +432,15 @@ class _EditPostMenuState extends State<EditPostMenu> {
   Widget _getButtonsColumn(
       bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
-      children:
-          List.generate(postMenuArgs.buttonPrograms?.length ?? 0, (index) {
+      children: List.generate(6, (index) {
         return Padding(
-            padding: EdgeInsets.all(10),
-            child: SizedBox(
-              height: 50,
-              width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-              child: _getListButton(index, postMenuArgs),
-            ));
+          padding: EdgeInsets.all(10),
+          child: SizedBox(
+            height: 50,
+            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+            child: _getListButton(index, postMenuArgs),
+          ),
+        );
       }),
     );
   }
@@ -431,15 +448,15 @@ class _EditPostMenuState extends State<EditPostMenu> {
   Widget _getCheckBoxColumn(
       bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
-      children:
-          List.generate(postMenuArgs.buttonPrograms?.length ?? 0, (index) {
+      children: List.generate(6, (index) {
         return Padding(
-            padding: EdgeInsets.all(10),
-            child: SizedBox(
-              height: 50,
-              width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-              child: _getCheckBox(index, postMenuArgs),
-            ));
+          padding: EdgeInsets.all(10),
+          child: SizedBox(
+            height: 50,
+            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+            child: _getCheckBox(index, postMenuArgs),
+          ),
+        );
       }),
     );
   }
@@ -453,7 +470,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       ),
       value: index < _checkboxList.length ? _checkboxList[index] : false,
       onChanged: (newValue) async {
-        _programButtonListener(index, postMenuArgs);
+        //_programButtonListener(index, postMenuArgs);
       },
     );
   }
@@ -469,10 +486,10 @@ class _EditPostMenuState extends State<EditPostMenu> {
       disabledTextColor: Colors.black,
       splashColor: Colors.lightGreenAccent,
       onPressed: () async {
-        _programButtonListener(index, postMenuArgs);
+        //_programButtonListener(index, postMenuArgs);
       },
       child: Text(
-        "${index < _buttonNames.length ? _buttonNames[index] : ""}",
+        _buttonNames[index] ?? " ",
         style: TextStyle(fontSize: 15),
       ),
     );
