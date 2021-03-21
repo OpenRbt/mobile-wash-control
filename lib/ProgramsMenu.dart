@@ -27,7 +27,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
       setState(() {});
     } catch (e) {
       print("Exception when calling GetData in ProgramsMenu: $e\n");
-      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -108,7 +108,6 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                     ),
                   ),
                   Column(
-                    //children: buildChildren(sessionData, screenW, screenH),),
                     children: programsTable(sessionData, screenW, screenH),
                   ),
                 ])

@@ -20,8 +20,12 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
 
   StationReport _total = StationReport();
 
-  DateTime _startDate = DateTime.now().add(new Duration(days: -31),);
-  DateTime _endDate = DateTime.now().add(new Duration(days: 1, seconds: -1),);
+  DateTime _startDate = DateTime.now().add(
+    new Duration(days: -31),
+  );
+  DateTime _endDate = DateTime.now().add(
+    new Duration(days: 1, seconds: -1),
+  );
 
   void _GetStatistics(SessionData sessionData) async {
     if (_updating) {
@@ -37,23 +41,27 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
           args.id = i + 1;
           args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
           args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
-          reportsTmp.add(sessionData.client.stationReportDates(args),);
+          reportsTmp.add(
+            sessionData.client.stationReportDates(args),
+          );
         } else {
           var args = StationReportCurrentMoneyArgs();
           args.id = i + 1;
-          reportsTmp.add(sessionData.client.stationReportCurrentMoney(args),);
+          reportsTmp.add(
+            sessionData.client.stationReportCurrentMoney(args),
+          );
         }
       } on ApiException catch (e) {
         if (e.code != 404) {
           print(
               "Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+              "Произошла ошибка при запросе к api", Colors.red);
         } else {}
       } catch (e) {
         if (!(e is ApiException)) {
           print("Other Exception: $e\n");
         }
-        //showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
       }
     }
 
@@ -64,7 +72,8 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
         if (e.code != 404) {
           print(
               "Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+              "Произошла ошибка при запросе к api", Colors.red);
         } else {
           var tmp = StationReport();
           tmp.moneyReport = MoneyReport();
@@ -79,7 +88,6 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
         if (!(e is ApiException)) {
           print("Other Exception: $e\n");
         }
-        //showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
       }
     }
     print("Recieved reports: ${_reports.length}");
@@ -277,87 +285,92 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                         'ср. чек'
                       ])
                     ]
-                      ..addAll(List.generate(_reports.length, (index) {
-                        return createTableRow([
-                          _reports.keys.elementAt(index),
-                          (_reports.values
-                                      .elementAt(index)
-                                      .moneyReport
-                                      .banknotes ??
-                                  0) +
-                              (_reports.values
-                                      .elementAt(index)
-                                      .moneyReport
-                                      .coins ??
-                                  0),
-                          _reports.values
-                                  .elementAt(index)
-                                  .moneyReport
-                                  .electronical ??
-                              0,
-                          _reports.values
-                                  .elementAt(index)
-                                  .moneyReport
-                                  .service ??
-                              0,
-                          _reports.values
-                                  .elementAt(index)
-                                  .moneyReport
-                                  .carsTotal ??
-                              0,
-                          (_reports.values
-                                          .elementAt(index)
-                                          .moneyReport
-                                          .carsTotal !=
-                                      null &&
-                                  _reports.values
-                                          .elementAt(index)
-                                          .moneyReport
-                                          .carsTotal >
-                                      0)
-                              ? ((((_reports.values
-                                                  .elementAt(index)
-                                                  .moneyReport
-                                                  .banknotes ??
-                                              0) +
-                                          (_reports.values
-                                                  .elementAt(index)
-                                                  .moneyReport
-                                                  .coins ??
-                                              0) +
-                                          (_reports.values
-                                                  .elementAt(index)
-                                                  .moneyReport
-                                                  .electronical ??
-                                              0) +
-                                          (_reports.values
-                                                  .elementAt(index)
-                                                  .moneyReport
-                                                  .service ??
-                                              0)) /
-                                      _reports.values
-                                          .elementAt(index)
-                                          .moneyReport
-                                          .carsTotal))
+                      ..addAll(
+                        List.generate(_reports.length, (index) {
+                          return createTableRow([
+                            _reports.keys.elementAt(index),
+                            (_reports.values
+                                        .elementAt(index)
+                                        .moneyReport
+                                        .banknotes ??
+                                    0) +
+                                (_reports.values
+                                        .elementAt(index)
+                                        .moneyReport
+                                        .coins ??
+                                    0),
+                            _reports.values
+                                    .elementAt(index)
+                                    .moneyReport
+                                    .electronical ??
+                                0,
+                            _reports.values
+                                    .elementAt(index)
+                                    .moneyReport
+                                    .service ??
+                                0,
+                            _reports.values
+                                    .elementAt(index)
+                                    .moneyReport
+                                    .carsTotal ??
+                                0,
+                            (_reports.values
+                                            .elementAt(index)
+                                            .moneyReport
+                                            .carsTotal !=
+                                        null &&
+                                    _reports.values
+                                            .elementAt(index)
+                                            .moneyReport
+                                            .carsTotal >
+                                        0)
+                                ? ((((_reports.values
+                                                    .elementAt(index)
+                                                    .moneyReport
+                                                    .banknotes ??
+                                                0) +
+                                            (_reports.values
+                                                    .elementAt(index)
+                                                    .moneyReport
+                                                    .coins ??
+                                                0) +
+                                            (_reports.values
+                                                    .elementAt(index)
+                                                    .moneyReport
+                                                    .electronical ??
+                                                0) +
+                                            (_reports.values
+                                                    .elementAt(index)
+                                                    .moneyReport
+                                                    .service ??
+                                                0)) /
+                                        _reports.values
+                                            .elementAt(index)
+                                            .moneyReport
+                                            .carsTotal))
+                                    .toStringAsFixed(2)
+                                : 0
+                          ]);
+                        }),
+                      )
+                      ..add(
+                        createTableRow([
+                          "Итого",
+                          _total.moneyReport.banknotes +
+                              _total.moneyReport.coins,
+                          _total.moneyReport.electronical,
+                          _total.moneyReport.service,
+                          _total.moneyReport.carsTotal,
+                          _total.moneyReport.carsTotal > 0
+                              ? ((_total.moneyReport.banknotes +
+                                          _total.moneyReport.coins +
+                                          _total.moneyReport.electronical +
+                                          _total.moneyReport.service) /
+                                      _total.moneyReport.carsTotal)
                                   .toStringAsFixed(2)
-                              : 0
-                        ]);
-                      }),)
-                      ..add(createTableRow([
-                        "Итого",
-                        _total.moneyReport.banknotes + _total.moneyReport.coins,
-                        _total.moneyReport.electronical,
-                        _total.moneyReport.service,
-                        _total.moneyReport.carsTotal,
-                        _total.moneyReport.carsTotal > 0
-                            ? ((_total.moneyReport.banknotes +
-                                        _total.moneyReport.coins +
-                                        _total.moneyReport.electronical +
-                                        _total.moneyReport.service) /
-                                    _total.moneyReport.carsTotal)
-                                .toStringAsFixed(2)
-                            : 0,
-                      ]),),
+                              : 0,
+                        ]),
+                      ),
                   ),
                   SizedBox(height: 10),
                   Center(
@@ -394,7 +407,9 @@ Widget createMoto(int number) {
         border: Border.all(color: Colors.black),
       ),
       child: Center(
-        child: Text('пост ' + number.toString(),),
+        child: Text(
+          'пост ' + number.toString(),
+        ),
       ),
     ),
     Container(

@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
       }
     } catch (e) {
       print("Exception when calling DefaultApi->Status in HomePage: $e\n");
-      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
     setState(() {});
   }
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
       );
     } catch (e) {
       print("Exception when calling DefaultApi->Status in HomePage: $e\n");
-      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
     setState(() {});
   }
@@ -219,45 +219,6 @@ class _HomePageState extends State<HomePage> {
                                     ? Colors.lightGreenAccent
                                     : Colors.white,
                                 onPressed: () {},
-                                //   () async {
-                                //   if (btnIndex < (_programs?.length ?? 0)) {
-                                //     if (btnIndex != activeProgramIndex) {
-                                //       try {
-                                //         var args = RunProgramArgs();
-                                //         args.hash =
-                                //             _homePageData[index].hash;
-                                //         args.programID =
-                                //             _programs[btnIndex].id ?? 1;
-                                //         await sessionData.client
-                                //             .runProgram(args);
-                                //         setState(() {
-                                //           _homePageData[index]
-                                //                   .currentProgramID =
-                                //               _programs[btnIndex].id ?? 1;
-                                //         });
-                                //       } catch (e) {
-                                //         print(
-                                //             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-                                //       }
-                                //     } else {
-                                //       try {
-                                //         var args = RunProgramArgs();
-                                //         args.hash =
-                                //             _homePageData[index].hash;
-                                //         args.programID = -1;
-                                //         await sessionData.client
-                                //             .runProgram(args);
-                                //         setState(() {
-                                //           _homePageData[index]
-                                //               .currentProgramID = -1;
-                                //         });
-                                //       } catch (e) {
-                                //         print(
-                                //             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-                                //       }
-                                //     }
-                                //   }
-                                // },
                                 child: Text(_stationLabels[index + 1] != null
                                     ? (_stationLabels[index + 1][btnIndex] ??
                                         "")

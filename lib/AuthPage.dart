@@ -37,16 +37,18 @@ class _AuthPageState extends State<AuthPage> {
       _sessionData.client.apiClient.basePath = _host;
       _sessionData.client.apiClient.addDefaultHeader("Pin", _currentPin);
       var res = await _sessionData.client.getUser();
-      if (res != null) {
-        _loadPage();
-      } else {
-        showErrorSnackBar(_scaffoldKey, _isSnackBarActive,
-            text: 'Введены неверные данные');
+      _loadPage();
+    } on ApiException catch (e) {
+      if (e.code == 401) {
+        showInfoSnackBar(
+            _scaffoldKey, _isSnackBarActive, "Неверные данные", Colors.red);
       }
-      print(res);
     } catch (e) {
+      if (!(e is ApiException)) {
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Невозможно авторизоваться", Colors.red);
+      }
       print("Exception when calling DefaultApi->/user: $e\n");
-      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
   }
 
@@ -86,7 +88,6 @@ class _AuthPageState extends State<AuthPage> {
                         child: Center(
                           child: Text(
                             _toDisplay(),
-                            // child: Text(_toDisplay(_displayedSymbols),
                             style: TextStyle(fontSize: 40),
                           ),
                         ),

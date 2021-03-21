@@ -62,7 +62,6 @@ class _EditPostMenuState extends State<EditPostMenu> {
       var args = StationReportCurrentMoneyArgs();
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
-      // _balance = res.moneyReport.coins + res.moneyReport.banknotes;
       _serviceBalance = res.moneyReport.service;
       if (!mounted) {
         return;
@@ -71,13 +70,12 @@ class _EditPostMenuState extends State<EditPostMenu> {
       if (e.code != 404) {
         print(
             "Exception when calling DefaultApi->/station-report-current-money: $e\n");
-        showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
         print("Other Exception: $e\n");
       }
-      //showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
     }
     setState(() {});
   }
@@ -90,7 +88,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
     } catch (e) {
       print("Exception when calling DefaultApi->/add-service-amount: $e\n");
-      showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -112,7 +110,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       } catch (e) {
         print(
             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-        showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       }
     } else {
       try {
@@ -129,7 +127,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       } catch (e) {
         print(
             "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-        showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       }
     }
   }
@@ -166,7 +164,6 @@ class _EditPostMenuState extends State<EditPostMenu> {
             _buttonNames[i] = "NOT FOUND";
           }
         }
-        //_buttonNames = postMenuArgs.programs.map((e) => e.name ?? "").toList();
         _checkboxList = List.filled(_buttonNames.length, false);
         _currentProgram = postMenuArgs.programs.indexWhere(
           (element) =>
@@ -271,24 +268,6 @@ class _EditPostMenuState extends State<EditPostMenu> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // SizedBox(
-              //   height: 50,
-              //   width: isPortrait ? 50 : (screenW / 3 - 20) / 6,
-              //   child: Align(
-              //       alignment: Alignment.center,
-              //       child: FittedBox(
-              //         fit: BoxFit.fill,
-              //         child: IconButton(
-              //           iconSize: 75,
-              //           icon: Icon(Icons.remove_circle_outline),
-              //           color: Colors.lightGreen,
-              //           splashColor: Colors.lightGreenAccent,
-              //           onPressed: () {
-              //             setState(() {});
-              //           },
-              //         ),
-              //       ),),
-              // ),
               SizedBox(
                 height: 50,
                 width: isPortrait ? 150 : (screenW / 3 - 20) / 6 * 4,
@@ -358,22 +337,19 @@ class _EditPostMenuState extends State<EditPostMenu> {
                             var res = await postMenuArgs.sessionData.client
                                 .saveCollection(args);
                           } on ApiException catch (e) {
-                            if (e.code != 404) {
+                            if (e.code == 401) {
                               print(
                                   "Exception when calling DefaultApi->/save-collection: $e\n");
-                              showErrorSnackBar(
-                                  _scaffoldKey, _isSnackBarActive);
+                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Нет доступа", Colors.red);
+                            } else{
+                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive,  "Произошла ошибка при запросе к api", Colors.red);
                             }
                           } catch (e) {
                             if (!(e is ApiException)) {
                               print("Other Exception: $e\n");
                             }
                           }
-                          _scaffoldKey.currentState.showSnackBar(
-                            SnackBar(
-                              content: Text("Пост проинкассирован"),
-                            ),
-                          );
+                          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пост проинкассирован", Colors.green);
                           Navigator.pop(context);
                         },
                         child: Text("Да"),
@@ -419,7 +395,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 } catch (e) {
                   print(
                       "Exception when calling DefaultApi->/open-station: $e\n");
-                  showErrorSnackBar(_scaffoldKey, _isSnackBarActive);
+                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
                 }
               },
             ),
@@ -478,9 +454,6 @@ class _EditPostMenuState extends State<EditPostMenu> {
   Widget _getListButton(int index, PostMenuArgs postMenuArgs) {
     return new RaisedButton(
       color: Colors.white10,
-      // color: _current_program_index  == index
-      //     ? Colors.lightGreen
-      //     : Colors.white10,
       textColor: Colors.white,
       disabledColor: Colors.grey,
       disabledTextColor: Colors.black,

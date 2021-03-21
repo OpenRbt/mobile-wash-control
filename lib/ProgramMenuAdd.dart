@@ -9,6 +9,9 @@ class ProgramMenuAdd extends StatefulWidget {
 }
 
 class _ProgramMenuAddState extends State<ProgramMenuAdd> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
+
   final int _maxPercent = 100;
   final int _maxMotor = 150;
   final int _relayCount = 11;
@@ -188,11 +191,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
 
       print(args);
       var res = await sessionData.client.setProgram(args);
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Программа добавлена"),
-        ),
-      );
+      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Программа добавлена", Colors.green);
 
       for (var field in _relays) {
         field.text = "";
@@ -210,11 +209,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
         field.text = "";
       }
     } catch (e) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Произошла ошибка при сохранении"),
-        ),
-      );
+      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Не удалось добавить программу", Colors.red);
     }
     setState(() {});
     _inUpdate = false;
@@ -231,6 +226,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: appBar,
+      key: _scaffoldKey,
       body: OrientationBuilder(
         builder: (context, orientation) {
           return SizedBox(

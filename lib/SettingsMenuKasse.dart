@@ -9,6 +9,8 @@ class SettingsMenuKasse extends StatefulWidget {
 }
 
 class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
   bool _inUpdate = false;
   bool _firstLoad = true;
 
@@ -68,20 +70,10 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
       args.cashierINN = _inputControllers[2].value.text;
 
       var res = await sessionData.client.setKasse(args);
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Настройки кассы успешно сохранены"),
-        ),
-      );
+      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Настройки кассы сохрианены", Colors.green);
     } catch (e) {
       print("Exception when calling DefaultApi->set-kasse: $e\n");
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Произошла ошибка при сохранении'),
-          backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 2),
-        ),
-      );
+      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Не удалось сохранить настройки кассы", Colors.red);
     }
     _inUpdate = false;
   }
@@ -103,6 +95,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
 
     return Scaffold(
       appBar: appBar,
+      key: _scaffoldKey,
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new SizedBox(

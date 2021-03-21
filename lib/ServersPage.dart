@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/client/api.dart';
 
 class ServersPage extends StatelessWidget {
   final List<String> servers;
   List<bool> serversValid;
-  var _client = DefaultApi();
 
   ServersPage({Key key, @required this.servers, @required this.serversValid})
       : super(key: key);

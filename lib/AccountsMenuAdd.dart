@@ -9,6 +9,9 @@ class AccountsMenuAdd extends StatefulWidget {
 }
 
 class _AccountsMenuAddState extends State<AccountsMenuAdd> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
+
   bool _inUpdate = false;
   List<TextEditingController> _inputControllers;
   List<bool> _inputTriggers = List.filled(3, false);
@@ -90,9 +93,8 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
       args.isOperator = _inputTriggers[1];
       args.isEngineer = _inputTriggers[2];
       var res = await sessionData.client.createUser(args);
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Пользователь добавлен"),
-      ));
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пользователь добавлен",
+          Colors.green);
 
       for (var field in _inputControllers) {
         field.text = "";
@@ -101,11 +103,23 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
       for (var field in _inputTriggers) {
         field = false;
       }
+    } on ApiException catch (e) {
+      if (e.code == 403) {
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Недостаточно прав",
+            Colors.orange);
+      } else if (e.code == 409) {
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Невозможно добавить пользователя", Colors.orange);
+      } else {
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Ошибка при запросе к апи", Colors.red);
+      }
     } catch (e) {
-      print("Exception when calling DefaultApi->User(put): $e\n");
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Произошла ошибка при добавлении"),
-      ));
+      if (!(e is ApiException)) {
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Не удалось добавить пользователя", Colors.red);
+      }
+      print("Exception when calling DefaultApi->User(post): $e\n");
     }
     _inUpdate = false;
     setState(() {});
@@ -125,6 +139,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: appBar,
+      key: _scaffoldKey,
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new ListView(
@@ -430,7 +445,6 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                           ? null
                           : () {
                               _addUser(sessionData, context);
-                              //Navigator.pop(context, true);
                             },
                       child: Text("Сохранить"),
                     ),

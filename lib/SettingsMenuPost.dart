@@ -17,6 +17,9 @@ class SettingsMenuPostArgs {
 }
 
 class _SettingsMenuPostState extends State<SettingsMenuPost> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
+
   _SettingsMenuPostState() : super();
   bool _firstLoad = true;
   List<String> _readerValues = ["NOT_USED", "VENDOTEK", "PAYMENT_WORLD"];
@@ -83,14 +86,12 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.preflightSec = int.tryParse(_inputControllers[4].value.text) ?? 0;
 
       var res = await settingsMenuPostArgs.sessionData.client.setStation(args);
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Настройки станции сохранены"),
-      ));
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Настройки поста сохранены", Colors.green);
     } catch (e) {
       print("Exception when calling DefaultApi->/set-station: $e\n");
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Произошла ошибка при сохранении"),
-      ));
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Не удалось сохранить настройки поста", Colors.red);
     }
   }
 
@@ -128,14 +129,12 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
           : " ";
       var res = await settingsMenuPostArgs.sessionData.client
           .setCardReaderConfig(args);
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Настройки кардридера сохранены"),
-      ));
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Настройки кардридера сохранены", Colors.green);
     } catch (e) {
       print("Exception when calling DefaultApi->/set-card-reader-config: $e\n");
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Произошла ошибка при сохранении"),
-      ));
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Не удалось сохранить настройки кардридера", Colors.red);
     }
   }
 
@@ -198,14 +197,12 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.buttons = buttons;
       var res =
           await settingsMenuPostArgs.sessionData.client.setStationButton(args);
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Настройки кнопок сохранены"),
-      ));
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Настройки кнопок сохранены", Colors.green);
     } catch (e) {
       print("Exception when calling DefaultApi->/set-station-button: $e\n");
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Произошла ошибка при сохранении"),
-      ));
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Не удалось сохранить кнопки", Colors.red);
     }
   }
 
@@ -234,6 +231,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
     return Scaffold(
       appBar: appBar,
+      key: _scaffoldKey,
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new SizedBox(
@@ -379,11 +377,6 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                             onChanged: (newValue) {
                               _relayboardValue = newValue;
                               setState(() {});
-                              // setState(() {
-                              //   if (newValue != true)
-                              //     showErrorDialog(context,
-                              //         "Поддерживаются только платы 2 ревизии");
-                              // });
                             },
                             items: List.generate(_dropdownRelayBoard.length,
                                 (index) {

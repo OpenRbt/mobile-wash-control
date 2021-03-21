@@ -17,6 +17,8 @@ class ProgramMenuEdit extends StatefulWidget {
 }
 
 class _ProgramMenuEditState extends State<ProgramMenuEdit> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
   final int _maxPercent = 100;
   final int _maxMotor = 150;
   final int _relayCount = 11;
@@ -220,17 +222,9 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       args.preflightRelays = relaysPreflight;
 
       var res = await programMenuEditArgs.sessionData.client.setProgram(args);
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Изменения программы успешно сохранены"),
-        ),
-      );
+      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Измененеия программы сохранены", Colors.green);
     } catch (e) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Произошла ошибка при сохранении"),
-        ),
-      );
+      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Не удалось изменить программу", Colors.red);
     }
     _inUpdate = false;
   }
@@ -252,6 +246,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: appBar,
+      key: _scaffoldKey,
       body: OrientationBuilder(
         builder: (context, orientation) {
           return SizedBox(

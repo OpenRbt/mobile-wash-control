@@ -10,6 +10,9 @@ class AccountsMenuEdit extends StatefulWidget {
 }
 
 class _AccountsMenuEditState extends State<AccountsMenuEdit> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _isSnackBarActive = ValueWrapper(false);
+
   bool _notLoaded = true;
   bool _inUpdate = false;
 
@@ -87,16 +90,25 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
       args.isOperator = _inputTriggers[1];
       args.isEngineer = _inputTriggers[2];
       var res = await sessionData.client.updateUser(args);
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Пользователь успешно изменен"),
-      ));
-    } catch (e) {
-      if (e is Exception) {
-        print("Exception when calling DefaultApi->User(put): $e\n");
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text("Произошла ошибка при сохранении"),
-        ));
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пользователь изменен",
+          Colors.green);
+    } on ApiException catch (e) {
+      if (e.code == 403) {
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Недостаточно прав",
+            Colors.orange);
+      } else if (e.code == 404) {
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Невозможно изменить пользователя", Colors.orange);
+      } else {
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Ошибка при запросе к апи", Colors.red);
       }
+    } catch (e) {
+      if (!(e is ApiException)) {
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Не удалось изменить пользователя", Colors.red);
+      }
+      print("Exception when calling DefaultApi->User(put): $e\n");
     }
     _inUpdate = false;
     setState(() {});
@@ -129,6 +141,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
     }
     return Scaffold(
       appBar: appBar,
+      key: _scaffoldKey,
       body: OrientationBuilder(
         builder: (context, orientation) {
           return new ListView(
