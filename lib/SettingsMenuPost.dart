@@ -152,7 +152,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
         _programIDs.add(
           res[i].id.toString(),
         );
-        _programNames.add(res[i].name);
+        _programNames.add(res[i].name ?? "no name");
       }
     } catch (e) {
       print("Exception when calling DefaultApi->/programs: $e\n");

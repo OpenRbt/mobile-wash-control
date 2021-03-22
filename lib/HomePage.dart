@@ -31,18 +31,20 @@ class _HomePageState extends State<HomePage> {
   List<HomePageData> _homePageData = List.generate(12, (index) {
     return HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
   });
+
   Timer _updateTimer;
   Timer _updateLabelsTimer;
 
   List<Program> _programs;
   Map<int, List<InlineResponse2001Buttons>> _stationProgramsButtons = Map();
-
   Map<int, Map<int, String>> _stationLabels = Map();
+
   void initState() {
     super.initState();
   }
 
   void _getLabels(SessionData sessionData) async {
+    bool redraw = false;
     try {
       if (!mounted) {
         return;
@@ -70,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                   String label = program.name.length > 0 ? program.name[0] : "";
                   if (program.name.length > 0 &&
                       program.name.lastIndexOf(" ") > 0 &&
-                      program.name.lastIndexOf(" ") < program.name.length) {
+                      program.name.lastIndexOf(" ") + 1 < program.name.length) {
                     label += program.name[program.name.lastIndexOf(" ") + 1];
                   }
                   labels[res.buttons[i].buttonID - 1] = label;
@@ -78,17 +80,20 @@ class _HomePageState extends State<HomePage> {
               }
             }
           }
+          redraw = _stationLabels[_homePageData[i].id] != labels;
           _stationLabels[_homePageData[i].id] = labels;
         } catch (e) {}
       }
     } catch (e) {
       print("Exception when calling DefaultApi->Status in HomePage: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Произошла ошибка при запросе к api", Colors.red);
     }
-    setState(() {});
+    if (redraw) setState(() {});
   }
 
   void _getStations(SessionData sessionData) async {
+    bool redraw = false;
     try {
       var res = await sessionData.client.status();
       res.stations =
@@ -96,7 +101,7 @@ class _HomePageState extends State<HomePage> {
       if (!mounted) {
         return;
       }
-      _homePageData = List.generate((res.stations.length), (index) {
+      var tmpHomepage = List.generate((res.stations.length), (index) {
         return HomePageData(
             res.stations[index].id ?? index + 1,
             res.stations[index].name ?? "Station ${index + 1}",
@@ -107,14 +112,17 @@ class _HomePageState extends State<HomePage> {
             res.stations[index].currentProgram ?? -1);
       });
 
-      _homePageData.sort(
+      tmpHomepage.sort(
         (a, b) => a.id.compareTo(b.id),
       );
+      redraw = _homePageData != tmpHomepage;
+      if (redraw) _homePageData = tmpHomepage;
     } catch (e) {
       print("Exception when calling DefaultApi->Status in HomePage: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Произошла ошибка при запросе к api", Colors.red);
     }
-    setState(() {});
+    if (redraw) setState(() {});
   }
 
   @override
@@ -210,15 +218,15 @@ class _HomePageState extends State<HomePage> {
                         physics: NeverScrollableScrollPhysics(),
                         crossAxisCount: 3,
                         children: List.generate(6, (btnIndex) {
-                          return SizedBox(
-                            child: Padding(
-                              padding: EdgeInsets.all(5),
-                              child: FlatButton(
-                                padding: EdgeInsets.zero,
+                          return Padding(
+                            padding: EdgeInsets.all(5),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
                                 color: (btnIndex + 1 == activeProgramIndex)
                                     ? Colors.lightGreenAccent
                                     : Colors.white,
-                                onPressed: () {},
+                              ),
+                              child: Center(
                                 child: Text(_stationLabels[index + 1] != null
                                     ? (_stationLabels[index + 1][btnIndex] ??
                                         "")
@@ -226,6 +234,22 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           );
+                          // return SizedBox(
+                          //   child: Padding(
+                          //     padding: EdgeInsets.all(5),
+                          //     child: FlatButton(
+                          //       padding: EdgeInsets.zero,
+                          //       color: (btnIndex + 1 == activeProgramIndex)
+                          //           ? Colors.lightGreenAccent
+                          //           : Colors.white,
+                          //       onPressed: () {},
+                          //       child: Text(_stationLabels[index + 1] != null
+                          //           ? (_stationLabels[index + 1][btnIndex] ??
+                          //               "")
+                          //           : ""),
+                          //     ),
+                          //   ),
+                          // );
                         }),
                       ),
                       decoration: BoxDecoration(

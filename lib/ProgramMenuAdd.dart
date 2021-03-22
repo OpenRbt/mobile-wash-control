@@ -13,7 +13,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
   var _isSnackBarActive = ValueWrapper(false);
 
   final int _maxPercent = 100;
-  final int _maxMotor = 150;
+  final int _maxMotor = 100;
   final int _relayCount = 11;
   final int _relayTime = 1000;
   bool _preflight = false;
@@ -191,7 +191,8 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
 
       print(args);
       var res = await sessionData.client.setProgram(args);
-      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Программа добавлена", Colors.green);
+      showInfoSnackBar(
+          _scaffoldKey, _isSnackBarActive, "Программа добавлена", Colors.green);
 
       for (var field in _relays) {
         field.text = "";
@@ -209,7 +210,8 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
         field.text = "";
       }
     } catch (e) {
-      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Не удалось добавить программу", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Не удалось добавить программу", Colors.red);
     }
     setState(() {});
     _inUpdate = false;

@@ -51,7 +51,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
               res.users[i].isOperator),
         );
       }
-
+      _accounts.sort((a,b) => a.login.compareTo(b.login));
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->/users: $e\n");

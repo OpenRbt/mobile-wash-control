@@ -20,7 +20,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
   final int _maxPercent = 100;
-  final int _maxMotor = 150;
+  final int _maxMotor = 100;
   final int _relayCount = 11;
   final int _relayTime = 1000;
 
@@ -222,9 +222,12 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       args.preflightRelays = relaysPreflight;
 
       var res = await programMenuEditArgs.sessionData.client.setProgram(args);
-      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Измененеия программы сохранены", Colors.green);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Измененеия программы сохранены", Colors.green);
     } catch (e) {
-      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Не удалось изменить программу", Colors.red);
+      print(e);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Не удалось изменить программу", Colors.red);
     }
     _inUpdate = false;
   }
