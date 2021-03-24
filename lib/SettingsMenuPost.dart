@@ -69,7 +69,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       _relayboardValue = res.relayBoard ?? "localGPIO";
       _inputControllers[2].text = res.name ?? "";
       _inputControllers[3].text = res.hash ?? "";
-      _inputControllers[4].text = res.preflightSec ?? "";
+      _inputControllers[4].text = res.preflightSec?.toString() ?? "";
     } catch (e) {
       print("Exception when calling DefaultApi->/station: $e\n");
     }

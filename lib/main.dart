@@ -154,6 +154,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(
+              height: 25,
+            ),
+            SizedBox(
               height: 75,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -197,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SizedBox(
-              height: screenH - appBar.preferredSize.height - 141 - 75,
+              height: screenH - appBar.preferredSize.height - 141 - 100,
               child: (_servers.length > 0 &&
                       _serversValid.length == _servers.length)
                   ? ListView.separated(

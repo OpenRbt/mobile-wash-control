@@ -443,6 +443,91 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 25,
+              ),
+              Center(
+                child: SizedBox(
+                  height: 50,
+                  width: screenW / 3 * 2,
+                  child: RaisedButton(
+                    padding: EdgeInsets.all(5),
+                    color: Colors.red,
+                    textColor: Colors.white,
+                    disabledColor: Colors.grey,
+                    disabledTextColor: Colors.black,
+                    splashColor: Colors.redAccent,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text("Удалить пользователя?"),
+                          content: Text("Вы уверены?"),
+                          actionsPadding: EdgeInsets.all(10),
+                          actions: [
+                            RaisedButton(
+                              color: Colors.lightGreen,
+                              textColor: Colors.white,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              onPressed: () async {
+                                bool success = false;
+                                try {
+                                  var cur_user = await accountsMenuEditArgs
+                                      .sessionData.client
+                                      .getUser();
+
+                                  var args = DeleteUserArgs();
+                                  args.login = _inputControllers[0].value.text;
+
+                                  if (cur_user.login != accountsMenuEditArgs.targetUser.login) {
+                                    var res = await accountsMenuEditArgs
+                                        .sessionData.client
+                                        .deleteUser(args);
+                                    success = true;
+                                  } else {
+                                    showInfoSnackBar(
+                                        _scaffoldKey,
+                                        _isSnackBarActive,
+                                        "Вы не можете удалить сами себя",
+                                        Colors.orange);
+                                  }
+                                } on ApiException catch (e) {
+                                  print(e);
+                                  showInfoSnackBar(
+                                      _scaffoldKey,
+                                      _isSnackBarActive,
+                                      "Произошла ошибка при запросе к api",
+                                      Colors.redAccent);
+                                } catch (e) {
+                                  print(e);
+                                  if (!(e is ApiException)) {
+                                    print("Other Exception: $e\n");
+                                  }
+                                }
+                                Navigator.pop(context);
+                                if (success) Navigator.of(context).pop();
+                              },
+                              child: Text("Удалить"),
+                            ),
+                            RaisedButton(
+                              color: Colors.white,
+                              textColor: Colors.black,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Отмена"),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                    child: Text("Удалить пользователя"),
+                  ),
+                ),
+              ),
             ],
           );
         },
