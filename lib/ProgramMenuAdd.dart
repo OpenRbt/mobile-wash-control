@@ -167,7 +167,8 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
       List<RelayConfig> relays = List();
       List<RelayConfig> relaysPreflight = List();
       for (int i = 0; i < _relayCount; i++) {
-        if (_relays[i].value.text.isNotEmpty) {
+        if (_relays[i].value.text.isNotEmpty &&
+            int.tryParse(_relays[i].value.text) != 0) {
           var tmp = RelayConfig();
           tmp.id = i + 1;
           tmp.timeon =
@@ -176,7 +177,9 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
           tmp.timeoff = _relayTime - tmp.timeon;
           relays.add(tmp);
         }
-        if (_preflight && _relaysPreflight[i].value.text.isNotEmpty) {
+        if (_preflight &&
+            _relaysPreflight[i].value.text.isNotEmpty &&
+            int.tryParse(_relaysPreflight[i].value.text) != 0) {
           var tmp = RelayConfig();
           tmp.id = i + 1;
           tmp.timeon = (_relayTime *
