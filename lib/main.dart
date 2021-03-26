@@ -90,51 +90,104 @@ class _MyHomePageState extends State<MyHomePage> {
     _servers = new List();
     _serversValid = new List();
 
-    int level = await Wifi.level;
-    String localIp = await Wifi.ip;
-    _localIP = localIp;
-    _scanIP = localIp.substring(
-      0,
-      localIp.lastIndexOf('.'),
-    );
-    _wifi = level > 0;
-    if (_wifi) {
-      List<String> _serversTMP = new List();
-      List<bool> _serversValidTMP = new List();
-      var subIPS = List.generate(256, (index) {
-        return "$index";
-      });
+    if (Platform.isLinux) {
+      List<NetworkInterface> interfaces =
+          await NetworkInterface.list(type: InternetAddressType.IPv4);
+      print(interfaces);
+      NetworkInterface target = interfaces.firstWhere((element) =>
+          element.name.contains("en") || element.name.contains("wlan"),orElse: () {return null;});
+      if (target != null) {
+        _localIP = target.addresses.first.address;
+        _scanIP = _localIP.substring(
+          0,
+          _localIP.lastIndexOf('.'),
+        );
+        List<String> _serversTMP = new List();
+        List<bool> _serversValidTMP = new List();
+        var subIPS = List.generate(256, (index) {
+          return "$index";
+        });
 
-      var client = HttpClient();
-      client.connectionTimeout = Duration(milliseconds: 100);
+        var client = HttpClient();
+        client.connectionTimeout = Duration(milliseconds: 100);
 
-      await Future.forEach(subIPS, (element) async {
-        print("Try to http://${_scanIP}.${element}:8020/ping");
-        try {
-          setState(() {
-            _pos++;
-          });
-          final request =
-              await client.get("${_scanIP}.${element}", 8020, "/ping");
-          final response = await request.close();
-          if (response.statusCode == 200) {
-            _serversTMP.add("${_scanIP}.${element}");
-          }
-        } catch (e) {}
-      }).then((value) {
-        _canScan = true;
-        _serversValidTMP = List.filled(_serversTMP.length, true); //TODO: remove
-        _servers = _serversTMP;
-        _serversValid = _serversValidTMP;
-        setState(() {});
-      });
+        await Future.forEach(subIPS, (element) async {
+          print("Try to http://${_scanIP}.${element}:8020/ping");
+          try {
+            setState(() {
+              _pos++;
+            });
+            final request =
+                await client.get("${_scanIP}.${element}", 8020, "/ping");
+            final response = await request.close();
+            if (response.statusCode == 200) {
+              _serversTMP.add("${_scanIP}.${element}");
+            }
+          } catch (e) {}
+        }).then((value) {
+          _canScan = true;
+          _serversValidTMP =
+              List.filled(_serversTMP.length, true); //TODO: remove
+          _servers = _serversTMP;
+          _serversValid = _serversValidTMP;
+          setState(() {});
+        });
 
-      client.close();
+        client.close();
+      } else {
+        setState(() {
+          _scanMSG = "Нет подключения к сети";
+          _canScan = true;
+        });
+      }
     } else {
-      setState(() {
-        _scanMSG = "Нет подключения к WiFi";
-        _canScan = true;
-      });
+      int level = await Wifi.level;
+      String localIp = await Wifi.ip;
+      _localIP = localIp;
+      _scanIP = localIp.substring(
+        0,
+        localIp.lastIndexOf('.'),
+      );
+      _wifi = level > 0;
+      if (_wifi) {
+        List<String> _serversTMP = new List();
+        List<bool> _serversValidTMP = new List();
+        var subIPS = List.generate(256, (index) {
+          return "$index";
+        });
+
+        var client = HttpClient();
+        client.connectionTimeout = Duration(milliseconds: 100);
+
+        await Future.forEach(subIPS, (element) async {
+          print("Try to http://${_scanIP}.${element}:8020/ping");
+          try {
+            setState(() {
+              _pos++;
+            });
+            final request =
+                await client.get("${_scanIP}.${element}", 8020, "/ping");
+            final response = await request.close();
+            if (response.statusCode == 200) {
+              _serversTMP.add("${_scanIP}.${element}");
+            }
+          } catch (e) {}
+        }).then((value) {
+          _canScan = true;
+          _serversValidTMP =
+              List.filled(_serversTMP.length, true); //TODO: remove
+          _servers = _serversTMP;
+          _serversValid = _serversValidTMP;
+          setState(() {});
+        });
+
+        client.close();
+      } else {
+        setState(() {
+          _scanMSG = "Нет подключения к WiFi";
+          _canScan = true;
+        });
+      }
     }
   }
 
