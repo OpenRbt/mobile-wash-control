@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'AccountsMenu.dart';
-import 'package:mobile_wash_control/CommonElements.dart';
-import "client/api.dart";
+import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import "package:mobile_wash_control/client/api.dart";
 
 class AccountsMenuEdit extends StatefulWidget {
   @override

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:io';
-import 'client/api.dart';
+import 'package:mobile_wash_control/client/api.dart';
 
-enum Pages { Main, Programs, Settings, Accounts, Statistics }
+enum Pages { Main, Programs, Settings, Accounts, Statistics, None }
 
 class SessionData {
   final DefaultApi client;

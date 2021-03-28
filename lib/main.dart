@@ -1,21 +1,23 @@
 import 'dart:core';
 import 'dart:io';
-import 'package:http/http.dart';
-import 'package:mobile_wash_control/AccountsMenuAdd.dart';
-import 'package:mobile_wash_control/AccountsMenuEdit.dart';
-import 'package:mobile_wash_control/ProgramMenuAdd.dart';
-import 'package:mobile_wash_control/ProgramMenuEdit.dart';
-import 'package:mobile_wash_control/SettingsMenuKasse.dart';
-import 'package:mobile_wash_control/SettingsMenuPost.dart';
-import 'package:mobile_wash_control/AccountsMenu.dart';
-import 'package:mobile_wash_control/AuthPage.dart';
-import 'package:mobile_wash_control/homePage.dart';
-import 'package:mobile_wash_control/PostMenuEdit.dart';
-import 'package:mobile_wash_control/PostsMenu.dart';
-import 'package:mobile_wash_control/ProgramsMenu.dart';
-import 'package:mobile_wash_control/ServersPage.dart';
-import 'package:mobile_wash_control/SettingsMenu.dart';
-import 'package:mobile_wash_control/StatisticsMenu.dart';
+import 'package:mobile_wash_control/desktop/DHomePage.dart';
+import 'package:mobile_wash_control/desktop/DViewPage.dart';
+import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
+import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
+import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/SettingsMenuKasse.dart';
+import 'package:mobile_wash_control/mobile/SettingsMenuPost.dart';
+import 'package:mobile_wash_control/mobile/AccountsMenu.dart';
+import 'package:mobile_wash_control/mobile/AuthPage.dart';
+import 'package:mobile_wash_control/mobile/HomePage.dart';
+import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/PostsMenu.dart';
+import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';
+import 'package:mobile_wash_control/mobile/ServersPage.dart';
+import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
+import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
+import 'package:mobile_wash_control/desktop/DAuthPage.dart';
 
 import 'package:wifi/wifi.dart';
 
@@ -56,7 +58,10 @@ class MyApp extends StatelessWidget {
         "/mobile/home/posts": (context) => PostsMenu(),
         "/mobile/home/accounts": (context) => AccountsMenu(),
         "/mobile/home/accounts/edit": (context) => AccountsMenuEdit(),
-        "/mobile/home/accounts/add": (context) => AccountsMenuAdd()
+        "/mobile/home/accounts/add": (context) => AccountsMenuAdd(),
+        "/desktop/auth": (context) => DAuthPage(),
+        "/desktop/view": (context) => DViewPage(),
+        "/desktop/home": (context) => DHomePage(),
       },
     );
   }
@@ -94,8 +99,12 @@ class _MyHomePageState extends State<MyHomePage> {
       List<NetworkInterface> interfaces =
           await NetworkInterface.list(type: InternetAddressType.IPv4);
       print(interfaces);
-      NetworkInterface target = interfaces.firstWhere((element) =>
-          element.name.contains("en") || element.name.contains("wlan"),orElse: () {return null;});
+      NetworkInterface target = interfaces.firstWhere(
+          (element) =>
+              element.name.contains("en") || element.name.contains("wlan"),
+          orElse: () {
+        return null;
+      });
       if (target != null) {
         _localIP = target.addresses.first.address;
         _scanIP = _localIP.substring(
@@ -284,10 +293,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           onTap: _serversValid[index]
                               ? () {
-                                  var args = AuthArgs(
-                                      "http://" + _servers[index] + ":8020");
-                                  Navigator.pushNamed(context, "/mobile/auth",
-                                      arguments: args);
+                                  if (Platform.isLinux) {
+                                    var args = DAuthArgs(
+                                        "http://" + _servers[index] + ":8020");
+                                    Navigator.pushNamed(
+                                        context, "/desktop/auth",
+                                        arguments: args);
+                                  } else {
+                                    var args = AuthArgs(
+                                        "http://" + _servers[index] + ":8020");
+                                    Navigator.pushNamed(context, "/mobile/auth",
+                                        arguments: args);
+                                  }
                                 }
                               : null,
                         );

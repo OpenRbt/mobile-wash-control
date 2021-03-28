@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/ProgramMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 class ProgramsMenu extends StatefulWidget {

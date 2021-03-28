@@ -1,32 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/mobile/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
-class ProgramMenuEditArgs {
-  final int programID;
-  final String programName;
-  final SessionData sessionData;
-
-  ProgramMenuEditArgs(this.programID, this.programName, this.sessionData);
-}
-
-class ProgramMenuEdit extends StatefulWidget {
+class ProgramMenuAdd extends StatefulWidget {
   @override
-  _ProgramMenuEditState createState() => _ProgramMenuEditState();
+  _ProgramMenuAddState createState() => _ProgramMenuAddState();
 }
 
-class _ProgramMenuEditState extends State<ProgramMenuEdit> {
+class _ProgramMenuAddState extends State<ProgramMenuAdd> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
+
   final int _maxPercent = 100;
   final int _maxMotor = 100;
   final int _relayCount = 11;
   final int _relayTime = 1000;
-
   bool _preflight = false;
   bool _inUpdate = false;
-  bool _firstLoad = true;
 
   List<TextEditingController> _program;
   List<TextEditingController> _relays;
@@ -150,45 +141,22 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
     disposeInputs();
   }
 
-  void getProgram(ProgramMenuEditArgs programMenuEditArgs) async {
-    try {
-      var args = ProgramsArgs();
-      args.programID = programMenuEditArgs.programID;
-      var res = await programMenuEditArgs.sessionData.client.programs(args);
-
-      _program[0].text = res[0].name;
-      _program[1].text = res[0].price.toString();
-
-      _motors[0].text = res[0].motorSpeedPercent.toString();
-      _motors[1].text = res[0].preflightMotorSpeedPercent.toString();
-
-      _preflight = res[0].preflightEnabled ?? false;
-
-      for (int i = 0; i < res[0].relays.length; i++) {
-        int id = res[0].relays[i].id - 1;
-        var timeon = res[0].relays[i].timeon ?? 0;
-        var timeoff = res[0].relays[i].timeoff ?? 0;
-        int percent = (100 * timeon / (timeon + timeoff)).round();
-        _relays[id].text = percent.toString();
-      }
-
-      for (int i = 0; i < res[0].preflightRelays.length; i++) {
-        int id = res[0].preflightRelays[i].id - 1;
-        var timeon = res[0].preflightRelays[i].timeon ?? 0;
-        var timeoff = res[0].preflightRelays[i].timeoff ?? 0;
-        int percent = (100 * timeon / (timeon + timeoff)).round();
-        _relaysPreflight[id].text = percent.toString();
-      }
-    } catch (e) {}
-    setState(() {});
-  }
-
-  void saveProgram(
-      ProgramMenuEditArgs programMenuEditArgs, BuildContext context) async {
+  void saveProgram(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
     try {
+      var argstmp = ProgramsArgs();
+      var tmp = await sessionData.client.programs(argstmp);
+      int maxID = 1;
+      if (tmp != null && tmp.isNotEmpty) {
+        tmp.sort(
+          (a, b) => a.id.compareTo(b.id),
+        );
+        maxID = tmp.last.id + 1;
+        print(maxID);
+      }
+
       var args = Program();
-      args.id = programMenuEditArgs.programID;
+      args.id = maxID;
       args.motorSpeedPercent = int.tryParse(_motors[0].value.text) ?? 0;
       args.name = _program[0].value.text;
       args.price = int.tryParse(_program[1].value.text) ?? 0;
@@ -224,29 +192,40 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       args.relays = relays;
       args.preflightRelays = relaysPreflight;
 
-      var res = await programMenuEditArgs.sessionData.client.setProgram(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Измененеия программы сохранены", Colors.green);
+      print(args);
+      var res = await sessionData.client.setProgram(args);
+      showInfoSnackBar(
+          _scaffoldKey, _isSnackBarActive, "Программа добавлена", Colors.green);
+
+      for (var field in _relays) {
+        field.text = "";
+      }
+
+      for (var field in _relaysPreflight) {
+        field.text = "";
+      }
+
+      for (var field in _program) {
+        field.text = "";
+      }
+
+      for (var field in _motors) {
+        field.text = "";
+      }
     } catch (e) {
-      print(e);
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Не удалось изменить программу", Colors.red);
+          "Не удалось добавить программу", Colors.red);
     }
+    setState(() {});
     _inUpdate = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final ProgramMenuEditArgs programMenuEditArgs =
-        ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
     final AppBar appBar = AppBar(
-      title: Text("Программа ${programMenuEditArgs.programName}"),
+      title: Text("Новая программа"),
     );
-
-    if (_firstLoad) {
-      getProgram(programMenuEditArgs);
-      _firstLoad = false;
-    }
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
@@ -328,11 +307,8 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                         title: Text(
                           'Прокачка',
                         ),
-                        value: _preflight,
-                        onChanged: (newValue) {
-                          _preflight = newValue;
-                          setState(() {});
-                        },
+                        value: false,
+                        onChanged: (newValue) {},
                       ),
                     ),
                   ],
@@ -610,9 +586,9 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                         onPressed: _inUpdate
                             ? null
                             : () {
-                                saveProgram(programMenuEditArgs, context);
+                                saveProgram(sessionData, context);
                               },
-                        child: Text(_inUpdate ? "Сохранение..." : "Сохранить"),
+                        child: Text("Сохранить"),
                       ),
                     ),
                     SizedBox(
@@ -627,7 +603,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                         onPressed: _inUpdate
                             ? null
                             : () {
-                                getProgram(programMenuEditArgs);
+                                Navigator.pop(context);
                               },
                         child: Text("Отменить"),
                       ),
