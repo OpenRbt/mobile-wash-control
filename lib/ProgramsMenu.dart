@@ -193,7 +193,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                   onPressed: () {
                     var args = ProgramMenuEditArgs(_programs[index].id,
                         _programs[index].name, sessionData);
-                    Navigator.pushNamed(context, "/home/programs/edit",
+                    Navigator.pushNamed(context, "/mobile/home/programs/edit",
                             arguments: args)
                         .then(
                       (value) => GetData(sessionData),
@@ -259,7 +259,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                 child: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
-                    Navigator.pushNamed(context, "/home/programs/add",
+                    Navigator.pushNamed(context, "/mobile/home/programs/add",
                             arguments: sessionData)
                         .then(
                       (value) => GetData(sessionData),

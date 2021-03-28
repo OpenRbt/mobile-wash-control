@@ -283,7 +283,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                         _availableHashes,
                                         sessionData);
                                     Navigator.pushNamed(
-                                            context, "/home/settings/post",
+                                            context, "/mobile/home/settings/post",
                                             arguments: args)
                                         .then((value) {
                                       getSettings(sessionData);
@@ -310,7 +310,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         padding: EdgeInsets.all(8.0),
                         child: Text("Настройки кассы"),
                         onPressed: () {
-                          Navigator.pushNamed(context, "/home/settings/kasse",
+                          Navigator.pushNamed(context, "/mobile/home/settings/kasse",
                               arguments: sessionData);
                         },
                       ),

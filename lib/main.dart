@@ -9,7 +9,7 @@ import 'package:mobile_wash_control/SettingsMenuKasse.dart';
 import 'package:mobile_wash_control/SettingsMenuPost.dart';
 import 'package:mobile_wash_control/AccountsMenu.dart';
 import 'package:mobile_wash_control/AuthPage.dart';
-import 'package:mobile_wash_control/HomePage.dart';
+import 'package:mobile_wash_control/homePage.dart';
 import 'package:mobile_wash_control/PostMenuEdit.dart';
 import 'package:mobile_wash_control/PostsMenu.dart';
 import 'package:mobile_wash_control/ProgramsMenu.dart';
@@ -38,25 +38,25 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/auth": (context) => AuthPage(),
+        "/mobile/auth": (context) => AuthPage(),
         "/": (context) => MyHomePage(title: "Главная страница"),
         "/testScan": (context) => ServersPage(
               servers: null,
               serversValid: [],
             ),
-        "/home": (context) => HomePage(),
-        "/home/editPost": (context) => EditPostMenu(),
-        "/home/programs": (context) => ProgramsMenu(),
-        "/home/programs/edit": (context) => ProgramMenuEdit(),
-        "/home/programs/add": (context) => ProgramMenuAdd(),
-        "/home/settings": (context) => SettingsMenu(),
-        "/home/settings/post": (context) => SettingsMenuPost(),
-        "/home/settings/kasse": (context) => SettingsMenuKasse(),
-        "/home/statistics": (context) => StatisticsMenu(),
-        "/home/posts": (context) => PostsMenu(),
-        "/home/accounts": (context) => AccountsMenu(),
-        "/home/accounts/edit": (context) => AccountsMenuEdit(),
-        "/home/accounts/add": (context) => AccountsMenuAdd()
+        "/mobile/home": (context) => HomePage(),
+        "/mobile/home/editPost": (context) => EditPostMenu(),
+        "/mobile/home/programs": (context) => ProgramsMenu(),
+        "/mobile/home/programs/edit": (context) => ProgramMenuEdit(),
+        "/mobile/home/programs/add": (context) => ProgramMenuAdd(),
+        "/mobile/home/settings": (context) => SettingsMenu(),
+        "/mobile/home/settings/post": (context) => SettingsMenuPost(),
+        "/mobile/home/settings/kasse": (context) => SettingsMenuKasse(),
+        "/mobile/home/statistics": (context) => StatisticsMenu(),
+        "/mobile/home/posts": (context) => PostsMenu(),
+        "/mobile/home/accounts": (context) => AccountsMenu(),
+        "/mobile/home/accounts/edit": (context) => AccountsMenuEdit(),
+        "/mobile/home/accounts/add": (context) => AccountsMenuAdd()
       },
     );
   }
@@ -286,7 +286,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ? () {
                                   var args = AuthArgs(
                                       "http://" + _servers[index] + ":8020");
-                                  Navigator.pushNamed(context, "/auth",
+                                  Navigator.pushNamed(context, "/mobile/auth",
                                       arguments: args);
                                 }
                               : null,

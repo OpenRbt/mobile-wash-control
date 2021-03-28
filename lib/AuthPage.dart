@@ -26,7 +26,7 @@ class _AuthPageState extends State<AuthPage> {
 
   void _loadPage() {
     SystemChrome.setPreferredOrientations([]);
-    Navigator.pushReplacementNamed(context, "/home", arguments: _sessionData);
+    Navigator.pushReplacementNamed(context, "/mobile/home", arguments: _sessionData);
   }
 
   void _authCheck() async {

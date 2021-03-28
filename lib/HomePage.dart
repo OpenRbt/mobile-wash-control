@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                                   sessionData);
                               _updateTimer.cancel();
                               _updateLabelsTimer.cancel();
-                              Navigator.pushNamed(context, "/home/editPost",
+                              Navigator.pushNamed(context, "/mobile/home/editPost",
                                       arguments: args)
                                   .then((value) {
                                 _getStations(sessionData);

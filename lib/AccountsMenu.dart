@@ -280,7 +280,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                     args.sessionData = sessionData;
                                     args.targetUser = _accounts[index];
                                     Navigator.pushNamed(
-                                            context, "/home/accounts/edit",
+                                            context, "/mobile/home/accounts/edit",
                                             arguments: args)
                                         .then(
                                       (value) => _getUsers(sessionData),
@@ -399,7 +399,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
                                   icon: Icon(Icons.add),
                                   onPressed: () {
                                     Navigator.pushNamed(
-                                            context, "/home/accounts/add",
+                                            context, "/mobile/home/accounts/add",
                                             arguments: sessionData)
                                         .then(
                                       (value) => _getUsers(sessionData),

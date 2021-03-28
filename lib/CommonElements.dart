@@ -23,11 +23,11 @@ Widget prepareDrawer(
   ];
 
   var routes = [
-    "/home",
-    "/home/programs",
-    "/home/settings",
-    "/home/accounts",
-    "/home/statistics",
+    "/mobile/home",
+    "/mobile/home/programs",
+    "/mobile/home/settings",
+    "/mobile/home/accounts",
+    "/mobile/home/statistics",
   ];
 
   var styles = new List.filled(
