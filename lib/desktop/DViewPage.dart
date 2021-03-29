@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/desktop/DHomePage.dart';
+import 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenu.dart';
 import 'package:mobile_wash_control/mobile/CommonElements.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
-import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
+import 'dart:io';
 
 class DViewPage extends StatefulWidget {
   @override
@@ -36,7 +37,7 @@ class _DViewPageState extends State<DViewPage> {
     Pages.Programs: ProgramsMenu(),
     Pages.Settings: SettingsMenu(),
     Pages.Accounts: AccountsMenu(),
-    Pages.Statistics: StatisticsMenu(),
+    Pages.Statistics: DStatisticsPage(),
     Pages.None: null
   };
 
@@ -65,11 +66,40 @@ class _DViewPageState extends State<DViewPage> {
                             : 16,
                       ),
                     ),
-                    onTap: () {
-                      setState(() {
-                        _currentPage = _pagesMap[_pagesNames[index]];
-                      });
-                    },
+                    onTap: (index < _pagesNames.length - 1)
+                        ? () {
+                            setState(() {
+                              _currentPage = _pagesMap[_pagesNames[index]];
+                            });
+                          }
+                        : () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("Выход"),
+                                content: Text("Выйти из приложения?"),
+                                actionsPadding: EdgeInsets.all(10),
+                                actions: [
+                                  RaisedButton(
+                                    onPressed: () {
+                                      exit(0);
+                                    },
+                                    child: Text("Да"),
+                                  ),
+                                  RaisedButton(
+                                    color: Colors.lightGreen,
+                                    textColor: Colors.white,
+                                    disabledColor: Colors.grey,
+                                    disabledTextColor: Colors.black,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Нет"),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
