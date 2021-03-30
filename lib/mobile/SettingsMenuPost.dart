@@ -20,12 +20,13 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
 
+  final int _maxButtons = 8;
   _SettingsMenuPostState() : super();
   bool _firstLoad = true;
   List<String> _readerValues = ["NOT_USED", "VENDOTEK", "PAYMENT_WORLD"];
   String _dropDownCardReader = "NOT_USED";
 
-  List<String> _dropDownPrograms = List.filled(7, "------------");
+  List<String> _dropDownPrograms;
   List<String> _programIDs = ["------------"];
   List<String> _programNames = ["------------"];
   List<TextEditingController> _inputControllers;
@@ -40,6 +41,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
     super.initState();
     //0-1 CardReader inputs
     //2-4 Post inputs
+    _dropDownPrograms = List.filled(_maxButtons, "------------");
     _inputControllers = List.generate(5, (index) {
       var controller = new TextEditingController();
       switch (index) {
@@ -186,7 +188,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       var args = SetStationButtonsArgs();
       args.stationID = settingsMenuPostArgs.stationID;
       List<InlineResponse2001Buttons> buttons = List();
-      for (int i = 0; i < 6; i++) {
+      for (int i = 0; i < _maxButtons; i++) {
         if (_dropDownPrograms[i] != _programIDs[0]) {
           var value = InlineResponse2001Buttons();
           value.programID = int.parse(_dropDownPrograms[i]);
