@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 class SettingsMenuPost extends StatefulWidget {
@@ -553,7 +553,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                   thickness: 3,
                 ),
                 Column(
-                  children: List.generate(7, (index) {
+                  children: List.generate(_maxButtons, (index) {
                     return Row(
                       children: [
                         SizedBox(

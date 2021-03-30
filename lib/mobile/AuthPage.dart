@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
@@ -21,7 +21,7 @@ class _AuthPageState extends State<AuthPage> {
   _AuthPageState() : super();
   final int _maxPinLength = 4;
   String _host;
-  var _sessionData;
+  SessionData _sessionData;
   String _currentPin = "";
 
   void _loadPage() {
@@ -31,7 +31,7 @@ class _AuthPageState extends State<AuthPage> {
 
   void _authCheck() async {
     try {
-      _sessionData = new SessionData(
+       _sessionData = new SessionData(
         DefaultApi(),
       );
       _sessionData.client.apiClient.basePath = _host;

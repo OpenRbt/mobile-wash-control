@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'dart:async';
 
@@ -32,6 +32,8 @@ class DEditPost extends StatelessWidget {
   bool _firstLoad = true;
   Timer _updateBalanceTimer;
   int _currentProgram = -1;
+
+  final int _maxButtons = 8;
 
   List<bool> _checkboxList;
   Map<int, String> _buttonNames = Map();
@@ -360,7 +362,7 @@ class DEditPost extends StatelessWidget {
 
   Widget _getButtonsColumn(bool isPortrait, double screenW) {
     return new Column(
-      children: List.generate(6, (index) {
+      children: List.generate(_maxButtons, (index) {
         return Padding(
           padding: EdgeInsets.all(10),
           child: SizedBox(
@@ -375,7 +377,7 @@ class DEditPost extends StatelessWidget {
 
   Widget _getCheckBoxColumn(bool isPortrait, double screenW) {
     return new Column(
-      children: List.generate(6, (index) {
+      children: List.generate(_maxButtons, (index) {
         return Padding(
           padding: EdgeInsets.all(10),
           child: SizedBox(

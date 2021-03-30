@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 
 class AccountsMenuEditArgs {
   AccountInfo targetUser;

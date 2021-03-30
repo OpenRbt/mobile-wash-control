@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/desktop/DHomePage.dart';
 import 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenu.dart';
-import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';

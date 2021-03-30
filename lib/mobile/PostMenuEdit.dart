@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'dart:async';
 
@@ -32,6 +32,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
   int _serviceBalance = 0;
   int _balance = 0;
   int _currentProgram = -1;
+  final int _maxButtons = 8;
 
   @override
   void initState() {
@@ -408,7 +409,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
   Widget _getButtonsColumn(
       bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
-      children: List.generate(6, (index) {
+      children: List.generate(_maxButtons, (index) {
         return Padding(
           padding: EdgeInsets.all(10),
           child: SizedBox(
@@ -424,7 +425,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
   Widget _getCheckBoxColumn(
       bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
-      children: List.generate(6, (index) {
+      children: List.generate(_maxButtons, (index) {
         return Padding(
           padding: EdgeInsets.all(10),
           child: SizedBox(

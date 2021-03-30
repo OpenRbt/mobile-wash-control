@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenuPost.dart';
 
@@ -76,7 +76,8 @@ class _SettingsMenuState extends State<SettingsMenu> {
       }
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Произошла ошибка при запросе к api", Colors.red);
     }
 
     setState(() {});
@@ -113,6 +114,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
             },
             child: ListView(
               children: [
+                SizedBox(
+                  height: 10,
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -282,8 +286,8 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                         _settingsData[index].id,
                                         _availableHashes,
                                         sessionData);
-                                    Navigator.pushNamed(
-                                            context, "/mobile/home/settings/post",
+                                    Navigator.pushNamed(context,
+                                            "/mobile/home/settings/post",
                                             arguments: args)
                                         .then((value) {
                                       getSettings(sessionData);
@@ -310,7 +314,28 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         padding: EdgeInsets.all(8.0),
                         child: Text("Настройки кассы"),
                         onPressed: () {
-                          Navigator.pushNamed(context, "/mobile/home/settings/kasse",
+                          Navigator.pushNamed(
+                              context, "/mobile/home/settings/kasse",
+                              arguments: sessionData);
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    SizedBox(
+                      height: 50,
+                      child: RaisedButton(
+                        color: Colors.lightGreen,
+                        textColor: Colors.white,
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.black,
+                        splashColor: Colors.lightGreenAccent,
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Стандартные настройки"),
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, "/mobile/home/settings/default",
                               arguments: sessionData);
                         },
                       ),

@@ -1,11 +1,11 @@
 import 'dart:core';
 import 'dart:io';
-import 'package:mobile_wash_control/desktop/DHomePage.dart';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/SettingsDefaultConfigs.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenuKasse.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenuPost.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenu.dart';
@@ -54,6 +54,7 @@ class MyApp extends StatelessWidget {
         "/mobile/home/settings": (context) => SettingsMenu(),
         "/mobile/home/settings/post": (context) => SettingsMenuPost(),
         "/mobile/home/settings/kasse": (context) => SettingsMenuKasse(),
+        "/mobile/home/settings/default": (context) => SettingsDefaultConfigs(),
         "/mobile/home/statistics": (context) => StatisticsMenu(),
         "/mobile/home/posts": (context) => PostsMenu(),
         "/mobile/home/accounts": (context) => AccountsMenu(),
@@ -61,7 +62,6 @@ class MyApp extends StatelessWidget {
         "/mobile/home/accounts/add": (context) => AccountsMenuAdd(),
         "/desktop/auth": (context) => DAuthPage(),
         "/desktop/view": (context) => DViewPage(),
-        "/desktop/home": (context) => DHomePage(),
       },
     );
   }

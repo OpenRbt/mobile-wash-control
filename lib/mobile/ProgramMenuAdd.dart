@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_wash_control/mobile/CommonElements.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 class ProgramMenuAdd extends StatefulWidget {
@@ -14,7 +14,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
 
   final int _maxPercent = 100;
   final int _maxMotor = 100;
-  final int _relayCount = 11;
+  final int _relayCount = 17;
   final int _relayTime = 1000;
   bool _preflight = false;
   bool _inUpdate = false;
