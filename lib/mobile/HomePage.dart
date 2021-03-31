@@ -69,11 +69,21 @@ class _HomePageState extends State<HomePage> {
                     .where((element) => element.id == res.buttons[i].programID)
                     .first;
                 if (program != null) {
-                  String label = program.name.length > 0 ? program.name[0] : "";
-                  if (program.name.length > 0 &&
-                      program.name.lastIndexOf(" ") > 0 &&
-                      program.name.lastIndexOf(" ") + 1 < program.name.length) {
-                    label += program.name[program.name.lastIndexOf(" ") + 1];
+                  String label = "";
+                  if (program.name.length > 0) {
+                    label = program.name[0];
+
+                    if (program.name.lastIndexOf("-") > 0 &&
+                        program.name.lastIndexOf("-") + 1 <
+                            program.name.length) {
+                      label = program.name[program.name.lastIndexOf("-") + 1];
+                    }
+
+                    if (program.name.lastIndexOf(" ") > 0 &&
+                        program.name.lastIndexOf(" ") + 1 <
+                            program.name.length) {
+                      label += program.name[program.name.lastIndexOf(" ") + 1];
+                    }
                   }
                   labels[res.buttons[i].buttonID - 1] = label;
                 }
@@ -185,7 +195,8 @@ class _HomePageState extends State<HomePage> {
                                   sessionData);
                               _updateTimer.cancel();
                               _updateLabelsTimer.cancel();
-                              Navigator.pushNamed(context, "/mobile/home/editPost",
+                              Navigator.pushNamed(
+                                      context, "/mobile/home/editPost",
                                       arguments: args)
                                   .then((value) {
                                 _getStations(sessionData);

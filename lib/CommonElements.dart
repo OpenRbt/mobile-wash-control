@@ -218,30 +218,30 @@ void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey,
 class DefaultConfig {
   static final Map<String, StationsDefaultConfig> configs = {
     "Wash": StationsDefaultConfig([
-      _getProgram(1, "water", 25, false, 100, 100, [
+      _getProgram(1, "wsh-water", 25, false, 100, 100, [
         _getRelay(1, 1000, 0),
         _getRelay(6, 1000, 0),
       ], []),
-      _getProgram(2, "foam", 25, false, 100, 100, [
+      _getProgram(2, "wsh-foam", 25, false, 100, 100, [
         _getRelay(1, 1000, 0),
         _getRelay(2, 278, 722), //0.3857 | 278 722
         _getRelay(6, 1000, 0)
       ], []),
-      _getProgram(3, "foam active", 25, false, 100, 100, [
+      _getProgram(3, "wsh-foam active", 25, false, 100, 100, [
         _getRelay(1, 1000, 0),
         _getRelay(2, 500, 500),
         _getRelay(6, 1000, 0)
       ], []),
-      _getProgram(4, "wax", 25, false, 100, 100, [
+      _getProgram(4, "wsh-wax", 25, false, 100, 100, [
         _getRelay(1, 1000, 0),
         _getRelay(4, 284, 716),
         _getRelay(6, 1000, 0),
       ], []),
-      _getProgram(5, "osmosian", 25, false, 100, 100, [
+      _getProgram(5, "wsh-osmosian", 25, false, 100, 100, [
         _getRelay(5, 1000, 0),
         _getRelay(6, 1000, 0),
       ], []),
-      _getProgram(6, "pause", 25, false, 100, 100, [
+      _getProgram(6, "wsh-pause", 25, false, 100, 100, [
         _getRelay(6, 1000, 0),
       ], []),
     ], [
@@ -252,89 +252,88 @@ class DefaultConfig {
       _getProgramButton(5, 5),
       _getProgramButton(6, 6),
     ]),
-    "Moycar": StationsDefaultConfig([
-      _getProgram(1, "express", 25, false, 100, 100, [
-        _getRelay(1, 1000, 0),
-      ], []),
-      _getProgram(2, "daily", 25, false, 100, 100, [
-        _getRelay(2, 1000, 0),
-      ], []),
-      _getProgram(3, "premium", 25, false, 100, 100, [
-        _getRelay(3, 1000, 0),
-      ], []),
-      _getProgram(4, "vacuum cleaner and mats", 25, false, 100, 100, [
-        _getRelay(11, 1000, 0),
-      ], []),
-      _getProgram(5, "interior and wheels", 25, false, 100, 100, [
-        _getRelay(12, 1000, 0),
-      ], []),
-      _getProgram(6, "tire", 25, false, 100, 100, [
-        _getRelay(13, 1000, 0),
-      ], []),
-      _getProgram(7, "disks", 25, false, 100, 100, [
-        _getRelay(14, 1000, 0),
-      ], []),
-      _getProgram(8, "drying", 25, false, 100, 100, [
-        _getRelay(15, 1000, 0),
-      ], []),
-    ], [
-      _getProgramButton(1, 1),
-      _getProgramButton(2, 2),
-      _getProgramButton(3, 3),
-      _getProgramButton(4, 4),
-      _getProgramButton(5, 5),
-      _getProgramButton(6, 6),
-      _getProgramButton(7, 7),
-      _getProgramButton(8, 8),
-    ]),
     "Sensor Screen": StationsDefaultConfig([
-      _getProgram(1, "foam", 25, false, 100, 100, [
+      _getProgram(51, "qzr-foam", 25, false, 100, 100, [
         _getRelay(1, 500, 500),
         _getRelay(6, 1000, 0),
         _getRelay(12, 1000, 0),
         _getRelay(14, 1000, 0),
       ], []),
-      _getProgram(2, "shampoo", 25, false, 100, 100, [
+      _getProgram(52, "qzr-shampoo", 25, false, 100, 100, [
         _getRelay(1, 667, 333),
         _getRelay(5, 1000, 0),
         _getRelay(12, 1000, 0),
         _getRelay(14, 1000, 0),
       ], []),
-      _getProgram(3, "water", 25, false, 100, 100, [
+      _getProgram(53, "qzr-water", 25, false, 100, 100, [
         _getRelay(1, 750, 250),
         _getRelay(11, 1000, 0),
         _getRelay(14, 1000, 0),
       ], []),
-      _getProgram(4, "wax", 25, false, 100, 100, [
+      _getProgram(54, "qzr-wax", 25, false, 100, 100, [
         _getRelay(1, 800, 200),
         _getRelay(4, 1000, 0),
         _getRelay(12, 1000, 0),
         _getRelay(14, 1000, 0),
       ], []),
-      _getProgram(5, "air", 25, false, 100, 100, [
+      _getProgram(55, "qzr-air", 25, false, 100, 100, [
         _getRelay(14, 1000, 0),
         _getRelay(16, 1000, 0),
       ], []),
-      _getProgram(6, "pause", 25, false, 100, 100, [
+      _getProgram(56, "qzr-pause", 25, false, 100, 100, [
         _getRelay(6, 1000, 0),
         _getRelay(14, 1000, 0),
       ], []),
-      _getProgram(7, "openlid", 25, false, 100, 100, [
+      _getProgram(57, "qzr-openlid", 25, false, 100, 100, [
         _getRelay(2, 1000, 0),
         _getRelay(6, 1000, 0),
         _getRelay(14, 1000, 0),
       ], []),
     ], [
-      _getProgramButton(1, 1),
-      _getProgramButton(2, 2),
-      _getProgramButton(3, 3),
-      _getProgramButton(4, 4),
-      _getProgramButton(5, 5),
-      _getProgramButton(6, 6),
-      _getProgramButton(7, 7),
+      _getProgramButton(1, 51),
+      _getProgramButton(2, 52),
+      _getProgramButton(3, 53),
+      _getProgramButton(4, 54),
+      _getProgramButton(5, 55),
+      _getProgramButton(6, 56),
+    ]),
+    "Moycar": StationsDefaultConfig([
+      _getProgram(101, "robo-express", 25, false, 100, 100, [
+        _getRelay(1, 1000, 0),
+      ], []),
+      _getProgram(102, "robo-daily", 25, false, 100, 100, [
+        _getRelay(2, 1000, 0),
+      ], []),
+      _getProgram(103, "robo-premium", 25, false, 100, 100, [
+        _getRelay(3, 1000, 0),
+      ], []),
+      _getProgram(104, "robo-vacuum cleaner and mats", 25, false, 100, 100, [
+        _getRelay(11, 1000, 0),
+      ], []),
+      _getProgram(105, "robo-interior and wheels", 25, false, 100, 100, [
+        _getRelay(12, 1000, 0),
+      ], []),
+      _getProgram(106, "robo-tire", 25, false, 100, 100, [
+        _getRelay(13, 1000, 0),
+      ], []),
+      _getProgram(107, "robo-disks", 25, false, 100, 100, [
+        _getRelay(14, 1000, 0),
+      ], []),
+      _getProgram(108, "robo-drying", 25, false, 100, 100, [
+        _getRelay(15, 1000, 0),
+      ], []),
+    ], [
+      _getProgramButton(1, 101),
+      _getProgramButton(2, 102),
+      _getProgramButton(3, 103),
+      _getProgramButton(4, 104),
+      _getProgramButton(5, 105),
+      _getProgramButton(6, 106),
+      _getProgramButton(7, 107),
+      _getProgramButton(8, 108),
     ]),
     "Vacuum": StationsDefaultConfig([
-      _getProgram(1, "vacuum", 25, false, 100, 100, [
+      _getProgram(151, "vcm-vacuum", 25, false, 100, 100, [
         _getRelay(1, 1000, 0),
         _getRelay(2, 1000, 0),
         _getRelay(3, 1000, 0),
@@ -342,12 +341,12 @@ class DefaultConfig {
         _getRelay(5, 1000, 0),
         _getRelay(6, 1000, 0),
       ], []),
-      _getProgram(6, "pause", 25, false, 100, 100, [
+      _getProgram(156, "vcm-pause", 25, false, 100, 100, [
         _getRelay(6, 1000, 0),
       ], []),
     ], [
-      _getProgramButton(1, 1),
-      _getProgramButton(6, 6),
+      _getProgramButton(1, 151),
+      _getProgramButton(2, 156),
     ]),
   };
 }

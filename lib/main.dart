@@ -20,7 +20,6 @@ import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
 import 'package:mobile_wash_control/desktop/DAuthPage.dart';
 
 import 'package:wifi/wifi.dart';
-
 import 'package:flutter/material.dart';
 
 void main() {

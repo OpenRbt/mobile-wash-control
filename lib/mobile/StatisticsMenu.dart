@@ -102,11 +102,12 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
 
     for (int i = 0; _reports != null && i < _reports.length; i++) {
       if (_reports[i] != null) {
-        _total.moneyReport.banknotes += _reports[i].moneyReport.banknotes;
-        _total.moneyReport.coins += _reports[i].moneyReport.coins;
-        _total.moneyReport.electronical += _reports[i].moneyReport.electronical;
-        _total.moneyReport.service += _reports[i].moneyReport.service;
-        _total.moneyReport.carsTotal += _reports[i].moneyReport.carsTotal;
+        _total.moneyReport.banknotes += _reports[i].moneyReport.banknotes ?? 0;
+        _total.moneyReport.coins += _reports[i].moneyReport.coins ?? 0;
+        _total.moneyReport.electronical +=
+            _reports[i].moneyReport.electronical ?? 0;
+        _total.moneyReport.service += _reports[i].moneyReport.service ?? 0;
+        _total.moneyReport.carsTotal += _reports[i].moneyReport.carsTotal ?? 0;
       }
     }
 

@@ -27,7 +27,8 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
       setState(() {});
     } catch (e) {
       print("Exception when calling GetData in ProgramsMenu: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -70,7 +71,21 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                       children: [
                         SizedBox(
                           height: 50,
-                          width: screenW / 7 * 2,
+                          width: screenW > screenH ? screenW / 8 : 0,
+                          child: Center(
+                            child: Text(
+                              screenW > screenH ? "ID" : "",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: screenW > screenH
+                              ? screenW / 8 * 2
+                              : screenW / 7 * 2,
                           child: Center(
                             child: Text(
                               "Название",
@@ -82,7 +97,9 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                         ),
                         SizedBox(
                           height: 50,
-                          width: screenW / 7 * 2,
+                          width: screenW > screenH
+                              ? screenW / 8 * 2
+                              : screenW / 7 * 2,
                           child: Center(
                             child: Text(
                               "Цена",
@@ -94,7 +111,9 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                         ),
                         SizedBox(
                           height: 50,
-                          width: screenW / 7 * 2,
+                          width: screenW > screenH
+                              ? screenW / 8 * 2
+                              : screenW / 7 * 2,
                           child: Center(
                             child: Text(
                               "Прокачка",
@@ -128,7 +147,21 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
           children: [
             SizedBox(
               height: 50,
-              width: screenW / 7 * 2,
+              width: screenW > screenH ? screenW / 8 : 0,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: index % 2 == 0 ? Colors.white : Colors.black12,
+                  border: Border.all(color: Colors.black38),
+                ),
+                child: Text(
+                  screenW > screenH ? "${_programs[index].id}" : "",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 50,
+              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: index % 2 == 0 ? Colors.white : Colors.black12,
@@ -142,7 +175,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
             ),
             SizedBox(
               height: 50,
-              width: screenW / 7 * 2,
+              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: index % 2 == 0 ? Colors.white : Colors.black12,
@@ -156,7 +189,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
             ),
             SizedBox(
               height: 50,
-              width: screenW / 7 * 2,
+              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: (_programs[index].preflightEnabled != null)
@@ -182,7 +215,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
             ),
             SizedBox(
               height: 50,
-              width: screenW / 7,
+              width: screenW > screenH ? screenW / 8 : screenW / 7,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: index % 2 == 0 ? Colors.white : Colors.black12,
@@ -209,7 +242,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
           children: [
             SizedBox(
               height: 50,
-              width: screenW / 7 * 2,
+              width: screenW > screenH ? screenW / 8 : 0,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: index % 2 == 0 ? Colors.white : Colors.black12,
@@ -223,7 +256,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
             ),
             SizedBox(
               height: 50,
-              width: screenW / 7 * 2,
+              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: index % 2 == 0 ? Colors.white : Colors.black12,
@@ -237,7 +270,21 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
             ),
             SizedBox(
               height: 50,
-              width: screenW / 7 * 2,
+              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: index % 2 == 0 ? Colors.white : Colors.black12,
+                  border: Border.all(color: Colors.black38),
+                ),
+                child: Text(
+                  "",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 50,
+              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: index % 2 == 0 ? Colors.white : Colors.black12,
@@ -250,7 +297,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
             ),
             SizedBox(
               height: 50,
-              width: screenW / 7,
+              width: screenW > screenH ? screenW / 8 : screenW / 7,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: index % 2 == 0 ? Colors.white : Colors.black12,

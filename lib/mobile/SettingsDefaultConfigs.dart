@@ -11,6 +11,8 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
 
+  List<bool> _stationsToSave = List.filled(12, false);
+
   final List<String> _dropDownNames = ["----"]
     ..addAll(DefaultConfig.configs.keys);
   String _dropDownValue = "----";
@@ -30,19 +32,21 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
         }
       });
 
-      for (int i = 1; i <= 12; i++) {
-        try {
-          var args = SetStationButtonsArgs();
-          args.stationID = i;
-          args.buttons = config.stationPrograms;
-          var res = await sessionData.client.setStationButton(args);
-        } catch (e) {}
+      for (int i = 0; i < _stationsToSave.length; i++) {
+        if (_stationsToSave[i]) {
+          try {
+            var args = SetStationButtonsArgs();
+            args.stationID = i + 1;
+            args.buttons = config.stationPrograms;
+            var res = await sessionData.client.setStationButton(args);
+          } catch (e) {}
+        }
       }
 
       showInfoSnackBar(
           _scaffoldKey, _isSnackBarActive, "Настройки сохранены", Colors.green);
     }
-
+    _stationsToSave = List.filled(12, false);
     _canSet = true;
   }
 
@@ -51,30 +55,66 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
 
     final AppBar appBar = AppBar(
-      title: Text("Настройки по умолчанию"),
+      title: Text("Стандартные настройки"),
     );
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: appBar,
       key: _scaffoldKey,
-      body: Column(
+      body: ListView(
         children: [
           SizedBox(
             height: 75,
             child: Center(
               child: Text(
-                "Выберите пресет",
+                "Выберите посты",
+                style: TextStyle(fontSize: 32),
+              ),
+            ),
+          ),
+          Divider(
+            color: Colors.lightGreen,
+            thickness: 3,
+          ),
+          Column(
+            children: List.generate(_stationsToSave.length, (index) {
+              return SizedBox(
+                height: 50,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: index % 2 == 0 ? Colors.black12 : Colors.white,
+                  ),
+                  child: CheckboxListTile(
+                    title: Text("Пост ${index + 1}"),
+                    value: _stationsToSave[index],
+                    onChanged: (newValue) {
+                      _stationsToSave[index] = !_stationsToSave[index];
+                      setState(() {});
+                    },
+                  ),
+                ),
+              );
+            }),
+          ),
+          Divider(
+            color: Colors.lightGreen,
+            thickness: 3,
+          ),
+          SizedBox(
+            height: 75,
+            child: Center(
+              child: Text(
+                "Выберите тип поста",
                 style: TextStyle(fontSize: 32),
               ),
             ),
           ),
           SizedBox(
             height: 75,
-            width: screenW / 5 * 4,
             child: Center(
               child: DropdownButton(
-                isExpanded: true,
+                isExpanded: false,
                 value: _dropDownValue,
                 items: List.generate(
                   _dropDownNames.length,
@@ -116,7 +156,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
                         builder: (context) => AlertDialog(
                           title: Text("Загрузить настройки?"),
                           content: Text(
-                              "Настройки для программ 1-8 могут быть перезаписаны параметрами по умолчанию"),
+                              "Настройки для программи кнопок будут установлены по умолчанию"),
                           actionsPadding: EdgeInsets.all(10),
                           actions: [
                             RaisedButton(

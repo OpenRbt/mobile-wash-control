@@ -146,12 +146,14 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
     try {
       var argstmp = ProgramsArgs();
       var tmp = await sessionData.client.programs(argstmp);
-      int maxID = 1;
+      int maxID = 1000;
       if (tmp != null && tmp.isNotEmpty) {
         tmp.sort(
           (a, b) => a.id.compareTo(b.id),
         );
-        maxID = tmp.last.id + 1;
+        if (tmp.last.id >= 1000){
+          maxID = tmp.last.id + 1;
+        }
         print(maxID);
       }
 
