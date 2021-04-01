@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
@@ -82,17 +83,24 @@ class _MyHomePageState extends State<MyHomePage> {
   int _pos = 0;
   bool _wifi = false;
   bool _canScan = true;
-  List<String> _servers = new List<String>();
-  List<bool> _serversValid = new List<bool>();
+  HashSet<String> _servers;
 
-  void _scanLan() async {
+  @override
+  void initState() {
+    super.initState();
+    _servers = new HashSet();
+  }
+
+  void _scanLan(bool quick) async {
     _pos = 0;
     setState(() {
       _canScan = false;
     });
     _scanMSG = "";
-    _servers = new List();
-    _serversValid = new List();
+    _servers = new HashSet();
+
+    var client = HttpClient();
+    client.connectionTimeout = Duration(milliseconds: 100);
 
     if (Platform.isLinux) {
       List<NetworkInterface> interfaces =
@@ -110,14 +118,9 @@ class _MyHomePageState extends State<MyHomePage> {
           0,
           _localIP.lastIndexOf('.'),
         );
-        List<String> _serversTMP = new List();
-        List<bool> _serversValidTMP = new List();
         var subIPS = List.generate(256, (index) {
           return "$index";
         });
-
-        var client = HttpClient();
-        client.connectionTimeout = Duration(milliseconds: 100);
 
         await Future.forEach(subIPS, (element) async {
           print("Try to http://${_scanIP}.${element}:8020/ping");
@@ -129,19 +132,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 await client.get("${_scanIP}.${element}", 8020, "/ping");
             final response = await request.close();
             if (response.statusCode == 200) {
-              _serversTMP.add("${_scanIP}.${element}");
+              if (mounted) {
+                _servers.add("${_scanIP}.${element}");
+                setState(() {});
+              }
             }
           } catch (e) {}
-        }).then((value) {
-          _canScan = true;
-          _serversValidTMP =
-              List.filled(_serversTMP.length, true); //TODO: remove
-          _servers = _serversTMP;
-          _serversValid = _serversValidTMP;
-          setState(() {});
         });
 
-        client.close();
+        if (mounted)
+          setState(() {
+            _canScan = true;
+          });
       } else {
         setState(() {
           _scanMSG = "Нет подключения к сети";
@@ -158,45 +160,67 @@ class _MyHomePageState extends State<MyHomePage> {
       );
       _wifi = level > 0;
       if (_wifi) {
-        List<String> _serversTMP = new List();
-        List<bool> _serversValidTMP = new List();
         var subIPS = List.generate(256, (index) {
           return "$index";
         });
 
-        var client = HttpClient();
-        client.connectionTimeout = Duration(milliseconds: 100);
-
-        await Future.forEach(subIPS, (element) async {
-          print("Try to http://${_scanIP}.${element}:8020/ping");
-          try {
-            setState(() {
-              _pos++;
-            });
-            final request =
-                await client.get("${_scanIP}.${element}", 8020, "/ping");
-            final response = await request.close();
-            if (response.statusCode == 200) {
-              _serversTMP.add("${_scanIP}.${element}");
+        if (quick) {
+          client.connectionTimeout = Duration(milliseconds: 500);
+          subIPS.forEach((element) async {
+            try {
+              setState(() {
+                _pos++;
+              });
+              final request =
+                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final response = await request.close();
+              if (response.statusCode == 200) {
+                if (mounted) {
+                  _servers.add("${_scanIP}.${element}");
+                  setState(() {});
+                }
+              }
+            } catch (e) {
+              //print(e);
+              //print(e);
             }
-          } catch (e) {}
-        }).then((value) {
-          _canScan = true;
-          _serversValidTMP =
-              List.filled(_serversTMP.length, true); //TODO: remove
-          _servers = _serversTMP;
-          _serversValid = _serversValidTMP;
-          setState(() {});
-        });
+          });
 
-        client.close();
+          await Future.delayed(Duration(seconds: 1));
+          print("FOUND : ${_servers.length}");
+        } else {
+          await Future.forEach(subIPS, (element) async {
+            // print("Try to http://${_scanIP}.${element}:8020/ping");
+            try {
+              setState(() {
+                _pos++;
+              });
+              final request =
+                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final response = await request.close();
+              if (response.statusCode == 200) {
+                if (mounted) {
+                  _servers.add("${_scanIP}.${element}");
+                  setState(() {});
+                }
+              }
+            } catch (e) {}
+          });
+        }
+
+        if (mounted)
+          setState(() {
+            _canScan = true;
+          });
       } else {
-        setState(() {
-          _scanMSG = "Нет подключения к WiFi";
-          _canScan = true;
-        });
+        if (mounted)
+          setState(() {
+            _scanMSG = "Нет подключения к WiFi";
+            _canScan = true;
+          });
       }
     }
+    client.close();
   }
 
   @override
@@ -210,125 +234,122 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: appBar,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 25,
-            ),
-            SizedBox(
-              height: 75,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "IP: $_localIP\nTARGET: $_scanIP.*\nSCANNING: ${_scanIP}.${_pos}",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  !_canScan
-                      ? SizedBox(
-                          height: 20,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: Colors.black26, width: 2),
-                            ),
-                            child: LinearProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation(Colors.lightGreen),
-                              backgroundColor: Colors.black12,
-                              value: _pos / 256,
-                            ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: 25,
+          ),
+          SizedBox(
+            height: 75,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "IP: $_localIP\nTARGET: $_scanIP.*\nSCANNING: ${_scanIP}.${_pos}",
+                  style: TextStyle(fontSize: 15),
+                ),
+                !_canScan
+                    ? SizedBox(
+                        height: 20,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black26, width: 2),
                           ),
-                        )
-                      : SizedBox()
-                ],
-              ),
+                          child: LinearProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation(Colors.lightGreen),
+                            backgroundColor: Colors.black12,
+                            value: _pos / 256,
+                          ),
+                        ),
+                      )
+                    : SizedBox()
+              ],
             ),
-            SizedBox(
-              height: 100,
-              width: screenW,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildServersButton(),
-                  Text(
-                    _canScan ? _scanMSG : "",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: screenH - appBar.preferredSize.height - 141 - 100,
-              child: (_servers.length > 0 &&
-                      _serversValid.length == _servers.length)
-                  ? ListView.separated(
-                      //TODO: remove after
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Divider(
-                          height: 5,
-                          color: Colors.black38,
-                          thickness: 5,
-                        );
+          ),
+          SizedBox(
+            height: 100,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    RaisedButton(
+                      color: _canScan ? Colors.lightGreen : Colors.yellow,
+                      splashColor: Colors.lightGreenAccent,
+                      child: new Text(
+                          _canScan ? ("Поиск серверов") : "Сканирование"),
+                      onPressed: () {
+                        if (_canScan) _scanLan(false);
                       },
-                      itemCount: _servers.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          tileColor: Colors.black12,
-                          title: Text(
-                            "Server: " + _servers[index],
-                            style: TextStyle(fontSize: 30),
-                          ),
-                          trailing: Icon(
-                            _serversValid[index]
-                                ? Icons.check_circle
-                                : Icons.circle,
-                            color: _serversValid[index]
-                                ? Colors.lightGreen
-                                : Colors.red,
-                            size: 30,
-                          ),
-                          onTap: _serversValid[index]
-                              ? () {
-                                  if (Platform.isLinux) {
-                                    var args = DAuthArgs(
-                                        "http://" + _servers[index] + ":8020");
-                                    Navigator.pushNamed(
-                                        context, "/desktop/auth",
-                                        arguments: args);
-                                  } else {
-                                    var args = AuthArgs(
-                                        "http://" + _servers[index] + ":8020");
-                                    Navigator.pushNamed(context, "/mobile/auth",
-                                        arguments: args);
-                                  }
-                                }
-                              : null,
-                        );
+                    ),
+                    RaisedButton(
+                      color: _canScan ? Colors.lightGreen : Colors.yellow,
+                      splashColor: Colors.lightGreenAccent,
+                      child:
+                          new Text(_canScan ? ("QUICK SCAN") : "Сканирование"),
+                      onPressed: () {
+                        if (_canScan) _scanLan(true);
                       },
                     )
-                  : Center(),
-            )
-          ],
-        ),
+                  ],
+                ),
+                Text(
+                  _canScan ? _scanMSG : "",
+                  style: TextStyle(fontSize: 30),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: screenH - appBar.preferredSize.height - 141 - 100,
+            child: (_servers.length > 0)
+                ? ListView.separated(
+                    //TODO: remove after
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider(
+                        height: 5,
+                        color: Colors.black38,
+                        thickness: 5,
+                      );
+                    },
+                    itemCount: _servers.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        tileColor: Colors.black12,
+                        title: Text(
+                          "Server: " + _servers.elementAt(index),
+                          style: TextStyle(fontSize: 30),
+                        ),
+                        trailing: Icon(
+                          Icons.check_circle,
+                          color: Colors.lightGreen,
+                          size: 30,
+                        ),
+                        onTap: () {
+                          if (Platform.isLinux) {
+                            var args = DAuthArgs("http://" +
+                                _servers.elementAt(index) +
+                                ":8020");
+                            Navigator.pushNamed(context, "/desktop/auth",
+                                arguments: args);
+                          } else {
+                            var args = AuthArgs("http://" +
+                                _servers.elementAt(index) +
+                                ":8020");
+                            Navigator.pushNamed(context, "/mobile/auth",
+                                arguments: args);
+                          }
+                        },
+                      );
+                    },
+                  )
+                : Center(),
+          )
+        ],
       ),
-    );
-  }
-
-  Widget _buildServersButton() {
-    return new RaisedButton(
-      color: _canScan ? Colors.lightGreen : Colors.yellow,
-      splashColor: Colors.lightGreenAccent,
-      child: new Text(_canScan ? ("Поиск серверов") : "Сканирование"),
-      onPressed: _canScan
-          ? () {
-              _scanLan();
-            }
-          : () {
-              print("cant_scan");
-            },
     );
   }
 }

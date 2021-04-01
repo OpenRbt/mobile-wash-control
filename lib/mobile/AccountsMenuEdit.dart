@@ -17,56 +17,37 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
   bool _inUpdate = false;
 
   bool _loginNotValid = false;
-  List<TextEditingController> _inputControllers;
+
+  Map<String, TextEditingController> _inputControllers;
+
   List<bool> _inputTriggers = List.filled(3, false);
+
+  void pageInit() {
+    _inputControllers = {
+      "login": new TextEditingController(),
+      "firstName": new TextEditingController(),
+      "lastName": new TextEditingController(),
+      "middleName": new TextEditingController(),
+    };
+  }
 
   void initState() {
     super.initState();
-    _inputControllers = List.generate(4, (index) {
-      var controller = new TextEditingController();
-      switch (index) {
-        case 0: //login controller
-          controller.addListener(() {
-            final text = controller.text.toLowerCase();
-            controller.value = controller.value.copyWith(
-                text: text,
-                selection: TextSelection(
-                    baseOffset: text.length, extentOffset: text.length),
-                composing: TextRange.empty);
-            _loginNotValid = (controller.value.text.isEmpty ||
-                    controller.value.text.length < 4)
-                ? true
-                : false;
-          });
-          break;
-        case 1: //firstName controller
-          controller.addListener(() {});
-          break;
-        case 2: //lastName controller
-          controller.addListener(() {});
-          break;
-        case 3: //middleName controller
-          controller.addListener(() {});
-          break;
-        default:
-          break;
-      }
-      return controller;
-    });
+    pageInit();
   }
 
   void dispose() {
-    for (var controller in _inputControllers) {
+    for (var controller in _inputControllers.values) {
       controller.dispose();
     }
     super.dispose();
   }
 
   void _setData(AccountInfo accountInfo) {
-    _inputControllers[0].text = accountInfo.login;
-    _inputControllers[1].text = accountInfo.firstName;
-    _inputControllers[2].text = accountInfo.lastName;
-    _inputControllers[3].text = accountInfo.middleName;
+    _inputControllers["login"].text = accountInfo.login;
+    _inputControllers["firstName"].text = accountInfo.firstName;
+    _inputControllers["lastName"].text = accountInfo.lastName;
+    _inputControllers["middleName"].text = accountInfo.middleName;
     _inputTriggers[0] = accountInfo.isAdmin;
     _inputTriggers[1] = accountInfo.isOperator;
     _inputTriggers[2] = accountInfo.isEngineer;
@@ -79,12 +60,12 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
     _inUpdate = true;
     try {
       var args = UpdateUserArgs();
-      args.login = _inputControllers[0].value.text;
-      args.firstName = _inputControllers[1].value.text;
+      args.login = _inputControllers["login"].value.text;
+      args.firstName = _inputControllers["firstName"].value.text;
       if (args.firstName.length < 1) args.firstName = " ";
-      args.lastName = _inputControllers[2].value.text;
+      args.lastName = _inputControllers["lastName"].value.text;
       if (args.lastName.length < 1) args.lastName = " ";
-      args.middleName = _inputControllers[3].value.text;
+      args.middleName = _inputControllers["middleName"].value.text;
       if (args.middleName.length < 1) args.middleName = " ";
       args.isAdmin = _inputTriggers[0];
       args.isOperator = _inputTriggers[1];
@@ -150,257 +131,221 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                 height: 10,
               ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: List.generate(7, (index) {
-                  switch (index) {
-                    case 0: //login
-                      return Row(
-                        children: [
-                          SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Логин",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              "Логин",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 75,
+                          width: screenW - screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: _inputControllers["login"],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
+                              ),
+                              enabled: false,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              "Имя",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 75,
+                          width: screenW - screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: _inputControllers["firstName"],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                    RegExp("[a-zA-Z0-9_]"),
-                                  )
-                                ],
-                                controller: _inputControllers[index],
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: _loginNotValid
-                                              ? Colors.red
-                                              : Colors.grey),
-                                    ),
-                                    helperText: "Логин не менее 4х символов",
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: _loginNotValid
-                                              ? Colors.red
-                                              : Colors.grey),
-                                    )),
-                                enabled: false,
-                              ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              "Фамилия",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.end,
                             ),
-                          )
-                        ],
-                      );
-                      break;
-                    case 1: //firstName
-                      return Row(
-                        children: [
-                          SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Имя",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.end,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 75,
+                          width: screenW - screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: _inputControllers["lastName"],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[index],
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(10),
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              "Отчество",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.end,
                             ),
-                          )
-                        ],
-                      );
-                      break;
-                    case 2: //middleName
-                      return Row(
-                        children: [
-                          SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Фамилия",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.end,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 75,
+                          width: screenW - screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: _inputControllers["middleName"],
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(),
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[index],
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(10),
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      );
-                      break;
-                    case 3: //lastName
-                      return Row(
-                        children: [
-                          SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Отчество",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.end,
-                              ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              "Админ",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.end,
                             ),
                           ),
-                          SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                controller: _inputControllers[index],
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(10),
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      );
-                      break;
-                    case 4: //isAdmin
-                      return Row(
-                        children: [
-                          SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Админ",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.end,
-                              ),
+                        ),
+                        SizedBox(
+                          height: 75,
+                          width: screenW - screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Checkbox(
+                              value: _inputTriggers[0],
+                              onChanged: (newValue) {
+                                _inputTriggers[0] = !_inputTriggers[0];
+                                setState(() {});
+                              },
                             ),
                           ),
-                          SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Checkbox(
-                                value: _inputTriggers[0],
-                                onChanged: (newValue) {
-                                  _inputTriggers[0] = !_inputTriggers[0];
-                                  setState(() {});
-                                },
-                              ),
-                            ),
-                          )
-                        ],
-                      );
-                      break;
-                    case 5: //isOperator
-                      return Row(
-                        children: [
-                          SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Оператор",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.end,
-                              ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              "Оператор",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.end,
                             ),
                           ),
-                          SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Checkbox(
-                                value: _inputTriggers[1],
-                                onChanged: (newValue) {
-                                  _inputTriggers[1] = !_inputTriggers[1];
-                                  setState(() {});
-                                },
-                              ),
-                            ),
-                          )
-                        ],
-                      );
-                      break;
-                    case 6: //isEngineer
-                      return Row(
-                        children: [
-                          SizedBox(
-                            height: 75,
-                            width: screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Инженер",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.end,
-                              ),
+                        ),
+                        SizedBox(
+                          height: 75,
+                          width: screenW - screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Checkbox(
+                              value: _inputTriggers[1],
+                              onChanged: (newValue) {
+                                _inputTriggers[1] = !_inputTriggers[1];
+                                setState(() {});
+                              },
                             ),
                           ),
-                          SizedBox(
-                            height: 75,
-                            width: screenW - screenW / 3,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Checkbox(
-                                value: _inputTriggers[2],
-                                onChanged: (newValue) {
-                                  _inputTriggers[2] = !_inputTriggers[2];
-                                  setState(() {});
-                                },
-                              ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              "Инженер",
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.end,
                             ),
-                          )
-                        ],
-                      );
-                      break;
-                    default:
-                      return Row();
-                      break;
-                  }
-                }),
-              ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 75,
+                          width: screenW - screenW / 3,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Checkbox(
+                              value: _inputTriggers[2],
+                              onChanged: (newValue) {
+                                _inputTriggers[2] = !_inputTriggers[2];
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ]),
               Wrap(
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.center,
@@ -478,9 +423,11 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                                       .getUser();
 
                                   var args = DeleteUserArgs();
-                                  args.login = _inputControllers[0].value.text;
+                                  args.login =
+                                      _inputControllers["login"].value.text;
 
-                                  if (cur_user.login != accountsMenuEditArgs.targetUser.login) {
+                                  if (cur_user.login !=
+                                      accountsMenuEditArgs.targetUser.login) {
                                     var res = await accountsMenuEditArgs
                                         .sessionData.client
                                         .deleteUser(args);

@@ -26,12 +26,13 @@ class _AuthPageState extends State<AuthPage> {
 
   void _loadPage() {
     SystemChrome.setPreferredOrientations([]);
-    Navigator.pushReplacementNamed(context, "/mobile/home", arguments: _sessionData);
+    Navigator.pushReplacementNamed(context, "/mobile/home",
+        arguments: _sessionData);
   }
 
   void _authCheck() async {
     try {
-       _sessionData = new SessionData(
+      _sessionData = new SessionData(
         DefaultApi(),
       );
       _sessionData.client.apiClient.basePath = _host;
