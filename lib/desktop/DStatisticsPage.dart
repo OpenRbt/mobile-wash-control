@@ -45,193 +45,208 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
 
     var screenW = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.height;
-    screenW = screenW > 1280 ? screenW / 4 * 3 : 960;
+
+    var width = screenW - screenW / 4;
+    var height = screenH;
 
     return Scaffold(
       key: _scaffoldKey,
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Период с ",
-                  style: TextStyle(fontSize: 32),
-                ),
-                RaisedButton(
-                  onPressed: () => _selectStartDate(context),
-                  child: Text(
-                      "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
-                ),
-                Text(
-                  " по ",
-                  style: TextStyle(fontSize: 32),
-                ),
-                RaisedButton(
-                  onPressed: () => _selectEndDate(context),
-                  child: Text(
-                      "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
-                ),
-                IconButton(
-                    icon: Icon(
-                      Icons.update,
-                      color: _updating ? Colors.yellow : Colors.green,
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              DGetDrawer(
+                  screenH, screenW / 4, context, Pages.Statistics, sessionData),
+              Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Период с ",
+                      style: TextStyle(fontSize: 32),
                     ),
-                    onPressed: () {
-                      _getStatistics(sessionData);
-                      setState(() {});
-                    }),
-              ],
-            ),
-            SizedBox(height: 25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Вывод: ",
-                  style: TextStyle(fontSize: 32),
-                ),
-                SizedBox(
-                  width: screenW / 3 * 2,
-                  child: DropdownButton(
-                      isExpanded: true,
-                      value: _byDate,
-                      items: [
-                        DropdownMenuItem(
-                          value: false,
-                          child: Text("С последней инкассации"),
+                    RaisedButton(
+                      onPressed: () => _selectStartDate(context),
+                      child: Text(
+                          "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
+                    ),
+                    Text(
+                      " по ",
+                      style: TextStyle(fontSize: 32),
+                    ),
+                    RaisedButton(
+                      onPressed: () => _selectEndDate(context),
+                      child: Text(
+                          "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                    ),
+                    IconButton(
+                        icon: Icon(
+                          Icons.update,
+                          color: _updating ? Colors.yellow : Colors.green,
                         ),
-                        DropdownMenuItem(
-                          value: true,
-                          child: Text("По датам"),
-                        )
-                      ],
-                      onChanged: (newValue) {
-                        _byDate = newValue;
-                        setState(() {});
-                      }),
-                )
-              ],
-            ),
-            SizedBox(height: 25),
-            SizedBox(
-              width: screenW / 5 * 4,
-              child: Table(
-                border: TableBorder.all(
-                    color: Colors.black, width: 1, style: BorderStyle.solid),
-                children: [
-                  createTableRow([
-                    'пост',
-                    'наличные',
-                    'банк. карта',
-                    'сервисные',
-                    'авто',
-                    'ср. чек'
-                  ])
-                ]
-                  ..addAll(
-                    List.generate(_reports.length, (index) {
-                      return createTableRow([
-                        _reports.keys.elementAt(index),
-                        (_reports.values
-                                    .elementAt(index)
-                                    .moneyReport
-                                    .banknotes ??
-                                0) +
-                            (_reports.values
-                                    .elementAt(index)
-                                    .moneyReport
-                                    .coins ??
-                                0),
-                        _reports.values
-                                .elementAt(index)
-                                .moneyReport
-                                .electronical ??
-                            0,
-                        _reports.values.elementAt(index).moneyReport.service ??
-                            0,
-                        _reports.values
-                                .elementAt(index)
-                                .moneyReport
-                                .carsTotal ??
-                            0,
-                        (_reports.values
-                                        .elementAt(index)
-                                        .moneyReport
-                                        .carsTotal !=
-                                    null &&
-                                _reports.values
-                                        .elementAt(index)
-                                        .moneyReport
-                                        .carsTotal >
-                                    0)
-                            ? ((((_reports.values
-                                                .elementAt(index)
-                                                .moneyReport
-                                                .banknotes ??
-                                            0) +
-                                        (_reports.values
-                                                .elementAt(index)
-                                                .moneyReport
-                                                .coins ??
-                                            0) +
-                                        (_reports.values
-                                                .elementAt(index)
-                                                .moneyReport
-                                                .electronical ??
-                                            0) +
-                                        (_reports.values
-                                                .elementAt(index)
-                                                .moneyReport
-                                                .service ??
-                                            0)) /
-                                    _reports.values
-                                        .elementAt(index)
-                                        .moneyReport
-                                        .carsTotal))
-                                .toStringAsFixed(2)
-                            : 0
-                      ]);
-                    }),
-                  )
-                  ..add(
-                    createTableRow([
-                      "Итого",
-                      _total.moneyReport.banknotes + _total.moneyReport.coins,
-                      _total.moneyReport.electronical,
-                      _total.moneyReport.service,
-                      _total.moneyReport.carsTotal,
-                      _total.moneyReport.carsTotal > 0
-                          ? ((_total.moneyReport.banknotes +
-                                      _total.moneyReport.coins +
-                                      _total.moneyReport.electronical +
-                                      _total.moneyReport.service) /
-                                  _total.moneyReport.carsTotal)
-                              .toStringAsFixed(2)
-                          : 0,
-                    ]),
-                  ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Center(
-              child: Text(
-                'Моторесурс',
-                style: TextStyle(fontSize: 32),
-              ),
-            ),
-            SizedBox(height: 5),
-            Center(
-              child: Wrap(
-                children: List.generate(
-                  8,
-                  (index) => createMoto(index + 1),
+                        onPressed: () {
+                          _getStatistics(sessionData);
+                          setState(() {});
+                        }),
+                  ],
                 ),
-              ),
-            )
-          ]);
+                SizedBox(height: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Вывод: ",
+                      style: TextStyle(fontSize: 32),
+                    ),
+                    SizedBox(
+                      width: width / 7 * 6,
+                      child: DropdownButton(
+                          isExpanded: true,
+                          value: _byDate,
+                          items: [
+                            DropdownMenuItem(
+                              value: false,
+                              child: Text("С последней инкассации"),
+                            ),
+                            DropdownMenuItem(
+                              value: true,
+                              child: Text("По датам"),
+                            )
+                          ],
+                          onChanged: (newValue) {
+                            _byDate = newValue;
+                            setState(() {});
+                          }),
+                    )
+                  ],
+                ),
+                SizedBox(height: 25),
+                SizedBox(
+                  width: width / 7 * 6,
+                  child: Table(
+                    border: TableBorder.all(
+                        color: Colors.black,
+                        width: 1,
+                        style: BorderStyle.solid),
+                    children: [
+                      createTableRow([
+                        'пост',
+                        'наличные',
+                        'банк. карта',
+                        'сервисные',
+                        'авто',
+                        'ср. чек'
+                      ])
+                    ]
+                      ..addAll(
+                        List.generate(_reports.length, (index) {
+                          return createTableRow([
+                            _reports.keys.elementAt(index),
+                            (_reports.values
+                                        .elementAt(index)
+                                        .moneyReport
+                                        .banknotes ??
+                                    0) +
+                                (_reports.values
+                                        .elementAt(index)
+                                        .moneyReport
+                                        .coins ??
+                                    0),
+                            _reports.values
+                                    .elementAt(index)
+                                    .moneyReport
+                                    .electronical ??
+                                0,
+                            _reports.values
+                                    .elementAt(index)
+                                    .moneyReport
+                                    .service ??
+                                0,
+                            _reports.values
+                                    .elementAt(index)
+                                    .moneyReport
+                                    .carsTotal ??
+                                0,
+                            (_reports.values
+                                            .elementAt(index)
+                                            .moneyReport
+                                            .carsTotal !=
+                                        null &&
+                                    _reports.values
+                                            .elementAt(index)
+                                            .moneyReport
+                                            .carsTotal >
+                                        0)
+                                ? ((((_reports.values
+                                                    .elementAt(index)
+                                                    .moneyReport
+                                                    .banknotes ??
+                                                0) +
+                                            (_reports.values
+                                                    .elementAt(index)
+                                                    .moneyReport
+                                                    .coins ??
+                                                0) +
+                                            (_reports.values
+                                                    .elementAt(index)
+                                                    .moneyReport
+                                                    .electronical ??
+                                                0) +
+                                            (_reports.values
+                                                    .elementAt(index)
+                                                    .moneyReport
+                                                    .service ??
+                                                0)) /
+                                        _reports.values
+                                            .elementAt(index)
+                                            .moneyReport
+                                            .carsTotal))
+                                    .toStringAsFixed(2)
+                                : 0
+                          ]);
+                        }),
+                      )
+                      ..add(
+                        createTableRow([
+                          "Итого",
+                          _total.moneyReport.banknotes +
+                              _total.moneyReport.coins,
+                          _total.moneyReport.electronical,
+                          _total.moneyReport.service,
+                          _total.moneyReport.carsTotal,
+                          _total.moneyReport.carsTotal > 0
+                              ? ((_total.moneyReport.banknotes +
+                                          _total.moneyReport.coins +
+                                          _total.moneyReport.electronical +
+                                          _total.moneyReport.service) /
+                                      _total.moneyReport.carsTotal)
+                                  .toStringAsFixed(2)
+                              : 0,
+                        ]),
+                      ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    'Моторесурс',
+                    style: TextStyle(fontSize: 32),
+                  ),
+                ),
+                SizedBox(height: 5),
+                Center(
+                  child: Wrap(
+                    children: List.generate(
+                      12,
+                      (index) => createMoto(index + 1, width),
+                    ),
+                  ),
+                )
+              ])
+            ],
+          );
         },
       ),
     );
@@ -312,11 +327,12 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
 
     for (int i = 0; _reports != null && i < _reports.length; i++) {
       if (_reports[i] != null) {
-        _total.moneyReport.banknotes += _reports[i].moneyReport.banknotes;
-        _total.moneyReport.coins += _reports[i].moneyReport.coins;
-        _total.moneyReport.electronical += _reports[i].moneyReport.electronical;
-        _total.moneyReport.service += _reports[i].moneyReport.service;
-        _total.moneyReport.carsTotal += _reports[i].moneyReport.carsTotal;
+        _total.moneyReport.banknotes += _reports[i].moneyReport.banknotes ?? 0;
+        _total.moneyReport.coins += _reports[i].moneyReport.coins ?? 0;
+        _total.moneyReport.electronical +=
+            _reports[i].moneyReport.electronical ?? 0;
+        _total.moneyReport.service += _reports[i].moneyReport.service ?? 0;
+        _total.moneyReport.carsTotal += _reports[i].moneyReport.carsTotal ?? 0;
       }
     }
 
@@ -374,10 +390,10 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
     }
   }
 
-  Widget createMoto(int number) {
+  Widget createMoto(int number, double width) {
     return Column(children: [
       Container(
-        width: 100,
+        width: width / 13,
         height: 50,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black),
@@ -385,12 +401,12 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
         child: Center(
           child: Text(
             'пост ' + number.toString(),
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 16),
           ),
         ),
       ),
       Container(
-        width: 100,
+        width: width / 13,
         height: 50,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black),
@@ -400,7 +416,7 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
         ),
       ),
       Container(
-        width: 100,
+        width: width / 13,
         height: 50,
         child: RaisedButton(
           shape: RoundedRectangleBorder(
@@ -413,7 +429,7 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
           },
           child: Text(
             "сброс",
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 16),
           ),
         ),
       ),

@@ -57,7 +57,7 @@ class _DHomePageState extends State<DHomePage> {
       key: _scaffoldKey,
       body: Row(
         children: [
-          DGetDrawer(screenH, screenW / 4, context, Pages.Main),
+          DGetDrawer(screenH, screenW / 4, context, Pages.Main, sessionData),
           SizedBox(
             height: screenH,
             width: width,
@@ -86,17 +86,17 @@ class _DHomePageState extends State<DHomePage> {
                         disabledColor: Colors.red,
                         disabledTextColor: Colors.black,
                         onPressed: () {
-                            var args = DEditPostArgs(
-                                _homePageData[index].id,
-                                _homePageData[index].hash,
-                                _homePageData[index].currentProgramID,
-                                _stationProgramsButtons[
-                                    _homePageData[index].id],
-                                _programs,
-                                this._homePageData[index].currentBalance,
-                                sessionData);
-                                Navigator.pushNamed(context, "/desktop/home/edit", arguments: args);
-                         
+                          var args = DEditPostArgs(
+                              _homePageData[index].id,
+                              _homePageData[index].hash,
+                              _homePageData[index].currentProgramID,
+                              _stationProgramsButtons[_homePageData[index].id],
+                              _programs,
+                              this._homePageData[index].currentBalance,
+                              sessionData);
+                          Navigator.pushNamed(context, "/desktop/home/edit",
+                              arguments: args);
+
                           setState(() {});
                         },
                         child: Column(

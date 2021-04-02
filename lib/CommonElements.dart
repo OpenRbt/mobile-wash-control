@@ -24,10 +24,10 @@ Widget prepareDrawer(
 
   var routes = [
     "/mobile/home",
-    "/mobile/home/programs",
-    "/mobile/home/settings",
-    "/mobile/home/accounts",
-    "/mobile/home/statistics",
+    "/mobile/programs",
+    "/mobile/settings",
+    "/mobile/accounts",
+    "/mobile/statistics",
   ];
 
   var styles = new List.filled(
@@ -399,55 +399,58 @@ InlineResponse2001Buttons _getProgramButton(int buttonID, int programID) {
   return tmp;
 }
 
-Widget DGetDrawer(double height, double width, BuildContext context,
-    Pages _currentPage, ) {
-  final List<String> _pagesNames = [
-    "Главная",
-    "Программы",
-    "Настройки",
-    "Учетки",
-    "Статистика",
-    "Выход"
-  ];
-  final Map<String, Pages> _pagesMap = {
-    "Главная": Pages.Main,
-    "Программы": Pages.Programs,
-    "Настройки": Pages.Settings,
-    "Учетки": Pages.Accounts,
-    "Статистика": Pages.Statistics,
-    "Выход": Pages.None
-  };
-Map<Pages, String> _pageRoutes={
+final List<String> dPagesNames = [
+  "Главная",
+  "Программы",
+  "Настройки",
+  "Учетки",
+  "Статистика",
+  "Выход"
+];
+final Map<String, Pages> dPagesMap = {
+  "Главная": Pages.Main,
+  "Программы": Pages.Programs,
+  "Настройки": Pages.Settings,
+  "Учетки": Pages.Accounts,
+  "Статистика": Pages.Statistics,
+  "Выход": Pages.None
+};
+final Map<Pages, String> dPageRoutes = {
   Pages.Main: "/desktop/home",
   Pages.Programs: "",
   Pages.Settings: "",
-  Pages.Accounts: "",
+  Pages.Accounts: "/desktop/accounts",
   Pages.Statistics: "/desktop/statistics",
 };
+
+Widget DGetDrawer(double height, double width, BuildContext context,
+    Pages _currentPage, SessionData sessionData) {
   return SizedBox(
     height: height,
     width: width,
     child: DecoratedBox(
-      decoration:  BoxDecoration(
-              color: Colors.black12,
-              border: Border.all(
-                color: Colors.lightGreen,
-              ),
-            ),
+      decoration: BoxDecoration(
+        color: Colors.black12,
+        border: Border.all(
+          color: Colors.lightGreen,
+        ),
+      ),
       child: ListView.separated(
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               title: Text(
-                _pagesNames[index],
+                dPagesNames[index],
                 style: TextStyle(
                   fontSize:
-                      _currentPage == _pagesMap[_pagesNames[index]] ? 32 : 16,
+                      _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
                 ),
               ),
-              onTap: (index < _pagesNames.length - 1)
+              onTap: (index < dPagesNames.length - 1)
                   ? () {
-                    Navigator.pushReplacementNamed(context, _pageRoutes[_pagesNames[index]]);
-                  }
+                      Navigator.pushReplacementNamed(
+                          context, dPageRoutes[dPagesMap[dPagesNames[index]]],
+                          arguments: sessionData);
+                    }
                   : () {
                       showDialog(
                         context: context,
@@ -483,7 +486,7 @@ Map<Pages, String> _pageRoutes={
               height: height / 24,
             );
           },
-          itemCount: _pagesNames.length),
+          itemCount: dPagesNames.length),
     ),
   );
 }

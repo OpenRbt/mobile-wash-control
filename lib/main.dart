@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
+import 'package:mobile_wash_control/desktop/DAccountsMenu.dart';
+import 'package:mobile_wash_control/desktop/DAccountsMenuEdit.dart';
 import 'package:mobile_wash_control/desktop/DEditPost.dart';
 import 'package:mobile_wash_control/desktop/DHomePage.dart';
 import 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
@@ -50,23 +52,25 @@ class MyApp extends StatelessWidget {
               serversValid: [],
             ),
         "/mobile/home": (context) => HomePage(),
-        "/mobile/home/editPost": (context) => EditPostMenu(),
-        "/mobile/home/programs": (context) => ProgramsMenu(),
-        "/mobile/home/programs/edit": (context) => ProgramMenuEdit(),
-        "/mobile/home/programs/add": (context) => ProgramMenuAdd(),
-        "/mobile/home/settings": (context) => SettingsMenu(),
-        "/mobile/home/settings/post": (context) => SettingsMenuPost(),
-        "/mobile/home/settings/kasse": (context) => SettingsMenuKasse(),
-        "/mobile/home/settings/default": (context) => SettingsDefaultConfigs(),
-        "/mobile/home/statistics": (context) => StatisticsMenu(),
-        "/mobile/home/posts": (context) => PostsMenu(),
-        "/mobile/home/accounts": (context) => AccountsMenu(),
-        "/mobile/home/accounts/edit": (context) => AccountsMenuEdit(),
-        "/mobile/home/accounts/add": (context) => AccountsMenuAdd(),
+        "/mobile/editPost": (context) => EditPostMenu(),
+        "/mobile/programs": (context) => ProgramsMenu(),
+        "/mobile/programs/edit": (context) => ProgramMenuEdit(),
+        "/mobile/programs/add": (context) => ProgramMenuAdd(),
+        "/mobile/settings": (context) => SettingsMenu(),
+        "/mobile/settings/post": (context) => SettingsMenuPost(),
+        "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
+        "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
+        "/mobile/statistics": (context) => StatisticsMenu(),
+        "/mobile/posts": (context) => PostsMenu(),
+        "/mobile/accounts": (context) => AccountsMenu(),
+        "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
+        "/mobile/accounts/add": (context) => AccountsMenuAdd(),
         "/desktop/auth": (context) => DAuthPage(),
         "/desktop/home": (context) => DHomePage(),
         "/desktop/home/edit": (context) => DEditPostMenu(),
         "/desktop/statistics": (context) => DStatisticsPage(),
+        "/desktop/accounts": (context) => DAccountsMenu(),
+        "/desktop/accounts/edit": (context) => DAccountsMenuEdit(),
       },
     );
   }
@@ -183,7 +187,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               }
             } catch (e) {
-              //print(e);
               //print(e);
             }
               setState(() {

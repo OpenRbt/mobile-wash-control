@@ -287,7 +287,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                         _availableHashes,
                                         sessionData);
                                     Navigator.pushNamed(context,
-                                            "/mobile/home/settings/post",
+                                            "/mobile/settings/post",
                                             arguments: args)
                                         .then((value) {
                                       getSettings(sessionData);
@@ -315,7 +315,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         child: Text("Настройки кассы"),
                         onPressed: () {
                           Navigator.pushNamed(
-                              context, "/mobile/home/settings/kasse",
+                              context, "/mobile/settings/kasse",
                               arguments: sessionData);
                         },
                       ),
@@ -335,7 +335,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         child: Text("Стандартные настройки"),
                         onPressed: () {
                           Navigator.pushNamed(
-                              context, "/mobile/home/settings/default",
+                              context, "/mobile/settings/default",
                               arguments: sessionData);
                         },
                       ),

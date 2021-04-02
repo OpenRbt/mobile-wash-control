@@ -149,7 +149,7 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
     );
 
     if (_firstLoad) {
-      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 10), (timer) {
+      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
         _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
       });
 

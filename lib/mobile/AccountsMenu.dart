@@ -308,7 +308,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
               icon: Icon(addAction ? Icons.add : Icons.more_horiz),
               onPressed: addAction
                   ? () {
-                      Navigator.pushNamed(context, "/mobile/home/accounts/add",
+                      Navigator.pushNamed(context, "/mobile/accounts/add",
                               arguments: sessionData)
                           .then(
                         (value) => _getUsers(sessionData),
@@ -318,7 +318,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
                       var args = AccountsMenuEditArgs();
                       args.sessionData = sessionData;
                       args.targetUser = _accounts[index];
-                      Navigator.pushNamed(context, "/mobile/home/accounts/edit",
+                      Navigator.pushNamed(context, "/mobile/accounts/edit",
                               arguments: args)
                           .then(
                         (value) => _getUsers(sessionData),

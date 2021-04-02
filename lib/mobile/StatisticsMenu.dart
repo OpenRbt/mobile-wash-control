@@ -384,7 +384,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                   Center(
                     child: Wrap(
                       children: List.generate(
-                        8,
+                        12,
                         (index) => createMoto(index + 1),
                       ),
                     ),
@@ -402,7 +402,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
 Widget createMoto(int number) {
   return Column(children: [
     Container(
-      width: 80,
+      width: 60,
       height: 18,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
@@ -414,7 +414,7 @@ Widget createMoto(int number) {
       ),
     ),
     Container(
-      width: 80,
+      width: 60,
       height: 18,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
@@ -424,7 +424,7 @@ Widget createMoto(int number) {
       ),
     ),
     Container(
-      width: 80,
+      width: 60,
       height: 18,
       child: RaisedButton(
         shape: RoundedRectangleBorder(
