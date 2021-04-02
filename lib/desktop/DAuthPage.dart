@@ -36,7 +36,7 @@ class _DAuthPageState extends State<DAuthPage> {
   var _sessionData;
 
   void _loadPage() {
-    Navigator.pushReplacementNamed(context, "/desktop/view",
+    Navigator.pushReplacementNamed(context, "/desktop/home",
         arguments: _sessionData);
   }
 

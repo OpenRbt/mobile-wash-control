@@ -27,10 +27,6 @@ class _DHomePageState extends State<DHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
 
-  bool _editPost = false;
-  int _post = -1;
-  DEditPost _editPostPage = new DEditPost();
-
   Timer _updateTimer;
   Timer _updateLabelsTimer;
 
@@ -54,32 +50,32 @@ class _DHomePageState extends State<DHomePage> {
 
     var screenW = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.height;
-    screenW = screenW > 1280 ? screenW / 4 * 3 : 960;
+
+    var width = screenW - screenW / 4;
+    var height = screenH;
     return Scaffold(
       key: _scaffoldKey,
       body: Row(
         children: [
+          DGetDrawer(screenH, screenW / 4, context, Pages.Main),
           SizedBox(
             height: screenH,
-            width: _editPost ? screenW / 2 : screenW,
+            width: width,
             child: GridView.count(
               physics: NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.all(10),
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              crossAxisCount: _editPost ? 3 : 4,
-              childAspectRatio: _editPost
-                  ? (screenW / 6) / (screenH / 4)
-                  : (screenW / 4) / (screenH / 3),
+              crossAxisCount: 4,
+              childAspectRatio: (width / 4) / (height / 3),
               children: List.generate(_homePageData?.length ?? 0, (index) {
                 var activeProgramIndex = _homePageData[index].currentProgramID;
-
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
                       height: 50,
-                      width: _editPost ? screenW / 4 : screenW / 3,
+                      width: width / 4,
                       child: FlatButton(
                         color: _homePageData[index].status == "online"
                             ? Colors.green
@@ -90,9 +86,6 @@ class _DHomePageState extends State<DHomePage> {
                         disabledColor: Colors.red,
                         disabledTextColor: Colors.black,
                         onPressed: () {
-                          if (_editPostPage.editData == null ||
-                              _editPostPage.editData.postID !=
-                                  _homePageData[index].id) {
                             var args = DEditPostArgs(
                                 _homePageData[index].id,
                                 _homePageData[index].hash,
@@ -102,14 +95,8 @@ class _DHomePageState extends State<DHomePage> {
                                 _programs,
                                 this._homePageData[index].currentBalance,
                                 sessionData);
-                            _editPostPage = new DEditPost(
-                              editData: args,
-                              context: context,
-                            );
-                            _editPost = true;
-                          } else {
-                            _editPost = !_editPost;
-                          }
+                                Navigator.pushNamed(context, "/desktop/home/edit", arguments: args);
+                         
                           setState(() {});
                         },
                         child: Column(
@@ -123,10 +110,8 @@ class _DHomePageState extends State<DHomePage> {
                       ),
                     ),
                     SizedBox(
-                      height: _editPost
-                          ? (screenH - 50) / 4 - 55
-                          : (screenH - 50) / 3 - 55,
-                      width: _editPost ? screenW / 4 : screenW / 3,
+                      height: height / 3 - 50 - 13,
+                      width: width / 4,
                       child: DecoratedBox(
                         child: GridView.count(
                           physics: NeverScrollableScrollPhysics(),
@@ -159,11 +144,6 @@ class _DHomePageState extends State<DHomePage> {
                 );
               }),
             ),
-          ),
-          SizedBox(
-            height: screenH,
-            width: _editPost ? screenW / 2 : 0,
-            child: _editPostPage ?? Null,
           ),
         ],
       ),

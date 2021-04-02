@@ -1,6 +1,9 @@
 import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
+import 'package:mobile_wash_control/desktop/DEditPost.dart';
+import 'package:mobile_wash_control/desktop/DHomePage.dart';
+import 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
@@ -61,7 +64,9 @@ class MyApp extends StatelessWidget {
         "/mobile/home/accounts/edit": (context) => AccountsMenuEdit(),
         "/mobile/home/accounts/add": (context) => AccountsMenuAdd(),
         "/desktop/auth": (context) => DAuthPage(),
-        "/desktop/view": (context) => DViewPage(),
+        "/desktop/home": (context) => DHomePage(),
+        "/desktop/home/edit": (context) => DEditPostMenu(),
+        "/desktop/statistics": (context) => DStatisticsPage(),
       },
     );
   }
@@ -165,12 +170,9 @@ class _MyHomePageState extends State<MyHomePage> {
         });
 
         if (quick) {
-          client.connectionTimeout = Duration(milliseconds: 500);
+          client.connectionTimeout = Duration(seconds: 5);
           subIPS.forEach((element) async {
             try {
-              setState(() {
-                _pos++;
-              });
               final request =
                   await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
@@ -184,9 +186,12 @@ class _MyHomePageState extends State<MyHomePage> {
               //print(e);
               //print(e);
             }
+              setState(() {
+                _pos++;
+              });
           });
 
-          await Future.delayed(Duration(seconds: 1));
+          await Future.delayed(Duration(seconds: 5, milliseconds: 100));
           print("FOUND : ${_servers.length}");
         } else {
           await Future.forEach(subIPS, (element) async {

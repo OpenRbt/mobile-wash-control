@@ -398,3 +398,92 @@ InlineResponse2001Buttons _getProgramButton(int buttonID, int programID) {
 
   return tmp;
 }
+
+Widget DGetDrawer(double height, double width, BuildContext context,
+    Pages _currentPage, ) {
+  final List<String> _pagesNames = [
+    "Главная",
+    "Программы",
+    "Настройки",
+    "Учетки",
+    "Статистика",
+    "Выход"
+  ];
+  final Map<String, Pages> _pagesMap = {
+    "Главная": Pages.Main,
+    "Программы": Pages.Programs,
+    "Настройки": Pages.Settings,
+    "Учетки": Pages.Accounts,
+    "Статистика": Pages.Statistics,
+    "Выход": Pages.None
+  };
+Map<Pages, String> _pageRoutes={
+  Pages.Main: "/desktop/home",
+  Pages.Programs: "",
+  Pages.Settings: "",
+  Pages.Accounts: "",
+  Pages.Statistics: "/desktop/statistics",
+};
+  return SizedBox(
+    height: height,
+    width: width,
+    child: DecoratedBox(
+      decoration:  BoxDecoration(
+              color: Colors.black12,
+              border: Border.all(
+                color: Colors.lightGreen,
+              ),
+            ),
+      child: ListView.separated(
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text(
+                _pagesNames[index],
+                style: TextStyle(
+                  fontSize:
+                      _currentPage == _pagesMap[_pagesNames[index]] ? 32 : 16,
+                ),
+              ),
+              onTap: (index < _pagesNames.length - 1)
+                  ? () {
+                    Navigator.pushReplacementNamed(context, _pageRoutes[_pagesNames[index]]);
+                  }
+                  : () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text("Выход"),
+                          content: Text("Выйти из приложения?"),
+                          actionsPadding: EdgeInsets.all(10),
+                          actions: [
+                            RaisedButton(
+                              onPressed: () {
+                                exit(0);
+                              },
+                              child: Text("Да"),
+                            ),
+                            RaisedButton(
+                              color: Colors.lightGreen,
+                              textColor: Colors.white,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Нет"),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(
+              height: height / 24,
+            );
+          },
+          itemCount: _pagesNames.length),
+    ),
+  );
+}
