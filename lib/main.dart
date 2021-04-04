@@ -176,6 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (quick) {
           client.connectionTimeout = Duration(seconds: 60);
           subIPS.forEach((element) async {
+            _pos++;
             try {
               if (element == "1" || element == "0" || element == "255") {
                 print ("ignoring ... " + element);
@@ -195,7 +196,6 @@ class _MyHomePageState extends State<MyHomePage> {
               print(e);
             }
               setState(() {
-                _pos++;
               });
           });
 
