@@ -174,27 +174,32 @@ class _MyHomePageState extends State<MyHomePage> {
         });
 
         if (quick) {
-          client.connectionTimeout = Duration(seconds: 5);
+          client.connectionTimeout = Duration(seconds: 60);
           subIPS.forEach((element) async {
             try {
+              if (element == "1" || element == "0" || element == "255") {
+                print ("ignoring ... " + element);
+                return;
+              }
               final request =
                   await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
                   _servers.add("${_scanIP}.${element}");
+                  print("found connection on $element");
                   setState(() {});
                 }
               }
             } catch (e) {
-              //print(e);
+              print(e);
             }
               setState(() {
                 _pos++;
               });
           });
 
-          await Future.delayed(Duration(seconds: 5, milliseconds: 100));
+          await Future.delayed(Duration(seconds: 50, milliseconds: 100));
           print("FOUND : ${_servers.length}");
         } else {
           await Future.forEach(subIPS, (element) async {
