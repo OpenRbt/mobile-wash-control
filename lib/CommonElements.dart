@@ -417,7 +417,7 @@ final Map<String, Pages> dPagesMap = {
 };
 final Map<Pages, String> dPageRoutes = {
   Pages.Main: "/desktop/home",
-  Pages.Programs: "",
+  Pages.Programs: "/desktop/programs",
   Pages.Settings: "",
   Pages.Accounts: "/desktop/accounts",
   Pages.Statistics: "/desktop/statistics",
@@ -432,7 +432,7 @@ Widget DGetDrawer(double height, double width, BuildContext context,
       decoration: BoxDecoration(
         color: Colors.black12,
         border: Border.all(
-          color: Colors.lightGreen,
+          color: Colors.grey,
         ),
       ),
       child: ListView.separated(

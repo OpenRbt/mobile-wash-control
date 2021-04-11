@@ -106,6 +106,7 @@ class _DAccountsMenuEditState extends State<DAccountsMenuEdit> {
     }
     final AppBar appBar = AppBar(
       title: Text("Редактирование пользователя"),
+      backgroundColor: Colors.grey,
     );
 
     double screenH = MediaQuery.of(context).size.height;
@@ -124,7 +125,7 @@ class _DAccountsMenuEditState extends State<DAccountsMenuEdit> {
       key: _scaffoldKey,
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return new ListView(
+          return ListView(
             children: [
               SizedBox(
                 height: 10,

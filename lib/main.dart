@@ -2,9 +2,11 @@ import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
 import 'package:mobile_wash_control/desktop/DAccountsMenu.dart';
+import 'package:mobile_wash_control/desktop/DAccountsMenuAdd.dart';
 import 'package:mobile_wash_control/desktop/DAccountsMenuEdit.dart';
 import 'package:mobile_wash_control/desktop/DEditPost.dart';
 import 'package:mobile_wash_control/desktop/DHomePage.dart';
+import 'package:mobile_wash_control/desktop/DProgramsMenu.dart';
 import 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
@@ -71,6 +73,8 @@ class MyApp extends StatelessWidget {
         "/desktop/statistics": (context) => DStatisticsPage(),
         "/desktop/accounts": (context) => DAccountsMenu(),
         "/desktop/accounts/edit": (context) => DAccountsMenuEdit(),
+        "/desktop/accounts/add": (context) => DAccountsMenuAdd(),
+        "/desktop/programs":(context) => DProgramsMenu(),
       },
     );
   }
