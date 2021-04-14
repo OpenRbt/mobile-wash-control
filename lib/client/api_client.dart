@@ -177,20 +177,26 @@ class ApiClient {
       request.headers.addAll(body.headers);
       request.headers.addAll(headerParams);
       var response = await client.send(request);
-      return Response.fromStream(response);
+      // return Response.fromStream(response);
+      return Response.fromStream(response).timeout(Duration(seconds: 30));
     } else {
       var msgBody = contentType == "application/x-www-form-urlencoded" ? formParams : serialize(body);
       switch(method) {
         case "POST":
-          return client.post(url, headers: headerParams, body: msgBody);
+          return client.post(url, headers: headerParams, body: msgBody).timeout(Duration(seconds: 30),);
+          // return client.post(url, headers: headerParams, body: msgBody);
         case "PUT":
-          return client.put(url, headers: headerParams, body: msgBody);
+          return client.put(url, headers: headerParams, body: msgBody).timeout(Duration(seconds: 30),);
+          // return client.put(url, headers: headerParams, body: msgBody);
         case "DELETE":
-          return client.delete(url, headers: headerParams);
+          return client.delete(url, headers: headerParams).timeout(Duration(seconds: 30),);
+          // return client.delete(url, headers: headerParams);
         case "PATCH":
-          return client.patch(url, headers: headerParams, body: msgBody);
+          return client.patch(url, headers: headerParams, body: msgBody).timeout(Duration(seconds: 30),);
+          // return client.patch(url, headers: headerParams, body: msgBody);
         default:
-          return client.get(url, headers: headerParams);
+          return client.get(url, headers: headerParams).timeout(Duration(seconds: 30),);
+          // return client.get(url, headers: headerParams);
       }
     }
   }

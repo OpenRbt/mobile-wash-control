@@ -74,6 +74,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           }
         }
       }
+      setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
@@ -286,8 +287,8 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                         _settingsData[index].id,
                                         _availableHashes,
                                         sessionData);
-                                    Navigator.pushNamed(context,
-                                            "/mobile/settings/post",
+                                    Navigator.pushNamed(
+                                            context, "/mobile/settings/post",
                                             arguments: args)
                                         .then((value) {
                                       getSettings(sessionData);
@@ -314,8 +315,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         padding: EdgeInsets.all(8.0),
                         child: Text("Настройки кассы"),
                         onPressed: () {
-                          Navigator.pushNamed(
-                              context, "/mobile/settings/kasse",
+                          Navigator.pushNamed(context, "/mobile/settings/kasse",
                               arguments: sessionData);
                         },
                       ),
