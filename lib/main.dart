@@ -180,10 +180,14 @@ class _MyHomePageState extends State<MyHomePage> {
         if (quick) {
           client.connectionTimeout = Duration(seconds: 60);
           subIPS.forEach((element) async {
-            _pos++;
             try {
               if (element == "1" || element == "0" || element == "255") {
-                print ("ignoring ... " + element);
+                _pos++;
+                print("ignoring ... " + element);
+                if (_pos == 256) {
+                  _canScan = true;
+                  setState(() {});
+                }
                 return;
               }
               final request =
@@ -199,8 +203,13 @@ class _MyHomePageState extends State<MyHomePage> {
             } catch (e) {
               print(e);
             }
-              setState(() {
-              });
+            _pos++;
+            if (_pos == 256) {
+              _canScan = true;
+              setState(() {});
+              return;
+            }
+            setState(() {});
           });
 
           await Future.delayed(Duration(seconds: 50, milliseconds: 100));

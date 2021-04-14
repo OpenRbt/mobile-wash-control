@@ -38,7 +38,7 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
   int _serviceBalance = 0;
   int _balance = 0;
   int _currentProgram = -1;
-  final int _maxButtons = 8;
+  final int _maxButtons = 20;
 
   @override
   void initState() {

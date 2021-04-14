@@ -32,7 +32,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
   int _serviceBalance = 0;
   int _balance = 0;
   int _currentProgram = -1;
-  final int _maxButtons = 8;
+  final int _maxButtons = 20;
 
   @override
   void initState() {
@@ -143,7 +143,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
     );
 
     if (_firstLoad) {
-      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 10), (timer) {
+      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
         _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
       });
 

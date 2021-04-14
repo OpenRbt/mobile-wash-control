@@ -20,7 +20,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
 
-  final int _maxButtons = 8;
+  final int _maxButtons = 20;
   _SettingsMenuPostState() : super();
   bool _firstLoad = true;
   List<String> _readerValues = ["NOT_USED", "VENDOTEK", "PAYMENT_WORLD"];
