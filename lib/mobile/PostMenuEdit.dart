@@ -80,7 +80,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
       //_balance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0)+(res.moneyReport?.electronical ?? 0);
-      _serviceBalance = res.moneyReport.service;
+      _serviceBalance = res.moneyReport.service ?? 0;
       if (!mounted) {
         return;
       }
@@ -275,7 +275,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 fit: BoxFit.fitHeight,
                 child: Padding(
                   padding: EdgeInsets.all(2),
-                  child: Text("$_serviceBalance"),
+                  child: Text("${_serviceBalance}"),
                 ),
               ),
               decoration: BoxDecoration(
