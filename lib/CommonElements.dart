@@ -418,7 +418,7 @@ final Map<String, Pages> dPagesMap = {
 final Map<Pages, String> dPageRoutes = {
   Pages.Main: "/desktop/home",
   Pages.Programs: "/desktop/programs",
-  Pages.Settings: "",
+  Pages.Settings: "/desktop/settings",
   Pages.Accounts: "/desktop/accounts",
   Pages.Statistics: "/desktop/statistics",
 };

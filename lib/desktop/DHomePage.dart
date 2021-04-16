@@ -110,34 +110,49 @@ class _DHomePageState extends State<DHomePage> {
                       ),
                     ),
                     SizedBox(
-                      height: height / 3 - 50 - 13,
-                      width: width / 4,
+                      height: 115,
                       child: DecoratedBox(
-                        child: GridView.count(
-                          physics: NeverScrollableScrollPhysics(),
-                          crossAxisCount: 3,
-                          children: List.generate(6, (btnIndex) {
-                            return Padding(
-                              padding: EdgeInsets.all(5),
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: (btnIndex + 1 == activeProgramIndex)
-                                      ? Colors.lightGreenAccent
-                                      : Colors.white,
-                                ),
-                                child: Center(
-                                  child: Text(_stationLabels[index + 1] != null
-                                      ? (_stationLabels[index + 1][btnIndex] ??
-                                          "")
-                                      : ""),
+                        child: Center(
+                          child: SizedBox(
+                            height: 100,
+                            child: DecoratedBox(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Текущая программа",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    Divider(
+                                      color: Colors.grey,
+                                      thickness: 3,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: Text(activeProgramIndex == -1
+                                          ? "Idle"
+                                          : _programs.firstWhere(
+                                                  (element) =>
+                                                      element.id ==
+                                                      activeProgramIndex,
+                                                  orElse: () {
+                                                return null;
+                                              })?.name ??
+                                              "Загрузка..."),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          }),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border:
+                                    Border.all(color: Colors.grey, width: 3),
+                              ),
+                            ),
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.black26,
-                        ),
+                        decoration: BoxDecoration(color: Colors.grey),
                       ),
                     )
                   ],

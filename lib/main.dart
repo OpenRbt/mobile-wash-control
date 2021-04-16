@@ -7,6 +7,8 @@ import 'package:mobile_wash_control/desktop/DAccountsMenuEdit.dart';
 import 'package:mobile_wash_control/desktop/DEditPost.dart';
 import 'package:mobile_wash_control/desktop/DHomePage.dart';
 import 'package:mobile_wash_control/desktop/DProgramsMenu.dart';
+import 'package:mobile_wash_control/desktop/DSettingsMenu.dart';
+import 'package:mobile_wash_control/desktop/DSettingsMenuPost.dart';
 import 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
@@ -75,6 +77,8 @@ class MyApp extends StatelessWidget {
         "/desktop/accounts/edit": (context) => DAccountsMenuEdit(),
         "/desktop/accounts/add": (context) => DAccountsMenuAdd(),
         "/desktop/programs":(context) => DProgramsMenu(),
+        "/desktop/settings": (context) => DSettingsMenu(),
+        "/desktop/settings/post": (context) => DSettingsMenuPost(),
       },
     );
   }
@@ -134,7 +138,44 @@ class _MyHomePageState extends State<MyHomePage> {
         var subIPS = List.generate(256, (index) {
           return "$index";
         });
+        if (quick){
+          client.connectionTimeout = Duration(seconds: 60);
+          subIPS.forEach((element) async {
+            try {
+              if (element == "1" || element == "0" || element == "255") {
+                _pos++;
+                print("ignoring ... " + element);
+                if (_pos == 256) {
+                  _canScan = true;
+                  setState(() {});
+                }
+                return;
+              }
+              final request =
+                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final response = await request.close();
+              if (response.statusCode == 200) {
+                if (mounted) {
+                  _servers.add("${_scanIP}.${element}");
+                  print("found connection on $element");
+                  setState(() {});
+                }
+              }
+            } catch (e) {
+              print(e);
+            }
+            _pos++;
+            if (_pos == 256) {
+              _canScan = true;
+              setState(() {});
+              return;
+            }
+            setState(() {});
+          });
 
+          await Future.delayed(Duration(seconds: 50, milliseconds: 100));
+          print("FOUND : ${_servers.length}");
+        } else {
         await Future.forEach(subIPS, (element) async {
           print("Try to http://${_scanIP}.${element}:8020/ping");
           try {
@@ -152,7 +193,8 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           } catch (e) {}
         });
-
+        }
+        
         if (mounted)
           setState(() {
             _canScan = true;
