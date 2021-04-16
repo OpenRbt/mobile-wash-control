@@ -200,7 +200,6 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                   border: Border.all(color: Colors.black38),
                 ),
                 child: Center(
-                  //TODO: get active status (Kronusol)
                   child: Text(
                     (_programs[index].preflightEnabled != null)
                         ? (_programs[index].preflightEnabled

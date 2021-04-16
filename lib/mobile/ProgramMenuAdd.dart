@@ -151,7 +151,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
         tmp.sort(
           (a, b) => a.id.compareTo(b.id),
         );
-        if (tmp.last.id >= 1000){
+        if (tmp.last.id >= 1000) {
           maxID = tmp.last.id + 1;
         }
         print(maxID);
@@ -309,8 +309,11 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                         title: Text(
                           'Прокачка',
                         ),
-                        value: false,
-                        onChanged: (newValue) {},
+                        value: _preflight,
+                        onChanged: (newValue) {
+                          _preflight = !_preflight;
+                          setState(() {});
+                        },
                       ),
                     ),
                   ],
