@@ -28,7 +28,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
   var _isSnackBarActive = ValueWrapper(false);
   bool _firstLoad = true;
   Timer _updateBalanceTimer;
-  int _serviceBalance = 0;
+  int _incassBalance = 0;
   int _balance = 0;
   int _currentProgram = -1;
   final int _maxButtons = 20;
@@ -80,7 +80,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
       //_balance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0)+(res.moneyReport?.electronical ?? 0);
-      _serviceBalance = res.moneyReport.service ?? 0;
+      _incassBalance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0);
       if (!mounted) {
         return;
       }
@@ -183,7 +183,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
     final AppBar appBar = AppBar(
       title:
-          Text("Пост: ${postMenuArgs.postID} | Баланс: ${_balance ?? 0} руб"),
+          Text("Пост: ${postMenuArgs.postID} | Инкасс: ${_incassBalance ?? 0} руб"),
     );
 
     if (_firstLoad) {
@@ -275,7 +275,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 fit: BoxFit.fitHeight,
                 child: Padding(
                   padding: EdgeInsets.all(2),
-                  child: Text("${_serviceBalance}"),
+                  child: Text("${_balance}"),
                 ),
               ),
               decoration: BoxDecoration(
