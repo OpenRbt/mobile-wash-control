@@ -39,6 +39,7 @@ part 'model/Args/SaveCollectionArgs.dart';
 part 'model/Args/LoadMoneyArgs.dart';
 part 'model/Args/SaveArgs.dart';
 part 'model/Args/LoadArgs.dart';
+part 'model/Args/StationCollectionReportDatesArgs.dart';
 part 'model/card_reader_config.dart';
 part 'model/collection_report.dart';
 part 'model/first_name.dart';
@@ -73,5 +74,6 @@ part 'model/status_collection_report.dart';
 part 'model/status_report.dart';
 part 'model/user_config.dart';
 part 'model/users_report.dart';
+part 'model/collection_report_with_user.dart';
 
 ApiClient defaultApiClient = new ApiClient();

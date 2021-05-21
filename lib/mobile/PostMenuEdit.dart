@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'dart:async';
+import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
 
 class PostMenuArgs {
   final int postID;
@@ -427,6 +428,33 @@ class _EditPostMenuState extends State<EditPostMenu> {
                   showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
                       "Произошла ошибка при запросе к api", Colors.red);
                 }
+              },
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: SizedBox(
+            height: 50,
+            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+            child: RaisedButton(
+              color: Colors.lightGreen,
+              textColor: Colors.white,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.black,
+              padding: EdgeInsets.all(8.0),
+              splashColor: Colors.lightGreenAccent,
+              child: Text(
+                "История инкассаций",
+                style: TextStyle(fontSize: 15),
+              ),
+              onPressed: () {
+                var args = IncassationHistoryArgs(
+                    postMenuArgs.postID,
+                    postMenuArgs.sessionData);
+                Navigator.pushNamed(context, "/mobile/statistics/incassation",
+                    arguments: args);
+                  setState(() {});
               },
             ),
           ),

@@ -52,6 +52,8 @@ class ApiClient {
           return new CardReaderConfig.fromJson(value);
         case 'CollectionReport':
           return new CollectionReport.fromJson(value);
+        case 'CollectionReportWithUser':
+          return new CollectionReportWithUser.fromJson(value);
         case 'FirstName':
           return new FirstName.fromJson(value);
         case 'Hash':
