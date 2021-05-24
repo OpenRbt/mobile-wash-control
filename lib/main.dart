@@ -29,6 +29,7 @@ import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
 import 'package:mobile_wash_control/desktop/DAuthPage.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
+import 'package:mobile_wash_control/desktop/DIncassationHistory.dart';
 
 import 'package:wifi/wifi.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
         "/mobile/accounts": (context) => AccountsMenu(),
         "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
         "/mobile/accounts/add": (context) => AccountsMenuAdd(),
-        "/mobile/statistics/incassation": (context) => IncassationHistory(),
+        "/mobile/incassation": (context) => IncassationHistory(),
         "/desktop/auth": (context) => DAuthPage(),
         "/desktop/home": (context) => DHomePage(),
         "/desktop/home/edit": (context) => DEditPostMenu(),
@@ -81,6 +82,7 @@ class MyApp extends StatelessWidget {
         "/desktop/programs":(context) => DProgramsMenu(),
         "/desktop/settings": (context) => DSettingsMenu(),
         "/desktop/settings/post": (context) => DSettingsMenuPost(),
+        "/dekstop/incassation": (context) => DIncassationHistory(),
       },
     );
   }

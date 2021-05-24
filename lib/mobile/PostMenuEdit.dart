@@ -452,8 +452,15 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 var args = IncassationHistoryArgs(
                     postMenuArgs.postID,
                     postMenuArgs.sessionData);
-                Navigator.pushNamed(context, "/mobile/statistics/incassation",
-                    arguments: args);
+                _updateBalanceTimer.cancel();
+                Navigator.pushNamed(context, "/mobile/incassation",
+                    arguments: args).then((value) {
+                  _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+                    _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
+                    _unpackNames(postMenuArgs);
+                  });
+                  setState(() {});
+                });;
                   setState(() {});
               },
             ),

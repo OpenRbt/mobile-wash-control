@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
-class IncassationHistoryArgs {
+class DIncassationHistoryArgs {
   final int stationID;
   final SessionData sessionData;
-  IncassationHistoryArgs(this.stationID, this.sessionData);
+  DIncassationHistoryArgs(this.stationID, this.sessionData);
 }
 
-class IncassationHistory extends StatefulWidget {
+class DIncassationHistory extends StatefulWidget {
   @override
-  _IncassationHistoryState createState() => _IncassationHistoryState();
+  _DIncassationHistoryState createState() => _DIncassationHistoryState();
 }
 
-class _IncassationHistoryState extends State<IncassationHistory> {
-  _IncassationHistoryState() : super();
+class _DIncassationHistoryState extends State<DIncassationHistory> {
+  _DIncassationHistoryState() : super();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
 
@@ -32,7 +32,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
   int _totalNal = 0;
   int _totalBeznal = 0;
 
-  void _GetIncassation(IncassationHistoryArgs incassationHistoryArgs) async {
+  void _GetIncassation(DIncassationHistoryArgs incassationHistoryArgs) async {
     if (_updating) {
       return;
     }
@@ -44,18 +44,18 @@ class _IncassationHistoryState extends State<IncassationHistory> {
       args.id = incassationHistoryArgs.stationID;
       args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
       args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
-      _incassations =
-          (await incassationHistoryArgs.sessionData.client
-          .stationCollectionReportDates(args)) ?? [];
+      _incassations = (await incassationHistoryArgs.sessionData.client
+              .stationCollectionReportDates(args)) ??
+          [];
 
       _totalNal = 0;
       _totalBeznal = 0;
       for (int i = 0; i < _incassations.length; i++) {
-        _totalNal += (_incassations[i].banknotes ?? 0) + (_incassations[i].coins ?? 0);
+        _totalNal +=
+            (_incassations[i].banknotes ?? 0) + (_incassations[i].coins ?? 0);
         _totalBeznal += _incassations[i].electronical ?? 0;
       }
-    }
-    on ApiException catch (e) {
+    } on ApiException catch (e) {
       if (e.code != 404) {
         print(
             "Exception when calling DefaultApi->/station-collection-report-dates: $e\n");
@@ -66,8 +66,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
       if (!(e is ApiException)) {
         print("Other Exception: $e\n");
       }
-    }
-    finally {
+    } finally {
       _incassations = [];
     }
 
@@ -127,11 +126,12 @@ class _IncassationHistoryState extends State<IncassationHistory> {
 
   @override
   Widget build(BuildContext context) {
-    IncassationHistoryArgs incassationHistoryArgs =
+    DIncassationHistoryArgs incassationHistoryArgs =
         ModalRoute.of(context).settings.arguments;
 
     final AppBar appBar = AppBar(
-      title: Text("История инкассаций | Пост ${incassationHistoryArgs.stationID}"),
+      title:
+          Text("История инкассаций | Пост ${incassationHistoryArgs.stationID}"),
     );
 
     if (_firstLoad) {
@@ -139,61 +139,58 @@ class _IncassationHistoryState extends State<IncassationHistory> {
       _firstLoad = false;
     }
 
-    double screenH = MediaQuery.of(context).size.height;
-    double screenW = MediaQuery.of(context).size.width;
+    var screenW = MediaQuery.of(context).size.width;
+    var screenH = MediaQuery.of(context).size.height;
+
+    var width = screenW - screenW / 4;
+    var height = screenH;
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: appBar,
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              await Future.delayed(
-                Duration(milliseconds: 500),
-              );
-              _GetIncassation(incassationHistoryArgs);
-            },
-            child: Container(
-              width: screenW,
-              height: screenH,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Период с ",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      RaisedButton(
-                        onPressed: () => _selectStartDate(context),
-                        child: Text(
-                            "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
-                      ),
-                      Text(
-                        " по ",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      RaisedButton(
-                        onPressed: () => _selectEndDate(context),
-                        child: Text(
-                            "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.update,
-                            color: _updating ? Colors.yellow : Colors.green,
-                          ),
-                          onPressed: () {
-                            _GetIncassation(incassationHistoryArgs);
-                            setState(() {});
-                          }),
-                    ],
+          return Container(
+            width: screenW,
+            height: screenH,
+            child: ListView(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Период с ",
+                    style: TextStyle(fontSize: 32),
                   ),
-                  SizedBox(height: 10),
-                  Table(
+                  RaisedButton(
+                    onPressed: () => _selectStartDate(context),
+                    child: Text(
+                        "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
+                  ),
+                  Text(
+                    " по ",
+                    style: TextStyle(fontSize: 32),
+                  ),
+                  RaisedButton(
+                    onPressed: () => _selectEndDate(context),
+                    child: Text(
+                        "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                  ),
+                  IconButton(
+                      icon: Icon(
+                        Icons.update,
+                        color: _updating ? Colors.yellow : Colors.green,
+                      ),
+                      onPressed: () {
+                        _GetIncassation(incassationHistoryArgs);
+                        setState(() {});
+                      }),
+                ],
+              ),
+              SizedBox(height: 25),
+              SizedBox(
+                  width: width / 7 * 6,
+                  child: Table(
                     border: TableBorder.all(
                         color: Colors.black,
                         width: 1,
@@ -208,8 +205,10 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                       ..addAll(
                         List.generate(_incassations.length, (index) {
                           return createTableRow([
-                            formatDateTime(DateTime.fromMillisecondsSinceEpoch(_incassations[index].ctime * 1000)),
-                            (_incassations[index].banknotes ?? 0) + (_incassations[index].coins ?? 0),
+                            formatDateTime(DateTime.fromMillisecondsSinceEpoch(
+                                _incassations[index].ctime * 1000)),
+                            (_incassations[index].banknotes ?? 0) +
+                                (_incassations[index].coins ?? 0),
                             _incassations[index].electronical ?? 0,
                           ]);
                         }),
@@ -217,10 +216,8 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                       ..add(
                         createTableRow(["Итого", _totalNal, _totalBeznal]),
                       ),
-                  ),
-                ]),
-              ),
-            ),
+                  )),
+            ]),
           );
         },
       ),
@@ -245,6 +242,6 @@ TableRow createTableRow(List values) {
   return TableRow(children: result);
 }
 
-String formatDateTime(DateTime datetime){
+String formatDateTime(DateTime datetime) {
   return "${datetime.year.toString()}-${datetime.month.toString().padLeft(2, '0')}-${datetime.day.toString().padLeft(2, '0')} ${datetime.hour.toString()}:${datetime.minute.toString()}:${datetime.second.toString()}";
 }

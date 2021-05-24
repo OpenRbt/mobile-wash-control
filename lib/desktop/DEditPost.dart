@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
+import 'package:mobile_wash_control/desktop/DIncassationHistory.dart';
 import 'dart:async';
 
 class DEditPostArgs {
@@ -404,6 +405,39 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
                       "Exception when calling DefaultApi->/open-station: $e\n");
                   showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
                 }
+              },
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: SizedBox(
+            height: 50,
+            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+            child: RaisedButton(
+              color: Colors.lightGreen,
+              textColor: Colors.white,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.black,
+              padding: EdgeInsets.all(8.0),
+              splashColor: Colors.lightGreenAccent,
+              child: Text(
+                "История инкассаций",
+                style: TextStyle(fontSize: 15),
+              ),
+              onPressed: () {
+                var args = DIncassationHistoryArgs(
+                    postMenuArgs.postID,
+                    postMenuArgs.sessionData);
+                _updateBalanceTimer.cancel();
+                Navigator.pushNamed(context, "/dekstop/incassation",
+                    arguments: args).then((value) {
+                  _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+                    _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
+                  });
+                  setState(() {});
+                });;
+                setState(() {});
               },
             ),
           ),
