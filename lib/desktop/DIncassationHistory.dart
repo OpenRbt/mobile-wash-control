@@ -44,9 +44,8 @@ class _DIncassationHistoryState extends State<DIncassationHistory> {
       args.stationID = incassationHistoryArgs.stationID;
       args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
       args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
-      _incassations = (await incassationHistoryArgs.sessionData.client
-              .stationCollectionReportDates(args)) ??
-          [];
+      _incassations = await incassationHistoryArgs.sessionData.client
+              .stationCollectionReportDates(args);
       _totalNal = 0;
       _totalBeznal = 0;
       for (int i = 0; i < _incassations.length; i++) {

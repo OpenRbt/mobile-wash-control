@@ -44,9 +44,8 @@ class _IncassationHistoryState extends State<IncassationHistory> {
       args.stationID = incassationHistoryArgs.stationID;
       args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
       args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
-      _incassations =
-          (await incassationHistoryArgs.sessionData.client
-          .stationCollectionReportDates(args)) ?? [];
+      _incassations = await incassationHistoryArgs.sessionData.client
+          .stationCollectionReportDates(args);
 
       _totalNal = 0;
       _totalBeznal = 0;
@@ -66,9 +65,6 @@ class _IncassationHistoryState extends State<IncassationHistory> {
       if (!(e is ApiException)) {
         print("Other Exception: $e\n");
       }
-    }
-    finally {
-      _incassations = [];
     }
 
     if (!mounted) {
