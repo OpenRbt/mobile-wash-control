@@ -41,7 +41,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
 
     try {
       var args = StationCollectionReportDatesArgs();
-      args.id = incassationHistoryArgs.stationID;
+      args.stationID = incassationHistoryArgs.stationID;
       args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
       args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
       _incassations =

@@ -41,16 +41,16 @@ class _DIncassationHistoryState extends State<DIncassationHistory> {
 
     try {
       var args = StationCollectionReportDatesArgs();
-      args.id = incassationHistoryArgs.stationID;
+      args.stationID = incassationHistoryArgs.stationID;
       args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
       args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
       _incassations = (await incassationHistoryArgs.sessionData.client
               .stationCollectionReportDates(args)) ??
           [];
-
       _totalNal = 0;
       _totalBeznal = 0;
       for (int i = 0; i < _incassations.length; i++) {
+        print(_incassations[i]);
         _totalNal +=
             (_incassations[i].banknotes ?? 0) + (_incassations[i].coins ?? 0);
         _totalBeznal += _incassations[i].electronical ?? 0;
@@ -66,10 +66,7 @@ class _DIncassationHistoryState extends State<DIncassationHistory> {
       if (!(e is ApiException)) {
         print("Other Exception: $e\n");
       }
-    } finally {
-      _incassations = [];
-    }
-
+    } 
     if (!mounted) {
       return;
     }

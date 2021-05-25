@@ -54,6 +54,19 @@ class ApiClient {
           return new CollectionReport.fromJson(value);
         case 'CollectionReportWithUser':
           return new CollectionReportWithUser.fromJson(value);
+        case 'List<CollectionReportWithUser>': 
+            var targetType = "collectionReports";
+            Match match;
+            if (value is List &&
+                (_RegList.hasMatch(targetType))) {
+                  match = _RegList.allMatches(targetType).first;
+              var newTargetType = match[1];
+              return value.map((v) => _deserialize(v, "CollectionReportWithUser")).toList();
+            } else if (value is Map) {
+              return value["collectionReports"].map((v) => _deserialize(v, "CollectionReportWithUser")).toList();
+            }
+          return;
+          
         case 'FirstName':
           return new FirstName.fromJson(value);
         case 'Hash':

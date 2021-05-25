@@ -2,7 +2,7 @@ part of swagger.api;
 
 class StationCollectionReportDatesArgs {
   
-  int id = null;
+  int stationID = null;
   
 /* Unix time */
   int startDate = null;
@@ -14,13 +14,13 @@ class StationCollectionReportDatesArgs {
 
   @override
   String toString() {
-    return 'Args[id=$id, startDate=$startDate, endDate=$endDate, ]';
+    return 'Args[stationID=$stationID, startDate=$startDate, endDate=$endDate, ]';
   }
 
   StationCollectionReportDatesArgs.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
-    id =
-        json['id']
+    stationID =
+        json['stationID']
     ;
     startDate =
         json['startDate']
@@ -32,7 +32,7 @@ class StationCollectionReportDatesArgs {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'stationID': stationID,
       'startDate': startDate,
       'endDate': endDate
      };
