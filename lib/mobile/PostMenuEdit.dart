@@ -7,13 +7,14 @@ import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
 
 class PostMenuArgs {
   final int postID;
+  final String ip;
   final String hash;
   final int currentProgramID;
   final List<Program> programs;
   final SessionData sessionData;
 
-  PostMenuArgs(this.postID, this.hash, this.currentProgramID, this.programs,
-      this.sessionData);
+  PostMenuArgs(this.postID, this.ip, this.hash, this.currentProgramID,
+      this.programs, this.sessionData);
 }
 
 //TODO: Buttons rework and fix
@@ -81,7 +82,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
       //_balance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0)+(res.moneyReport?.electronical ?? 0);
-      _incassBalance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0);
+      _incassBalance =
+          (res.moneyReport?.banknotes ?? 0) + (res.moneyReport?.coins ?? 0);
       if (!mounted) {
         return;
       }
@@ -183,8 +185,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
     final PostMenuArgs postMenuArgs = ModalRoute.of(context).settings.arguments;
 
     final AppBar appBar = AppBar(
-      title:
-          Text("Пост: ${postMenuArgs.postID} | Инкасс: ${_incassBalance ?? 0} руб"),
+      title: Text(
+          "Пост: ${postMenuArgs.postID} | Инкасс: ${_incassBalance ?? 0} руб"),
     );
 
     if (_firstLoad) {
@@ -450,21 +452,35 @@ class _EditPostMenuState extends State<EditPostMenu> {
               ),
               onPressed: () {
                 var args = IncassationHistoryArgs(
-                    postMenuArgs.postID,
-                    postMenuArgs.sessionData);
+                    postMenuArgs.postID, postMenuArgs.sessionData);
                 _updateBalanceTimer.cancel();
                 Navigator.pushNamed(context, "/mobile/incassation",
-                    arguments: args).then((value) {
-                  _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+                        arguments: args)
+                    .then((value) {
+                  _updateBalanceTimer =
+                      new Timer.periodic(Duration(seconds: 1), (timer) {
                     _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
                     _unpackNames(postMenuArgs);
                   });
                   setState(() {});
-                });;
-                  setState(() {});
+                });
+                ;
+                setState(() {});
               },
             ),
           ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(5),
+          child: SizedBox(
+              height: 20,
+              width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+              child: Center(
+                child: Text(
+                  "IP поста: ${postMenuArgs.ip}",
+                  style: TextStyle(fontSize: 14),
+                ),
+              )),
         ),
       ],
     );

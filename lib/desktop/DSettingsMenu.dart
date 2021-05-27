@@ -7,11 +7,12 @@ class DSettingsMenuArgs {}
 
 class DSettingsData {
   final int id;
+  final String ip;
   final String name;
   final String hash;
   final String status;
 
-  DSettingsData(this.id, this.name, this.hash, this.status);
+  DSettingsData(this.id, this.ip, this.name, this.hash, this.status);
 }
 
 class DSettingsMenu extends StatefulWidget {
@@ -27,7 +28,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
   bool _firstLoad = true;
   String _currentTemp = "__";
   List<DSettingsData> _settingsData = List.generate(10, (index) {
-    return new DSettingsData(-1, "Loading", "$index", "loading");
+    return new DSettingsData(-1, "...", "Loading", "$index", "loading");
   });
 
   List<String> _availableHashes = List();
@@ -49,6 +50,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
       _settingsData = List.generate((res.stations.length), (index) {
         return new DSettingsData(
             res.stations[index].id,
+            res.stations[index].ip,
             res.stations[index].name,
             res.stations[index].hash,
             res.stations[index].status.value);
@@ -288,6 +290,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                                   onPressed: () {
                                     var args = DSettingsMenuPostArgs(
                                         _settingsData[index].id,
+                                        _settingsData[index].ip,
                                         _availableHashes,
                                         sessionData);
                                     Navigator.pushNamed(

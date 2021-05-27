@@ -15,13 +15,14 @@ class HomePage extends StatefulWidget {
 class HomePageData {
   final int id;
   final String name;
+  final String ip;
   final String hash;
   final String status;
   final String info;
   final int currentBalance;
   int currentProgramID;
 
-  HomePageData(this.id, this.name, this.hash, this.status, this.info,
+  HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info,
       this.currentBalance, this.currentProgramID);
 }
 
@@ -31,7 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   bool _firstLoad = true;
   List<HomePageData> _homePageData = List.generate(12, (index) {
-    return HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
+    return HomePageData(-1, "Loading...", "...", "...", "...", "...", -1, -1);
   });
 
   Timer _updateTimer;
@@ -70,6 +71,7 @@ class _HomePageState extends State<HomePage> {
         return HomePageData(
             res.stations[index].id ?? index + 1,
             res.stations[index].name ?? "Station ${index + 1}",
+            res.stations[index].ip ?? "",
             res.stations[index].hash ?? "",
             res.stations[index].status.value ?? "",
             res.stations[index].info ?? "",
@@ -146,6 +148,7 @@ class _HomePageState extends State<HomePage> {
                           : () {
                               var args = PostMenuArgs(
                                   _homePageData[index].id,
+                                  _homePageData[index].ip,
                                   _homePageData[index].hash,
                                   _homePageData[index].currentProgramID,
                                   _programs,
@@ -173,6 +176,8 @@ class _HomePageState extends State<HomePage> {
                           Text(_homePageData[index].name),
                           Text(
                               "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
+                          Text(
+                              "IP: ${_homePageData[index].ip}"),
                         ],
                       ),
                     ),

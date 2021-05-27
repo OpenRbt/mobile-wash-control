@@ -7,11 +7,12 @@ class SettingsMenuArgs {}
 
 class SettingsData {
   final int id;
+  final String ip;
   final String name;
   final String hash;
   final String status;
 
-  SettingsData(this.id, this.name, this.hash, this.status);
+  SettingsData(this.id, this.ip, this.name, this.hash, this.status);
 }
 
 class SettingsMenu extends StatefulWidget {
@@ -27,7 +28,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
   bool _firstLoad = true;
   String _currentTemp = "__";
   List<SettingsData> _settingsData = List.generate(10, (index) {
-    return new SettingsData(-1, "Loading", "$index", "loading");
+    return new SettingsData(-1, "...", "Loading", "$index", "loading");
   });
 
   List<String> _availableHashes = List();
@@ -49,6 +50,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
       _settingsData = List.generate((res.stations.length), (index) {
         return new SettingsData(
             res.stations[index].id,
+            res.stations[index].ip,
             res.stations[index].name,
             res.stations[index].hash,
             res.stations[index].status.value);
@@ -285,6 +287,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                                   onPressed: () {
                                     var args = SettingsMenuPostArgs(
                                         _settingsData[index].id,
+                                        _settingsData[index].ip,
                                         _availableHashes,
                                         sessionData);
                                     Navigator.pushNamed(

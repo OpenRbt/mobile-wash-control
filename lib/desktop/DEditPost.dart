@@ -7,6 +7,7 @@ import 'dart:async';
 
 class DEditPostArgs {
   final int postID;
+  final String ip;
   final String hash;
   final int currentProgramID;
   final List<InlineResponse2001Buttons> buttonPrograms;
@@ -16,6 +17,7 @@ class DEditPostArgs {
 
   DEditPostArgs(
     this.postID,
+      this.ip,
     this.hash,
     this.currentProgramID,
     this.buttonPrograms,
@@ -441,6 +443,18 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
               },
             ),
           ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(5),
+          child: SizedBox(
+              height: 20,
+              width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+              child: Center(
+                child: Text(
+                  "IP поста: ${postMenuArgs.ip}",
+                  style: TextStyle(fontSize: 14),
+                ),
+              )),
         ),
       ],
     );

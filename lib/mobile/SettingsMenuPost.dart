@@ -10,10 +10,11 @@ class SettingsMenuPost extends StatefulWidget {
 
 class SettingsMenuPostArgs {
   final int stationID;
+  final String stationIP;
   final SessionData sessionData;
   final List<String> availableHashes;
 
-  SettingsMenuPostArgs(this.stationID, this.availableHashes, this.sessionData);
+  SettingsMenuPostArgs(this.stationID, this.stationIP, this.availableHashes, this.sessionData);
 }
 
 class _SettingsMenuPostState extends State<SettingsMenuPost> {
@@ -258,6 +259,26 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                           width: screenW / 3 * 2,
                           child: Center(
                             child: Text("${settingsMenuPostArgs.stationID}"),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3,
+                          child: Center(
+                            child: Text("IP",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 75,
+                          width: screenW / 3 * 2,
+                          child: Center(
+                            child: Text("${settingsMenuPostArgs.stationIP}"),
                           ),
                         )
                       ],
