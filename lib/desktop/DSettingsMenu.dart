@@ -177,7 +177,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                       children: [
                         SizedBox(
                           height: 50,
-                          width: width / 7 * 2,
+                          width: width * 3 / 13,
                           child: Center(
                             child: Text(
                               "Список постов",
@@ -189,7 +189,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                         ),
                         SizedBox(
                           height: 50,
-                          width: width / 7 * 2,
+                          width: width * 3 / 13,
                           child: Center(
                             child: Text(
                               "Хэш",
@@ -201,7 +201,19 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                         ),
                         SizedBox(
                           height: 50,
-                          width: width / 7 * 2,
+                          width: width * 3 / 13,
+                          child: Center(
+                            child: Text(
+                              "IP",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: width * 3 / 13,
                           child: Center(
                             child: Text(
                               "Статус",
@@ -220,7 +232,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                           children: [
                             SizedBox(
                               height: 50,
-                              width: width / 7 * 2,
+                              width: width * 3 / 13,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color: index % 2 == 0
@@ -237,7 +249,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                             ),
                             SizedBox(
                               height: 50,
-                              width: width / 7 * 2,
+                              width: width * 3 / 13,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color: index % 2 == 0
@@ -254,7 +266,24 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                             ),
                             SizedBox(
                               height: 50,
-                              width: width / 7 * 2,
+                              width: width * 3 / 13,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${_settingsData[index].ip}",
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: width * 3 / 13,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color: index % 2 == 0
@@ -277,7 +306,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                             ),
                             SizedBox(
                               height: 50,
-                              width: width / 7,
+                              width: width / 13,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color: index % 2 == 0

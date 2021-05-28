@@ -447,14 +447,14 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
         Padding(
           padding: EdgeInsets.all(5),
           child: SizedBox(
-              height: 20,
               width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-              child: Center(
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                  child: Center(
                 child: Text(
                   "IP поста: ${postMenuArgs.ip}",
-                  style: TextStyle(fontSize: 14),
                 ),
-              )),
+              ))),
         ),
       ],
     );
@@ -499,7 +499,7 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
         'Активный',
         style: TextStyle(fontSize: 15),
       ),
-      value: index < _checkboxList.length ? _checkboxList[index] : false,
+      value: index < (_checkboxList?.length ?? 0) ? _checkboxList[index] : false,
       onChanged: (newValue) async {
         //_programButtonListener(index, postMenuArgs);
       },
