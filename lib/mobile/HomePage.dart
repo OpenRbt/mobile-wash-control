@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 50,
+                    height: 60,
                     width: (screenW -
                         (orientation == Orientation.portrait ? 3 : 5) * 10),
                     child: FlatButton(

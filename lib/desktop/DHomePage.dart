@@ -75,7 +75,7 @@ class _DHomePageState extends State<DHomePage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      height: 50,
+                      height: 60,
                       width: width / 4,
                       child: FlatButton(
                         color: _homePageData[index].status == "online"
