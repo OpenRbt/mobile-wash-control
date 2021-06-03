@@ -7,11 +7,12 @@ class DSettingsMenuArgs {}
 
 class DSettingsData {
   final int id;
+  final String ip;
   final String name;
   final String hash;
   final String status;
 
-  DSettingsData(this.id, this.name, this.hash, this.status);
+  DSettingsData(this.id, this.ip, this.name, this.hash, this.status);
 }
 
 class DSettingsMenu extends StatefulWidget {
@@ -27,7 +28,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
   bool _firstLoad = true;
   String _currentTemp = "__";
   List<DSettingsData> _settingsData = List.generate(10, (index) {
-    return new DSettingsData(-1, "Loading", "$index", "loading");
+    return new DSettingsData(-1, "...", "Loading", "$index", "loading");
   });
 
   List<String> _availableHashes = List();
@@ -49,6 +50,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
       _settingsData = List.generate((res.stations.length), (index) {
         return new DSettingsData(
             res.stations[index].id,
+            res.stations[index].ip,
             res.stations[index].name,
             res.stations[index].hash,
             res.stations[index].status.value);
@@ -175,7 +177,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                       children: [
                         SizedBox(
                           height: 50,
-                          width: width / 7 * 2,
+                          width: width * 3 / 13,
                           child: Center(
                             child: Text(
                               "Список постов",
@@ -187,7 +189,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                         ),
                         SizedBox(
                           height: 50,
-                          width: width / 7 * 2,
+                          width: width * 3 / 13,
                           child: Center(
                             child: Text(
                               "Хэш",
@@ -199,7 +201,19 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                         ),
                         SizedBox(
                           height: 50,
-                          width: width / 7 * 2,
+                          width: width * 3 / 13,
+                          child: Center(
+                            child: Text(
+                              "IP",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: width * 3 / 13,
                           child: Center(
                             child: Text(
                               "Статус",
@@ -218,7 +232,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                           children: [
                             SizedBox(
                               height: 50,
-                              width: width / 7 * 2,
+                              width: width * 3 / 13,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color: index % 2 == 0
@@ -235,7 +249,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                             ),
                             SizedBox(
                               height: 50,
-                              width: width / 7 * 2,
+                              width: width * 3 / 13,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color: index % 2 == 0
@@ -252,7 +266,24 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                             ),
                             SizedBox(
                               height: 50,
-                              width: width / 7 * 2,
+                              width: width * 3 / 13,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.white
+                                      : Colors.black12,
+                                  border: Border.all(color: Colors.black38),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${_settingsData[index].ip}",
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: width * 3 / 13,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color: index % 2 == 0
@@ -275,7 +306,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                             ),
                             SizedBox(
                               height: 50,
-                              width: width / 7,
+                              width: width / 13,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color: index % 2 == 0
@@ -288,6 +319,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
                                   onPressed: () {
                                     var args = DSettingsMenuPostArgs(
                                         _settingsData[index].id,
+                                        _settingsData[index].ip,
                                         _availableHashes,
                                         sessionData);
                                     Navigator.pushNamed(

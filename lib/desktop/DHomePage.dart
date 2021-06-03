@@ -13,13 +13,14 @@ class DHomePage extends StatefulWidget {
 class HomePageData {
   final int id;
   final String name;
+  final String ip;
   final String hash;
   final String status;
   final String info;
   final int currentBalance;
   int currentProgramID;
 
-  HomePageData(this.id, this.name, this.hash, this.status, this.info,
+  HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info,
       this.currentBalance, this.currentProgramID);
 }
 
@@ -74,7 +75,7 @@ class _DHomePageState extends State<DHomePage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      height: 50,
+                      height: 60,
                       width: width / 4,
                       child: FlatButton(
                         color: _homePageData[index].status == "online"
@@ -88,6 +89,7 @@ class _DHomePageState extends State<DHomePage> {
                         onPressed: () {
                           var args = DEditPostArgs(
                               _homePageData[index].id,
+                              _homePageData[index].ip,
                               _homePageData[index].hash,
                               _homePageData[index].currentProgramID,
                               _stationProgramsButtons[_homePageData[index].id],
@@ -105,6 +107,8 @@ class _DHomePageState extends State<DHomePage> {
                             Text(_homePageData[index].name),
                             Text(
                                 "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
+                            Text(
+                                "IP: ${_homePageData[index].ip}"),
                           ],
                         ),
                       ),
@@ -167,7 +171,7 @@ class _DHomePageState extends State<DHomePage> {
 
   bool _firstLoad = true;
   List<HomePageData> _homePageData = List.generate(12, (index) {
-    return HomePageData(-1, "Loading...", "...", "...", "...", -1, -1);
+    return HomePageData(-1, "Loading...", "...", "...", "...", "...", -1, -1);
   });
 
   void initState() {
@@ -236,6 +240,7 @@ class _DHomePageState extends State<DHomePage> {
         return HomePageData(
             res.stations[index].id ?? index + 1,
             res.stations[index].name ?? "Station ${index + 1}",
+            res.stations[index].ip ?? "",
             res.stations[index].hash ?? "",
             res.stations[index].status.value ?? "",
             res.stations[index].info ?? "",

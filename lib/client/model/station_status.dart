@@ -6,6 +6,9 @@ class StationStatus {
   
 
   String name = null;
+
+
+  String ip = null;
   
 
   String hash = null;
@@ -26,7 +29,7 @@ class StationStatus {
 
   @override
   String toString() {
-    return 'StationStatus[id=$id, name=$name, hash=$hash, status=$status, info=$info, currentBalance=$currentBalance, currentProgram=$currentProgram, ]';
+    return 'StationStatus[id=$id, name=$name, ip = $ip, hash=$hash, status=$status, info=$info, currentBalance=$currentBalance, currentProgram=$currentProgram, ]';
   }
 
   StationStatus.fromJson(Map<String, dynamic> json) {
@@ -36,6 +39,9 @@ class StationStatus {
     ;
     name =
         json['name']
+    ;
+    ip =
+        json['ip']
     ;
     hash =
       
@@ -62,6 +68,7 @@ class StationStatus {
     return {
       'id': id,
       'name': name,
+      'ip': ip,
       'hash': hash,
       'status': status,
       'info': info,
