@@ -68,7 +68,10 @@ class _EditPostMenuState extends State<EditPostMenu> {
     }
   }
 
-  void _getBalance(SessionData sessionData, int postID) async {
+  void _getBalance(PostMenuArgs postMenuArgs) async {
+    final SessionData sessionData = postMenuArgs.sessionData;
+    final int postID = postMenuArgs.postID;
+    _updateBalanceTimer.cancel();
     try {
       var res1 = await sessionData.client.status();
       StationStatus stationStatus = res1.stations
@@ -108,6 +111,12 @@ class _EditPostMenuState extends State<EditPostMenu> {
         print("Other Exception: $e\n");
       }
     }
+    Future.delayed(Duration(seconds: 500),(){
+      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+        _getBalance(postMenuArgs);
+        _unpackNames(postMenuArgs);
+      });
+    });
     setState(() {});
   }
 
@@ -193,7 +202,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
       _loadButtons(postMenuArgs);
 
       _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-        _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
+        _getBalance(postMenuArgs);
         _unpackNames(postMenuArgs);
       });
 
@@ -453,13 +462,15 @@ class _EditPostMenuState extends State<EditPostMenu> {
               onPressed: () {
                 var args = IncassationHistoryArgs(
                     postMenuArgs.postID, postMenuArgs.sessionData);
-                _updateBalanceTimer.cancel();
+                if (_updateBalanceTimer.isActive){
+                  _updateBalanceTimer.cancel();
+                }
                 Navigator.pushNamed(context, "/mobile/incassation",
                         arguments: args)
                     .then((value) {
                   _updateBalanceTimer =
                       new Timer.periodic(Duration(seconds: 1), (timer) {
-                    _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
+                    _getBalance(postMenuArgs);
                     _unpackNames(postMenuArgs);
                   });
                   setState(() {});

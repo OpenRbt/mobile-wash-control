@@ -107,8 +107,7 @@ class _DHomePageState extends State<DHomePage> {
                             Text(_homePageData[index].name),
                             Text(
                                 "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
-                            Text(
-                                "IP: ${_homePageData[index].ip}"),
+                            Text("IP: ${_homePageData[index].ip}"),
                           ],
                         ),
                       ),
@@ -179,6 +178,7 @@ class _DHomePageState extends State<DHomePage> {
   }
 
   void _getLabels(SessionData sessionData) async {
+    _updateLabelsTimer.cancel();
     bool redraw = false;
     try {
       if (!mounted) {
@@ -224,10 +224,16 @@ class _DHomePageState extends State<DHomePage> {
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
           "Произошла ошибка при запросе к api", Colors.red);
     }
+    Future.delayed(Duration(milliseconds: 500), () {
+      _updateLabelsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+        _getLabels(sessionData);
+      });
+    });
     if (redraw) setState(() {});
   }
 
   void _getStations(SessionData sessionData) async {
+    _updateTimer.cancel();
     bool redraw = false;
     try {
       var res = await sessionData.client.status();
@@ -258,7 +264,11 @@ class _DHomePageState extends State<DHomePage> {
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
           "Произошла ошибка при запросе к api", Colors.red);
     }
-
+    Future.delayed(Duration(milliseconds: 500), () {
+      _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        _getStations(sessionData);
+      });
+    });
     if (redraw) setState(() {});
   }
 }

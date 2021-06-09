@@ -58,6 +58,7 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
   Map<int, String> _buttonNames = Map();
 
   void _getBalance(SessionData sessionData, int postID) async {
+    _updateBalanceTimer.cancel();
     try {
       var res1 = await sessionData.client.status();
       _currentProgram = res1.stations
@@ -87,6 +88,9 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
         print("Other Exception: $e\n");
       }
     }
+    Future.delayed(Duration(milliseconds: 500), (){_updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+      _getBalance(sessionData, postID);
+    });});
     setState(() {});
   }
 
@@ -431,7 +435,9 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
                 var args = DIncassationHistoryArgs(
                     postMenuArgs.postID,
                     postMenuArgs.sessionData);
-                _updateBalanceTimer.cancel();
+                if (_updateBalanceTimer.isActive){
+                  _updateBalanceTimer.cancel();
+                }
                 Navigator.pushNamed(context, "/dekstop/incassation",
                     arguments: args).then((value) {
                   _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
