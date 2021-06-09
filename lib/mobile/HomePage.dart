@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _getPrograms(SessionData sessionData) async {
+    _programsTimer.cancel();
     try {
       if (!mounted) {
         return;
@@ -56,10 +57,16 @@ class _HomePageState extends State<HomePage> {
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
           "Произошла ошибка при запросе к api", Colors.red);
     }
+    Future.delayed(Duration(seconds: 500), () {
+      _programsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+        _getPrograms(sessionData);
+      });
+    });
   }
 
   void _getStations(SessionData sessionData) async {
     bool redraw = false;
+    _updateTimer.cancel();
     try {
       if (!mounted) {
         return;
@@ -89,6 +96,13 @@ class _HomePageState extends State<HomePage> {
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
           "Произошла ошибка при запросе к api", Colors.red);
     }
+    Future.delayed(Duration(milliseconds: 500), () {
+      if (!_updateTimer.isActive) {
+        _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+          _getStations(sessionData);
+        });
+      }
+    });
     if (redraw) setState(() {});
   }
 
@@ -153,8 +167,12 @@ class _HomePageState extends State<HomePage> {
                                   _homePageData[index].currentProgramID,
                                   _programs,
                                   sessionData);
-                              _updateTimer.cancel();
-                              _programsTimer.cancel();
+                              if (_updateTimer.isActive) {
+                                _updateTimer.cancel();
+                              }
+                              if (_programsTimer.isActive) {
+                                _programsTimer.cancel();
+                              }
                               Navigator.pushNamed(context, "/mobile/editPost",
                                       arguments: args)
                                   .then((value) {
@@ -162,10 +180,10 @@ class _HomePageState extends State<HomePage> {
                                 _updateTimer = Timer.periodic(
                                     Duration(seconds: 1), (timer) {
                                   _getStations(sessionData);
-                                  _programsTimer = Timer.periodic(
-                                      Duration(seconds: 10), (timer) {
-                                    _getPrograms(sessionData);
-                                  });
+                                });
+                                _programsTimer = Timer.periodic(
+                                    Duration(seconds: 10), (timer) {
+                                  _getPrograms(sessionData);
                                 });
                                 setState(() {});
                               });
@@ -176,8 +194,7 @@ class _HomePageState extends State<HomePage> {
                           Text(_homePageData[index].name),
                           Text(
                               "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
-                          Text(
-                              "IP: ${_homePageData[index].ip}"),
+                          Text("IP: ${_homePageData[index].ip}"),
                         ],
                       ),
                     ),
