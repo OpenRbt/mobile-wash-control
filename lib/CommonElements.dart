@@ -216,7 +216,7 @@ void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey,
 }
 
 class DefaultConfig {
-  static final appVersion = "1.0.0";
+  static final appVersion = "1.0.1";
   static final Map<String, StationsDefaultConfig> configs = {
     "Wash": StationsDefaultConfig([
       _getProgram(1, "wsh-water", 25, false, 100, 100, [
