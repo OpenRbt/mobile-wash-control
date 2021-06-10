@@ -91,11 +91,18 @@ class _EditPostMenuState extends State<EditPostMenu> {
         return;
       }
       _checkboxList = List.filled(_maxButtons, false);
-      var checkboxID = _buttons
-                  .firstWhere((element) => element.programID == _currentProgram)
-                  ?.buttonID -
-              1 ??
-          -1;
+      var checkboxID = 0;
+      if (_buttons
+              .where((element) => element.programID == _currentProgram)
+              .length !=
+          0) {
+        checkboxID = _buttons
+                    .firstWhere(
+                        (element) => element.programID == _currentProgram)
+                    .buttonID -
+                1 ??
+            -1;
+      }
       if (checkboxID >= 0) {
         _checkboxList[checkboxID] = true;
       }
@@ -111,11 +118,9 @@ class _EditPostMenuState extends State<EditPostMenu> {
         print("Other Exception: $e\n");
       }
     }
-    Future.delayed(Duration(seconds: 500),(){
-      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-        _getBalance(postMenuArgs);
-        _unpackNames(postMenuArgs);
-      });
+    _unpackNames(postMenuArgs);
+    _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+      _getBalance(postMenuArgs);
     });
     setState(() {});
   }
@@ -200,10 +205,8 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
     if (_firstLoad) {
       _loadButtons(postMenuArgs);
-
       _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
         _getBalance(postMenuArgs);
-        _unpackNames(postMenuArgs);
       });
 
       _firstLoad = false;
@@ -462,7 +465,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
               onPressed: () {
                 var args = IncassationHistoryArgs(
                     postMenuArgs.postID, postMenuArgs.sessionData);
-                if (_updateBalanceTimer.isActive){
+                if (_updateBalanceTimer.isActive) {
                   _updateBalanceTimer.cancel();
                 }
                 Navigator.pushNamed(context, "/mobile/incassation",
@@ -471,11 +474,10 @@ class _EditPostMenuState extends State<EditPostMenu> {
                   _updateBalanceTimer =
                       new Timer.periodic(Duration(seconds: 1), (timer) {
                     _getBalance(postMenuArgs);
-                    _unpackNames(postMenuArgs);
                   });
                   setState(() {});
                 });
-                ;
+
                 setState(() {});
               },
             ),

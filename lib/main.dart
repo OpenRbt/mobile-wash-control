@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/desktop/DAccountsMenu.dart';
 import 'package:mobile_wash_control/desktop/DAccountsMenuAdd.dart';
 import 'package:mobile_wash_control/desktop/DAccountsMenuEdit.dart';
@@ -298,7 +299,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var appBar = AppBar(
-      title: Text(widget.title),
+      title: Text("${widget.title}"),
+      leading: Text("${DefaultConfig.appVersion}"),
     );
 
     var screenW = MediaQuery.of(context).size.width;
