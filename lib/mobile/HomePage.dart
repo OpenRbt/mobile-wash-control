@@ -67,42 +67,43 @@ class _HomePageState extends State<HomePage> {
   void _getStations(SessionData sessionData) async {
     bool redraw = false;
     _updateTimer.cancel();
-    try {
-      if (!mounted) {
-        return;
-      }
-      var res = await sessionData.client.status();
-      res.stations =
-          res.stations.where((element) => element.id != null).toList();
-      var tmpHomepage = List.generate((res.stations.length), (index) {
-        return HomePageData(
-            res.stations[index].id ?? index + 1,
-            res.stations[index].name ?? "Station ${index + 1}",
-            res.stations[index].ip ?? "",
-            res.stations[index].hash ?? "",
-            res.stations[index].status.value ?? "",
-            res.stations[index].info ?? "",
-            res.stations[index].currentBalance ?? 0,
-            res.stations[index].currentProgram ?? -1);
-      });
-
-      tmpHomepage.sort(
-        (a, b) => a.id.compareTo(b.id),
-      );
-      redraw = _homePageData != tmpHomepage;
-      if (redraw) _homePageData = tmpHomepage;
-    } catch (e) {
-      print("Exception when calling DefaultApi->Status in HomePage: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
-    }
-    Future.delayed(Duration(milliseconds: 500), () {
-      if (!_updateTimer.isActive) {
-        _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-          _getStations(sessionData);
+    if ((GlobalData.appLifecycleState ?? AppLifecycleState.resumed) ==
+        AppLifecycleState.resumed) {
+      try {
+        if (!mounted) {
+          return;
+        }
+        var res = await sessionData.client.status();
+        res.stations =
+            res.stations.where((element) => element.id != null).toList();
+        var tmpHomepage = List.generate((res.stations.length), (index) {
+          return HomePageData(
+              res.stations[index].id ?? index + 1,
+              res.stations[index].name ?? "Station ${index + 1}",
+              res.stations[index].ip ?? "",
+              res.stations[index].hash ?? "",
+              res.stations[index].status.value ?? "",
+              res.stations[index].info ?? "",
+              res.stations[index].currentBalance ?? 0,
+              res.stations[index].currentProgram ?? -1);
         });
+
+        tmpHomepage.sort(
+          (a, b) => a.id.compareTo(b.id),
+        );
+        redraw = _homePageData != tmpHomepage;
+        if (redraw) _homePageData = tmpHomepage;
+      } catch (e) {
+        print("Exception when calling DefaultApi->Status in HomePage: $e\n");
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Произошла ошибка при запросе к api", Colors.red);
       }
-    });
+    }
+    if (!_updateTimer.isActive) {
+      _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        _getStations(sessionData);
+      });
+    }
     if (redraw) setState(() {});
   }
 

@@ -72,50 +72,48 @@ class _EditPostMenuState extends State<EditPostMenu> {
     final SessionData sessionData = postMenuArgs.sessionData;
     final int postID = postMenuArgs.postID;
     _updateBalanceTimer.cancel();
-    try {
-      var res1 = await sessionData.client.status();
-      StationStatus stationStatus = res1.stations
-          .firstWhere((element) => element.id == postID, orElse: () {
-        return null;
-      });
-      _currentProgram = stationStatus?.currentProgram ?? -1;
-      _balance = stationStatus?.currentBalance ?? 0;
 
-      var args = StationReportCurrentMoneyArgs();
-      args.id = postID;
-      var res = await sessionData.client.stationReportCurrentMoney(args);
-      //_balance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0)+(res.moneyReport?.electronical ?? 0);
-      _incassBalance =
-          (res.moneyReport?.banknotes ?? 0) + (res.moneyReport?.coins ?? 0);
-      if (!mounted) {
-        return;
-      }
-      _checkboxList = List.filled(_maxButtons, false);
-      var checkboxID = 0;
-      if (_buttons
-              .where((element) => element.programID == _currentProgram)
-              .length !=
-          0) {
-        checkboxID = _buttons
+    if ((GlobalData.appLifecycleState ??
+        AppLifecycleState.resumed) == AppLifecycleState.resumed) {
+      try {
+        var res1 = await sessionData.client.status();
+        StationStatus stationStatus = res1.stations
+            .firstWhere((element) => element.id == postID, orElse: () {
+          return null;
+        });
+        _currentProgram = stationStatus?.currentProgram ?? -1;
+        _balance = stationStatus?.currentBalance ?? 0;
+
+        var args = StationReportCurrentMoneyArgs();
+        args.id = postID;
+        var res = await sessionData.client.stationReportCurrentMoney(args);
+        //_balance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0)+(res.moneyReport?.electronical ?? 0);
+        _incassBalance =
+            (res.moneyReport?.banknotes ?? 0) + (res.moneyReport?.coins ?? 0);
+        if (!mounted) {
+          return;
+        }
+        _checkboxList = List.filled(_maxButtons, false);
+        var checkboxID = _buttons
                     .firstWhere(
                         (element) => element.programID == _currentProgram)
-                    .buttonID -
+                    ?.buttonID -
                 1 ??
             -1;
-      }
-      if (checkboxID >= 0) {
-        _checkboxList[checkboxID] = true;
-      }
-    } on ApiException catch (e) {
-      if (e.code != 404) {
-        print(
-            "Exception when calling DefaultApi->/station-report-current-money: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Произошла ошибка при запросе к api", Colors.red);
-      }
-    } catch (e) {
-      if (!(e is ApiException)) {
-        print("Other Exception: $e\n");
+        if (checkboxID >= 0) {
+          _checkboxList[checkboxID] = true;
+        }
+      } on ApiException catch (e) {
+        if (e.code != 404) {
+          print(
+              "Exception when calling DefaultApi->/station-report-current-money: $e\n");
+          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+              "Произошла ошибка при запросе к api", Colors.red);
+        }
+      } catch (e) {
+        if (!(e is ApiException)) {
+          print("Other Exception: $e\n");
+        }
       }
     }
     _unpackNames(postMenuArgs);
