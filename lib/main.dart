@@ -14,6 +14,7 @@ import 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/LifeCycleManager.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/SettingsDefaultConfigs.dart';
@@ -44,6 +45,52 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (Platform.isAndroid) {
+      return LifeCycleManager(
+        child: MaterialApp(
+          title: 'Mobile Wash Control',
+          theme: ThemeData(
+            primarySwatch: Colors.lightGreen,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          initialRoute: "/",
+          routes: {
+            "/mobile/auth": (context) => AuthPage(),
+            "/": (context) => MyHomePage(title: "Главная страница"),
+            "/testScan": (context) => ServersPage(
+                  servers: null,
+                  serversValid: [],
+                ),
+            "/mobile/home": (context) => HomePage(),
+            "/mobile/editPost": (context) => EditPostMenu(),
+            "/mobile/programs": (context) => ProgramsMenu(),
+            "/mobile/programs/edit": (context) => ProgramMenuEdit(),
+            "/mobile/programs/add": (context) => ProgramMenuAdd(),
+            "/mobile/settings": (context) => SettingsMenu(),
+            "/mobile/settings/post": (context) => SettingsMenuPost(),
+            "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
+            "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
+            "/mobile/statistics": (context) => StatisticsMenu(),
+            "/mobile/posts": (context) => PostsMenu(),
+            "/mobile/accounts": (context) => AccountsMenu(),
+            "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
+            "/mobile/accounts/add": (context) => AccountsMenuAdd(),
+            "/mobile/incassation": (context) => IncassationHistory(),
+            "/desktop/auth": (context) => DAuthPage(),
+            "/desktop/home": (context) => DHomePage(),
+            "/desktop/home/edit": (context) => DEditPostMenu(),
+            "/desktop/statistics": (context) => DStatisticsPage(),
+            "/desktop/accounts": (context) => DAccountsMenu(),
+            "/desktop/accounts/edit": (context) => DAccountsMenuEdit(),
+            "/desktop/accounts/add": (context) => DAccountsMenuAdd(),
+            "/desktop/programs": (context) => DProgramsMenu(),
+            "/desktop/settings": (context) => DSettingsMenu(),
+            "/desktop/settings/post": (context) => DSettingsMenuPost(),
+            "/dekstop/incassation": (context) => DIncassationHistory(),
+          },
+        ),
+      );
+    }
     return MaterialApp(
       title: 'Mobile Wash Control',
       theme: ThemeData(
@@ -80,7 +127,7 @@ class MyApp extends StatelessWidget {
         "/desktop/accounts": (context) => DAccountsMenu(),
         "/desktop/accounts/edit": (context) => DAccountsMenuEdit(),
         "/desktop/accounts/add": (context) => DAccountsMenuAdd(),
-        "/desktop/programs":(context) => DProgramsMenu(),
+        "/desktop/programs": (context) => DProgramsMenu(),
         "/desktop/settings": (context) => DSettingsMenu(),
         "/desktop/settings/post": (context) => DSettingsMenuPost(),
         "/dekstop/incassation": (context) => DIncassationHistory(),
@@ -113,6 +160,11 @@ class _MyHomePageState extends State<MyHomePage> {
     _servers = new HashSet();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void _scanLan(bool quick) async {
     _pos = 0;
     setState(() {
@@ -143,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
         var subIPS = List.generate(256, (index) {
           return "$index";
         });
-        if (quick){
+        if (quick) {
           client.connectionTimeout = Duration(seconds: 60);
           subIPS.forEach((element) async {
             try {
@@ -181,25 +233,25 @@ class _MyHomePageState extends State<MyHomePage> {
           await Future.delayed(Duration(seconds: 50, milliseconds: 100));
           print("FOUND : ${_servers.length}");
         } else {
-        await Future.forEach(subIPS, (element) async {
-          print("Try to http://${_scanIP}.${element}:8020/ping");
-          try {
-            setState(() {
-              _pos++;
-            });
-            final request =
-                await client.get("${_scanIP}.${element}", 8020, "/ping");
-            final response = await request.close();
-            if (response.statusCode == 200) {
-              if (mounted) {
-                _servers.add("${_scanIP}.${element}");
-                setState(() {});
+          await Future.forEach(subIPS, (element) async {
+            print("Try to http://${_scanIP}.${element}:8020/ping");
+            try {
+              setState(() {
+                _pos++;
+              });
+              final request =
+                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final response = await request.close();
+              if (response.statusCode == 200) {
+                if (mounted) {
+                  _servers.add("${_scanIP}.${element}");
+                  setState(() {});
+                }
               }
-            }
-          } catch (e) {}
-        });
+            } catch (e) {}
+          });
         }
-        
+
         if (mounted)
           setState(() {
             _canScan = true;
@@ -300,7 +352,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var appBar = AppBar(
       title: Text("${widget.title}"),
-      leading: Text("${DefaultConfig.appVersion}"),
+      leading: Text("${GlobalData.appVersion}"),
     );
 
     var screenW = MediaQuery.of(context).size.width;
