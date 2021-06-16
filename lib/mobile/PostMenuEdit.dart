@@ -10,11 +10,10 @@ class PostMenuArgs {
   final String ip;
   final String hash;
   final int currentProgramID;
-  final List<Program> programs;
   final SessionData sessionData;
 
-  PostMenuArgs(this.postID, this.ip, this.hash, this.currentProgramID,
-      this.programs, this.sessionData);
+  PostMenuArgs(
+      this.postID, this.ip, this.hash, this.currentProgramID, this.sessionData);
 }
 
 //TODO: Buttons rework and fix
@@ -56,11 +55,12 @@ class _EditPostMenuState extends State<EditPostMenu> {
       args.stationID = postMenuArgs.postID;
       var res = await postMenuArgs.sessionData.client.stationButton(args);
       _buttons = res.buttons;
+      var progArgs = ProgramsArgs();
+      var programs = await postMenuArgs.sessionData.client.programs(progArgs);
       if (!mounted) {
         return;
       }
-      _unpackNames(postMenuArgs);
-      setState(() {});
+      _unpackNames(programs);
     } catch (e) {
       print("Exception when calling DefaultApi->/station-button: $e\n");
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
@@ -118,25 +118,24 @@ class _EditPostMenuState extends State<EditPostMenu> {
         print("Other Exception: $e\n");
       }
     }
-    _unpackNames(postMenuArgs);
     _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
       _getBalance(postMenuArgs);
     });
     setState(() {});
   }
 
-  void _unpackNames(PostMenuArgs postMenuArgs) {
+  void _unpackNames(List<Program> programs) {
     if ((_buttons?.length ?? 0) > 0) {
       _buttonNames = Map();
       for (int i = 0; i < _buttons.length; i++) {
-        _buttonNames[_buttons[i].buttonID - 1] = postMenuArgs.programs
-                .firstWhere((element) => element.id == _buttons[i].programID,
-                    orElse: () {
+        _buttonNames[_buttons[i].buttonID - 1] = programs.firstWhere(
+                (element) => element.id == _buttons[i].programID, orElse: () {
               return null;
             })?.name ??
             "NOT FOUND";
       }
     }
+    setState(() {});
   }
 
   void _addServiceMoney(PostMenuArgs postMenuArgs) async {
