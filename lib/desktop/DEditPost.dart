@@ -11,21 +11,20 @@ class DEditPostArgs {
   final String hash;
   final int currentProgramID;
   final List<InlineResponse2001Buttons> buttonPrograms;
-  final List<Program> programs;
   final SessionData sessionData;
   int serviceBalance;
 
   DEditPostArgs(
     this.postID,
-      this.ip,
+    this.ip,
     this.hash,
     this.currentProgramID,
     this.buttonPrograms,
-    this.programs,
     this.serviceBalance,
     this.sessionData,
   );
 }
+
 class DEditPostMenu extends StatefulWidget {
   DEditPostMenu({Key key}) : super(key: key);
 
@@ -56,41 +55,94 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
 
   List<bool> _checkboxList;
   Map<int, String> _buttonNames = Map();
+  List<InlineResponse2001Buttons> _buttons = List();
 
-  void _getBalance(SessionData sessionData, int postID) async {
+  void _loadButtons(DEditPostArgs postMenuArgs) async {
+    try {
+      var args = StationButtonArgs();
+      args.stationID = postMenuArgs.postID;
+      var res = await postMenuArgs.sessionData.client.stationButton(args);
+      _buttons = res.buttons;
+      var progArgs = ProgramsArgs();
+      var programs = await postMenuArgs.sessionData.client.programs(progArgs);
+      if (!mounted) {
+        return;
+      }
+      _unpackNames(programs);
+    } catch (e) {
+      print("Exception when calling DefaultApi->/station-button: $e\n");
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Произошла ошибка при запросе к api", Colors.red);
+    }
+  }
+
+  void _getBalance(DEditPostArgs postMenuArgs) async {
+    final SessionData sessionData = postMenuArgs.sessionData;
+    final int postID = postMenuArgs.postID;
     _updateBalanceTimer.cancel();
     try {
       var res1 = await sessionData.client.status();
-      _currentProgram = res1.stations
-          .where((element) => element.id == postID)
-          .last
-          .currentProgram;
-      _balance = res1.stations
-          .where((element) => element.id == postID)
-          .last
-          .currentBalance;
-      _currentProgram = _currentProgram ?? -1;
+      StationStatus stationStatus = res1.stations
+          .firstWhere((element) => element.id == postID, orElse: () {
+        return null;
+      });
+      _currentProgram = stationStatus?.currentProgram ?? -1;
+      _balance = stationStatus?.currentBalance ?? 0;
+
       var args = StationReportCurrentMoneyArgs();
       args.id = postID;
       var res = await sessionData.client.stationReportCurrentMoney(args);
-      _incassBalance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0);
+      //_balance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0)+(res.moneyReport?.electronical ?? 0);
+      _incassBalance =
+          (res.moneyReport?.banknotes ?? 0) + (res.moneyReport?.coins ?? 0);
       if (!mounted) {
         return;
+      }
+      _checkboxList = List.filled(_maxButtons, false);
+      var checkboxID = 0;
+      if (_buttons
+              .where((element) => element.programID == _currentProgram)
+              .length !=
+          0) {
+        checkboxID = _buttons
+                    .firstWhere(
+                        (element) => element.programID == _currentProgram)
+                    .buttonID -
+                1 ??
+            -1;
+      }
+      if (checkboxID >= 0) {
+        _checkboxList[checkboxID] = true;
       }
     } on ApiException catch (e) {
       if (e.code != 404) {
         print(
             "Exception when calling DefaultApi->/station-report-current-money: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Произошла ошибка при запросе к api", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
         print("Other Exception: $e\n");
       }
     }
-    Future.delayed(Duration(milliseconds: 500), (){_updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-      _getBalance(sessionData, postID);
-    });});
+    _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+      _getBalance(postMenuArgs);
+    });
+    setState(() {});
+  }
+
+  void _unpackNames(List<Program> programs) {
+    if ((_buttons?.length ?? 0) > 0) {
+      _buttonNames = Map();
+      for (int i = 0; i < _buttons.length; i++) {
+        _buttonNames[_buttons[i].buttonID - 1] = programs.firstWhere(
+                (element) => element.id == _buttons[i].programID, orElse: () {
+              return null;
+            })?.name ??
+            "NOT FOUND";
+      }
+    }
     setState(() {});
   }
 
@@ -102,7 +154,8 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
       var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
     } catch (e) {
       print("Exception when calling DefaultApi->/add-service-amount: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+          "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -124,7 +177,8 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
       } catch (e) {
         print(
             "Exception when calling DefaultApi->runProgram in DEditPostMenu: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Произошла ошибка при запросе к api", Colors.red);
       }
     } else {
       try {
@@ -141,50 +195,28 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
       } catch (e) {
         print(
             "Exception when calling DefaultApi->runProgram in DEditPostMenu: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+            "Произошла ошибка при запросе к api", Colors.red);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final DEditPostArgs postMenuArgs = ModalRoute.of(context).settings.arguments;
+    final DEditPostArgs postMenuArgs =
+        ModalRoute.of(context).settings.arguments;
 
     final AppBar appBar = AppBar(
-      title:
-          Text("Пост: ${postMenuArgs.postID} | Инкасс: ${_incassBalance ?? 0} руб"),
+      title: Text(
+          "Пост: ${postMenuArgs.postID} | Инкасс: ${_incassBalance ?? 0} руб"),
     );
 
     if (_firstLoad) {
+      _loadButtons(postMenuArgs);
       _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-        _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
+        _getBalance(postMenuArgs);
       });
 
-      if (postMenuArgs.buttonPrograms != null &&
-          postMenuArgs.buttonPrograms.length > 0) {
-        _buttonNames = Map();
-        for (int i = 0; i < postMenuArgs.buttonPrograms.length; i++) {
-          try {
-            _buttonNames[postMenuArgs.buttonPrograms[i].buttonID - 1] =
-                postMenuArgs
-                        .programs
-                        .where((element) =>
-                            element.id ==
-                            postMenuArgs.buttonPrograms[i].programID)
-                        .first
-                        .name ??
-                    "NOT FOUND";
-          } catch (e) {
-            _buttonNames[i] = "NOT FOUND";
-          }
-        }
-        _checkboxList = List.filled(_buttonNames.length, false);
-        _currentProgram = postMenuArgs.programs.indexWhere(
-          (element) =>
-              (element.id ?? -1) == (postMenuArgs.currentProgramID ?? -1),
-        );
-        if (_currentProgram != -1) _checkboxList[_currentProgram] = true;
-      }
       _firstLoad = false;
     }
 
@@ -354,16 +386,22 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
                             if (e.code == 401) {
                               print(
                                   "Exception when calling DefaultApi->/save-collection: $e\n");
-                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Нет доступа", Colors.red);
-                            } else{
-                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive,  "Произошла ошибка при запросе к api", Colors.red);
+                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+                                  "Нет доступа", Colors.red);
+                            } else {
+                              showInfoSnackBar(
+                                  _scaffoldKey,
+                                  _isSnackBarActive,
+                                  "Произошла ошибка при запросе к api",
+                                  Colors.red);
                             }
                           } catch (e) {
                             if (!(e is ApiException)) {
                               print("Other Exception: $e\n");
                             }
                           }
-                          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пост проинкассирован", Colors.green);
+                          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+                              "Пост проинкассирован", Colors.green);
                           Navigator.pop(context);
                         },
                         child: Text("Да"),
@@ -409,7 +447,8 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
                 } catch (e) {
                   print(
                       "Exception when calling DefaultApi->/open-station: $e\n");
-                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+                      "Произошла ошибка при запросе к api", Colors.red);
                 }
               },
             ),
@@ -433,18 +472,24 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
               ),
               onPressed: () {
                 var args = DIncassationHistoryArgs(
-                    postMenuArgs.postID,
-                    postMenuArgs.sessionData);
-                if (_updateBalanceTimer.isActive){
+                    postMenuArgs.postID, postMenuArgs.sessionData);
+                if (_updateBalanceTimer.isActive) {
                   _updateBalanceTimer.cancel();
                 }
                 Navigator.pushNamed(context, "/dekstop/incassation",
-                    arguments: args).then((value) {
-                  _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-                    _getBalance(postMenuArgs.sessionData, postMenuArgs.postID);
-                  });
-                  setState(() {});
-                });;
+                        arguments: args)
+                    .then(
+                  (value) {
+                    _updateBalanceTimer = new Timer.periodic(
+                      Duration(seconds: 1),
+                      (timer) {
+                        _getBalance(postMenuArgs);
+                      },
+                    );
+                    setState(() {});
+                  },
+                );
+                ;
                 setState(() {});
               },
             ),
@@ -455,12 +500,12 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
           child: SizedBox(
               width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
               child: FittedBox(
-                fit: BoxFit.fitWidth,
+                  fit: BoxFit.fitWidth,
                   child: Center(
-                child: Text(
-                  "IP поста: ${postMenuArgs.ip}",
-                ),
-              ))),
+                    child: Text(
+                      "IP поста: ${postMenuArgs.ip}",
+                    ),
+                  ))),
         ),
       ],
     );
@@ -469,32 +514,38 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
   Widget _getButtonsColumn(
       bool isPortrait, double screenW, DEditPostArgs postMenuArgs) {
     return new Column(
-      children: List.generate(_maxButtons, (index) {
-        return Padding(
-          padding: EdgeInsets.all(10),
-          child: SizedBox(
-            height: 50,
-            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-            child: _getListButton(index, postMenuArgs),
-          ),
-        );
-      }),
+      children: List.generate(
+        _maxButtons,
+        (index) {
+          return Padding(
+            padding: EdgeInsets.all(10),
+            child: SizedBox(
+              height: 50,
+              width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+              child: _getListButton(index, postMenuArgs),
+            ),
+          );
+        },
+      ),
     );
   }
 
   Widget _getCheckBoxColumn(
       bool isPortrait, double screenW, DEditPostArgs postMenuArgs) {
     return new Column(
-      children: List.generate(_maxButtons, (index) {
-        return Padding(
-          padding: EdgeInsets.all(10),
-          child: SizedBox(
-            height: 50,
-            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-            child: _getCheckBox(index, postMenuArgs),
-          ),
-        );
-      }),
+      children: List.generate(
+        _maxButtons,
+        (index) {
+          return Padding(
+            padding: EdgeInsets.all(10),
+            child: SizedBox(
+              height: 50,
+              width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+              child: _getCheckBox(index, postMenuArgs),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -505,7 +556,8 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
         'Активный',
         style: TextStyle(fontSize: 15),
       ),
-      value: index < (_checkboxList?.length ?? 0) ? _checkboxList[index] : false,
+      value:
+          index < (_checkboxList?.length ?? 0) ? _checkboxList[index] : false,
       onChanged: (newValue) async {
         //_programButtonListener(index, postMenuArgs);
       },

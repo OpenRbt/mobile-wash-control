@@ -39,8 +39,6 @@ class _HomePageState extends State<HomePage> {
 
   Timer _updateTimer;
 
-  List<Program> _programs = List();
-
   void initState() {
     super.initState();
   }
