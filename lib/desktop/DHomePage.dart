@@ -72,13 +72,13 @@ class _DHomePageState extends State<DHomePage> {
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
           "Произошла ошибка при запросе к api", Colors.red);
     }
-    Future.delayed(Duration(milliseconds: 500), () {
-      if (!_updateTimer.isActive) {
-        _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-          _getStations(sessionData);
-        });
-      }
-    });
+
+    if (!_updateTimer.isActive) {
+      _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        _getStations(sessionData);
+      });
+    }
+
     if (redraw) setState(() {});
   }
 
