@@ -42,8 +42,11 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
 
-    var width = screenW - screenW / 4;
+    double DrawerSize = 256;
+
+    var width = screenW - DrawerSize;
     var height = screenH;
+    
     return Scaffold(
       key: _scaffoldKey,
       drawer: prepareDrawer(context, Pages.Programs, sessionData),
@@ -52,7 +55,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
           return Row(
             children: [
               DGetDrawer(
-                  screenH, screenW / 4, context, Pages.Programs, sessionData),
+                  screenH, DrawerSize, context, Pages.Programs, sessionData),
               SizedBox(
                 height: height,
                 width: width,

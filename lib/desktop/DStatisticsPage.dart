@@ -46,7 +46,9 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
     var screenW = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.height;
 
-    var width = screenW - screenW / 4;
+    double DrawerSize = 256;
+
+    var width = screenW - DrawerSize;
     var height = screenH;
 
     return Scaffold(
@@ -57,7 +59,7 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               DGetDrawer(
-                  screenH, screenW / 4, context, Pages.Statistics, sessionData),
+                  screenH, DrawerSize, context, Pages.Statistics, sessionData),
               Column(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
