@@ -119,96 +119,102 @@ class _HomePageState extends State<HomePage> {
               (index) {
                 var activeProgramIndex = _homePageData[index].currentProgramID;
 
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      width: (screenW -
-                          (orientation == Orientation.portrait ? 3 : 5) * 10),
-                      child: FlatButton(
-                        color: _homePageData[index].status == "online"
-                            ? Colors.lightGreen
-                            : Colors.red,
-                        highlightColor: _homePageData[index].status == "online"
-                            ? Colors.lightGreenAccent
-                            : Colors.redAccent,
-                        disabledColor: Colors.red,
-                        disabledTextColor: Colors.black,
-                        onPressed: _homePageData[index].id == -1
-                            ? null
-                            : () {
-                                var args = PostMenuArgs(
-                                    _homePageData[index].id,
-                                    _homePageData[index].ip,
-                                    _homePageData[index].hash,
-                                    _homePageData[index].currentProgramID,
-                                    sessionData);
-                                if (_updateTimer.isActive) {
-                                  _updateTimer.cancel();
-                                }
-                                Navigator.pushNamed(context, "/mobile/editPost",
-                                        arguments: args)
-                                    .then((value) {
-                                  _getStations(sessionData);
-                                  _updateTimer = Timer.periodic(
-                                      Duration(seconds: 1), (timer) {
-                                    _getStations(sessionData);
-                                  });
-                                  setState(() {});
-                                });
-                              },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(_homePageData[index].name),
-                            Text(
-                                "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
-                            Text("IP: ${_homePageData[index].ip}"),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 115,
-                      child: DecoratedBox(
-                        child: Center(
-                          child: SizedBox(
-                            height: 100,
-                            child: DecoratedBox(
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Текущая программа",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    Divider(
-                                      color: Colors.grey,
-                                      thickness: 3,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(5),
-                                      child: Text(_homePageData[index]
-                                          .currentProgramName),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border:
-                                    Border.all(color: Colors.grey, width: 3),
+                return _homePageData[index].hash == ""
+                    ? SizedBox()
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 60,
+                            width: (screenW -
+                                (orientation == Orientation.portrait ? 3 : 5) *
+                                    10),
+                            child: FlatButton(
+                              color: _homePageData[index].status == "online"
+                                  ? Colors.lightGreen
+                                  : Colors.red,
+                              highlightColor:
+                                  _homePageData[index].status == "online"
+                                      ? Colors.lightGreenAccent
+                                      : Colors.redAccent,
+                              disabledColor: Colors.red,
+                              disabledTextColor: Colors.black,
+                              onPressed: _homePageData[index].id == -1
+                                  ? null
+                                  : () {
+                                      var args = PostMenuArgs(
+                                          _homePageData[index].id,
+                                          _homePageData[index].ip,
+                                          _homePageData[index].hash,
+                                          _homePageData[index].currentProgramID,
+                                          sessionData);
+                                      if (_updateTimer.isActive) {
+                                        _updateTimer.cancel();
+                                      }
+                                      Navigator.pushNamed(
+                                              context, "/mobile/editPost",
+                                              arguments: args)
+                                          .then((value) {
+                                        _getStations(sessionData);
+                                        _updateTimer = Timer.periodic(
+                                            Duration(seconds: 1), (timer) {
+                                          _getStations(sessionData);
+                                        });
+                                        setState(() {});
+                                      });
+                                    },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(_homePageData[index].name),
+                                  Text(
+                                      "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
+                                  Text("IP: ${_homePageData[index].ip}"),
+                                ],
                               ),
                             ),
                           ),
-                        ),
-                        decoration: BoxDecoration(color: Colors.grey),
-                      ),
-                    )
-                  ],
-                );
+                          SizedBox(
+                            height: 115,
+                            child: DecoratedBox(
+                              child: Center(
+                                child: SizedBox(
+                                  height: 100,
+                                  child: DecoratedBox(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Текущая программа",
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          Divider(
+                                            color: Colors.grey,
+                                            thickness: 3,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(5),
+                                            child: Text(_homePageData[index]
+                                                .currentProgramName),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          color: Colors.grey, width: 3),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              decoration: BoxDecoration(color: Colors.grey),
+                            ),
+                          )
+                        ],
+                      );
               },
             ),
           );
