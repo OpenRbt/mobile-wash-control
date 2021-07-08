@@ -416,6 +416,8 @@ class PagesRoutes {
       "/desktop/programs/edit": (context) => desktop.EditProgramPage(),
       "/desktop/settings": (context) => desktop.DSettingsMenu(),
       "/desktop/settings/post": (context) => desktop.DSettingsMenuPost(),
+      "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
+      "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
       "/dekstop/incassation": (context) => desktop.DIncassationHistory(),
     },
     "MOBILE": {

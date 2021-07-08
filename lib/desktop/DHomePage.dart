@@ -39,7 +39,7 @@ class _DHomePageState extends State<DHomePage> {
   bool _firstLoad = true;
   List<HomePageData> _homePageData = List.generate(12, (index) {
     return HomePageData(
-        -1, "Loading...", "...", "...", "...", "...", -1, "IDLE", -1);
+        -1, "Loading...", "", "", "", "", -1, "IDLE", -1);
   });
 
   void _getStations(SessionData sessionData) async {
@@ -66,10 +66,11 @@ class _DHomePageState extends State<DHomePage> {
             res.stations[index].currentProgramName ?? "Загрузка...",
             res.stations[index].currentProgram ?? -1);
       });
-
-      tmpHomepage.sort(
-        (a, b) => a.id.compareTo(b.id),
-      );
+      var binded = tmpHomepage.where((element) => element.hash != "").toList();
+      var notBinded = tmpHomepage.where((element) => element.hash == "");
+      binded.sort((a, b)=>a.id.compareTo(b.id));
+      tmpHomepage = binded;
+      tmpHomepage.addAll(notBinded);
       redraw = _homePageData != tmpHomepage;
       if (redraw) _homePageData = tmpHomepage;
     } catch (e) {
@@ -154,7 +155,7 @@ class _DHomePageState extends State<DHomePage> {
           3,
           (index) {
             var pos = startID + index;
-            if (pos >= _homePageData.length) {
+            if (pos >= _homePageData.length || _homePageData[pos].hash == "") {
               return SizedBox(
                 height: height,
                 width: boxWidth,
