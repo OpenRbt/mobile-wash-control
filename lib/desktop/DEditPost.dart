@@ -10,7 +10,6 @@ class DEditPostArgs {
   final String ip;
   final String hash;
   final int currentProgramID;
-  final List<InlineResponse2001Buttons> buttonPrograms;
   final SessionData sessionData;
   int serviceBalance;
 
@@ -19,7 +18,6 @@ class DEditPostArgs {
     this.ip,
     this.hash,
     this.currentProgramID,
-    this.buttonPrograms,
     this.serviceBalance,
     this.sessionData,
   );
@@ -288,11 +286,7 @@ class _DEditPostMenuState extends State<DEditPostMenu> {
           padding: EdgeInsets.all(10),
           child: SizedBox(
             height: 50,
-            width: isPortrait
-                ? screenW / 2 - 20
-                : ((postMenuArgs.buttonPrograms?.length ?? 0) > 0
-                    ? screenW / 3 - 20
-                    : screenW - 100),
+            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
             child: DecoratedBox(
               child: FittedBox(
                 fit: BoxFit.fitHeight,
