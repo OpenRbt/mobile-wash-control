@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
+import 'package:mobile_wash_control/PagesUtils/PagesArgs.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 class DProgramsMenu extends StatefulWidget {
@@ -46,7 +46,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
 
     var width = screenW - DrawerSize;
     var height = screenH;
-    
+
     return Scaffold(
       key: _scaffoldKey,
       drawer: prepareDrawer(context, Pages.Programs, sessionData),
@@ -217,9 +217,9 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
                 child: IconButton(
                   icon: Icon(Icons.more_horiz),
                   onPressed: () {
-                    var args = ProgramMenuEditArgs(_programs[index].id,
-                        _programs[index].name, sessionData);
-                    Navigator.pushNamed(context, "/mobile/programs/edit",
+                    var args =
+                        ProgramMenuEditArgs(_programs[index].id, sessionData);
+                    Navigator.pushNamed(context, "/desktop/programs/edit",
                             arguments: args)
                         .then(
                       (value) => GetData(sessionData),
@@ -299,7 +299,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
                 child: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
-                    Navigator.pushNamed(context, "/mobile/programs/add",
+                    Navigator.pushNamed(context, "/desktop/programs/add",
                             arguments: sessionData)
                         .then(
                       (value) => GetData(sessionData),

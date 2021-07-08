@@ -412,6 +412,8 @@ class PagesRoutes {
       "/desktop/accounts/edit": (context) => desktop.DAccountsMenuEdit(),
       "/desktop/accounts/add": (context) => desktop.DAccountsMenuAdd(),
       "/desktop/programs": (context) => desktop.DProgramsMenu(),
+      "/desktop/programs/add": (context) => desktop.AddProgramPage(),
+      "/desktop/programs/edit": (context) => desktop.EditProgramPage(),
       "/desktop/settings": (context) => desktop.DSettingsMenu(),
       "/desktop/settings/post": (context) => desktop.DSettingsMenuPost(),
       "/dekstop/incassation": (context) => desktop.DIncassationHistory(),

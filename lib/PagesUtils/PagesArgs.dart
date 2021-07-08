@@ -10,3 +10,10 @@ class PostMenuArgs {
   PostMenuArgs(
       this.postID, this.ip, this.hash, this.currentProgramID, this.sessionData);
 }
+
+class ProgramMenuEditArgs {
+  final int programID;
+  final SessionData sessionData;
+
+  ProgramMenuEditArgs(this.programID, this.sessionData);
+}

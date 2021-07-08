@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/PagesUtils/PagesArgs.dart';
-import 'package:mobile_wash_control/PagesUtils/ServerRequests/Homepage.dart';
+import 'package:mobile_wash_control/PagesUtils/ServerRequests/HomepageRequests.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 class PostMenu extends StatefulWidget {
@@ -261,7 +261,6 @@ class _PostMenuState extends State<PostMenu> {
                       splashColor: Colors.lightGreenAccent,
                       onPressed: () {
                         AddServiceMoney(postMenuArgs);
-                        //_addServiceMoney(postMenuArgs);
                       },
                     ),
                   ),
@@ -489,7 +488,7 @@ class _PostMenuState extends State<PostMenu> {
                     ],
                   ),
                 )
-              : SizedBox(width: width, height: listSize),
+              : SizedBox(),
           _showIncassation
               ? SizedBox(
                   width: width,
@@ -565,9 +564,7 @@ class _PostMenuState extends State<PostMenu> {
                         );
                       }),
                 )
-              : SizedBox(
-                  width: width,
-                  height: listSize,
+              : SizedBox(            
                 ),
           _showIncassation
               ? SizedBox(

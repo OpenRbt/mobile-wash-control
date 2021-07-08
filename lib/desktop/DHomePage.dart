@@ -6,7 +6,7 @@ import 'package:mobile_wash_control/client/api.dart';
 import 'dart:async';
 
 import 'package:mobile_wash_control/PagesUtils/PagesArgs.dart';
-import 'package:mobile_wash_control/PagesUtils/ServerRequests/Homepage.dart';
+import 'package:mobile_wash_control/PagesUtils/ServerRequests/HomepageRequests.dart';
 
 class DHomePage extends StatefulWidget {
   @override
