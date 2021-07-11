@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
+
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/desktop/DAccountsMenu.dart';
 import 'package:mobile_wash_control/desktop/DAccountsMenuAdd.dart';
@@ -31,11 +32,18 @@ import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
 import 'package:mobile_wash_control/desktop/DAuthPage.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
 import 'package:mobile_wash_control/desktop/DIncassationHistory.dart';
+import 'package:mobile_wash_control/mobile/StatisticsStationsEventsMenu.dart';
 
 import 'package:wifi/wifi.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
+  Intl.defaultLocale = "ru_RU";
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationService.init();
+  Future.delayed(Duration(seconds: 1),(){NotificationService.showNotification();});
   runApp(
     MyApp(),
   );
@@ -68,6 +76,7 @@ class MyApp extends StatelessWidget {
         "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
         "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
         "/mobile/statistics": (context) => StatisticsMenu(),
+        "/mobile/statistics/events": (context) => StatisticsStationsEventsMenu(),
         "/mobile/posts": (context) => PostsMenu(),
         "/mobile/accounts": (context) => AccountsMenu(),
         "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
@@ -85,6 +94,13 @@ class MyApp extends StatelessWidget {
         "/desktop/settings/post": (context) => DSettingsMenuPost(),
         "/dekstop/incassation": (context) => DIncassationHistory(),
       },
+      localizationsDelegates: [
+      GlobalMaterialLocalizations.delegate
+    ],
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('ru')
+      ],
     );
   }
 }

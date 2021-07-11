@@ -11,6 +11,9 @@ class StationPrograms {
   int preflightSec = null;
   
 
+  int lastUpdate = null;
+  
+
   RelayBoard relayBoard = null;
   
 
@@ -34,6 +37,9 @@ class StationPrograms {
     preflightSec =
         json['preflightSec']
     ;
+    lastUpdate =
+        json['lastUpdate']
+    ;
     relayBoard =
       
       
@@ -49,6 +55,7 @@ class StationPrograms {
       'stationID': stationID,
       'name': name,
       'preflightSec': preflightSec,
+      'lastUpdate': lastUpdate,
       'relayBoard': relayBoard,
       'programs': programs
      };

@@ -1,7 +1,11 @@
+import 'dart:async';
+
+import 'package:mobile_wash_control/client/api.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:io';
-import 'package:mobile_wash_control/client/api.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 enum Pages { Main, Programs, Settings, Accounts, Statistics, None }
 
@@ -216,7 +220,7 @@ void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey,
 }
 
 class DefaultConfig {
-  static final appVersion = "1.0.1";
+  static final appVersion = "1.0.5";
   static final Map<String, StationsDefaultConfig> configs = {
     "Wash": StationsDefaultConfig([
       _getProgram(1, "wsh-water", 25, false, 100, 100, [
@@ -490,4 +494,28 @@ Widget DGetDrawer(double height, double width, BuildContext context,
           itemCount: dPagesNames.length),
     ),
   );
+}
+
+class StationInfo {
+  static Map<int, StationStatus> info = Map();
+  static Timer statusTimer;
+}
+
+class NotificationService {
+  static FlutterLocalNotificationsPlugin _plugin;
+  static void init(){
+    var settingsAndroid = new AndroidInitializationSettings('icon');
+    var initializationSettings = new InitializationSettings(android: settingsAndroid);
+    _plugin = new FlutterLocalNotificationsPlugin();
+    _plugin.initialize(initializationSettings,onSelectNotification: (info){
+      print("\nNotification clicked:\n\t$info\n\n");
+      Object res = 0;
+      return res;
+    });
+  }
+  static void showNotification() async{
+    var androidNotificationInfo = new AndroidNotificationDetails("channelId", "channelName", "channelDescription", priority:  Priority.high, importance: Importance.max);
+    var details = new NotificationDetails(android: androidNotificationInfo);
+    await _plugin.show(0, "Test", "OK", details, payload: "Notification info");
+  }
 }

@@ -388,7 +388,24 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                         (index) => createMoto(index + 1),
                       ),
                     ),
-                  )
+                  ),
+                  Center(
+                    child: SizedBox(
+                      height: 50,
+                      width: 200,
+                      child: RaisedButton(
+                        child: Text(
+                          "События постов",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, "/mobile/statistics/events",
+                              arguments: sessionData);
+                        },
+                      ),
+                    ),
+                  ),
                 ]),
               ),
             ),

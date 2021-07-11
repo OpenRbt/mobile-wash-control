@@ -24,12 +24,14 @@ class StationStatus {
   
 
   int currentProgram = null;
+
+  StationLastEvents lastEvents = null;
   
   StationStatus();
 
   @override
   String toString() {
-    return 'StationStatus[id=$id, name=$name, ip = $ip, hash=$hash, status=$status, info=$info, currentBalance=$currentBalance, currentProgram=$currentProgram, ]';
+    return 'StationStatus[id=$id, name=$name, hash=$hash, status=$status, info=$info, currentBalance=$currentBalance, currentProgram=$currentProgram, ip=$ip, lastEvents=$lastEvents, ]';
   }
 
   StationStatus.fromJson(Map<String, dynamic> json) {
@@ -62,18 +64,27 @@ class StationStatus {
     currentProgram =
         json['currentProgram']
     ;
+    ip =
+        json['ip']
+    ;
+    lastEvents =
+
+
+    new StationLastEvents.fromJson(json['lastEvents'])
+    ;
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
-      'ip': ip,
       'hash': hash,
       'status': status,
       'info': info,
       'currentBalance': currentBalance,
-      'currentProgram': currentProgram
+      'currentProgram': currentProgram,
+      'ip': ip,
+      'lastEvents': lastEvents
      };
   }
 

@@ -40,8 +40,11 @@ part 'model/Args/LoadMoneyArgs.dart';
 part 'model/Args/SaveArgs.dart';
 part 'model/Args/LoadArgs.dart';
 part 'model/Args/StationCollectionReportDatesArgs.dart';
+part 'model/Args/StationEventsByDateArgs.dart';
+
 part 'model/card_reader_config.dart';
 part 'model/collection_report.dart';
+part 'model/collection_report_with_user.dart';
 part 'model/first_name.dart';
 part 'model/hash.dart';
 part 'model/inline_response200.dart';
@@ -64,6 +67,9 @@ part 'model/relay_config.dart';
 part 'model/relay_report.dart';
 part 'model/relay_stat.dart';
 part 'model/station_config.dart';
+part 'model/station_event.dart';
+part 'model/station_event_report.dart';
+part 'model/station_last_events.dart';
 part 'model/station_programs.dart';
 part 'model/station_programs_programs.dart';
 part 'model/station_report.dart';
@@ -74,6 +80,5 @@ part 'model/status_collection_report.dart';
 part 'model/status_report.dart';
 part 'model/user_config.dart';
 part 'model/users_report.dart';
-part 'model/collection_report_with_user.dart';
 
 ApiClient defaultApiClient = new ApiClient();

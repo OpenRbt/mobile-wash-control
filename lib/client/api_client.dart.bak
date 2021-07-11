@@ -107,8 +107,6 @@ class ApiClient {
           return new StationEvent.fromJson(value);
         case 'StationEventReport':
           return new StationEventReport.fromJson(value);
-        case 'StationLastEvents':
-          return new StationLastEvents.fromJson(value);
         case 'StationPrograms':
           return new StationPrograms.fromJson(value);
         case 'StationReport':
