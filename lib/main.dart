@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/client/api.dart';
 import 'package:mobile_wash_control/desktop/DAccountsMenu.dart';
 import 'package:mobile_wash_control/desktop/DAccountsMenuAdd.dart';
 import 'package:mobile_wash_control/desktop/DAccountsMenuEdit.dart';
@@ -33,6 +34,7 @@ import 'package:mobile_wash_control/desktop/DAuthPage.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
 import 'package:mobile_wash_control/desktop/DIncassationHistory.dart';
 import 'package:mobile_wash_control/mobile/StatisticsStationsEventsMenu.dart';
+import 'package:mobile_wash_control/mobile/ViewNotificationInfo.dart';
 
 import 'package:wifi/wifi.dart';
 import 'package:flutter/material.dart';
@@ -43,13 +45,13 @@ void main() {
   Intl.defaultLocale = "ru_RU";
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService.init();
-  Future.delayed(Duration(seconds: 1),(){NotificationService.showNotification();});
   runApp(
     MyApp(),
   );
 }
 
 class MyApp extends StatelessWidget {
+  final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.lightGreen,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      navigatorKey: NotificationService.navigatorKey,
       initialRoute: "/",
       routes: {
         "/mobile/auth": (context) => AuthPage(),
@@ -82,6 +85,7 @@ class MyApp extends StatelessWidget {
         "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
         "/mobile/accounts/add": (context) => AccountsMenuAdd(),
         "/mobile/incassation": (context) => IncassationHistory(),
+        "/mobile/viewEvent" : (context) => ViewNotificationInfo(),
         "/desktop/auth": (context) => DAuthPage(),
         "/desktop/home": (context) => DHomePage(),
         "/desktop/home/edit": (context) => DEditPostMenu(),
@@ -89,18 +93,13 @@ class MyApp extends StatelessWidget {
         "/desktop/accounts": (context) => DAccountsMenu(),
         "/desktop/accounts/edit": (context) => DAccountsMenuEdit(),
         "/desktop/accounts/add": (context) => DAccountsMenuAdd(),
-        "/desktop/programs":(context) => DProgramsMenu(),
+        "/desktop/programs": (context) => DProgramsMenu(),
         "/desktop/settings": (context) => DSettingsMenu(),
         "/desktop/settings/post": (context) => DSettingsMenuPost(),
         "/dekstop/incassation": (context) => DIncassationHistory(),
       },
-      localizationsDelegates: [
-      GlobalMaterialLocalizations.delegate
-    ],
-      supportedLocales: [
-        const Locale('en'),
-        const Locale('ru')
-      ],
+      localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+      supportedLocales: [const Locale('en'), const Locale('ru')],
     );
   }
 }
@@ -141,13 +140,9 @@ class _MyHomePageState extends State<MyHomePage> {
     client.connectionTimeout = Duration(milliseconds: 100);
 
     if (Platform.isLinux) {
-      List<NetworkInterface> interfaces =
-          await NetworkInterface.list(type: InternetAddressType.IPv4);
+      List<NetworkInterface> interfaces = await NetworkInterface.list(type: InternetAddressType.IPv4);
       print(interfaces);
-      NetworkInterface target = interfaces.firstWhere(
-          (element) =>
-              element.name.contains("en") || element.name.contains("wlan"),
-          orElse: () {
+      NetworkInterface target = interfaces.firstWhere((element) => element.name.contains("en") || element.name.contains("wlan"), orElse: () {
         return null;
       });
       if (target != null) {
@@ -159,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
         var subIPS = List.generate(256, (index) {
           return "$index";
         });
-        if (quick){
+        if (quick) {
           client.connectionTimeout = Duration(seconds: 60);
           subIPS.forEach((element) async {
             try {
@@ -172,8 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
                 return;
               }
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -183,7 +177,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               }
             } catch (e) {
-              print(e);
+              if (!(e is SocketException)) {
+                print(e);
+              }
             }
             _pos++;
             if (_pos == 256) {
@@ -197,25 +193,24 @@ class _MyHomePageState extends State<MyHomePage> {
           await Future.delayed(Duration(seconds: 50, milliseconds: 100));
           print("FOUND : ${_servers.length}");
         } else {
-        await Future.forEach(subIPS, (element) async {
-          print("Try to http://${_scanIP}.${element}:8020/ping");
-          try {
-            setState(() {
-              _pos++;
-            });
-            final request =
-                await client.get("${_scanIP}.${element}", 8020, "/ping");
-            final response = await request.close();
-            if (response.statusCode == 200) {
-              if (mounted) {
-                _servers.add("${_scanIP}.${element}");
-                setState(() {});
+          await Future.forEach(subIPS, (element) async {
+            print("Try to http://${_scanIP}.${element}:8020/ping");
+            try {
+              setState(() {
+                _pos++;
+              });
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final response = await request.close();
+              if (response.statusCode == 200) {
+                if (mounted) {
+                  _servers.add("${_scanIP}.${element}");
+                  setState(() {});
+                }
               }
-            }
-          } catch (e) {}
-        });
+            } catch (e) {}
+          });
         }
-        
+
         if (mounted)
           setState(() {
             _canScan = true;
@@ -253,8 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
                 return;
               }
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -264,7 +258,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               }
             } catch (e) {
-              print(e);
+              if (!(e is SocketException)) {
+                print(e);
+              }
             }
             _pos++;
             if (_pos == 256) {
@@ -284,8 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 _pos++;
               });
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -318,10 +313,13 @@ class _MyHomePageState extends State<MyHomePage> {
       title: Text("${widget.title}"),
       leading: Text("${DefaultConfig.appVersion}"),
     );
-
     var screenW = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.height;
-
+    if (ModalRoute.of(context).isCurrent) {
+      if (GlobalStations.statusTimer != null && GlobalStations.statusTimer.isActive) {
+        GlobalStations.StopTimer();
+      }
+    }
     return Scaffold(
       appBar: appBar,
       body: Column(
@@ -347,8 +345,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             border: Border.all(color: Colors.black26, width: 2),
                           ),
                           child: LinearProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation(Colors.lightGreen),
+                            valueColor: AlwaysStoppedAnimation(Colors.lightGreen),
                             backgroundColor: Colors.black12,
                             value: _pos / 256,
                           ),
@@ -369,8 +366,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       color: _canScan ? Colors.lightGreen : Colors.yellow,
                       splashColor: Colors.lightGreenAccent,
-                      child: new Text(
-                          _canScan ? ("Поиск серверов") : "Сканирование"),
+                      child: new Text(_canScan ? ("Поиск серверов") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(false);
                       },
@@ -378,8 +374,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       color: _canScan ? Colors.lightGreen : Colors.yellow,
                       splashColor: Colors.lightGreenAccent,
-                      child:
-                          new Text(_canScan ? ("QUICK SCAN") : "Сканирование"),
+                      child: new Text(_canScan ? ("QUICK SCAN") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(true);
                       },
@@ -420,17 +415,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: () {
                           if (Platform.isLinux) {
-                            var args = DAuthArgs("http://" +
-                                _servers.elementAt(index) +
-                                ":8020");
-                            Navigator.pushNamed(context, "/desktop/auth",
-                                arguments: args);
+                            var args = DAuthArgs("http://" + _servers.elementAt(index) + ":8020");
+                            Navigator.pushNamed(context, "/desktop/auth", arguments: args).then((value) => setState);
                           } else {
-                            var args = AuthArgs("http://" +
-                                _servers.elementAt(index) +
-                                ":8020");
-                            Navigator.pushNamed(context, "/mobile/auth",
-                                arguments: args);
+                            var args = AuthArgs("http://" + _servers.elementAt(index) + ":8020", context);
+                            Navigator.pushNamed(context, "/mobile/auth", arguments: args).then((value) => setState);
                           }
                         },
                       );

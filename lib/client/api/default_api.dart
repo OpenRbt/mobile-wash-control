@@ -1823,7 +1823,7 @@ class DefaultApi {
     }
 
     // create path and map variables
-    String path = "/station-events-by-date".replaceAll("{format}","json");
+    String path = "/station-events-report-dates".replaceAll("{format}","json");
 
     // query params
     List<QueryParam> queryParams = [];

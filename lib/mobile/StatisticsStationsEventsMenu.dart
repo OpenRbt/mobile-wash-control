@@ -5,12 +5,10 @@ import 'package:mobile_wash_control/client/api.dart';
 
 class StatisticsStationsEventsMenu extends StatefulWidget {
   @override
-  _StatisticsStationsEventsMenuState createState() =>
-      _StatisticsStationsEventsMenuState();
+  _StatisticsStationsEventsMenuState createState() => _StatisticsStationsEventsMenuState();
 }
 
-class _StatisticsStationsEventsMenuState
-    extends State<StatisticsStationsEventsMenu> {
+class _StatisticsStationsEventsMenuState extends State<StatisticsStationsEventsMenu> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
 
@@ -26,21 +24,7 @@ class _StatisticsStationsEventsMenuState
 
   Map<int, StationEventReport> _eventsReports = Map();
 
-  final List<String> dropDownNames = [
-    "Краткий отчет",
-    "Пост 1",
-    "Пост 2",
-    "Пост 3",
-    "Пост 4",
-    "Пост 5",
-    "Пост 6",
-    "Пост 7",
-    "Пост 8",
-    "Пост 9",
-    "Пост 10",
-    "Пост 11",
-    "Пост 12"
-  ];
+  final List<String> dropDownNames = ["Краткий отчет", "Пост 1", "Пост 2", "Пост 3", "Пост 4", "Пост 5", "Пост 6", "Пост 7", "Пост 8", "Пост 9", "Пост 10", "Пост 11", "Пост 12"];
   final List<int> dropDownValues = List.generate(13, (index) {
     return index;
   });
@@ -61,24 +45,19 @@ class _StatisticsStationsEventsMenuState
         tmpReports.add(sessionData.client.stationEventsByDate(args));
       } on ApiException catch (e) {
         if (e.code != 404) {
-          print(
-              "Exception when calling DefaultApi->/station-events-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-              "Произошла ошибка при запросе к api", Colors.red);
+          print("Exception when calling DefaultApi->/station-events-report-dates: $e\n");
+          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
         } else {}
       }
     }
     Map<int, StationEventReport> reports = Map();
     for (int i = 0; i < tmpReports.length; i++) {
       try {
-        reports
-            .addAll({(i + 1): (await tmpReports[i] ?? StationEventReport())});
+        reports.addAll({(i + 1): (await tmpReports[i] ?? StationEventReport())});
       } on ApiException catch (e) {
         if (e.code != 404) {
-          print(
-              "Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-              "Произошла ошибка при запросе к api", Colors.red);
+          print("Exception when calling DefaultApi->/station-report-dates: $e\n");
+          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
         } else {
           var tmp = StationEventReport();
           tmp.events = List();
@@ -98,10 +77,7 @@ class _StatisticsStationsEventsMenuState
 
   Future<Null> _selectDateRange(BuildContext context) async {
     {
-      final DateTimeRange range = await showDateRangePicker(
-          context: context,
-          firstDate: DateTime(2020),
-          lastDate: DateTime.now().add(Duration(days: 1)));
+      final DateTimeRange range = await showDateRangePicker(context: context, firstDate: DateTime(2020), lastDate: DateTime.now().add(Duration(days: 1)));
 
       if (!mounted || range == null) {
         return;
@@ -172,8 +148,7 @@ class _StatisticsStationsEventsMenuState
                 ),
                 RaisedButton(
                   onPressed: () => _selectDateRange(context),
-                  child: Text(
-                      "${_startDate.day}.${_startDate.month}.${_startDate.year} - ${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                  child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year} - ${_endDate.day}.${_endDate.month}.${_endDate.year}"),
                 ),
                 IconButton(
                   icon: Icon(
@@ -192,9 +167,7 @@ class _StatisticsStationsEventsMenuState
               height: 50,
               width: screenW,
               child: DecoratedBox(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [BoxShadow(blurRadius: 1.5)]),
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(blurRadius: 1.5)]),
                 child: SizedBox(
                   child: DropdownButton(
                     value: _dropdownValue,
@@ -226,19 +199,15 @@ class _StatisticsStationsEventsMenuState
       child: stationID != 0
           ? Column(
               children: [
-                _createWidgetTableRow(
-                    ["Модуль", "Статус", "Инфо", "Дата"], 50, w,
-                    customCollumnSize: {0: 75, 1: 75, 3: 150}),
+                _createWidgetTableRow(["Модуль", "Статус", "Инфо", "Дата"], 50, w, customCollumnSize: {0: 75, 1: 75, 3: 150}),
                 SizedBox(
                   height: h - 50,
                   width: w,
                   child: ListView.builder(
                       itemCount: _eventsReports[stationID]?.events?.length ?? 0,
                       itemBuilder: (BuildContext context, int index) {
-                        StationEvent event =
-                            _eventsReports[stationID].events[index];
-                        DateTime time = DateTime.fromMillisecondsSinceEpoch(
-                            (event.ctime ?? 0) * 1000);
+                        StationEvent event = _eventsReports[stationID].events[index];
+                        DateTime time = DateTime.fromMillisecondsSinceEpoch((event.ctime ?? 0) * 1000);
                         return _createWidgetTableRow(
                             [
                               "${event.module ?? ""}",
@@ -257,8 +226,7 @@ class _StatisticsStationsEventsMenuState
             )
           : ListView(
               children: [
-                _createWidgetTableRow(
-                    ["ПОСТ", "OK", "WARNING", "ERROR", "CRITICAL"], 50, w),
+                _createWidgetTableRow(["ПОСТ", "OK", "WARNING", "ERROR", "CRITICAL"], 50, w),
               ]..addAll(
                   List.generate(
                     12,
@@ -277,11 +245,7 @@ class _StatisticsStationsEventsMenuState
     );
   }
 
-  Widget _createWidgetTableRow(List<String> values, double height, double width,
-      {bool centerText = true,
-      bool centerFirst = true,
-      Map<int, double> customCollumnSize,
-      Color borderColor = Colors.black}) {
+  Widget _createWidgetTableRow(List<String> values, double height, double width, {bool centerText = true, bool centerFirst = true, Map<int, double> customCollumnSize, Color borderColor = Colors.black}) {
     if (customCollumnSize == null) {
       customCollumnSize = Map();
     }
@@ -291,8 +255,7 @@ class _StatisticsStationsEventsMenuState
             ? Container(
                 height: height,
                 width: customCollumnSize[index],
-                decoration:
-                    BoxDecoration(border: Border.all(color: borderColor)),
+                decoration: BoxDecoration(border: Border.all(color: borderColor)),
                 child: centerText || (centerFirst && index == 0)
                     ? Center(
                         child: Text(values[index]),
@@ -305,8 +268,7 @@ class _StatisticsStationsEventsMenuState
             : Expanded(
                 child: Container(
                   height: height,
-                  decoration:
-                      BoxDecoration(border: Border.all(color: borderColor)),
+                  decoration: BoxDecoration(border: Border.all(color: borderColor)),
                   child: centerText || (centerFirst && index == 0)
                       ? Center(
                           child: Text(values[index]),
@@ -318,33 +280,5 @@ class _StatisticsStationsEventsMenuState
               );
       }),
     );
-  }
-
-  TableRow _createTableRow(List<String> values,
-      {double rowHeight = 25.0,
-      bool centerText = true,
-      bool centerFirst = true}) {
-    List<TableCell> result = [];
-    int i = 0;
-    for (var val in values) {
-      result.add(
-        TableCell(
-          verticalAlignment: TableCellVerticalAlignment.middle,
-          child: SizedBox(
-            height: rowHeight,
-            child: centerText || (centerFirst && i == 0)
-                ? Center(
-                    child: Text(val),
-                  )
-                : Text(
-                    val,
-                    textAlign: TextAlign.center,
-                  ),
-          ),
-        ),
-      );
-      i++;
-    }
-    return TableRow(children: result);
   }
 }

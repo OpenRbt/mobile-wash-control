@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 import 'package:flutter/material.dart';
@@ -15,15 +16,14 @@ class SessionData {
   SessionData(this.client);
 }
 
-Widget prepareDrawer(
-    BuildContext context, Pages selectedPage, SessionData sessionData) {
+Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessionData) {
   var texts = [
     "Главная",
     "Программы",
     "Настройки",
     "Учетки",
     "Статистика",
-    "Выход"
+    "Выход",
   ];
 
   var routes = [
@@ -38,8 +38,7 @@ Widget prepareDrawer(
     texts.length,
     TextStyle(fontSize: 30),
   );
-  styles[selectedPage.index] =
-      TextStyle(fontSize: 40, fontWeight: FontWeight.bold);
+  styles[selectedPage.index] = TextStyle(fontSize: 40, fontWeight: FontWeight.bold);
 
   var textElements = [];
   for (int i = 0; i < texts.length; i++) {
@@ -58,10 +57,7 @@ Widget prepareDrawer(
       behavior: MyScrollingBehavior(),
       child: FittedBox(
         child: Container(
-          width: screenWidth *
-              3 /
-              4 *
-              (isPortrait ? 1 : screenHeight / screenWidth),
+          width: screenWidth * 3 / 4 * (isPortrait ? 1 : screenHeight / screenWidth),
           height: screenHeight,
           child: CustomPaint(
             painter: MyPainter(context),
@@ -104,9 +100,7 @@ Widget prepareDrawer(
                             }
                           : () {
                               Navigator.pop(context); //Closing Drawer
-                              Navigator.pushReplacementNamed(
-                                  Navigator.of(context).context, routes[index],
-                                  arguments: sessionData);
+                              Navigator.pushReplacementNamed(Navigator.of(context).context, routes[index], arguments: sessionData);
                             };
                       return ListTile(title: textElements[index], onTap: onTap);
                     },
@@ -132,9 +126,7 @@ class MyPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    size = size.width < size.height
-        ? size
-        : Size(size.height * 3 / 4, size.width * 3 / 4);
+    size = size.width < size.height ? size : Size(size.height * 3 / 4, size.width * 3 / 4);
     final sizeB = Size(size.width * 2, size.height + size.height * 0.5);
     var rect = Offset(-size.width, -size.height * 0.25) & sizeB;
     canvas.drawOval(rect, Paint()..color = Colors.white);
@@ -154,8 +146,7 @@ class MyPainter extends CustomPainter {
 
 class MyScrollingBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
 }
@@ -188,8 +179,7 @@ class ValueWrapper {
   ValueWrapper(this.value);
 }
 
-void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey,
-    ValueWrapper isSnackBarActive, String text, Color color) async {
+void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnackBarActive, String text, Color color) async {
   if (isSnackBarActive.value) {
     return;
   }
@@ -232,11 +222,7 @@ class DefaultConfig {
         _getRelay(2, 278, 722), //0.3857 | 278 722
         _getRelay(6, 1000, 0)
       ], []),
-      _getProgram(3, "wsh-foam active", 25, false, 100, 100, [
-        _getRelay(1, 1000, 0),
-        _getRelay(2, 500, 500),
-        _getRelay(6, 1000, 0)
-      ], []),
+      _getProgram(3, "wsh-foam active", 25, false, 100, 100, [_getRelay(1, 1000, 0), _getRelay(2, 500, 500), _getRelay(6, 1000, 0)], []),
       _getProgram(4, "wsh-wax", 25, false, 100, 100, [
         _getRelay(1, 1000, 0),
         _getRelay(4, 284, 716),
@@ -362,15 +348,7 @@ class StationsDefaultConfig {
   StationsDefaultConfig(this.programs, this.stationPrograms);
 }
 
-Program _getProgram(
-    int id,
-    String name,
-    int price,
-    bool preflightEnabled,
-    int motorSpeedPercent,
-    int preflightMotorSpeedPercent,
-    List<RelayConfig> relays,
-    List<RelayConfig> preflightRelays) {
+Program _getProgram(int id, String name, int price, bool preflightEnabled, int motorSpeedPercent, int preflightMotorSpeedPercent, List<RelayConfig> relays, List<RelayConfig> preflightRelays) {
   Program tmp = Program();
 
   tmp.id = id;
@@ -404,22 +382,8 @@ InlineResponse2001Buttons _getProgramButton(int buttonID, int programID) {
   return tmp;
 }
 
-final List<String> dPagesNames = [
-  "Главная",
-  "Программы",
-  "Настройки",
-  "Учетки",
-  "Статистика",
-  "Выход"
-];
-final Map<String, Pages> dPagesMap = {
-  "Главная": Pages.Main,
-  "Программы": Pages.Programs,
-  "Настройки": Pages.Settings,
-  "Учетки": Pages.Accounts,
-  "Статистика": Pages.Statistics,
-  "Выход": Pages.None
-};
+final List<String> dPagesNames = ["Главная", "Программы", "Настройки", "Учетки", "Статистика", "Выход"];
+final Map<String, Pages> dPagesMap = {"Главная": Pages.Main, "Программы": Pages.Programs, "Настройки": Pages.Settings, "Учетки": Pages.Accounts, "Статистика": Pages.Statistics, "Выход": Pages.None};
 final Map<Pages, String> dPageRoutes = {
   Pages.Main: "/desktop/home",
   Pages.Programs: "/desktop/programs",
@@ -428,8 +392,7 @@ final Map<Pages, String> dPageRoutes = {
   Pages.Statistics: "/desktop/statistics",
 };
 
-Widget DGetDrawer(double height, double width, BuildContext context,
-    Pages _currentPage, SessionData sessionData) {
+Widget DGetDrawer(double height, double width, BuildContext context, Pages _currentPage, SessionData sessionData) {
   return SizedBox(
     height: height,
     width: width,
@@ -446,15 +409,12 @@ Widget DGetDrawer(double height, double width, BuildContext context,
               title: Text(
                 dPagesNames[index],
                 style: TextStyle(
-                  fontSize:
-                      _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
+                  fontSize: _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
                 ),
               ),
               onTap: (index < dPagesNames.length - 1)
                   ? () {
-                      Navigator.pushReplacementNamed(
-                          context, dPageRoutes[dPagesMap[dPagesNames[index]]],
-                          arguments: sessionData);
+                      Navigator.pushReplacementNamed(context, dPageRoutes[dPagesMap[dPagesNames[index]]], arguments: sessionData);
                     }
                   : () {
                       showDialog(
@@ -496,26 +456,150 @@ Widget DGetDrawer(double height, double width, BuildContext context,
   );
 }
 
-class StationInfo {
+class GlobalStations {
   static Map<int, StationStatus> info = Map();
+  static Map<int, StationLastEvents> lastEvents = Map();
+  static Map<int, StationEvent> eventData = Map();
   static Timer statusTimer;
+  static SessionData _sessionData;
+
+  static void initTimer({SessionData apiClient, BuildContext context}) async {
+    if (apiClient == null) {
+      return;
+    }
+    if (statusTimer != null && statusTimer.isActive) {
+      StopTimer();
+    }
+    print("Create Status Timer");
+    _sessionData = apiClient;
+    statusTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _updateFunc(timer, context);
+    });
+    for (int i = 1; i < 12; i++) {
+      info[i] = StationStatus();
+    }
+    int ctime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    for (int i = 1; i < 12; i++) {
+      var last = StationLastEvents();
+      last.okCtime = ctime;
+      last.warningCtime = ctime;
+      last.errorCtime = ctime;
+      last.criticalCtime = ctime;
+      lastEvents[i] = last;
+    }
+  }
+
+  static void _updateFunc(Timer timer, BuildContext context) async {
+    if (ModalRoute.of(context).isCurrent) {
+      await StopTimer();
+      return;
+    }
+    await _GetStations();
+    await _CheckEvents();
+  }
+
+  static void StopTimer() async {
+    print("Stop Status Timer");
+    statusTimer.cancel();
+    info.clear();
+    lastEvents.clear();
+    return;
+  }
+
+  static Future<Null> _GetStations() async {
+    try {
+      var res = await _sessionData.client.status();
+      res.stations = res.stations.where((element) => element.id != null).toList();
+      var linked = res.stations.where((element) => element.hash != null).toList();
+      linked.sort((a, b) => a.id.compareTo(b.id));
+      var notLinked = res.stations.where((element) => element.hash == null).toList();
+      notLinked.sort((a, b) => a.id.compareTo(b.id));
+      List<StationStatus> stations = List();
+      stations.addAll(linked);
+      stations.addAll(notLinked);
+
+      for (int i = 0; i < stations.length; i++) {
+        if (stations[i].lastEvents == null) {
+          stations[i].lastEvents = StationLastEvents();
+        }
+        info[i + 1] = stations[i];
+      }
+    } catch (e) {}
+  }
+
+  static Future<Null> _CheckEvents() async {
+    try {
+      for (int i = 1; i <= info.length; i++) {
+        if (lastEvents[i].errorCtime < info[i].lastEvents.errorCtime ?? 0) {
+          lastEvents[i].errorCtime = info[i].lastEvents.errorCtime;
+          StationEvent currentEvent = await _getEvent(stationID: i, ctime: lastEvents[i].errorCtime);
+          eventData[currentEvent.ctime] = currentEvent;
+          NotificationService.showNotification(event: currentEvent);
+        }
+        if (lastEvents[i].criticalCtime < info[i].lastEvents.criticalCtime ?? 0) {
+          print("critical event");
+          lastEvents[i].criticalCtime = info[i].lastEvents.criticalCtime;
+          StationEvent currentEvent = await _getEvent(stationID: i, ctime: lastEvents[i].criticalCtime);
+          eventData[currentEvent.ctime] = currentEvent;
+          NotificationService.showNotification(event: currentEvent);
+        }
+      }
+    } catch (e) {}
+  }
+
+  static Future<StationEvent> _getEvent({int stationID, int ctime}) async {
+    StationEvent res = null;
+    print("try to get event");
+    try {
+      StationEventsByDateArgs args = StationEventsByDateArgs();
+      args.stationID = stationID;
+      args.startDate = ctime;
+      args.endDate = ctime + 1;
+      var events = await _sessionData.client.stationEventsByDate(args);
+      print(args);
+      res = events.events.first;
+    } catch (e) {
+      print(e);
+    }
+    return res;
+  }
 }
 
 class NotificationService {
+  static GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
   static FlutterLocalNotificationsPlugin _plugin;
-  static void init(){
+  static void init() {
     var settingsAndroid = new AndroidInitializationSettings('icon');
-    var initializationSettings = new InitializationSettings(android: settingsAndroid);
+    var initializationSettings = new InitializationSettings(
+      android: settingsAndroid,
+    );
     _plugin = new FlutterLocalNotificationsPlugin();
-    _plugin.initialize(initializationSettings,onSelectNotification: (info){
-      print("\nNotification clicked:\n\t$info\n\n");
-      Object res = 0;
-      return res;
+    _plugin.initialize(initializationSettings, onSelectNotification: (info) {
+      StationEvent Event = GlobalStations.eventData[int.tryParse(info) ?? -1] ?? StationEvent();
+      GlobalStations.eventData.remove(Event);
+      navigatorKey.currentState.pushNamed("/mobile/viewEvent", arguments: Event);
+      return null;
     });
   }
-  static void showNotification() async{
-    var androidNotificationInfo = new AndroidNotificationDetails("channelId", "channelName", "channelDescription", priority:  Priority.high, importance: Importance.max);
+
+  static void showNotification({StationEvent event}) async {
+    print("showing notification");
+    DateTime eventDate = DateTime.fromMillisecondsSinceEpoch((event.ctime ?? 0) * 1000);
+    var androidNotificationInfo = new AndroidNotificationDetails(
+      "events",
+      "stationEvents",
+      "StationEventsInfo",
+      priority: Priority.max,
+      importance: Importance.max,
+      groupKey: event.stationID.toString(),
+      subText: DateFormat('dd.MM.yyyy HH:mm:ss').format(eventDate),
+    );
     var details = new NotificationDetails(android: androidNotificationInfo);
-    await _plugin.show(0, "Test", "OK", details, payload: "Notification info");
+
+    int id_multipler = event.status == "ERROR" ? 10 : 20;
+    String msg = event.status == "ERROR" ? "ОШИБКА ПОСТА ${event.stationID}" : "КРИТИЧЕСКИЙ СБОЙ ПОСТА ${event.stationID}";
+    await _plugin.show(event.stationID * id_multipler, msg, "МОДУЛЬ: ${event.module ?? "неизвестен"}", details, payload: event.ctime.toString()).then((value) {
+      print("Notification shown");
+    });
   }
 }

@@ -14,7 +14,7 @@ class StationEventReport {
   StationEventReport.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     events =
-      StationEvent.listFromJson(json['events'])
+      StationEvent.listFromJson(json['eventsReport'])
 ;
   }
 

@@ -13,17 +13,26 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageData {
-  final int id;
-  final String name;
-  final String ip;
-  final String hash;
-  final String status;
-  final String info;
-  final int currentBalance;
+  int id;
+  String name;
+  String ip;
+  String hash;
+  String status;
+  String info;
+  int currentBalance;
   int currentProgramID;
 
-  HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info,
-      this.currentBalance, this.currentProgramID);
+  HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info, this.currentBalance, this.currentProgramID);
+  HomePageData.fromStationStatus(StationStatus status) {
+    this.id = status.id ?? 0;
+    this.ip = status.ip ?? "___.___.___.___";
+    this.name = status.name ?? "";
+    this.hash = status.hash ?? "";
+    this.status = status.status?.value ?? "";
+    this.info = status.info ?? "";
+    this.currentBalance = status.currentBalance ?? 0;
+    this.currentProgramID = status.currentProgram ?? 0;
+  }
 }
 
 class _HomePageState extends State<HomePage> {
@@ -47,62 +56,41 @@ class _HomePageState extends State<HomePage> {
   void _getPrograms(SessionData sessionData) async {
     _programsTimer.cancel();
     try {
-      if (!mounted) {
-        return;
-      }
       var args14 = ProgramsArgs();
       _programs = await sessionData.client.programs(args14);
     } catch (e) {
       print("Exception when calling DefaultApi->programs in HomePage: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
-    Future.delayed(Duration(seconds: 500), () {
-      _programsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
-        _getPrograms(sessionData);
-      });
+    if (!mounted) {
+      return;
+    }
+    _programsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+      _getPrograms(sessionData);
     });
   }
 
-  void _getStations(SessionData sessionData) async {
+  void _getStations() async {
     bool redraw = false;
     _updateTimer.cancel();
-    try {
-      if (!mounted) {
-        return;
-      }
-      var res = await sessionData.client.status();
-      res.stations =
-          res.stations.where((element) => element.id != null).toList();
-      var tmpHomepage = List.generate((res.stations.length), (index) {
-        return HomePageData(
-            res.stations[index].id ?? index + 1,
-            res.stations[index].name ?? "Station ${index + 1}",
-            res.stations[index].ip ?? "",
-            res.stations[index].hash ?? "",
-            res.stations[index].status.value ?? "",
-            res.stations[index].info ?? "",
-            res.stations[index].currentBalance ?? 0,
-            res.stations[index].currentProgram ?? -1);
-      });
 
-      tmpHomepage.sort(
-        (a, b) => a.id.compareTo(b.id),
-      );
+    try {
+      List<StationStatus> stations = GlobalStations.info.values.toList();
+      var tmpHomepage = List.generate((stations.length), (index) {
+        return HomePageData.fromStationStatus(stations[index]);
+      });
       redraw = _homePageData != tmpHomepage;
-      if (redraw) _homePageData = tmpHomepage;
+      _homePageData = tmpHomepage;
     } catch (e) {
-      print("Exception when calling DefaultApi->Status in HomePage: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      print("ERROR:\n$e");
     }
-    Future.delayed(Duration(milliseconds: 500), () {
-      if (!_updateTimer.isActive) {
-        _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-          _getStations(sessionData);
-        });
-      }
+    if (!mounted) {
+      return;
+    }
+    _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _getStations();
     });
+
     if (redraw) setState(() {});
   }
 
@@ -110,10 +98,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
     if (_firstLoad) {
-      _getStations(sessionData);
-      _getPrograms(sessionData);
       _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        _getStations(sessionData);
+        _getStations();
       });
       _programsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
         _getPrograms(sessionData);
@@ -146,43 +132,27 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   SizedBox(
                     height: 60,
-                    width: (screenW -
-                        (orientation == Orientation.portrait ? 3 : 5) * 10),
+                    width: (screenW - (orientation == Orientation.portrait ? 3 : 5) * 10),
                     child: FlatButton(
-                      color: _homePageData[index].status == "online"
-                          ? Colors.lightGreen
-                          : Colors.red,
-                      highlightColor: _homePageData[index].status == "online"
-                          ? Colors.lightGreenAccent
-                          : Colors.redAccent,
+                      color: _homePageData[index].status == "online" ? Colors.lightGreen : Colors.red,
+                      highlightColor: _homePageData[index].status == "online" ? Colors.lightGreenAccent : Colors.redAccent,
                       disabledColor: Colors.red,
                       disabledTextColor: Colors.black,
                       onPressed: _homePageData[index].id == -1
                           ? null
                           : () {
-                              var args = PostMenuArgs(
-                                  _homePageData[index].id,
-                                  _homePageData[index].ip,
-                                  _homePageData[index].hash,
-                                  _homePageData[index].currentProgramID,
-                                  _programs,
-                                  sessionData);
+                              var args = PostMenuArgs(_homePageData[index].id, _homePageData[index].ip, _homePageData[index].hash, _homePageData[index].currentProgramID, _programs, sessionData);
                               if (_updateTimer.isActive) {
                                 _updateTimer.cancel();
                               }
                               if (_programsTimer.isActive) {
                                 _programsTimer.cancel();
                               }
-                              Navigator.pushNamed(context, "/mobile/editPost",
-                                      arguments: args)
-                                  .then((value) {
-                                _getStations(sessionData);
-                                _updateTimer = Timer.periodic(
-                                    Duration(seconds: 1), (timer) {
-                                  _getStations(sessionData);
+                              Navigator.pushNamed(context, "/mobile/editPost", arguments: args).then((value) {
+                                _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+                                  _getStations();
                                 });
-                                _programsTimer = Timer.periodic(
-                                    Duration(seconds: 10), (timer) {
+                                _programsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
                                   _getPrograms(sessionData);
                                 });
                                 setState(() {});
@@ -192,8 +162,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(_homePageData[index].name),
-                          Text(
-                              "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
+                          Text("Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
                           Text("IP: ${_homePageData[index].ip}"),
                         ],
                       ),
@@ -220,13 +189,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(5),
-                                    child: Text(activeProgramIndex == -1
-                                        ? "Idle"
-                                        : _programs.firstWhere(
-                                                (element) =>
-                                                    element.id ==
-                                                    activeProgramIndex,
-                                                orElse: () {
+                                    child: Text(activeProgramIndex < 1
+                                        ? "Ожидание клиента"
+                                        : _programs.firstWhere((element) => element.id == activeProgramIndex, orElse: () {
                                               return null;
                                             })?.name ??
                                             "Загрузка..."),
