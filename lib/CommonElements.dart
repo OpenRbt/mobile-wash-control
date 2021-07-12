@@ -209,8 +209,13 @@ void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnack
   });
 }
 
+class LinuxConfigs {
+  static final double DefaultHeight = 720;
+  static final double DefaultWidth = 1280;
+}
+
 class DefaultConfig {
-  static final appVersion = "1.0.5";
+  static final appVersion = "1.1.1";
   static final Map<String, StationsDefaultConfig> configs = {
     "Wash": StationsDefaultConfig([
       _getProgram(1, "wsh-water", 25, false, 100, 100, [
@@ -382,8 +387,8 @@ InlineResponse2001Buttons _getProgramButton(int buttonID, int programID) {
   return tmp;
 }
 
-final List<String> dPagesNames = ["Главная", "Программы", "Настройки", "Учетки", "Статистика", "Выход"];
-final Map<String, Pages> dPagesMap = {"Главная": Pages.Main, "Программы": Pages.Programs, "Настройки": Pages.Settings, "Учетки": Pages.Accounts, "Статистика": Pages.Statistics, "Выход": Pages.None};
+final List<String> dPagesNames = ["Главная", "Программы", "Настройки", "Учетки", "Статистика"];
+final Map<String, Pages> dPagesMap = {"Главная": Pages.Main, "Программы": Pages.Programs, "Настройки": Pages.Settings, "Учетки": Pages.Accounts, "Статистика": Pages.Statistics};
 final Map<Pages, String> dPageRoutes = {
   Pages.Main: "/desktop/home",
   Pages.Programs: "/desktop/programs",
@@ -406,45 +411,18 @@ Widget DGetDrawer(double height, double width, BuildContext context, Pages _curr
       child: ListView.separated(
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-              title: Text(
-                dPagesNames[index],
-                style: TextStyle(
-                  fontSize: _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
+                title: Text(
+                  dPagesNames[index],
+                  style: TextStyle(
+                    fontSize:
+                        _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
+                  ),
                 ),
-              ),
-              onTap: (index < dPagesNames.length - 1)
-                  ? () {
-                      Navigator.pushReplacementNamed(context, dPageRoutes[dPagesMap[dPagesNames[index]]], arguments: sessionData);
-                    }
-                  : () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Выход"),
-                          content: Text("Выйти из приложения?"),
-                          actionsPadding: EdgeInsets.all(10),
-                          actions: [
-                            RaisedButton(
-                              onPressed: () {
-                                exit(0);
-                              },
-                              child: Text("Да"),
-                            ),
-                            RaisedButton(
-                              color: Colors.lightGreen,
-                              textColor: Colors.white,
-                              disabledColor: Colors.grey,
-                              disabledTextColor: Colors.black,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("Нет"),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-            );
+                onTap: () {
+                  Navigator.pushReplacementNamed(
+                      context, dPageRoutes[dPagesMap[dPagesNames[index]]],
+                      arguments: sessionData);
+                });
           },
           separatorBuilder: (BuildContext context, int index) {
             return SizedBox(

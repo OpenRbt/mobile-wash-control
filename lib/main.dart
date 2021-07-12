@@ -2,17 +2,8 @@ import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
 
+import 'package:mobile_wash_control/desktop/_DesktopPages.dart' as desktop;
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/client/api.dart';
-import 'package:mobile_wash_control/desktop/DAccountsMenu.dart';
-import 'package:mobile_wash_control/desktop/DAccountsMenuAdd.dart';
-import 'package:mobile_wash_control/desktop/DAccountsMenuEdit.dart';
-import 'package:mobile_wash_control/desktop/DEditPost.dart';
-import 'package:mobile_wash_control/desktop/DHomePage.dart';
-import 'package:mobile_wash_control/desktop/DProgramsMenu.dart';
-import 'package:mobile_wash_control/desktop/DSettingsMenu.dart';
-import 'package:mobile_wash_control/desktop/DSettingsMenuPost.dart';
-import 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
@@ -30,9 +21,7 @@ import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';
 import 'package:mobile_wash_control/mobile/ServersPage.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
-import 'package:mobile_wash_control/desktop/DAuthPage.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
-import 'package:mobile_wash_control/desktop/DIncassationHistory.dart';
 import 'package:mobile_wash_control/mobile/StatisticsStationsEventsMenu.dart';
 import 'package:mobile_wash_control/mobile/ViewNotificationInfo.dart';
 
@@ -62,44 +51,7 @@ class MyApp extends StatelessWidget {
       ),
       navigatorKey: NotificationService.navigatorKey,
       initialRoute: "/",
-      routes: {
-        "/mobile/auth": (context) => AuthPage(),
-        "/": (context) => MyHomePage(title: "Главная страница"),
-        "/testScan": (context) => ServersPage(
-              servers: null,
-              serversValid: [],
-            ),
-        "/mobile/home": (context) => HomePage(),
-        "/mobile/editPost": (context) => EditPostMenu(),
-        "/mobile/programs": (context) => ProgramsMenu(),
-        "/mobile/programs/edit": (context) => ProgramMenuEdit(),
-        "/mobile/programs/add": (context) => ProgramMenuAdd(),
-        "/mobile/settings": (context) => SettingsMenu(),
-        "/mobile/settings/post": (context) => SettingsMenuPost(),
-        "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
-        "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
-        "/mobile/statistics": (context) => StatisticsMenu(),
-        "/mobile/statistics/events": (context) => StatisticsStationsEventsMenu(),
-        "/mobile/posts": (context) => PostsMenu(),
-        "/mobile/accounts": (context) => AccountsMenu(),
-        "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
-        "/mobile/accounts/add": (context) => AccountsMenuAdd(),
-        "/mobile/incassation": (context) => IncassationHistory(),
-        "/mobile/viewEvent" : (context) => ViewNotificationInfo(),
-        "/desktop/auth": (context) => DAuthPage(),
-        "/desktop/home": (context) => DHomePage(),
-        "/desktop/home/edit": (context) => DEditPostMenu(),
-        "/desktop/statistics": (context) => DStatisticsPage(),
-        "/desktop/accounts": (context) => DAccountsMenu(),
-        "/desktop/accounts/edit": (context) => DAccountsMenuEdit(),
-        "/desktop/accounts/add": (context) => DAccountsMenuAdd(),
-        "/desktop/programs": (context) => DProgramsMenu(),
-        "/desktop/settings": (context) => DSettingsMenu(),
-        "/desktop/settings/post": (context) => DSettingsMenuPost(),
-        "/dekstop/incassation": (context) => DIncassationHistory(),
-      },
-      localizationsDelegates: [GlobalMaterialLocalizations.delegate],
-      supportedLocales: [const Locale('en'), const Locale('ru')],
+      routes: Platform.isAndroid ? PagesRoutes.routes["MOBILE"] : PagesRoutes.routes["DESKTOP"],
     );
   }
 }
@@ -431,4 +383,61 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+}
+/*
+TODO:
+  * REWORK:
+    DProgramsMenu
+    DProgramsMenuEdit
+    DProgramsMenuAdd
+    DSettingsMenu
+
+  * Layout Fixes:
+    DAccountsMenuAdd
+    DAccountsMenuEdit
+    DStatisticsPage
+    DProgramsMenu
+ */
+class PagesRoutes {
+  static final Map<String, Map<String, Widget Function(BuildContext)>> routes =
+      {
+    "DESKTOP": {
+      "/": (context) => MyHomePage(title: "Главная страница"),
+      "/desktop/auth": (context) => desktop.DAuthPage(),
+      "/desktop/home": (context) => desktop.DHomePage(),
+      "/desktop/home/edit": (context) => desktop.PostMenu(),
+      "/desktop/statistics": (context) => desktop.DStatisticsPage(),
+      "/desktop/accounts": (context) => desktop.DAccountsMenu(),
+      "/desktop/accounts/edit": (context) => desktop.DAccountsMenuEdit(),
+      "/desktop/accounts/add": (context) => desktop.DAccountsMenuAdd(),
+      "/desktop/programs": (context) => desktop.DProgramsMenu(),
+      "/desktop/programs/add": (context) => desktop.AddProgramPage(),
+      "/desktop/programs/edit": (context) => desktop.EditProgramPage(),
+      "/desktop/settings": (context) => desktop.DSettingsMenu(),
+      "/desktop/settings/post": (context) => desktop.DSettingsMenuPost(),
+      "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
+      "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
+      "/dekstop/incassation": (context) => desktop.DIncassationHistory(),
+    },
+    "MOBILE": {
+      "/": (context) => MyHomePage(title: "Главная страница"),
+      "/mobile/home": (context) => HomePage(),
+      "/mobile/editPost": (context) => EditPostMenu(),
+      "/mobile/programs": (context) => ProgramsMenu(),
+      "/mobile/programs/edit": (context) => ProgramMenuEdit(),
+      "/mobile/programs/add": (context) => ProgramMenuAdd(),
+      "/mobile/settings": (context) => SettingsMenu(),
+      "/mobile/settings/post": (context) => SettingsMenuPost(),
+      "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
+      "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
+      "/mobile/statistics": (context) => StatisticsMenu(),
+      "/mobile/statistics/events": (context) => StatisticsStationsEventsMenu(),
+      "/mobile/posts": (context) => PostsMenu(),
+      "/mobile/accounts": (context) => AccountsMenu(),
+      "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
+      "/mobile/accounts/add": (context) => AccountsMenuAdd(),
+      "/mobile/incassation": (context) => IncassationHistory(),
+      "/mobile/viewEvent" : (context) => ViewNotificationInfo(),
+    }
+  };
 }

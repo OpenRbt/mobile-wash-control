@@ -43,13 +43,11 @@ class _HomePageState extends State<HomePage> {
 
   bool _firstLoad = true;
   List<HomePageData> _homePageData = List.generate(12, (index) {
-    return HomePageData(-1, "Loading...", "...", "...", "...", "...", -1, -1);
+    return HomePageData(
+        -1, "Loading...", "...", "...", "...", "...", -1, "IDLE", -1);
   });
 
   Timer _updateTimer;
-  Timer _programsTimer;
-
-  List<Program> _programs = List();
 
   void initState() {
     super.initState();
@@ -102,9 +100,6 @@ class _HomePageState extends State<HomePage> {
     if (_firstLoad) {
       _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
         _getStations();
-      });
-      _programsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
-        _getPrograms(sessionData);
       });
       _firstLoad = false;
     }
@@ -188,6 +183,7 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  Text(_homePageData[index].name),
                                   Text(
                                     "Текущая программа",
                                     style: TextStyle(fontSize: 16),
@@ -205,19 +201,50 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                             ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.grey, width: 3),
-                            ),
                           ),
-                        ),
-                      ),
-                      decoration: BoxDecoration(color: Colors.grey),
-                    ),
-                  )
-                ],
-              );
-            }),
+                          SizedBox(
+                            height: 115,
+                            child: DecoratedBox(
+                              child: Center(
+                                child: SizedBox(
+                                  height: 100,
+                                  child: DecoratedBox(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Текущая программа",
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          Divider(
+                                            color: Colors.grey,
+                                            thickness: 3,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(5),
+                                            child: Text(_homePageData[index]
+                                                .currentProgramName),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          color: Colors.grey, width: 3),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              decoration: BoxDecoration(color: Colors.grey),
+                            ),
+                          )
+                        ],
+                      );
+              },
+            ),
           );
         },
       ),
@@ -228,9 +255,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     if (_updateTimer != null && _updateTimer.isActive) {
       _updateTimer.cancel();
-    }
-    if (_programsTimer != null && _programsTimer.isActive) {
-      _programsTimer.cancel();
     }
     super.dispose();
   }
