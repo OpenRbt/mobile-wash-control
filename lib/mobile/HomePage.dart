@@ -21,6 +21,7 @@ class HomePageData {
   String info;
   int currentBalance;
   int currentProgramID;
+  String currentProgramName;
 
   HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info, this.currentBalance, this.currentProgramID);
   HomePageData.fromStationStatus(StationStatus status) {
@@ -31,7 +32,8 @@ class HomePageData {
     this.status = status.status?.value ?? "";
     this.info = status.info ?? "";
     this.currentBalance = status.currentBalance ?? 0;
-    this.currentProgramID = status.currentProgram ?? 0;
+    this.currentProgramID = status.currentProgram ?? -1;
+    this.currentProgramName = status.currentProgramName ?? "";
   }
 }
 
@@ -141,7 +143,14 @@ class _HomePageState extends State<HomePage> {
                       onPressed: _homePageData[index].id == -1
                           ? null
                           : () {
-                              var args = PostMenuArgs(_homePageData[index].id, _homePageData[index].ip, _homePageData[index].hash, _homePageData[index].currentProgramID, _programs, sessionData);
+                              var args = PostMenuArgs(
+                                _homePageData[index].id,
+                                _homePageData[index].ip,
+                                _homePageData[index].hash,
+                                _homePageData[index].currentProgramID,
+                                _programs,
+                                sessionData,
+                              );
                               if (_updateTimer.isActive) {
                                 _updateTimer.cancel();
                               }
@@ -189,12 +198,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(5),
-                                    child: Text(activeProgramIndex < 1
-                                        ? "Ожидание клиента"
-                                        : _programs.firstWhere((element) => element.id == activeProgramIndex, orElse: () {
-                                              return null;
-                                            })?.name ??
-                                            "Загрузка..."),
+                                    child: Text(
+                                      activeProgramIndex > 0 ? _homePageData[index]?.currentProgramName : (activeProgramIndex == -1 ? "Загрузка..." : "Ожидание клиента"),
+                                    ),
                                   ),
                                 ],
                               ),

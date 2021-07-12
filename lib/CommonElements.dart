@@ -470,7 +470,6 @@ class GlobalStations {
     if (statusTimer != null && statusTimer.isActive) {
       StopTimer();
     }
-    print("Create Status Timer");
     _sessionData = apiClient;
     statusTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       _updateFunc(timer, context);
@@ -499,7 +498,6 @@ class GlobalStations {
   }
 
   static void StopTimer() async {
-    print("Stop Status Timer");
     statusTimer.cancel();
     info.clear();
     lastEvents.clear();
@@ -549,7 +547,6 @@ class GlobalStations {
 
   static Future<StationEvent> _getEvent({int stationID, int ctime}) async {
     StationEvent res = null;
-    print("try to get event");
     try {
       StationEventsByDateArgs args = StationEventsByDateArgs();
       args.stationID = stationID;
@@ -583,7 +580,6 @@ class NotificationService {
   }
 
   static void showNotification({StationEvent event}) async {
-    print("showing notification");
     DateTime eventDate = DateTime.fromMillisecondsSinceEpoch((event.ctime ?? 0) * 1000);
     var androidNotificationInfo = new AndroidNotificationDetails(
       "events",
@@ -598,8 +594,6 @@ class NotificationService {
 
     int id_multipler = event.status == "ERROR" ? 10 : 20;
     String msg = event.status == "ERROR" ? "ОШИБКА ПОСТА ${event.stationID}" : "КРИТИЧЕСКИЙ СБОЙ ПОСТА ${event.stationID}";
-    await _plugin.show(event.stationID * id_multipler, msg, "МОДУЛЬ: ${event.module ?? "неизвестен"}", details, payload: event.ctime.toString()).then((value) {
-      print("Notification shown");
-    });
+    await _plugin.show(event.stationID * id_multipler, msg, "МОДУЛЬ: ${event.module ?? "неизвестен"}", details, payload: event.ctime.toString());
   }
 }
