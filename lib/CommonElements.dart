@@ -414,14 +414,11 @@ Widget DGetDrawer(double height, double width, BuildContext context, Pages _curr
                 title: Text(
                   dPagesNames[index],
                   style: TextStyle(
-                    fontSize:
-                        _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
+                    fontSize: _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
                   ),
                 ),
                 onTap: () {
-                  Navigator.pushReplacementNamed(
-                      context, dPageRoutes[dPagesMap[dPagesNames[index]]],
-                      arguments: sessionData);
+                  Navigator.pushReplacementNamed(context, dPageRoutes[dPagesMap[dPagesNames[index]]], arguments: sessionData);
                 });
           },
           separatorBuilder: (BuildContext context, int index) {
@@ -513,7 +510,6 @@ class GlobalStations {
           NotificationService.showNotification(event: currentEvent);
         }
         if (lastEvents[i].criticalCtime < info[i].lastEvents.criticalCtime ?? 0) {
-          print("critical event");
           lastEvents[i].criticalCtime = info[i].lastEvents.criticalCtime;
           StationEvent currentEvent = await _getEvent(stationID: i, ctime: lastEvents[i].criticalCtime);
           eventData[currentEvent.ctime] = currentEvent;
@@ -552,6 +548,7 @@ class NotificationService {
     _plugin.initialize(initializationSettings, onSelectNotification: (info) {
       StationEvent Event = GlobalStations.eventData[int.tryParse(info) ?? -1] ?? StationEvent();
       GlobalStations.eventData.remove(Event);
+      print(Event.ctime);
       navigatorKey.currentState.pushNamed("/mobile/viewEvent", arguments: Event);
       return null;
     });

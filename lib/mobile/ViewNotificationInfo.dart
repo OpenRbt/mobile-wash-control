@@ -8,7 +8,7 @@ class ViewNotificationInfo extends StatelessWidget {
     final StationEvent event = ModalRoute.of(context).settings.arguments as StationEvent;
 
     Color eventColor = (event.status ?? "") == "ERROR" ? Colors.deepOrange : Colors.red;
-    DateTime eventDate = DateTime.fromMicrosecondsSinceEpoch((event.ctime ?? 0) * 1000);
+    DateTime eventDate = DateTime.fromMillisecondsSinceEpoch((event.ctime ?? 0) * 1000);
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;

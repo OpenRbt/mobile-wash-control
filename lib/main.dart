@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:mobile_wash_control/desktop/_DesktopPages.dart' as desktop;
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
@@ -18,7 +17,6 @@ import 'package:mobile_wash_control/mobile/HomePage.dart';
 import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/PostsMenu.dart';
 import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';
-import 'package:mobile_wash_control/mobile/ServersPage.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
@@ -52,6 +50,13 @@ class MyApp extends StatelessWidget {
       navigatorKey: NotificationService.navigatorKey,
       initialRoute: "/",
       routes: Platform.isAndroid ? PagesRoutes.routes["MOBILE"] : PagesRoutes.routes["DESKTOP"],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('ru')
+      ],
     );
   }
 }
@@ -367,7 +372,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: () {
                           if (Platform.isLinux) {
-                            var args = DAuthArgs("http://" + _servers.elementAt(index) + ":8020");
+                            var args = desktop.DAuthArgs("http://" + _servers.elementAt(index) + ":8020");
                             Navigator.pushNamed(context, "/desktop/auth", arguments: args).then((value) => setState);
                           } else {
                             var args = AuthArgs("http://" + _servers.elementAt(index) + ":8020", context);
@@ -421,6 +426,7 @@ class PagesRoutes {
     },
     "MOBILE": {
       "/": (context) => MyHomePage(title: "Главная страница"),
+      "/mobile/auth": (context) => AuthPage(),
       "/mobile/home": (context) => HomePage(),
       "/mobile/editPost": (context) => EditPostMenu(),
       "/mobile/programs": (context) => ProgramsMenu(),

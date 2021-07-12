@@ -76,14 +76,14 @@ class _SettingsMenuState extends State<SettingsMenu> {
           }
         }
       }
-      setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
           "Произошла ошибка при запросе к api", Colors.red);
     }
-
-    setState(() {});
+    if (mounted){
+      setState(() {});
+    }
   }
 
   @override
