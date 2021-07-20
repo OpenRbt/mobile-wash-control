@@ -38,6 +38,11 @@ class _PostMenuState extends State<PostMenu> {
   DateTime _endDate = DateTime.now().add(
     new Duration(days: 1, seconds: -1),
   );
+  @override
+  void dispose(){
+    _updateBalanceTimer.cancel();
+    super.dispose();
+  }
 
   void _getBalance(PostMenuArgs postMenuArgs) async {
     _updateBalanceTimer.cancel();

@@ -42,11 +42,17 @@ class _DHomePageState extends State<DHomePage> {
         -1, "Loading...", "", "", "", "", -1, "IDLE", -1);
   });
 
+  @override
+  void dispose() {
+    _updateTimer.cancel();
+    super.dispose();
+  }
+
   void _getStations(SessionData sessionData) async {
     bool redraw = false;
-    if (_updateTimer != null && _updateTimer.isActive) {
-      _updateTimer.cancel();
-    }
+
+    _updateTimer.cancel();
+
     try {
       if (!mounted) {
         return;
@@ -79,11 +85,9 @@ class _DHomePageState extends State<DHomePage> {
           "Произошла ошибка при запросе к api", Colors.red);
     }
 
-    if (!_updateTimer.isActive) {
-      _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        _getStations(sessionData);
-      });
-    }
+    _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _getStations(sessionData);
+    });
 
     if (redraw) setState(() {});
   }
@@ -92,7 +96,6 @@ class _DHomePageState extends State<DHomePage> {
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
     if (_firstLoad) {
-      _getStations(sessionData);
       _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
         _getStations(sessionData);
       });
@@ -260,15 +263,11 @@ class _DHomePageState extends State<DHomePage> {
         _homePageData[index].hash,
         _homePageData[index].currentProgramID,
         _sessionData);
-    if (_updateTimer.isActive) {
-      _updateTimer.cancel();
-    }
+    _updateTimer.cancel();
+
     Navigator.pushNamed(context, "/desktop/home/edit", arguments: args)
         .then((value) {
       _getStations(_sessionData);
-      _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        _getStations(_sessionData);
-      });
       setState(() {});
     });
   }
