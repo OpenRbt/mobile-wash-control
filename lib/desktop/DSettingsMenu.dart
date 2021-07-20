@@ -99,8 +99,11 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
     var screenW = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.height;
 
-    var width = screenW - screenW / 4;
+    double DrawerSize = 256;
+
+    var width = screenW - DrawerSize;
     var height = screenH;
+    
     return Scaffold(
       key: _scaffoldKey,
       body: OrientationBuilder(
@@ -114,7 +117,7 @@ class _DSettingsMenuState extends State<DSettingsMenu> {
               setState(() {});
             },
             child: Row(children: [
-              DGetDrawer(screenH, screenW/4, context, Pages.Settings, sessionData),
+              DGetDrawer(screenH, DrawerSize, context, Pages.Settings, sessionData),
               SizedBox(
                 height: height,
                 width: width,

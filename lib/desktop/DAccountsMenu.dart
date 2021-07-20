@@ -72,7 +72,9 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
     var screenW = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.height;
 
-    var width = screenW - screenW / 4;
+    double DrawerSize = 256;
+
+    var width = screenW - DrawerSize;
     var height = screenH;
 
     return Scaffold(
@@ -89,7 +91,7 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
               child: Row(
                 children: [
                   DGetDrawer(
-                      height, screenW / 4, context, Pages.Accounts, sessionData),
+                      height,DrawerSize, context, Pages.Accounts, sessionData),
                   SizedBox(
                     height: height,
                     width: width,

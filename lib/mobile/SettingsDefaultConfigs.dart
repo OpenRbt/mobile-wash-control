@@ -24,13 +24,13 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
     if (_dropDownValue != "----") {
       StationsDefaultConfig config = DefaultConfig.configs[_dropDownValue];
 
-      config.programs.forEach((element) async {
+      for (int i = 0; i < config.programs.length; i++){
         try {
-          var res = await sessionData.client.setProgram(element);
+          var res = await sessionData.client.setProgram(config.programs[i]);
         } catch (e) {
           print(e);
         }
-      });
+      }
 
       for (int i = 0; i < _stationsToSave.length; i++) {
         if (_stationsToSave[i]) {
