@@ -22,11 +22,13 @@ class _EditProgramState extends State<EditProgramPage> {
 //
   bool _firstLoad = true;
 
+  int _programID = 0;
   final int _maxPercent = 100;
   final int _maxMotor = 100;
   final int _relayCount = 17;
   final int _relayTime = 1000;
   bool _preflight = false;
+  bool _isFinishingProgram = false;
   List<TextEditingController> _program;
   List<TextEditingController> _relays;
   List<TextEditingController> _relaysPreflight;
@@ -43,11 +45,13 @@ class _EditProgramState extends State<EditProgramPage> {
               int value = int.tryParse(text);
               value = value ?? 0;
               controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+                text: value.toString(),
+                selection: TextSelection(
+                  baseOffset: value.toString().length,
+                  extentOffset: value.toString().length,
+                ),
+                composing: TextRange.empty,
+              );
             }
           });
           break;
@@ -67,11 +71,13 @@ class _EditProgramState extends State<EditProgramPage> {
               value = value ?? 0;
               value = value > _maxMotor ? _maxMotor : value;
               controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+                text: value.toString(),
+                selection: TextSelection(
+                  baseOffset: value.toString().length,
+                  extentOffset: value.toString().length,
+                ),
+                composing: TextRange.empty,
+              );
             }
           });
           break;
@@ -89,11 +95,13 @@ class _EditProgramState extends State<EditProgramPage> {
               value = value ?? 0;
               value = value > _maxPercent ? _maxPercent : value;
               controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+                text: value.toString(),
+                selection: TextSelection(
+                  baseOffset: value.toString().length,
+                  extentOffset: value.toString().length,
+                ),
+                composing: TextRange.empty,
+              );
             }
           });
           break;
@@ -111,11 +119,13 @@ class _EditProgramState extends State<EditProgramPage> {
               value = value ?? 0;
               value = value > _maxPercent ? _maxPercent : value;
               controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+                text: value.toString(),
+                selection: TextSelection(
+                  baseOffset: value.toString().length,
+                  extentOffset: value.toString().length,
+                ),
+                composing: TextRange.empty,
+              );
             }
           });
           break;
@@ -154,8 +164,7 @@ class _EditProgramState extends State<EditProgramPage> {
     AppBar appBar = AppBar(
       title: Text("Редактирование программы ${_program[0].text}"),
     );
-    final ProgramMenuEditArgs editArgs =
-        ModalRoute.of(context).settings.arguments;
+    final ProgramMenuEditArgs editArgs = ModalRoute.of(context).settings.arguments;
 
     if (_firstLoad) {
       load(editArgs);
@@ -250,40 +259,54 @@ class _EditProgramState extends State<EditProgramPage> {
                       ],
                     ),
                     SizedBox(
-                      height: 75,
-                      width: width / 3 * 2,
-                      child: Center(child: CheckboxListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          'Прокачка',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        value: _preflight,
-                        onChanged: (newValue) {
-                          _preflight = !_preflight;
-                          setState(() {});
-                        },
-                      ),)
-                    ),
+                        height: 75,
+                        width: width / 3 * 2,
+                        child: Center(
+                          child: CheckboxListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(
+                              'Прокачка',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            value: _preflight,
+                            onChanged: (newValue) {
+                              _preflight = !_preflight;
+                              setState(() {});
+                            },
+                          ),
+                        )),
+                    SizedBox(
+                        height: 75,
+                        width: width / 3 * 2,
+                        child: Center(
+                          child: CheckboxListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(
+                              'Финальная программа',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            value: _isFinishingProgram,
+                            onChanged: (newValue) {
+                              _isFinishingProgram = !_isFinishingProgram;
+                              setState(() {});
+                            },
+                          ),
+                        )),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
                           height: 50,
-                          width: width /3,
+                          width: width / 3,
                           child: Center(
-                            child: Text("Мотор %",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Мотор %", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
                           height: 50,
                           width: width / 3,
                           child: Center(
-                            child: Text("Мотор прокачки %",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Мотор прокачки %", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                       ],
@@ -401,18 +424,14 @@ class _EditProgramState extends State<EditProgramPage> {
                           height: 50,
                           width: width / 2,
                           child: Center(
-                            child: Text("Реле",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Реле", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
                           height: 50,
                           width: width / 2,
                           child: Center(
-                            child: Text("Реле прокачки",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Реле прокачки", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                       ],
@@ -423,18 +442,14 @@ class _EditProgramState extends State<EditProgramPage> {
                           height: 25,
                           width: width / 9 * 2,
                           child: Center(
-                            child: Text("ID",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("ID", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
                           height: 25,
                           width: width / 9 * 2,
                           child: Center(
-                            child: Text("%",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("%", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
@@ -445,18 +460,14 @@ class _EditProgramState extends State<EditProgramPage> {
                           height: 25,
                           width: width / 9 * 2,
                           child: Center(
-                            child: Text("ID",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("ID", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
                           height: 25,
                           width: width / 9 * 2,
                           child: Center(
-                            child: Text("%",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("%", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         )
                       ],
@@ -470,15 +481,11 @@ class _EditProgramState extends State<EditProgramPage> {
                               width: width / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
-                                  child: Text("${index + 1}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center),
+                                  child: Text("${index + 1}", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                                 ),
                               ),
                             ),
@@ -487,9 +494,7 @@ class _EditProgramState extends State<EditProgramPage> {
                               width: width / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: TextField(
@@ -516,15 +521,11 @@ class _EditProgramState extends State<EditProgramPage> {
                               width: width / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
-                                  child: Text("${index + 1}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center),
+                                  child: Text("${index + 1}", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                                 ),
                               ),
                             ),
@@ -533,9 +534,7 @@ class _EditProgramState extends State<EditProgramPage> {
                               width: width / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: TextField(
@@ -570,18 +569,19 @@ class _EditProgramState extends State<EditProgramPage> {
   }
 
   void load(ProgramMenuEditArgs args) async {
-    ProgramData data = await getProgram(
-        sessionData: args.sessionData, programID: args.programID);
+    ProgramData data = await getProgram(sessionData: args.sessionData, programID: args.programID);
     if (data == null) {
       {
         return;
       }
     }
+    _programID = args.programID;
     _program[0].text = data.name;
     _program[1].text = data.price.toString();
     _motors[0].text = data.motorSpeed.toString();
     _motors[1].text = data.motorSpeedPreflight.toString();
     _preflight = data.preflightEnabled;
+    _isFinishingProgram = data.isFinishingProgram;
     for (int i = 0; i < data.relays.length; i++) {
       if (data.relays[i] != 0) {
         _relays[i].text = data.relays[i].toString();
@@ -601,6 +601,7 @@ class _EditProgramState extends State<EditProgramPage> {
     String name = _program[0].value.text;
     int price = int.tryParse(_program[1].value.text) ?? 0;
     bool preflightEnabled = _preflight;
+    bool finishingProgram = _isFinishingProgram;
     int motorSpeed = int.tryParse(_motors[0].value.text) ?? 0;
     int motorSpeedPreflight = int.tryParse(_motors[1].value.text) ?? 0;
     List<int> relays = List.generate(_relayCount, (index) {
@@ -610,17 +611,20 @@ class _EditProgramState extends State<EditProgramPage> {
       return int.tryParse(_relaysPreflight[index].value.text) ?? 0;
     });
 
-    bool success = await saveProgram(sessionData,
-        programName: name,
-        price: price,
-        preflightEnabled: preflightEnabled,
-        motorSpeed: motorSpeed,
-        motorSpeedPreflight: motorSpeedPreflight,
-        relaysPercent: relays,
-        relaysPreflightPercent: relayPreflight);
+    bool success = await saveProgram(
+      sessionData,
+      programName: name,
+      price: price,
+      preflightEnabled: preflightEnabled,
+      isFinishingProgram: finishingProgram,
+      motorSpeed: motorSpeed,
+      motorSpeedPreflight: motorSpeedPreflight,
+      relaysPercent: relays,
+      relaysPreflightPercent: relayPreflight,
+      id: _programID,
+    );
     if (success) {
-      showInfoSnackBar(
-          _scaffoldKey, _isSnackBarActive, "Программа добавлена", Colors.green);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Программа изменена", Colors.green);
 
       for (var field in _relays) {
         field.text = "";
@@ -635,8 +639,7 @@ class _EditProgramState extends State<EditProgramPage> {
         field.text = "";
       }
     } else {
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Не удалось добавить программу", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось добавить программу", Colors.red);
     }
     setState(() {});
     _inUpdate = false;

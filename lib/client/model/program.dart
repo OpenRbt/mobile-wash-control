@@ -14,6 +14,9 @@ class Program {
   bool preflightEnabled = null;
   
 
+  bool isFinishingProgram = null;
+  
+
   int motorSpeedPercent = null;
    // range from 0 to 100//
 
@@ -29,7 +32,7 @@ class Program {
 
   @override
   String toString() {
-    return 'Program[id=$id, name=$name, price=$price, preflightEnabled=$preflightEnabled, motorSpeedPercent=$motorSpeedPercent, preflightMotorSpeedPercent=$preflightMotorSpeedPercent, relays=$relays, preflightRelays=$preflightRelays, ]';
+    return 'Program[id=$id, name=$name, price=$price, preflightEnabled=$preflightEnabled, isFinishingProgram=$isFinishingProgram, motorSpeedPercent=$motorSpeedPercent, preflightMotorSpeedPercent=$preflightMotorSpeedPercent, relays=$relays, preflightRelays=$preflightRelays, ]';
   }
 
   Program.fromJson(Map<String, dynamic> json) {
@@ -45,6 +48,9 @@ class Program {
     ;
     preflightEnabled =
         json['preflightEnabled']
+    ;
+    isFinishingProgram =
+        json['isFinishingProgram']
     ;
     motorSpeedPercent =
         json['motorSpeedPercent']
@@ -66,6 +72,7 @@ class Program {
       'name': name,
       'price': price,
       'preflightEnabled': preflightEnabled,
+      'isFinishingProgram': isFinishingProgram,
       'motorSpeedPercent': motorSpeedPercent,
       'preflightMotorSpeedPercent': preflightMotorSpeedPercent,
       'relays': relays,

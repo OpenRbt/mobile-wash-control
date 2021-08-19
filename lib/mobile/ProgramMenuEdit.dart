@@ -25,6 +25,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
   final int _relayTime = 1000;
 
   bool _preflight = false;
+  bool _isFinishingProgram = false;
   bool _inUpdate = false;
   bool _firstLoad = true;
 
@@ -44,11 +45,13 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
               int value = int.tryParse(text);
               value = value ?? 0;
               controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+                text: value.toString(),
+                selection: TextSelection(
+                  baseOffset: value.toString().length,
+                  extentOffset: value.toString().length,
+                ),
+                composing: TextRange.empty,
+              );
             }
           });
           break;
@@ -68,11 +71,13 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
               value = value ?? 0;
               value = value > _maxMotor ? _maxMotor : value;
               controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+                text: value.toString(),
+                selection: TextSelection(
+                  baseOffset: value.toString().length,
+                  extentOffset: value.toString().length,
+                ),
+                composing: TextRange.empty,
+              );
             }
           });
           break;
@@ -90,11 +95,13 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
               value = value ?? 0;
               value = value > _maxPercent ? _maxPercent : value;
               controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+                text: value.toString(),
+                selection: TextSelection(
+                  baseOffset: value.toString().length,
+                  extentOffset: value.toString().length,
+                ),
+                composing: TextRange.empty,
+              );
             }
           });
           break;
@@ -112,11 +119,13 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
               value = value ?? 0;
               value = value > _maxPercent ? _maxPercent : value;
               controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+                text: value.toString(),
+                selection: TextSelection(
+                  baseOffset: value.toString().length,
+                  extentOffset: value.toString().length,
+                ),
+                composing: TextRange.empty,
+              );
             }
           });
           break;
@@ -163,6 +172,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       _motors[1].text = res[0].preflightMotorSpeedPercent.toString();
 
       _preflight = res[0].preflightEnabled ?? false;
+      _isFinishingProgram = res[0].isFinishingProgram ?? false;
 
       for (int i = 0; i < res[0].relays.length; i++) {
         int id = res[0].relays[i].id - 1;
@@ -183,8 +193,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
     setState(() {});
   }
 
-  void saveProgram(
-      ProgramMenuEditArgs programMenuEditArgs, BuildContext context) async {
+  void saveProgram(ProgramMenuEditArgs programMenuEditArgs, BuildContext context) async {
     _inUpdate = true;
     try {
       var args = Program();
@@ -193,30 +202,23 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       args.name = _program[0].value.text;
       args.price = int.tryParse(_program[1].value.text) ?? 0;
       args.preflightEnabled = _preflight;
-      args.preflightMotorSpeedPercent =
-          int.tryParse(_motors[1].value.text) ?? 0;
+      args.isFinishingProgram = _isFinishingProgram;
+      args.preflightMotorSpeedPercent = int.tryParse(_motors[1].value.text) ?? 0;
 
       List<RelayConfig> relays = List();
       List<RelayConfig> relaysPreflight = List();
       for (int i = 0; i < _relayCount; i++) {
-        if (_relays[i].value.text.isNotEmpty &&
-            int.tryParse(_relays[i].value.text) != 0) {
+        if (_relays[i].value.text.isNotEmpty && int.tryParse(_relays[i].value.text) != 0) {
           var tmp = RelayConfig();
           tmp.id = i + 1;
-          tmp.timeon =
-              (_relayTime * (int.tryParse(_relays[i].value.text) / 100))
-                  .round();
+          tmp.timeon = (_relayTime * (int.tryParse(_relays[i].value.text) / 100)).round();
           tmp.timeoff = _relayTime - tmp.timeon;
           relays.add(tmp);
         }
-        if (_preflight &&
-            _relaysPreflight[i].value.text.isNotEmpty &&
-            int.tryParse(_relaysPreflight[i].value.text) != 0) {
+        if (_preflight && _relaysPreflight[i].value.text.isNotEmpty && int.tryParse(_relaysPreflight[i].value.text) != 0) {
           var tmp = RelayConfig();
           tmp.id = i + 1;
-          tmp.timeon = (_relayTime *
-                  (double.tryParse(_relaysPreflight[i].value.text) / 100))
-              .round();
+          tmp.timeon = (_relayTime * (double.tryParse(_relaysPreflight[i].value.text) / 100)).round();
           tmp.timeoff = _relayTime - tmp.timeon;
           relaysPreflight.add(tmp);
         }
@@ -225,20 +227,17 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       args.preflightRelays = relaysPreflight;
 
       var res = await programMenuEditArgs.sessionData.client.setProgram(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Измененеия программы сохранены", Colors.green);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Измененеия программы сохранены", Colors.green);
     } catch (e) {
       print(e);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Не удалось изменить программу", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось изменить программу", Colors.red);
     }
     _inUpdate = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final ProgramMenuEditArgs programMenuEditArgs =
-        ModalRoute.of(context).settings.arguments;
+    final ProgramMenuEditArgs programMenuEditArgs = ModalRoute.of(context).settings.arguments;
     final AppBar appBar = AppBar(
       title: Text("Программа ${programMenuEditArgs.programName}"),
     );
@@ -268,9 +267,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                           height: 75,
                           width: screenW / 3,
                           child: Center(
-                            child: Text("Название",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Название", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
@@ -295,9 +292,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                           height: 75,
                           width: screenW / 3,
                           child: Center(
-                            child: Text("Цена",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Цена", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
@@ -335,6 +330,19 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                         },
                       ),
                     ),
+                    Center(
+                      child: CheckboxListTile(
+                        contentPadding: EdgeInsets.only(left: 5, right: 5),
+                        title: Text(
+                          'Финальная программа',
+                        ),
+                        value: _isFinishingProgram,
+                        onChanged: (newValue) {
+                          _isFinishingProgram = !_isFinishingProgram;
+                          setState(() {});
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 Divider(
@@ -347,9 +355,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                       height: 50,
                       width: screenW / 9 * 4,
                       child: Center(
-                        child: Text("Мотор %",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center),
+                        child: Text("Мотор %", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                       ),
                     ),
                     SizedBox(
@@ -360,9 +366,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                       height: 50,
                       width: screenW / 9 * 4,
                       child: Center(
-                        child: Text("Мотор прокачки %",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center),
+                        child: Text("Мотор прокачки %", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                       ),
                     ),
                   ],
@@ -427,9 +431,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                       height: 50,
                       width: screenW / 9 * 4,
                       child: Center(
-                        child: Text("Реле",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center),
+                        child: Text("Реле", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                       ),
                     ),
                     SizedBox(
@@ -440,9 +442,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                       height: 50,
                       width: screenW / 9 * 4,
                       child: Center(
-                        child: Text("Реле прокачки",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center),
+                        child: Text("Реле прокачки", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                       ),
                     ),
                   ],
@@ -453,18 +453,14 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                       height: 50,
                       width: screenW / 9 * 2,
                       child: Center(
-                        child: Text("ID",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center),
+                        child: Text("ID", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                       ),
                     ),
                     SizedBox(
                       height: 50,
                       width: screenW / 9 * 2,
                       child: Center(
-                        child: Text("%",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center),
+                        child: Text("%", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                       ),
                     ),
                     SizedBox(
@@ -475,18 +471,14 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                       height: 50,
                       width: screenW / 9 * 2,
                       child: Center(
-                        child: Text("ID",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center),
+                        child: Text("ID", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                       ),
                     ),
                     SizedBox(
                       height: 50,
                       width: screenW / 9 * 2,
                       child: Center(
-                        child: Text("%",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center),
+                        child: Text("%", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                       ),
                     )
                   ],
@@ -501,15 +493,11 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                           width: screenW / 9 * 2,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: index % 2 == 0
-                                  ? Colors.white
-                                  : Colors.black12,
+                              color: index % 2 == 0 ? Colors.white : Colors.black12,
                               border: Border.all(color: Colors.black38),
                             ),
                             child: Center(
-                              child: Text("${index + 1}",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
+                              child: Text("${index + 1}", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                             ),
                           ),
                         ),
@@ -518,9 +506,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                           width: screenW / 9 * 2,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: index % 2 == 0
-                                  ? Colors.white
-                                  : Colors.black12,
+                              color: index % 2 == 0 ? Colors.white : Colors.black12,
                               border: Border.all(color: Colors.black38),
                             ),
                             child: TextField(
@@ -547,15 +533,11 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                           width: screenW / 9 * 2,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: index % 2 == 0
-                                  ? Colors.white
-                                  : Colors.black12,
+                              color: index % 2 == 0 ? Colors.white : Colors.black12,
                               border: Border.all(color: Colors.black38),
                             ),
                             child: Center(
-                              child: Text("${index + 1}",
-                                  style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center),
+                              child: Text("${index + 1}", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                             ),
                           ),
                         ),
@@ -564,9 +546,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                           width: screenW / 9 * 2,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: index % 2 == 0
-                                  ? Colors.white
-                                  : Colors.black12,
+                              color: index % 2 == 0 ? Colors.white : Colors.black12,
                               border: Border.all(color: Colors.black38),
                             ),
                             child: TextField(

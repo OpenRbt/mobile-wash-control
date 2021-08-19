@@ -83,13 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
     client.connectionTimeout = Duration(milliseconds: 100);
 
     if (Platform.isLinux) {
-      List<NetworkInterface> interfaces =
-          await NetworkInterface.list(type: InternetAddressType.IPv4);
+      List<NetworkInterface> interfaces = await NetworkInterface.list(type: InternetAddressType.IPv4);
       print(interfaces);
-      NetworkInterface target = interfaces.firstWhere(
-          (element) =>
-              element.name.contains("en") || element.name.contains("wlan"),
-          orElse: () {
+      NetworkInterface target = interfaces.firstWhere((element) => element.name.contains("en") || element.name.contains("wlan"), orElse: () {
         return null;
       });
       if (target != null) {
@@ -114,8 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
                 return;
               }
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -145,8 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 _pos++;
               });
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -195,8 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
                 return;
               }
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -226,8 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 _pos++;
               });
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -289,8 +281,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             border: Border.all(color: Colors.black26, width: 2),
                           ),
                           child: LinearProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation(Colors.lightGreen),
+                            valueColor: AlwaysStoppedAnimation(Colors.lightGreen),
                             backgroundColor: Colors.black12,
                             value: _pos / 256,
                           ),
@@ -311,8 +302,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       color: _canScan ? Colors.lightGreen : Colors.yellow,
                       splashColor: Colors.lightGreenAccent,
-                      child: new Text(
-                          _canScan ? ("Поиск серверов") : "Сканирование"),
+                      child: new Text(_canScan ? ("Поиск серверов") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(false);
                       },
@@ -320,8 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       color: _canScan ? Colors.lightGreen : Colors.yellow,
                       splashColor: Colors.lightGreenAccent,
-                      child:
-                          new Text(_canScan ? ("QUICK SCAN") : "Сканирование"),
+                      child: new Text(_canScan ? ("QUICK SCAN") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(true);
                       },
@@ -362,17 +351,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: () {
                           if (Platform.isLinux) {
-                            var args = desktop.DAuthArgs("http://" +
-                                _servers.elementAt(index) +
-                                ":8020");
-                            Navigator.pushNamed(context, "/desktop/auth",
-                                arguments: args);
+                            var args = desktop.DAuthArgs("http://" + _servers.elementAt(index) + ":8020");
+                            Navigator.pushNamed(context, "/desktop/auth", arguments: args);
                           } else {
-                            var args = AuthArgs("http://" +
-                                _servers.elementAt(index) +
-                                ":8020");
-                            Navigator.pushNamed(context, "/mobile/auth",
-                                arguments: args);
+                            var args = AuthArgs("http://" + _servers.elementAt(index) + ":8020");
+                            Navigator.pushNamed(context, "/mobile/auth", arguments: args);
                           }
                         },
                       );
@@ -385,6 +368,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
 /*
 TODO:
   * REWORK:
@@ -400,8 +384,7 @@ TODO:
     DProgramsMenu
  */
 class PagesRoutes {
-  static final Map<String, Map<String, Widget Function(BuildContext)>> routes =
-      {
+  static final Map<String, Map<String, Widget Function(BuildContext)>> routes = {
     "DESKTOP": {
       "/": (context) => MyHomePage(title: "Главная страница"),
       "/desktop/auth": (context) => desktop.DAuthPage(),
@@ -422,6 +405,7 @@ class PagesRoutes {
     },
     "MOBILE": {
       "/": (context) => MyHomePage(title: "Главная страница"),
+      "/mobile/auth": (context) => AuthPage(),
       "/mobile/home": (context) => HomePage(),
       "/mobile/editPost": (context) => EditPostMenu(),
       "/mobile/programs": (context) => ProgramsMenu(),

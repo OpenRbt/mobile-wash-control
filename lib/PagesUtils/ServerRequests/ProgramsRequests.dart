@@ -2,37 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
-Future<bool> saveProgram(SessionData sessionData,
-    {int motorSpeed,
-    int motorSpeedPreflight,
-    bool preflightEnabled,
-    String programName,
-    int price,
-    List<int> relaysPercent,
-    List<int> relaysPreflightPercent}) async {
+Future<bool> saveProgram(
+  SessionData sessionData, {
+  int id = -1,
+  int motorSpeed,
+  int motorSpeedPreflight,
+  bool preflightEnabled,
+  bool isFinishingProgram,
+  String programName,
+  int price,
+  List<int> relaysPercent,
+  List<int> relaysPreflightPercent,
+}) async {
   final int _relayCount = 17;
   final int _relayTime = 1000;
   try {
-    var argstmp = ProgramsArgs();
-    var tmp = await sessionData.client.programs(argstmp);
-    int maxID = 1000;
-    if (tmp != null && tmp.isNotEmpty) {
-      tmp.sort(
-        (a, b) => a.id.compareTo(b.id),
-      );
-      if (tmp.last.id >= 1000) {
-        maxID = tmp.last.id + 1;
+    if (id == -1) {
+      var args = ProgramsArgs();
+      var tmp = await sessionData.client.programs(args);
+      int maxID = 1000;
+      if (tmp != null && tmp.isNotEmpty) {
+        tmp.sort(
+          (a, b) => a.id.compareTo(b.id),
+        );
+        if (tmp.last.id >= 1000) {
+          maxID = tmp.last.id + 1;
+        }
       }
-      print(maxID);
+      id = maxID;
     }
 
     var args = Program();
-    args.id = maxID;
+    args.id = id;
     args.motorSpeedPercent = motorSpeed;
     args.name = programName;
     args.price = price;
     args.preflightEnabled = preflightEnabled;
     args.preflightMotorSpeedPercent = motorSpeedPreflight;
+    args.isFinishingProgram = isFinishingProgram;
 
     List<RelayConfig> relays = List();
     List<RelayConfig> relaysPreflight = List();
@@ -67,6 +74,7 @@ class ProgramData {
   String name;
   int price;
   bool preflightEnabled;
+  bool isFinishingProgram;
   int motorSpeed;
   int motorSpeedPreflight;
   List<int> relays;
@@ -81,6 +89,7 @@ Future<ProgramData> getProgram({SessionData sessionData, int programID}) async {
   program.name = "";
   program.price = 0;
   program.preflightEnabled = false;
+  program.isFinishingProgram = false;
   program.motorSpeed = 0;
   program.motorSpeedPreflight = 0;
   program.relays = List.filled(_relayCount, 0);
@@ -101,6 +110,7 @@ Future<ProgramData> getProgram({SessionData sessionData, int programID}) async {
     program.motorSpeed = resProgram.motorSpeedPercent ?? 0;
     program.motorSpeedPreflight = resProgram.preflightMotorSpeedPercent ?? 0;
     program.preflightEnabled = resProgram.preflightEnabled ?? false;
+    program.isFinishingProgram = resProgram.isFinishingProgram ?? false;
 
     for (int i = 0; i < resProgram.relays.length; i++) {
       int id = resProgram.relays[i].id - 1;

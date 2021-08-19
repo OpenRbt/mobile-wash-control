@@ -24,6 +24,7 @@ class _AddProgramState extends State<AddProgramPage> {
   final int _relayCount = 17;
   final int _relayTime = 1000;
   bool _preflight = false;
+  bool _isFinishingProgram = false;
   List<TextEditingController> _program;
   List<TextEditingController> _relays;
   List<TextEditingController> _relaysPreflight;
@@ -247,6 +248,19 @@ class _AddProgramState extends State<AddProgramPage> {
                         value: _preflight,
                         onChanged: (newValue) {
                           _preflight = !_preflight;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    Center(
+                      child: CheckboxListTile(
+                        contentPadding: EdgeInsets.only(left: 5, right: 5),
+                        title: Text(
+                          'Финальная программа',
+                        ),
+                        value: _isFinishingProgram,
+                        onChanged: (newValue) {
+                          _isFinishingProgram = !_isFinishingProgram;
                           setState(() {});
                         },
                       ),
@@ -563,6 +577,7 @@ class _AddProgramState extends State<AddProgramPage> {
     String name = _program[0].value.text;
     int price = int.tryParse(_program[1].value.text) ?? 0;
     bool preflightEnabled = _preflight;
+    bool finishingProgram = _isFinishingProgram;
     int motorSpeed = int.tryParse(_motors[0].value.text) ?? 0;
     int motorSpeedPreflight = int.tryParse(_motors[1].value.text) ?? 0;
     List<int> relays = List.generate(_relayCount, (index) {
@@ -576,6 +591,7 @@ class _AddProgramState extends State<AddProgramPage> {
         programName: name,
         price: price,
         preflightEnabled: preflightEnabled,
+        isFinishingProgram: finishingProgram,
         motorSpeed: motorSpeed,
         motorSpeedPreflight: motorSpeedPreflight,
         relaysPercent: relays,
