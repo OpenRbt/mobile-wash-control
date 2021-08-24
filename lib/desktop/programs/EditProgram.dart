@@ -282,7 +282,7 @@ class _EditProgramState extends State<EditProgramPage> {
                           child: CheckboxListTile(
                             contentPadding: EdgeInsets.zero,
                             title: Text(
-                              'Финальная программа',
+                              'Чистовая программа',
                               style: TextStyle(fontSize: 20),
                             ),
                             value: _isFinishingProgram,

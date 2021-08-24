@@ -7,6 +7,7 @@ import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/MotorMenu.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/SettingsDefaultConfigs.dart';
@@ -416,6 +417,7 @@ class PagesRoutes {
       "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
       "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
       "/mobile/statistics": (context) => StatisticsMenu(),
+      "/mobile/motors": (context) => MotorMenu(),
       "/mobile/posts": (context) => PostsMenu(),
       "/mobile/accounts": (context) => AccountsMenu(),
       "/mobile/accounts/edit": (context) => AccountsMenuEdit(),

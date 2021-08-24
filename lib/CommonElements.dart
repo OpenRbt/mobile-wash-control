@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'package:mobile_wash_control/client/api.dart';
 
-enum Pages { Main, Programs, Settings, Accounts, Statistics, None }
+enum Pages { Main, Programs, Settings, Accounts, Statistics,Motors, None }
 
 class SessionData {
   final DefaultApi client;
@@ -19,6 +19,7 @@ Widget prepareDrawer(
     "Настройки",
     "Учетки",
     "Статистика",
+    "Моторесурс",
     "Выход"
   ];
 
@@ -28,6 +29,7 @@ Widget prepareDrawer(
     "/mobile/settings",
     "/mobile/accounts",
     "/mobile/statistics",
+    "/mobile/motors",
   ];
 
   var styles = new List.filled(

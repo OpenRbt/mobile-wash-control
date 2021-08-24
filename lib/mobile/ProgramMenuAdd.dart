@@ -316,7 +316,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                       child: CheckboxListTile(
                         contentPadding: EdgeInsets.only(left: 5, right: 5),
                         title: Text(
-                          'Финальная программа',
+                          'Чистовая программа',
                         ),
                         value: _isFinishingProgram,
                         onChanged: (newValue) {

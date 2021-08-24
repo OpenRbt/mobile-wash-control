@@ -53,10 +53,8 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
         }
       } on ApiException catch (e) {
         if (e.code != 404) {
-          print(
-              "Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-              "Произошла ошибка при запросе к api", Colors.red);
+          print("Exception when calling DefaultApi->/station-report-dates: $e\n");
+          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
         } else {}
       } catch (e) {
         if (!(e is ApiException)) {
@@ -70,10 +68,8 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
         _reports.addAll({(i + 1): (await reportsTmp[i] ?? StationReport())});
       } on ApiException catch (e) {
         if (e.code != 404) {
-          print(
-              "Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-              "Произошла ошибка при запросе к api", Colors.red);
+          print("Exception when calling DefaultApi->/station-report-dates: $e\n");
+          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
         } else {
           var tmp = StationReport();
           tmp.moneyReport = MoneyReport();
@@ -104,8 +100,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
       if (_reports[i] != null) {
         _total.moneyReport.banknotes += _reports[i].moneyReport.banknotes ?? 0;
         _total.moneyReport.coins += _reports[i].moneyReport.coins ?? 0;
-        _total.moneyReport.electronical +=
-            _reports[i].moneyReport.electronical ?? 0;
+        _total.moneyReport.electronical += _reports[i].moneyReport.electronical ?? 0;
         _total.moneyReport.service += _reports[i].moneyReport.service ?? 0;
         _total.moneyReport.carsTotal += _reports[i].moneyReport.carsTotal ?? 0;
       }
@@ -217,8 +212,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                       ),
                       RaisedButton(
                         onPressed: () => _selectStartDate(context),
-                        child: Text(
-                            "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
+                        child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year}"),
                       ),
                       Text(
                         " по ",
@@ -226,8 +220,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                       ),
                       RaisedButton(
                         onPressed: () => _selectEndDate(context),
-                        child: Text(
-                            "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                        child: Text("${_endDate.day}.${_endDate.month}.${_endDate.year}"),
                       ),
                       IconButton(
                           icon: Icon(
@@ -272,83 +265,24 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                   ),
                   SizedBox(height: 10),
                   Table(
-                    border: TableBorder.all(
-                        color: Colors.black,
-                        width: 1,
-                        style: BorderStyle.solid),
+                    border: TableBorder.all(color: Colors.black, width: 1, style: BorderStyle.solid),
                     children: [
-                      createTableRow([
-                        'пост',
-                        'наличные',
-                        'банк. карта',
-                        'сервисные',
-                        'авто',
-                        'ср. чек'
-                      ])
+                      createTableRow(['пост', 'наличные', 'банк. карта', 'сервисные', 'авто', 'ср. чек'])
                     ]
                       ..addAll(
                         List.generate(_reports.length, (index) {
                           return createTableRow([
                             _reports.keys.elementAt(index),
-                            (_reports.values
-                                        .elementAt(index)
-                                        .moneyReport
-                                        .banknotes ??
-                                    0) +
-                                (_reports.values
-                                        .elementAt(index)
-                                        .moneyReport
-                                        .coins ??
-                                    0),
-                            _reports.values
-                                    .elementAt(index)
-                                    .moneyReport
-                                    .electronical ??
-                                0,
-                            _reports.values
-                                    .elementAt(index)
-                                    .moneyReport
-                                    .service ??
-                                0,
-                            _reports.values
-                                    .elementAt(index)
-                                    .moneyReport
-                                    .carsTotal ??
-                                0,
-                            (_reports.values
-                                            .elementAt(index)
-                                            .moneyReport
-                                            .carsTotal !=
-                                        null &&
-                                    _reports.values
-                                            .elementAt(index)
-                                            .moneyReport
-                                            .carsTotal >
-                                        0)
-                                ? ((((_reports.values
-                                                    .elementAt(index)
-                                                    .moneyReport
-                                                    .banknotes ??
-                                                0) +
-                                            (_reports.values
-                                                    .elementAt(index)
-                                                    .moneyReport
-                                                    .coins ??
-                                                0) +
-                                            (_reports.values
-                                                    .elementAt(index)
-                                                    .moneyReport
-                                                    .electronical ??
-                                                0) +
-                                            (_reports.values
-                                                    .elementAt(index)
-                                                    .moneyReport
-                                                    .service ??
-                                                0)) /
-                                        _reports.values
-                                            .elementAt(index)
-                                            .moneyReport
-                                            .carsTotal))
+                            (_reports.values.elementAt(index).moneyReport.banknotes ?? 0) + (_reports.values.elementAt(index).moneyReport.coins ?? 0),
+                            _reports.values.elementAt(index).moneyReport.electronical ?? 0,
+                            _reports.values.elementAt(index).moneyReport.service ?? 0,
+                            _reports.values.elementAt(index).moneyReport.carsTotal ?? 0,
+                            (_reports.values.elementAt(index).moneyReport.carsTotal != null && _reports.values.elementAt(index).moneyReport.carsTotal > 0)
+                                ? ((((_reports.values.elementAt(index).moneyReport.banknotes ?? 0) +
+                                            (_reports.values.elementAt(index).moneyReport.coins ?? 0) +
+                                            (_reports.values.elementAt(index).moneyReport.electronical ?? 0) +
+                                            (_reports.values.elementAt(index).moneyReport.service ?? 0)) /
+                                        _reports.values.elementAt(index).moneyReport.carsTotal))
                                     .toStringAsFixed(2)
                                 : 0
                           ]);
@@ -357,19 +291,11 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                       ..add(
                         createTableRow([
                           "Итого",
-                          _total.moneyReport.banknotes +
-                              _total.moneyReport.coins,
+                          _total.moneyReport.banknotes + _total.moneyReport.coins,
                           _total.moneyReport.electronical,
                           _total.moneyReport.service,
                           _total.moneyReport.carsTotal,
-                          _total.moneyReport.carsTotal > 0
-                              ? ((_total.moneyReport.banknotes +
-                                          _total.moneyReport.coins +
-                                          _total.moneyReport.electronical +
-                                          _total.moneyReport.service) /
-                                      _total.moneyReport.carsTotal)
-                                  .toStringAsFixed(2)
-                              : 0,
+                          _total.moneyReport.carsTotal > 0 ? ((_total.moneyReport.banknotes + _total.moneyReport.coins + _total.moneyReport.electronical + _total.moneyReport.service) / _total.moneyReport.carsTotal).toStringAsFixed(2) : 0,
                         ]),
                       ),
                   ),
