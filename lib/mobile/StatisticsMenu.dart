@@ -301,22 +301,6 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                         ]),
                       ),
                   ),
-                  SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      'Моторесурс',
-                      style: TextStyle(fontSize: 22),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Center(
-                    child: Wrap(
-                      children: List.generate(
-                        12,
-                        (index) => createMoto(index + 1),
-                      ),
-                    ),
-                  )
                 ]),
               ),
             ),
@@ -325,52 +309,6 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
       ),
     );
   }
-}
-
-Widget createMoto(int number) {
-  return Column(children: [
-    Container(
-      width: 60,
-      height: 18,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-      ),
-      child: Center(
-        child: Text(
-          'пост ' + number.toString(),
-        ),
-      ),
-    ),
-    Container(
-      width: 60,
-      height: 18,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-      ),
-      child: Center(
-        child: Text(''),
-      ),
-    ),
-    Container(
-      width: 60,
-      height: 18,
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.black),
-        ),
-        color: Colors.white,
-        disabledColor: Colors.white,
-        onPressed: () {
-          print("Pressed " + number.toString() + " post reset button");
-        },
-        child: Text(
-          "сброс",
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    ),
-    SizedBox(height: 20)
-  ]);
 }
 
 TableRow createTableRow(List values) {

@@ -15,85 +15,40 @@ class _MotorMenuState extends State<MotorMenu> {
 
   bool _firstLoad = true;
   bool _updating = false;
-  Map<int, StationReport> _reports = new Map();
 
-  StationReport _total = StationReport();
+  List<StationStat> _stationStats = new List();
+  List<bool> _ProgramStat = new List();
 
-  void _GetStatistics(SessionData sessionData) async {
+  int _paddingValue = 0;
+
+  void GetMotorStats(SessionData sessionData) async {
     if (_updating) {
       return;
     }
     _updating = true;
-    List<Future<StationReport>> reportsTmp = new List();
-    for (int i = 0; i < 12; i++) {
-      try {
-        var args = ArgStationReportCurrentMoney(
-          id: i + 1,
-        );
-        reportsTmp.add(
-          sessionData.client.stationReportCurrentMoney(args),
-        );
-      } on ApiException catch (e) {
-        if (e.code != 404) {
-          print("Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-        } else {}
-      } catch (e) {
-        if (!(e is ApiException)) {
-          print("Other Exception: $e\n");
-        }
+    try {
+      var args = ArgStationStat();
+      _stationStats = await sessionData.client.stationStatCurrent(args: args);
+      _ProgramStat = List.filled(_stationStats.length, true);
+      _stationStats.forEach((element) {
+        element.relayStats.forEach((relay) {
+          if ("${relay.switchedCount}".length > _paddingValue) {
+            _paddingValue = "${relay.switchedCount}".length;
+          }
+        });
+      });
+      setState(() {});
+    } on ApiException catch (e) {
+      if (e.code != 404) {
+        print("Exception when calling DefaultApi->/station-report-dates: $e\n");
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+      } else {}
+    } catch (e) {
+      if (!(e is ApiException)) {
+        print("Other Exception: $e\n");
       }
     }
-
-    for (int i = 0; i < reportsTmp.length; i++) {
-      try {
-        _reports.addAll({(i + 1): (await reportsTmp[i] ?? StationReport())});
-      } on ApiException catch (e) {
-        if (e.code != 404) {
-          print("Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-        } else {
-          var tmp = StationReport();
-          tmp.moneyReport = MoneyReport();
-          tmp.moneyReport.banknotes = 0;
-          tmp.moneyReport.coins = 0;
-          tmp.moneyReport.electronical = 0;
-          tmp.moneyReport.service = 0;
-          tmp.moneyReport.carsTotal = 0;
-          _reports.addAll({(i + 1): tmp});
-        }
-      } catch (e) {
-        if (!(e is ApiException)) {
-          print("Other Exception: $e\n");
-        }
-      }
-    }
-    print("Recieved reports: ${_reports.length}");
-
-    _total = StationReport();
-    _total.moneyReport = MoneyReport();
-    _total.moneyReport.banknotes = 0;
-    _total.moneyReport.coins = 0;
-    _total.moneyReport.electronical = 0;
-    _total.moneyReport.service = 0;
-    _total.moneyReport.carsTotal = 0;
-
-    for (int i = 0; _reports != null && i < _reports.length; i++) {
-      if (_reports[i] != null) {
-        _total.moneyReport.banknotes += _reports[i].moneyReport.banknotes ?? 0;
-        _total.moneyReport.coins += _reports[i].moneyReport.coins ?? 0;
-        _total.moneyReport.electronical += _reports[i].moneyReport.electronical ?? 0;
-        _total.moneyReport.service += _reports[i].moneyReport.service ?? 0;
-        _total.moneyReport.carsTotal += _reports[i].moneyReport.carsTotal ?? 0;
-      }
-    }
-
-    if (!mounted) {
-      return;
-    }
-
     _updating = false;
-    setState(() {});
   }
 
   @override
@@ -104,16 +59,8 @@ class _MotorMenuState extends State<MotorMenu> {
       title: Text("Моторесурс"),
     );
 
-    if (_total.moneyReport == null) {
-      _total.moneyReport = MoneyReport();
-      _total.moneyReport.banknotes = 0;
-      _total.moneyReport.coins = 0;
-      _total.moneyReport.electronical = 0;
-      _total.moneyReport.service = 0;
-      _total.moneyReport.carsTotal = 0;
-    }
     if (_firstLoad) {
-      _GetStatistics(sessionData);
+      GetMotorStats(sessionData);
       _firstLoad = false;
     }
 
@@ -130,143 +77,309 @@ class _MotorMenuState extends State<MotorMenu> {
               await Future.delayed(
                 Duration(milliseconds: 500),
               );
-              _GetStatistics(sessionData);
+              GetMotorStats(sessionData);
             },
-            child: Container(
-              width: screenW,
-              height: screenH,
-              child: Column(
-                children: [
-                  Container(
+            child: _stationStats.length > 0
+                ? Container(
+                    width: screenW,
                     height: screenH,
-                    child: ListView(children: [
-                      Container(
-                        height: screenH,
-                        width: screenW,
-                        child: ListView(
-                          padding: EdgeInsets.all(0),
-                          physics: PageScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          children: List.generate(_reports.length, (index) {
-                            return Container(
-                              padding: EdgeInsets.all(8),
-                              child: Container(
-                                height: screenH - 100,
-                                width: screenW - 16,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(color: Colors.black, blurRadius: 2.5),
-                                  ],
-                                ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      child: Text(
-                                        "Пост ${index + 1}",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: screenH,
+                          child: ListView(children: [
+                            Container(
+                              height: screenH,
+                              width: screenW,
+                              child: ListView(
+                                padding: EdgeInsets.all(0),
+                                physics: PageScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                children: List.generate(_stationStats.length, (index) {
+                                  return Container(
+                                    padding: EdgeInsets.all(8),
+                                    child: Container(
+                                      height: screenH - 100,
+                                      width: screenW - 16,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(color: Colors.black, blurRadius: 2.5),
+                                        ],
                                       ),
-                                    ),
-                                    Column(
-                                      children: List.generate(15, (index) {
-                                        return Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.all(5),
-                                              child: Text(
-                                                "Some info $index:",
-                                                textAlign: TextAlign.left,
+                                      child: ListView(
+                                        children: [
+                                          Container(
+                                            child: Text(
+                                              "Пост ${index + 1}",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  _ProgramStat[index] = true;
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  "Статистика программ",
+                                                  style: TextStyle(
+                                                    color: _ProgramStat[index] ? Colors.green : null,
+                                                    fontWeight: _ProgramStat[index] ? FontWeight.bold : null,
+                                                  ),
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  _ProgramStat[index] = false;
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  "Статистика реле",
+                                                  style: TextStyle(
+                                                    color: !_ProgramStat[index] ? Colors.green : null,
+                                                    fontWeight: !_ProgramStat[index] ? FontWeight.bold : null,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: _ProgramStat[index] ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.spaceEvenly,
+                                            children: !_ProgramStat[index]
+                                                ? [
+                                                    Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(
+                                                        "Общее время работы насоса",
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(
+                                                        "${_SecondsToTime(_stationStats[index].pumpTimeOn)}",
+                                                        textAlign: TextAlign.right,
+                                                      ),
+                                                    ),
+                                                  ]
+                                                : [],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: _ProgramStat[index] ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.spaceEvenly,
+                                            children: _ProgramStat[index]
+                                                ? [
+                                                    Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(
+                                                        "Программа",
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(
+                                                        "Время работы",
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ]
+                                                : [
+                                                    Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(
+                                                        "Реле",
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(
+                                                        "Включений",
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(
+                                                        "Время работы",
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                          ),
+                                          Column(
+                                            children: _ProgramStat[index] ? ProgramsCollumn(index, screenW / 3) : RelayCollumn(index, screenW / 4),
+                                          ),
+                                          Container(
+                                              child: TextButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                      "Сбросить статистику",
+                                                      style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    content: Text("Вы уверены, что хотите сбросить статистику?"),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () async {
+                                                            bool res = await ResetStats(_stationStats[index].stationID, sessionData);
+                                                            if (res) {
+                                                              GetMotorStats(sessionData);
+                                                            }
+                                                            Navigator.pop(context);
+                                                          },
+                                                          child: Text("Да")),
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(context);
+                                                          },
+                                                          child: Text("Нет"))
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Text(
+                                              "Сбросить статистику",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            Container(
-                                              padding: EdgeInsets.all(5),
-                                              child: Text("${(index + 1) * 100} сек"),
-                                            ),
-                                          ],
-                                        );
-                                      }),
+                                          )),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
+                                  );
+                                }),
                               ),
-                            );
-                          }),
+                            ),
+                          ]),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(
+                    height: screenH,
+                    width: screenW,
+                    child: Center(
+                      child: Text(
+                        "Нет статистики по моторесурсу",
+                        style: TextStyle(
+                          fontSize: 16,
                         ),
                       ),
-                    ]),
+                    ),
                   ),
-                ],
-              ),
-            ),
           );
         },
       ),
     );
   }
-}
 
-Widget createMoto(int number) {
-  return Column(children: [
-    Container(
-      width: 60,
-      height: 18,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-      ),
-      child: Center(
-        child: Text(
-          'пост ' + number.toString(),
-        ),
-      ),
-    ),
-    Container(
-      width: 60,
-      height: 18,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-      ),
-      child: Center(
-        child: Text(''),
-      ),
-    ),
-    Container(
-      width: 60,
-      height: 18,
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.black),
-        ),
-        color: Colors.white,
-        disabledColor: Colors.white,
-        onPressed: () {
-          print("Pressed " + number.toString() + " post reset button");
-        },
-        child: Text(
-          "сброс",
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    ),
-    SizedBox(height: 20)
-  ]);
-}
-
-TableRow createTableRow(List values) {
-  List<TableCell> result = [];
-  for (var val in values) {
-    result.add(
-      TableCell(
-        verticalAlignment: TableCellVerticalAlignment.middle,
-        child: Center(
-          child: Text(
-            val.toString(),
+  List<Widget> RelayCollumn(int index, double Width) {
+    return List.generate(_stationStats[index].relayStats.length, (relayIndex) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            width: Width,
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "Реле ${_stationStats[index].relayStats[relayIndex].relayID}",
+              textAlign: TextAlign.left,
+            ),
           ),
-        ),
-      ),
-    );
+          Container(
+            width: Width,
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "${_stationStats[index].relayStats[relayIndex].switchedCount}".padLeft(_paddingValue, ' '),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Container(
+            width: Width,
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "${_SecondsToTime(_stationStats[index].relayStats[relayIndex].totalTimeOn ?? 0)}",
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      );
+    });
   }
-  return TableRow(children: result);
+
+  List<Widget> ProgramsCollumn(int index, double Width) {
+    return List.generate(_stationStats[index].programStats.length, (programIndex) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            width: Width,
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "${_stationStats[index].programStats[programIndex].programName}",
+              textAlign: TextAlign.left,
+            ),
+          ),
+          Container(
+            width: Width,
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "${_SecondsToTime(_stationStats[index].programStats[programIndex].timeOn ?? 0)}",
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
+  Future<bool> ResetStats(int stationID, SessionData sessionData) async {
+    try {
+      var args = ArgResetStationStat(stationID: stationID);
+      var res = await sessionData.client.resetStationStat(args: args);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  String _SecondsToTime(int seconds) {
+    String res = "";
+    if (seconds > 3600) {
+      res += "${seconds ~/ 3600} ч.\n";
+    }
+    if (seconds > 60) {
+      res += "${(seconds % 3600) ~/ 60} мин.\n";
+    }
+    res += "${seconds % 60} сек.";
+    return res;
+  }
 }
