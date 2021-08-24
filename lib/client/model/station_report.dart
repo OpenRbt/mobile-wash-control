@@ -1,48 +1,89 @@
-part of swagger.api;
+//
+// AUTO-GENERATED FILE, DO NOT MODIFY!
+//
+// @dart=2.0
+
+// ignore_for_file: unused_element, unused_import
+// ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: lines_longer_than_80_chars
+
+part of openapi.api;
 
 class StationReport {
-  
-  MoneyReport moneyReport = null;
-  
+  /// Returns a new [StationReport] instance.
+  StationReport({
+    this.moneyReport,
+    this.relayStats = const [],
+  });
 
-  List<RelayStat> relayStats = [];
-  
-  StationReport();
+  MoneyReport moneyReport;
+
+  List<RelayStat> relayStats;
 
   @override
-  String toString() {
-    return 'StationReport[moneyReport=$moneyReport, relayStats=$relayStats, ]';
-  }
+  bool operator ==(Object other) => identical(this, other) || other is StationReport && other.moneyReport == moneyReport && other.relayStats == relayStats;
 
-  StationReport.fromJson(Map<String, dynamic> json) {
-    if (json == null) return;
-    moneyReport =
-      
-      
-      new MoneyReport.fromJson(json['moneyReport'])
-;
-    relayStats =
-      RelayStat.listFromJson(json['relayStats'])
-;
-  }
+  @override
+  int get hashCode => (moneyReport == null ? 0 : moneyReport.hashCode) + (relayStats == null ? 0 : relayStats.hashCode);
+
+  @override
+  String toString() => 'StationReport[moneyReport=$moneyReport, relayStats=$relayStats]';
 
   Map<String, dynamic> toJson() {
-    return {
-      'moneyReport': moneyReport,
-      'relayStats': relayStats
-     };
+    final json = <String, dynamic>{};
+    if (moneyReport != null) {
+      json[r'moneyReport'] = moneyReport;
+    }
+    if (relayStats != null) {
+      json[r'relayStats'] = relayStats;
+    }
+    return json;
   }
 
-  static List<StationReport> listFromJson(List<dynamic> json) {
-    return json == null ? new List<StationReport>() : json.map((value) => new StationReport.fromJson(value)).toList();
+  /// Returns a new [StationReport] instance and imports its values from
+  /// [json] if it's non-null, null if [json] is null.
+  static StationReport fromJson(Map<String, dynamic> json) => json == null
+      ? null
+      : StationReport(
+          moneyReport: MoneyReport.fromJson(json[r'moneyReport']),
+          relayStats: RelayStat.listFromJson(json[r'relayStats']),
+        );
+
+  static List<StationReport> listFromJson(
+    List<dynamic> json, {
+    bool emptyIsNull,
+    bool growable,
+  }) =>
+      json == null || json.isEmpty
+          ? true == emptyIsNull
+              ? null
+              : <StationReport>[]
+          : json.map((dynamic value) => StationReport.fromJson(value)).toList(growable: true == growable);
+
+  static Map<String, StationReport> mapFromJson(Map<String, dynamic> json) {
+    final map = <String, StationReport>{};
+    if (json?.isNotEmpty == true) {
+      json.forEach((key, value) => map[key] = StationReport.fromJson(value));
+    }
+    return map;
   }
 
-  static Map<String, StationReport> mapFromJson(Map<String, Map<String, dynamic>> json) {
-    var map = new Map<String, StationReport>();
-    if (json != null && json.length > 0) {
-      json.forEach((String key, Map<String, dynamic> value) => map[key] = new StationReport.fromJson(value));
+  // maps a json object with a list of StationReport-objects as value to a dart map
+  static Map<String, List<StationReport>> mapListFromJson(
+    Map<String, dynamic> json, {
+    bool emptyIsNull,
+    bool growable,
+  }) {
+    final map = <String, List<StationReport>>{};
+    if (json?.isNotEmpty == true) {
+      json.forEach((key, value) {
+        map[key] = StationReport.listFromJson(
+          value,
+          emptyIsNull: emptyIsNull,
+          growable: growable,
+        );
+      });
     }
     return map;
   }
 }
-

@@ -27,8 +27,9 @@ class _MotorMenuState extends State<MotorMenu> {
     List<Future<StationReport>> reportsTmp = new List();
     for (int i = 0; i < 12; i++) {
       try {
-        var args = StationReportCurrentMoneyArgs();
-        args.id = i + 1;
+        var args = ArgStationReportCurrentMoney(
+          id: i + 1,
+        );
         reportsTmp.add(
           sessionData.client.stationReportCurrentMoney(args),
         );

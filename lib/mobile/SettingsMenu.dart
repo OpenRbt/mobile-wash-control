@@ -41,19 +41,12 @@ class _SettingsMenuState extends State<SettingsMenu> {
       tmp.forEach((element) {
         _availableHashes.add(element.hash);
       });
-      res.stations =
-          res.stations.where((element) => element.id != null).toList();
+      res.stations = res.stations.where((element) => element.id != null).toList();
       if (!mounted) {
         return;
       }
-      var args = LoadArgs();
       _settingsData = List.generate((res.stations.length), (index) {
-        return new SettingsData(
-            res.stations[index].id,
-            res.stations[index].ip,
-            res.stations[index].name,
-            res.stations[index].hash,
-            res.stations[index].status.value);
+        return new SettingsData(res.stations[index].id, res.stations[index].ip, res.stations[index].name, res.stations[index].hash, res.stations[index].status.value);
       });
 
       _settingsData.sort(
@@ -64,8 +57,10 @@ class _SettingsMenuState extends State<SettingsMenu> {
       if (res.stations.length > 0) {
         for (int i = 0; i < res.stations.length; i++) {
           if (res.stations[i].hash != null && res.stations[i].hash.length > 0) {
-            args.hash = res.stations[i].hash;
-            args.key = "curr_temp";
+            var args = ArgLoad(
+              hash: res.stations[i].hash,
+              key: "curr_temp",
+            );
             var resTemp = await sessionData.client.load(args);
             _currentTemp = resTemp ?? _currentTemp;
 
@@ -79,8 +74,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
 
     setState(() {});
@@ -124,50 +118,46 @@ class _SettingsMenuState extends State<SettingsMenu> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: Center(
-                              child: Text(
-                                "Дата ",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 2,
+                        child: Center(
+                          child: Text(
+                            "Дата ",
+                            style: TextStyle(fontSize: 16),
                           ),
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: RaisedButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {},
-                              child: Text(
-                                  "${currentTime.day}.${currentTime.month}.${currentTime.year}"),
-                            ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 2,
+                        child: RaisedButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                          child: Text("${currentTime.day}.${currentTime.month}.${currentTime.year}"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 2,
+                        child: Center(
+                          child: Text(
+                            "Tемп ",
+                            style: TextStyle(fontSize: 16),
                           ),
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: Center(
-                              child: Text(
-                                "Tемп ",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: RaisedButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {},
-                              child: Text("${_currentTemp}"),
-                            ),
-                          ),
-                        ]),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 2,
+                        child: RaisedButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                          child: Text("${_currentTemp}"),
+                        ),
+                      ),
+                    ]),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,8 +169,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             child: Text(
                               "Список постов",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -191,8 +180,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             child: Text(
                               "Хэш",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -203,8 +191,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             child: Text(
                               "Статус",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         )
@@ -220,9 +207,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               width: screenW / 7 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
@@ -237,9 +222,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               width: screenW / 7 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
@@ -254,20 +237,14 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               width: screenW / 7 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
                                   child: Text(
                                     "${_settingsData[index].status}",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: _settingsData[index].status ==
-                                                "online"
-                                            ? Colors.lightGreen
-                                            : Colors.red),
+                                    style: TextStyle(color: _settingsData[index].status == "online" ? Colors.lightGreen : Colors.red),
                                   ),
                                 ),
                               ),
@@ -277,23 +254,14 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               width: screenW / 7,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: IconButton(
                                   icon: Icon(Icons.more_horiz),
                                   onPressed: () {
-                                    var args = SettingsMenuPostArgs(
-                                        _settingsData[index].id,
-                                        _settingsData[index].ip,
-                                        _availableHashes,
-                                        sessionData);
-                                    Navigator.pushNamed(
-                                            context, "/mobile/settings/post",
-                                            arguments: args)
-                                        .then((value) {
+                                    var args = SettingsMenuPostArgs(_settingsData[index].id, _settingsData[index].ip, _availableHashes, sessionData);
+                                    Navigator.pushNamed(context, "/mobile/settings/post", arguments: args).then((value) {
                                       getSettings(sessionData);
                                     });
                                   },
@@ -318,8 +286,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         padding: EdgeInsets.all(8.0),
                         child: Text("Настройки кассы"),
                         onPressed: () {
-                          Navigator.pushNamed(context, "/mobile/settings/kasse",
-                              arguments: sessionData);
+                          Navigator.pushNamed(context, "/mobile/settings/kasse", arguments: sessionData);
                         },
                       ),
                     ),
@@ -337,9 +304,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         padding: EdgeInsets.all(8.0),
                         child: Text("Стандартные настройки"),
                         onPressed: () {
-                          Navigator.pushNamed(
-                              context, "/mobile/settings/default",
-                              arguments: sessionData);
+                          Navigator.pushNamed(context, "/mobile/settings/default", arguments: sessionData);
                         },
                       ),
                     ),

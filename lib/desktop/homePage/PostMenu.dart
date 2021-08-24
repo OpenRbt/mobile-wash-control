@@ -29,7 +29,7 @@ class _PostMenuState extends State<PostMenu> {
   final int _maxButtons = 20;
   PostMenuInfo _postMenuInfo = PostMenuInfo(0, 0, 0, List.filled(1, false));
 
-  List<InlineResponse2001Buttons> _buttons = List();
+  List<ResponseStationButtonButtons> _buttons = List();
   Map<int, String> _buttonNames = Map();
   IncassationInfo _postIncassationInfo;
   DateTime _startDate = DateTime.now().add(
@@ -39,7 +39,7 @@ class _PostMenuState extends State<PostMenu> {
     new Duration(days: 1, seconds: -1),
   );
   @override
-  void dispose(){
+  void dispose() {
     _updateBalanceTimer.cancel();
     super.dispose();
   }
@@ -57,20 +57,19 @@ class _PostMenuState extends State<PostMenu> {
 
   void _getButtons(PostMenuArgs postMenuArgs) async {
     try {
-      var args = StationButtonArgs();
-      args.stationID = postMenuArgs.postID;
+      var args = ArgStationButton(
+        stationID: postMenuArgs.postID,
+      );
       var res = await postMenuArgs.sessionData.client.stationButton(args);
       _buttons = res.buttons;
-      var progArgs = ProgramsArgs();
-      var programs = await postMenuArgs.sessionData.client.programs(progArgs);
+      var programs = await postMenuArgs.sessionData.client.programs(ArgPrograms());
       if (!mounted) {
         return;
       }
       _unpackNames(programs);
     } catch (e) {
       print("Exception when calling DefaultApi->/station-button: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -78,8 +77,7 @@ class _PostMenuState extends State<PostMenu> {
     if ((_buttons?.length ?? 0) > 0) {
       _buttonNames = Map();
       for (int i = 0; i < _buttons.length; i++) {
-        _buttonNames[_buttons[i].buttonID - 1] = programs.firstWhere(
-                (element) => element.id == _buttons[i].programID, orElse: () {
+        _buttonNames[_buttons[i].buttonID - 1] = programs.firstWhere((element) => element.id == _buttons[i].programID, orElse: () {
               return null;
             })?.name ??
             "NOT FOUND";
@@ -151,8 +149,7 @@ class _PostMenuState extends State<PostMenu> {
     var screenH = MediaQuery.of(context).size.height;
 
     AppBar appbar = AppBar(
-      title: Text(
-          "Пост: ${postMenuArgs.postID} | Инкасс: ${_postMenuInfo.incassBalance} руб"),
+      title: Text("Пост: ${postMenuArgs.postID} | Инкасс: ${_postMenuInfo.incassBalance} руб"),
     );
     var width = screenW;
     var height = screenH - appbar.preferredSize.height;
@@ -175,8 +172,7 @@ class _PostMenuState extends State<PostMenu> {
                       BoxShadow(blurRadius: 4, color: Colors.black),
                     ],
                   ),
-                  child:
-                      GetMainCollumn(width / 3, height, context, postMenuArgs),
+                  child: GetMainCollumn(width / 3, height, context, postMenuArgs),
                 ),
               ),
               SizedBox(
@@ -212,8 +208,7 @@ class _PostMenuState extends State<PostMenu> {
     );
   }
 
-  Widget GetMainCollumn(double width, double height, BuildContext context,
-      PostMenuArgs postMenuArgs) {
+  Widget GetMainCollumn(double width, double height, BuildContext context, PostMenuArgs postMenuArgs) {
     return SizedBox(
       height: height,
       width: width,
@@ -340,9 +335,7 @@ class _PostMenuState extends State<PostMenu> {
                     "Список кнопок:",
                     style: TextStyle(fontSize: 16),
                   ),
-                  Icon(_showButtons
-                      ? Icons.expand_less_outlined
-                      : Icons.expand_more_outlined)
+                  Icon(_showButtons ? Icons.expand_less_outlined : Icons.expand_more_outlined)
                 ],
               ),
               onPressed: () {
@@ -384,16 +377,12 @@ class _PostMenuState extends State<PostMenu> {
                               width: width / 2 - 20,
                               height: 50,
                               child: CheckboxListTile(
-                                controlAffinity:
-                                    ListTileControlAffinity.trailing,
+                                controlAffinity: ListTileControlAffinity.trailing,
                                 title: Text(
                                   'Активный',
                                   style: TextStyle(fontSize: 15),
                                 ),
-                                value:
-                                    index < _postMenuInfo.activePrograms.length
-                                        ? _postMenuInfo.activePrograms[index]
-                                        : false,
+                                value: index < _postMenuInfo.activePrograms.length ? _postMenuInfo.activePrograms[index] : false,
                                 onChanged: (newValue) async {
                                   //_programButtonListener(index, postMenuArgs);
                                 },
@@ -410,8 +399,7 @@ class _PostMenuState extends State<PostMenu> {
     );
   }
 
-  Widget GetIncassationCollumn(
-      double width, double height, PostMenuArgs postMenuArgs) {
+  Widget GetIncassationCollumn(double width, double height, PostMenuArgs postMenuArgs) {
     double listSize = height - 200.0;
     return SizedBox(
       height: height,
@@ -429,9 +417,7 @@ class _PostMenuState extends State<PostMenu> {
                     "История инкассаций:",
                     style: TextStyle(fontSize: 16),
                   ),
-                  Icon(_showIncassation
-                      ? Icons.expand_less_outlined
-                      : Icons.expand_more_outlined)
+                  Icon(_showIncassation ? Icons.expand_less_outlined : Icons.expand_more_outlined)
                 ],
               ),
               onPressed: () {
@@ -456,8 +442,7 @@ class _PostMenuState extends State<PostMenu> {
                         height: 45,
                         child: RaisedButton(
                           onPressed: () => _selectStartDate(context),
-                          child: Text(
-                              "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
+                          child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year}"),
                         ),
                       ),
                       Text(
@@ -469,22 +454,18 @@ class _PostMenuState extends State<PostMenu> {
                         height: 45,
                         child: RaisedButton(
                           onPressed: () => _selectEndDate(context),
-                          child: Text(
-                              "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                          child: Text("${_endDate.day}.${_endDate.month}.${_endDate.year}"),
                         ),
                       ),
                       IconButton(
                         icon: Icon(
                           Icons.update,
-                          color: _incassationUpdating
-                              ? Colors.yellow
-                              : Colors.green,
+                          color: _incassationUpdating ? Colors.yellow : Colors.green,
                         ),
                         onPressed: () async {
                           if (!_incassationUpdating) {
                             _incassationUpdating = true;
-                            _postIncassationInfo = await GetIncassation(
-                                postMenuArgs, _startDate, _endDate);
+                            _postIncassationInfo = await GetIncassation(postMenuArgs, _startDate, _endDate);
                             _incassationUpdating = false;
                             setState(() {});
                           }
@@ -541,27 +522,21 @@ class _PostMenuState extends State<PostMenu> {
                                 width: width / 3,
                                 height: 50,
                                 child: Center(
-                                  child: Text(formatDateTime(
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          _postIncassationInfo
-                                                  .incassations[index].ctime *
-                                              1000))),
+                                  child: Text(formatDateTime(DateTime.fromMillisecondsSinceEpoch(_postIncassationInfo.incassations[index].ctime * 1000))),
                                 ),
                               ),
                               SizedBox(
                                 width: width / 3,
                                 height: 50,
                                 child: Center(
-                                  child: Text(
-                                      "${(_postIncassationInfo.incassations[index].banknotes ?? 0) + (_postIncassationInfo.incassations[index].coins ?? 0)}"),
+                                  child: Text("${(_postIncassationInfo.incassations[index].banknotes ?? 0) + (_postIncassationInfo.incassations[index].coins ?? 0)}"),
                                 ),
                               ),
                               SizedBox(
                                 width: width / 3,
                                 height: 50,
                                 child: Center(
-                                  child: (Text(
-                                      "${_postIncassationInfo.incassations[index].electronical ?? 0}")),
+                                  child: (Text("${_postIncassationInfo.incassations[index].electronical ?? 0}")),
                                 ),
                               )
                             ],
@@ -569,8 +544,7 @@ class _PostMenuState extends State<PostMenu> {
                         );
                       }),
                 )
-              : SizedBox(            
-                ),
+              : SizedBox(),
           _showIncassation
               ? SizedBox(
                   width: width,
@@ -588,16 +562,14 @@ class _PostMenuState extends State<PostMenu> {
                         width: width / 3,
                         height: 50,
                         child: Center(
-                          child:
-                              (Text("${_postIncassationInfo?.totalNal ?? 0}")),
+                          child: (Text("${_postIncassationInfo?.totalNal ?? 0}")),
                         ),
                       ),
                       SizedBox(
                         width: width / 3,
                         height: 50,
                         child: Center(
-                          child: (Text(
-                              "${_postIncassationInfo?.totalBeznal ?? 0}")),
+                          child: (Text("${_postIncassationInfo?.totalBeznal ?? 0}")),
                         ),
                       )
                     ],
@@ -624,27 +596,23 @@ class _PostMenuState extends State<PostMenu> {
             disabledTextColor: Colors.black,
             onPressed: () async {
               try {
-                var args = SaveCollectionArgs();
-                args.id = postMenuArgs.postID;
-                var res =
-                    await postMenuArgs.sessionData.client.saveCollection(args);
+                var args = ArgSaveCollection(
+                  id: postMenuArgs.postID,
+                );
+                var res = await postMenuArgs.sessionData.client.saveCollection(args);
               } on ApiException catch (e) {
                 if (e.code == 401) {
-                  print(
-                      "Exception when calling DefaultApi->/save-collection: $e\n");
-                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-                      "Нет доступа", Colors.red);
+                  print("Exception when calling DefaultApi->/save-collection: $e\n");
+                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Нет доступа", Colors.red);
                 } else {
-                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-                      "Произошла ошибка при запросе к api", Colors.red);
+                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
                 }
               } catch (e) {
                 if (!(e is ApiException)) {
                   print("Other Exception: $e\n");
                 }
               }
-              showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-                  "Пост проинкассирован", Colors.green);
+              showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пост проинкассирован", Colors.green);
               Navigator.pop(context);
             },
             child: Text("Да"),
@@ -667,13 +635,13 @@ class _PostMenuState extends State<PostMenu> {
   void OpenStation(PostMenuArgs postMenuArgs) async {
     _canOpenStation = false;
     try {
-      var args = OpenStationArgs();
-      args.stationID = postMenuArgs.postID;
+      var args = ArgOpenStation(
+        stationID: postMenuArgs.postID,
+      );
       var res = await postMenuArgs.sessionData.client.openStation(args);
     } catch (e) {
       print("Exception when calling DefaultApi->/open-station: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
     _canOpenStation = true;
   }

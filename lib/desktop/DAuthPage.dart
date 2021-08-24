@@ -36,8 +36,7 @@ class _DAuthPageState extends State<DAuthPage> {
   var _sessionData;
 
   void _loadPage() {
-    Navigator.pushReplacementNamed(context, "/desktop/home",
-        arguments: _sessionData);
+    Navigator.pushReplacementNamed(context, "/desktop/home", arguments: _sessionData);
   }
 
   void _authCheck() async {
@@ -51,13 +50,11 @@ class _DAuthPageState extends State<DAuthPage> {
       _loadPage();
     } on ApiException catch (e) {
       if (e.code == 401) {
-        showInfoSnackBar(
-            _scaffoldKey, _isSnackBarActive, "Неверные данные", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Неверные данные", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Невозможно авторизоваться", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Невозможно авторизоваться", Colors.red);
       }
       print("Exception when calling DefaultApi->/user: $e\n");
     }

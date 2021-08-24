@@ -37,16 +37,18 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
     for (int i = 0; i < 12; i++) {
       try {
         if (_byDate) {
-          var args = StationReportDatesArgs();
-          args.id = i + 1;
-          args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
-          args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
+          var args = ArgStationReportDates(
+            id: i + 1,
+            startDate: _startDate.millisecondsSinceEpoch ~/ 1000,
+            endDate: _endDate.millisecondsSinceEpoch ~/ 1000,
+          );
           reportsTmp.add(
             sessionData.client.stationReportDates(args),
           );
         } else {
-          var args = StationReportCurrentMoneyArgs();
-          args.id = i + 1;
+          var args = ArgStationReportCurrentMoney(
+            id: i + 1,
+          );
           reportsTmp.add(
             sessionData.client.stationReportCurrentMoney(args),
           );

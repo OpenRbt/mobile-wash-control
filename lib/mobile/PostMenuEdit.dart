@@ -12,8 +12,7 @@ class PostMenuArgs {
   final int currentProgramID;
   final SessionData sessionData;
 
-  PostMenuArgs(
-      this.postID, this.ip, this.hash, this.currentProgramID, this.sessionData);
+  PostMenuArgs(this.postID, this.ip, this.hash, this.currentProgramID, this.sessionData);
 }
 
 //TODO: Buttons rework and fix
@@ -34,15 +33,14 @@ class _EditPostMenuState extends State<EditPostMenu> {
   int _currentProgram = -1;
   final int _maxButtons = 20;
 
-  List<InlineResponse2001Buttons> _buttons = List();
+  List<ResponseStationButtonButtons> _buttons = List();
   @override
   void initState() {
     super.initState();
   }
 
   void dispose() {
-    if (_updateBalanceTimer != null && _updateBalanceTimer.isActive)
-      _updateBalanceTimer.cancel();
+    if (_updateBalanceTimer != null && _updateBalanceTimer.isActive) _updateBalanceTimer.cancel();
     super.dispose();
   }
 
@@ -51,20 +49,17 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   void _loadButtons(PostMenuArgs postMenuArgs) async {
     try {
-      var args = StationButtonArgs();
-      args.stationID = postMenuArgs.postID;
+      var args = ArgStationButton(stationID: postMenuArgs.postID);
       var res = await postMenuArgs.sessionData.client.stationButton(args);
       _buttons = res.buttons;
-      var progArgs = ProgramsArgs();
-      var programs = await postMenuArgs.sessionData.client.programs(progArgs);
+      var programs = await postMenuArgs.sessionData.client.programs(ArgPrograms());
       if (!mounted) {
         return;
       }
       _unpackNames(programs);
     } catch (e) {
       print("Exception when calling DefaultApi->/station-button: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -74,44 +69,33 @@ class _EditPostMenuState extends State<EditPostMenu> {
     _updateBalanceTimer.cancel();
     try {
       var res1 = await sessionData.client.status();
-      StationStatus stationStatus = res1.stations
-          .firstWhere((element) => element.id == postID, orElse: () {
+      StationStatus stationStatus = res1.stations.firstWhere((element) => element.id == postID, orElse: () {
         return null;
       });
       _currentProgram = stationStatus?.currentProgram ?? -1;
       _balance = stationStatus?.currentBalance ?? 0;
 
-      var args = StationReportCurrentMoneyArgs();
-      args.id = postID;
+      var args = ArgStationReportCurrentMoney(
+        id: postID,
+      );
       var res = await sessionData.client.stationReportCurrentMoney(args);
       //_balance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0)+(res.moneyReport?.electronical ?? 0);
-      _incassBalance =
-          (res.moneyReport?.banknotes ?? 0) + (res.moneyReport?.coins ?? 0);
+      _incassBalance = (res.moneyReport?.banknotes ?? 0) + (res.moneyReport?.coins ?? 0);
       if (!mounted) {
         return;
       }
       _checkboxList = List.filled(_maxButtons, false);
       var checkboxID = 0;
-      if (_buttons
-              .where((element) => element.programID == _currentProgram)
-              .length !=
-          0) {
-        checkboxID = _buttons
-                    .firstWhere(
-                        (element) => element.programID == _currentProgram)
-                    .buttonID -
-                1 ??
-            -1;
+      if (_buttons.where((element) => element.programID == _currentProgram).length != 0) {
+        checkboxID = _buttons.firstWhere((element) => element.programID == _currentProgram).buttonID - 1 ?? -1;
       }
       if (checkboxID >= 0) {
         _checkboxList[checkboxID] = true;
       }
     } on ApiException catch (e) {
       if (e.code != 404) {
-        print(
-            "Exception when calling DefaultApi->/station-report-current-money: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Произошла ошибка при запросе к api", Colors.red);
+        print("Exception when calling DefaultApi->/station-report-current-money: $e\n");
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
@@ -128,8 +112,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
     if ((_buttons?.length ?? 0) > 0) {
       _buttonNames = Map();
       for (int i = 0; i < _buttons.length; i++) {
-        _buttonNames[_buttons[i].buttonID - 1] = programs.firstWhere(
-                (element) => element.id == _buttons[i].programID, orElse: () {
+        _buttonNames[_buttons[i].buttonID - 1] = programs.firstWhere((element) => element.id == _buttons[i].programID, orElse: () {
               return null;
             })?.name ??
             "NOT FOUND";
@@ -140,14 +123,14 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   void _addServiceMoney(PostMenuArgs postMenuArgs) async {
     try {
-      var args = AddServiceAmountArgs();
-      args.hash = postMenuArgs.hash;
-      args.amount = 10;
+      var args = ArgAddServiceAmount(
+        hash: postMenuArgs.hash,
+        amount: 10,
+      );
       var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
     } catch (e) {
       print("Exception when calling DefaultApi->/add-service-amount: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -155,40 +138,35 @@ class _EditPostMenuState extends State<EditPostMenu> {
   void _programButtonListener(index, PostMenuArgs postMenuArgs) async {
     if (index != _currentProgram) {
       try {
-        var args = RunProgramArgs();
-        args.hash = postMenuArgs.hash;
-        // args.programID = postMenuArgs.programs[index].id ?? 1;
-        args.preflight = false; //TODO: use preflight trigger
+        var args = ArgRunProgram(
+          hash: postMenuArgs.hash,
+          preflight: false, //TODO: use preflight trigger
+        );
         await postMenuArgs.sessionData.client.runProgram(args);
         setState(() {
-          if (_currentProgram != -1)
-            _checkboxList[_currentProgram ?? 1] = false;
+          if (_currentProgram != -1) _checkboxList[_currentProgram ?? 1] = false;
           _checkboxList[index] = true;
           _currentProgram = index;
         });
       } catch (e) {
-        print(
-            "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Произошла ошибка при запросе к api", Colors.red);
+        print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       }
     } else {
       try {
-        var args = RunProgramArgs();
-        args.hash = postMenuArgs.hash;
-        args.programID = -1;
-        args.preflight = false; //TODO: use preflight trigger
+        var args = ArgRunProgram(
+          hash: postMenuArgs.hash,
+          programID: -1,
+          preflight: false, //TODO: use preflight trigger
+        );
         await postMenuArgs.sessionData.client.runProgram(args);
         setState(() {
-          if (_currentProgram != -1)
-            _checkboxList[_currentProgram ?? 1] = false;
+          if (_currentProgram != -1) _checkboxList[_currentProgram ?? 1] = false;
           _currentProgram = -1;
         });
       } catch (e) {
-        print(
-            "Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Произошла ошибка при запросе к api", Colors.red);
+        print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       }
     }
   }
@@ -198,8 +176,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
     final PostMenuArgs postMenuArgs = ModalRoute.of(context).settings.arguments;
 
     final AppBar appBar = AppBar(
-      title: Text(
-          "Пост: ${postMenuArgs.postID} | Инкасс: ${_incassBalance ?? 0} руб"),
+      title: Text("Пост: ${postMenuArgs.postID} | Инкасс: ${_incassBalance ?? 0} руб"),
     );
 
     if (_firstLoad) {
@@ -252,38 +229,26 @@ class _EditPostMenuState extends State<EditPostMenu> {
             color: Colors.lightGreen,
           ),
           Row(
-            children: [
-              _getButtonsColumn(isPortrait, screenW, postMenuArgs),
-              _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)
-            ],
+            children: [_getButtonsColumn(isPortrait, screenW, postMenuArgs), _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)],
           )
         ],
       );
     } else {
       return new FittedBox(
         fit: BoxFit.fill,
-        child: Row(children: [
-          _getMainColumn(isPortrait, screenW, postMenuArgs),
-          _getButtonsColumn(isPortrait, screenW, postMenuArgs),
-          _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)
-        ]),
+        child: Row(children: [_getMainColumn(isPortrait, screenW, postMenuArgs), _getButtonsColumn(isPortrait, screenW, postMenuArgs), _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)]),
       );
     }
   }
 
-  Widget _getMainColumn(
-      bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
+  Widget _getMainColumn(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
       children: [
         Padding(
           padding: EdgeInsets.all(10),
           child: SizedBox(
             height: 50,
-            width: isPortrait
-                ? screenW / 2 - 20
-                : ((_buttons?.length ?? 0) > 0
-                    ? screenW / 3 - 20
-                    : screenW - 100),
+            width: isPortrait ? screenW / 2 - 20 : ((_buttons?.length ?? 0) > 0 ? screenW / 3 - 20 : screenW - 100),
             child: DecoratedBox(
               child: FittedBox(
                 fit: BoxFit.fitHeight,
@@ -369,30 +334,23 @@ class _EditPostMenuState extends State<EditPostMenu> {
                         disabledTextColor: Colors.black,
                         onPressed: () async {
                           try {
-                            var args = SaveCollectionArgs();
-                            args.id = postMenuArgs.postID;
-                            var res = await postMenuArgs.sessionData.client
-                                .saveCollection(args);
+                            var args = ArgSaveCollection(
+                              id: postMenuArgs.postID,
+                            );
+                            var res = await postMenuArgs.sessionData.client.saveCollection(args);
                           } on ApiException catch (e) {
                             if (e.code == 401) {
-                              print(
-                                  "Exception when calling DefaultApi->/save-collection: $e\n");
-                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-                                  "Нет доступа", Colors.red);
+                              print("Exception when calling DefaultApi->/save-collection: $e\n");
+                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Нет доступа", Colors.red);
                             } else {
-                              showInfoSnackBar(
-                                  _scaffoldKey,
-                                  _isSnackBarActive,
-                                  "Произошла ошибка при запросе к api",
-                                  Colors.red);
+                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
                             }
                           } catch (e) {
                             if (!(e is ApiException)) {
                               print("Other Exception: $e\n");
                             }
                           }
-                          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-                              "Пост проинкассирован", Colors.green);
+                          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пост проинкассирован", Colors.green);
                           Navigator.pop(context);
                         },
                         child: Text("Да"),
@@ -432,14 +390,13 @@ class _EditPostMenuState extends State<EditPostMenu> {
               ),
               onPressed: () {
                 try {
-                  var args = OpenStationArgs();
-                  args.stationID = postMenuArgs.postID;
+                  var args = ArgOpenStation(
+                    stationID: postMenuArgs.postID,
+                  );
                   var res = postMenuArgs.sessionData.client.openStation(args);
                 } catch (e) {
-                  print(
-                      "Exception when calling DefaultApi->/open-station: $e\n");
-                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-                      "Произошла ошибка при запросе к api", Colors.red);
+                  print("Exception when calling DefaultApi->/open-station: $e\n");
+                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
                 }
               },
             ),
@@ -462,16 +419,12 @@ class _EditPostMenuState extends State<EditPostMenu> {
                 style: TextStyle(fontSize: 15),
               ),
               onPressed: () {
-                var args = IncassationHistoryArgs(
-                    postMenuArgs.postID, postMenuArgs.sessionData);
+                var args = IncassationHistoryArgs(postMenuArgs.postID, postMenuArgs.sessionData);
                 if (_updateBalanceTimer.isActive) {
                   _updateBalanceTimer.cancel();
                 }
-                Navigator.pushNamed(context, "/mobile/incassation",
-                        arguments: args)
-                    .then((value) {
-                  _updateBalanceTimer =
-                      new Timer.periodic(Duration(seconds: 1), (timer) {
+                Navigator.pushNamed(context, "/mobile/incassation", arguments: args).then((value) {
+                  _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
                     _getBalance(postMenuArgs);
                   });
                   setState(() {});
@@ -498,8 +451,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
     );
   }
 
-  Widget _getButtonsColumn(
-      bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
+  Widget _getButtonsColumn(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
       children: List.generate(_maxButtons, (index) {
         return Padding(
@@ -514,8 +466,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
     );
   }
 
-  Widget _getCheckBoxColumn(
-      bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
+  Widget _getCheckBoxColumn(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
       children: List.generate(_maxButtons, (index) {
         return Padding(

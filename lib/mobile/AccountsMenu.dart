@@ -20,8 +20,7 @@ class AccountInfo {
   bool isOperator;
   bool isEngineer;
 
-  AccountInfo(this.login, this.firstName, this.middleName, this.lastName,
-      this.isAdmin, this.isEngineer, this.isOperator);
+  AccountInfo(this.login, this.firstName, this.middleName, this.lastName, this.isAdmin, this.isEngineer, this.isOperator);
 }
 
 class _AccountsMenuState extends State<AccountsMenu> {
@@ -41,22 +40,14 @@ class _AccountsMenuState extends State<AccountsMenu> {
       }
       for (int i = 0; i < res.users.length; i++) {
         _accounts.add(
-          AccountInfo(
-              res.users[i].login,
-              res.users[i].firstName,
-              res.users[i].middleName,
-              res.users[i].lastName,
-              res.users[i].isAdmin,
-              res.users[i].isEngineer,
-              res.users[i].isOperator),
+          AccountInfo(res.users[i].login, res.users[i].firstName, res.users[i].middleName, res.users[i].lastName, res.users[i].isAdmin, res.users[i].isEngineer, res.users[i].isOperator),
         );
       }
       _accounts.sort((a, b) => a.login.compareTo(b.login));
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->/users: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -103,64 +94,51 @@ class _AccountsMenuState extends State<AccountsMenu> {
                           child: Text(
                             screenW > screenH ? "Логин" : "",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                       SizedBox(
                         height: 50,
-                        width: screenW > screenH
-                            ? screenW / 11 * 2
-                            : screenW / 9 * 2,
+                        width: screenW > screenH ? screenW / 11 * 2 : screenW / 9 * 2,
                         child: Center(
                           child: Text(
                             "Фамилия",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                       SizedBox(
                         height: 50,
-                        width: screenW > screenH
-                            ? screenW / 11 * 2
-                            : screenW / 9 * 2,
+                        width: screenW > screenH ? screenW / 11 * 2 : screenW / 9 * 2,
                         child: Center(
                           child: Text(
                             "Имя",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                       SizedBox(
                         height: 50,
-                        width: screenW > screenH
-                            ? screenW / 11 * 2
-                            : screenW / 9 * 2,
+                        width: screenW > screenH ? screenW / 11 * 2 : screenW / 9 * 2,
                         child: Center(
                           child: Text(
                             "Отчество",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                       SizedBox(
                         height: 50,
-                        width: screenW > screenH
-                            ? screenW / 11 * 2
-                            : screenW / 9 * 2,
+                        width: screenW > screenH ? screenW / 11 * 2 : screenW / 9 * 2,
                         child: Center(
                           child: Text(
                             "Статус",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -212,17 +190,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
     );
   }
 
-  Widget _getAccountsRow(
-      double screenW,
-      double screenH,
-      int index,
-      SessionData sessionData,
-      String login,
-      String firstName,
-      String lastName,
-      String middleName,
-      String status,
-      bool addAction) {
+  Widget _getAccountsRow(double screenW, double screenH, int index, SessionData sessionData, String login, String firstName, String lastName, String middleName, String status, bool addAction) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -308,9 +276,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
               icon: Icon(addAction ? Icons.add : Icons.more_horiz),
               onPressed: addAction
                   ? () {
-                      Navigator.pushNamed(context, "/mobile/accounts/add",
-                              arguments: sessionData)
-                          .then(
+                      Navigator.pushNamed(context, "/mobile/accounts/add", arguments: sessionData).then(
                         (value) => _getUsers(sessionData),
                       );
                     }
@@ -318,9 +284,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
                       var args = AccountsMenuEditArgs();
                       args.sessionData = sessionData;
                       args.targetUser = _accounts[index];
-                      Navigator.pushNamed(context, "/mobile/accounts/edit",
-                              arguments: args)
-                          .then(
+                      Navigator.pushNamed(context, "/mobile/accounts/edit", arguments: args).then(
                         (value) => _getUsers(sessionData),
                       );
                     },

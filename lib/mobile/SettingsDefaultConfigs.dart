@@ -13,8 +13,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
 
   List<bool> _stationsToSave = List.filled(12, false);
 
-  final List<String> _dropDownNames = ["----"]
-    ..addAll(DefaultConfig.configs.keys);
+  final List<String> _dropDownNames = ["----"]..addAll(DefaultConfig.configs.keys);
   String _dropDownValue = "----";
 
   bool _canSet = true;
@@ -24,7 +23,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
     if (_dropDownValue != "----") {
       StationsDefaultConfig config = DefaultConfig.configs[_dropDownValue];
 
-      for (int i = 0; i < config.programs.length; i++){
+      for (int i = 0; i < config.programs.length; i++) {
         try {
           var res = await sessionData.client.setProgram(config.programs[i]);
         } catch (e) {
@@ -35,16 +34,16 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
       for (int i = 0; i < _stationsToSave.length; i++) {
         if (_stationsToSave[i]) {
           try {
-            var args = SetStationButtonsArgs();
-            args.stationID = i + 1;
-            args.buttons = config.stationPrograms;
+            var args = ArgSetStationButton(
+              stationID: i + 1,
+              buttons: config.stationPrograms,
+            );
             var res = await sessionData.client.setStationButton(args);
           } catch (e) {}
         }
       }
 
-      showInfoSnackBar(
-          _scaffoldKey, _isSnackBarActive, "Настройки сохранены", Colors.green);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Настройки сохранены", Colors.green);
     }
     _stationsToSave = List.filled(12, false);
     _canSet = true;
@@ -155,8 +154,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
                         context: context,
                         builder: (context) => AlertDialog(
                           title: Text("Загрузить настройки?"),
-                          content: Text(
-                              "Настройки для программи кнопок будут установлены по умолчанию"),
+                          content: Text("Настройки для программи кнопок будут установлены по умолчанию"),
                           actionsPadding: EdgeInsets.all(10),
                           actions: [
                             RaisedButton(

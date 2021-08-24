@@ -24,8 +24,7 @@ class HomePageData {
   final String currentProgramName;
   final int currentProgramID;
 
-  HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info,
-      this.currentBalance, this.currentProgramName, this.currentProgramID);
+  HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info, this.currentBalance, this.currentProgramName, this.currentProgramID);
 }
 
 class _DHomePageState extends State<DHomePage> {
@@ -38,8 +37,7 @@ class _DHomePageState extends State<DHomePage> {
 
   bool _firstLoad = true;
   List<HomePageData> _homePageData = List.generate(12, (index) {
-    return HomePageData(
-        -1, "Loading...", "", "", "", "", -1, "IDLE", -1);
+    return HomePageData(-1, "Loading...", "", "", "", "", -1, "IDLE", -1);
   });
 
   @override
@@ -58,31 +56,21 @@ class _DHomePageState extends State<DHomePage> {
         return;
       }
       var res = await sessionData.client.status();
-      res.stations =
-          res.stations.where((element) => element.id != null).toList();
+      res.stations = res.stations.where((element) => element.id != null).toList();
       var tmpHomepage = List.generate((res.stations.length), (index) {
-        return HomePageData(
-            res.stations[index].id ?? index + 1,
-            res.stations[index].name ?? "Station ${index + 1}",
-            res.stations[index].ip ?? "___.___.___.___",
-            res.stations[index].hash ?? "",
-            res.stations[index].status.value ?? "",
-            res.stations[index].info ?? "",
-            res.stations[index].currentBalance ?? 0,
-            res.stations[index].currentProgramName ?? "Загрузка...",
-            res.stations[index].currentProgram ?? -1);
+        return HomePageData(res.stations[index].id ?? index + 1, res.stations[index].name ?? "Station ${index + 1}", res.stations[index].ip ?? "___.___.___.___", res.stations[index].hash ?? "", res.stations[index].status.value ?? "",
+            res.stations[index].info ?? "", res.stations[index].currentBalance ?? 0, res.stations[index].currentProgramName ?? "Загрузка...", res.stations[index].currentProgram ?? -1);
       });
       var binded = tmpHomepage.where((element) => element.hash != "").toList();
       var notBinded = tmpHomepage.where((element) => element.hash == "");
-      binded.sort((a, b)=>a.id.compareTo(b.id));
+      binded.sort((a, b) => a.id.compareTo(b.id));
       tmpHomepage = binded;
       tmpHomepage.addAll(notBinded);
       redraw = _homePageData != tmpHomepage;
       if (redraw) _homePageData = tmpHomepage;
     } catch (e) {
       print("Exception when calling DefaultApi->Status in HomePage: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
 
     _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -180,12 +168,8 @@ class _DHomePageState extends State<DHomePage> {
                       height: height / 4,
                       width: boxWidth,
                       child: FlatButton(
-                        color: _homePageData[pos].status == "online"
-                            ? Colors.lightGreen
-                            : Colors.red,
-                        highlightColor: _homePageData[pos].status == "online"
-                            ? Colors.lightGreenAccent
-                            : Colors.redAccent,
+                        color: _homePageData[pos].status == "online" ? Colors.lightGreen : Colors.red,
+                        highlightColor: _homePageData[pos].status == "online" ? Colors.lightGreenAccent : Colors.redAccent,
                         disabledColor: Colors.red,
                         disabledTextColor: Colors.black,
                         onPressed: () => OpenPostEditPage(pos),
@@ -193,8 +177,7 @@ class _DHomePageState extends State<DHomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(_homePageData[pos].name),
-                            Text(
-                                "Баланс: ${_homePageData[pos].currentBalance ?? '__'}"),
+                            Text("Баланс: ${_homePageData[pos].currentBalance ?? '__'}"),
                           ],
                         ),
                       ),
@@ -204,9 +187,7 @@ class _DHomePageState extends State<DHomePage> {
                       width: boxWidth,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: _homePageData[pos].status == "online"
-                              ? Colors.white
-                              : Colors.grey,
+                          color: _homePageData[pos].status == "online" ? Colors.white : Colors.grey,
                           boxShadow: [
                             BoxShadow(blurRadius: 2, color: Colors.black),
                           ],
@@ -240,9 +221,7 @@ class _DHomePageState extends State<DHomePage> {
                           ],
                         ),
                         child: Center(
-                          child: Text(_homePageData[pos].currentProgramName,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                          child: Text(_homePageData[pos].currentProgramName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ),
@@ -257,16 +236,10 @@ class _DHomePageState extends State<DHomePage> {
   }
 
   void OpenPostEditPage(int index) {
-    var args = PostMenuArgs(
-        _homePageData[index].id,
-        _homePageData[index].ip,
-        _homePageData[index].hash,
-        _homePageData[index].currentProgramID,
-        _sessionData);
+    var args = PostMenuArgs(_homePageData[index].id, _homePageData[index].ip, _homePageData[index].hash, _homePageData[index].currentProgramID, _sessionData);
     _updateTimer.cancel();
 
-    Navigator.pushNamed(context, "/desktop/home/edit", arguments: args)
-        .then((value) {
+    Navigator.pushNamed(context, "/desktop/home/edit", arguments: args).then((value) {
       _getStations(_sessionData);
       setState(() {});
     });

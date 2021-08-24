@@ -59,35 +59,29 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
   void _updateUser(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
     try {
-      var args = UpdateUserArgs();
-      args.login = _inputControllers["login"].value.text;
-      args.firstName = _inputControllers["firstName"].value.text;
-      if (args.firstName.length < 1) args.firstName = " ";
-      args.lastName = _inputControllers["lastName"].value.text;
-      if (args.lastName.length < 1) args.lastName = " ";
-      args.middleName = _inputControllers["middleName"].value.text;
-      if (args.middleName.length < 1) args.middleName = " ";
-      args.isAdmin = _inputTriggers[0];
-      args.isOperator = _inputTriggers[1];
-      args.isEngineer = _inputTriggers[2];
+      var args = ArgUserUpdate(
+        login: _inputControllers["login"].value.text,
+        firstName: _inputControllers["firstName"].value.text.isNotEmpty ? _inputControllers["firstName"].value.text : " ",
+        lastName: _inputControllers["lastName"].value.text.isNotEmpty ? _inputControllers["lastName"].value.text : " ",
+        middleName: _inputControllers["middleName"].value.text.isNotEmpty ? _inputControllers["middleName"].value.text : " ",
+        isAdmin: _inputTriggers[0],
+        isOperator: _inputTriggers[1],
+        isEngineer: _inputTriggers[2],
+      );
+
       var res = await sessionData.client.updateUser(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пользователь изменен",
-          Colors.green);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пользователь изменен", Colors.green);
     } on ApiException catch (e) {
       if (e.code == 403) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Недостаточно прав",
-            Colors.orange);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Недостаточно прав", Colors.orange);
       } else if (e.code == 404) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Невозможно изменить пользователя", Colors.orange);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Невозможно изменить пользователя", Colors.orange);
       } else {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Ошибка при запросе к апи", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Ошибка при запросе к апи", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Не удалось изменить пользователя", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось изменить пользователя", Colors.red);
       }
       print("Exception when calling DefaultApi->User(put): $e\n");
     }
@@ -99,8 +93,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final AccountsMenuEditArgs accountsMenuEditArgs =
-        ModalRoute.of(context).settings.arguments;
+    final AccountsMenuEditArgs accountsMenuEditArgs = ModalRoute.of(context).settings.arguments;
 
     if (_notLoaded) {
       _setData(accountsMenuEditArgs.targetUser);
@@ -130,222 +123,219 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
               SizedBox(
                 height: 10,
               ),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+              Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 75,
-                          width: screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Логин",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.end,
-                            ),
+                    SizedBox(
+                      height: 75,
+                      width: screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "Логин",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 75,
+                      width: screenW - screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: TextField(
+                          controller: _inputControllers["login"],
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            border: OutlineInputBorder(),
+                          ),
+                          enabled: false,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 75,
+                      width: screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "Имя",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 75,
+                      width: screenW - screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: TextField(
+                          controller: _inputControllers["firstName"],
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            border: OutlineInputBorder(),
                           ),
                         ),
-                        SizedBox(
-                          height: 75,
-                          width: screenW - screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: TextField(
-                              controller: _inputControllers["login"],
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(10),
-                                border: OutlineInputBorder(),
-                              ),
-                              enabled: false,
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 75,
+                      width: screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "Фамилия",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 75,
-                          width: screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Имя",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.end,
-                            ),
+                    SizedBox(
+                      height: 75,
+                      width: screenW - screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: TextField(
+                          controller: _inputControllers["lastName"],
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            border: OutlineInputBorder(),
                           ),
                         ),
-                        SizedBox(
-                          height: 75,
-                          width: screenW - screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: TextField(
-                              controller: _inputControllers["firstName"],
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(10),
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 75,
+                      width: screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "Отчество",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 75,
-                          width: screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Фамилия",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.end,
-                            ),
+                    SizedBox(
+                      height: 75,
+                      width: screenW - screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: TextField(
+                          controller: _inputControllers["middleName"],
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            border: OutlineInputBorder(),
                           ),
                         ),
-                        SizedBox(
-                          height: 75,
-                          width: screenW - screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: TextField(
-                              controller: _inputControllers["lastName"],
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(10),
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 75,
-                          width: screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Отчество",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 75,
+                      width: screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "Админ",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.end,
                         ),
-                        SizedBox(
-                          height: 75,
-                          width: screenW - screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: TextField(
-                              controller: _inputControllers["middleName"],
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(10),
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 75,
-                          width: screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Админ",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
+                    SizedBox(
+                      height: 75,
+                      width: screenW - screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Checkbox(
+                          value: _inputTriggers[0],
+                          onChanged: (newValue) {
+                            _inputTriggers[0] = !_inputTriggers[0];
+                            setState(() {});
+                          },
                         ),
-                        SizedBox(
-                          height: 75,
-                          width: screenW - screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Checkbox(
-                              value: _inputTriggers[0],
-                              onChanged: (newValue) {
-                                _inputTriggers[0] = !_inputTriggers[0];
-                                setState(() {});
-                              },
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 75,
-                          width: screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Оператор",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 75,
+                      width: screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "Оператор",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.end,
                         ),
-                        SizedBox(
-                          height: 75,
-                          width: screenW - screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Checkbox(
-                              value: _inputTriggers[1],
-                              onChanged: (newValue) {
-                                _inputTriggers[1] = !_inputTriggers[1];
-                                setState(() {});
-                              },
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 75,
-                          width: screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Инженер",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
+                    SizedBox(
+                      height: 75,
+                      width: screenW - screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Checkbox(
+                          value: _inputTriggers[1],
+                          onChanged: (newValue) {
+                            _inputTriggers[1] = !_inputTriggers[1];
+                            setState(() {});
+                          },
                         ),
-                        SizedBox(
-                          height: 75,
-                          width: screenW - screenW / 3,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Checkbox(
-                              value: _inputTriggers[2],
-                              onChanged: (newValue) {
-                                _inputTriggers[2] = !_inputTriggers[2];
-                                setState(() {});
-                              },
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 75,
+                      width: screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "Инженер",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
                     ),
-                  ]),
+                    SizedBox(
+                      height: 75,
+                      width: screenW - screenW / 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Checkbox(
+                          value: _inputTriggers[2],
+                          onChanged: (newValue) {
+                            _inputTriggers[2] = !_inputTriggers[2];
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ]),
               Wrap(
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.center,
@@ -363,8 +353,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                       onPressed: _inUpdate
                           ? null
                           : () {
-                              _updateUser(
-                                  accountsMenuEditArgs.sessionData, context);
+                              _updateUser(accountsMenuEditArgs.sessionData, context);
                             },
                       child: Text(_inUpdate ? "Сохранение..." : "Сохранить"),
                     ),
@@ -418,34 +407,19 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                               onPressed: () async {
                                 bool success = false;
                                 try {
-                                  var cur_user = await accountsMenuEditArgs
-                                      .sessionData.client
-                                      .getUser();
+                                  var cur_user = await accountsMenuEditArgs.sessionData.client.getUser();
 
-                                  var args = DeleteUserArgs();
-                                  args.login =
-                                      _inputControllers["login"].value.text;
+                                  var args = ArgUserDelete(login: _inputControllers["login"].value.text);
 
-                                  if (cur_user.login !=
-                                      accountsMenuEditArgs.targetUser.login) {
-                                    var res = await accountsMenuEditArgs
-                                        .sessionData.client
-                                        .deleteUser(args);
+                                  if (cur_user.login != accountsMenuEditArgs.targetUser.login) {
+                                    var res = await accountsMenuEditArgs.sessionData.client.deleteUser(args);
                                     success = true;
                                   } else {
-                                    showInfoSnackBar(
-                                        _scaffoldKey,
-                                        _isSnackBarActive,
-                                        "Вы не можете удалить сами себя",
-                                        Colors.orange);
+                                    showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Вы не можете удалить сами себя", Colors.orange);
                                   }
                                 } on ApiException catch (e) {
                                   print(e);
-                                  showInfoSnackBar(
-                                      _scaffoldKey,
-                                      _isSnackBarActive,
-                                      "Произошла ошибка при запросе к api",
-                                      Colors.redAccent);
+                                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.redAccent);
                                 } catch (e) {
                                   print(e);
                                   if (!(e is ApiException)) {

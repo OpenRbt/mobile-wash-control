@@ -16,30 +16,9 @@ class DViewPage extends StatefulWidget {
 
 class _DViewPageState extends State<DViewPage> {
   Pages _currentPage = Pages.Main;
-  final List<String> _pagesNames = [
-    "Главная",
-    "Программы",
-    "Настройки",
-    "Учетки",
-    "Статистика",
-    "Выход"
-  ];
-  final Map<String, Pages> _pagesMap = {
-    "Главная": Pages.Main,
-    "Программы": Pages.Programs,
-    "Настройки": Pages.Settings,
-    "Учетки": Pages.Accounts,
-    "Статистика": Pages.Statistics,
-    "Выход": Pages.None
-  };
-  final Map<Pages, Widget> _pagesWidgets = {
-    Pages.Main: DHomePage(),
-    Pages.Programs: ProgramsMenu(),
-    Pages.Settings: SettingsMenu(),
-    Pages.Accounts: AccountsMenu(),
-    Pages.Statistics: DStatisticsPage(),
-    Pages.None: null
-  };
+  final List<String> _pagesNames = ["Главная", "Программы", "Настройки", "Учетки", "Статистика", "Выход"];
+  final Map<String, Pages> _pagesMap = {"Главная": Pages.Main, "Программы": Pages.Programs, "Настройки": Pages.Settings, "Учетки": Pages.Accounts, "Статистика": Pages.Statistics, "Выход": Pages.None};
+  final Map<Pages, Widget> _pagesWidgets = {Pages.Main: DHomePage(), Pages.Programs: ProgramsMenu(), Pages.Settings: SettingsMenu(), Pages.Accounts: AccountsMenu(), Pages.Statistics: DStatisticsPage(), Pages.None: null};
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +40,7 @@ class _DViewPageState extends State<DViewPage> {
                     title: Text(
                       _pagesNames[index],
                       style: TextStyle(
-                        fontSize: _currentPage == _pagesMap[_pagesNames[index]]
-                            ? 32
-                            : 16,
+                        fontSize: _currentPage == _pagesMap[_pagesNames[index]] ? 32 : 16,
                       ),
                     ),
                     onTap: (index < _pagesNames.length - 1)

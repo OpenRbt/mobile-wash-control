@@ -26,28 +26,24 @@ class _AuthPageState extends State<AuthPage> {
 
   void _loadPage() {
     SystemChrome.setPreferredOrientations([]);
-    Navigator.pushReplacementNamed(context, "/mobile/home",
-        arguments: _sessionData);
+    Navigator.pushReplacementNamed(context, "/mobile/home", arguments: _sessionData);
   }
 
   void _authCheck() async {
     try {
       _sessionData = new SessionData(
-        DefaultApi(),
+        DefaultApi(ApiClient(basePath: _host)),
       );
-      _sessionData.client.apiClient.basePath = _host;
       _sessionData.client.apiClient.addDefaultHeader("Pin", _currentPin);
       var res = await _sessionData.client.getUser();
       _loadPage();
     } on ApiException catch (e) {
       if (e.code == 401) {
-        showInfoSnackBar(
-            _scaffoldKey, _isSnackBarActive, "Неверные данные", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Неверные данные", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Невозможно авторизоваться", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Невозможно авторизоваться", Colors.red);
       }
       print("Exception when calling DefaultApi->/user: $e\n");
     }
@@ -102,29 +98,17 @@ class _AuthPageState extends State<AuthPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _keyPadKey('1', screenW, screenH),
-                        _keyPadKey('2', screenW, screenH),
-                        _keyPadKey('3', screenW, screenH)
-                      ],
+                      children: [_keyPadKey('1', screenW, screenH), _keyPadKey('2', screenW, screenH), _keyPadKey('3', screenW, screenH)],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _keyPadKey('4', screenW, screenH),
-                        _keyPadKey('5', screenW, screenH),
-                        _keyPadKey('6', screenW, screenH)
-                      ],
+                      children: [_keyPadKey('4', screenW, screenH), _keyPadKey('5', screenW, screenH), _keyPadKey('6', screenW, screenH)],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _keyPadKey('7', screenW, screenH),
-                        _keyPadKey('8', screenW, screenH),
-                        _keyPadKey('9', screenW, screenH)
-                      ],
+                      children: [_keyPadKey('7', screenW, screenH), _keyPadKey('8', screenW, screenH), _keyPadKey('9', screenW, screenH)],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -160,8 +144,7 @@ class _AuthPageState extends State<AuthPage> {
       padding: EdgeInsets.all(2),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
-          side: BorderSide(
-              color: Colors.black, width: 2.0, style: BorderStyle.solid),
+          side: BorderSide(color: Colors.black, width: 2.0, style: BorderStyle.solid),
         ),
         color: Colors.white,
         elevation: 4,
@@ -213,9 +196,7 @@ class _AuthPageState extends State<AuthPage> {
   String _toDisplay() {
     var res = "";
     if (_currentPin.length > 0) {
-      return _currentPin
-          .substring(_currentPin.length - 1)
-          .padLeft(_currentPin.length, "*");
+      return _currentPin.substring(_currentPin.length - 1).padLeft(_currentPin.length, "*");
     }
     return res;
   }

@@ -1,95 +1,162 @@
-part of swagger.api;
+//
+// AUTO-GENERATED FILE, DO NOT MODIFY!
+//
+// @dart=2.0
+
+// ignore_for_file: unused_element, unused_import
+// ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: lines_longer_than_80_chars
+
+part of openapi.api;
 
 class Program {
-  
-  int id = null;
-   // range from 1 to //
+  /// Returns a new [Program] instance.
+  Program({
+    @required this.id,
+    this.name,
+    this.price,
+    this.preflightEnabled,
+    this.isFinishingProgram,
+    this.motorSpeedPercent,
+    this.preflightMotorSpeedPercent,
+    this.relays = const [],
+    this.preflightRelays = const [],
+  });
 
-  String name = null;
-  
+  // minimum: 1
+  int id;
 
-  int price = null;
-  
+  String name;
 
-  bool preflightEnabled = null;
-  
+  int price;
 
-  bool isFinishingProgram = null;
-  
+  bool preflightEnabled;
 
-  int motorSpeedPercent = null;
-   // range from 0 to 100//
+  bool isFinishingProgram;
 
-  int preflightMotorSpeedPercent = null;
-   // range from 0 to 100//
+  // minimum: 0
+  // maximum: 100
+  int motorSpeedPercent;
 
-  List<RelayConfig> relays = [];
-  
+  // minimum: 0
+  // maximum: 100
+  int preflightMotorSpeedPercent;
 
-  List<RelayConfig> preflightRelays = [];
-  
-  Program();
+  List<RelayConfig> relays;
+
+  List<RelayConfig> preflightRelays;
 
   @override
-  String toString() {
-    return 'Program[id=$id, name=$name, price=$price, preflightEnabled=$preflightEnabled, isFinishingProgram=$isFinishingProgram, motorSpeedPercent=$motorSpeedPercent, preflightMotorSpeedPercent=$preflightMotorSpeedPercent, relays=$relays, preflightRelays=$preflightRelays, ]';
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Program &&
+          other.id == id &&
+          other.name == name &&
+          other.price == price &&
+          other.preflightEnabled == preflightEnabled &&
+          other.isFinishingProgram == isFinishingProgram &&
+          other.motorSpeedPercent == motorSpeedPercent &&
+          other.preflightMotorSpeedPercent == preflightMotorSpeedPercent &&
+          other.relays == relays &&
+          other.preflightRelays == preflightRelays;
 
-  Program.fromJson(Map<String, dynamic> json) {
-    if (json == null) return;
-    id =
-        json['id']
-    ;
-    name =
-        json['name']
-    ;
-    price =
-        json['price']
-    ;
-    preflightEnabled =
-        json['preflightEnabled']
-    ;
-    isFinishingProgram =
-        json['isFinishingProgram']
-    ;
-    motorSpeedPercent =
-        json['motorSpeedPercent']
-    ;
-    preflightMotorSpeedPercent =
-        json['preflightMotorSpeedPercent']
-    ;
-    relays =
-      RelayConfig.listFromJson(json['relays'])
-;
-    preflightRelays =
-      RelayConfig.listFromJson(json['preflightRelays'])
-;
-  }
+  @override
+  int get hashCode =>
+      (id == null ? 0 : id.hashCode) +
+      (name == null ? 0 : name.hashCode) +
+      (price == null ? 0 : price.hashCode) +
+      (preflightEnabled == null ? 0 : preflightEnabled.hashCode) +
+      (isFinishingProgram == null ? 0 : isFinishingProgram.hashCode) +
+      (motorSpeedPercent == null ? 0 : motorSpeedPercent.hashCode) +
+      (preflightMotorSpeedPercent == null ? 0 : preflightMotorSpeedPercent.hashCode) +
+      (relays == null ? 0 : relays.hashCode) +
+      (preflightRelays == null ? 0 : preflightRelays.hashCode);
+
+  @override
+  String toString() =>
+      'Program[id=$id, name=$name, price=$price, preflightEnabled=$preflightEnabled, isFinishingProgram=$isFinishingProgram, motorSpeedPercent=$motorSpeedPercent, preflightMotorSpeedPercent=$preflightMotorSpeedPercent, relays=$relays, preflightRelays=$preflightRelays]';
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'price': price,
-      'preflightEnabled': preflightEnabled,
-      'isFinishingProgram': isFinishingProgram,
-      'motorSpeedPercent': motorSpeedPercent,
-      'preflightMotorSpeedPercent': preflightMotorSpeedPercent,
-      'relays': relays,
-      'preflightRelays': preflightRelays
-     };
+    final json = <String, dynamic>{};
+    json[r'id'] = id;
+    if (name != null) {
+      json[r'name'] = name;
+    }
+    if (price != null) {
+      json[r'price'] = price;
+    }
+    if (preflightEnabled != null) {
+      json[r'preflightEnabled'] = preflightEnabled;
+    }
+    if (isFinishingProgram != null) {
+      json[r'isFinishingProgram'] = isFinishingProgram;
+    }
+    if (motorSpeedPercent != null) {
+      json[r'motorSpeedPercent'] = motorSpeedPercent;
+    }
+    if (preflightMotorSpeedPercent != null) {
+      json[r'preflightMotorSpeedPercent'] = preflightMotorSpeedPercent;
+    }
+    if (relays != null) {
+      json[r'relays'] = relays;
+    }
+    if (preflightRelays != null) {
+      json[r'preflightRelays'] = preflightRelays;
+    }
+    return json;
   }
 
-  static List<Program> listFromJson(List<dynamic> json) {
-    return json == null ? new List<Program>() : json.map((value) => new Program.fromJson(value)).toList();
+  /// Returns a new [Program] instance and imports its values from
+  /// [json] if it's non-null, null if [json] is null.
+  static Program fromJson(Map<String, dynamic> json) => json == null
+      ? null
+      : Program(
+          id: json[r'id'],
+          name: json[r'name'],
+          price: json[r'price'],
+          preflightEnabled: json[r'preflightEnabled'],
+          isFinishingProgram: json[r'isFinishingProgram'],
+          motorSpeedPercent: json[r'motorSpeedPercent'],
+          preflightMotorSpeedPercent: json[r'preflightMotorSpeedPercent'],
+          relays: RelayConfig.listFromJson(json[r'relays']),
+          preflightRelays: RelayConfig.listFromJson(json[r'preflightRelays']),
+        );
+
+  static List<Program> listFromJson(
+    List<dynamic> json, {
+    bool emptyIsNull,
+    bool growable,
+  }) =>
+      json == null || json.isEmpty
+          ? true == emptyIsNull
+              ? null
+              : <Program>[]
+          : json.map((dynamic value) => Program.fromJson(value)).toList(growable: true == growable);
+
+  static Map<String, Program> mapFromJson(Map<String, dynamic> json) {
+    final map = <String, Program>{};
+    if (json?.isNotEmpty == true) {
+      json.forEach((key, value) => map[key] = Program.fromJson(value));
+    }
+    return map;
   }
 
-  static Map<String, Program> mapFromJson(Map<String, Map<String, dynamic>> json) {
-    var map = new Map<String, Program>();
-    if (json != null && json.length > 0) {
-      json.forEach((String key, Map<String, dynamic> value) => map[key] = new Program.fromJson(value));
+  // maps a json object with a list of Program-objects as value to a dart map
+  static Map<String, List<Program>> mapListFromJson(
+    Map<String, dynamic> json, {
+    bool emptyIsNull,
+    bool growable,
+  }) {
+    final map = <String, List<Program>>{};
+    if (json?.isNotEmpty == true) {
+      json.forEach((key, value) {
+        map[key] = Program.listFromJson(
+          value,
+          emptyIsNull: emptyIsNull,
+          growable: growable,
+        );
+      });
     }
     return map;
   }
 }
-

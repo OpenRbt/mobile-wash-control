@@ -40,12 +40,7 @@ class _AddProgramState extends State<AddProgramPage> {
             if (text.length > 0) {
               int value = int.tryParse(text);
               value = value ?? 0;
-              controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+              controller.value = controller.value.copyWith(text: value.toString(), selection: TextSelection(baseOffset: value.toString().length, extentOffset: value.toString().length), composing: TextRange.empty);
             }
           });
           break;
@@ -64,12 +59,7 @@ class _AddProgramState extends State<AddProgramPage> {
               int value = int.tryParse(text);
               value = value ?? 0;
               value = value > _maxMotor ? _maxMotor : value;
-              controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+              controller.value = controller.value.copyWith(text: value.toString(), selection: TextSelection(baseOffset: value.toString().length, extentOffset: value.toString().length), composing: TextRange.empty);
             }
           });
           break;
@@ -86,12 +76,7 @@ class _AddProgramState extends State<AddProgramPage> {
               int value = int.tryParse(text);
               value = value ?? 0;
               value = value > _maxPercent ? _maxPercent : value;
-              controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+              controller.value = controller.value.copyWith(text: value.toString(), selection: TextSelection(baseOffset: value.toString().length, extentOffset: value.toString().length), composing: TextRange.empty);
             }
           });
           break;
@@ -108,12 +93,7 @@ class _AddProgramState extends State<AddProgramPage> {
               int value = int.tryParse(text);
               value = value ?? 0;
               value = value > _maxPercent ? _maxPercent : value;
-              controller.value = controller.value.copyWith(
-                  text: value.toString(),
-                  selection: TextSelection(
-                      baseOffset: value.toString().length,
-                      extentOffset: value.toString().length),
-                  composing: TextRange.empty);
+              controller.value = controller.value.copyWith(text: value.toString(), selection: TextSelection(baseOffset: value.toString().length, extentOffset: value.toString().length), composing: TextRange.empty);
             }
           });
           break;
@@ -185,9 +165,7 @@ class _AddProgramState extends State<AddProgramPage> {
                           height: 75,
                           width: width / 4,
                           child: Center(
-                            child: Text("Название",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Название", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
@@ -212,9 +190,7 @@ class _AddProgramState extends State<AddProgramPage> {
                           height: 75,
                           width: width / 4,
                           child: Center(
-                            child: Text("Цена",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Цена", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
@@ -272,18 +248,14 @@ class _AddProgramState extends State<AddProgramPage> {
                           height: 50,
                           width: width / 5 * 2,
                           child: Center(
-                            child: Text("Мотор %",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Мотор %", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
                           height: 50,
                           width: width / 5 * 2,
                           child: Center(
-                            child: Text("Мотор прокачки %",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Мотор прокачки %", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                       ],
@@ -401,18 +373,14 @@ class _AddProgramState extends State<AddProgramPage> {
                           height: 50,
                           width: width / 2,
                           child: Center(
-                            child: Text("Реле",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Реле", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
                           height: 50,
                           width: width / 2,
                           child: Center(
-                            child: Text("Реле прокачки",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("Реле прокачки", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                       ],
@@ -423,18 +391,14 @@ class _AddProgramState extends State<AddProgramPage> {
                           height: 25,
                           width: width / 9 * 2,
                           child: Center(
-                            child: Text("ID",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("ID", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
                           height: 25,
                           width: width / 9 * 2,
                           child: Center(
-                            child: Text("%",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("%", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
@@ -445,18 +409,14 @@ class _AddProgramState extends State<AddProgramPage> {
                           height: 25,
                           width: width / 9 * 2,
                           child: Center(
-                            child: Text("ID",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("ID", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         ),
                         SizedBox(
                           height: 25,
                           width: width / 9 * 2,
                           child: Center(
-                            child: Text("%",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center),
+                            child: Text("%", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                           ),
                         )
                       ],
@@ -470,15 +430,11 @@ class _AddProgramState extends State<AddProgramPage> {
                               width: width / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
-                                  child: Text("${index + 1}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center),
+                                  child: Text("${index + 1}", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                                 ),
                               ),
                             ),
@@ -487,9 +443,7 @@ class _AddProgramState extends State<AddProgramPage> {
                               width: width / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: TextField(
@@ -516,15 +470,11 @@ class _AddProgramState extends State<AddProgramPage> {
                               width: width / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
-                                  child: Text("${index + 1}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center),
+                                  child: Text("${index + 1}", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                                 ),
                               ),
                             ),
@@ -533,9 +483,7 @@ class _AddProgramState extends State<AddProgramPage> {
                               width: width / 9 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: TextField(
@@ -571,8 +519,7 @@ class _AddProgramState extends State<AddProgramPage> {
 
   void save(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
-    setState(() {
-    });
+    setState(() {});
 
     String name = _program[0].value.text;
     int price = int.tryParse(_program[1].value.text) ?? 0;
@@ -588,17 +535,9 @@ class _AddProgramState extends State<AddProgramPage> {
     });
 
     bool success = await saveProgram(sessionData,
-        programName: name,
-        price: price,
-        preflightEnabled: preflightEnabled,
-        isFinishingProgram: finishingProgram,
-        motorSpeed: motorSpeed,
-        motorSpeedPreflight: motorSpeedPreflight,
-        relaysPercent: relays,
-        relaysPreflightPercent: relayPreflight);
+        programName: name, price: price, preflightEnabled: preflightEnabled, isFinishingProgram: finishingProgram, motorSpeed: motorSpeed, motorSpeedPreflight: motorSpeedPreflight, relaysPercent: relays, relaysPreflightPercent: relayPreflight);
     if (success) {
-      showInfoSnackBar(
-          _scaffoldKey, _isSnackBarActive, "Программа добавлена", Colors.green);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Программа добавлена", Colors.green);
 
       for (var field in _relays) {
         field.text = "";
@@ -613,8 +552,7 @@ class _AddProgramState extends State<AddProgramPage> {
         field.text = "";
       }
     } else {
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Не удалось добавить программу", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось добавить программу", Colors.red);
     }
     setState(() {});
     _inUpdate = false;

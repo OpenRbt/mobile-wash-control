@@ -153,8 +153,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
   void saveProgram(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
     try {
-      var argstmp = ProgramsArgs();
-      var tmp = await sessionData.client.programs(argstmp);
+      var tmp = await sessionData.client.programs(ArgPrograms());
       int maxID = 1000;
       if (tmp != null && tmp.isNotEmpty) {
         tmp.sort(

@@ -161,8 +161,9 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
 
   void getProgram(ProgramMenuEditArgs programMenuEditArgs) async {
     try {
-      var args = ProgramsArgs();
-      args.programID = programMenuEditArgs.programID;
+      var args = ArgPrograms(
+        programID: programMenuEditArgs.programID,
+      );
       var res = await programMenuEditArgs.sessionData.client.programs(args);
 
       _program[0].text = res[0].name;

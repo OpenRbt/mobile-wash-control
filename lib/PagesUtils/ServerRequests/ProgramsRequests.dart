@@ -18,8 +18,7 @@ Future<bool> saveProgram(
   final int _relayTime = 1000;
   try {
     if (id == -1) {
-      var args = ProgramsArgs();
-      var tmp = await sessionData.client.programs(args);
+      var tmp = await sessionData.client.programs(ArgPrograms());
       int maxID = 1000;
       if (tmp != null && tmp.isNotEmpty) {
         tmp.sort(
@@ -96,9 +95,9 @@ Future<ProgramData> getProgram({SessionData sessionData, int programID}) async {
   program.relayPreflight = List.filled(_relayCount, 0);
 
   try {
-    var args = ProgramsArgs();
-    args.programID = programID;
-    var res = await sessionData.client.programs(args);
+    var res = await sessionData.client.programs(ArgPrograms(
+      programID: programID,
+    ));
 
     if (res.length == 0) {
       return null;

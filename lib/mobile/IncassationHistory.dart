@@ -40,12 +40,14 @@ class _IncassationHistoryState extends State<IncassationHistory> {
     _updating = true;
 
     try {
-      var args = StationCollectionReportDatesArgs();
-      args.stationID = incassationHistoryArgs.stationID;
-      args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
-      args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
-      _incassations = await incassationHistoryArgs.sessionData.client
-          .stationCollectionReportDates(args);
+      var args = ArgCollectionReportDates(
+        stationID: incassationHistoryArgs.stationID,
+        startDate: _startDate.millisecondsSinceEpoch ~/ 1000,
+        endDate: _endDate.millisecondsSinceEpoch ~/ 1000,
+      );
+
+      var res = await incassationHistoryArgs.sessionData.client.stationCollectionReportDates(args);
+      _incassations = res.collectionReports;
 
       _totalNal = 0;
       _totalBeznal = 0;
@@ -53,13 +55,10 @@ class _IncassationHistoryState extends State<IncassationHistory> {
         _totalNal += (_incassations[i].banknotes ?? 0) + (_incassations[i].coins ?? 0);
         _totalBeznal += _incassations[i].electronical ?? 0;
       }
-    }
-    on ApiException catch (e) {
+    } on ApiException catch (e) {
       if (e.code != 404) {
-        print(
-            "Exception when calling DefaultApi->/station-collection-report-dates: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Произошла ошибка при запросе к api", Colors.red);
+        print("Exception when calling DefaultApi->/station-collection-report-dates: $e\n");
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       } else {}
     } catch (e) {
       if (!(e is ApiException)) {
@@ -123,8 +122,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
 
   @override
   Widget build(BuildContext context) {
-    IncassationHistoryArgs incassationHistoryArgs =
-        ModalRoute.of(context).settings.arguments;
+    IncassationHistoryArgs incassationHistoryArgs = ModalRoute.of(context).settings.arguments;
 
     final AppBar appBar = AppBar(
       title: Text("История инкассаций | Пост ${incassationHistoryArgs.stationID}"),
@@ -165,8 +163,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                       ),
                       RaisedButton(
                         onPressed: () => _selectStartDate(context),
-                        child: Text(
-                            "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
+                        child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year}"),
                       ),
                       Text(
                         " по ",
@@ -174,8 +171,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                       ),
                       RaisedButton(
                         onPressed: () => _selectEndDate(context),
-                        child: Text(
-                            "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                        child: Text("${_endDate.day}.${_endDate.month}.${_endDate.year}"),
                       ),
                       IconButton(
                           icon: Icon(
@@ -190,10 +186,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                   ),
                   SizedBox(height: 10),
                   Table(
-                    border: TableBorder.all(
-                        color: Colors.black,
-                        width: 1,
-                        style: BorderStyle.solid),
+                    border: TableBorder.all(color: Colors.black, width: 1, style: BorderStyle.solid),
                     children: [
                       createTableRow([
                         'Дата/Время',
@@ -241,6 +234,6 @@ TableRow createTableRow(List values) {
   return TableRow(children: result);
 }
 
-String formatDateTime(DateTime datetime){
+String formatDateTime(DateTime datetime) {
   return "${datetime.year.toString()}-${datetime.month.toString().padLeft(2, '0')}-${datetime.day.toString().padLeft(2, '0')} ${datetime.hour.toString()}:${datetime.minute.toString()}:${datetime.second.toString()}";
 }

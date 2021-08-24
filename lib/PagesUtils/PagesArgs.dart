@@ -7,8 +7,7 @@ class PostMenuArgs {
   final int currentProgramID;
   final SessionData sessionData;
 
-  PostMenuArgs(
-      this.postID, this.ip, this.hash, this.currentProgramID, this.sessionData);
+  PostMenuArgs(this.postID, this.ip, this.hash, this.currentProgramID, this.sessionData);
 }
 
 class ProgramMenuEditArgs {
