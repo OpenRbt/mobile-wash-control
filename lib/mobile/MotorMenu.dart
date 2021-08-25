@@ -57,6 +57,7 @@ class _MotorMenuState extends State<MotorMenu> {
         var args = ArgStationStat();
         _stationStats = await sessionData.client.stationStatCurrent(args: args);
       }
+      _stationStats.sort((a, b) => a.stationID.compareTo(b.stationID));
       _ProgramStat = List.filled(_stationStats.length, true);
       _stationStats.forEach((element) {
         element.programStats.forEach((program) {
@@ -477,14 +478,18 @@ class _MotorMenuState extends State<MotorMenu> {
   }
 
   String _SecondsToTime(int seconds) {
+    bool showSeconds = true;
     String res = "";
     if (seconds > 3600) {
       res += "${seconds ~/ 3600} ч.\n";
+      showSeconds = false;
     }
     if (seconds > 60) {
       res += "${(seconds % 3600) ~/ 60} мин.\n";
     }
-    res += "${seconds % 60} сек.";
+    if (showSeconds) {
+      res += "${seconds % 60} сек.";
+    }
     return res;
   }
 

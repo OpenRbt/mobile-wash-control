@@ -58,6 +58,7 @@ class _DMotorMenuState extends State<DMotorMenu> {
         var args = ArgStationStat();
         _stationStats = await sessionData.client.stationStatCurrent(args: args);
       }
+      _stationStats.sort((a, b) => a.stationID.compareTo(b.stationID));
       _ProgramStat = List.filled(_stationStats.length, true);
       _stationStats.forEach((element) {
         element.programStats.forEach((program) {
@@ -412,9 +413,9 @@ class _DMotorMenuState extends State<DMotorMenu> {
               ],
             )
           : Row(
-            children: [
-              DGetDrawer(screenH, DrawerSize, context, Pages.Motors, sessionData),
-              Container(
+              children: [
+                DGetDrawer(screenH, DrawerSize, context, Pages.Motors, sessionData),
+                Container(
                   height: screenH,
                   width: width,
                   child: Center(
@@ -426,8 +427,8 @@ class _DMotorMenuState extends State<DMotorMenu> {
                     ),
                   ),
                 ),
-            ],
-          ),
+              ],
+            ),
     );
   }
 
@@ -502,14 +503,18 @@ class _DMotorMenuState extends State<DMotorMenu> {
   }
 
   String _SecondsToTime(int seconds) {
+    bool showSeconds = true;
     String res = "";
     if (seconds > 3600) {
       res += "${seconds ~/ 3600} ч.\n";
+      showSeconds = false;
     }
     if (seconds > 60) {
       res += "${(seconds % 3600) ~/ 60} мин.\n";
     }
-    res += "${seconds % 60} сек.";
+    if (showSeconds) {
+      res += "${seconds % 60} сек.";
+    }
     return res;
   }
 
