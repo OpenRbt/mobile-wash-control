@@ -269,13 +269,14 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                   Table(
                     border: TableBorder.all(color: Colors.black, width: 1, style: BorderStyle.solid),
                     children: [
-                      createTableRow(['пост', 'наличные', 'банк. карта', 'сервисные', 'авто', 'ср. чек'])
+                      createTableRow(['пост', 'банкноты', 'монеты', 'банк. карта', 'сервисные', 'авто', 'ср. чек'])
                     ]
                       ..addAll(
                         List.generate(_reports.length, (index) {
                           return createTableRow([
                             _reports.keys.elementAt(index),
-                            (_reports.values.elementAt(index).moneyReport.banknotes ?? 0) + (_reports.values.elementAt(index).moneyReport.coins ?? 0),
+                            _reports.values.elementAt(index).moneyReport.banknotes ?? 0,
+                            _reports.values.elementAt(index).moneyReport.coins ?? 0,
                             _reports.values.elementAt(index).moneyReport.electronical ?? 0,
                             _reports.values.elementAt(index).moneyReport.service ?? 0,
                             _reports.values.elementAt(index).moneyReport.carsTotal ?? 0,
@@ -293,7 +294,8 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                       ..add(
                         createTableRow([
                           "Итого",
-                          _total.moneyReport.banknotes + _total.moneyReport.coins,
+                          _total.moneyReport.banknotes,
+                          _total.moneyReport.coins,
                           _total.moneyReport.electronical,
                           _total.moneyReport.service,
                           _total.moneyReport.carsTotal,

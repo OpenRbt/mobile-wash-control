@@ -220,7 +220,7 @@ class _MotorMenuState extends State<MotorMenu> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      "Пост ${index + 1}",
+                                      "Пост ${_stationStats[index].stationID}",
                                       style: TextStyle(
                                         fontSize: 18,
                                       ),

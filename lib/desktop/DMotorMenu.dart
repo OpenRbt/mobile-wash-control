@@ -238,7 +238,7 @@ class _DMotorMenuState extends State<DMotorMenu> {
                                       Container(
                                         height: 25,
                                         child: Text(
-                                          "Пост ${index + 1}",
+                                          "Пост ${_stationStats[index].stationID}",
                                           style: TextStyle(
                                             fontSize: 18,
                                           ),
