@@ -13,6 +13,14 @@ class _MotorMenuState extends State<MotorMenu> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
 
+  bool _ByDate = false;
+  DateTime _startDate = DateTime.now().add(
+    new Duration(days: -31),
+  );
+  DateTime _endDate = DateTime.now().add(
+    new Duration(days: 1, seconds: -1),
+  );
+
   bool _firstLoad = true;
   bool _updating = false;
 
@@ -21,16 +29,44 @@ class _MotorMenuState extends State<MotorMenu> {
 
   int _paddingValue = 0;
 
+  ScrollController _scrollController;
+
+  void initState() {
+    _scrollController = new ScrollController(keepScrollOffset: false);
+  }
+
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void GetMotorStats(SessionData sessionData) async {
     if (_updating) {
       return;
     }
     _updating = true;
     try {
-      var args = ArgStationStat();
-      _stationStats = await sessionData.client.stationStatCurrent(args: args);
+      _paddingValue = 0;
+      if (_ByDate) {
+        var args = ArgStationStatDates(
+          startDate: _startDate.millisecondsSinceEpoch ~/ 1000,
+          endDate: _endDate.millisecondsSinceEpoch ~/ 1000,
+        );
+        _stationStats = await sessionData.client.stationStatDates(args: args);
+      } else {
+        var args = ArgStationStat();
+        _stationStats = await sessionData.client.stationStatCurrent(args: args);
+      }
       _ProgramStat = List.filled(_stationStats.length, true);
       _stationStats.forEach((element) {
+        element.programStats.forEach((program) {
+          if (program?.programName != null) {
+            var tmp = program.programName.indexOf('-');
+            if (tmp < program.programName.length) {
+              program.programName = program.programName.substring(tmp + 1);
+            }
+          }
+        });
         element.relayStats.forEach((relay) {
           if ("${relay.switchedCount}".length > _paddingValue) {
             _paddingValue = "${relay.switchedCount}".length;
@@ -57,6 +93,84 @@ class _MotorMenuState extends State<MotorMenu> {
 
     final AppBar appBar = AppBar(
       title: Text("Моторесурс"),
+      actions: [
+        IconButton(
+          onPressed: () {
+            if (!_updating) GetMotorStats(sessionData);
+          },
+          icon: Icon(Icons.refresh),
+        ),
+        Icon(_ByDate ? Icons.calendar_today : null),
+        IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return StatefulBuilder(builder: (context, setState) {
+                      return AlertDialog(
+                        title: Text("Настройки отображения"),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("По датам: "),
+                                TextButton(
+                                  onPressed: () {
+                                    _ByDate = !_ByDate;
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                    "${_ByDate ? "Да" : "Нет"}",
+                                    style: TextStyle(color: _ByDate ? Colors.green : Colors.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Начальная дата: "),
+                                TextButton(
+                                  onPressed: () async {
+                                    await _selectStartDate(context);
+                                    setState(() {});
+                                  },
+                                  child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year}"),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Конечная дата: "),
+                                TextButton(
+                                  onPressed: () async {
+                                    await _selectEndDate(context);
+                                    setState(() {});
+                                  },
+                                  child: Text("${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              GetMotorStats(sessionData);
+                            },
+                            child: Text("Закрыть"),
+                          ),
+                        ],
+                      );
+                    });
+                  });
+            },
+            icon: Icon(Icons.settings))
+      ],
     );
 
     if (_firstLoad) {
@@ -70,234 +184,225 @@ class _MotorMenuState extends State<MotorMenu> {
       key: _scaffoldKey,
       appBar: appBar,
       drawer: prepareDrawer(context, Pages.Motors, sessionData),
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              await Future.delayed(
-                Duration(milliseconds: 500),
-              );
-              GetMotorStats(sessionData);
-            },
-            child: _stationStats.length > 0
-                ? Container(
-                    width: screenW,
+      body: _stationStats.length > 0
+          ? Container(
+              width: screenW,
+              height: screenH,
+              child: Column(
+                children: [
+                  Container(
                     height: screenH,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: screenH,
-                          child: ListView(children: [
-                            Container(
+                    width: screenW,
+                    child: RawScrollbar(
+                      thumbColor: Colors.grey,
+                      controller: _scrollController,
+                      isAlwaysShown: true,
+                      thickness: 10,
+                      radius: Radius.circular(5),
+                      child: ListView(
+                        controller: _scrollController,
+                        padding: EdgeInsets.all(0),
+                        physics: PageScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        children: List.generate(_stationStats.length, (index) {
+                          return Container(
+                            padding: EdgeInsets.all(8),
+                            child: Container(
                               height: screenH,
-                              width: screenW,
+                              width: screenW - 16,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(color: Colors.black, blurRadius: 2.5),
+                                ],
+                              ),
                               child: ListView(
-                                padding: EdgeInsets.all(0),
-                                physics: PageScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                children: List.generate(_stationStats.length, (index) {
-                                  return Container(
-                                    padding: EdgeInsets.all(8),
-                                    child: Container(
-                                      height: screenH - 100,
-                                      width: screenW - 16,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(color: Colors.black, blurRadius: 2.5),
-                                        ],
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      "Пост ${index + 1}",
+                                      style: TextStyle(
+                                        fontSize: 18,
                                       ),
-                                      child: ListView(
-                                        children: [
-                                          Container(
-                                            child: Text(
-                                              "Пост ${index + 1}",
-                                              style: TextStyle(
-                                                fontSize: 18,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
+                                          _ProgramStat[index] = true;
+                                          setState(() {});
+                                        },
+                                        child: Text(
+                                          "Статистика программ",
+                                          style: TextStyle(
+                                            color: _ProgramStat[index] ? Colors.green : null,
+                                            fontWeight: _ProgramStat[index] ? FontWeight.bold : null,
+                                          ),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          _ProgramStat[index] = false;
+                                          setState(() {});
+                                        },
+                                        child: Text(
+                                          "Статистика реле",
+                                          style: TextStyle(
+                                            color: !_ProgramStat[index] ? Colors.green : null,
+                                            fontWeight: !_ProgramStat[index] ? FontWeight.bold : null,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: _ProgramStat[index] ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.spaceEvenly,
+                                    children: !_ProgramStat[index]
+                                        ? [
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                "Общее время работы насоса",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                              textAlign: TextAlign.center,
                                             ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  _ProgramStat[index] = true;
-                                                  setState(() {});
-                                                },
-                                                child: Text(
-                                                  "Статистика программ",
-                                                  style: TextStyle(
-                                                    color: _ProgramStat[index] ? Colors.green : null,
-                                                    fontWeight: _ProgramStat[index] ? FontWeight.bold : null,
-                                                  ),
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                "${_SecondsToTime(_stationStats[index].pumpTimeOn)}",
+                                                textAlign: TextAlign.right,
+                                              ),
+                                            ),
+                                          ]
+                                        : [],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: _ProgramStat[index] ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.spaceEvenly,
+                                    children: _ProgramStat[index]
+                                        ? [
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                "Программа",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  _ProgramStat[index] = false;
-                                                  setState(() {});
-                                                },
-                                                child: Text(
-                                                  "Статистика реле",
-                                                  style: TextStyle(
-                                                    color: !_ProgramStat[index] ? Colors.green : null,
-                                                    fontWeight: !_ProgramStat[index] ? FontWeight.bold : null,
-                                                  ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                "Время работы",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: _ProgramStat[index] ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.spaceEvenly,
-                                            children: !_ProgramStat[index]
-                                                ? [
-                                                    Container(
-                                                      padding: EdgeInsets.all(5),
-                                                      child: Text(
-                                                        "Общее время работы насоса",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding: EdgeInsets.all(5),
-                                                      child: Text(
-                                                        "${_SecondsToTime(_stationStats[index].pumpTimeOn)}",
-                                                        textAlign: TextAlign.right,
-                                                      ),
-                                                    ),
-                                                  ]
-                                                : [],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: _ProgramStat[index] ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.spaceEvenly,
-                                            children: _ProgramStat[index]
-                                                ? [
-                                                    Container(
-                                                      padding: EdgeInsets.all(5),
-                                                      child: Text(
-                                                        "Программа",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding: EdgeInsets.all(5),
-                                                      child: Text(
-                                                        "Время работы",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ]
-                                                : [
-                                                    Container(
-                                                      padding: EdgeInsets.all(5),
-                                                      child: Text(
-                                                        "Реле",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding: EdgeInsets.all(5),
-                                                      child: Text(
-                                                        "Включений",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding: EdgeInsets.all(5),
-                                                      child: Text(
-                                                        "Время работы",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                          ),
-                                          Column(
-                                            children: _ProgramStat[index] ? ProgramsCollumn(index, screenW / 3) : RelayCollumn(index, screenW / 4),
-                                          ),
-                                          Container(
-                                              child: TextButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    title: Text(
-                                                      "Сбросить статистику",
-                                                      style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    content: Text("Вы уверены, что хотите сбросить статистику?"),
-                                                    actions: [
-                                                      TextButton(
-                                                          onPressed: () async {
-                                                            bool res = await ResetStats(_stationStats[index].stationID, sessionData);
-                                                            if (res) {
-                                                              GetMotorStats(sessionData);
-                                                            }
-                                                            Navigator.pop(context);
-                                                          },
-                                                          child: Text("Да")),
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(context);
-                                                          },
-                                                          child: Text("Нет"))
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Text(
+                                            ),
+                                          ]
+                                        : [
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                "Реле",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                "Включений",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                "Время работы",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                  ),
+                                  Column(
+                                    children: _ProgramStat[index] ? ProgramsCollumn(index, screenW / 3) : RelayCollumn(index, screenW / 4),
+                                  ),
+                                  Container(
+                                      child: TextButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text(
                                               "Сбросить статистику",
                                               style: TextStyle(
                                                 color: Colors.red,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                          )),
-                                        ],
+                                            content: Text("Вы уверены, что хотите сбросить статистику?"),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () async {
+                                                    bool res = await ResetStats(_stationStats[index].stationID, sessionData);
+                                                    if (res) {
+                                                      GetMotorStats(sessionData);
+                                                    }
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text("Да")),
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text("Нет"))
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Text(
+                                      "Сбросить статистику",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                  );
-                                }),
+                                  )),
+                                ],
                               ),
                             ),
-                          ]),
-                        ),
-                      ],
-                    ),
-                  )
-                : Container(
-                    height: screenH,
-                    width: screenW,
-                    child: Center(
-                      child: Text(
-                        "Нет статистики по моторесурсу",
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                          );
+                        }),
                       ),
                     ),
                   ),
-          );
-        },
-      ),
+                ],
+              ),
+            )
+          : Container(
+              height: screenH,
+              width: screenW,
+              child: Center(
+                child: Text(
+                  "Нет статистики по моторесурсу",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
     );
   }
 
@@ -381,5 +486,41 @@ class _MotorMenuState extends State<MotorMenu> {
     }
     res += "${seconds % 60} сек.";
     return res;
+  }
+
+  Future<Null> _selectStartDate(BuildContext context) async {
+    {
+      final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _startDate,
+        firstDate: DateTime(2020),
+        lastDate: DateTime.now(),
+      );
+
+      if (picked != null && picked != _startDate) {
+        _startDate = picked;
+      }
+      setState(() {});
+    }
+  }
+
+  Future<Null> _selectEndDate(BuildContext context) async {
+    {
+      final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _endDate,
+        firstDate: DateTime(2020),
+        lastDate: DateTime.now().add(
+          new Duration(days: 1),
+        ),
+      );
+
+      if (picked != null && picked != _endDate) {
+        _endDate = picked;
+        _endDate = _endDate.add(
+          Duration(days: 1, seconds: -1),
+        );
+      }
+    }
   }
 }

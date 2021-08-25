@@ -42,9 +42,8 @@ class _DAuthPageState extends State<DAuthPage> {
   void _authCheck() async {
     try {
       _sessionData = new SessionData(
-        DefaultApi(),
+        DefaultApi(ApiClient(basePath: _host)),
       );
-      _sessionData.client.apiClient.basePath = _host;
       _sessionData.client.apiClient.addDefaultHeader("Pin", pinController.text);
       var res = await _sessionData.client.getUser();
       _loadPage();

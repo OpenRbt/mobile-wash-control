@@ -12,3 +12,4 @@ export 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
 export 'package:mobile_wash_control/desktop/homePage/PostMenu.dart';
 export 'package:mobile_wash_control/desktop/programs/AddProgram.dart';
 export 'package:mobile_wash_control/desktop/programs/EditProgram.dart';
+export 'package:mobile_wash_control/desktop/DMotorMenu.dart';

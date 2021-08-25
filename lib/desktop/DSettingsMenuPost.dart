@@ -102,7 +102,7 @@ class _DSettingsMenuPostState extends State<DSettingsMenuPost> {
       if (!mounted) {
         return;
       }
-      _dropDownCardReader = res.cardReaderType ?? _dropDownCardReader;
+      _dropDownCardReader = res.cardReaderType.value ?? _dropDownCardReader;
       _inputControllers[0].text = res.host ?? _inputControllers[0].value.text;
       _inputControllers[1].text = res.port ?? _inputControllers[1].value.text;
 

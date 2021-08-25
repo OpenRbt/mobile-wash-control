@@ -160,22 +160,6 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
                       ),
                   ),
                 ),
-                SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    'Моторесурс',
-                    style: TextStyle(fontSize: 32),
-                  ),
-                ),
-                SizedBox(height: 5),
-                Center(
-                  child: Wrap(
-                    children: List.generate(
-                      12,
-                      (index) => createMoto(index + 1, width),
-                    ),
-                  ),
-                )
               ])
             ],
           );
@@ -318,53 +302,6 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
         }
       });
     }
-  }
-
-  Widget createMoto(int number, double width) {
-    return Column(children: [
-      Container(
-        width: width / 13,
-        height: 50,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
-        child: Center(
-          child: Text(
-            'пост ' + number.toString(),
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      ),
-      Container(
-        width: width / 13,
-        height: 50,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
-        child: Center(
-          child: Text(''),
-        ),
-      ),
-      Container(
-        width: width / 13,
-        height: 50,
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.black),
-          ),
-          color: Colors.white,
-          disabledColor: Colors.white,
-          onPressed: () {
-            print("Pressed " + number.toString() + " post reset button");
-          },
-          child: Text(
-            "сброс",
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      ),
-      SizedBox(height: 20)
-    ]);
   }
 
   TableRow createTableRow(List values) {

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
 
+import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/desktop/_DesktopPages.dart' as desktop;
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
@@ -26,8 +27,10 @@ import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
 
 import 'package:wifi/wifi.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
+  Intl.defaultLocale = "ru_RU";
   runApp(
     MyApp(),
   );
@@ -44,6 +47,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: Platform.isAndroid ? PagesRoutes.routes["MOBILE"] : PagesRoutes.routes["DESKTOP"],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('ru')
+      ],
     );
   }
 }
@@ -403,6 +413,7 @@ class PagesRoutes {
       "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
       "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
       "/dekstop/incassation": (context) => desktop.DIncassationHistory(),
+      "/desktop/motors":(context) => desktop.DMotorMenu(),
     },
     "MOBILE": {
       "/": (context) => MyHomePage(title: "Главная страница"),

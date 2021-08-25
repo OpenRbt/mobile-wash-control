@@ -67,7 +67,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       if (!mounted) {
         return;
       }
-      _relayboardValue = res.relayBoard ?? "localGPIO";
+      _relayboardValue = res.relayBoard.value ?? "localGPIO";
       _inputControllers[2].text = res.name ?? "";
       _inputControllers[3].text = res.hash ?? "";
       _inputControllers[4].text = res.preflightSec?.toString() ?? "";
@@ -103,7 +103,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       if (!mounted) {
         return;
       }
-      _dropDownCardReader = res.cardReaderType ?? _dropDownCardReader;
+      _dropDownCardReader = res.cardReaderType.value ?? _dropDownCardReader;
       _inputControllers[0].text = res.host ?? _inputControllers[0].value.text;
       _inputControllers[1].text = res.port ?? _inputControllers[1].value.text;
 
