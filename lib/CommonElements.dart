@@ -438,3 +438,7 @@ Widget DGetDrawer(double height, double width, BuildContext context, Pages _curr
     ),
   );
 }
+
+class GlobalData{
+  static int AddServiceValue = 10;
+}

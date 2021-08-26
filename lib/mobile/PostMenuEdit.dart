@@ -121,11 +121,19 @@ class _EditPostMenuState extends State<EditPostMenu> {
     setState(() {});
   }
 
+  void _changeServiceValue({int value = 10}) {
+    GlobalData.AddServiceValue += value;
+    if (GlobalData.AddServiceValue < 0) {
+      GlobalData.AddServiceValue = 0;
+    }
+    setState(() {});
+  }
+
   void _addServiceMoney(PostMenuArgs postMenuArgs) async {
     try {
       var args = ArgAddServiceAmount(
         hash: postMenuArgs.hash,
-        amount: 10,
+        amount: GlobalData.AddServiceValue,
       );
       var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
     } catch (e) {
@@ -243,12 +251,13 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   Widget _getMainColumn(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
     return new Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(5),
           child: SizedBox(
             height: 50,
-            width: isPortrait ? screenW / 2 - 20 : ((_buttons?.length ?? 0) > 0 ? screenW / 3 - 20 : screenW - 100),
+            width: isPortrait ? screenW / 2 : ((_buttons?.length ?? 0) > 0 ? screenW / 3 - 20 : screenW - 100),
             child: DecoratedBox(
               child: FittedBox(
                 fit: BoxFit.fitHeight,
@@ -264,182 +273,182 @@ class _EditPostMenuState extends State<EditPostMenu> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 50,
-                width: isPortrait ? 150 : (screenW / 3 - 20) / 6 * 4,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "10 руб",
-                    style: TextStyle(fontSize: 36),
-                  ),
-                ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove_circle_outline),
+              color: Colors.lightGreen,
+              splashColor: Colors.lightGreenAccent,
+              onPressed: () {
+                _changeServiceValue(value: -10);
+              },
+            ),
+            Container(
+              child: Text(
+                "${GlobalData.AddServiceValue} руб",
+                style: TextStyle(fontSize: 36),
               ),
-              SizedBox(
-                height: 50,
-                width: isPortrait ? 50 : (screenW / 3 - 20) / 6,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: IconButton(
-                      iconSize: 75,
-                      icon: Icon(Icons.add_circle_outline),
+            ),
+            IconButton(
+              icon: Icon(Icons.add_circle_outline),
+              color: Colors.lightGreen,
+              splashColor: Colors.lightGreenAccent,
+              onPressed: () {
+                _changeServiceValue(value: 10);
+              },
+            ),
+          ],
+        ),
+        Container(
+          padding: EdgeInsets.all(5),
+          width: isPortrait ? screenW / 2 : screenW / 3 - 20,
+          child: RaisedButton(
+            color: Colors.lightGreen,
+            textColor: Colors.white,
+            disabledColor: Colors.grey,
+            disabledTextColor: Colors.black,
+            padding: EdgeInsets.all(8.0),
+            splashColor: Colors.lightGreenAccent,
+            child: Text(
+              "Отправить",
+              style: TextStyle(fontSize: 15),
+            ),
+            onPressed: () {
+          _addServiceMoney(postMenuArgs);
+            },
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(5),
+          width: isPortrait ? screenW / 2 : screenW / 3 - 20,
+          child: RaisedButton(
+            color: Colors.lightGreen,
+            textColor: Colors.white,
+            disabledColor: Colors.grey,
+            disabledTextColor: Colors.black,
+            padding: EdgeInsets.all(8.0),
+            splashColor: Colors.lightGreenAccent,
+            child: Text(
+              "Инкассировать",
+              style: TextStyle(fontSize: 15),
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Инакссировать?"),
+                  content: Text("Вы уверены?"),
+                  actionsPadding: EdgeInsets.all(10),
+                  actions: [
+                    RaisedButton(
                       color: Colors.lightGreen,
-                      splashColor: Colors.lightGreenAccent,
-                      onPressed: () {
-                        _addServiceMoney(postMenuArgs);
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: SizedBox(
-            height: 50,
-            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-            child: RaisedButton(
-              color: Colors.lightGreen,
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
-              padding: EdgeInsets.all(8.0),
-              splashColor: Colors.lightGreenAccent,
-              child: Text(
-                "Инкассировать",
-                style: TextStyle(fontSize: 15),
-              ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text("Инакссировать?"),
-                    content: Text("Вы уверены?"),
-                    actionsPadding: EdgeInsets.all(10),
-                    actions: [
-                      RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        onPressed: () async {
-                          try {
-                            var args = ArgSaveCollection(
-                              id: postMenuArgs.postID,
-                            );
-                            var res = await postMenuArgs.sessionData.client.saveCollection(args);
-                          } on ApiException catch (e) {
-                            if (e.code == 401) {
-                              print("Exception when calling DefaultApi->/save-collection: $e\n");
-                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Нет доступа", Colors.red);
-                            } else {
-                              showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-                            }
-                          } catch (e) {
-                            if (!(e is ApiException)) {
-                              print("Other Exception: $e\n");
-                            }
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      onPressed: () async {
+                        try {
+                          var args = ArgSaveCollection(
+                            id: postMenuArgs.postID,
+                          );
+                          var res = await postMenuArgs.sessionData.client.saveCollection(args);
+                        } on ApiException catch (e) {
+                          if (e.code == 401) {
+                            print("Exception when calling DefaultApi->/save-collection: $e\n");
+                            showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Нет доступа", Colors.red);
+                          } else {
+                            showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
                           }
-                          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пост проинкассирован", Colors.green);
-                          Navigator.pop(context);
-                        },
-                        child: Text("Да"),
-                      ),
-                      RaisedButton(
-                        color: Colors.white,
-                        textColor: Colors.black,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text("Нет"),
-                      )
-                    ],
-                  ),
+                        } catch (e) {
+                          if (!(e is ApiException)) {
+                            print("Other Exception: $e\n");
+                          }
+                        }
+                        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пост проинкассирован", Colors.green);
+                        Navigator.pop(context);
+                      },
+                      child: Text("Да"),
+                    ),
+                    RaisedButton(
+                      color: Colors.white,
+                      textColor: Colors.black,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text("Нет"),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(5),
+          width: isPortrait ? screenW / 2 : screenW / 3 - 20,
+          child: RaisedButton(
+            color: Colors.lightGreen,
+            textColor: Colors.white,
+            disabledColor: Colors.grey,
+            disabledTextColor: Colors.black,
+            padding: EdgeInsets.all(8.0),
+            splashColor: Colors.lightGreenAccent,
+            child: Text(
+              "Открыть дверь",
+              style: TextStyle(fontSize: 15),
+            ),
+            onPressed: () {
+              try {
+                var args = ArgOpenStation(
+                  stationID: postMenuArgs.postID,
                 );
-              },
-            ),
+                var res = postMenuArgs.sessionData.client.openStation(args);
+              } catch (e) {
+                print("Exception when calling DefaultApi->/open-station: $e\n");
+                showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+              }
+            },
           ),
         ),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: SizedBox(
-            height: 50,
-            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-            child: RaisedButton(
-              color: Colors.lightGreen,
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
-              padding: EdgeInsets.all(8.0),
-              splashColor: Colors.lightGreenAccent,
-              child: Text(
-                "Открыть дверь",
-                style: TextStyle(fontSize: 15),
-              ),
-              onPressed: () {
-                try {
-                  var args = ArgOpenStation(
-                    stationID: postMenuArgs.postID,
-                  );
-                  var res = postMenuArgs.sessionData.client.openStation(args);
-                } catch (e) {
-                  print("Exception when calling DefaultApi->/open-station: $e\n");
-                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-                }
-              },
+        Container(
+          padding: EdgeInsets.all(5),
+          width: isPortrait ? screenW / 2 : screenW / 3 - 20,
+          child: RaisedButton(
+            color: Colors.lightGreen,
+            textColor: Colors.white,
+            disabledColor: Colors.grey,
+            disabledTextColor: Colors.black,
+            padding: EdgeInsets.all(8.0),
+            splashColor: Colors.lightGreenAccent,
+            child: Text(
+              "История инкассаций",
+              style: TextStyle(fontSize: 15),
             ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: SizedBox(
-            height: 50,
-            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-            child: RaisedButton(
-              color: Colors.lightGreen,
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
-              padding: EdgeInsets.all(8.0),
-              splashColor: Colors.lightGreenAccent,
-              child: Text(
-                "История инкассаций",
-                style: TextStyle(fontSize: 15),
-              ),
-              onPressed: () {
-                var args = IncassationHistoryArgs(postMenuArgs.postID, postMenuArgs.sessionData);
-                if (_updateBalanceTimer.isActive) {
-                  _updateBalanceTimer.cancel();
-                }
-                Navigator.pushNamed(context, "/mobile/incassation", arguments: args).then((value) {
-                  _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-                    _getBalance(postMenuArgs);
-                  });
-                  setState(() {});
+            onPressed: () {
+              var args = IncassationHistoryArgs(postMenuArgs.postID, postMenuArgs.sessionData);
+              if (_updateBalanceTimer.isActive) {
+                _updateBalanceTimer.cancel();
+              }
+              Navigator.pushNamed(context, "/mobile/incassation", arguments: args).then((value) {
+                _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
+                  _getBalance(postMenuArgs);
                 });
-
                 setState(() {});
-              },
-            ),
+              });
+
+              setState(() {});
+            },
           ),
         ),
         Padding(
           padding: EdgeInsets.all(5),
           child: SizedBox(
               height: 20,
-              width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
+              width: isPortrait ? screenW / 2 : screenW / 3 - 20,
               child: Center(
                 child: Text(
                   "IP поста: ${postMenuArgs.ip}",
