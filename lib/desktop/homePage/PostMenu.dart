@@ -5,6 +5,7 @@ import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/PagesUtils/PagesArgs.dart';
 import 'package:mobile_wash_control/PagesUtils/ServerRequests/HomepageRequests.dart';
 import 'package:mobile_wash_control/client/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostMenu extends StatefulWidget {
   @override
@@ -132,12 +133,15 @@ class _PostMenuState extends State<PostMenu> {
     }
   }
 
-  void _changeServiceValue({int value = 10}) {
+  void _changeServiceValue({int value = 10}) async {
     GlobalData.AddServiceValue += value;
     if (GlobalData.AddServiceValue < 0) {
       GlobalData.AddServiceValue = 0;
     }
     setState(() {});
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt("AddServiceValue", GlobalData.AddServiceValue);
   }
 
   @override

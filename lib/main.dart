@@ -29,7 +29,7 @@ import 'package:wifi/wifi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
+void main() async {
   Intl.defaultLocale = "ru_RU";
   runApp(
     MyApp(),

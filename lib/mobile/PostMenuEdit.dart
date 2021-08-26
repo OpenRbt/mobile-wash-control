@@ -4,6 +4,7 @@ import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'dart:async';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostMenuArgs {
   final int postID;
@@ -121,12 +122,15 @@ class _EditPostMenuState extends State<EditPostMenu> {
     setState(() {});
   }
 
-  void _changeServiceValue({int value = 10}) {
+  void _changeServiceValue({int value = 10}) async {
     GlobalData.AddServiceValue += value;
     if (GlobalData.AddServiceValue < 0) {
       GlobalData.AddServiceValue = 0;
     }
     setState(() {});
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt("AddServiceValue", GlobalData.AddServiceValue);
   }
 
   void _addServiceMoney(PostMenuArgs postMenuArgs) async {
@@ -317,7 +321,7 @@ class _EditPostMenuState extends State<EditPostMenu> {
               style: TextStyle(fontSize: 15),
             ),
             onPressed: () {
-          _addServiceMoney(postMenuArgs);
+              _addServiceMoney(postMenuArgs);
             },
           ),
         ),

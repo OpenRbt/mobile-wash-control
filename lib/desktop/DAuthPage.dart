@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/client/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DAuthPage extends StatefulWidget {
   @override
@@ -35,7 +36,10 @@ class _DAuthPageState extends State<DAuthPage> {
   String _host;
   var _sessionData;
 
-  void _loadPage() {
+  void _loadPage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
+    GlobalData.AddServiceValue = addServiceValue;
     Navigator.pushReplacementNamed(context, "/desktop/home", arguments: _sessionData);
   }
 
