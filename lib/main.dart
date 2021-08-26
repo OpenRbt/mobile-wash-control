@@ -1,19 +1,14 @@
 import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
+
+import 'package:intl/intl.dart';
+import 'package:mobile_wash_control/desktop/_DesktopPages.dart' as desktop;
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/desktop/DAccountsMenu.dart';
-import 'package:mobile_wash_control/desktop/DAccountsMenuAdd.dart';
-import 'package:mobile_wash_control/desktop/DAccountsMenuEdit.dart';
-import 'package:mobile_wash_control/desktop/DEditPost.dart';
-import 'package:mobile_wash_control/desktop/DHomePage.dart';
-import 'package:mobile_wash_control/desktop/DProgramsMenu.dart';
-import 'package:mobile_wash_control/desktop/DSettingsMenu.dart';
-import 'package:mobile_wash_control/desktop/DSettingsMenuPost.dart';
-import 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
 import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/MotorMenu.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/SettingsDefaultConfigs.dart';
@@ -28,14 +23,14 @@ import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';
 import 'package:mobile_wash_control/mobile/ServersPage.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
-import 'package:mobile_wash_control/desktop/DAuthPage.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
-import 'package:mobile_wash_control/desktop/DIncassationHistory.dart';
 
 import 'package:wifi/wifi.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
+  Intl.defaultLocale = "ru_RU";
   runApp(
     MyApp(),
   );
@@ -51,40 +46,14 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: "/",
-      routes: {
-        "/mobile/auth": (context) => AuthPage(),
-        "/": (context) => MyHomePage(title: "Главная страница"),
-        "/testScan": (context) => ServersPage(
-              servers: null,
-              serversValid: [],
-            ),
-        "/mobile/home": (context) => HomePage(),
-        "/mobile/editPost": (context) => EditPostMenu(),
-        "/mobile/programs": (context) => ProgramsMenu(),
-        "/mobile/programs/edit": (context) => ProgramMenuEdit(),
-        "/mobile/programs/add": (context) => ProgramMenuAdd(),
-        "/mobile/settings": (context) => SettingsMenu(),
-        "/mobile/settings/post": (context) => SettingsMenuPost(),
-        "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
-        "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
-        "/mobile/statistics": (context) => StatisticsMenu(),
-        "/mobile/posts": (context) => PostsMenu(),
-        "/mobile/accounts": (context) => AccountsMenu(),
-        "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
-        "/mobile/accounts/add": (context) => AccountsMenuAdd(),
-        "/mobile/incassation": (context) => IncassationHistory(),
-        "/desktop/auth": (context) => DAuthPage(),
-        "/desktop/home": (context) => DHomePage(),
-        "/desktop/home/edit": (context) => DEditPostMenu(),
-        "/desktop/statistics": (context) => DStatisticsPage(),
-        "/desktop/accounts": (context) => DAccountsMenu(),
-        "/desktop/accounts/edit": (context) => DAccountsMenuEdit(),
-        "/desktop/accounts/add": (context) => DAccountsMenuAdd(),
-        "/desktop/programs":(context) => DProgramsMenu(),
-        "/desktop/settings": (context) => DSettingsMenu(),
-        "/desktop/settings/post": (context) => DSettingsMenuPost(),
-        "/dekstop/incassation": (context) => DIncassationHistory(),
-      },
+      routes: Platform.isAndroid ? PagesRoutes.routes["MOBILE"] : PagesRoutes.routes["DESKTOP"],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('ru')
+      ],
     );
   }
 }
@@ -125,13 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
     client.connectionTimeout = Duration(milliseconds: 100);
 
     if (Platform.isLinux) {
-      List<NetworkInterface> interfaces =
-          await NetworkInterface.list(type: InternetAddressType.IPv4);
+      List<NetworkInterface> interfaces = await NetworkInterface.list(type: InternetAddressType.IPv4);
       print(interfaces);
-      NetworkInterface target = interfaces.firstWhere(
-          (element) =>
-              element.name.contains("en") || element.name.contains("wlan"),
-          orElse: () {
+      NetworkInterface target = interfaces.firstWhere((element) => element.name.contains("en") || element.name.contains("wlan"), orElse: () {
         return null;
       });
       if (target != null) {
@@ -143,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
         var subIPS = List.generate(256, (index) {
           return "$index";
         });
-        if (quick){
+        if (quick) {
           client.connectionTimeout = Duration(seconds: 60);
           subIPS.forEach((element) async {
             try {
@@ -156,8 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
                 return;
               }
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -181,25 +145,24 @@ class _MyHomePageState extends State<MyHomePage> {
           await Future.delayed(Duration(seconds: 50, milliseconds: 100));
           print("FOUND : ${_servers.length}");
         } else {
-        await Future.forEach(subIPS, (element) async {
-          print("Try to http://${_scanIP}.${element}:8020/ping");
-          try {
-            setState(() {
-              _pos++;
-            });
-            final request =
-                await client.get("${_scanIP}.${element}", 8020, "/ping");
-            final response = await request.close();
-            if (response.statusCode == 200) {
-              if (mounted) {
-                _servers.add("${_scanIP}.${element}");
-                setState(() {});
+          await Future.forEach(subIPS, (element) async {
+            print("Try to http://${_scanIP}.${element}:8020/ping");
+            try {
+              setState(() {
+                _pos++;
+              });
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final response = await request.close();
+              if (response.statusCode == 200) {
+                if (mounted) {
+                  _servers.add("${_scanIP}.${element}");
+                  setState(() {});
+                }
               }
-            }
-          } catch (e) {}
-        });
+            } catch (e) {}
+          });
         }
-        
+
         if (mounted)
           setState(() {
             _canScan = true;
@@ -237,8 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
                 return;
               }
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -268,8 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 _pos++;
               });
-              final request =
-                  await client.get("${_scanIP}.${element}", 8020, "/ping");
+              final request = await client.get("${_scanIP}.${element}", 8020, "/ping");
               final response = await request.close();
               if (response.statusCode == 200) {
                 if (mounted) {
@@ -331,8 +292,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             border: Border.all(color: Colors.black26, width: 2),
                           ),
                           child: LinearProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation(Colors.lightGreen),
+                            valueColor: AlwaysStoppedAnimation(Colors.lightGreen),
                             backgroundColor: Colors.black12,
                             value: _pos / 256,
                           ),
@@ -353,8 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       color: _canScan ? Colors.lightGreen : Colors.yellow,
                       splashColor: Colors.lightGreenAccent,
-                      child: new Text(
-                          _canScan ? ("Поиск серверов") : "Сканирование"),
+                      child: new Text(_canScan ? ("Поиск серверов") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(false);
                       },
@@ -362,8 +321,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       color: _canScan ? Colors.lightGreen : Colors.yellow,
                       splashColor: Colors.lightGreenAccent,
-                      child:
-                          new Text(_canScan ? ("QUICK SCAN") : "Сканирование"),
+                      child: new Text(_canScan ? ("QUICK SCAN") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(true);
                       },
@@ -404,17 +362,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: () {
                           if (Platform.isLinux) {
-                            var args = DAuthArgs("http://" +
-                                _servers.elementAt(index) +
-                                ":8020");
-                            Navigator.pushNamed(context, "/desktop/auth",
-                                arguments: args);
+                            var args = desktop.DAuthArgs("http://" + _servers.elementAt(index) + ":8020");
+                            Navigator.pushNamed(context, "/desktop/auth", arguments: args);
                           } else {
-                            var args = AuthArgs("http://" +
-                                _servers.elementAt(index) +
-                                ":8020");
-                            Navigator.pushNamed(context, "/mobile/auth",
-                                arguments: args);
+                            var args = AuthArgs("http://" + _servers.elementAt(index) + ":8020");
+                            Navigator.pushNamed(context, "/mobile/auth", arguments: args);
                           }
                         },
                       );
@@ -426,4 +378,62 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+}
+
+/*
+TODO:
+  * REWORK:
+    DProgramsMenu
+    DProgramsMenuEdit
+    DProgramsMenuAdd
+    DSettingsMenu
+
+  * Layout Fixes:
+    DAccountsMenuAdd
+    DAccountsMenuEdit
+    DStatisticsPage
+    DProgramsMenu
+ */
+class PagesRoutes {
+  static final Map<String, Map<String, Widget Function(BuildContext)>> routes = {
+    "DESKTOP": {
+      "/": (context) => MyHomePage(title: "Главная страница"),
+      "/desktop/auth": (context) => desktop.DAuthPage(),
+      "/desktop/home": (context) => desktop.DHomePage(),
+      "/desktop/home/edit": (context) => desktop.PostMenu(),
+      "/desktop/statistics": (context) => desktop.DStatisticsPage(),
+      "/desktop/accounts": (context) => desktop.DAccountsMenu(),
+      "/desktop/accounts/edit": (context) => desktop.DAccountsMenuEdit(),
+      "/desktop/accounts/add": (context) => desktop.DAccountsMenuAdd(),
+      "/desktop/programs": (context) => desktop.DProgramsMenu(),
+      "/desktop/programs/add": (context) => desktop.AddProgramPage(),
+      "/desktop/programs/edit": (context) => desktop.EditProgramPage(),
+      "/desktop/settings": (context) => desktop.DSettingsMenu(),
+      "/desktop/settings/post": (context) => desktop.DSettingsMenuPost(),
+      "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
+      "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
+      "/dekstop/incassation": (context) => desktop.DIncassationHistory(),
+      "/desktop/motors":(context) => desktop.DMotorMenu(),
+    },
+    "MOBILE": {
+      "/": (context) => MyHomePage(title: "Главная страница"),
+      "/mobile/auth": (context) => AuthPage(),
+      "/mobile/home": (context) => HomePage(),
+      "/mobile/editPost": (context) => EditPostMenu(),
+      "/mobile/programs": (context) => ProgramsMenu(),
+      "/mobile/programs/edit": (context) => ProgramMenuEdit(),
+      "/mobile/programs/add": (context) => ProgramMenuAdd(),
+      "/mobile/settings": (context) => SettingsMenu(),
+      "/mobile/settings/post": (context) => SettingsMenuPost(),
+      "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
+      "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
+      "/mobile/statistics": (context) => StatisticsMenu(),
+      "/mobile/motors": (context) => MotorMenu(),
+      "/mobile/posts": (context) => PostsMenu(),
+      "/mobile/accounts": (context) => AccountsMenu(),
+      "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
+      "/mobile/accounts/add": (context) => AccountsMenuAdd(),
+      "/mobile/incassation": (context) => IncassationHistory(),
+    }
+  };
 }

@@ -45,7 +45,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
       if (!mounted) {
         return;
       }
-      _dropDownValue = res.tax;
+      _dropDownValue = res.tax.value;
       _inputControllers[0].text = res.receiptItemName;
       _inputControllers[1].text = res.cashier;
       _inputControllers[2].text = res.cashierINN;
@@ -58,22 +58,42 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
   void _setKasse(SessionData sessionData, BuildContext context) async {
     _inUpdate = true;
     try {
-      if (_inputControllers[1].value.text.length > 0 &&
-          _inputControllers[2].value.text.length != 12) {
+      if (_inputControllers[1].value.text.length > 0 && _inputControllers[2].value.text.length != 12) {
         throw Exception("");
       }
 
       var args = KasseConfig();
-      args.tax = _dropDownValue;
+      switch (_dropDownValue) {
+        case "TAX_VAT110":
+          {
+            args.tax = KasseConfigTaxEnum.vAT110;
+            break;
+          }
+        case "TAX_VAT0":
+          {
+            args.tax = KasseConfigTaxEnum.vAT0;
+            break;
+          }
+        case "TAX_NO":
+          {
+            args.tax = KasseConfigTaxEnum.NO;
+            break;
+          }
+        case "TAX_VAT120":
+          {
+            args.tax = KasseConfigTaxEnum.vAT120;
+            break;
+          }
+      }
       args.receiptItemName = _inputControllers[0].value.text;
       args.cashier = _inputControllers[1].value.text;
       args.cashierINN = _inputControllers[2].value.text;
 
       var res = await sessionData.client.setKasse(args);
-      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Настройки кассы сохрианены", Colors.green);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Настройки кассы сохрианены", Colors.green);
     } catch (e) {
       print("Exception when calling DefaultApi->set-kasse: $e\n");
-      showInfoSnackBar(_scaffoldKey,_isSnackBarActive, "Не удалось сохранить настройки кассы", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось сохранить настройки кассы", Colors.red);
     }
     _inUpdate = false;
   }
@@ -109,9 +129,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
                         height: 75,
                         width: screenW / 3,
                         child: Center(
-                          child: Text("TAX",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.center),
+                          child: Text("TAX", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                         ),
                       ),
                       SizedBox(
@@ -142,9 +160,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
                         height: 75,
                         width: screenW / 3,
                         child: Center(
-                          child: Text("ReceiptItem",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.center),
+                          child: Text("ReceiptItem", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                         ),
                       ),
                       SizedBox(
@@ -169,9 +185,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
                         height: 75,
                         width: screenW / 3,
                         child: Center(
-                          child: Text("Cashier",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.center),
+                          child: Text("Cashier", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                         ),
                       ),
                       SizedBox(
@@ -196,9 +210,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
                         height: 75,
                         width: screenW / 3,
                         child: Center(
-                          child: Text("CashierINN",
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.center),
+                          child: Text("CashierINN", style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
                         ),
                       ),
                       SizedBox(

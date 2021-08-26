@@ -13,17 +13,35 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageData {
-  final int id;
-  final String name;
-  final String ip;
-  final String hash;
-  final String status;
-  final String info;
-  final int currentBalance;
+  int id;
+  String name;
+  String ip;
+  String hash;
+  String status;
+  String info;
+  int currentBalance;
+  String currentProgramName = "";
   int currentProgramID;
 
-  HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info,
-      this.currentBalance, this.currentProgramID);
+  HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info, this.currentBalance, this.currentProgramName, this.currentProgramID);
+  HomePageData.fromStationStatus(StationStatus status) {
+    this.id = status.id ?? 0;
+    this.ip = status.ip ?? "___.___.___.___";
+    this.name = status.name ?? "";
+    this.hash = status.hash ?? "";
+    this.status = status.status?.value ?? "";
+    this.info = status.info ?? "";
+    this.currentBalance = status.currentBalance ?? 0;
+    this.currentProgramID = status.currentProgram ?? 0;
+    if (status?.currentProgramName != null) {
+      var tmp = status.currentProgramName.indexOf('-');
+      if (tmp < status.currentProgramName.length) {
+        this.currentProgramName = status.currentProgramName.substring(tmp + 1);
+      } else {
+        this.currentProgramName = status.currentProgramName;
+      }
+    }
+  }
 }
 
 class _HomePageState extends State<HomePage> {
@@ -31,61 +49,23 @@ class _HomePageState extends State<HomePage> {
   var _isSnackBarActive = ValueWrapper(false);
 
   bool _firstLoad = true;
-  List<HomePageData> _homePageData = List.generate(12, (index) {
-    return HomePageData(-1, "Loading...", "...", "...", "...", "...", -1, -1);
-  });
+  List<HomePageData> _homePageData = List();
 
   Timer _updateTimer;
-  Timer _programsTimer;
-
-  List<Program> _programs = List();
 
   void initState() {
     super.initState();
-  }
-
-  void _getPrograms(SessionData sessionData) async {
-    _programsTimer.cancel();
-    try {
-      if (!mounted) {
-        return;
-      }
-      var args14 = ProgramsArgs();
-      _programs = await sessionData.client.programs(args14);
-    } catch (e) {
-      print("Exception when calling DefaultApi->programs in HomePage: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
-    }
-    Future.delayed(Duration(seconds: 500), () {
-      _programsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
-        _getPrograms(sessionData);
-      });
-    });
   }
 
   void _getStations(SessionData sessionData) async {
     bool redraw = false;
     _updateTimer.cancel();
     try {
-      if (!mounted) {
-        return;
-      }
       var res = await sessionData.client.status();
-      res.stations =
-          res.stations.where((element) => element.id != null).toList();
+      res.stations = res.stations.where((element) => element.hash != null).toList();
       var tmpHomepage = List.generate((res.stations.length), (index) {
-        return HomePageData(
-            res.stations[index].id ?? index + 1,
-            res.stations[index].name ?? "Station ${index + 1}",
-            res.stations[index].ip ?? "",
-            res.stations[index].hash ?? "",
-            res.stations[index].status.value ?? "",
-            res.stations[index].info ?? "",
-            res.stations[index].currentBalance ?? 0,
-            res.stations[index].currentProgram ?? -1);
+        return HomePageData.fromStationStatus(res.stations[index]);
       });
-
       tmpHomepage.sort(
         (a, b) => a.id.compareTo(b.id),
       );
@@ -93,15 +73,13 @@ class _HomePageState extends State<HomePage> {
       if (redraw) _homePageData = tmpHomepage;
     } catch (e) {
       print("Exception when calling DefaultApi->Status in HomePage: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
-    Future.delayed(Duration(milliseconds: 500), () {
-      if (!_updateTimer.isActive) {
-        _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-          _getStations(sessionData);
-        });
-      }
+    if (!mounted) {
+      return;
+    }
+    _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _getStations(sessionData);
     });
     if (redraw) setState(() {});
   }
@@ -110,13 +88,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
     if (_firstLoad) {
-      _getStations(sessionData);
-      _getPrograms(sessionData);
       _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
         _getStations(sessionData);
-      });
-      _programsTimer = Timer.periodic(Duration(seconds: 10), (timer) {
-        _getPrograms(sessionData);
       });
       _firstLoad = false;
     }
@@ -138,115 +111,107 @@ class _HomePageState extends State<HomePage> {
             mainAxisSpacing: 10,
             crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
             childAspectRatio: 1,
-            children: List.generate(_homePageData?.length ?? 0, (index) {
-              var activeProgramIndex = _homePageData[index].currentProgramID;
-
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 60,
-                    width: (screenW -
-                        (orientation == Orientation.portrait ? 3 : 5) * 10),
-                    child: FlatButton(
-                      color: _homePageData[index].status == "online"
-                          ? Colors.lightGreen
-                          : Colors.red,
-                      highlightColor: _homePageData[index].status == "online"
-                          ? Colors.lightGreenAccent
-                          : Colors.redAccent,
-                      disabledColor: Colors.red,
-                      disabledTextColor: Colors.black,
-                      onPressed: _homePageData[index].id == -1
-                          ? null
-                          : () {
-                              var args = PostMenuArgs(
-                                  _homePageData[index].id,
-                                  _homePageData[index].ip,
-                                  _homePageData[index].hash,
-                                  _homePageData[index].currentProgramID,
-                                  _programs,
-                                  sessionData);
-                              if (_updateTimer.isActive) {
-                                _updateTimer.cancel();
-                              }
-                              if (_programsTimer.isActive) {
-                                _programsTimer.cancel();
-                              }
-                              Navigator.pushNamed(context, "/mobile/editPost",
-                                      arguments: args)
-                                  .then((value) {
-                                _getStations(sessionData);
-                                _updateTimer = Timer.periodic(
-                                    Duration(seconds: 1), (timer) {
-                                  _getStations(sessionData);
-                                });
-                                _programsTimer = Timer.periodic(
-                                    Duration(seconds: 10), (timer) {
-                                  _getPrograms(sessionData);
-                                });
-                                setState(() {});
-                              });
-                            },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(_homePageData[index].name),
-                          Text(
-                              "Баланс: ${_homePageData[index].currentBalance ?? '__'}"),
-                          Text("IP: ${_homePageData[index].ip}"),
-                        ],
-                      ),
+            children: List.generate(
+              _homePageData?.length ?? 0,
+              (index) {
+                bool isOnline = _homePageData[index].status == "online";
+                return Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black,
+                          blurRadius: 1,
+                        ),
+                      ],
+                      color: Colors.white,
                     ),
-                  ),
-                  SizedBox(
-                    height: 115,
-                    child: DecoratedBox(
-                      child: Center(
-                        child: SizedBox(
-                          height: 100,
-                          child: DecoratedBox(
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Текущая программа",
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  Divider(
-                                    color: Colors.grey,
-                                    thickness: 3,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Text(activeProgramIndex == -1
-                                        ? "Idle"
-                                        : _programs.firstWhere(
-                                                (element) =>
-                                                    element.id ==
-                                                    activeProgramIndex,
-                                                orElse: () {
-                                              return null;
-                                            })?.name ??
-                                            "Загрузка..."),
-                                  ),
-                                ],
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      children: [
+                        Flex(
+                          direction: Axis.horizontal,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                color: isOnline ? Colors.green : Colors.red,
+                                child: Column(
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        var args = PostMenuArgs(
+                                          _homePageData[index].id,
+                                          _homePageData[index].ip,
+                                          _homePageData[index].hash,
+                                          _homePageData[index].currentProgramID,
+                                          sessionData,
+                                        );
+                                        if (_updateTimer.isActive) {
+                                          _updateTimer.cancel();
+                                        }
+                                        Navigator.pushNamed(context, "/mobile/editPost", arguments: args).then((value) {
+                                          _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+                                            _getStations(sessionData);
+                                          });
+                                          setState(() {});
+                                        });
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            _homePageData[index].name,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                          Divider(
+                                            thickness: 2,
+                                          ),
+                                          Text(
+                                            "Баланс: ${_homePageData[index].currentBalance}",
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                          Text(
+                                            "IP: ${_homePageData[index].ip}",
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.grey, width: 3),
-                            ),
-                          ),
+                          ],
                         ),
-                      ),
-                      decoration: BoxDecoration(color: Colors.grey),
+                        Flex(
+                          direction: Axis.horizontal,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.only(top: 5, bottom: 5),
+                                color: Colors.white,
+                                child: Column(
+                                  children: [
+                                    Text("Текущая программа:"),
+                                    Divider(
+                                      thickness: 3,
+                                    ),
+                                    Text(
+                                      _homePageData[index].currentProgramID == 0 ? (isOnline ? "Ожидание клиента" : "") : _homePageData[index].currentProgramName ?? "Загрузка...",
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  )
-                ],
-              );
-            }),
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
@@ -257,9 +222,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     if (_updateTimer != null && _updateTimer.isActive) {
       _updateTimer.cancel();
-    }
-    if (_programsTimer != null && _programsTimer.isActive) {
-      _programsTimer.cancel();
     }
     super.dispose();
   }

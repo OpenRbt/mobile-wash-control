@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'package:mobile_wash_control/client/api.dart';
 
-enum Pages { Main, Programs, Settings, Accounts, Statistics, None }
+enum Pages { Main, Programs, Settings, Accounts, Statistics, Motors, None }
 
 class SessionData {
   final DefaultApi client;
@@ -11,16 +11,8 @@ class SessionData {
   SessionData(this.client);
 }
 
-Widget prepareDrawer(
-    BuildContext context, Pages selectedPage, SessionData sessionData) {
-  var texts = [
-    "Главная",
-    "Программы",
-    "Настройки",
-    "Учетки",
-    "Статистика",
-    "Выход"
-  ];
+Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessionData) {
+  var texts = ["Главная", "Программы", "Настройки", "Учетки", "Статистика", "Моторесурс", "Выход"];
 
   var routes = [
     "/mobile/home",
@@ -28,14 +20,14 @@ Widget prepareDrawer(
     "/mobile/settings",
     "/mobile/accounts",
     "/mobile/statistics",
+    "/mobile/motors",
   ];
 
   var styles = new List.filled(
     texts.length,
     TextStyle(fontSize: 30),
   );
-  styles[selectedPage.index] =
-      TextStyle(fontSize: 40, fontWeight: FontWeight.bold);
+  styles[selectedPage.index] = TextStyle(fontSize: 40, fontWeight: FontWeight.bold);
 
   var textElements = [];
   for (int i = 0; i < texts.length; i++) {
@@ -54,10 +46,7 @@ Widget prepareDrawer(
       behavior: MyScrollingBehavior(),
       child: FittedBox(
         child: Container(
-          width: screenWidth *
-              3 /
-              4 *
-              (isPortrait ? 1 : screenHeight / screenWidth),
+          width: screenWidth * 3 / 4 * (isPortrait ? 1 : screenHeight / screenWidth),
           height: screenHeight,
           child: CustomPaint(
             painter: MyPainter(context),
@@ -100,9 +89,7 @@ Widget prepareDrawer(
                             }
                           : () {
                               Navigator.pop(context); //Closing Drawer
-                              Navigator.pushReplacementNamed(
-                                  Navigator.of(context).context, routes[index],
-                                  arguments: sessionData);
+                              Navigator.pushReplacementNamed(Navigator.of(context).context, routes[index], arguments: sessionData);
                             };
                       return ListTile(title: textElements[index], onTap: onTap);
                     },
@@ -128,9 +115,7 @@ class MyPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    size = size.width < size.height
-        ? size
-        : Size(size.height * 3 / 4, size.width * 3 / 4);
+    size = size.width < size.height ? size : Size(size.height * 3 / 4, size.width * 3 / 4);
     final sizeB = Size(size.width * 2, size.height + size.height * 0.5);
     var rect = Offset(-size.width, -size.height * 0.25) & sizeB;
     canvas.drawOval(rect, Paint()..color = Colors.white);
@@ -150,8 +135,7 @@ class MyPainter extends CustomPainter {
 
 class MyScrollingBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
 }
@@ -181,11 +165,11 @@ void showErrorDialog(BuildContext context, String text) {
 
 class ValueWrapper {
   var value;
+
   ValueWrapper(this.value);
 }
 
-void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey,
-    ValueWrapper isSnackBarActive, String text, Color color) async {
+void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnackBarActive, String text, Color color) async {
   if (isSnackBarActive.value) {
     return;
   }
@@ -215,8 +199,13 @@ void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey,
   });
 }
 
+class LinuxConfigs {
+  static final double DefaultHeight = 720;
+  static final double DefaultWidth = 1280;
+}
+
 class DefaultConfig {
-  static final appVersion = "1.0.1";
+  static final appVersion = "1.1.1";
   static final Map<String, StationsDefaultConfig> configs = {
     "Wash": StationsDefaultConfig([
       _getProgram(1, "wsh-water", 25, false, 100, 100, [
@@ -228,11 +217,7 @@ class DefaultConfig {
         _getRelay(2, 278, 722), //0.3857 | 278 722
         _getRelay(6, 1000, 0)
       ], []),
-      _getProgram(3, "wsh-foam active", 25, false, 100, 100, [
-        _getRelay(1, 1000, 0),
-        _getRelay(2, 500, 500),
-        _getRelay(6, 1000, 0)
-      ], []),
+      _getProgram(3, "wsh-foam active", 25, false, 100, 100, [_getRelay(1, 1000, 0), _getRelay(2, 500, 500), _getRelay(6, 1000, 0)], []),
       _getProgram(4, "wsh-wax", 25, false, 100, 100, [
         _getRelay(1, 1000, 0),
         _getRelay(4, 284, 716),
@@ -354,19 +339,12 @@ class DefaultConfig {
 
 class StationsDefaultConfig {
   List<Program> programs;
-  List<InlineResponse2001Buttons> stationPrograms;
+  List<ResponseStationButtonButtons> stationPrograms;
+
   StationsDefaultConfig(this.programs, this.stationPrograms);
 }
 
-Program _getProgram(
-    int id,
-    String name,
-    int price,
-    bool preflightEnabled,
-    int motorSpeedPercent,
-    int preflightMotorSpeedPercent,
-    List<RelayConfig> relays,
-    List<RelayConfig> preflightRelays) {
+Program _getProgram(int id, String name, int price, bool preflightEnabled, int motorSpeedPercent, int preflightMotorSpeedPercent, List<RelayConfig> relays, List<RelayConfig> preflightRelays) {
   Program tmp = Program();
 
   tmp.id = id;
@@ -391,8 +369,8 @@ RelayConfig _getRelay(int id, int timeon, int timeoff) {
   return tmp;
 }
 
-InlineResponse2001Buttons _getProgramButton(int buttonID, int programID) {
-  InlineResponse2001Buttons tmp = InlineResponse2001Buttons();
+ResponseStationButtonButtons _getProgramButton(int buttonID, int programID) {
+  ResponseStationButtonButtons tmp = ResponseStationButtonButtons();
 
   tmp.buttonID = buttonID;
   tmp.programID = programID;
@@ -406,26 +384,28 @@ final List<String> dPagesNames = [
   "Настройки",
   "Учетки",
   "Статистика",
-  "Выход"
+  "Моторесурс",
 ];
+
 final Map<String, Pages> dPagesMap = {
   "Главная": Pages.Main,
   "Программы": Pages.Programs,
   "Настройки": Pages.Settings,
   "Учетки": Pages.Accounts,
   "Статистика": Pages.Statistics,
-  "Выход": Pages.None
+  "Моторесурс": Pages.Motors,
 };
+
 final Map<Pages, String> dPageRoutes = {
   Pages.Main: "/desktop/home",
   Pages.Programs: "/desktop/programs",
   Pages.Settings: "/desktop/settings",
   Pages.Accounts: "/desktop/accounts",
   Pages.Statistics: "/desktop/statistics",
+  Pages.Motors: "/desktop/motors",
 };
 
-Widget DGetDrawer(double height, double width, BuildContext context,
-    Pages _currentPage, SessionData sessionData) {
+Widget DGetDrawer(double height, double width, BuildContext context, Pages _currentPage, SessionData sessionData) {
   return SizedBox(
     height: height,
     width: width,
@@ -439,48 +419,15 @@ Widget DGetDrawer(double height, double width, BuildContext context,
       child: ListView.separated(
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-              title: Text(
-                dPagesNames[index],
-                style: TextStyle(
-                  fontSize:
-                      _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
+                title: Text(
+                  dPagesNames[index],
+                  style: TextStyle(
+                    fontSize: _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
+                  ),
                 ),
-              ),
-              onTap: (index < dPagesNames.length - 1)
-                  ? () {
-                      Navigator.pushReplacementNamed(
-                          context, dPageRoutes[dPagesMap[dPagesNames[index]]],
-                          arguments: sessionData);
-                    }
-                  : () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Выход"),
-                          content: Text("Выйти из приложения?"),
-                          actionsPadding: EdgeInsets.all(10),
-                          actions: [
-                            RaisedButton(
-                              onPressed: () {
-                                exit(0);
-                              },
-                              child: Text("Да"),
-                            ),
-                            RaisedButton(
-                              color: Colors.lightGreen,
-                              textColor: Colors.white,
-                              disabledColor: Colors.grey,
-                              disabledTextColor: Colors.black,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("Нет"),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-            );
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, dPageRoutes[dPagesMap[dPagesNames[index]]], arguments: sessionData);
+                });
           },
           separatorBuilder: (BuildContext context, int index) {
             return SizedBox(

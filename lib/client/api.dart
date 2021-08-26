@@ -1,8 +1,21 @@
-library swagger.api;
+//
+// AUTO-GENERATED FILE, DO NOT MODIFY!
+//
+// @dart=2.0
+
+// ignore_for_file: unused_element, unused_import
+// ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: lines_longer_than_80_chars
+
+library openapi.api;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
+import 'package:meta/meta.dart';
 
 part 'api_client.dart';
 part 'api_helper.dart';
@@ -11,62 +24,67 @@ part 'auth/authentication.dart';
 part 'auth/api_key_auth.dart';
 part 'auth/oauth.dart';
 part 'auth/http_basic_auth.dart';
+part 'auth/http_bearer_auth.dart';
 
 part 'api/default_api.dart';
 
-part 'model/Args/StationReportDatesArgs.dart';
-part 'model/Args/StationReportCurrentMoneyArgs.dart';
-part 'model/Args/PingArgs.dart';
-part 'model/Args/StationByHashArgs.dart';
-part 'model/Args/SaveIfNotExistsArgs.dart';
-part 'model/Args/OpenStationArgs.dart';
-part 'model/Args/ProgramsArgs.dart';
-part 'model/Args/StationProgramByHashArgs.dart';
-part 'model/Args/StationButtonArgs.dart';
-part 'model/Args/SetStationButtonsArgs.dart';
-part 'model/Args/CardReaderConfigArgs.dart';
-part 'model/Args/CardReaderConfigByHashArgs.dart';
-part 'model/Args/AddServiceAmountArgs.dart';
-part 'model/Args/UpdateUserPasswordArgs.dart';
-part 'model/Args/UpdateUserArgs.dart';
-part 'model/Args/CreateUserArgs.dart';
-part 'model/Args/DeleteUserArgs.dart';
-part 'model/Args/RunProgramArgs.dart';
-part 'model/Args/StationArgs.dart';
-part 'model/Args/DelStationArgs.dart';
-part 'model/Args/LoadRelayArgs.dart';
-part 'model/Args/SaveCollectionArgs.dart';
-part 'model/Args/LoadMoneyArgs.dart';
-part 'model/Args/SaveArgs.dart';
-part 'model/Args/LoadArgs.dart';
-part 'model/Args/StationCollectionReportDatesArgs.dart';
+part 'model/arg_add_service_amount.dart';
+part 'model/arg_card_reader_config.dart';
+part 'model/arg_card_reader_config_by_cash.dart';
+part 'model/arg_collection_report_dates.dart';
+part 'model/arg_del_station.dart';
+part 'model/arg_load.dart';
+part 'model/arg_load_from_station.dart';
+part 'model/arg_load_money.dart';
+part 'model/arg_load_relay.dart';
+part 'model/arg_open_station.dart';
+part 'model/arg_ping.dart';
+part 'model/arg_press_button.dart';
+part 'model/arg_programs.dart';
+part 'model/arg_reset_station_stat.dart';
+part 'model/arg_run_program.dart';
+part 'model/arg_save.dart';
+part 'model/arg_save_collection.dart';
+part 'model/arg_save_if_not_exists.dart';
+part 'model/arg_set_station_button.dart';
+part 'model/arg_station.dart';
+part 'model/arg_station_button.dart';
+part 'model/arg_station_by_hash.dart';
+part 'model/arg_station_program_by_hash.dart';
+part 'model/arg_station_report_current_money.dart';
+part 'model/arg_station_report_dates.dart';
+part 'model/arg_station_stat.dart';
+part 'model/arg_station_stat_dates.dart';
+part 'model/arg_user_create.dart';
+part 'model/arg_user_delete.dart';
+part 'model/arg_user_password.dart';
+part 'model/arg_user_update.dart';
 part 'model/card_reader_config.dart';
 part 'model/collection_report.dart';
-part 'model/first_name.dart';
-part 'model/hash.dart';
-part 'model/inline_response200.dart';
-part 'model/inline_response2001.dart';
-part 'model/inline_response2001_buttons.dart';
+part 'model/collection_report_with_user.dart';
 part 'model/inline_response409.dart';
-part 'model/is_admin.dart';
-part 'model/is_engineer.dart';
-part 'model/is_operator.dart';
 part 'model/kasse_config.dart';
 part 'model/key_pair.dart';
-part 'model/last_name.dart';
-part 'model/login.dart';
-part 'model/middle_name.dart';
 part 'model/money_report.dart';
-part 'model/password.dart';
 part 'model/program.dart';
+part 'model/program_stat.dart';
 part 'model/relay_board.dart';
 part 'model/relay_config.dart';
 part 'model/relay_report.dart';
 part 'model/relay_stat.dart';
+part 'model/response_ping.dart';
+part 'model/response_station_button.dart';
+part 'model/response_station_button_buttons.dart';
+part 'model/response_station_collection_report_dates.dart';
+part 'model/response_user_create.dart';
+part 'model/response_user_create_conflict.dart';
+part 'model/response_user_password.dart';
+part 'model/response_user_update.dart';
 part 'model/station_config.dart';
 part 'model/station_programs.dart';
 part 'model/station_programs_programs.dart';
 part 'model/station_report.dart';
+part 'model/station_stat.dart';
 part 'model/station_status.dart';
 part 'model/stations_variables.dart';
 part 'model/status.dart';
@@ -74,6 +92,12 @@ part 'model/status_collection_report.dart';
 part 'model/status_report.dart';
 part 'model/user_config.dart';
 part 'model/users_report.dart';
-part 'model/collection_report_with_user.dart';
 
-ApiClient defaultApiClient = new ApiClient();
+const _delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};
+const _dateEpochMarker = 'epoch';
+final _dateFormatter = DateFormat('yyyy-MM-dd');
+final _regList = RegExp(r'^List<(.*)>$');
+final _regSet = RegExp(r'^Set<(.*)>$');
+final _regMap = RegExp(r'^Map<String,(.*)>$');
+
+ApiClient defaultApiClient = ApiClient();

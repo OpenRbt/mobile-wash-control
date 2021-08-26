@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
+import 'package:mobile_wash_control/PagesUtils/PagesArgs.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 class DProgramsMenu extends StatefulWidget {
@@ -18,8 +18,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
 
   Future<void> GetData(SessionData sessionData) async {
     try {
-      var args14 = ProgramsArgs();
-      _programs = await sessionData.client.programs(args14);
+      _programs = await sessionData.client.programs(ArgPrograms());
       if (!mounted) {
         return;
       }
@@ -27,8 +26,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
       setState(() {});
     } catch (e) {
       print("Exception when calling GetData in DProgramsMenu: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -42,8 +40,11 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
 
-    var width = screenW - screenW / 4;
+    double DrawerSize = 256;
+
+    var width = screenW - DrawerSize;
     var height = screenH;
+
     return Scaffold(
       key: _scaffoldKey,
       drawer: prepareDrawer(context, Pages.Programs, sessionData),
@@ -51,8 +52,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
         builder: (context, orientation) {
           return Row(
             children: [
-              DGetDrawer(
-                  screenH, screenW / 4, context, Pages.Programs, sessionData),
+              DGetDrawer(screenH, DrawerSize, context, Pages.Programs, sessionData),
               SizedBox(
                 height: height,
                 width: width,
@@ -71,8 +71,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
                               child: Text(
                                 screenW > screenH ? "ID" : "",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -83,8 +82,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
                               child: Text(
                                 "Название",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -95,8 +93,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
                               child: Text(
                                 "Цена",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -107,8 +104,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
                               child: Text(
                                 "Прокачка",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -128,10 +124,8 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
     );
   }
 
-  List<Widget> programsTable(
-      SessionData sessionData, double width, double height) {
-    return List.generate((_programs != null ? _programs.length : 0) + 1,
-        (index) {
+  List<Widget> programsTable(SessionData sessionData, double width, double height) {
+    return List.generate((_programs != null ? _programs.length : 0) + 1, (index) {
       if (index < (_programs?.length ?? 0)) {
         return Row(
           children: [
@@ -182,21 +176,13 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
               width: width / 8 * 2,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: (_programs[index].preflightEnabled != null)
-                      ? (_programs[index].preflightEnabled
-                          ? Colors.lightGreen
-                          : Colors.red)
-                      : Colors.red,
+                  color: (_programs[index].preflightEnabled != null) ? (_programs[index].preflightEnabled ? Colors.lightGreen : Colors.red) : Colors.red,
                   border: Border.all(color: Colors.black38),
                 ),
                 child: Center(
                   //TODO: get active status (Kronusol)
                   child: Text(
-                    (_programs[index].preflightEnabled != null)
-                        ? (_programs[index].preflightEnabled
-                            ? "Включена"
-                            : "Отключена")
-                        : "Отключена",
+                    (_programs[index].preflightEnabled != null) ? (_programs[index].preflightEnabled ? "Включена" : "Отключена") : "Отключена",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
@@ -214,11 +200,8 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
                 child: IconButton(
                   icon: Icon(Icons.more_horiz),
                   onPressed: () {
-                    var args = ProgramMenuEditArgs(_programs[index].id,
-                        _programs[index].name, sessionData);
-                    Navigator.pushNamed(context, "/mobile/programs/edit",
-                            arguments: args)
-                        .then(
+                    var args = ProgramMenuEditArgs(_programs[index].id, sessionData);
+                    Navigator.pushNamed(context, "/desktop/programs/edit", arguments: args).then(
                       (value) => GetData(sessionData),
                     );
                   },
@@ -296,9 +279,7 @@ class _DProgramsMenuState extends State<DProgramsMenu> {
                 child: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
-                    Navigator.pushNamed(context, "/mobile/programs/add",
-                            arguments: sessionData)
-                        .then(
+                    Navigator.pushNamed(context, "/desktop/programs/add", arguments: sessionData).then(
                       (value) => GetData(sessionData),
                     );
                   },

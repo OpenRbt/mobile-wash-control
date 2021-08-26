@@ -20,8 +20,7 @@ class AccountInfo {
   bool isOperator;
   bool isEngineer;
 
-  AccountInfo(this.login, this.firstName, this.middleName, this.lastName,
-      this.isAdmin, this.isEngineer, this.isOperator);
+  AccountInfo(this.login, this.firstName, this.middleName, this.lastName, this.isAdmin, this.isEngineer, this.isOperator);
 }
 
 class _DAccountsMenuState extends State<DAccountsMenu> {
@@ -41,22 +40,14 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
       }
       for (int i = 0; i < res.users.length; i++) {
         _accounts.add(
-          AccountInfo(
-              res.users[i].login,
-              res.users[i].firstName,
-              res.users[i].middleName,
-              res.users[i].lastName,
-              res.users[i].isAdmin,
-              res.users[i].isEngineer,
-              res.users[i].isOperator),
+          AccountInfo(res.users[i].login, res.users[i].firstName, res.users[i].middleName, res.users[i].lastName, res.users[i].isAdmin, res.users[i].isEngineer, res.users[i].isOperator),
         );
       }
       _accounts.sort((a, b) => a.login.compareTo(b.login));
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->/users: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -72,7 +63,9 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
     var screenW = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.height;
 
-    var width = screenW - screenW / 4;
+    double DrawerSize = 256;
+
+    var width = screenW - DrawerSize;
     var height = screenH;
 
     return Scaffold(
@@ -88,8 +81,7 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
               },
               child: Row(
                 children: [
-                  DGetDrawer(
-                      height, screenW / 4, context, Pages.Accounts, sessionData),
+                  DGetDrawer(height, DrawerSize, context, Pages.Accounts, sessionData),
                   SizedBox(
                     height: height,
                     width: width,
@@ -108,9 +100,7 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
                                   child: Text(
                                     "Логин",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -121,9 +111,7 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
                                   child: Text(
                                     "Фамилия",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -134,9 +122,7 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
                                   child: Text(
                                     "Имя",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -147,9 +133,7 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
                                   child: Text(
                                     "Отчество",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -160,17 +144,14 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
                                   child: Text(
                                     "Статус",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
                             ],
                           ),
                           Column(
-                            children:
-                                List.generate(_accounts.length + 1, (index) {
+                            children: List.generate(_accounts.length + 1, (index) {
                               if (index < _accounts.length) {
                                 return _getAccountsRow(
                                   width,
@@ -217,17 +198,7 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
     );
   }
 
-  Widget _getAccountsRow(
-      double width,
-      double height,
-      int index,
-      SessionData sessionData,
-      String login,
-      String firstName,
-      String lastName,
-      String middleName,
-      String status,
-      bool addAction) {
+  Widget _getAccountsRow(double width, double height, int index, SessionData sessionData, String login, String firstName, String lastName, String middleName, String status, bool addAction) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -313,9 +284,7 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
               icon: Icon(addAction ? Icons.add : Icons.more_horiz),
               onPressed: addAction
                   ? () {
-                      Navigator.pushNamed(context, "/desktop/accounts/add",
-                              arguments: sessionData)
-                          .then(
+                      Navigator.pushNamed(context, "/desktop/accounts/add", arguments: sessionData).then(
                         (value) => _getUsers(sessionData),
                       );
                     }
@@ -323,9 +292,7 @@ class _DAccountsMenuState extends State<DAccountsMenu> {
                       var args = DAccountsMenuEditArgs();
                       args.sessionData = sessionData;
                       args.targetUser = _accounts[index];
-                      Navigator.pushNamed(context, "/desktop/accounts/edit",
-                              arguments: args)
-                          .then(
+                      Navigator.pushNamed(context, "/desktop/accounts/edit", arguments: args).then(
                         (value) => _getUsers(sessionData),
                       );
                     },

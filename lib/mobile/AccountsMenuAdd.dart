@@ -44,30 +44,28 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
     setState(() {});
 
     try {
-      var args = CreateUserArgs();
-      args.login = _inputControllers["login"].value.text;
-      if (args.login.length < 4) {
+      if (_inputControllers["login"].value.text.length < 4) {
         print("login length fail");
         throw "login length error";
       }
-      args.firstName = _inputControllers["firstName"].value.text;
-      if (args.firstName.length < 1) args.firstName = " ";
-      args.lastName = _inputControllers["lastName"].value.text;
-      if (args.lastName.length < 1) args.lastName = " ";
-      args.middleName = _inputControllers["middleName"].value.text;
-      if (args.middleName.length < 1) args.middleName = " ";
-      args.password = _inputControllers["password"].value.text;
-      if (args.password.length < 4) {
+      if (_inputControllers["password"].value.text.length < 4) {
         print("pass length fail");
         throw "pass length error";
       }
-      args.isAdmin = _inputTriggers[0];
-      args.isOperator = _inputTriggers[1];
-      args.isEngineer = _inputTriggers[2];
+
+      var args = ArgUserCreate(
+        login: _inputControllers["login"].value.text,
+        password: _inputControllers["password"].value.text,
+        firstName: _inputControllers["firstName"].value.text.isNotEmpty ? _inputControllers["firstName"].value.text : " ",
+        lastName: _inputControllers["lastName"].value.text.isNotEmpty ? _inputControllers["lastName"].value.text : " ",
+        middleName: _inputControllers["middleName"].value.text.isNotEmpty ? _inputControllers["middleName"].value.text : " ",
+        isAdmin: _inputTriggers[0],
+        isOperator: _inputTriggers[1],
+        isEngineer: _inputTriggers[2],
+      );
 
       var res = await sessionData.client.createUser(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пользователь добавлен",
-          Colors.green);
+      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пользователь добавлен", Colors.green);
 
       for (var field in _inputControllers.values) {
         field.text = "";
@@ -78,19 +76,15 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
       }
     } on ApiException catch (e) {
       if (e.code == 403) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Недостаточно прав",
-            Colors.orange);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Недостаточно прав", Colors.orange);
       } else if (e.code == 409) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Невозможно добавить пользователя", Colors.orange);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Невозможно добавить пользователя", Colors.orange);
       } else {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Ошибка при запросе к апи", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Ошибка при запросе к апи", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Не удалось добавить пользователя", Colors.red);
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось добавить пользователя", Colors.red);
       }
       print("Exception when calling DefaultApi->User(post): $e\n");
     }
@@ -153,12 +147,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                             onChanged: (newValue) {
                               var controller = _inputControllers["login"];
                               final text = controller.text.toLowerCase();
-                              controller.value = controller.value.copyWith(
-                                  text: text,
-                                  selection: TextSelection(
-                                      baseOffset: text.length,
-                                      extentOffset: text.length),
-                                  composing: TextRange.empty);
+                              controller.value = controller.value.copyWith(text: text, selection: TextSelection(baseOffset: text.length, extentOffset: text.length), composing: TextRange.empty);
                             },
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),
@@ -291,12 +280,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                             onChanged: (newValue) {
                               var controller = _inputControllers["password"];
                               final text = controller.text.toLowerCase();
-                              controller.value = controller.value.copyWith(
-                                  text: text,
-                                  selection: TextSelection(
-                                      baseOffset: text.length,
-                                      extentOffset: text.length),
-                                  composing: TextRange.empty);
+                              controller.value = controller.value.copyWith(text: text, selection: TextSelection(baseOffset: text.length, extentOffset: text.length), composing: TextRange.empty);
                             },
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),

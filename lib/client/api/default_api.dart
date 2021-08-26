@@ -1,2067 +1,2157 @@
-part of swagger.api;
+//
+// AUTO-GENERATED FILE, DO NOT MODIFY!
+//
+// @dart=2.0
 
+// ignore_for_file: unused_element, unused_import
+// ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: lines_longer_than_80_chars
 
+part of openapi.api;
 
 class DefaultApi {
-  final ApiClient apiClient;
-
   DefaultApi([ApiClient apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
-  /// 
+  final ApiClient apiClient;
+
+  /// Performs an HTTP 'POST /add-service-amount' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future addServiceAmount(AddServiceAmountArgs args) async {
+  /// * [ArgAddServiceAmount] args (required):
+  Future<Response> addServiceAmountWithHttpInfo(ArgAddServiceAmount args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/add-service-amount';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/add-service-amount".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [ArgAddServiceAmount] args (required):
+  Future<void> addServiceAmount(ArgAddServiceAmount args) async {
+    final response = await addServiceAmountWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /card-reader-config' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future<CardReaderConfig> cardReaderConfig(CardReaderConfigArgs args) async {
+  /// * [ArgCardReaderConfig] args (required):
+  Future<Response> cardReaderConfigWithHttpInfo(ArgCardReaderConfig args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/card-reader-config';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/card-reader-config".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'CardReaderConfig') as CardReaderConfig ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future<CardReaderConfig> cardReaderConfigByHash(CardReaderConfigByHashArgs args) async {
+  /// * [ArgCardReaderConfig] args (required):
+  Future<CardReaderConfig> cardReaderConfig(ArgCardReaderConfig args) async {
+    final response = await cardReaderConfigWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'CardReaderConfig',
+      ) as CardReaderConfig;
+    }
+    return Future<CardReaderConfig>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /card-reader-config-by-hash' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgCardReaderConfigByCash] args (required):
+  Future<Response> cardReaderConfigByHashWithHttpInfo(ArgCardReaderConfigByCash args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/card-reader-config-by-hash';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/card-reader-config-by-hash".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'CardReaderConfig') as CardReaderConfig ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
+  /// * [ArgCardReaderConfigByCash] args (required):
+  Future<CardReaderConfig> cardReaderConfigByHash(ArgCardReaderConfigByCash args) async {
+    final response = await cardReaderConfigByHashWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'CardReaderConfig',
+      ) as CardReaderConfig;
+    }
+    return Future<CardReaderConfig>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /user' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// TODO: Add UserResponseModel
-  Future<SaveCollectionArgs> createUser(CreateUserArgs args) async {
+  /// * [ArgUserCreate] args (required):
+  Future<Response> createUserWithHttpInfo(ArgUserCreate args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/user';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/user".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = ["pinCode"];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'UserResponse') as SaveCollectionArgs ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future delStation(DelStationArgs args) async {
+  /// * [ArgUserCreate] args (required):
+  Future<ResponseUserCreate> createUser(ArgUserCreate args) async {
+    final response = await createUserWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseUserCreate',
+      ) as ResponseUserCreate;
+    }
+    return Future<ResponseUserCreate>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /del-station' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgDelStation] args (required):
+  Future<Response> delStationWithHttpInfo(ArgDelStation args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/del-station';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/del-station".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [ArgDelStation] args (required):
+  Future<void> delStation(ArgDelStation args) async {
+    final response = await delStationWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'DELETE /user' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future deleteUser(DeleteUserArgs args) async {
+  /// * [ArgUserDelete] args (required):
+  Future<Response> deleteUserWithHttpInfo(ArgUserDelete args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/user';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/user".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = ["pinCode"];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'DELETE',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [ArgUserDelete] args (required):
+  Future<void> deleteUser(ArgUserDelete args) async {
+    final response = await deleteUserWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
-  ///
-  /// 
-  Future getPing() async {
-    Object postBody = null;
 
-    // verify required params are set
+  /// Performs an HTTP 'GET /ping' operation and returns the [Response].
+  Future<Response> getPingWithHttpInfo() async {
+    final path = r'/ping';
 
-    // create path and map variables
-    String path = "/ping".replaceAll("{format}","json");
+    Object postBody;
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
+    final contentTypes = <String>[];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
+    return await apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  Future<void> getPing() async {
+    final response = await getPingWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
-  ///
-  /// 
+
+  /// Performs an HTTP 'GET /user' operation and returns the [Response].
+  Future<Response> getUserWithHttpInfo() async {
+    final path = r'/user';
+
+    Object postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>[];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
   Future<UserConfig> getUser() async {
-    Object postBody = null;
-
-    // verify required params are set
-
-    // create path and map variables
-    String path = "/user".replaceAll("{format}","json");
-
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = ["pinCode"];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
+    final response = await getUserWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'UserConfig') as UserConfig ;
-    } else {
-      return null;
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'UserConfig',
+      ) as UserConfig;
     }
+    return Future<UserConfig>.value(null);
   }
-  /// 
-  ///
-  /// 
+
+  /// Performs an HTTP 'GET /users' operation and returns the [Response].
+  Future<Response> getUsersWithHttpInfo() async {
+    final path = r'/users';
+
+    Object postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>[];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
   Future<UsersReport> getUsers() async {
-    Object postBody = null;
-
-    // verify required params are set
-
-    // create path and map variables
-    String path = "/users".replaceAll("{format}","json");
-
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = ["pinCode"];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
+    final response = await getUsersWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'UsersReport') as UsersReport ;
-    } else {
-      return null;
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'UsersReport',
+      ) as UsersReport;
     }
+    return Future<UsersReport>.value(null);
   }
-  /// 
-  ///
-  /// 
+
+  /// Performs an HTTP 'GET /info' operation and returns the [Response].
+  Future<Response> infoWithHttpInfo() async {
+    final path = r'/info';
+
+    Object postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>[];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
+
+    return await apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
   Future<String> info() async {
-    Object postBody = null;
-
-    // verify required params are set
-
-    // create path and map variables
-    String path = "/info".replaceAll("{format}","json");
-
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
+    final response = await infoWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'String') as String ;
-    } else {
-      return null;
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'String',
+      ) as String;
     }
+    return Future<String>.value(null);
   }
-  /// 
-  ///
-  /// 
+
+  /// Performs an HTTP 'POST /kasse' operation and returns the [Response].
+  Future<Response> kasseWithHttpInfo() async {
+    final path = r'/kasse';
+
+    Object postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>[];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
   Future<KasseConfig> kasse() async {
-    Object postBody = null;
-
-    // verify required params are set
-
-    // create path and map variables
-    String path = "/kasse".replaceAll("{format}","json");
-
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
+    final response = await kasseWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'KasseConfig') as KasseConfig ;
-    } else {
-      return null;
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'KasseConfig',
+      ) as KasseConfig;
     }
+    return Future<KasseConfig>.value(null);
   }
-  /// 
+
+  /// Performs an HTTP 'POST /load' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future<String> load(LoadArgs args) async {
+  /// * [ArgLoad] args (required):
+  Future<Response> loadWithHttpInfo(ArgLoad args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/load';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/load".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'String') as String ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future<MoneyReport> loadMoney(LoadMoneyArgs args) async {
+  /// * [ArgLoad] args (required):
+  Future<String> load(ArgLoad args) async {
+    final response = await loadWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'String',
+      ) as String;
+    }
+    return Future<String>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /load-from-station' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgLoadFromStation] args (required):
+  Future<Response> loadFromStationWithHttpInfo(ArgLoadFromStation args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/load-from-station';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/load-money".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'MoneyReport') as MoneyReport ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future<RelayReport> loadRelay(LoadRelayArgs args) async {
+  /// * [ArgLoadFromStation] args (required):
+  Future<String> loadFromStation(ArgLoadFromStation args) async {
+    final response = await loadFromStationWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'String',
+      ) as String;
+    }
+    return Future<String>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /load-money' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgLoadMoney] args (required):
+  Future<Response> loadMoneyWithHttpInfo(ArgLoadMoney args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/load-money';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/load-relay".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'RelayReport') as RelayReport ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future openStation(OpenStationArgs args) async {
+  /// * [ArgLoadMoney] args (required):
+  Future<MoneyReport> loadMoney(ArgLoadMoney args) async {
+    final response = await loadMoneyWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'MoneyReport',
+      ) as MoneyReport;
+    }
+    return Future<MoneyReport>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /load-relay' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgLoadRelay] args (required):
+  Future<Response> loadRelayWithHttpInfo(ArgLoadRelay args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/load-relay';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/open-station".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future<Object> ping(PingArgs args) async {
+  /// * [ArgLoadRelay] args (required):
+  Future<RelayReport> loadRelay(ArgLoadRelay args) async {
+    final response = await loadRelayWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'RelayReport',
+      ) as RelayReport;
+    }
+    return Future<RelayReport>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /open-station' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgOpenStation] args (required):
+  Future<Response> openStationWithHttpInfo(ArgOpenStation args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/open-station';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/ping".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Object') as Object ;
-    } else {
-      return null;
+  /// Parameters:
+  ///
+  /// * [ArgOpenStation] args (required):
+  Future<void> openStation(ArgOpenStation args) async {
+    final response = await openStationWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /ping' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future<List<Program>> programs(ProgramsArgs args) async {
+  /// * [ArgPing] args (required):
+  Future<Response> pingWithHttpInfo(ArgPing args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/ping';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/programs".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-        (apiClient.deserialize(utf8.decode(response.bodyBytes), 'List<Program>') as List).map((item) => item as Program).toList();
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future runProgram(RunProgramArgs args) async {
+  /// * [ArgPing] args (required):
+  Future<ResponsePing> ping(ArgPing args) async {
+    final response = await pingWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponsePing',
+      ) as ResponsePing;
+    }
+    return Future<ResponsePing>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /press-button' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgPressButton] args (required):
+  Future<Response> pressButtonWithHttpInfo(ArgPressButton args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/press-button';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/run-program".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [ArgPressButton] args (required):
+  Future<void> pressButton(ArgPressButton args) async {
+    final response = await pressButtonWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /programs' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future save(SaveArgs args) async {
+  /// * [ArgPrograms] args (required):
+  Future<Response> programsWithHttpInfo(ArgPrograms args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/programs';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/save".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future saveCollection(SaveCollectionArgs args) async {
+  /// * [ArgPrograms] args (required):
+  Future<List<Program>> programs(ArgPrograms args) async {
+    final response = await programsWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<Program>') as List).cast<Program>().toList(growable: false);
+    }
+    return Future<List<Program>>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /reset-station-stat' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgResetStationStat] args:
+  Future<Response> resetStationStatWithHttpInfo({ArgResetStationStat args}) async {
+    // Verify required params are set.
+
+    final path = r'/reset-station-stat';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/save-collection".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = ["pinCode"];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [ArgResetStationStat] args:
+  Future<void> resetStationStat({ArgResetStationStat args}) async {
+    final response = await resetStationStatWithHttpInfo(args: args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /run-program' operation and returns the [Response].
+  /// Parameters:
   ///
-  ///
-  Future saveIfNotExists(SaveIfNotExistsArgs args) async {
+  /// * [ArgRunProgram] args (required):
+  Future<Response> runProgramWithHttpInfo(ArgRunProgram args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/run-program';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/save-if-not-exists".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [ArgRunProgram] args (required):
+  Future<void> runProgram(ArgRunProgram args) async {
+    final response = await runProgramWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /save' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future saveMoney(MoneyReport args) async {
+  /// * [ArgSave] args (required):
+  Future<Response> saveWithHttpInfo(ArgSave args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/save';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/save-money".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [ArgSave] args (required):
+  Future<void> save(ArgSave args) async {
+    final response = await saveWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /save-collection' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future saveRelay(RelayReport args) async {
+  /// * [ArgSaveCollection] args (required):
+  Future<Response> saveCollectionWithHttpInfo(ArgSaveCollection args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/save-collection';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/save-relay".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [ArgSaveCollection] args (required):
+  Future<void> saveCollection(ArgSaveCollection args) async {
+    final response = await saveCollectionWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /save-if-not-exists' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future setCardReaderConfig(CardReaderConfig args) async {
+  /// * [ArgSaveIfNotExists] args (required):
+  Future<Response> saveIfNotExistsWithHttpInfo(ArgSaveIfNotExists args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/save-if-not-exists';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/set-card-reader-config".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [ArgSaveIfNotExists] args (required):
+  Future<void> saveIfNotExists(ArgSaveIfNotExists args) async {
+    final response = await saveIfNotExistsWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /save-money' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future setKasse(KasseConfig args) async {
+  /// * [MoneyReport] args (required):
+  Future<Response> saveMoneyWithHttpInfo(MoneyReport args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/save-money';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/set-kasse".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [MoneyReport] args (required):
+  Future<void> saveMoney(MoneyReport args) async {
+    final response = await saveMoneyWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /save-relay' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future setProgram(Program args) async {
+  /// * [RelayReport] args (required):
+  Future<Response> saveRelayWithHttpInfo(RelayReport args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/save-relay';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/set-program".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [RelayReport] args (required):
+  Future<void> saveRelay(RelayReport args) async {
+    final response = await saveRelayWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /set-card-reader-config' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future setStation(StationConfig args) async {
+  /// * [CardReaderConfig] args (required):
+  Future<Response> setCardReaderConfigWithHttpInfo(CardReaderConfig args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/set-card-reader-config';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/set-station".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [CardReaderConfig] args (required):
+  Future<void> setCardReaderConfig(CardReaderConfig args) async {
+    final response = await setCardReaderConfigWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /set-kasse' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future setStationButton(SetStationButtonsArgs args) async {
+  /// * [KasseConfig] args (required):
+  Future<Response> setKasseWithHttpInfo(KasseConfig args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/set-kasse';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/set-station-button".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          ;
-    } else {
-      return ;
+  /// Parameters:
+  ///
+  /// * [KasseConfig] args (required):
+  Future<void> setKasse(KasseConfig args) async {
+    final response = await setKasseWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /set-program' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future<StationConfig> station(StationArgs args) async {
+  /// * [Program] args (required):
+  Future<Response> setProgramWithHttpInfo(Program args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/set-program';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/station".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationConfig') as StationConfig ;
-    } else {
-      return null;
+  /// Parameters:
+  ///
+  /// * [Program] args (required):
+  Future<void> setProgram(Program args) async {
+    final response = await setProgramWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /set-station' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future<InlineResponse2001> stationButton(StationButtonArgs args) async {
+  /// * [StationConfig] args (required):
+  Future<Response> setStationWithHttpInfo(StationConfig args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/set-station';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/station-button".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'InlineResponse2001') as InlineResponse2001 ;
-    } else {
-      return null;
+  /// Parameters:
+  ///
+  /// * [StationConfig] args (required):
+  Future<void> setStation(StationConfig args) async {
+    final response = await setStationWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /set-station-button' operation and returns the [Response].
+  /// Parameters:
   ///
-  /// 
-  Future<int> stationByHash(StationByHashArgs args) async {
+  /// * [ArgSetStationButton] args (required):
+  Future<Response> setStationButtonWithHttpInfo(ArgSetStationButton args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/set-station-button';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/station-by-hash".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'int') as int ;
-    } else {
-      return null;
+  /// Parameters:
+  ///
+  /// * [ArgSetStationButton] args (required):
+  Future<void> setStationButton(ArgSetStationButton args) async {
+    final response = await setStationButtonWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
-  /// 
+
+  /// Performs an HTTP 'POST /station' operation and returns the [Response].
+  /// Parameters:
   ///
-  ///
-  Future<List<CollectionReportWithUser>> stationCollectionReportDates(StationCollectionReportDatesArgs args) async {
+  /// * [ArgStation] args (required):
+  Future<Response> stationWithHttpInfo(ArgStation args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/station';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-      throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/station-collection-report-dates".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = ["pinCode"];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-    }
-
-    var response = await apiClient.invokeAPI(path,
-        'POST',
-        queryParams,
-        postBody,
-        headerParams,
-        formParams,
-        contentType,
-        authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return
-      (apiClient.deserialize(utf8.decode(response.bodyBytes), 'List<CollectionReportWithUser>') as List).map((item) => item as CollectionReportWithUser).toList();
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
+
+  /// Parameters:
   ///
+  /// * [ArgStation] args (required):
+  Future<StationConfig> station(ArgStation args) async {
+    final response = await stationWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StationConfig',
+      ) as StationConfig;
+    }
+    return Future<StationConfig>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /station-button' operation and returns the [Response].
+  /// Parameters:
   ///
-  ///
-  Future<StationPrograms> stationProgramByHash(StationProgramByHashArgs args) async {
+  /// * [ArgStationButton] args (required):
+  Future<Response> stationButtonWithHttpInfo(ArgStationButton args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/station-button';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/station-program-by-hash".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationPrograms') as StationPrograms ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future<StationReport> stationReportCurrentMoney(StationReportCurrentMoneyArgs args) async {
+  /// * [ArgStationButton] args (required):
+  Future<ResponseStationButton> stationButton(ArgStationButton args) async {
+    final response = await stationButtonWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseStationButton',
+      ) as ResponseStationButton;
+    }
+    return Future<ResponseStationButton>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /station-by-hash' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgStationByHash] args (required):
+  Future<Response> stationByHashWithHttpInfo(ArgStationByHash args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/station-by-hash';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/station-report-current-money".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationReport') as StationReport ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future<StationReport> stationReportDates(StationReportDatesArgs args) async {
+  /// * [ArgStationByHash] args (required):
+  Future<int> stationByHash(ArgStationByHash args) async {
+    final response = await stationByHashWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'int',
+      ) as int;
+    }
+    return Future<int>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /station-collection-report-dates' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgCollectionReportDates] args (required):
+  Future<Response> stationCollectionReportDatesWithHttpInfo(ArgCollectionReportDates args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/station-collection-report-dates';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/station-report-dates".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StationReport') as StationReport ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
+  /// * [ArgCollectionReportDates] args (required):
+  Future<ResponseStationCollectionReportDates> stationCollectionReportDates(ArgCollectionReportDates args) async {
+    final response = await stationCollectionReportDatesWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseStationCollectionReportDates',
+      ) as ResponseStationCollectionReportDates;
+    }
+    return Future<ResponseStationCollectionReportDates>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /station-program-by-hash' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgStationProgramByHash] args (required):
+  Future<Response> stationProgramByHashWithHttpInfo(ArgStationProgramByHash args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/station-program-by-hash';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgStationProgramByHash] args (required):
+  Future<StationPrograms> stationProgramByHash(ArgStationProgramByHash args) async {
+    final response = await stationProgramByHashWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StationPrograms',
+      ) as StationPrograms;
+    }
+    return Future<StationPrograms>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /station-report-current-money' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgStationReportCurrentMoney] args (required):
+  Future<Response> stationReportCurrentMoneyWithHttpInfo(ArgStationReportCurrentMoney args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/station-report-current-money';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgStationReportCurrentMoney] args (required):
+  Future<StationReport> stationReportCurrentMoney(ArgStationReportCurrentMoney args) async {
+    final response = await stationReportCurrentMoneyWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StationReport',
+      ) as StationReport;
+    }
+    return Future<StationReport>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /station-report-dates' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgStationReportDates] args (required):
+  Future<Response> stationReportDatesWithHttpInfo(ArgStationReportDates args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/station-report-dates';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgStationReportDates] args (required):
+  Future<StationReport> stationReportDates(ArgStationReportDates args) async {
+    final response = await stationReportDatesWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StationReport',
+      ) as StationReport;
+    }
+    return Future<StationReport>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /station-stat-current' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgStationStat] args:
+  Future<Response> stationStatCurrentWithHttpInfo({ArgStationStat args}) async {
+    // Verify required params are set.
+
+    final path = r'/station-stat-current';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgStationStat] args:
+  Future<List<StationStat>> stationStatCurrent({ArgStationStat args}) async {
+    final response = await stationStatCurrentWithHttpInfo(args: args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<StationStat>') as List).cast<StationStat>().toList(growable: false);
+    }
+    return Future<List<StationStat>>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /station-stat-dates' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgStationStatDates] args:
+  Future<Response> stationStatDatesWithHttpInfo({ArgStationStatDates args}) async {
+    // Verify required params are set.
+
+    final path = r'/station-stat-dates';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgStationStatDates] args:
+  Future<List<StationStat>> stationStatDates({ArgStationStatDates args}) async {
+    final response = await stationStatDatesWithHttpInfo(args: args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<StationStat>') as List).cast<StationStat>().toList(growable: false);
+    }
+    return Future<List<StationStat>>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /stations-variables' operation and returns the [Response].
+  Future<Response> stationsVariablesWithHttpInfo() async {
+    final path = r'/stations-variables';
+
+    Object postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>[];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
   Future<List<StationsVariables>> stationsVariables() async {
-    Object postBody = null;
-
-    // verify required params are set
-
-    // create path and map variables
-    String path = "/stations-variables".replaceAll("{format}","json");
-
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
+    final response = await stationsVariablesWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-        (apiClient.deserialize(utf8.decode(response.bodyBytes), 'List<StationsVariables>') as List).map((item) => item as StationsVariables).toList();
-    } else {
-      return null;
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<StationsVariables>') as List).cast<StationsVariables>().toList(growable: false);
     }
+    return Future<List<StationsVariables>>.value(null);
   }
-  /// 
-  ///
-  /// 
+
+  /// Performs an HTTP 'GET /status' operation and returns the [Response].
+  Future<Response> statusWithHttpInfo() async {
+    final path = r'/status';
+
+    Object postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>[];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
+
+    return await apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
   Future<StatusReport> status() async {
-    Object postBody = null;
-
-    // verify required params are set
-
-    // create path and map variables
-    String path = "/status".replaceAll("{format}","json");
-
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
+    final response = await statusWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StatusReport') as StatusReport ;
-    } else {
-      return null;
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StatusReport',
+      ) as StatusReport;
     }
+    return Future<StatusReport>.value(null);
   }
-  /// 
-  ///
-  /// 
+
+  /// Performs an HTTP 'GET /status-collection' operation and returns the [Response].
+  Future<Response> statusCollectionWithHttpInfo() async {
+    final path = r'/status-collection';
+
+    Object postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>[];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
   Future<StatusCollectionReport> statusCollection() async {
-    Object postBody = null;
-
-    // verify required params are set
-
-    // create path and map variables
-    String path = "/status-collection".replaceAll("{format}","json");
-
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = ["pinCode"];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
+    final response = await statusCollectionWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'StatusCollectionReport') as StatusCollectionReport ;
-    } else {
-      return null;
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StatusCollectionReport',
+      ) as StatusCollectionReport;
     }
+    return Future<StatusCollectionReport>.value(null);
   }
-  /// 
+
+  /// Performs an HTTP 'PUT /user' operation and returns the [Response].
+  /// Parameters:
   ///
-  ///
-  /// TODO: Add UserResponceModel
-  Future<SaveCollectionArgs> updateUser(UpdateUserArgs args) async {
+  /// * [ArgUserUpdate] args (required):
+  Future<Response> updateUserWithHttpInfo(ArgUserUpdate args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/user';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
-    }
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
 
-    // create path and map variables
-    String path = "/user".replaceAll("{format}","json");
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = ["pinCode"];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
-    }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'PUT',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'UserResponse') as SaveCollectionArgs ;
-    } else {
-      return null;
-    }
+    return await apiClient.invokeAPI(
+      path,
+      'PUT',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
   }
-  /// 
+
+  /// Parameters:
   ///
-  /// 
-  Future<Object> updateUserPassword(UpdateUserPasswordArgs args) async {
+  /// * [ArgUserUpdate] args (required):
+  Future<ResponseUserUpdate> updateUser(ArgUserUpdate args) async {
+    final response = await updateUserWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseUserUpdate',
+      ) as ResponseUserUpdate;
+    }
+    return Future<ResponseUserUpdate>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /user-password' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgUserPassword] args (required):
+  Future<Response> updateUserPasswordWithHttpInfo(ArgUserPassword args) async {
+    // Verify required params are set.
+    if (args == null) {
+      throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
+    }
+
+    final path = r'/user-password';
+
     Object postBody = args;
 
-    // verify required params are set
-    if(args == null) {
-     throw new ApiException(400, "Missing required param: args");
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgUserPassword] args (required):
+  Future<ResponseUserPassword> updateUserPassword(ArgUserPassword args) async {
+    final response = await updateUserPasswordWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-
-    // create path and map variables
-    String path = "/user-password".replaceAll("{format}","json");
-
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
-    
-    List<String> contentTypes = ["application/json"];
-
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = ["pinCode"];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      
-      if(hasFields)
-        postBody = mp;
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseUserPassword',
+      ) as ResponseUserPassword;
     }
-    else {
-          }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'POST',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return 
-          apiClient.deserialize(utf8.decode(response.bodyBytes), 'Object') as Object ;
-    } else {
-      return null;
-    }
+    return Future<ResponseUserPassword>.value(null);
   }
 }

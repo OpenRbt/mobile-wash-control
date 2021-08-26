@@ -1,0 +1,15 @@
+export 'package:mobile_wash_control/desktop/DAccountsMenu.dart';
+export 'package:mobile_wash_control/desktop/DAccountsMenuAdd.dart';
+export 'package:mobile_wash_control/desktop/DAccountsMenuEdit.dart';
+export 'package:mobile_wash_control/desktop/DAuthPage.dart';
+export 'package:mobile_wash_control/desktop/DEditPost.dart';
+export 'package:mobile_wash_control/desktop/DHomePage.dart';
+export 'package:mobile_wash_control/desktop/DIncassationHistory.dart';
+export 'package:mobile_wash_control/desktop/DProgramsMenu.dart';
+export 'package:mobile_wash_control/desktop/DSettingsMenu.dart';
+export 'package:mobile_wash_control/desktop/DSettingsMenuPost.dart';
+export 'package:mobile_wash_control/desktop/DStatisticsPage.dart';
+export 'package:mobile_wash_control/desktop/homePage/PostMenu.dart';
+export 'package:mobile_wash_control/desktop/programs/AddProgram.dart';
+export 'package:mobile_wash_control/desktop/programs/EditProgram.dart';
+export 'package:mobile_wash_control/desktop/DMotorMenu.dart';

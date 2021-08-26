@@ -40,32 +40,31 @@ class _DIncassationHistoryState extends State<DIncassationHistory> {
     _updating = true;
 
     try {
-      var args = StationCollectionReportDatesArgs();
-      args.stationID = incassationHistoryArgs.stationID;
-      args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
-      args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
-      _incassations = await incassationHistoryArgs.sessionData.client
-              .stationCollectionReportDates(args);
+      var args = ArgCollectionReportDates(
+        stationID: incassationHistoryArgs.stationID,
+        startDate: _startDate.millisecondsSinceEpoch ~/ 1000,
+        endDate: _endDate.millisecondsSinceEpoch ~/ 1000,
+      );
+      var res = await incassationHistoryArgs.sessionData.client.stationCollectionReportDates(args);
+
+      _incassations = res.collectionReports;
       _totalNal = 0;
       _totalBeznal = 0;
       for (int i = 0; i < _incassations.length; i++) {
         print(_incassations[i]);
-        _totalNal +=
-            (_incassations[i].banknotes ?? 0) + (_incassations[i].coins ?? 0);
+        _totalNal += (_incassations[i].banknotes ?? 0) + (_incassations[i].coins ?? 0);
         _totalBeznal += _incassations[i].electronical ?? 0;
       }
     } on ApiException catch (e) {
       if (e.code != 404) {
-        print(
-            "Exception when calling DefaultApi->/station-collection-report-dates: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-            "Произошла ошибка при запросе к api", Colors.red);
+        print("Exception when calling DefaultApi->/station-collection-report-dates: $e\n");
+        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       } else {}
     } catch (e) {
       if (!(e is ApiException)) {
         print("Other Exception: $e\n");
       }
-    } 
+    }
     if (!mounted) {
       return;
     }
@@ -122,12 +121,10 @@ class _DIncassationHistoryState extends State<DIncassationHistory> {
 
   @override
   Widget build(BuildContext context) {
-    DIncassationHistoryArgs incassationHistoryArgs =
-        ModalRoute.of(context).settings.arguments;
+    DIncassationHistoryArgs incassationHistoryArgs = ModalRoute.of(context).settings.arguments;
 
     final AppBar appBar = AppBar(
-      title:
-          Text("История инкассаций | Пост ${incassationHistoryArgs.stationID}"),
+      title: Text("История инкассаций | Пост ${incassationHistoryArgs.stationID}"),
     );
 
     if (_firstLoad) {
@@ -160,8 +157,7 @@ class _DIncassationHistoryState extends State<DIncassationHistory> {
                   ),
                   RaisedButton(
                     onPressed: () => _selectStartDate(context),
-                    child: Text(
-                        "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
+                    child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year}"),
                   ),
                   Text(
                     " по ",
@@ -169,8 +165,7 @@ class _DIncassationHistoryState extends State<DIncassationHistory> {
                   ),
                   RaisedButton(
                     onPressed: () => _selectEndDate(context),
-                    child: Text(
-                        "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                    child: Text("${_endDate.day}.${_endDate.month}.${_endDate.year}"),
                   ),
                   IconButton(
                       icon: Icon(
@@ -187,10 +182,7 @@ class _DIncassationHistoryState extends State<DIncassationHistory> {
               SizedBox(
                   width: width / 7 * 6,
                   child: Table(
-                    border: TableBorder.all(
-                        color: Colors.black,
-                        width: 1,
-                        style: BorderStyle.solid),
+                    border: TableBorder.all(color: Colors.black, width: 1, style: BorderStyle.solid),
                     children: [
                       createTableRow([
                         'Дата/Время',
@@ -201,10 +193,8 @@ class _DIncassationHistoryState extends State<DIncassationHistory> {
                       ..addAll(
                         List.generate(_incassations.length, (index) {
                           return createTableRow([
-                            formatDateTime(DateTime.fromMillisecondsSinceEpoch(
-                                _incassations[index].ctime * 1000)),
-                            (_incassations[index].banknotes ?? 0) +
-                                (_incassations[index].coins ?? 0),
+                            formatDateTime(DateTime.fromMillisecondsSinceEpoch(_incassations[index].ctime * 1000)),
+                            (_incassations[index].banknotes ?? 0) + (_incassations[index].coins ?? 0),
                             _incassations[index].electronical ?? 0,
                           ]);
                         }),

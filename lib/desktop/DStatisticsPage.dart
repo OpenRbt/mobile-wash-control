@@ -46,7 +46,9 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
     var screenW = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.height;
 
-    var width = screenW - screenW / 4;
+    double DrawerSize = 256;
+
+    var width = screenW - DrawerSize;
     var height = screenH;
 
     return Scaffold(
@@ -56,8 +58,7 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              DGetDrawer(
-                  screenH, screenW / 4, context, Pages.Statistics, sessionData),
+              DGetDrawer(screenH, DrawerSize, context, Pages.Statistics, sessionData),
               Column(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -69,8 +70,7 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
                     ),
                     RaisedButton(
                       onPressed: () => _selectStartDate(context),
-                      child: Text(
-                          "${_startDate.day}.${_startDate.month}.${_startDate.year}"),
+                      child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year}"),
                     ),
                     Text(
                       " по ",
@@ -78,8 +78,7 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
                     ),
                     RaisedButton(
                       onPressed: () => _selectEndDate(context),
-                      child: Text(
-                          "${_endDate.day}.${_endDate.month}.${_endDate.year}"),
+                      child: Text("${_endDate.day}.${_endDate.month}.${_endDate.year}"),
                     ),
                     IconButton(
                         icon: Icon(
@@ -126,83 +125,25 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
                 SizedBox(
                   width: width / 7 * 6,
                   child: Table(
-                    border: TableBorder.all(
-                        color: Colors.black,
-                        width: 1,
-                        style: BorderStyle.solid),
+                    border: TableBorder.all(color: Colors.black, width: 1, style: BorderStyle.solid),
                     children: [
-                      createTableRow([
-                        'пост',
-                        'наличные',
-                        'банк. карта',
-                        'сервисные',
-                        'авто',
-                        'ср. чек'
-                      ])
+                      createTableRow(['пост', 'банкноты', 'монеты', 'банк. карта', 'сервисные', 'авто', 'ср. чек'])
                     ]
                       ..addAll(
                         List.generate(_reports.length, (index) {
                           return createTableRow([
                             _reports.keys.elementAt(index),
-                            (_reports.values
-                                        .elementAt(index)
-                                        .moneyReport
-                                        .banknotes ??
-                                    0) +
-                                (_reports.values
-                                        .elementAt(index)
-                                        .moneyReport
-                                        .coins ??
-                                    0),
-                            _reports.values
-                                    .elementAt(index)
-                                    .moneyReport
-                                    .electronical ??
-                                0,
-                            _reports.values
-                                    .elementAt(index)
-                                    .moneyReport
-                                    .service ??
-                                0,
-                            _reports.values
-                                    .elementAt(index)
-                                    .moneyReport
-                                    .carsTotal ??
-                                0,
-                            (_reports.values
-                                            .elementAt(index)
-                                            .moneyReport
-                                            .carsTotal !=
-                                        null &&
-                                    _reports.values
-                                            .elementAt(index)
-                                            .moneyReport
-                                            .carsTotal >
-                                        0)
-                                ? ((((_reports.values
-                                                    .elementAt(index)
-                                                    .moneyReport
-                                                    .banknotes ??
-                                                0) +
-                                            (_reports.values
-                                                    .elementAt(index)
-                                                    .moneyReport
-                                                    .coins ??
-                                                0) +
-                                            (_reports.values
-                                                    .elementAt(index)
-                                                    .moneyReport
-                                                    .electronical ??
-                                                0) +
-                                            (_reports.values
-                                                    .elementAt(index)
-                                                    .moneyReport
-                                                    .service ??
-                                                0)) /
-                                        _reports.values
-                                            .elementAt(index)
-                                            .moneyReport
-                                            .carsTotal))
+                            _reports.values.elementAt(index).moneyReport.banknotes ?? 0,
+                            _reports.values.elementAt(index).moneyReport.coins ?? 0,
+                            _reports.values.elementAt(index).moneyReport.electronical ?? 0,
+                            _reports.values.elementAt(index).moneyReport.service ?? 0,
+                            _reports.values.elementAt(index).moneyReport.carsTotal ?? 0,
+                            (_reports.values.elementAt(index).moneyReport.carsTotal != null && _reports.values.elementAt(index).moneyReport.carsTotal > 0)
+                                ? ((((_reports.values.elementAt(index).moneyReport.banknotes ?? 0) +
+                                            (_reports.values.elementAt(index).moneyReport.coins ?? 0) +
+                                            (_reports.values.elementAt(index).moneyReport.electronical ?? 0) +
+                                            (_reports.values.elementAt(index).moneyReport.service ?? 0)) /
+                                        _reports.values.elementAt(index).moneyReport.carsTotal))
                                     .toStringAsFixed(2)
                                 : 0
                           ]);
@@ -211,39 +152,16 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
                       ..add(
                         createTableRow([
                           "Итого",
-                          _total.moneyReport.banknotes +
-                              _total.moneyReport.coins,
+                          _total.moneyReport.banknotes,
+                          _total.moneyReport.coins,
                           _total.moneyReport.electronical,
                           _total.moneyReport.service,
                           _total.moneyReport.carsTotal,
-                          _total.moneyReport.carsTotal > 0
-                              ? ((_total.moneyReport.banknotes +
-                                          _total.moneyReport.coins +
-                                          _total.moneyReport.electronical +
-                                          _total.moneyReport.service) /
-                                      _total.moneyReport.carsTotal)
-                                  .toStringAsFixed(2)
-                              : 0,
+                          _total.moneyReport.carsTotal > 0 ? ((_total.moneyReport.banknotes + _total.moneyReport.coins + _total.moneyReport.electronical + _total.moneyReport.service) / _total.moneyReport.carsTotal).toStringAsFixed(2) : 0,
                         ]),
                       ),
                   ),
                 ),
-                SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    'Моторесурс',
-                    style: TextStyle(fontSize: 32),
-                  ),
-                ),
-                SizedBox(height: 5),
-                Center(
-                  child: Wrap(
-                    children: List.generate(
-                      12,
-                      (index) => createMoto(index + 1, width),
-                    ),
-                  ),
-                )
               ])
             ],
           );
@@ -262,26 +180,27 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
     for (int i = 0; i < 12; i++) {
       try {
         if (_byDate) {
-          var args = StationReportDatesArgs();
-          args.id = i + 1;
-          args.startDate = _startDate.millisecondsSinceEpoch ~/ 1000;
-          args.endDate = _endDate.millisecondsSinceEpoch ~/ 1000;
+          var args = ArgStationReportDates(
+            id: i + 1,
+            startDate: _startDate.millisecondsSinceEpoch ~/ 1000,
+            endDate: _endDate.millisecondsSinceEpoch ~/ 1000,
+          );
+
           reportsTmp.add(
             sessionData.client.stationReportDates(args),
           );
         } else {
-          var args = StationReportCurrentMoneyArgs();
-          args.id = i + 1;
+          var args = ArgStationReportCurrentMoney(
+            id: i + 1,
+          );
           reportsTmp.add(
             sessionData.client.stationReportCurrentMoney(args),
           );
         }
       } on ApiException catch (e) {
         if (e.code != 404) {
-          print(
-              "Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-              "Произошла ошибка при запросе к api", Colors.red);
+          print("Exception when calling DefaultApi->/station-report-dates: $e\n");
+          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
         } else {}
       } catch (e) {
         if (!(e is ApiException)) {
@@ -295,10 +214,8 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
         _reports.addAll({(i + 1): (await reportsTmp[i] ?? StationReport())});
       } on ApiException catch (e) {
         if (e.code != 404) {
-          print(
-              "Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
-              "Произошла ошибка при запросе к api", Colors.red);
+          print("Exception when calling DefaultApi->/station-report-dates: $e\n");
+          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
         } else {
           var tmp = StationReport();
           tmp.moneyReport = MoneyReport();
@@ -329,8 +246,7 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
       if (_reports[i] != null) {
         _total.moneyReport.banknotes += _reports[i].moneyReport.banknotes ?? 0;
         _total.moneyReport.coins += _reports[i].moneyReport.coins ?? 0;
-        _total.moneyReport.electronical +=
-            _reports[i].moneyReport.electronical ?? 0;
+        _total.moneyReport.electronical += _reports[i].moneyReport.electronical ?? 0;
         _total.moneyReport.service += _reports[i].moneyReport.service ?? 0;
         _total.moneyReport.carsTotal += _reports[i].moneyReport.carsTotal ?? 0;
       }
@@ -388,53 +304,6 @@ class _DStatisticsPageState extends State<DStatisticsPage> {
         }
       });
     }
-  }
-
-  Widget createMoto(int number, double width) {
-    return Column(children: [
-      Container(
-        width: width / 13,
-        height: 50,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
-        child: Center(
-          child: Text(
-            'пост ' + number.toString(),
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      ),
-      Container(
-        width: width / 13,
-        height: 50,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
-        child: Center(
-          child: Text(''),
-        ),
-      ),
-      Container(
-        width: width / 13,
-        height: 50,
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.black),
-          ),
-          color: Colors.white,
-          disabledColor: Colors.white,
-          onPressed: () {
-            print("Pressed " + number.toString() + " post reset button");
-          },
-          child: Text(
-            "сброс",
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      ),
-      SizedBox(height: 20)
-    ]);
   }
 
   TableRow createTableRow(List values) {
