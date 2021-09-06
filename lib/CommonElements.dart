@@ -205,7 +205,7 @@ class LinuxConfigs {
 }
 
 class DefaultConfig {
-  static final appVersion = "1.1.1";
+  static final appVersion = "1.1.2";
   static final Map<String, StationsDefaultConfig> configs = {
     "Wash": StationsDefaultConfig([
       _getProgram(1, "wsh-water", 25, false, 100, 100, [
@@ -437,4 +437,8 @@ Widget DGetDrawer(double height, double width, BuildContext context, Pages _curr
           itemCount: dPagesNames.length),
     ),
   );
+}
+
+class GlobalData{
+  static int AddServiceValue = 10;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/PagesUtils/PagesArgs.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
@@ -114,7 +115,7 @@ void AddServiceMoney(PostMenuArgs postMenuArgs) async {
   try {
     var args = ArgAddServiceAmount(
       hash: postMenuArgs.hash,
-      amount: 10,
+      amount: GlobalData.AddServiceValue,
     );
     var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
   } catch (e) {

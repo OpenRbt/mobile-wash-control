@@ -5,6 +5,7 @@ import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/PagesUtils/PagesArgs.dart';
 import 'package:mobile_wash_control/PagesUtils/ServerRequests/HomepageRequests.dart';
 import 'package:mobile_wash_control/client/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostMenu extends StatefulWidget {
   @override
@@ -132,6 +133,17 @@ class _PostMenuState extends State<PostMenu> {
     }
   }
 
+  void _changeServiceValue({int value = 10}) async {
+    GlobalData.AddServiceValue += value;
+    if (GlobalData.AddServiceValue < 0) {
+      GlobalData.AddServiceValue = 0;
+    }
+    setState(() {});
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt("AddServiceValue", GlobalData.AddServiceValue);
+  }
+
   @override
   Widget build(BuildContext context) {
     final PostMenuArgs postMenuArgs = ModalRoute.of(context).settings.arguments;
@@ -235,38 +247,50 @@ class _PostMenuState extends State<PostMenu> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                height: 50,
-                width: width / 6 * 2,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "10 руб",
-                    style: TextStyle(fontSize: 36),
-                  ),
+              IconButton(
+                icon: Icon(Icons.remove_circle_outline),
+                color: Colors.lightGreen,
+                splashColor: Colors.lightGreenAccent,
+                onPressed: () {
+                  _changeServiceValue(value: -10);
+                },
+              ),
+              Container(
+                child: Text(
+                  "${GlobalData.AddServiceValue} руб",
+                  style: TextStyle(fontSize: 36),
                 ),
               ),
-              SizedBox(
-                height: 50,
-                width: width / 6,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: IconButton(
-                      iconSize: 75,
-                      icon: Icon(Icons.add_circle_outline),
-                      color: Colors.lightGreen,
-                      splashColor: Colors.lightGreenAccent,
-                      onPressed: () {
-                        AddServiceMoney(postMenuArgs);
-                      },
-                    ),
-                  ),
-                ),
+              IconButton(
+                icon: Icon(Icons.add_circle_outline),
+                color: Colors.lightGreen,
+                splashColor: Colors.lightGreenAccent,
+                onPressed: () {
+                  _changeServiceValue(value: 10);
+                },
               ),
             ],
+          ),
+          Container(
+            height: 50,
+            width: width / 2,
+            child: RaisedButton(
+              color: Colors.lightGreen,
+              textColor: Colors.white,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.black,
+              padding: EdgeInsets.all(8.0),
+              splashColor: Colors.lightGreenAccent,
+              child: Text(
+                "Отправить",
+                style: TextStyle(fontSize: 15),
+              ),
+              onPressed: () {
+                AddServiceMoney(postMenuArgs);
+              },
+            ),
           ),
           SizedBox(
             height: 50,
