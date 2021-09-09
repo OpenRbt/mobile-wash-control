@@ -25,7 +25,7 @@ class _AuthPageState extends State<AuthPage> {
   SessionData _sessionData;
   String _currentPin = "";
 
-  void _loadPage() async{
+  void _loadPage() async {
     final prefs = await SharedPreferences.getInstance();
     final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
     GlobalData.AddServiceValue = addServiceValue;

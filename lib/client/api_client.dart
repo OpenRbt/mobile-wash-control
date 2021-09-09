@@ -237,14 +237,22 @@ class ApiClient {
           break;
         case 'double':
           return value is double ? value : double.parse('$value');
+        case 'AdvertisingCampaign':
+          return AdvertisingCampaign.fromJson(value);
         case 'ArgAddServiceAmount':
           return ArgAddServiceAmount.fromJson(value);
+        case 'ArgAdvertisingCampagin':
+          return ArgAdvertisingCampagin.fromJson(value);
+        case 'ArgAdvertisingCampaignByID':
+          return ArgAdvertisingCampaignByID.fromJson(value);
         case 'ArgCardReaderConfig':
           return ArgCardReaderConfig.fromJson(value);
         case 'ArgCardReaderConfigByCash':
           return ArgCardReaderConfigByCash.fromJson(value);
         case 'ArgCollectionReportDates':
           return ArgCollectionReportDates.fromJson(value);
+        case 'ArgDelAdvertisingCampagin':
+          return ArgDelAdvertisingCampagin.fromJson(value);
         case 'ArgDelStation':
           return ArgDelStation.fromJson(value);
         case 'ArgLoad':
@@ -305,6 +313,8 @@ class ApiClient {
           return CollectionReport.fromJson(value);
         case 'CollectionReportWithUser':
           return CollectionReportWithUser.fromJson(value);
+        case 'DiscountProgram':
+          return DiscountProgram.fromJson(value);
         case 'InlineResponse409':
           return InlineResponse409.fromJson(value);
         case 'KasseConfig':

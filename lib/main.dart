@@ -5,9 +5,11 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/desktop/_DesktopPages.dart' as desktop;
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/AdvertisingCampagins.dart';
+import 'package:mobile_wash_control/mobile/AdvertisingCampaginsCreate.dart';
+import 'package:mobile_wash_control/mobile/AdvertisingCampaginsEdit.dart';
 import 'package:mobile_wash_control/mobile/MotorMenu.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
@@ -20,7 +22,6 @@ import 'package:mobile_wash_control/mobile/HomePage.dart';
 import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/PostsMenu.dart';
 import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';
-import 'package:mobile_wash_control/mobile/ServersPage.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
@@ -48,11 +49,11 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: Platform.isAndroid ? PagesRoutes.routes["MOBILE"] : PagesRoutes.routes["DESKTOP"],
       localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate
+        GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: [
         const Locale('en'),
-        const Locale('ru')
+        const Locale('ru'),
       ],
     );
   }
@@ -413,7 +414,7 @@ class PagesRoutes {
       "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
       "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
       "/dekstop/incassation": (context) => desktop.DIncassationHistory(),
-      "/desktop/motors":(context) => desktop.DMotorMenu(),
+      "/desktop/motors": (context) => desktop.DMotorMenu(),
     },
     "MOBILE": {
       "/": (context) => MyHomePage(title: "Главная страница"),
@@ -434,6 +435,9 @@ class PagesRoutes {
       "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
       "/mobile/accounts/add": (context) => AccountsMenuAdd(),
       "/mobile/incassation": (context) => IncassationHistory(),
+      "/mobile/advertisings": (conmtext) => AdvertisingCampagins(),
+      "/mobile/advertisings/create": (context) => AdvertisingCampaginsCreate(),
+      "/mobile/advertisings/edit": (context) => AdvertisingCampaginsEdit(),
     }
   };
 }

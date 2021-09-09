@@ -14,6 +14,47 @@ class DefaultApi {
 
   final ApiClient apiClient;
 
+  /// Performs an HTTP 'POST /add-advertising-campaign' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [AdvertisingCampaign] args:
+  Future<Response> addAdvertisingCampaignWithHttpInfo({AdvertisingCampaign args}) async {
+    // Verify required params are set.
+
+    final path = r'/add-advertising-campaign';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [AdvertisingCampaign] args:
+  Future<void> addAdvertisingCampaign({AdvertisingCampaign args}) async {
+    final response = await addAdvertisingCampaignWithHttpInfo(args: args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
   /// Performs an HTTP 'POST /add-service-amount' operation and returns the [Response].
   /// Parameters:
   ///
@@ -56,6 +97,105 @@ class DefaultApi {
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
+  }
+
+  /// Performs an HTTP 'POST /advertising-campaign' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgAdvertisingCampagin] args:
+  Future<Response> advertisingCampaignWithHttpInfo({ArgAdvertisingCampagin args}) async {
+    // Verify required params are set.
+
+    final path = r'/advertising-campaign';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgAdvertisingCampagin] args:
+  Future<List<AdvertisingCampaign>> advertisingCampaign({ArgAdvertisingCampagin args}) async {
+    final response = await advertisingCampaignWithHttpInfo(args: args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<AdvertisingCampaign>') as List).cast<AdvertisingCampaign>().toList(growable: false);
+    }
+    return Future<List<AdvertisingCampaign>>.value(null);
+  }
+
+  /// Performs an HTTP 'POST /advertising-campaign-by-id' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgAdvertisingCampaignByID] args:
+  Future<Response> advertisingCampaignByIDWithHttpInfo({ArgAdvertisingCampaignByID args}) async {
+    // Verify required params are set.
+
+    final path = r'/advertising-campaign-by-id';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgAdvertisingCampaignByID] args:
+  Future<AdvertisingCampaign> advertisingCampaignByID({ArgAdvertisingCampaignByID args}) async {
+    final response = await advertisingCampaignByIDWithHttpInfo(args: args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'AdvertisingCampaign',
+      ) as AdvertisingCampaign;
+    }
+    return Future<AdvertisingCampaign>.value(null);
   }
 
   /// Performs an HTTP 'POST /card-reader-config' operation and returns the [Response].
@@ -220,6 +360,47 @@ class DefaultApi {
     return Future<ResponseUserCreate>.value(null);
   }
 
+  /// Performs an HTTP 'POST /del-advertising-campaign' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgDelAdvertisingCampagin] args:
+  Future<Response> delAdvertisingCampaignWithHttpInfo({ArgDelAdvertisingCampagin args}) async {
+    // Verify required params are set.
+
+    final path = r'/del-advertising-campaign';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgDelAdvertisingCampagin] args:
+  Future<void> delAdvertisingCampaign({ArgDelAdvertisingCampagin args}) async {
+    final response = await delAdvertisingCampaignWithHttpInfo(args: args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
   /// Performs an HTTP 'POST /del-station' operation and returns the [Response].
   /// Parameters:
   ///
@@ -303,6 +484,47 @@ class DefaultApi {
   /// * [ArgUserDelete] args (required):
   Future<void> deleteUser(ArgUserDelete args) async {
     final response = await deleteUserWithHttpInfo(args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /edit-advertising-campaign' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [AdvertisingCampaign] args:
+  Future<Response> editAdvertisingCampaignWithHttpInfo({AdvertisingCampaign args}) async {
+    // Verify required params are set.
+
+    final path = r'/edit-advertising-campaign';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>['pinCode'];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [AdvertisingCampaign] args:
+  Future<void> editAdvertisingCampaign({AdvertisingCampaign args}) async {
+    final response = await editAdvertisingCampaignWithHttpInfo(args: args);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

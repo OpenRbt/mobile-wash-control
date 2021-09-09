@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'package:mobile_wash_control/client/api.dart';
 
-enum Pages { Main, Programs, Settings, Accounts, Statistics, Motors, None }
+enum Pages { Main, Programs, Advertisting, Settings, Accounts, Statistics, Motors, None }
 
 class SessionData {
   final DefaultApi client;
@@ -12,11 +12,12 @@ class SessionData {
 }
 
 Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessionData) {
-  var texts = ["Главная", "Программы", "Настройки", "Учетки", "Статистика", "Моторесурс", "Выход"];
+  var texts = ["Главная", "Программы","Управление скидками", "Настройки", "Учетки", "Статистика", "Моторесурс", "Выход"];
 
   var routes = [
     "/mobile/home",
     "/mobile/programs",
+    "/mobile/advertisings",
     "/mobile/settings",
     "/mobile/accounts",
     "/mobile/statistics",
@@ -439,6 +440,6 @@ Widget DGetDrawer(double height, double width, BuildContext context, Pages _curr
   );
 }
 
-class GlobalData{
+class GlobalData {
   static int AddServiceValue = 10;
 }

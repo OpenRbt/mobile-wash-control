@@ -28,10 +28,14 @@ part 'auth/http_bearer_auth.dart';
 
 part 'api/default_api.dart';
 
+part 'model/advertising_campaign.dart';
 part 'model/arg_add_service_amount.dart';
+part 'model/arg_advertising_campagin.dart';
+part 'model/arg_advertising_campaign_by_id.dart';
 part 'model/arg_card_reader_config.dart';
 part 'model/arg_card_reader_config_by_cash.dart';
 part 'model/arg_collection_report_dates.dart';
+part 'model/arg_del_advertising_campagin.dart';
 part 'model/arg_del_station.dart';
 part 'model/arg_load.dart';
 part 'model/arg_load_from_station.dart';
@@ -62,6 +66,7 @@ part 'model/arg_user_update.dart';
 part 'model/card_reader_config.dart';
 part 'model/collection_report.dart';
 part 'model/collection_report_with_user.dart';
+part 'model/discount_program.dart';
 part 'model/inline_response409.dart';
 part 'model/kasse_config.dart';
 part 'model/key_pair.dart';
