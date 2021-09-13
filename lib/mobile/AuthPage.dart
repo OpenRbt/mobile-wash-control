@@ -29,7 +29,7 @@ class _AuthPageState extends State<AuthPage> {
     final prefs = await SharedPreferences.getInstance();
     final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
     GlobalData.AddServiceValue = addServiceValue;
-    SystemChrome.setPreferredOrientations([]);
+    //SystemChrome.setPreferredOrientations([]);
     Navigator.pushReplacementNamed(context, "/mobile/home", arguments: _sessionData);
   }
 
