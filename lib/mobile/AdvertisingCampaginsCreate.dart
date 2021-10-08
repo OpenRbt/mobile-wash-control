@@ -723,13 +723,9 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      var tmpStartMinutes = tmpStart.hour * 60 + tmpStart.minute;
-                      var tmpEndMinutes = tmpEnd.hour * 60 + tmpEnd.minute;
-                      if (tmpStartMinutes <= tmpEndMinutes) {
-                        DiscountTimeStart = tmpStart;
-                        DiscountTimeEnd = tmpEnd;
-                        Navigator.pop(context);
-                      }
+                      DiscountTimeStart = tmpStart;
+                      DiscountTimeEnd = tmpEnd;
+                      Navigator.pop(context);
                     },
                     child: Text("Сохранить"),
                   ),

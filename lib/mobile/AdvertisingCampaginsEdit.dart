@@ -785,13 +785,9 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      var tmpStartMinutes = tmpStart.hour * 60 + tmpStart.minute;
-                      var tmpEndMinutes = tmpEnd.hour * 60 + tmpEnd.minute;
-                      if (tmpStartMinutes <= tmpEndMinutes) {
-                        discountTimeStart = tmpStart;
-                        discountTimeEnd = tmpEnd;
-                        Navigator.pop(context);
-                      }
+                      discountTimeStart = tmpStart;
+                      discountTimeEnd = tmpEnd;
+                      Navigator.pop(context);
                     },
                     child: Text("Сохранить"),
                   ),
