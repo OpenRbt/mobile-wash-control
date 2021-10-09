@@ -48,6 +48,8 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
         args.endDate = dateRange.end.millisecondsSinceEpoch ~/ 1000;
       }
       adCampagins = await sessionData.client.advertisingCampaign(args: args);
+      adCampagins.sort((a,b) => a.id.compareTo(b.id));
+
       if (_hideCompleted){
         var now = DateTime.now().add(Duration(days: 1)).millisecondsSinceEpoch;
         adCampagins = adCampagins.where((e) => (e.endDate ?? 0)*1000 + (e.timezone??0)*60000 < now).toList();

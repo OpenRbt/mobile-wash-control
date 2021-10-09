@@ -1201,9 +1201,9 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
   }
 
   Future<Widget> showEditProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems, int index) {
-    int dropDownValue = dropDownItems[0].value;
+    int dropDownValue = discountProgramsList[index].programID;
     _programDiscountController.text = "0";
-    ProgramDiscountValue = 0;
+    ProgramDiscountValue = discountProgramsList[index].discount;
 
     return showDialog(
       context: context,
@@ -1281,7 +1281,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      if (dropDownValue != -1 && discountProgramsList.where((element) => element.programID == dropDownValue).length == 0) {
+                      if (dropDownValue != -1 && (discountProgramsList.indexWhere((element) => element.programID == dropDownValue) == index || !discountProgramsList.any((element) => element.programID == dropDownValue))) {
                         discountProgramsList[index] = DiscountProgram(programID: dropDownValue, discount: ProgramDiscountValue);
                         ignoreItems.add(dropDownValue);
                       }

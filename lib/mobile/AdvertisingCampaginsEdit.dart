@@ -54,7 +54,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
   int _timeZone = 0;
   final List<DropdownMenuItem> _timeZoneValues = List.generate(
     12,
-        (index) => DropdownMenuItem(
+    (index) => DropdownMenuItem(
       child: Center(
         child: Text(
           "UTC+${index}",
@@ -1263,9 +1263,9 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
   }
 
   Future<Widget> showEditProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems, int index) {
-    int dropDownValue = dropDownItems[0].value;
+    int dropDownValue = discountProgramsList[index].programID;
     _programDiscountController.text = "0";
-    programDiscountValue = 0;
+    programDiscountValue = discountProgramsList[index].discount;
 
     return showDialog(
       context: context,
@@ -1343,7 +1343,8 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      if (dropDownValue != -1 && discountProgramsList.where((element) => element.programID == dropDownValue).length == 0) {
+                      if (dropDownValue != -1 && (discountProgramsList.indexWhere((element) => element.programID == dropDownValue) == index || !discountProgramsList.any((element) => element.programID == dropDownValue))) {
+                        ignoreItems.remove(discountProgramsList[index].programID);
                         discountProgramsList[index] = DiscountProgram(programID: dropDownValue, discount: programDiscountValue);
                         ignoreItems.add(dropDownValue);
                       }
