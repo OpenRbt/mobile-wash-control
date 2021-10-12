@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:mobile_wash_control/SharedData.dart';
 import 'dart:io';
 import 'package:mobile_wash_control/client/api.dart';
 
@@ -88,6 +89,11 @@ Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessi
                               );
                             }
                           : () {
+                              if (routes[index] != routes[0]) {
+                                SharedData.CanUpdateStatus = false;
+                              } else {
+                                SharedData.CanUpdateStatus = true;
+                              }
                               Navigator.pop(context); //Closing Drawer
                               Navigator.pushReplacementNamed(Navigator.of(context).context, routes[index], arguments: sessionData);
                             };
@@ -205,7 +211,7 @@ class LinuxConfigs {
 }
 
 class DefaultConfig {
-  static final appVersion = "1.1.2";
+  static final appVersion = "1.1.2a";
   static final Map<String, StationsDefaultConfig> configs = {
     "Wash": StationsDefaultConfig([
       _getProgram(1, "wsh-water", 25, false, 100, 100, [
@@ -439,6 +445,6 @@ Widget DGetDrawer(double height, double width, BuildContext context, Pages _curr
   );
 }
 
-class GlobalData{
+class GlobalData {
   static int AddServiceValue = 10;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/PagesUtils/PagesArgs.dart';
+import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 Future<List<ResponseStationButtonButtons>> GetStationButtons(PostMenuArgs postMenuArgs) async {
@@ -35,13 +36,8 @@ Future<PostMenuInfo> GetPostInfo(PostMenuArgs postMenuArgs, List<ResponseStation
   int currentProgram = -1;
   List<bool> activePrograms = List.filled(buttons.length, false);
   try {
-    var resStatus = await postMenuArgs.sessionData.client.status();
-    var status = resStatus.stations.firstWhere((element) => element.id == postMenuArgs.postID, orElse: () {
-      return null;
-    });
-
-    currentProgram = status.currentProgram ?? -1;
-    balance = status.currentBalance ?? 0;
+    currentProgram = SharedData.StationsData.value[postMenuArgs.postID].currentProgramID ?? -1;
+    balance = SharedData.StationsData.value[postMenuArgs.postID].currentBalance ?? 0;
 
     var args = ArgStationReportCurrentMoney(
       id: postMenuArgs.postID,

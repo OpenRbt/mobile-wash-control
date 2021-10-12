@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
@@ -13,29 +17,9 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
 
-  List<Program> _programs;
-  bool _firstLoad = true;
-
-  Future<void> GetData(SessionData sessionData) async {
-    try {
-      _programs = await sessionData.client.programs(ArgPrograms());
-      if (!mounted) {
-        return;
-      }
-      _firstLoad = false;
-      setState(() {});
-    } catch (e) {
-      print("Exception when calling GetData in ProgramsMenu: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context).settings.arguments;
-    if (_firstLoad) {
-      GetData(sessionData);
-    }
 
     final AppBar appBar = AppBar(
       title: Text("Программы"),
@@ -47,249 +31,220 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
       key: _scaffoldKey,
       appBar: appBar,
       drawer: prepareDrawer(context, Pages.Programs, sessionData),
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          return new SizedBox(
-            height: screenH - appBar.preferredSize.height,
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await GetData(sessionData);
-                await Future.delayed(
-                  Duration(milliseconds: 500),
-                );
-                setState(() {});
-              },
-              child: ListView(children: [
-                Column(children: [
-                  SizedBox(
-                    height: 50,
-                    width: screenW,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: screenW > screenH ? screenW / 8 : 0,
-                          child: Center(
-                            child: Text(
-                              screenW > screenH ? "ID" : "",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 50,
-                          width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
-                          child: Center(
-                            child: Text(
-                              "Название",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 50,
-                          width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
-                          child: Center(
-                            child: Text(
-                              "Цена",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 50,
-                          width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
-                          child: Center(
-                            child: Text(
-                              "Прокачка",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: programsTable(sessionData, screenW, screenH),
-                  ),
-                ])
-              ]),
-            ),
-          );
+      body: Container(
+          child: RefreshIndicator(
+        onRefresh: () async {
+          await SharedData.RefreshPrograms();
         },
-      ),
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                height: 50,
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Center(
+                        child: Text("ID"),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Center(
+                        child: Text("Название"),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Center(
+                        child: Text("Прокачка"),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Center(
+                        child: Text("Чистовая"),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Container(),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                height: 0,
+              ),
+              Expanded(
+                child: Container(
+                  child: ProgramsTableAlt(sessionData),
+                ),
+              )
+            ],
+          ),
+        ),
+      )),
     );
   }
 
-  List<Widget> programsTable(SessionData sessionData, double screenW, double screenH) {
-    return List.generate((_programs != null ? _programs.length : 0) + 1, (index) {
-      if (index < (_programs?.length ?? 0)) {
-        return Row(
-          children: [
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 : 0,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: index % 2 == 0 ? Colors.white : Colors.black12,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: Text(
-                  screenW > screenH ? "${_programs[index].id}" : "",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: index % 2 == 0 ? Colors.white : Colors.black12,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: Text(
-                  _programs[index].name ?? "no name",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: index % 2 == 0 ? Colors.white : Colors.black12,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: Text(
-                  "${_programs[index].price ?? 0}",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: (_programs[index].preflightEnabled != null) ? (_programs[index].preflightEnabled ? Colors.lightGreen : Colors.red) : Colors.red,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: Center(
-                  child: Text(
-                    (_programs[index].preflightEnabled != null) ? (_programs[index].preflightEnabled ? "Включена" : "Отключена") : "Отключена",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+  Widget ProgramsTableAlt(SessionData sessionData) {
+    return ValueListenableBuilder(
+      valueListenable: SharedData.Programs,
+      builder: (BuildContext context, values, child) {
+        if (SharedData.Programs.value == null) {
+          SharedData.RefreshPrograms();
+          return child;
+        }
+        return Container(
+          child: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              if (index == SharedData.Programs.value.length) {
+                return Container(
+                  height: 50,
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black)]),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Center(
+                          child: Text("..."),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: Container(
+                          width: double.maxFinite,
+                          child: Text(
+                            "Новая программа",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: Center(
+                          child: Text("---"),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: Center(
+                          child: Text("---"),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.green,
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: LayoutBuilder(
+                              builder: (context, constraint) {
+                                return Icon(
+                                  Icons.add_circle,
+                                  size: constraint.biggest.height,
+                                  color: Colors.white,
+                                );
+                              },
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/mobile/programs/add", arguments: sessionData).then(
+                                (value) => SharedData.RefreshPrograms(),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                );
+              }
+              return Container(
+                height: 50,
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black)]),
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Center(
+                        child: Text("${SharedData.Programs.value[index].id}"),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Container(
+                        width: double.maxFinite,
+                        child: Text(
+                          "${SharedData.Programs.value[index].name ?? ""}",
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Center(
+                        child: Text("${"${(SharedData.Programs.value[index].preflightEnabled ?? false) ? "Да" : "Нет"}"}"),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Center(
+                        child: Text("${"${(SharedData.Programs.value[index].isFinishingProgram ?? false) ? "Да" : "Нет"}"}"),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.green,
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: LayoutBuilder(
+                            builder: (context, constraint) {
+                              return Icon(
+                                Icons.build_circle,
+                                size: constraint.biggest.height,
+                                color: Colors.white,
+                              );
+                            },
+                          ),
+                          onPressed: () {
+                            var args = ProgramMenuEditArgs(SharedData.Programs.value[index].id, SharedData.Programs.value[index].name, sessionData);
+                            Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
+                              (value) => SharedData.RefreshPrograms(),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 : screenW / 7,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: index % 2 == 0 ? Colors.white : Colors.black12,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.more_horiz),
-                  onPressed: () {
-                    var args = ProgramMenuEditArgs(_programs[index].id, _programs[index].name, sessionData);
-                    Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
-                      (value) => GetData(sessionData),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
+              );
+            },
+            itemCount: SharedData.Programs.value.length + 1,
+          ),
         );
-      } else {
-        return Row(
-          children: [
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 : 0,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: index % 2 == 0 ? Colors.white : Colors.black12,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: Text(
-                  "",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: index % 2 == 0 ? Colors.white : Colors.black12,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: Text(
-                  "",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: index % 2 == 0 ? Colors.white : Colors.black12,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: Text(
-                  "",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 * 2 : screenW / 7 * 2,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: index % 2 == 0 ? Colors.white : Colors.black12,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: FlatButton(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-              width: screenW > screenH ? screenW / 8 : screenW / 7,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: index % 2 == 0 ? Colors.white : Colors.black12,
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/mobile/programs/add", arguments: sessionData).then(
-                      (value) => GetData(sessionData),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        );
-      }
-    });
+      },
+      child: Container(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
   }
 }
