@@ -211,7 +211,6 @@ class LinuxConfigs {
 }
 
 class DefaultConfig {
-  static final appVersion = "1.1.2a";
   static final Map<String, StationsDefaultConfig> configs = {
     "Wash": StationsDefaultConfig([
       _getProgram(1, "wsh-water", 25, false, 100, 100, [

@@ -3,6 +3,8 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
 import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/desktop/_DesktopPages.dart' as desktop;
 import 'package:mobile_wash_control/CommonElements.dart';
@@ -66,6 +68,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with RouteAware {
+  PackageInfo _packageInfo = PackageInfo(
+    appName: '',
+    packageName: '',
+    version: '',
+    buildNumber: '',
+    buildSignature: '',
+  );
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -94,6 +104,14 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
   void initState() {
     super.initState();
     _servers = new HashSet();
+    _initPackageInfo();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
   }
 
   void _scanLan(bool quick) async {
@@ -275,7 +293,7 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
   Widget build(BuildContext context) {
     var appBar = AppBar(
       title: Text("${widget.title}"),
-      leading: Text("${DefaultConfig.appVersion}"),
+      leading: Text("${_packageInfo.version}"),
     );
 
     var screenW = MediaQuery.of(context).size.width;
