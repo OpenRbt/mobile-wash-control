@@ -1,7 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/client/api.dart';
+import 'package:mobile_wash_control/main.dart';
 import 'dart:async';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +26,40 @@ class EditPostMenu extends StatefulWidget {
   _EditPostMenuState createState() => _EditPostMenuState();
 }
 
-class _EditPostMenuState extends State<EditPostMenu> {
+class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    if (_updateBalanceTimer != null && _updateBalanceTimer.isActive) _updateBalanceTimer.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didPush() {
+    SharedData.CanUpdateStatus = true;
+  }
+
+  @override
+  void didPushNext() {
+    SharedData.CanUpdateStatus = false;
+  }
+
+  @override
+  void didPop() {
+    // SharedData.CanUpdateStatus = false;
+  }
+
+  @override
+  void didPopNext() {
+    SharedData.CanUpdateStatus = true;
+  }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
   bool _firstLoad = true;
@@ -40,11 +75,6 @@ class _EditPostMenuState extends State<EditPostMenu> {
     super.initState();
   }
 
-  void dispose() {
-    if (_updateBalanceTimer != null && _updateBalanceTimer.isActive) _updateBalanceTimer.cancel();
-    super.dispose();
-  }
-
   List<bool> _checkboxList = List();
   Map<int, String> _buttonNames = Map();
 
@@ -53,11 +83,11 @@ class _EditPostMenuState extends State<EditPostMenu> {
       var args = ArgStationButton(stationID: postMenuArgs.postID);
       var res = await postMenuArgs.sessionData.client.stationButton(args);
       _buttons = res.buttons;
-      var programs = await postMenuArgs.sessionData.client.programs(ArgPrograms());
+
       if (!mounted) {
         return;
       }
-      _unpackNames(programs);
+      _unpackNames();
     } catch (e) {
       print("Exception when calling DefaultApi->/station-button: $e\n");
       showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
@@ -66,27 +96,24 @@ class _EditPostMenuState extends State<EditPostMenu> {
 
   void _getBalance(PostMenuArgs postMenuArgs) async {
     final SessionData sessionData = postMenuArgs.sessionData;
-    final int postID = postMenuArgs.postID;
     _updateBalanceTimer.cancel();
     try {
-      var res1 = await sessionData.client.status();
-      StationStatus stationStatus = res1.stations.firstWhere((element) => element.id == postID, orElse: () {
-        return null;
-      });
-      _currentProgram = stationStatus?.currentProgram ?? -1;
-      _balance = stationStatus?.currentBalance ?? 0;
+      _currentProgram = SharedData.StationsData.value.firstWhere((element) => element.id == postMenuArgs.postID)?.currentProgramID ?? -1;
+      _balance = SharedData.StationsData.value.firstWhere((element) => element.id == postMenuArgs.postID)?.currentBalance ?? 0;
 
       var args = ArgStationReportCurrentMoney(
-        id: postID,
+        id: postMenuArgs.postID,
       );
       var res = await sessionData.client.stationReportCurrentMoney(args);
-      //_balance = (res.moneyReport?.banknotes ?? 0)+(res.moneyReport?.coins ?? 0)+(res.moneyReport?.electronical ?? 0);
+
       _incassBalance = (res.moneyReport?.banknotes ?? 0) + (res.moneyReport?.coins ?? 0);
       if (!mounted) {
         return;
       }
+
       _checkboxList = List.filled(_maxButtons, false);
-      var checkboxID = 0;
+      var checkboxID = -1;
+
       if (_buttons.where((element) => element.programID == _currentProgram).length != 0) {
         checkboxID = _buttons.firstWhere((element) => element.programID == _currentProgram).buttonID - 1 ?? -1;
       }
@@ -109,7 +136,11 @@ class _EditPostMenuState extends State<EditPostMenu> {
     setState(() {});
   }
 
-  void _unpackNames(List<Program> programs) {
+  void _unpackNames() async {
+    if (SharedData.Programs.value == null) {
+      await SharedData.RefreshPrograms();
+    }
+    var programs = SharedData.Programs.value;
     if ((_buttons?.length ?? 0) > 0) {
       _buttonNames = Map();
       for (int i = 0; i < _buttons.length; i++) {
