@@ -563,6 +563,54 @@ class DefaultApi {
     }
   }
 
+  /// Performs an HTTP 'POST /get-station-discounts' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgGetStationDiscounts] args:
+  Future<Response> getStationDiscountsWithHttpInfo({ArgGetStationDiscounts args}) async {
+    // Verify required params are set.
+
+    final path = r'/get-station-discounts';
+
+    Object postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    final contentTypes = <String>['application/json'];
+    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
+    final authNames = <String>[];
+
+    return await apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      nullableContentType,
+      authNames,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgGetStationDiscounts] args:
+  Future<List<ButtonDiscount>> getStationDiscounts({ArgGetStationDiscounts args}) async {
+    final response = await getStationDiscountsWithHttpInfo(args: args);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<ButtonDiscount>') as List).cast<ButtonDiscount>().toList(growable: false);
+    }
+    return Future<List<ButtonDiscount>>.value(null);
+  }
+
   /// Performs an HTTP 'GET /user' operation and returns the [Response].
   Future<Response> getUserWithHttpInfo() async {
     final path = r'/user';

@@ -255,6 +255,8 @@ class ApiClient {
           return ArgDelAdvertisingCampagin.fromJson(value);
         case 'ArgDelStation':
           return ArgDelStation.fromJson(value);
+        case 'ArgGetStationDiscounts':
+          return ArgGetStationDiscounts.fromJson(value);
         case 'ArgLoad':
           return ArgLoad.fromJson(value);
         case 'ArgLoadFromStation':
@@ -307,6 +309,8 @@ class ApiClient {
           return ArgUserPassword.fromJson(value);
         case 'ArgUserUpdate':
           return ArgUserUpdate.fromJson(value);
+        case 'ButtonDiscount':
+          return ButtonDiscount.fromJson(value);
         case 'CardReaderConfig':
           return CardReaderConfig.fromJson(value);
         case 'CollectionReport':

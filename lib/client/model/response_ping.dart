@@ -15,6 +15,7 @@ class ResponsePing {
     @required this.serviceAmount,
     @required this.openStation,
     this.lastUpdate,
+    this.lastDiscountUpdate,
     this.buttonID,
   });
 
@@ -24,16 +25,24 @@ class ResponsePing {
 
   int lastUpdate;
 
+  int lastDiscountUpdate;
+
   int buttonID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ResponsePing && other.serviceAmount == serviceAmount && other.openStation == openStation && other.lastUpdate == lastUpdate && other.buttonID == buttonID;
+  bool operator ==(Object other) =>
+      identical(this, other) || other is ResponsePing && other.serviceAmount == serviceAmount && other.openStation == openStation && other.lastUpdate == lastUpdate && other.lastDiscountUpdate == lastDiscountUpdate && other.buttonID == buttonID;
 
   @override
-  int get hashCode => (serviceAmount == null ? 0 : serviceAmount.hashCode) + (openStation == null ? 0 : openStation.hashCode) + (lastUpdate == null ? 0 : lastUpdate.hashCode) + (buttonID == null ? 0 : buttonID.hashCode);
+  int get hashCode =>
+      (serviceAmount == null ? 0 : serviceAmount.hashCode) +
+      (openStation == null ? 0 : openStation.hashCode) +
+      (lastUpdate == null ? 0 : lastUpdate.hashCode) +
+      (lastDiscountUpdate == null ? 0 : lastDiscountUpdate.hashCode) +
+      (buttonID == null ? 0 : buttonID.hashCode);
 
   @override
-  String toString() => 'ResponsePing[serviceAmount=$serviceAmount, openStation=$openStation, lastUpdate=$lastUpdate, buttonID=$buttonID]';
+  String toString() => 'ResponsePing[serviceAmount=$serviceAmount, openStation=$openStation, lastUpdate=$lastUpdate, lastDiscountUpdate=$lastDiscountUpdate, buttonID=$buttonID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -41,6 +50,9 @@ class ResponsePing {
     json[r'openStation'] = openStation;
     if (lastUpdate != null) {
       json[r'lastUpdate'] = lastUpdate;
+    }
+    if (lastDiscountUpdate != null) {
+      json[r'lastDiscountUpdate'] = lastDiscountUpdate;
     }
     if (buttonID != null) {
       json[r'ButtonID'] = buttonID;
@@ -56,6 +68,7 @@ class ResponsePing {
           serviceAmount: json[r'serviceAmount'],
           openStation: json[r'openStation'],
           lastUpdate: json[r'lastUpdate'],
+          lastDiscountUpdate: json[r'lastDiscountUpdate'],
           buttonID: json[r'ButtonID'],
         );
 

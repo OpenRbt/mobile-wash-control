@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 class AdvertisingCampaginsEditArgs {
@@ -902,43 +903,57 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
   }
 
   Widget _ProgramsDiscountRow() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Text(
-                "Скидки по программам",
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                boxShadow: [BoxShadow()],
-                color: Colors.white,
-              ),
-              child: TextButton(
-                child: Text(
-                  "${discountPrograms.length} шт",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.right,
+    return ValueListenableBuilder(
+      valueListenable: SharedData.Programs,
+      builder: (BuildContext context, values, child) {
+        if (SharedData.Programs.value == null) {
+          SharedData.RefreshPrograms();
+          return child;
+        }
+        return Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Text(
+                    "Скидки по программам",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                onPressed: () async {
-                  await showProgramsDiscountDialog();
-                  setState(() {});
-                },
               ),
-            ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    boxShadow: [BoxShadow()],
+                    color: Colors.white,
+                  ),
+                  child: TextButton(
+                    child: Text(
+                      "${discountPrograms.length} шт",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
+                    ),
+                    onPressed: () async {
+                      await showProgramsDiscountDialog();
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        );
+      },
+      child: Container(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }
@@ -949,10 +964,10 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
         child: Text("-"),
         value: -1,
       )
-    ]..addAll(List.generate(GlobalData.Programs.length, (index) {
+    ]..addAll(List.generate(SharedData.Programs.value.length, (index) {
         return DropdownMenuItem(
-          child: Text(GlobalData.Programs[index].name),
-          value: GlobalData.Programs[index].id,
+          child: Text(SharedData.Programs.value[index].name),
+          value: SharedData.Programs.value[index].id,
         );
       }));
 
@@ -1090,7 +1105,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "${GlobalData.Programs.firstWhere((element) => element.id == DiscountProgramsTmp[DiscountID].programID).name}",
+                                    "${SharedData.Programs.value.firstWhere((element) => element.id == DiscountProgramsTmp[DiscountID].programID).name}",
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),

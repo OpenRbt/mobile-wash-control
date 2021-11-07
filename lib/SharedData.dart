@@ -43,7 +43,7 @@ class SharedData {
   static ValueNotifier<String> StatusKasseInfo = ValueNotifier("");
   static ValueNotifier<String> StatusKasse = ValueNotifier("");
 
-  static ValueNotifier<List<HomePageData>>  StationsData = ValueNotifier(null);
+  static ValueNotifier<List<HomePageData>> StationsData = ValueNotifier(null);
   static ValueNotifier<List<Program>> Programs = ValueNotifier(null);
 
   static Timer StatusTimer;

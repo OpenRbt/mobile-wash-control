@@ -31,15 +31,6 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
 
   List<AdvertisingCampaign> adCampagins = List();
 
-  Future<void> _loadPrograms(SessionData sessionData) async {
-    try {
-      GlobalData.Programs = await sessionData.client.programs(ArgPrograms());
-    } catch (e) {
-      print(e);
-    }
-    setState(() {});
-  }
-
   void _loadAdvertisting(SessionData sessionData) async {
     try {
       var args = ArgAdvertisingCampagin();
@@ -48,14 +39,14 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
         args.endDate = dateRange.end.millisecondsSinceEpoch ~/ 1000;
       }
       adCampagins = await sessionData.client.advertisingCampaign(args: args);
-      adCampagins.sort((a,b) => a.id.compareTo(b.id));
+      adCampagins.sort((a, b) => a.id.compareTo(b.id));
 
-      if (_hideCompleted){
+      if (_hideCompleted) {
         var now = DateTime.now().add(Duration(days: 1)).millisecondsSinceEpoch;
-        adCampagins = adCampagins.where((e) => (e.endDate ?? 0)*1000 + (e.timezone??0)*60000 < now).toList();
+        adCampagins = adCampagins.where((e) => (e.endDate ?? 0) * 1000 + (e.timezone ?? 0) * 60000 < now).toList();
       }
-      if(_sortByEndDate){
-        adCampagins.sort((a,b)=> a.endDate.compareTo(b.endDate));
+      if (_sortByEndDate) {
+        adCampagins.sort((a, b) => a.endDate.compareTo(b.endDate));
       }
     } catch (e) {
       print(e);
@@ -81,7 +72,6 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
 
     if (_firstLoad) {
       _loadAdvertisting(sessionData);
-      _loadPrograms(sessionData);
       _firstLoad = false;
     }
 
@@ -594,7 +584,7 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
                             initialDateRange: dateRange,
                             initialEntryMode: DatePickerEntryMode.input,
                           );
-                          if (res != null){
+                          if (res != null) {
                             dateRange = res;
                           }
                         },

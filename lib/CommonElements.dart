@@ -13,7 +13,7 @@ class SessionData {
 }
 
 Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessionData) {
-  var texts = ["Главная", "Программы","Управление скидками", "Настройки", "Учетки", "Статистика", "Моторесурс", "Выход"];
+  var texts = ["Главная", "Программы", "Управление скидками", "Настройки", "Учетки", "Статистика", "Моторесурс", "Выход"];
 
   var routes = [
     "/mobile/home",
