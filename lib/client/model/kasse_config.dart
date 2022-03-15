@@ -27,10 +27,18 @@ class KasseConfig {
   String cashierINN;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is KasseConfig && other.tax == tax && other.receiptItemName == receiptItemName && other.cashier == cashier && other.cashierINN == cashierINN;
+  bool operator ==(Object other) => identical(this, other) || other is KasseConfig &&
+     other.tax == tax &&
+     other.receiptItemName == receiptItemName &&
+     other.cashier == cashier &&
+     other.cashierINN == cashierINN;
 
   @override
-  int get hashCode => (tax == null ? 0 : tax.hashCode) + (receiptItemName == null ? 0 : receiptItemName.hashCode) + (cashier == null ? 0 : cashier.hashCode) + (cashierINN == null ? 0 : cashierINN.hashCode);
+  int get hashCode =>
+    (tax == null ? 0 : tax.hashCode) +
+    (receiptItemName == null ? 0 : receiptItemName.hashCode) +
+    (cashier == null ? 0 : cashier.hashCode) +
+    (cashierINN == null ? 0 : cashierINN.hashCode);
 
   @override
   String toString() => 'KasseConfig[tax=$tax, receiptItemName=$receiptItemName, cashier=$cashier, cashierINN=$cashierINN]';
@@ -55,24 +63,18 @@ class KasseConfig {
   /// Returns a new [KasseConfig] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static KasseConfig fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : KasseConfig(
-          tax: KasseConfigTaxEnum.fromJson(json[r'tax']),
-          receiptItemName: json[r'receiptItemName'],
-          cashier: json[r'cashier'],
-          cashierINN: json[r'cashierINN'],
-        );
+    ? null
+    : KasseConfig(
+        tax: KasseConfigTaxEnum.fromJson(json[r'tax']),
+        receiptItemName: json[r'receiptItemName'],
+        cashier: json[r'cashier'],
+        cashierINN: json[r'cashierINN'],
+    );
 
-  static List<KasseConfig> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <KasseConfig>[]
-          : json.map((dynamic value) => KasseConfig.fromJson(value)).toList(growable: true == growable);
+  static List<KasseConfig> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <KasseConfig>[]
+      : json.map((dynamic value) => KasseConfig.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, KasseConfig> mapFromJson(Map<String, dynamic> json) {
     final map = <String, KasseConfig>{};
@@ -83,24 +85,17 @@ class KasseConfig {
   }
 
   // maps a json object with a list of KasseConfig-objects as value to a dart map
-  static Map<String, List<KasseConfig>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<KasseConfig>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<KasseConfig>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = KasseConfig.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = KasseConfig.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+
 
 class KasseConfigTaxEnum {
   /// Instantiate a new enum with the provided [value].
@@ -127,18 +122,15 @@ class KasseConfigTaxEnum {
     vAT120,
   ];
 
-  static KasseConfigTaxEnum fromJson(dynamic value) => KasseConfigTaxEnumTypeTransformer().decode(value);
+  static KasseConfigTaxEnum fromJson(dynamic value) =>
+    KasseConfigTaxEnumTypeTransformer().decode(value);
 
-  static List<KasseConfigTaxEnum> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <KasseConfigTaxEnum>[]
-          : json.map((value) => KasseConfigTaxEnum.fromJson(value)).toList(growable: true == growable);
+  static List<KasseConfigTaxEnum> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <KasseConfigTaxEnum>[]
+      : json
+          .map((value) => KasseConfigTaxEnum.fromJson(value))
+          .toList(growable: true == growable);
 }
 
 /// Transformation class that can [encode] an instance of [KasseConfigTaxEnum] to String,
@@ -160,14 +152,10 @@ class KasseConfigTaxEnumTypeTransformer {
   /// and users are still using an old app with the old code.
   KasseConfigTaxEnum decode(dynamic data, {bool allowNull}) {
     switch (data) {
-      case r'TAX_VAT110':
-        return KasseConfigTaxEnum.vAT110;
-      case r'TAX_VAT0':
-        return KasseConfigTaxEnum.vAT0;
-      case r'TAX_NO':
-        return KasseConfigTaxEnum.NO;
-      case r'TAX_VAT120':
-        return KasseConfigTaxEnum.vAT120;
+      case r'TAX_VAT110': return KasseConfigTaxEnum.vAT110;
+      case r'TAX_VAT0': return KasseConfigTaxEnum.vAT0;
+      case r'TAX_NO': return KasseConfigTaxEnum.NO;
+      case r'TAX_VAT120': return KasseConfigTaxEnum.vAT120;
       default:
         if (allowNull == false) {
           throw ArgumentError('Unknown enum value to decode: $data');
@@ -179,3 +167,4 @@ class KasseConfigTaxEnumTypeTransformer {
   /// Singleton [KasseConfigTaxEnumTypeTransformer] instance.
   static KasseConfigTaxEnumTypeTransformer _instance;
 }
+

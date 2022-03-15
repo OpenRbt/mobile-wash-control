@@ -42,23 +42,6 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
   TextEditingController _discountController;
   TextEditingController _programDiscountController;
 
-  int _timeZone = 0;
-  final List<DropdownMenuItem> _timeZoneValues = List.generate(
-    12,
-    (index) => DropdownMenuItem(
-      child: Center(
-        child: Text(
-          "UTC+${index}",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      value: index * 60,
-    ),
-  );
-
   ScrollController _scrollController;
 
   void initState() {
@@ -156,7 +139,6 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
         name: DiscountTitle,
         startDate: DiscountDateRange.start.millisecondsSinceEpoch ~/ 1000,
         endDate: DiscountDateRange.end.millisecondsSinceEpoch ~/ 1000,
-        timezone: _timeZone,
         enabled: DiscountActive,
         startMinute: DiscountTimeStart.hour * 60 + DiscountTimeStart.minute,
         endMinute: DiscountTimeEnd.hour * 60 + DiscountTimeEnd.minute,
@@ -164,7 +146,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
         discountPrograms: DiscountPrograms,
         weekday: weekDays,
       );
-      var res = await sessionData.client.addAdvertisingCampaign(args: args);
+      var res = await sessionData.client.addAdvertisingCampaign(args);
 
       Navigator.pop(context);
     } catch (e) {
@@ -204,8 +186,6 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
             _EnabledRow(),
             Divider(),
             _DiscountRow(),
-            Divider(),
-            _TimeZoneRow(),
             Divider(),
             _DateRow(),
             Divider(),
@@ -1429,45 +1409,6 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                 ),
                 onPressed: () async {
                   DiscountActive = !DiscountActive;
-                  setState(() {});
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _TimeZoneRow() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Text(
-                "TimeZone",
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                boxShadow: [BoxShadow()],
-                color: Colors.white,
-              ),
-              child: DropdownButton(
-                isExpanded: true,
-                items: _timeZoneValues,
-                value: _timeZone,
-                onChanged: (val) {
-                  _timeZone = val;
                   setState(() {});
                 },
               ),

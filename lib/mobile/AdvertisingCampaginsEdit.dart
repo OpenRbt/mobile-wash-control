@@ -52,23 +52,6 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
   TextEditingController _discountController;
   TextEditingController _programDiscountController;
 
-  int _timeZone = 0;
-  final List<DropdownMenuItem> _timeZoneValues = List.generate(
-    12,
-    (index) => DropdownMenuItem(
-      child: Center(
-        child: Text(
-          "UTC+${index}",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      value: index * 60,
-    ),
-  );
-
   ScrollController _scrollController;
 
   void initState() {
@@ -93,7 +76,6 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     _discountController.text = "${discountValue ?? 0}";
 
     DiscountActive = data.enabled ?? false;
-    _timeZone = data.timezone ?? 0;
 
     DaysActive = List.generate(7, (index) {
       switch (index) {
@@ -200,14 +182,13 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
         startDate: discountDateRange.start.millisecondsSinceEpoch ~/ 1000,
         endDate: discountDateRange.end.millisecondsSinceEpoch ~/ 1000,
         enabled: DiscountActive,
-        timezone: _timeZone,
         startMinute: discountTimeStart.hour * 60 + discountTimeStart.minute,
         endMinute: discountTimeEnd.hour * 60 + discountTimeEnd.minute,
         defaultDiscount: discountValue,
         discountPrograms: discountPrograms,
         weekday: weekDays,
       );
-      await sessionData.client.editAdvertisingCampaign(args: args);
+      await sessionData.client.editAdvertisingCampaign(args);
       Navigator.pop(context);
     } catch (e) {
       print(e);
@@ -219,7 +200,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     _canSave = false;
     try {
       ArgDelAdvertisingCampagin args = ArgDelAdvertisingCampagin(id: data.id);
-      await sessionData.client.delAdvertisingCampaign(args: args);
+      await sessionData.client.delAdvertisingCampaign(args);
     } catch (e) {
       print(e);
     }
@@ -259,8 +240,6 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
             _EnabledRow(),
             Divider(),
             _DiscountRow(),
-            Divider(),
-            _TimeZoneRow(),
             Divider(),
             _DateRow(),
             Divider(),
@@ -1492,45 +1471,6 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                 ),
                 onPressed: () async {
                   DiscountActive = !DiscountActive;
-                  setState(() {});
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _TimeZoneRow() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Text(
-                "TimeZone",
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                boxShadow: [BoxShadow()],
-                color: Colors.white,
-              ),
-              child: DropdownButton(
-                isExpanded: true,
-                items: _timeZoneValues,
-                value: _timeZone,
-                onChanged: (val) {
-                  _timeZone = val;
                   setState(() {});
                 },
               ),

@@ -21,40 +21,38 @@ class KeyPair {
   String value;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is KeyPair && other.key == key && other.value == value;
+  bool operator ==(Object other) => identical(this, other) || other is KeyPair &&
+     other.key == key &&
+     other.value == value;
 
   @override
-  int get hashCode => (key == null ? 0 : key.hashCode) + (value == null ? 0 : value.hashCode);
+  int get hashCode =>
+    (key == null ? 0 : key.hashCode) +
+    (value == null ? 0 : value.hashCode);
 
   @override
   String toString() => 'KeyPair[key=$key, value=$value]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'key'] = key;
-    json[r'value'] = value;
+      json[r'key'] = key;
+      json[r'value'] = value;
     return json;
   }
 
   /// Returns a new [KeyPair] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static KeyPair fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : KeyPair(
-          key: json[r'key'],
-          value: json[r'value'],
-        );
+    ? null
+    : KeyPair(
+        key: json[r'key'],
+        value: json[r'value'],
+    );
 
-  static List<KeyPair> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <KeyPair>[]
-          : json.map((dynamic value) => KeyPair.fromJson(value)).toList(growable: true == growable);
+  static List<KeyPair> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <KeyPair>[]
+      : json.map((dynamic value) => KeyPair.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, KeyPair> mapFromJson(Map<String, dynamic> json) {
     final map = <String, KeyPair>{};
@@ -65,21 +63,14 @@ class KeyPair {
   }
 
   // maps a json object with a list of KeyPair-objects as value to a dart map
-  static Map<String, List<KeyPair>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<KeyPair>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<KeyPair>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = KeyPair.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = KeyPair.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

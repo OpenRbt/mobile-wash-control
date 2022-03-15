@@ -27,10 +27,18 @@ class StationsVariables {
   List<KeyPair> keyPairs;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is StationsVariables && other.id == id && other.name == name && other.hash == hash && other.keyPairs == keyPairs;
+  bool operator ==(Object other) => identical(this, other) || other is StationsVariables &&
+     other.id == id &&
+     other.name == name &&
+     other.hash == hash &&
+     other.keyPairs == keyPairs;
 
   @override
-  int get hashCode => (id == null ? 0 : id.hashCode) + (name == null ? 0 : name.hashCode) + (hash == null ? 0 : hash.hashCode) + (keyPairs == null ? 0 : keyPairs.hashCode);
+  int get hashCode =>
+    (id == null ? 0 : id.hashCode) +
+    (name == null ? 0 : name.hashCode) +
+    (hash == null ? 0 : hash.hashCode) +
+    (keyPairs == null ? 0 : keyPairs.hashCode);
 
   @override
   String toString() => 'StationsVariables[id=$id, name=$name, hash=$hash, keyPairs=$keyPairs]';
@@ -55,24 +63,18 @@ class StationsVariables {
   /// Returns a new [StationsVariables] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static StationsVariables fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : StationsVariables(
-          id: json[r'id'],
-          name: json[r'name'],
-          hash: json[r'hash'],
-          keyPairs: KeyPair.listFromJson(json[r'keyPairs']),
-        );
+    ? null
+    : StationsVariables(
+        id: json[r'id'],
+        name: json[r'name'],
+        hash: json[r'hash'],
+        keyPairs: KeyPair.listFromJson(json[r'keyPairs']),
+    );
 
-  static List<StationsVariables> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <StationsVariables>[]
-          : json.map((dynamic value) => StationsVariables.fromJson(value)).toList(growable: true == growable);
+  static List<StationsVariables> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <StationsVariables>[]
+      : json.map((dynamic value) => StationsVariables.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, StationsVariables> mapFromJson(Map<String, dynamic> json) {
     final map = <String, StationsVariables>{};
@@ -83,21 +85,14 @@ class StationsVariables {
   }
 
   // maps a json object with a list of StationsVariables-objects as value to a dart map
-  static Map<String, List<StationsVariables>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<StationsVariables>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<StationsVariables>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = StationsVariables.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = StationsVariables.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

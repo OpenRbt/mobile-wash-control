@@ -27,17 +27,25 @@ class CardReaderConfig {
   String port;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is CardReaderConfig && other.stationID == stationID && other.cardReaderType == cardReaderType && other.host == host && other.port == port;
+  bool operator ==(Object other) => identical(this, other) || other is CardReaderConfig &&
+     other.stationID == stationID &&
+     other.cardReaderType == cardReaderType &&
+     other.host == host &&
+     other.port == port;
 
   @override
-  int get hashCode => (stationID == null ? 0 : stationID.hashCode) + (cardReaderType == null ? 0 : cardReaderType.hashCode) + (host == null ? 0 : host.hashCode) + (port == null ? 0 : port.hashCode);
+  int get hashCode =>
+    (stationID == null ? 0 : stationID.hashCode) +
+    (cardReaderType == null ? 0 : cardReaderType.hashCode) +
+    (host == null ? 0 : host.hashCode) +
+    (port == null ? 0 : port.hashCode);
 
   @override
   String toString() => 'CardReaderConfig[stationID=$stationID, cardReaderType=$cardReaderType, host=$host, port=$port]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'stationID'] = stationID;
+      json[r'stationID'] = stationID;
     if (cardReaderType != null) {
       json[r'cardReaderType'] = cardReaderType;
     }
@@ -53,24 +61,18 @@ class CardReaderConfig {
   /// Returns a new [CardReaderConfig] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static CardReaderConfig fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : CardReaderConfig(
-          stationID: json[r'stationID'],
-          cardReaderType: CardReaderConfigCardReaderTypeEnum.fromJson(json[r'cardReaderType']),
-          host: json[r'host'],
-          port: json[r'port'],
-        );
+    ? null
+    : CardReaderConfig(
+        stationID: json[r'stationID'],
+        cardReaderType: CardReaderConfigCardReaderTypeEnum.fromJson(json[r'cardReaderType']),
+        host: json[r'host'],
+        port: json[r'port'],
+    );
 
-  static List<CardReaderConfig> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <CardReaderConfig>[]
-          : json.map((dynamic value) => CardReaderConfig.fromJson(value)).toList(growable: true == growable);
+  static List<CardReaderConfig> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <CardReaderConfig>[]
+      : json.map((dynamic value) => CardReaderConfig.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, CardReaderConfig> mapFromJson(Map<String, dynamic> json) {
     final map = <String, CardReaderConfig>{};
@@ -81,24 +83,17 @@ class CardReaderConfig {
   }
 
   // maps a json object with a list of CardReaderConfig-objects as value to a dart map
-  static Map<String, List<CardReaderConfig>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<CardReaderConfig>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<CardReaderConfig>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = CardReaderConfig.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = CardReaderConfig.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+
 
 class CardReaderConfigCardReaderTypeEnum {
   /// Instantiate a new enum with the provided [value].
@@ -123,18 +118,15 @@ class CardReaderConfigCardReaderTypeEnum {
     PAYMENT_WORLD,
   ];
 
-  static CardReaderConfigCardReaderTypeEnum fromJson(dynamic value) => CardReaderConfigCardReaderTypeEnumTypeTransformer().decode(value);
+  static CardReaderConfigCardReaderTypeEnum fromJson(dynamic value) =>
+    CardReaderConfigCardReaderTypeEnumTypeTransformer().decode(value);
 
-  static List<CardReaderConfigCardReaderTypeEnum> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <CardReaderConfigCardReaderTypeEnum>[]
-          : json.map((value) => CardReaderConfigCardReaderTypeEnum.fromJson(value)).toList(growable: true == growable);
+  static List<CardReaderConfigCardReaderTypeEnum> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <CardReaderConfigCardReaderTypeEnum>[]
+      : json
+          .map((value) => CardReaderConfigCardReaderTypeEnum.fromJson(value))
+          .toList(growable: true == growable);
 }
 
 /// Transformation class that can [encode] an instance of [CardReaderConfigCardReaderTypeEnum] to String,
@@ -156,12 +148,9 @@ class CardReaderConfigCardReaderTypeEnumTypeTransformer {
   /// and users are still using an old app with the old code.
   CardReaderConfigCardReaderTypeEnum decode(dynamic data, {bool allowNull}) {
     switch (data) {
-      case r'NOT_USED':
-        return CardReaderConfigCardReaderTypeEnum.NOT_USED;
-      case r'VENDOTEK':
-        return CardReaderConfigCardReaderTypeEnum.VENDOTEK;
-      case r'PAYMENT_WORLD':
-        return CardReaderConfigCardReaderTypeEnum.PAYMENT_WORLD;
+      case r'NOT_USED': return CardReaderConfigCardReaderTypeEnum.NOT_USED;
+      case r'VENDOTEK': return CardReaderConfigCardReaderTypeEnum.VENDOTEK;
+      case r'PAYMENT_WORLD': return CardReaderConfigCardReaderTypeEnum.PAYMENT_WORLD;
       default:
         if (allowNull == false) {
           throw ArgumentError('Unknown enum value to decode: $data');
@@ -173,3 +162,4 @@ class CardReaderConfigCardReaderTypeEnumTypeTransformer {
   /// Singleton [CardReaderConfigCardReaderTypeEnumTypeTransformer] instance.
   static CardReaderConfigCardReaderTypeEnumTypeTransformer _instance;
 }
+

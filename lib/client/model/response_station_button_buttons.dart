@@ -21,10 +21,14 @@ class ResponseStationButtonButtons {
   int programID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ResponseStationButtonButtons && other.buttonID == buttonID && other.programID == programID;
+  bool operator ==(Object other) => identical(this, other) || other is ResponseStationButtonButtons &&
+     other.buttonID == buttonID &&
+     other.programID == programID;
 
   @override
-  int get hashCode => (buttonID == null ? 0 : buttonID.hashCode) + (programID == null ? 0 : programID.hashCode);
+  int get hashCode =>
+    (buttonID == null ? 0 : buttonID.hashCode) +
+    (programID == null ? 0 : programID.hashCode);
 
   @override
   String toString() => 'ResponseStationButtonButtons[buttonID=$buttonID, programID=$programID]';
@@ -43,22 +47,16 @@ class ResponseStationButtonButtons {
   /// Returns a new [ResponseStationButtonButtons] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static ResponseStationButtonButtons fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : ResponseStationButtonButtons(
-          buttonID: json[r'buttonID'],
-          programID: json[r'programID'],
-        );
+    ? null
+    : ResponseStationButtonButtons(
+        buttonID: json[r'buttonID'],
+        programID: json[r'programID'],
+    );
 
-  static List<ResponseStationButtonButtons> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <ResponseStationButtonButtons>[]
-          : json.map((dynamic value) => ResponseStationButtonButtons.fromJson(value)).toList(growable: true == growable);
+  static List<ResponseStationButtonButtons> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <ResponseStationButtonButtons>[]
+      : json.map((dynamic value) => ResponseStationButtonButtons.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, ResponseStationButtonButtons> mapFromJson(Map<String, dynamic> json) {
     final map = <String, ResponseStationButtonButtons>{};
@@ -69,21 +67,14 @@ class ResponseStationButtonButtons {
   }
 
   // maps a json object with a list of ResponseStationButtonButtons-objects as value to a dart map
-  static Map<String, List<ResponseStationButtonButtons>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<ResponseStationButtonButtons>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<ResponseStationButtonButtons>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = ResponseStationButtonButtons.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = ResponseStationButtonButtons.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

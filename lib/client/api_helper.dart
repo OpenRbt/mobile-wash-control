@@ -31,7 +31,9 @@ Iterable<QueryParam> _convertParametersForCollectionFormat(
   if (name != null && name.isNotEmpty && value != null) {
     if (value is List) {
       // get the collection format, default: csv
-      collectionFormat = (collectionFormat == null || collectionFormat.isEmpty) ? 'csv' : collectionFormat;
+      collectionFormat = (collectionFormat == null || collectionFormat.isEmpty)
+        ? 'csv'
+        : collectionFormat;
 
       if (collectionFormat == 'multi') {
         return value.map((v) => QueryParam(name, parameterToString(v)));
@@ -70,8 +72,6 @@ String parameterToString(dynamic value) {
 Future<String> _decodeBodyBytes(Response response) async {
   final contentType = response.headers['content-type'];
   return contentType != null && contentType.toLowerCase().startsWith('application/json')
-      ? response.bodyBytes == null
-          ? null
-          : utf8.decode(response.bodyBytes)
-      : response.body;
+    ? response.bodyBytes == null ? null : utf8.decode(response.bodyBytes)
+    : response.body;
 }

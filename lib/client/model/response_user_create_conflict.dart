@@ -21,40 +21,38 @@ class ResponseUserCreateConflict {
   String message;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ResponseUserCreateConflict && other.code == code && other.message == message;
+  bool operator ==(Object other) => identical(this, other) || other is ResponseUserCreateConflict &&
+     other.code == code &&
+     other.message == message;
 
   @override
-  int get hashCode => (code == null ? 0 : code.hashCode) + (message == null ? 0 : message.hashCode);
+  int get hashCode =>
+    (code == null ? 0 : code.hashCode) +
+    (message == null ? 0 : message.hashCode);
 
   @override
   String toString() => 'ResponseUserCreateConflict[code=$code, message=$message]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'code'] = code;
-    json[r'message'] = message;
+      json[r'code'] = code;
+      json[r'message'] = message;
     return json;
   }
 
   /// Returns a new [ResponseUserCreateConflict] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static ResponseUserCreateConflict fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : ResponseUserCreateConflict(
-          code: json[r'code'],
-          message: json[r'message'],
-        );
+    ? null
+    : ResponseUserCreateConflict(
+        code: json[r'code'],
+        message: json[r'message'],
+    );
 
-  static List<ResponseUserCreateConflict> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <ResponseUserCreateConflict>[]
-          : json.map((dynamic value) => ResponseUserCreateConflict.fromJson(value)).toList(growable: true == growable);
+  static List<ResponseUserCreateConflict> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <ResponseUserCreateConflict>[]
+      : json.map((dynamic value) => ResponseUserCreateConflict.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, ResponseUserCreateConflict> mapFromJson(Map<String, dynamic> json) {
     final map = <String, ResponseUserCreateConflict>{};
@@ -65,21 +63,14 @@ class ResponseUserCreateConflict {
   }
 
   // maps a json object with a list of ResponseUserCreateConflict-objects as value to a dart map
-  static Map<String, List<ResponseUserCreateConflict>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<ResponseUserCreateConflict>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<ResponseUserCreateConflict>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = ResponseUserCreateConflict.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = ResponseUserCreateConflict.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

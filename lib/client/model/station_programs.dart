@@ -33,17 +33,22 @@ class StationPrograms {
   List<StationProgramsPrograms> programs;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is StationPrograms && other.stationID == stationID && other.name == name && other.preflightSec == preflightSec && other.lastUpdate == lastUpdate && other.relayBoard == relayBoard && other.programs == programs;
+  bool operator ==(Object other) => identical(this, other) || other is StationPrograms &&
+     other.stationID == stationID &&
+     other.name == name &&
+     other.preflightSec == preflightSec &&
+     other.lastUpdate == lastUpdate &&
+     other.relayBoard == relayBoard &&
+     other.programs == programs;
 
   @override
   int get hashCode =>
-      (stationID == null ? 0 : stationID.hashCode) +
-      (name == null ? 0 : name.hashCode) +
-      (preflightSec == null ? 0 : preflightSec.hashCode) +
-      (lastUpdate == null ? 0 : lastUpdate.hashCode) +
-      (relayBoard == null ? 0 : relayBoard.hashCode) +
-      (programs == null ? 0 : programs.hashCode);
+    (stationID == null ? 0 : stationID.hashCode) +
+    (name == null ? 0 : name.hashCode) +
+    (preflightSec == null ? 0 : preflightSec.hashCode) +
+    (lastUpdate == null ? 0 : lastUpdate.hashCode) +
+    (relayBoard == null ? 0 : relayBoard.hashCode) +
+    (programs == null ? 0 : programs.hashCode);
 
   @override
   String toString() => 'StationPrograms[stationID=$stationID, name=$name, preflightSec=$preflightSec, lastUpdate=$lastUpdate, relayBoard=$relayBoard, programs=$programs]';
@@ -74,26 +79,20 @@ class StationPrograms {
   /// Returns a new [StationPrograms] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static StationPrograms fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : StationPrograms(
-          stationID: json[r'stationID'],
-          name: json[r'name'],
-          preflightSec: json[r'preflightSec'],
-          lastUpdate: json[r'lastUpdate'],
-          relayBoard: RelayBoard.fromJson(json[r'relayBoard']),
-          programs: StationProgramsPrograms.listFromJson(json[r'programs']),
-        );
+    ? null
+    : StationPrograms(
+        stationID: json[r'stationID'],
+        name: json[r'name'],
+        preflightSec: json[r'preflightSec'],
+        lastUpdate: json[r'lastUpdate'],
+        relayBoard: RelayBoard.fromJson(json[r'relayBoard']),
+        programs: StationProgramsPrograms.listFromJson(json[r'programs']),
+    );
 
-  static List<StationPrograms> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <StationPrograms>[]
-          : json.map((dynamic value) => StationPrograms.fromJson(value)).toList(growable: true == growable);
+  static List<StationPrograms> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <StationPrograms>[]
+      : json.map((dynamic value) => StationPrograms.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, StationPrograms> mapFromJson(Map<String, dynamic> json) {
     final map = <String, StationPrograms>{};
@@ -104,21 +103,14 @@ class StationPrograms {
   }
 
   // maps a json object with a list of StationPrograms-objects as value to a dart map
-  static Map<String, List<StationPrograms>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<StationPrograms>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<StationPrograms>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = StationPrograms.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = StationPrograms.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

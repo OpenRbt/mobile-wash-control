@@ -36,18 +36,24 @@ class CollectionReport {
   int ctime;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is CollectionReport && other.id == id && other.carsTotal == carsTotal && other.coins == coins && other.banknotes == banknotes && other.electronical == electronical && other.service == service && other.ctime == ctime;
+  bool operator ==(Object other) => identical(this, other) || other is CollectionReport &&
+     other.id == id &&
+     other.carsTotal == carsTotal &&
+     other.coins == coins &&
+     other.banknotes == banknotes &&
+     other.electronical == electronical &&
+     other.service == service &&
+     other.ctime == ctime;
 
   @override
   int get hashCode =>
-      (id == null ? 0 : id.hashCode) +
-      (carsTotal == null ? 0 : carsTotal.hashCode) +
-      (coins == null ? 0 : coins.hashCode) +
-      (banknotes == null ? 0 : banknotes.hashCode) +
-      (electronical == null ? 0 : electronical.hashCode) +
-      (service == null ? 0 : service.hashCode) +
-      (ctime == null ? 0 : ctime.hashCode);
+    (id == null ? 0 : id.hashCode) +
+    (carsTotal == null ? 0 : carsTotal.hashCode) +
+    (coins == null ? 0 : coins.hashCode) +
+    (banknotes == null ? 0 : banknotes.hashCode) +
+    (electronical == null ? 0 : electronical.hashCode) +
+    (service == null ? 0 : service.hashCode) +
+    (ctime == null ? 0 : ctime.hashCode);
 
   @override
   String toString() => 'CollectionReport[id=$id, carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, ctime=$ctime]';
@@ -81,27 +87,21 @@ class CollectionReport {
   /// Returns a new [CollectionReport] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static CollectionReport fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : CollectionReport(
-          id: json[r'id'],
-          carsTotal: json[r'carsTotal'],
-          coins: json[r'coins'],
-          banknotes: json[r'banknotes'],
-          electronical: json[r'electronical'],
-          service: json[r'service'],
-          ctime: json[r'ctime'],
-        );
+    ? null
+    : CollectionReport(
+        id: json[r'id'],
+        carsTotal: json[r'carsTotal'],
+        coins: json[r'coins'],
+        banknotes: json[r'banknotes'],
+        electronical: json[r'electronical'],
+        service: json[r'service'],
+        ctime: json[r'ctime'],
+    );
 
-  static List<CollectionReport> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <CollectionReport>[]
-          : json.map((dynamic value) => CollectionReport.fromJson(value)).toList(growable: true == growable);
+  static List<CollectionReport> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <CollectionReport>[]
+      : json.map((dynamic value) => CollectionReport.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, CollectionReport> mapFromJson(Map<String, dynamic> json) {
     final map = <String, CollectionReport>{};
@@ -112,21 +112,14 @@ class CollectionReport {
   }
 
   // maps a json object with a list of CollectionReport-objects as value to a dart map
-  static Map<String, List<CollectionReport>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<CollectionReport>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<CollectionReport>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = CollectionReport.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = CollectionReport.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

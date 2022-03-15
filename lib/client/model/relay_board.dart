@@ -9,6 +9,7 @@
 
 part of openapi.api;
 
+
 class RelayBoard {
   /// Instantiate a new enum with the provided [value].
   const RelayBoard._(this.value);
@@ -30,18 +31,15 @@ class RelayBoard {
     danBoard,
   ];
 
-  static RelayBoard fromJson(dynamic value) => RelayBoardTypeTransformer().decode(value);
+  static RelayBoard fromJson(dynamic value) =>
+    RelayBoardTypeTransformer().decode(value);
 
-  static List<RelayBoard> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <RelayBoard>[]
-          : json.map((value) => RelayBoard.fromJson(value)).toList(growable: true == growable);
+  static List<RelayBoard> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <RelayBoard>[]
+      : json
+          .map((value) => RelayBoard.fromJson(value))
+          .toList(growable: true == growable);
 }
 
 /// Transformation class that can [encode] an instance of [RelayBoard] to String,
@@ -63,10 +61,8 @@ class RelayBoardTypeTransformer {
   /// and users are still using an old app with the old code.
   RelayBoard decode(dynamic data, {bool allowNull}) {
     switch (data) {
-      case r'localGPIO':
-        return RelayBoard.localGPIO;
-      case r'danBoard':
-        return RelayBoard.danBoard;
+      case r'localGPIO': return RelayBoard.localGPIO;
+      case r'danBoard': return RelayBoard.danBoard;
       default:
         if (allowNull == false) {
           throw ArgumentError('Unknown enum value to decode: $data');

@@ -21,10 +21,14 @@ class ButtonDiscount {
   int discount;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ButtonDiscount && other.buttonID == buttonID && other.discount == discount;
+  bool operator ==(Object other) => identical(this, other) || other is ButtonDiscount &&
+     other.buttonID == buttonID &&
+     other.discount == discount;
 
   @override
-  int get hashCode => (buttonID == null ? 0 : buttonID.hashCode) + (discount == null ? 0 : discount.hashCode);
+  int get hashCode =>
+    (buttonID == null ? 0 : buttonID.hashCode) +
+    (discount == null ? 0 : discount.hashCode);
 
   @override
   String toString() => 'ButtonDiscount[buttonID=$buttonID, discount=$discount]';
@@ -43,22 +47,16 @@ class ButtonDiscount {
   /// Returns a new [ButtonDiscount] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static ButtonDiscount fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : ButtonDiscount(
-          buttonID: json[r'buttonID'],
-          discount: json[r'discount'],
-        );
+    ? null
+    : ButtonDiscount(
+        buttonID: json[r'buttonID'],
+        discount: json[r'discount'],
+    );
 
-  static List<ButtonDiscount> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <ButtonDiscount>[]
-          : json.map((dynamic value) => ButtonDiscount.fromJson(value)).toList(growable: true == growable);
+  static List<ButtonDiscount> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <ButtonDiscount>[]
+      : json.map((dynamic value) => ButtonDiscount.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, ButtonDiscount> mapFromJson(Map<String, dynamic> json) {
     final map = <String, ButtonDiscount>{};
@@ -69,21 +67,14 @@ class ButtonDiscount {
   }
 
   // maps a json object with a list of ButtonDiscount-objects as value to a dart map
-  static Map<String, List<ButtonDiscount>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<ButtonDiscount>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<ButtonDiscount>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = ButtonDiscount.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = ButtonDiscount.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

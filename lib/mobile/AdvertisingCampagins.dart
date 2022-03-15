@@ -43,7 +43,7 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
 
       if (_hideCompleted) {
         var now = DateTime.now().add(Duration(days: 1)).millisecondsSinceEpoch;
-        adCampagins = adCampagins.where((e) => (e.endDate ?? 0) * 1000 + (e.timezone ?? 0) * 60000 < now).toList();
+        adCampagins = adCampagins.where((e) => (e.endDate ?? 0) * 1000 < now).toList();
       }
       if (_sortByEndDate) {
         adCampagins.sort((a, b) => a.endDate.compareTo(b.endDate));
@@ -435,7 +435,7 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
                                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                _dateFormat.format(DateTime.fromMillisecondsSinceEpoch((adCampagins[index].startDate ?? 0) * 1000 + (adCampagins[index].timezone ?? 0) * 60000, isUtc: true)),
+                                _dateFormat.format(DateTime.fromMillisecondsSinceEpoch((adCampagins[index].startDate ?? 0) * 1000, isUtc: true)),
                                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                               )
                             ],
@@ -448,7 +448,7 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
                                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                _dateFormat.format(DateTime.fromMillisecondsSinceEpoch((adCampagins[index].endDate ?? 0) * 1000 + (adCampagins[index].timezone ?? 0) * 60000, isUtc: true)),
+                                _dateFormat.format(DateTime.fromMillisecondsSinceEpoch((adCampagins[index].endDate ?? 0) * 1000, isUtc: true)),
                                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                               )
                             ],
@@ -508,15 +508,6 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
                   ),
                   Column(
                     children: [
-                      Container(
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            "UTC+${(adCampagins[index].timezone ?? 0) ~/ 60}",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
                       Container(
                         height: 50,
                         width: 75,

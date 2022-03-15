@@ -27,10 +27,18 @@ class StatusReport {
   List<StationStatus> stations;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is StatusReport && other.lcwInfo == lcwInfo && other.kasseStatus == kasseStatus && other.kasseInfo == kasseInfo && other.stations == stations;
+  bool operator ==(Object other) => identical(this, other) || other is StatusReport &&
+     other.lcwInfo == lcwInfo &&
+     other.kasseStatus == kasseStatus &&
+     other.kasseInfo == kasseInfo &&
+     other.stations == stations;
 
   @override
-  int get hashCode => (lcwInfo == null ? 0 : lcwInfo.hashCode) + (kasseStatus == null ? 0 : kasseStatus.hashCode) + (kasseInfo == null ? 0 : kasseInfo.hashCode) + (stations == null ? 0 : stations.hashCode);
+  int get hashCode =>
+    (lcwInfo == null ? 0 : lcwInfo.hashCode) +
+    (kasseStatus == null ? 0 : kasseStatus.hashCode) +
+    (kasseInfo == null ? 0 : kasseInfo.hashCode) +
+    (stations == null ? 0 : stations.hashCode);
 
   @override
   String toString() => 'StatusReport[lcwInfo=$lcwInfo, kasseStatus=$kasseStatus, kasseInfo=$kasseInfo, stations=$stations]';
@@ -55,24 +63,18 @@ class StatusReport {
   /// Returns a new [StatusReport] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static StatusReport fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : StatusReport(
-          lcwInfo: json[r'lcw_info'],
-          kasseStatus: Status.fromJson(json[r'kasse_status']),
-          kasseInfo: json[r'kasse_info'],
-          stations: StationStatus.listFromJson(json[r'stations']),
-        );
+    ? null
+    : StatusReport(
+        lcwInfo: json[r'lcw_info'],
+        kasseStatus: Status.fromJson(json[r'kasse_status']),
+        kasseInfo: json[r'kasse_info'],
+        stations: StationStatus.listFromJson(json[r'stations']),
+    );
 
-  static List<StatusReport> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <StatusReport>[]
-          : json.map((dynamic value) => StatusReport.fromJson(value)).toList(growable: true == growable);
+  static List<StatusReport> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <StatusReport>[]
+      : json.map((dynamic value) => StatusReport.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, StatusReport> mapFromJson(Map<String, dynamic> json) {
     final map = <String, StatusReport>{};
@@ -83,21 +85,14 @@ class StatusReport {
   }
 
   // maps a json object with a list of StatusReport-objects as value to a dart map
-  static Map<String, List<StatusReport>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<StatusReport>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<StatusReport>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = StatusReport.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = StatusReport.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

@@ -16,7 +16,6 @@ class AdvertisingCampaign {
     this.name,
     @required this.startDate,
     @required this.endDate,
-    this.timezone,
     this.enabled,
     this.startMinute,
     this.endMinute,
@@ -35,13 +34,14 @@ class AdvertisingCampaign {
   /// Unix time local
   int endDate;
 
-  /// minute
-  int timezone;
-
   bool enabled;
 
+  // minimum: 0
+  // maximum: 1440
   int startMinute;
 
+  // minimum: 0
+  // maximum: 1440
   int endMinute;
 
   int defaultDiscount;
@@ -51,38 +51,33 @@ class AdvertisingCampaign {
   List<AdvertisingCampaignWeekdayEnum> weekday;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AdvertisingCampaign &&
-          other.id == id &&
-          other.name == name &&
-          other.startDate == startDate &&
-          other.endDate == endDate &&
-          other.timezone == timezone &&
-          other.enabled == enabled &&
-          other.startMinute == startMinute &&
-          other.endMinute == endMinute &&
-          other.defaultDiscount == defaultDiscount &&
-          other.discountPrograms == discountPrograms &&
-          other.weekday == weekday;
+  bool operator ==(Object other) => identical(this, other) || other is AdvertisingCampaign &&
+     other.id == id &&
+     other.name == name &&
+     other.startDate == startDate &&
+     other.endDate == endDate &&
+     other.enabled == enabled &&
+     other.startMinute == startMinute &&
+     other.endMinute == endMinute &&
+     other.defaultDiscount == defaultDiscount &&
+     other.discountPrograms == discountPrograms &&
+     other.weekday == weekday;
 
   @override
   int get hashCode =>
-      (id == null ? 0 : id.hashCode) +
-      (name == null ? 0 : name.hashCode) +
-      (startDate == null ? 0 : startDate.hashCode) +
-      (endDate == null ? 0 : endDate.hashCode) +
-      (timezone == null ? 0 : timezone.hashCode) +
-      (enabled == null ? 0 : enabled.hashCode) +
-      (startMinute == null ? 0 : startMinute.hashCode) +
-      (endMinute == null ? 0 : endMinute.hashCode) +
-      (defaultDiscount == null ? 0 : defaultDiscount.hashCode) +
-      (discountPrograms == null ? 0 : discountPrograms.hashCode) +
-      (weekday == null ? 0 : weekday.hashCode);
+    (id == null ? 0 : id.hashCode) +
+    (name == null ? 0 : name.hashCode) +
+    (startDate == null ? 0 : startDate.hashCode) +
+    (endDate == null ? 0 : endDate.hashCode) +
+    (enabled == null ? 0 : enabled.hashCode) +
+    (startMinute == null ? 0 : startMinute.hashCode) +
+    (endMinute == null ? 0 : endMinute.hashCode) +
+    (defaultDiscount == null ? 0 : defaultDiscount.hashCode) +
+    (discountPrograms == null ? 0 : discountPrograms.hashCode) +
+    (weekday == null ? 0 : weekday.hashCode);
 
   @override
-  String toString() =>
-      'AdvertisingCampaign[id=$id, name=$name, startDate=$startDate, endDate=$endDate, timezone=$timezone, enabled=$enabled, startMinute=$startMinute, endMinute=$endMinute, defaultDiscount=$defaultDiscount, discountPrograms=$discountPrograms, weekday=$weekday]';
+  String toString() => 'AdvertisingCampaign[id=$id, name=$name, startDate=$startDate, endDate=$endDate, enabled=$enabled, startMinute=$startMinute, endMinute=$endMinute, defaultDiscount=$defaultDiscount, discountPrograms=$discountPrograms, weekday=$weekday]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -92,11 +87,8 @@ class AdvertisingCampaign {
     if (name != null) {
       json[r'name'] = name;
     }
-    json[r'startDate'] = startDate;
-    json[r'endDate'] = endDate;
-    if (timezone != null) {
-      json[r'timezone'] = timezone;
-    }
+      json[r'startDate'] = startDate;
+      json[r'endDate'] = endDate;
     if (enabled != null) {
       json[r'enabled'] = enabled;
     }
@@ -121,31 +113,24 @@ class AdvertisingCampaign {
   /// Returns a new [AdvertisingCampaign] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static AdvertisingCampaign fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : AdvertisingCampaign(
-          id: json[r'id'],
-          name: json[r'name'],
-          startDate: json[r'startDate'],
-          endDate: json[r'endDate'],
-          timezone: json[r'timezone'],
-          enabled: json[r'enabled'],
-          startMinute: json[r'startMinute'],
-          endMinute: json[r'endMinute'],
-          defaultDiscount: json[r'defaultDiscount'],
-          discountPrograms: DiscountProgram.listFromJson(json[r'discountPrograms']),
-          weekday: AdvertisingCampaignWeekdayEnum.listFromJson(json[r'weekday']),
-        );
+    ? null
+    : AdvertisingCampaign(
+        id: json[r'id'],
+        name: json[r'name'],
+        startDate: json[r'startDate'],
+        endDate: json[r'endDate'],
+        enabled: json[r'enabled'],
+        startMinute: json[r'startMinute'],
+        endMinute: json[r'endMinute'],
+        defaultDiscount: json[r'defaultDiscount'],
+        discountPrograms: DiscountProgram.listFromJson(json[r'discountPrograms']),
+        weekday: AdvertisingCampaignWeekdayEnum.listFromJson(json[r'weekday']),
+    );
 
-  static List<AdvertisingCampaign> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <AdvertisingCampaign>[]
-          : json.map((dynamic value) => AdvertisingCampaign.fromJson(value)).toList(growable: true == growable);
+  static List<AdvertisingCampaign> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <AdvertisingCampaign>[]
+      : json.map((dynamic value) => AdvertisingCampaign.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, AdvertisingCampaign> mapFromJson(Map<String, dynamic> json) {
     final map = <String, AdvertisingCampaign>{};
@@ -156,24 +141,17 @@ class AdvertisingCampaign {
   }
 
   // maps a json object with a list of AdvertisingCampaign-objects as value to a dart map
-  static Map<String, List<AdvertisingCampaign>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<AdvertisingCampaign>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<AdvertisingCampaign>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = AdvertisingCampaign.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = AdvertisingCampaign.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+
 
 class AdvertisingCampaignWeekdayEnum {
   /// Instantiate a new enum with the provided [value].
@@ -206,18 +184,15 @@ class AdvertisingCampaignWeekdayEnum {
     saturday,
   ];
 
-  static AdvertisingCampaignWeekdayEnum fromJson(dynamic value) => AdvertisingCampaignWeekdayEnumTypeTransformer().decode(value);
+  static AdvertisingCampaignWeekdayEnum fromJson(dynamic value) =>
+    AdvertisingCampaignWeekdayEnumTypeTransformer().decode(value);
 
-  static List<AdvertisingCampaignWeekdayEnum> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <AdvertisingCampaignWeekdayEnum>[]
-          : json.map((value) => AdvertisingCampaignWeekdayEnum.fromJson(value)).toList(growable: true == growable);
+  static List<AdvertisingCampaignWeekdayEnum> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <AdvertisingCampaignWeekdayEnum>[]
+      : json
+          .map((value) => AdvertisingCampaignWeekdayEnum.fromJson(value))
+          .toList(growable: true == growable);
 }
 
 /// Transformation class that can [encode] an instance of [AdvertisingCampaignWeekdayEnum] to String,
@@ -239,20 +214,13 @@ class AdvertisingCampaignWeekdayEnumTypeTransformer {
   /// and users are still using an old app with the old code.
   AdvertisingCampaignWeekdayEnum decode(dynamic data, {bool allowNull}) {
     switch (data) {
-      case r'sunday':
-        return AdvertisingCampaignWeekdayEnum.sunday;
-      case r'monday':
-        return AdvertisingCampaignWeekdayEnum.monday;
-      case r'tuesday':
-        return AdvertisingCampaignWeekdayEnum.tuesday;
-      case r'wednesday':
-        return AdvertisingCampaignWeekdayEnum.wednesday;
-      case r'thursday':
-        return AdvertisingCampaignWeekdayEnum.thursday;
-      case r'friday':
-        return AdvertisingCampaignWeekdayEnum.friday;
-      case r'saturday':
-        return AdvertisingCampaignWeekdayEnum.saturday;
+      case r'sunday': return AdvertisingCampaignWeekdayEnum.sunday;
+      case r'monday': return AdvertisingCampaignWeekdayEnum.monday;
+      case r'tuesday': return AdvertisingCampaignWeekdayEnum.tuesday;
+      case r'wednesday': return AdvertisingCampaignWeekdayEnum.wednesday;
+      case r'thursday': return AdvertisingCampaignWeekdayEnum.thursday;
+      case r'friday': return AdvertisingCampaignWeekdayEnum.friday;
+      case r'saturday': return AdvertisingCampaignWeekdayEnum.saturday;
       default:
         if (allowNull == false) {
           throw ArgumentError('Unknown enum value to decode: $data');
@@ -264,3 +232,4 @@ class AdvertisingCampaignWeekdayEnumTypeTransformer {
   /// Singleton [AdvertisingCampaignWeekdayEnumTypeTransformer] instance.
   static AdvertisingCampaignWeekdayEnumTypeTransformer _instance;
 }
+
