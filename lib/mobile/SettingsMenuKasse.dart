@@ -243,7 +243,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
                       SizedBox(
                         height: 50,
                         width: screenW / 3,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: _inUpdate
                               ? null
                               : () {
@@ -255,7 +255,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
                       SizedBox(
                         height: 50,
                         width: screenW / 3,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: _inUpdate
                               ? null
                               : () {

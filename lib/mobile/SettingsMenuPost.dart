@@ -188,7 +188,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       var args = ArgSetStationButton(
         stationID: settingsMenuPostArgs.stationID,
       );
-      List<ResponseStationButtonButtons> buttons = List();
+      List<ResponseStationButtonButtons> buttons =[];
       for (int i = 0; i < _maxButtons; i++) {
         if (_dropDownPrograms[i] != _programIDs[0]) {
           var value = ResponseStationButtonButtons();
@@ -222,7 +222,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       _firstLoad = false;
     }
 
-    List<String> availableHashes = List();
+    List<String> availableHashes = [];
     availableHashes.add("");
     availableHashes.addAll(
       settingsMenuPostArgs.availableHashes.where((element) => element != null),
@@ -406,7 +406,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                         SizedBox(
                           height: 50,
                           width: screenW / 3,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               _savePost(settingsMenuPostArgs, context);
                             },
@@ -416,7 +416,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                         SizedBox(
                           height: 50,
                           width: screenW / 3,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               _getPost(settingsMenuPostArgs);
                             },
@@ -522,7 +522,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                         SizedBox(
                           height: 50,
                           width: screenW / 3,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               _saveCardReader(settingsMenuPostArgs, context);
                             },
@@ -532,7 +532,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                         SizedBox(
                           height: 50,
                           width: screenW / 3,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               _getCardReader(settingsMenuPostArgs);
                             },
@@ -590,7 +590,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                     SizedBox(
                       height: 50,
                       width: screenW / 3,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           _saveButtons(settingsMenuPostArgs, context);
                         },
@@ -600,7 +600,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                     SizedBox(
                       height: 50,
                       width: screenW / 3,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           _getButtons(settingsMenuPostArgs);
                         },

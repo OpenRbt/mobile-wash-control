@@ -137,11 +137,17 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
           SizedBox(
             height: 75,
             width: screenW / 5 * 4,
-            child: RaisedButton(
-              color: Colors.lightGreen,
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                    return Colors.lightGreen;
+                  }),
+                  foregroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                    return Colors.white;
+                  })
+              ),
               child: Center(
                 child: Text(
                   "Установить",

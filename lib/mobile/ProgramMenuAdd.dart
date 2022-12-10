@@ -174,8 +174,8 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
       args.isFinishingProgram = _isFinishingProgram;
       args.preflightMotorSpeedPercent = int.tryParse(_motors[1].value.text) ?? 0;
 
-      List<RelayConfig> relays = List();
-      List<RelayConfig> relaysPreflight = List();
+      List<RelayConfig> relays = [];
+      List<RelayConfig> relaysPreflight = [];
       for (int i = 0; i < _relayCount; i++) {
         if (_relays[i].value.text.isNotEmpty && int.tryParse(_relays[i].value.text) != 0) {
           var tmp = RelayConfig();
@@ -562,12 +562,18 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
                     SizedBox(
                       height: 50,
                       width: screenW / 3,
-                      child: RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        splashColor: Colors.lightGreenAccent,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith((states) {
+                              if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                              return Colors.lightGreen;
+                            }),
+                            foregroundColor: MaterialStateProperty.resolveWith((states) {
+                              if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                              return Colors.white;
+                            }),
+                            overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                        ),
                         onPressed: _inUpdate
                             ? null
                             : () {

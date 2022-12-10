@@ -161,7 +161,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                         "Период с ",
                         style: TextStyle(fontSize: 16),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () => _selectStartDate(context),
                         child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year}"),
                       ),
@@ -169,7 +169,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                         " по ",
                         style: TextStyle(fontSize: 16),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () => _selectEndDate(context),
                         child: Text("${_endDate.day}.${_endDate.month}.${_endDate.year}"),
                       ),

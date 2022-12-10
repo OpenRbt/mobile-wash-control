@@ -69,13 +69,13 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
   int _currentProgram = -1;
   final int _maxButtons = 20;
 
-  List<ResponseStationButtonButtons> _buttons = List();
+  List<ResponseStationButtonButtons> _buttons = [];
   @override
   void initState() {
     super.initState();
   }
 
-  List<bool> _checkboxList = List();
+  List<bool> _checkboxList = [];
   Map<int, String> _buttonNames = Map();
 
   void _loadButtons(PostMenuArgs postMenuArgs) async {

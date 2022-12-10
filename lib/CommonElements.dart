@@ -155,11 +155,17 @@ void showErrorDialog(BuildContext context, String text) {
       content: Text(text),
       actionsPadding: EdgeInsets.all(10),
       actions: [
-        RaisedButton(
-          color: Colors.lightGreen,
-          textColor: Colors.white,
-          disabledColor: Colors.grey,
-          disabledTextColor: Colors.black,
+        ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                return Colors.lightGreen;
+              }),
+              foregroundColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                return Colors.white;
+              }),
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -188,6 +194,7 @@ void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnack
   }
   isSnackBarActive.value = true;
   scaffoldKey.currentState
+  //TODO: refactor showSnackbar
       .showSnackBar(
         SnackBar(
           content: Text(

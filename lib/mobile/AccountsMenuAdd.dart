@@ -392,12 +392,18 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                   SizedBox(
                     height: 50,
                     width: screenW / 3,
-                    child: RaisedButton(
-                      color: Colors.lightGreen,
-                      textColor: Colors.white,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
-                      splashColor: Colors.lightGreenAccent,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                          return Colors.lightGreen;
+                        }),
+                        foregroundColor: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                          return Colors.white;
+                        }),
+                        overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                      ),
                       onPressed: _inUpdate
                           ? null
                           : () {
@@ -409,12 +415,18 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                   SizedBox(
                     height: 50,
                     width: screenW / 3,
-                    child: RaisedButton(
-                      color: Colors.lightGreen,
-                      textColor: Colors.white,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
-                      splashColor: Colors.lightGreenAccent,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                            return Colors.lightGreen;
+                          }),
+                          foregroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                            return Colors.white;
+                          }),
+                          overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                      ),
                       onPressed: () {
                         Navigator.pop(context);
                       },

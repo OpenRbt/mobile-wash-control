@@ -65,7 +65,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
 
     DiscountPrograms = List();
     _titleController.text = DiscountTitle;
-    _discountController.text = "${DiscountValue}";
+    _discountController.text = "$DiscountValue";
 
     DaysActive = List.filled(7, false);
   }
@@ -397,7 +397,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
               ),
               child: TextButton(
                 child: Text(
-                  "${DiscountValue} %",
+                  "$DiscountValue %",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.right,
@@ -416,7 +416,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
 
   Future<Widget> showDiscountDialog() {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-    _discountController.text = "${DiscountValue}";
+    _discountController.text = "$DiscountValue";
     return showDialog(
       context: context,
       builder: (context) {
@@ -906,7 +906,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
               content: Container(
                 child: RawScrollbar(
                   controller: _scrollController,
-                  isAlwaysShown: false,
+                  thumbVisibility: false,
                   thumbColor: Colors.greenAccent,
                   interactive: true,
                   child: ListView.separated(
@@ -1156,7 +1156,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                         setState(() {});
                       },
                       child: Text(
-                        "${ProgramDiscountValue} %",
+                        "$ProgramDiscountValue %",
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -1262,7 +1262,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                         setState(() {});
                       },
                       child: Text(
-                        "${ProgramDiscountValue} %",
+                        "$ProgramDiscountValue %",
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -1313,7 +1313,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
 
   Future<Widget> showProgramDiscountDialog() {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-    _programDiscountController.text = "${ProgramDiscountValue}";
+    _programDiscountController.text = "$ProgramDiscountValue";
     return showDialog(
       context: context,
       builder: (context) {

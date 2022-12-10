@@ -344,12 +344,18 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                   SizedBox(
                     height: 50,
                     width: screenW / 3,
-                    child: RaisedButton(
-                      color: Colors.lightGreen,
-                      textColor: Colors.white,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
-                      splashColor: Colors.lightGreenAccent,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                            return Colors.lightGreen;
+                          }),
+                          foregroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                            return Colors.white;
+                          }),
+                          overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                      ),
                       onPressed: _inUpdate
                           ? null
                           : () {
@@ -361,12 +367,18 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                   SizedBox(
                     height: 50,
                     width: screenW / 3,
-                    child: RaisedButton(
-                      color: Colors.lightGreen,
-                      textColor: Colors.white,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
-                      splashColor: Colors.lightGreenAccent,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                            return Colors.lightGreen;
+                          }),
+                          foregroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                            return Colors.white;
+                          }),
+                          overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                      ),
                       onPressed: _inUpdate
                           ? null
                           : () {
@@ -384,68 +396,88 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                 child: SizedBox(
                   height: 50,
                   width: screenW / 3 * 2,
-                  child: RaisedButton(
-                    padding: EdgeInsets.all(5),
-                    color: Colors.red,
-                    textColor: Colors.white,
-                    disabledColor: Colors.grey,
-                    disabledTextColor: Colors.black,
-                    splashColor: Colors.redAccent,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Удалить пользователя?"),
-                          content: Text("Вы уверены?"),
-                          actionsPadding: EdgeInsets.all(10),
-                          actions: [
-                            RaisedButton(
-                              color: Colors.lightGreen,
-                              textColor: Colors.white,
-                              disabledColor: Colors.grey,
-                              disabledTextColor: Colors.black,
-                              onPressed: () async {
-                                bool success = false;
-                                try {
-                                  var cur_user = await accountsMenuEditArgs.sessionData.client.getUser();
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                            return Colors.red;
+                          }),
+                          foregroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                            return Colors.white;
+                          }),
+                          overlayColor: MaterialStateProperty.all(Colors.redAccent)
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Удалить пользователя?"),
+                            content: Text("Вы уверены?"),
+                            actionsPadding: EdgeInsets.all(10),
+                            actions: [
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                      if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                      return Colors.lightGreen;
+                                    }),
+                                    foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                      if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                      return Colors.white;
+                                    }),
+                                ),
+                                onPressed: () async {
+                                  bool success = false;
+                                  try {
+                                    var curUser = await accountsMenuEditArgs.sessionData.client.getUser();
 
-                                  var args = ArgUserDelete(login: _inputControllers["login"].value.text);
+                                    var args = ArgUserDelete(login: _inputControllers["login"].value.text);
 
-                                  if (cur_user.login != accountsMenuEditArgs.targetUser.login) {
-                                    var res = await accountsMenuEditArgs.sessionData.client.deleteUser(args);
-                                    success = true;
-                                  } else {
-                                    showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Вы не можете удалить сами себя", Colors.orange);
+                                    if (curUser.login != accountsMenuEditArgs.targetUser.login) {
+                                      var res = await accountsMenuEditArgs.sessionData.client.deleteUser(args);
+                                      success = true;
+                                    } else {
+                                      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Вы не можете удалить сами себя", Colors.orange);
+                                    }
+                                  } on ApiException catch (e) {
+                                    print(e);
+                                    showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.redAccent);
+                                  } catch (e) {
+                                    print(e);
+                                    if (!(e is ApiException)) {
+                                      print("Other Exception: $e\n");
+                                    }
                                   }
-                                } on ApiException catch (e) {
-                                  print(e);
-                                  showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.redAccent);
-                                } catch (e) {
-                                  print(e);
-                                  if (!(e is ApiException)) {
-                                    print("Other Exception: $e\n");
-                                  }
-                                }
-                                Navigator.pop(context);
-                                if (success) Navigator.of(context).pop();
-                              },
-                              child: Text("Удалить"),
-                            ),
-                            RaisedButton(
-                              color: Colors.white,
-                              textColor: Colors.black,
-                              disabledColor: Colors.grey,
-                              disabledTextColor: Colors.black,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("Отмена"),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                    child: Text("Удалить пользователя"),
+                                  Navigator.pop(context);
+                                  if (success) Navigator.of(context).pop();
+                                },
+                                child: Text("Удалить"),
+                              ),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                      if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                      return Colors.black;
+                                    }),
+                                    foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                      if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                      return Colors.white;
+                                    }),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Отмена"),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                      child: Text("Удалить пользователя"),
+                    ),
                   ),
                 ),
               ),
