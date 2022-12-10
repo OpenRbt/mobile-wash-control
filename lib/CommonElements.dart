@@ -384,66 +384,6 @@ ResponseStationButtonButtons _getProgramButton(int buttonID, int programID) {
   return tmp;
 }
 
-final List<String> dPagesNames = [
-  "Главная",
-  "Программы",
-  "Настройки",
-  "Учетки",
-  "Статистика",
-  "Моторесурс",
-];
-
-final Map<String, Pages> dPagesMap = {
-  "Главная": Pages.Main,
-  "Программы": Pages.Programs,
-  "Настройки": Pages.Settings,
-  "Учетки": Pages.Accounts,
-  "Статистика": Pages.Statistics,
-  "Моторесурс": Pages.Motors,
-};
-
-final Map<Pages, String> dPageRoutes = {
-  Pages.Main: "/desktop/home",
-  Pages.Programs: "/desktop/programs",
-  Pages.Settings: "/desktop/settings",
-  Pages.Accounts: "/desktop/accounts",
-  Pages.Statistics: "/desktop/statistics",
-  Pages.Motors: "/desktop/motors",
-};
-
-Widget DGetDrawer(double height, double width, BuildContext context, Pages _currentPage, SessionData sessionData) {
-  return SizedBox(
-    height: height,
-    width: width,
-    child: DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.black12,
-        border: Border.all(
-          color: Colors.grey,
-        ),
-      ),
-      child: ListView.separated(
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-                title: Text(
-                  dPagesNames[index],
-                  style: TextStyle(
-                    fontSize: _currentPage == dPagesMap[dPagesNames[index]] ? 32 : 16,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, dPageRoutes[dPagesMap[dPagesNames[index]]], arguments: sessionData);
-                });
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(
-              height: height / 24,
-            );
-          },
-          itemCount: dPagesNames.length),
-    ),
-  );
-}
 
 class GlobalData {
   static int AddServiceValue = 10;
