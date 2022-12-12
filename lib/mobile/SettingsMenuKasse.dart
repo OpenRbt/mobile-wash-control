@@ -90,10 +90,10 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
       args.cashierINN = _inputControllers[2].value.text;
 
       var res = await sessionData.client.setKasse(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Настройки кассы сохрианены", Colors.green);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Настройки кассы сохрианены", Colors.green);
     } catch (e) {
       print("Exception when calling DefaultApi->set-kasse: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось сохранить настройки кассы", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Не удалось сохранить настройки кассы", Colors.red);
     }
     _inUpdate = false;
   }

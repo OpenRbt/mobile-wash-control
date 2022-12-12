@@ -168,7 +168,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive,
           "Произошла ошибка при запросе к api", Colors.red);
     }
     setState(() {});
@@ -495,7 +495,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     _timeZone = val;
                   } catch (e) {
                     print(e);
-                    showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+                    showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive,
                         "Не удалось изменить таймзону", Colors.red);
                   }
                   setState(() {});

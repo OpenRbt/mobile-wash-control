@@ -52,11 +52,11 @@ class _AuthPageState extends State<AuthPage> {
       _loadPage();
     } on ApiException catch (e) {
       if (e.code == 401) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Неверные данные", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Неверные данные", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Невозможно авторизоваться", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Невозможно авторизоваться", Colors.red);
       }
       print("Exception when calling DefaultApi->/user: $e\n");
     }

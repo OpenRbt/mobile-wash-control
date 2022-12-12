@@ -228,10 +228,10 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       args.preflightRelays = relaysPreflight;
 
       var res = await programMenuEditArgs.sessionData.client.setProgram(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Измененеия программы сохранены", Colors.green);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Измененеия программы сохранены", Colors.green);
     } catch (e) {
       print(e);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось изменить программу", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Не удалось изменить программу", Colors.red);
     }
     _inUpdate = false;
   }

@@ -65,7 +65,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
       );
 
       var res = await sessionData.client.createUser(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пользователь добавлен", Colors.green);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Пользователь добавлен", Colors.green);
 
       for (var field in _inputControllers.values) {
         field.text = "";
@@ -76,15 +76,15 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
       }
     } on ApiException catch (e) {
       if (e.code == 403) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Недостаточно прав", Colors.orange);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Недостаточно прав", Colors.orange);
       } else if (e.code == 409) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Невозможно добавить пользователя", Colors.orange);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Невозможно добавить пользователя", Colors.orange);
       } else {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Ошибка при запросе к апи", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Ошибка при запросе к апи", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось добавить пользователя", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Не удалось добавить пользователя", Colors.red);
       }
       print("Exception when calling DefaultApi->User(post): $e\n");
     }

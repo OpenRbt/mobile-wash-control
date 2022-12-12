@@ -70,18 +70,18 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
       );
 
       var res = await sessionData.client.updateUser(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пользователь изменен", Colors.green);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Пользователь изменен", Colors.green);
     } on ApiException catch (e) {
       if (e.code == 403) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Недостаточно прав", Colors.orange);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Недостаточно прав", Colors.orange);
       } else if (e.code == 404) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Невозможно изменить пользователя", Colors.orange);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Невозможно изменить пользователя", Colors.orange);
       } else {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Ошибка при запросе к апи", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Ошибка при запросе к апи", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось изменить пользователя", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Не удалось изменить пользователя", Colors.red);
       }
       print("Exception when calling DefaultApi->User(put): $e\n");
     }
@@ -440,11 +440,11 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                                       var res = await accountsMenuEditArgs.sessionData.client.deleteUser(args);
                                       success = true;
                                     } else {
-                                      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Вы не можете удалить сами себя", Colors.orange);
+                                      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Вы не можете удалить сами себя", Colors.orange);
                                     }
                                   } on ApiException catch (e) {
                                     print(e);
-                                    showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.redAccent);
+                                    showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.redAccent);
                                   } catch (e) {
                                     print(e);
                                     if (!(e is ApiException)) {

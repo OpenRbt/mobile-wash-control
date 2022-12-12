@@ -47,7 +47,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->/users: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 

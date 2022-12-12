@@ -90,7 +90,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
       _unpackNames();
     } catch (e) {
       print("Exception when calling DefaultApi->/station-button: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -123,7 +123,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
     } on ApiException catch (e) {
       if (e.code != 404) {
         print("Exception when calling DefaultApi->/station-report-current-money: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
@@ -173,7 +173,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
       var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
     } catch (e) {
       print("Exception when calling DefaultApi->/add-service-amount: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
   }
 
@@ -193,7 +193,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
         });
       } catch (e) {
         print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       }
     } else {
       try {
@@ -209,7 +209,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
         });
       } catch (e) {
         print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       }
     }
   }
@@ -340,13 +340,18 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
         Container(
           padding: EdgeInsets.all(5),
           width: isPortrait ? screenW / 2 : screenW / 3 - 20,
-          child: RaisedButton(
-            color: Colors.lightGreen,
-            textColor: Colors.white,
-            disabledColor: Colors.grey,
-            disabledTextColor: Colors.black,
-            padding: EdgeInsets.all(8.0),
-            splashColor: Colors.lightGreenAccent,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                  return Colors.lightGreen;
+                }),
+                foregroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                  return Colors.white;
+                }),
+                overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+            ),
             child: Text(
               "Отправить",
               style: TextStyle(fontSize: 15),
@@ -359,13 +364,18 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
         Container(
           padding: EdgeInsets.all(5),
           width: isPortrait ? screenW / 2 : screenW / 3 - 20,
-          child: RaisedButton(
-            color: Colors.lightGreen,
-            textColor: Colors.white,
-            disabledColor: Colors.grey,
-            disabledTextColor: Colors.black,
-            padding: EdgeInsets.all(8.0),
-            splashColor: Colors.lightGreenAccent,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                  return Colors.lightGreen;
+                }),
+                foregroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                  return Colors.white;
+                }),
+                overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+            ),
             child: Text(
               "Инкассировать",
               style: TextStyle(fontSize: 15),
@@ -378,11 +388,17 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
                   content: Text("Вы уверены?"),
                   actionsPadding: EdgeInsets.all(10),
                   actions: [
-                    RaisedButton(
-                      color: Colors.lightGreen,
-                      textColor: Colors.white,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                            return Colors.lightGreen;
+                          }),
+                          foregroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                            return Colors.white;
+                          }),
+                      ),
                       onPressed: () async {
                         try {
                           var args = ArgSaveCollection(
@@ -392,25 +408,31 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
                         } on ApiException catch (e) {
                           if (e.code == 401) {
                             print("Exception when calling DefaultApi->/save-collection: $e\n");
-                            showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Нет доступа", Colors.red);
+                            showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Нет доступа", Colors.red);
                           } else {
-                            showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+                            showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
                           }
                         } catch (e) {
                           if (!(e is ApiException)) {
                             print("Other Exception: $e\n");
                           }
                         }
-                        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Пост проинкассирован", Colors.green);
+                        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Пост проинкассирован", Colors.green);
                         Navigator.pop(context);
                       },
                       child: Text("Да"),
                     ),
-                    RaisedButton(
-                      color: Colors.white,
-                      textColor: Colors.black,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                            return Colors.white;
+                          }),
+                          foregroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                            return Colors.black;
+                          }),
+                      ),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -425,13 +447,18 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
         Container(
           padding: EdgeInsets.all(5),
           width: isPortrait ? screenW / 2 : screenW / 3 - 20,
-          child: RaisedButton(
-            color: Colors.lightGreen,
-            textColor: Colors.white,
-            disabledColor: Colors.grey,
-            disabledTextColor: Colors.black,
-            padding: EdgeInsets.all(8.0),
-            splashColor: Colors.lightGreenAccent,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                  return Colors.lightGreen;
+                }),
+                foregroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                  return Colors.white;
+                }),
+                overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+            ),
             child: Text(
               "Открыть дверь",
               style: TextStyle(fontSize: 15),
@@ -444,7 +471,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
                 var res = postMenuArgs.sessionData.client.openStation(args);
               } catch (e) {
                 print("Exception when calling DefaultApi->/open-station: $e\n");
-                showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+                showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
               }
             },
           ),
@@ -452,13 +479,18 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
         Container(
           padding: EdgeInsets.all(5),
           width: isPortrait ? screenW / 2 : screenW / 3 - 20,
-          child: RaisedButton(
-            color: Colors.lightGreen,
-            textColor: Colors.white,
-            disabledColor: Colors.grey,
-            disabledTextColor: Colors.black,
-            padding: EdgeInsets.all(8.0),
-            splashColor: Colors.lightGreenAccent,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                  return Colors.lightGreen;
+                }),
+                foregroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                  return Colors.white;
+                }),
+                overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+            ),
             child: Text(
               "История инкассаций",
               style: TextStyle(fontSize: 15),
@@ -540,12 +572,17 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
   }
 
   Widget _getListButton(int index, PostMenuArgs postMenuArgs) {
-    return new RaisedButton(
-      color: Colors.white10,
-      textColor: Colors.white,
-      disabledColor: Colors.grey,
-      disabledTextColor: Colors.black,
-      splashColor: Colors.lightGreenAccent,
+    return new ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+            return Colors.lightGreen;
+          }),
+          foregroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) { return Colors.black; }
+            return Colors.white;
+          }),
+      ),
       onPressed: () async {
         //_programButtonListener(index, postMenuArgs);
       },
