@@ -78,7 +78,7 @@ class _MotorMenuState extends State<MotorMenu> {
     } on ApiException catch (e) {
       if (e.code != 404) {
         print("Exception when calling DefaultApi->/station-report-dates: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       } else {}
     } catch (e) {
       if (!(e is ApiException)) {

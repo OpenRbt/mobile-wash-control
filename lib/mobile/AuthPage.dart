@@ -52,11 +52,11 @@ class _AuthPageState extends State<AuthPage> {
       _loadPage();
     } on ApiException catch (e) {
       if (e.code == 401) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Неверные данные", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Неверные данные", Colors.red);
       }
     } catch (e) {
       if (!(e is ApiException)) {
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Невозможно авторизоваться", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Невозможно авторизоваться", Colors.red);
       }
       print("Exception when calling DefaultApi->/user: $e\n");
     }
@@ -149,12 +149,24 @@ class _AuthPageState extends State<AuthPage> {
       width: screenW / 4,
       height: 80,
       padding: EdgeInsets.all(2),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.black, width: 2.0, style: BorderStyle.solid),
+      child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+              return Colors.lightGreen;
+            }),
+            foregroundColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) { return Colors.black; }
+              return Colors.white;
+            }),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                side: BorderSide(color: Colors.black, width: 2.0, style: BorderStyle.solid),
+              )
+            ),
+            overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
         ),
-        color: Colors.white,
-        elevation: 4,
+        //TODO: add elevation param
         child: FittedBox(
           fit: BoxFit.fitWidth,
           child: Text(

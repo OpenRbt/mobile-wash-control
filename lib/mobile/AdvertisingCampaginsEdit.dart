@@ -967,7 +967,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
               content: Container(
                 child: RawScrollbar(
                   controller: _scrollController,
-                  isAlwaysShown: false,
+                  thumbVisibility: false,
                   thumbColor: Colors.greenAccent,
                   interactive: true,
                   child: ListView.separated(

@@ -21,19 +21,27 @@ class ServersPage extends StatelessWidget {
           return SizedBox(
             height: 50,
             width: 50,
-            child: RaisedButton(
-              color: serversValid[serverID] ? Colors.lightGreen : Colors.red,
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
-              padding: EdgeInsets.all(8.0),
-              splashColor: Colors.lightGreenAccent,
-              onPressed: () {
-                print("Touched  host ${servers[serverID]}");
-              },
-              child: Text(
-                "Server: ${servers[serverID]}",
-                style: TextStyle(fontSize: 20),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                      return serversValid[serverID] ? Colors.lightGreen : Colors.red;
+                    }),
+                    foregroundColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                      return Colors.white;
+                    }),
+                    overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                ),
+                onPressed: () {
+                  print("Touched  host ${servers[serverID]}");
+                },
+                child: Text(
+                  "Server: ${servers[serverID]}",
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ),
           );

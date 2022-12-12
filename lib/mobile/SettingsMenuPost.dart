@@ -86,10 +86,10 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.preflightSec = int.tryParse(_inputControllers[4].value.text) ?? 0;
 
       var res = await settingsMenuPostArgs.sessionData.client.setStation(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Настройки поста сохранены", Colors.green);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Настройки поста сохранены", Colors.green);
     } catch (e) {
       print("Exception when calling DefaultApi->/set-station: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось сохранить настройки поста", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Не удалось сохранить настройки поста", Colors.red);
     }
   }
 
@@ -137,10 +137,10 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       args.host = _inputControllers[0].value.text.isNotEmpty ? _inputControllers[0].value.text : " ";
       args.port = _inputControllers[1].value.text.isNotEmpty ? _inputControllers[1].value.text : " ";
       var res = await settingsMenuPostArgs.sessionData.client.setCardReaderConfig(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Настройки кардридера сохранены", Colors.green);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Настройки кардридера сохранены", Colors.green);
     } catch (e) {
       print("Exception when calling DefaultApi->/set-card-reader-config: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось сохранить настройки кардридера", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Не удалось сохранить настройки кардридера", Colors.red);
     }
   }
 
@@ -188,7 +188,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       var args = ArgSetStationButton(
         stationID: settingsMenuPostArgs.stationID,
       );
-      List<ResponseStationButtonButtons> buttons = List();
+      List<ResponseStationButtonButtons> buttons =[];
       for (int i = 0; i < _maxButtons; i++) {
         if (_dropDownPrograms[i] != _programIDs[0]) {
           var value = ResponseStationButtonButtons();
@@ -199,10 +199,10 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       }
       args.buttons = buttons;
       var res = await settingsMenuPostArgs.sessionData.client.setStationButton(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Настройки кнопок сохранены", Colors.green);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Настройки кнопок сохранены", Colors.green);
     } catch (e) {
       print("Exception when calling DefaultApi->/set-station-button: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось сохранить кнопки", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Не удалось сохранить кнопки", Colors.red);
     }
   }
 
@@ -222,7 +222,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       _firstLoad = false;
     }
 
-    List<String> availableHashes = List();
+    List<String> availableHashes = [];
     availableHashes.add("");
     availableHashes.addAll(
       settingsMenuPostArgs.availableHashes.where((element) => element != null),
@@ -406,7 +406,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                         SizedBox(
                           height: 50,
                           width: screenW / 3,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               _savePost(settingsMenuPostArgs, context);
                             },
@@ -416,7 +416,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                         SizedBox(
                           height: 50,
                           width: screenW / 3,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               _getPost(settingsMenuPostArgs);
                             },
@@ -522,7 +522,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                         SizedBox(
                           height: 50,
                           width: screenW / 3,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               _saveCardReader(settingsMenuPostArgs, context);
                             },
@@ -532,7 +532,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                         SizedBox(
                           height: 50,
                           width: screenW / 3,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               _getCardReader(settingsMenuPostArgs);
                             },
@@ -590,7 +590,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                     SizedBox(
                       height: 50,
                       width: screenW / 3,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           _saveButtons(settingsMenuPostArgs, context);
                         },
@@ -600,7 +600,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                     SizedBox(
                       height: 50,
                       width: screenW / 3,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           _getButtons(settingsMenuPostArgs);
                         },

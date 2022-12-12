@@ -364,17 +364,21 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    RaisedButton(
-                      color: _canScan ? Colors.lightGreen : Colors.yellow,
-                      splashColor: Colors.lightGreenAccent,
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(_canScan ? Colors.lightGreen : Colors.yellow),
+                          overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                      ),
                       child: new Text(_canScan ? ("Поиск серверов") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(false);
                       },
                     ),
-                    RaisedButton(
-                      color: _canScan ? Colors.lightGreen : Colors.yellow,
-                      splashColor: Colors.lightGreenAccent,
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(_canScan ? Colors.lightGreen : Colors.yellow),
+                          overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                      ),
                       child: new Text(_canScan ? ("QUICK SCAN") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(true);

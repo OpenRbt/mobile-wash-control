@@ -58,7 +58,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
     } on ApiException catch (e) {
       if (e.code != 404) {
         print("Exception when calling DefaultApi->/station-collection-report-dates: $e\n");
-        showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
       } else {}
     } catch (e) {
       if (!(e is ApiException)) {
@@ -161,7 +161,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                         "Период с ",
                         style: TextStyle(fontSize: 16),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () => _selectStartDate(context),
                         child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year}"),
                       ),
@@ -169,7 +169,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                         " по ",
                         style: TextStyle(fontSize: 16),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () => _selectEndDate(context),
                         child: Text("${_endDate.day}.${_endDate.month}.${_endDate.year}"),
                       ),

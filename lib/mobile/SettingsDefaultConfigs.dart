@@ -43,7 +43,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
         }
       }
 
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Настройки сохранены", Colors.green);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Настройки сохранены", Colors.green);
     }
     _stationsToSave = List.filled(12, false);
     _canSet = true;
@@ -137,11 +137,17 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
           SizedBox(
             height: 75,
             width: screenW / 5 * 4,
-            child: RaisedButton(
-              color: Colors.lightGreen,
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                    return Colors.lightGreen;
+                  }),
+                  foregroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                    return Colors.white;
+                  })
+              ),
               child: Center(
                 child: Text(
                   "Установить",
@@ -157,22 +163,34 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
                           content: Text("Настройки для программи кнопок будут установлены по умолчанию"),
                           actionsPadding: EdgeInsets.all(10),
                           actions: [
-                            RaisedButton(
-                              color: Colors.lightGreen,
-                              textColor: Colors.white,
-                              disabledColor: Colors.grey,
-                              disabledTextColor: Colors.black,
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                    if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                    return Colors.lightGreen;
+                                  }),
+                                  foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                    if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                    return Colors.white;
+                                  }),
+                              ),
                               onPressed: () {
                                 _setSettings(sessionData);
                                 Navigator.pop(context);
                               },
                               child: Text("Да"),
                             ),
-                            RaisedButton(
-                              color: Colors.white,
-                              textColor: Colors.black,
-                              disabledColor: Colors.grey,
-                              disabledTextColor: Colors.black,
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                    if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                    return Colors.white;
+                                  }),
+                                  foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                    if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                    return Colors.black;
+                                  }),
+                              ),
                               onPressed: () {
                                 Navigator.pop(context);
                               },

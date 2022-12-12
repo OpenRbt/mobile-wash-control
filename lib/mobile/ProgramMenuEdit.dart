@@ -206,8 +206,8 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       args.isFinishingProgram = _isFinishingProgram;
       args.preflightMotorSpeedPercent = int.tryParse(_motors[1].value.text) ?? 0;
 
-      List<RelayConfig> relays = List();
-      List<RelayConfig> relaysPreflight = List();
+      List<RelayConfig> relays = [];
+      List<RelayConfig> relaysPreflight = [];
       for (int i = 0; i < _relayCount; i++) {
         if (_relays[i].value.text.isNotEmpty && int.tryParse(_relays[i].value.text) != 0) {
           var tmp = RelayConfig();
@@ -228,10 +228,10 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       args.preflightRelays = relaysPreflight;
 
       var res = await programMenuEditArgs.sessionData.client.setProgram(args);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Измененеия программы сохранены", Colors.green);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Измененеия программы сохранены", Colors.green);
     } catch (e) {
       print(e);
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Не удалось изменить программу", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Не удалось изменить программу", Colors.red);
     }
     _inUpdate = false;
   }
@@ -582,12 +582,18 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                     SizedBox(
                       height: 50,
                       width: screenW / 3,
-                      child: RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        splashColor: Colors.lightGreenAccent,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith((states) {
+                              if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                              return Colors.lightGreen;
+                            }),
+                            foregroundColor: MaterialStateProperty.resolveWith((states) {
+                              if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                              return Colors.white;
+                            }),
+                            overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                        ),
                         onPressed: _inUpdate
                             ? null
                             : () {
@@ -599,12 +605,18 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                     SizedBox(
                       height: 50,
                       width: screenW / 3,
-                      child: RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        splashColor: Colors.lightGreenAccent,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith((states) {
+                              if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                              return Colors.lightGreen;
+                            }),
+                            foregroundColor: MaterialStateProperty.resolveWith((states) {
+                              if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                              return Colors.white;
+                            }),
+                            overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                        ),
                         onPressed: _inUpdate
                             ? null
                             : () {

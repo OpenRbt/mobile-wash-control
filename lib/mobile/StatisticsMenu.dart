@@ -33,7 +33,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
     }
     print("FROM: $_startDate, TO: $_endDate");
     _updating = true;
-    List<Future<StationReport>> reportsTmp = new List();
+    List<Future<StationReport>> reportsTmp = [];
     for (int i = 0; i < 12; i++) {
       try {
         if (_byDate) {
@@ -56,7 +56,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
       } on ApiException catch (e) {
         if (e.code != 404) {
           print("Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+          showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
         } else {}
       } catch (e) {
         if (!(e is ApiException)) {
@@ -71,7 +71,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
       } on ApiException catch (e) {
         if (e.code != 404) {
           print("Exception when calling DefaultApi->/station-report-dates: $e\n");
-          showInfoSnackBar(_scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+          showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
         } else {
           var tmp = StationReport();
           tmp.moneyReport = MoneyReport();
@@ -212,7 +212,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                         "Период с ",
                         style: TextStyle(fontSize: 16),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () => _selectStartDate(context),
                         child: Text("${_startDate.day}.${_startDate.month}.${_startDate.year}"),
                       ),
@@ -220,7 +220,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                         " по ",
                         style: TextStyle(fontSize: 16),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () => _selectEndDate(context),
                         child: Text("${_endDate.day}.${_endDate.month}.${_endDate.year}"),
                       ),

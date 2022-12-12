@@ -34,7 +34,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
     return new SettingsData(-1, "...", "Loading", "$index", "loading");
   });
 
-  List<String> _availableHashes = List();
+  List<String> _availableHashes = [];
 
   int _timeZone = -1;
   final List<int> _timeZoneValues = [
@@ -125,7 +125,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
       }
       var res = await sessionData.client.status();
       var tmp = res.stations.where((element) => element.hash != null).toList();
-      _availableHashes = List();
+      _availableHashes = [];
       tmp.forEach((element) {
         _availableHashes.add(element.hash);
       });
@@ -168,7 +168,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
-      showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive,
           "Произошла ошибка при запросе к api", Colors.red);
     }
     setState(() {});
@@ -229,8 +229,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           SizedBox(
                             height: 50,
                             width: screenW / 9 * 2,
-                            child: RaisedButton(
-                              padding: EdgeInsets.zero,
+                            child: ElevatedButton(
                               onPressed: () {},
                               child: Text(
                                   "${currentTime.day}.${currentTime.month}.${currentTime.year}"),
@@ -249,8 +248,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           SizedBox(
                             height: 50,
                             width: screenW / 9 * 2,
-                            child: RaisedButton(
-                              padding: EdgeInsets.zero,
+                            child: ElevatedButton(
                               onPressed: () {},
                               child: Text("${_currentTemp}"),
                             ),
@@ -398,18 +396,26 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     ),
                     SizedBox(
                       height: 50,
-                      child: RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        splashColor: Colors.lightGreenAccent,
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Настройки кассы"),
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/mobile/settings/kasse",
-                              arguments: sessionData);
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                return Colors.lightGreen;
+                              }),
+                              foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                return Colors.white;
+                              }),
+                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                          ),
+                          child: Text("Настройки кассы"),
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/mobile/settings/kasse",
+                                arguments: sessionData);
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -417,19 +423,27 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     ),
                     SizedBox(
                       height: 50,
-                      child: RaisedButton(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        splashColor: Colors.lightGreenAccent,
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Стандартные настройки"),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                              context, "/mobile/settings/default",
-                              arguments: sessionData);
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                return Colors.lightGreen;
+                              }),
+                              foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                return Colors.white;
+                              }),
+                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                          ),
+                          child: Text("Стандартные настройки"),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, "/mobile/settings/default",
+                                arguments: sessionData);
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -481,7 +495,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     _timeZone = val;
                   } catch (e) {
                     print(e);
-                    showInfoSnackBar(_scaffoldKey, _isSnackBarActive,
+                    showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive,
                         "Не удалось изменить таймзону", Colors.red);
                   }
                   setState(() {});

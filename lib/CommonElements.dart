@@ -69,17 +69,23 @@ Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessi
                                   content: Text("Выйти из приложения?"),
                                   actionsPadding: EdgeInsets.all(10),
                                   actions: [
-                                    RaisedButton(
+                                    ElevatedButton(
                                       onPressed: () {
                                         exit(0);
                                       },
                                       child: Text("Да"),
                                     ),
-                                    RaisedButton(
-                                      color: Colors.lightGreen,
-                                      textColor: Colors.white,
-                                      disabledColor: Colors.grey,
-                                      disabledTextColor: Colors.black,
+                                    ElevatedButton(
+                                      style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                            if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                            return Colors.lightGreen;
+                                          }),
+                                          foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                            if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                            return Colors.white;
+                                          }),
+                                      ),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
@@ -155,11 +161,17 @@ void showErrorDialog(BuildContext context, String text) {
       content: Text(text),
       actionsPadding: EdgeInsets.all(10),
       actions: [
-        RaisedButton(
-          color: Colors.lightGreen,
-          textColor: Colors.white,
-          disabledColor: Colors.grey,
-          disabledTextColor: Colors.black,
+        ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                return Colors.lightGreen;
+              }),
+              foregroundColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                return Colors.white;
+              }),
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -176,7 +188,7 @@ class ValueWrapper {
   ValueWrapper(this.value);
 }
 
-void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnackBarActive, String text, Color color) async {
+void showInfoSnackBar(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnackBarActive, String text, Color color) async {
   if (isSnackBarActive.value) {
     return;
   }
@@ -187,19 +199,16 @@ void showInfoSnackBar(GlobalKey<ScaffoldState> scaffoldKey, ValueWrapper isSnack
     if (scaffoldKey.currentState == null) return;
   }
   isSnackBarActive.value = true;
-  scaffoldKey.currentState
-      .showSnackBar(
-        SnackBar(
-          content: Text(
-            text ?? ('Успешно выполнено'),
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: color ?? Colors.grey,
-          duration: Duration(seconds: 2),
-        ),
-      )
-      .closed
-      .then((SnackBarClosedReason reason) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        text ?? ('Успешно выполнено'),
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: color ?? Colors.grey,
+      duration: Duration(seconds: 2),
+    ),
+  ).closed.then((SnackBarClosedReason reason) {
     isSnackBarActive.value = false;
   }).timeout(Duration(seconds: 4), onTimeout: () {
     isSnackBarActive.value = false;
