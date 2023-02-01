@@ -15,6 +15,8 @@ import 'package:mobile_wash_control/mobile/AdvertisingCampaginsEdit.dart';
 import 'package:mobile_wash_control/mobile/MotorMenu.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/SettingsServicesPage.dart';
+import 'package:mobile_wash_control/mobile/SettingsServicesRegistrationPage.dart';
 import 'package:mobile_wash_control/mobile/SettingsDefaultConfigs.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenuKasse.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenuPost.dart';
@@ -62,6 +64,8 @@ class MyApp extends StatelessWidget {
         "/mobile/settings/post": (context) => SettingsMenuPost(),
         "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
         "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
+        "/mobile/settings/services": (context) => SettingsServicesPage(),
+        "/mobile/settings/services-registration": (context) => SettingsServicesRegistrationPage(),
         "/mobile/statistics": (context) => StatisticsMenu(),
         "/mobile/motors": (context) => MotorMenu(),
         "/mobile/posts": (context) => PostsMenu(),

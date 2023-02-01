@@ -437,6 +437,34 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               }),
                               overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
                           ),
+                          child: Text("Сервисы"),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, "/mobile/settings/services-registration",
+                                arguments: {'sessionData': sessionData});
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    SizedBox(
+                      height: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                return Colors.lightGreen;
+                              }),
+                              foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                return Colors.white;
+                              }),
+                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                          ),
                           child: Text("Стандартные настройки"),
                           onPressed: () {
                             Navigator.pushNamed(
