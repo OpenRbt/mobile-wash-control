@@ -19,7 +19,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     final AppBar appBar = AppBar(
       title: Text("Программы"),
@@ -89,13 +89,13 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
     );
   }
 
-  Widget ProgramsTableAlt(SessionData sessionData) {
+  Widget? ProgramsTableAlt(SessionData sessionData) {
     return ValueListenableBuilder(
       valueListenable: SharedData.Programs,
       builder: (BuildContext context, values, child) {
         if (SharedData.Programs.value == null) {
           SharedData.RefreshPrograms();
-          return child;
+          return child ?? Container();
         }
         return Container(
           child: ListView.builder(

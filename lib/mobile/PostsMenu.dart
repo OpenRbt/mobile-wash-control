@@ -21,7 +21,7 @@ class _PostsMenuState extends State<PostsMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     final AppBar appBar = AppBar(
       title: Text("Посты"),
@@ -53,7 +53,7 @@ class _PostsMenuState extends State<PostsMenu> {
                           value: _PostDropDown[index],
                           onChanged: (newValue) {
                             setState(() {
-                              _PostDropDown[index] = newValue;
+                              _PostDropDown[index] = newValue!;
                             });
                           },
                           items: [

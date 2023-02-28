@@ -19,30 +19,30 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
   bool _firstLoad = true;
   bool _canSave = true;
   //Values
-  int ProgramDiscountValue;
+  late int ProgramDiscountValue;
 
-  int DiscountValue;
-  String DiscountTitle;
+  late int DiscountValue;
+  late String DiscountTitle;
 
-  List<DiscountProgram> DiscountPrograms;
+  late List<DiscountProgram> DiscountPrograms;
 
-  DateTimeRange DiscountDateRange;
-  TimeOfDay DiscountTimeStart;
-  TimeOfDay DiscountTimeEnd;
+  late DateTimeRange DiscountDateRange;
+  late TimeOfDay DiscountTimeStart;
+  late TimeOfDay DiscountTimeEnd;
 
   bool DiscountActive = true;
 
   List<String> FullDays = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
   List<String> Days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-  List<bool> DaysActive;
+  late List<bool> DaysActive;
   //Helpers
-  DateFormat _dateFormat;
+  late DateFormat _dateFormat;
   //TextFields
-  TextEditingController _titleController;
-  TextEditingController _discountController;
-  TextEditingController _programDiscountController;
+  late TextEditingController _titleController;
+  late TextEditingController _discountController;
+  late TextEditingController _programDiscountController;
 
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   void initState() {
     _titleController = new TextEditingController();
@@ -63,7 +63,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     DiscountTimeEnd = TimeOfDay(hour: 23, minute: 59);
     DiscountValue = 0;
 
-    DiscountPrograms = List();
+    DiscountPrograms = [];
     _titleController.text = DiscountTitle;
     _discountController.text = "$DiscountValue";
 
@@ -78,10 +78,10 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     super.dispose();
   }
 
-  void _saveAdvertisingCampagin(SessionData sessionData) async {
+  Future<void> _saveAdvertisingCampagin(SessionData sessionData) async {
     _canSave = false;
     try {
-      List<AdvertisingCampaignWeekdayEnum> weekDays = List();
+      List<AdvertisingCampaignWeekdayEnum> weekDays = [];
       for (int i = 0; i < 7; i++) {
         switch (i) {
           case 6:
@@ -157,7 +157,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     if (_firstLoad) {
       _firstLoad = false;
@@ -319,7 +319,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     );
   }
 
-  Future<Widget> showTitleDialog() {
+  Future<dynamic> showTitleDialog() {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     _titleController.text = DiscountTitle;
     return showDialog(
@@ -336,8 +336,9 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                     border: UnderlineInputBorder(),
                   ),
                   controller: _titleController,
-                  validator: (String value) {
-                    if (value.isEmpty) {
+                  validator: (String? value) {
+                    bool val = value?.isEmpty ?? true;
+                    if (val) {
                       return "Введите какое-либо название";
                     }
                     return null;
@@ -348,7 +349,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         DiscountTitle = _titleController.value.text;
                         Navigator.pop(context);
                       }
@@ -414,7 +415,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     );
   }
 
-  Future<Widget> showDiscountDialog() {
+  Future<dynamic> showDiscountDialog() {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     _discountController.text = "$DiscountValue";
     return showDialog(
@@ -433,15 +434,17 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                   controller: _discountController,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
-                  validator: (String value) {
-                    int discountValue = int.tryParse(_discountController.value.text);
-                    if (value.isEmpty) {
+                  validator: (String? value) {
+                    bool val = value?.isEmpty ?? true;
+                    int? discountValue = int.tryParse(_discountController.value.text);
+                    if (val) {
                       return "Введите скидку";
                     }
-                    if (discountValue > 100) {
+                    int discountVal = discountValue ?? 0;
+                    if (discountVal > 100) {
                       return "Скидка не может быть больше 100 %";
                     }
-                    if (discountValue < 0) {
+                    if (discountVal < 0) {
                       return "Скидка не может быть отрицательной";
                     }
                     return null;
@@ -452,7 +455,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         DiscountValue = int.parse(_discountController.value.text);
                         Navigator.pop(context);
                       }
@@ -618,7 +621,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     );
   }
 
-  Future<Widget> showTimeDialog() {
+  Future<dynamic> showTimeDialog() {
     TimeOfDay tmpStart = DiscountTimeStart;
     TimeOfDay tmpEnd = DiscountTimeEnd;
     return showDialog(
@@ -772,7 +775,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     );
   }
 
-  Future<Widget> showDaysDialog() {
+  Future<dynamic> showDaysDialog() {
     List<bool> tmpDays = List.from(DaysActive);
     return showDialog(
       context: context,
@@ -787,7 +790,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                   return CheckboxListTile(
                     value: tmpDays[index],
                     onChanged: (val) {
-                      tmpDays[index] = val;
+                      tmpDays[index] = val!;
                       setState(() {});
                     },
                     title: Text(FullDays[index]),
@@ -826,7 +829,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
       builder: (BuildContext context, values, child) {
         if (SharedData.Programs.value == null) {
           SharedData.RefreshPrograms();
-          return child;
+          return child ?? Container();
         }
         return Container(
           child: Row(
@@ -876,7 +879,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     );
   }
 
-  Future<Widget> showProgramsDiscountDialog() {
+  Future<dynamic> showProgramsDiscountDialog() {
     List<DropdownMenuItem> DropDownItems = [
       DropdownMenuItem(
         child: Text("-"),
@@ -1089,7 +1092,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     );
   }
 
-  Future<Widget> showCreateProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems) {
+  Future<dynamic> showCreateProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems) {
     int dropDownValue = dropDownItems[0].value;
     _programDiscountController.text = "0";
     ProgramDiscountValue = 0;
@@ -1195,7 +1198,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     );
   }
 
-  Future<Widget> showEditProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems, int index) {
+  Future<dynamic> showEditProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems, int index) {
     int dropDownValue = discountProgramsList[index].programID;
     _programDiscountController.text = "0";
     ProgramDiscountValue = discountProgramsList[index].discount;
@@ -1311,7 +1314,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
     );
   }
 
-  Future<Widget> showProgramDiscountDialog() {
+  Future<dynamic> showProgramDiscountDialog() {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     _programDiscountController.text = "$ProgramDiscountValue";
     return showDialog(
@@ -1330,15 +1333,17 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                   controller: _programDiscountController,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
-                  validator: (String value) {
-                    int discountValue = int.tryParse(_programDiscountController.value.text);
-                    if (value.isEmpty) {
+                  validator: (String? value) {
+                    String val = value ?? "";
+                    int? discountValue = int.tryParse(_programDiscountController.value.text);
+                    if (val.isEmpty) {
                       return "Введите скидку";
                     }
-                    if (discountValue > 100) {
+                    int discountVal = discountValue ?? 0;
+                    if (discountVal > 100) {
                       return "Скидка не может быть больше 100 %";
                     }
-                    if (discountValue < 0) {
+                    if (discountVal < 0) {
                       return "Скидка не может быть отрицательной";
                     }
                     return null;
@@ -1349,7 +1354,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         ProgramDiscountValue = int.parse(_programDiscountController.value.text);
                         Navigator.pop(context);
                       }

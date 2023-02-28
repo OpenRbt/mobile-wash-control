@@ -100,11 +100,11 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
 
     for (int i = 0; _reports != null && i < _reports.length; i++) {
       if (_reports[i] != null) {
-        _total.moneyReport.banknotes += _reports[i].moneyReport.banknotes ?? 0;
-        _total.moneyReport.coins += _reports[i].moneyReport.coins ?? 0;
-        _total.moneyReport.electronical += _reports[i].moneyReport.electronical ?? 0;
-        _total.moneyReport.service += _reports[i].moneyReport.service ?? 0;
-        _total.moneyReport.carsTotal += _reports[i].moneyReport.carsTotal ?? 0;
+        _total.moneyReport.banknotes += _reports[i]?.moneyReport.banknotes ?? 0;
+        _total.moneyReport.coins += _reports[i]?.moneyReport.coins ?? 0;
+        _total.moneyReport.electronical += _reports[i]?.moneyReport.electronical ?? 0;
+        _total.moneyReport.service += _reports[i]?.moneyReport.service ?? 0;
+        _total.moneyReport.carsTotal += _reports[i]?.moneyReport.carsTotal ?? 0;
       }
     }
 
@@ -118,7 +118,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
 
   Future<Null> _selectStartDate(BuildContext context) async {
     {
-      final DateTime picked = await showDatePicker(
+      final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: _startDate,
         firstDate: DateTime(2020),
@@ -138,7 +138,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
 
   Future<Null> _selectEndDate(BuildContext context) async {
     {
-      final DateTime picked = await showDatePicker(
+      final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: _endDate,
         firstDate: DateTime(2020),
@@ -164,7 +164,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     final AppBar appBar = AppBar(
       title: Text("Статистика"),
@@ -259,7 +259,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                               )
                             ],
                             onChanged: (newValue) {
-                              _byDate = newValue;
+                              _byDate = newValue!;
                               setState(() {});
                             }),
                       )

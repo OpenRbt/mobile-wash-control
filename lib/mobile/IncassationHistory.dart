@@ -76,7 +76,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
 
   Future<Null> _selectStartDate(BuildContext context) async {
     {
-      final DateTime picked = await showDatePicker(
+      final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: _startDate,
         firstDate: DateTime(2021),
@@ -96,7 +96,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
 
   Future<Null> _selectEndDate(BuildContext context) async {
     {
-      final DateTime picked = await showDatePicker(
+      final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: _endDate,
         firstDate: DateTime(2021),
@@ -122,7 +122,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
 
   @override
   Widget build(BuildContext context) {
-    IncassationHistoryArgs incassationHistoryArgs = ModalRoute.of(context).settings.arguments;
+    IncassationHistoryArgs incassationHistoryArgs = ModalRoute.of(context)?.settings.arguments as IncassationHistoryArgs;
 
     final AppBar appBar = AppBar(
       title: Text("История инкассаций | Пост ${incassationHistoryArgs.stationID}"),

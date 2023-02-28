@@ -22,9 +22,9 @@ class _AuthPageState extends State<AuthPage> {
 
   _AuthPageState() : super();
   final int _maxPinLength = 4;
-  String _host;
-  SessionData _sessionData;
-  String _currentPin = "";
+  late String _host;
+  late SessionData _sessionData;
+  late String _currentPin = "";
 
   void _loadPage() async {
     final prefs = await SharedPreferences.getInstance();
@@ -65,7 +65,7 @@ class _AuthPageState extends State<AuthPage> {
   //TODO: Add horizontal layout
   @override
   Widget build(BuildContext context) {
-    final AuthArgs authArgs = ModalRoute.of(context).settings.arguments;
+    final AuthArgs authArgs = ModalRoute.of(context)?.settings.arguments as AuthArgs;
     _host = authArgs.Host;
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;

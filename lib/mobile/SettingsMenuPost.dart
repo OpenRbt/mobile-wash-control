@@ -27,10 +27,10 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
   List<String> _readerValues = ["NOT_USED", "VENDOTEK", "PAYMENT_WORLD"];
   String _dropDownCardReader = "NOT_USED";
 
-  List<String> _dropDownPrograms;
+  late List<String> _dropDownPrograms;
   List<String> _programIDs = ["------------"];
   List<String> _programNames = ["------------"];
-  List<TextEditingController> _inputControllers;
+  late List<TextEditingController> _inputControllers;
 
   String _relayboardValue = "localGPIO";
   Map<String, String> _dropdownRelayBoard = {"localGPIO": "Локально", "danBoard": "На сервере"};
@@ -211,7 +211,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
     var appBar = AppBar(
       title: Text("Пост"),
     );
-    SettingsMenuPostArgs settingsMenuPostArgs = ModalRoute.of(context).settings.arguments;
+    SettingsMenuPostArgs settingsMenuPostArgs = ModalRoute.of(context)?.settings.arguments as SettingsMenuPostArgs;
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
 
@@ -327,7 +327,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                                   );
                                 }),
                                 onChanged: (newValue) {
-                                  _inputControllers[3].text = newValue;
+                                  _inputControllers[3].text = newValue!;
                                   setState(() {});
                                 }),
                           ),
@@ -381,7 +381,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                             isExpanded: true,
                             value: _relayboardValue,
                             onChanged: (newValue) {
-                              _relayboardValue = newValue;
+                              _relayboardValue = newValue!;
                               setState(() {});
                             },
                             items: List.generate(_dropdownRelayBoard.length, (index) {
@@ -458,7 +458,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                                 );
                               }),
                               onChanged: (newValue) {
-                                _dropDownCardReader = newValue;
+                                _dropDownCardReader = newValue!;
                                 setState(() {});
                               }),
                         )
@@ -574,7 +574,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
                                 );
                               }),
                               onChanged: (newValue) {
-                                _dropDownPrograms[index] = newValue;
+                                _dropDownPrograms[index] = newValue!;
                                 setState(() {});
                               }),
                         )

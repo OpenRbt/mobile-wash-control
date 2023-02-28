@@ -13,7 +13,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
   @override
   Widget build(BuildContext context) {
 
-    final arguments = ModalRoute.of(context).settings.arguments as Map;
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     SessionData sessionData = arguments['sessionData'];
 
     return Scaffold(

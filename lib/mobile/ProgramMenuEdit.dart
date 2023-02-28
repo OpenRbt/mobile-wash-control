@@ -29,10 +29,10 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
   bool _inUpdate = false;
   bool _firstLoad = true;
 
-  List<TextEditingController> _program;
-  List<TextEditingController> _relays;
-  List<TextEditingController> _relaysPreflight;
-  List<TextEditingController> _motors;
+  late List<TextEditingController> _program;
+  late List<TextEditingController> _relays;
+  late List<TextEditingController> _relaysPreflight;
+  late List<TextEditingController> _motors;
 
   void initInputs() {
     _program = List.generate(2, (index) {
@@ -42,7 +42,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
           controller.addListener(() {
             final text = controller.text.toLowerCase();
             if (text.length > 0) {
-              int value = int.tryParse(text);
+              int? value = int.tryParse(text);
               value = value ?? 0;
               controller.value = controller.value.copyWith(
                 text: value.toString(),
@@ -67,7 +67,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
           controller.addListener(() {
             final text = controller.text.toLowerCase();
             if (text.length > 0) {
-              int value = int.tryParse(text);
+              int? value = int.tryParse(text);
               value = value ?? 0;
               value = value > _maxMotor ? _maxMotor : value;
               controller.value = controller.value.copyWith(
@@ -91,7 +91,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
           controller.addListener(() {
             final text = controller.text.toLowerCase();
             if (text.length > 0) {
-              int value = int.tryParse(text);
+              int? value = int.tryParse(text);
               value = value ?? 0;
               value = value > _maxPercent ? _maxPercent : value;
               controller.value = controller.value.copyWith(
@@ -115,7 +115,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
           controller.addListener(() {
             final text = controller.text.toLowerCase();
             if (text.length > 0) {
-              int value = int.tryParse(text);
+              int? value = int.tryParse(text);
               value = value ?? 0;
               value = value > _maxPercent ? _maxPercent : value;
               controller.value = controller.value.copyWith(
@@ -212,14 +212,14 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
         if (_relays[i].value.text.isNotEmpty && int.tryParse(_relays[i].value.text) != 0) {
           var tmp = RelayConfig();
           tmp.id = i + 1;
-          tmp.timeon = (_relayTime * (int.tryParse(_relays[i].value.text) / 100)).round();
+          tmp.timeon = (_relayTime * (int.tryParse(_relays[i].value.text)! / 100)).round();
           tmp.timeoff = _relayTime - tmp.timeon;
           relays.add(tmp);
         }
         if (_preflight && _relaysPreflight[i].value.text.isNotEmpty && int.tryParse(_relaysPreflight[i].value.text) != 0) {
           var tmp = RelayConfig();
           tmp.id = i + 1;
-          tmp.timeon = (_relayTime * (double.tryParse(_relaysPreflight[i].value.text) / 100)).round();
+          tmp.timeon = (_relayTime * (double.tryParse(_relaysPreflight[i].value.text)! / 100)).round();
           tmp.timeoff = _relayTime - tmp.timeon;
           relaysPreflight.add(tmp);
         }
@@ -238,7 +238,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final ProgramMenuEditArgs programMenuEditArgs = ModalRoute.of(context).settings.arguments;
+    final ProgramMenuEditArgs programMenuEditArgs = ModalRoute.of(context)?.settings.arguments as ProgramMenuEditArgs;
     final AppBar appBar = AppBar(
       title: Text("Программа ${programMenuEditArgs.programName}"),
     );
@@ -326,7 +326,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
                         ),
                         value: _preflight,
                         onChanged: (newValue) {
-                          _preflight = newValue;
+                          _preflight = newValue!;
                           setState(() {});
                         },
                       ),

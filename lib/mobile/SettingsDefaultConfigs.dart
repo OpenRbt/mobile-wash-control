@@ -21,11 +21,12 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
   void _setSettings(SessionData sessionData) async {
     _canSet = false;
     if (_dropDownValue != "----") {
-      StationsDefaultConfig config = DefaultConfig.configs[_dropDownValue];
+      StationsDefaultConfig? config = DefaultConfig.configs[_dropDownValue];
 
-      for (int i = 0; i < config.programs.length; i++) {
+      int programLength = config?.programs.length ?? 0;
+      for (int i = 0; i < programLength; i++) {
         try {
-          var res = await sessionData.client.setProgram(config.programs[i]);
+          var res = await sessionData.client.setProgram(config?.programs[i]);
         } catch (e) {
           print(e);
         }
@@ -36,7 +37,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
           try {
             var args = ArgSetStationButton(
               stationID: i + 1,
-              buttons: config.stationPrograms,
+              buttons: config?.stationPrograms,
             );
             var res = await sessionData.client.setStationButton(args);
           } catch (e) {}
@@ -51,7 +52,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     final AppBar appBar = AppBar(
       title: Text("Стандартные настройки"),
@@ -128,7 +129,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
                   },
                 ),
                 onChanged: (newValue) {
-                  _dropDownValue = newValue;
+                  _dropDownValue = newValue!;
                   setState(() {});
                 },
               ),

@@ -16,7 +16,7 @@ class AdvertisingCampagins extends StatefulWidget {
 class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   //Helpers
-  DateFormat _dateFormat;
+  late DateFormat _dateFormat;
   //
   bool _showByDates = false;
   DateTimeRange dateRange = DateTimeRange(
@@ -29,7 +29,7 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
   List<String> Days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
   bool _firstLoad = true;
 
-  List<AdvertisingCampaign> adCampagins = List();
+  List<AdvertisingCampaign> adCampagins = [];
 
   void _loadAdvertisting(SessionData sessionData) async {
     try {
@@ -54,7 +54,7 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
     setState(() {});
   }
 
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   void initState() {
     _dateFormat = new DateFormat("dd.MM.yyyy");
@@ -68,7 +68,7 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     if (_firstLoad) {
       _loadAdvertisting(sessionData);
@@ -127,7 +127,7 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
     );
   }
 
-  Widget _GetCreateAdvertistingCampaginCard(SessionData sessionData, {double height, double width}) {
+  Widget _GetCreateAdvertistingCampaginCard(SessionData sessionData, {required double height, required double width}) {
     return Container(
       width: width,
       padding: EdgeInsets.all(5),
@@ -306,7 +306,7 @@ class _AdvertisingCampaginsState extends State<AdvertisingCampagins> {
     );
   }
 
-  Widget _GetAdvertistingCampaginCard(SessionData sessionData, int index, {double height, double width}) {
+  Widget _GetAdvertistingCampaginCard(SessionData sessionData, int index, {required double height, required double width}) {
     return Container(
       width: width,
       padding: EdgeInsets.all(5),

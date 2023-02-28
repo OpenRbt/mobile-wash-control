@@ -18,7 +18,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
   List<String> _taxValues = ["TAX_VAT110", "TAX_VAT0", "TAX_NO", "TAX_VAT120"];
   String _dropDownValue = "TAX_NO";
 
-  List<TextEditingController> _inputControllers;
+  late List<TextEditingController> _inputControllers;
 
   void initState() {
     super.initState();
@@ -100,7 +100,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     if (_firstLoad) {
       _getKasse(sessionData);
@@ -148,7 +148,7 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
                               );
                             }),
                             onChanged: (newValue) {
-                              _dropDownValue = newValue;
+                              _dropDownValue = newValue!;
                               setState(() {});
                             }),
                       ),

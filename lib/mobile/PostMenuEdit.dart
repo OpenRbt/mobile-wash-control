@@ -20,7 +20,7 @@ class PostMenuArgs {
 
 //TODO: Buttons rework and fix
 class EditPostMenu extends StatefulWidget {
-  EditPostMenu({Key key}) : super(key: key);
+  EditPostMenu({Key? key}) : super(key: key);
 
   @override
   _EditPostMenuState createState() => _EditPostMenuState();
@@ -30,7 +30,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context));
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
@@ -63,7 +63,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
   bool _firstLoad = true;
-  Timer _updateBalanceTimer;
+  late Timer _updateBalanceTimer;
   int _incassBalance = 0;
   int _balance = 0;
   int _currentProgram = -1;
@@ -216,7 +216,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final PostMenuArgs postMenuArgs = ModalRoute.of(context).settings.arguments;
+    final PostMenuArgs postMenuArgs = ModalRoute.of(context)?.settings.arguments as PostMenuArgs;
 
     final AppBar appBar = AppBar(
       title: Text("Пост: ${postMenuArgs.postID} | Инкасс: ${_incassBalance ?? 0} руб"),

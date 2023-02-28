@@ -113,7 +113,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
 
   List<DropdownMenuItem> _timeZoneValuesDropList = [];
 
-  void getSettings(SessionData sessionData) async {
+  Future<void> getSettings(SessionData sessionData) async {
     try {
       _timeZone = (await sessionData.client
               .getConfigVarInt(ArgGetConfigVar(name: "TIMEZONE")))
@@ -177,7 +177,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
   @override
   Widget build(BuildContext context) {
     final DateTime currentTime = DateTime.now();
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     if (_firstLoad) {
       getSettings(sessionData);

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -36,6 +37,20 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {
+
+  await Firebase.initializeApp(
+    // Replace with actual values
+    options: FirebaseOptions(
+        apiKey: "AIzaSyBq2HgLyU9y3G68uw_VaTSnxfZpvL8BxIo",
+        authDomain: "openwashing.firebaseapp.com",
+        projectId: "openwashing",
+        storageBucket: "openwashing.appspot.com",
+        messagingSenderId: "931729817638",
+        appId: "1:931729817638:web:0e6a02d606f0389e1c66e7",
+        measurementId: "G-4HD7TZX4BE"
+    ),
+  );
+
   Intl.defaultLocale = "ru_RU";
   runApp(
     MyApp(),
@@ -53,7 +68,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes:  {
-        "/": (context) => MyHomePage(title: "Главная страница"),
+        "/": (context) => MyHomePage(title: "Главная страница", key: null,),
         "/mobile/auth": (context) => AuthPage(),
         "/mobile/home": (context) => HomePage(),
         "/mobile/editPost": (context) => EditPostMenu(),
@@ -85,7 +100,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -105,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context));
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
@@ -124,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
   int _pos = 0;
   bool _wifi = false;
   bool _canScan = true;
-  HashSet<String> _servers;
+  late HashSet<String> _servers;
 
   @override
   void initState() {
@@ -152,9 +167,9 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
     client.connectionTimeout = Duration(milliseconds: 100);
 
     if (Platform.isLinux) {
-      List<NetworkInterface> interfaces = await NetworkInterface.list(type: InternetAddressType.IPv4);
+      List<NetworkInterface?> interfaces = await NetworkInterface.list(type: InternetAddressType.IPv4);
       print(interfaces);
-      NetworkInterface target = interfaces.firstWhere((element) => element.name.contains("en") || element.name.contains("wlan"), orElse: () {
+      NetworkInterface? target = interfaces.firstWhere((element) => element!.name.contains("en") || element.name.contains("wlan"), orElse: () {
         return null;
       });
       if (target != null) {

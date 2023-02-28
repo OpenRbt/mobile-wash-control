@@ -20,7 +20,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
 
     double screenW = MediaQuery.of(context).size.width;
 
-    final arguments = ModalRoute.of(context).settings.arguments as Map;
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     SessionData sessionData = arguments['sessionData'];
 
     return Scaffold(

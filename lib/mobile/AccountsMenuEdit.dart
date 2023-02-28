@@ -18,7 +18,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
 
   bool _loginNotValid = false;
 
-  Map<String, TextEditingController> _inputControllers;
+  late Map<String, TextEditingController> _inputControllers;
 
   List<bool> _inputTriggers = List.filled(3, false);
 
@@ -44,10 +44,10 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
   }
 
   void _setData(AccountInfo accountInfo) {
-    _inputControllers["login"].text = accountInfo.login;
-    _inputControllers["firstName"].text = accountInfo.firstName;
-    _inputControllers["lastName"].text = accountInfo.lastName;
-    _inputControllers["middleName"].text = accountInfo.middleName;
+    _inputControllers["login"]?.text = accountInfo.login;
+    _inputControllers["firstName"]?.text = accountInfo.firstName;
+    _inputControllers["lastName"]?.text = accountInfo.lastName;
+    _inputControllers["middleName"]?.text = accountInfo.middleName;
     _inputTriggers[0] = accountInfo.isAdmin;
     _inputTriggers[1] = accountInfo.isOperator;
     _inputTriggers[2] = accountInfo.isEngineer;
@@ -60,10 +60,10 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
     _inUpdate = true;
     try {
       var args = ArgUserUpdate(
-        login: _inputControllers["login"].value.text,
-        firstName: _inputControllers["firstName"].value.text.isNotEmpty ? _inputControllers["firstName"].value.text : " ",
-        lastName: _inputControllers["lastName"].value.text.isNotEmpty ? _inputControllers["lastName"].value.text : " ",
-        middleName: _inputControllers["middleName"].value.text.isNotEmpty ? _inputControllers["middleName"].value.text : " ",
+        login: _inputControllers["login"]?.value.text,
+        firstName: _inputControllers["firstName"]!.value.text.isNotEmpty ? _inputControllers["firstName"]!.value.text : " ",
+        lastName: _inputControllers["lastName"]!.value.text.isNotEmpty ? _inputControllers["lastName"]!.value.text : " ",
+        middleName: _inputControllers["middleName"]!.value.text.isNotEmpty ? _inputControllers["middleName"]!.value.text : " ",
         isAdmin: _inputTriggers[0],
         isOperator: _inputTriggers[1],
         isEngineer: _inputTriggers[2],
@@ -93,7 +93,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final AccountsMenuEditArgs accountsMenuEditArgs = ModalRoute.of(context).settings.arguments;
+    final AccountsMenuEditArgs accountsMenuEditArgs = ModalRoute.of(context)?.settings.arguments as AccountsMenuEditArgs;
 
     if (_notLoaded) {
       _setData(accountsMenuEditArgs.targetUser);
@@ -434,7 +434,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                                   try {
                                     var curUser = await accountsMenuEditArgs.sessionData.client.getUser();
 
-                                    var args = ArgUserDelete(login: _inputControllers["login"].value.text);
+                                    var args = ArgUserDelete(login: _inputControllers["login"]?.value.text);
 
                                     if (curUser.login != accountsMenuEditArgs.targetUser.login) {
                                       var res = await accountsMenuEditArgs.sessionData.client.deleteUser(args);

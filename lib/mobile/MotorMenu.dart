@@ -24,12 +24,12 @@ class _MotorMenuState extends State<MotorMenu> {
   bool _firstLoad = true;
   bool _updating = false;
 
-  List<StationStat> _stationStats = new List();
-  List<bool> _ProgramStat = new List();
+  List<StationStat> _stationStats = [];
+  List<bool> _ProgramStat = [];
 
   int _paddingValue = 0;
 
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   void initState() {
     _scrollController = new ScrollController(keepScrollOffset: false);
@@ -90,7 +90,7 @@ class _MotorMenuState extends State<MotorMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     final AppBar appBar = AppBar(
       title: Text("Моторесурс"),
@@ -495,7 +495,7 @@ class _MotorMenuState extends State<MotorMenu> {
 
   Future<Null> _selectStartDate(BuildContext context) async {
     {
-      final DateTime picked = await showDatePicker(
+      final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: _startDate,
         firstDate: DateTime(2020),
@@ -511,7 +511,7 @@ class _MotorMenuState extends State<MotorMenu> {
 
   Future<Null> _selectEndDate(BuildContext context) async {
     {
-      final DateTime picked = await showDatePicker(
+      final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: _endDate,
         firstDate: DateTime(2020),

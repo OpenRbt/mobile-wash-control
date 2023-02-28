@@ -15,7 +15,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
   bool _inUpdate = false;
   List<bool> _inputTriggers = List.filled(3, false);
 
-  Map<String, TextEditingController> _inputControllers;
+  late Map<String, TextEditingController> _inputControllers;
 
   void pageInit() {
     _inputControllers = {
@@ -44,21 +44,23 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
     setState(() {});
 
     try {
-      if (_inputControllers["login"].value.text.length < 4) {
+      int loginLength = _inputControllers["login"]?.value.text.length ?? 0;
+      if (loginLength < 4) {
         print("login length fail");
         throw "login length error";
       }
-      if (_inputControllers["password"].value.text.length < 4) {
+      int passwordLength = _inputControllers["password"]?.value.text.length ?? 0;
+      if (passwordLength < 4) {
         print("pass length fail");
         throw "pass length error";
       }
 
       var args = ArgUserCreate(
-        login: _inputControllers["login"].value.text,
-        password: _inputControllers["password"].value.text,
-        firstName: _inputControllers["firstName"].value.text.isNotEmpty ? _inputControllers["firstName"].value.text : " ",
-        lastName: _inputControllers["lastName"].value.text.isNotEmpty ? _inputControllers["lastName"].value.text : " ",
-        middleName: _inputControllers["middleName"].value.text.isNotEmpty ? _inputControllers["middleName"].value.text : " ",
+        login: _inputControllers["login"]!.value.text,
+        password: _inputControllers["password"]!.value.text,
+        firstName: _inputControllers["firstName"]!.value.text.isNotEmpty ? _inputControllers["firstName"]!.value.text : " ",
+        lastName: _inputControllers["lastName"]!.value.text.isNotEmpty ? _inputControllers["lastName"]!.value.text : " ",
+        middleName: _inputControllers["middleName"]!.value.text.isNotEmpty ? _inputControllers["middleName"]!.value.text : " ",
         isAdmin: _inputTriggers[0],
         isOperator: _inputTriggers[1],
         isEngineer: _inputTriggers[2],
@@ -96,7 +98,7 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     final AppBar appBar = AppBar(
       title: Text("Добавление пользователя"),
@@ -146,8 +148,8 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                             controller: _inputControllers["login"],
                             onChanged: (newValue) {
                               var controller = _inputControllers["login"];
-                              final text = controller.text.toLowerCase();
-                              controller.value = controller.value.copyWith(text: text, selection: TextSelection(baseOffset: text.length, extentOffset: text.length), composing: TextRange.empty);
+                              final text = controller?.text.toLowerCase();
+                              controller?.value = controller.value.copyWith(text: text, selection: TextSelection(baseOffset: text?.length ?? 0, extentOffset: text?.length ?? 0), composing: TextRange.empty);
                             },
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),
@@ -279,8 +281,8 @@ class _AccountsMenuAddState extends State<AccountsMenuAdd> {
                             maxLength: 16,
                             onChanged: (newValue) {
                               var controller = _inputControllers["password"];
-                              final text = controller.text.toLowerCase();
-                              controller.value = controller.value.copyWith(text: text, selection: TextSelection(baseOffset: text.length, extentOffset: text.length), composing: TextRange.empty);
+                              final text = controller?.text.toLowerCase();
+                              controller?.value = controller.value.copyWith(text: text, selection: TextSelection(baseOffset: text?.length ?? 0, extentOffset: text?.length ?? 0), composing: TextRange.empty);
                             },
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),

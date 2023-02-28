@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context));
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _isSnackBarActive = ValueWrapper(false);
 
-  List<HomePageData> _homePageData = List();
+  List<HomePageData> _homePageData = [];
 
   void initState() {
     super.initState();
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
@@ -70,9 +70,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
       drawer: prepareDrawer(context, Pages.Main, sessionData),
       body: ValueListenableBuilder(
         valueListenable: SharedData.StationsData,
-        builder: (BuildContext context, List<HomePageData> values, Widget child) {
+        builder: (BuildContext context, List<HomePageData> values, Widget? child) {
           if (SharedData.StationsData.value == null || SharedData.StationsData.value.length == 0) {
-            return child;
+            return child ?? Container();
           }
           return Container(
             child: GridView.count(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 
 class AccountsMenuEditArgs {
-  AccountInfo targetUser;
-  SessionData sessionData;
+  late AccountInfo targetUser;
+  late SessionData sessionData;
 }
 
 class AccountsMenu extends StatefulWidget {
@@ -53,7 +53,7 @@ class _AccountsMenuState extends State<AccountsMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = ModalRoute.of(context).settings.arguments;
+    final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
     if (_firstLoad) {
       _getUsers(sessionData);

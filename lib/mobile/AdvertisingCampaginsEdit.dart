@@ -27,32 +27,32 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
   bool _firstLoad = true;
   bool _canSave = true;
   //OldData
-  AdvertisingCampaign data;
+  late AdvertisingCampaign data;
   //Values
-  int programDiscountValue;
+  late int programDiscountValue;
 
-  int discountValue;
-  String discountTitle;
+  late int discountValue;
+  late String discountTitle;
 
-  List<DiscountProgram> discountPrograms;
+  late List<DiscountProgram> discountPrograms;
 
-  DateTimeRange discountDateRange;
-  TimeOfDay discountTimeStart;
-  TimeOfDay discountTimeEnd;
+  late DateTimeRange discountDateRange;
+  late TimeOfDay discountTimeStart;
+  late TimeOfDay discountTimeEnd;
 
   bool DiscountActive = true;
 
   final List<String> _fullDays = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
   final List<String> _days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-  List<bool> DaysActive;
+  late List<bool> DaysActive;
   //Helpers
-  DateFormat _dateFormat;
+  late DateFormat _dateFormat;
   //TextFields
-  TextEditingController _titleController;
-  TextEditingController _discountController;
-  TextEditingController _programDiscountController;
+  late TextEditingController _titleController;
+  late TextEditingController _discountController;
+  late TextEditingController _programDiscountController;
 
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   void initState() {
     _titleController = new TextEditingController();
@@ -107,6 +107,8 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
           {
             return data.weekday.contains(AdvertisingCampaignWeekdayEnum.sunday);
           }
+        default :
+          return false;
       }
     });
   }
@@ -209,7 +211,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final AdvertisingCampaginsEditArgs args = ModalRoute.of(context).settings.arguments;
+    final AdvertisingCampaginsEditArgs args = ModalRoute.of(context)?.settings.arguments as AdvertisingCampaginsEditArgs;
 
     if (_firstLoad) {
       data = args.campaign;
@@ -380,7 +382,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     );
   }
 
-  Future<Widget> showTitleDialog() {
+  Future<dynamic> showTitleDialog() {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     _titleController.text = discountTitle;
     return showDialog(
@@ -397,8 +399,9 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                     border: UnderlineInputBorder(),
                   ),
                   controller: _titleController,
-                  validator: (String value) {
-                    if (value.isEmpty) {
+                  validator: (String? value) {
+                    bool val = value?.isEmpty ?? true;
+                    if (val) {
                       return "Введите какое-либо название";
                     }
                     return null;
@@ -409,7 +412,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         discountTitle = _titleController.value.text;
                         Navigator.pop(context);
                       }
@@ -475,7 +478,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     );
   }
 
-  Future<Widget> showDiscountDialog() {
+  Future<dynamic> showDiscountDialog() {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     _discountController.text = "${discountValue}";
     return showDialog(
@@ -494,15 +497,17 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                   controller: _discountController,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
-                  validator: (String value) {
-                    int discountValue = int.tryParse(_discountController.value.text);
-                    if (value.isEmpty) {
+                  validator: (String? value) {
+                    int? discountValue = int.tryParse(_discountController.value.text);
+                    bool val = value?.isEmpty ?? true;
+                    if (val) {
                       return "Введите скидку";
                     }
-                    if (discountValue > 100) {
+                    int discountVal = discountValue ?? 0;
+                    if (discountVal > 100) {
                       return "Скидка не может быть больше 100 %";
                     }
-                    if (discountValue < 0) {
+                    if (discountVal < 0) {
                       return "Скидка не может быть отрицательной";
                     }
                     return null;
@@ -513,7 +518,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         discountValue = int.parse(_discountController.value.text);
                         Navigator.pop(context);
                       }
@@ -679,7 +684,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     );
   }
 
-  Future<Widget> showTimeDialog() {
+  Future<dynamic> showTimeDialog() {
     TimeOfDay tmpStart = discountTimeStart;
     TimeOfDay tmpEnd = discountTimeEnd;
     return showDialog(
@@ -833,7 +838,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     );
   }
 
-  Future<Widget> showDaysDialog() {
+  Future<dynamic> showDaysDialog() {
     List<bool> tmpDays = List.from(DaysActive);
     return showDialog(
       context: context,
@@ -848,7 +853,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                   return CheckboxListTile(
                     value: tmpDays[index],
                     onChanged: (val) {
-                      tmpDays[index] = val;
+                      tmpDays[index] = val!;
                       setState(() {});
                     },
                     title: Text(_fullDays[index]),
@@ -887,7 +892,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
       builder: (BuildContext context, values, child) {
         if (SharedData.Programs.value == null) {
           SharedData.RefreshPrograms();
-          return child;
+          return child ?? Container();
         }
         return Container(
           child: Row(
@@ -937,7 +942,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     );
   }
 
-  Future<Widget> showProgramsDiscountDialog() {
+  Future<dynamic> showProgramsDiscountDialog() {
     List<DropdownMenuItem> DropDownItems = [
       DropdownMenuItem(
         child: Text("-"),
@@ -1150,7 +1155,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     );
   }
 
-  Future<Widget> showCreateProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems) {
+  Future<dynamic> showCreateProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems) {
     int dropDownValue = dropDownItems[0].value;
     _programDiscountController.text = "0";
     programDiscountValue = 0;
@@ -1256,7 +1261,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     );
   }
 
-  Future<Widget> showEditProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems, int index) {
+  Future<dynamic> showEditProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems, int index) {
     int dropDownValue = discountProgramsList[index].programID;
     _programDiscountController.text = "0";
     programDiscountValue = discountProgramsList[index].discount;
@@ -1373,7 +1378,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
     );
   }
 
-  Future<Widget> showProgramDiscountDialog() {
+  Future<dynamic> showProgramDiscountDialog() {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     _programDiscountController.text = "${programDiscountValue}";
     return showDialog(
@@ -1392,15 +1397,17 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                   controller: _programDiscountController,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
-                  validator: (String value) {
-                    int discountValue = int.tryParse(_programDiscountController.value.text);
-                    if (value.isEmpty) {
+                  validator: (String? value) {
+                    int? discountValue = int.tryParse(_programDiscountController.value.text);
+                    bool val = value?.isEmpty ?? true;
+                    if (val) {
                       return "Введите скидку";
                     }
-                    if (discountValue > 100) {
+                    int discountVal = discountValue ?? 0;
+                    if (discountVal > 100) {
                       return "Скидка не может быть больше 100 %";
                     }
-                    if (discountValue < 0) {
+                    if (discountVal < 0) {
                       return "Скидка не может быть отрицательной";
                     }
                     return null;
@@ -1411,7 +1418,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                 Container(
                   child: MaterialButton(
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         programDiscountValue = int.parse(_programDiscountController.value.text);
                         Navigator.pop(context);
                       }
