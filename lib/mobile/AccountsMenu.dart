@@ -38,9 +38,10 @@ class _AccountsMenuState extends State<AccountsMenu> {
       if (!mounted) {
         return;
       }
-      for (int i = 0; i < res.users.length; i++) {
+      int usersLength = res?.users.length ?? 0;
+      for (int i = 0; i < usersLength; i++) {
         _accounts.add(
-          AccountInfo(res.users[i].login, res.users[i].firstName, res.users[i].middleName, res.users[i].lastName, res.users[i].isAdmin, res.users[i].isEngineer, res.users[i].isOperator),
+          AccountInfo(res?.users[i].login ?? "", res?.users[i].firstName ?? "", res?.users[i].middleName ?? "", res?.users[i].lastName ?? "", res?.users[i].isAdmin ?? false, res?.users[i].isEngineer ?? false, res?.users[i].isOperator ?? false),
         );
       }
       _accounts.sort((a, b) => a.login.compareTo(b.login));

@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -12,7 +13,7 @@ part of openapi.api;
 class StationConfig {
   /// Returns a new [StationConfig] instance.
   StationConfig({
-    @required this.id,
+    required this.id,
     this.preflightSec,
     this.name,
     this.hash,
@@ -21,13 +22,37 @@ class StationConfig {
 
   int id;
 
-  int preflightSec;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? preflightSec;
 
-  String name;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? name;
 
-  String hash;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? hash;
 
-  RelayBoard relayBoard;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  RelayBoard? relayBoard;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is StationConfig &&
@@ -39,67 +64,116 @@ class StationConfig {
 
   @override
   int get hashCode =>
-    (id == null ? 0 : id.hashCode) +
-    (preflightSec == null ? 0 : preflightSec.hashCode) +
-    (name == null ? 0 : name.hashCode) +
-    (hash == null ? 0 : hash.hashCode) +
-    (relayBoard == null ? 0 : relayBoard.hashCode);
+    // ignore: unnecessary_parenthesis
+    (id.hashCode) +
+    (preflightSec == null ? 0 : preflightSec!.hashCode) +
+    (name == null ? 0 : name!.hashCode) +
+    (hash == null ? 0 : hash!.hashCode) +
+    (relayBoard == null ? 0 : relayBoard!.hashCode);
 
   @override
   String toString() => 'StationConfig[id=$id, preflightSec=$preflightSec, name=$name, hash=$hash, relayBoard=$relayBoard]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'id'] = id;
-    if (preflightSec != null) {
-      json[r'preflightSec'] = preflightSec;
+      json[r'id'] = this.id;
+    if (this.preflightSec != null) {
+      json[r'preflightSec'] = this.preflightSec;
+    } else {
+      json[r'preflightSec'] = null;
     }
-    if (name != null) {
-      json[r'name'] = name;
+    if (this.name != null) {
+      json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
     }
-    if (hash != null) {
-      json[r'hash'] = hash;
+    if (this.hash != null) {
+      json[r'hash'] = this.hash;
+    } else {
+      json[r'hash'] = null;
     }
-    if (relayBoard != null) {
-      json[r'relayBoard'] = relayBoard;
+    if (this.relayBoard != null) {
+      json[r'relayBoard'] = this.relayBoard;
+    } else {
+      json[r'relayBoard'] = null;
     }
     return json;
   }
 
   /// Returns a new [StationConfig] instance and imports its values from
-  /// [json] if it's non-null, null if [json] is null.
-  static StationConfig fromJson(Map<String, dynamic> json) => json == null
-    ? null
-    : StationConfig(
-        id: json[r'id'],
-        preflightSec: json[r'preflightSec'],
-        name: json[r'name'],
-        hash: json[r'hash'],
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static StationConfig? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "StationConfig[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "StationConfig[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
+
+      return StationConfig(
+        id: mapValueOfType<int>(json, r'id')!,
+        preflightSec: mapValueOfType<int>(json, r'preflightSec'),
+        name: mapValueOfType<String>(json, r'name'),
+        hash: mapValueOfType<String>(json, r'hash'),
         relayBoard: RelayBoard.fromJson(json[r'relayBoard']),
-    );
+      );
+    }
+    return null;
+  }
 
-  static List<StationConfig> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <StationConfig>[]
-      : json.map((dynamic value) => StationConfig.fromJson(value)).toList(growable: true == growable);
+  static List<StationConfig>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <StationConfig>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = StationConfig.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
 
-  static Map<String, StationConfig> mapFromJson(Map<String, dynamic> json) {
+  static Map<String, StationConfig> mapFromJson(dynamic json) {
     final map = <String, StationConfig>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) => map[key] = StationConfig.fromJson(value));
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = StationConfig.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
 
   // maps a json object with a list of StationConfig-objects as value to a dart map
-  static Map<String, List<StationConfig>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
+  static Map<String, List<StationConfig>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<StationConfig>>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) {
-        map[key] = StationConfig.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
-      });
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = StationConfig.listFromJson(entry.value, growable: growable,);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{
+    'id',
+  };
 }
 

@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -12,8 +13,8 @@ part of openapi.api;
 class ArgSave {
   /// Returns a new [ArgSave] instance.
   ArgSave({
-    @required this.hash,
-    @required this.keyPair,
+    required this.hash,
+    required this.keyPair,
   });
 
   String hash;
@@ -27,50 +28,92 @@ class ArgSave {
 
   @override
   int get hashCode =>
-    (hash == null ? 0 : hash.hashCode) +
-    (keyPair == null ? 0 : keyPair.hashCode);
+    // ignore: unnecessary_parenthesis
+    (hash.hashCode) +
+    (keyPair.hashCode);
 
   @override
   String toString() => 'ArgSave[hash=$hash, keyPair=$keyPair]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'hash'] = hash;
-      json[r'keyPair'] = keyPair;
+      json[r'hash'] = this.hash;
+      json[r'keyPair'] = this.keyPair;
     return json;
   }
 
   /// Returns a new [ArgSave] instance and imports its values from
-  /// [json] if it's non-null, null if [json] is null.
-  static ArgSave fromJson(Map<String, dynamic> json) => json == null
-    ? null
-    : ArgSave(
-        hash: json[r'hash'],
-        keyPair: KeyPair.fromJson(json[r'keyPair']),
-    );
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static ArgSave? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
 
-  static List<ArgSave> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <ArgSave>[]
-      : json.map((dynamic value) => ArgSave.fromJson(value)).toList(growable: true == growable);
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "ArgSave[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "ArgSave[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
-  static Map<String, ArgSave> mapFromJson(Map<String, dynamic> json) {
+      return ArgSave(
+        hash: mapValueOfType<String>(json, r'hash')!,
+        keyPair: KeyPair.fromJson(json[r'keyPair'])!,
+      );
+    }
+    return null;
+  }
+
+  static List<ArgSave>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <ArgSave>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = ArgSave.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
+
+  static Map<String, ArgSave> mapFromJson(dynamic json) {
     final map = <String, ArgSave>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) => map[key] = ArgSave.fromJson(value));
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgSave.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
 
   // maps a json object with a list of ArgSave-objects as value to a dart map
-  static Map<String, List<ArgSave>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
+  static Map<String, List<ArgSave>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<ArgSave>>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) {
-        map[key] = ArgSave.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
-      });
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgSave.listFromJson(entry.value, growable: growable,);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{
+    'hash',
+    'keyPair',
+  };
 }
 

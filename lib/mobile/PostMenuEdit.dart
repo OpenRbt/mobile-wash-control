@@ -69,7 +69,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
   int _currentProgram = -1;
   final int _maxButtons = 20;
 
-  List<ResponseStationButtonButtons> _buttons = [];
+  List<ResponseStationButtonButtonsInner> _buttons = [];
   @override
   void initState() {
     super.initState();
@@ -82,7 +82,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
     try {
       var args = ArgStationButton(stationID: postMenuArgs.postID);
       var res = await postMenuArgs.sessionData.client.stationButton(args);
-      _buttons = res.buttons;
+      _buttons = res!.buttons;
 
       if (!mounted) {
         return;
@@ -106,7 +106,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
       );
       var res = await sessionData.client.stationReportCurrentMoney(args);
 
-      _incassBalance = (res.moneyReport?.banknotes ?? 0) + (res.moneyReport?.coins ?? 0);
+      _incassBalance = (res?.moneyReport?.banknotes ?? 0) + (res?.moneyReport?.coins ?? 0);
       if (!mounted) {
         return;
       }
@@ -115,7 +115,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
       var checkboxID = -1;
 
       if (_buttons.where((element) => element.programID == _currentProgram).length != 0) {
-        checkboxID = _buttons.firstWhere((element) => element.programID == _currentProgram).buttonID - 1 ?? -1;
+        checkboxID = (_buttons.firstWhere((element) => element.programID == _currentProgram).buttonID ?? 0) - 1;
       }
       if (checkboxID >= 0) {
         _checkboxList[checkboxID] = true;
@@ -144,8 +144,8 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
     if ((_buttons?.length ?? 0) > 0) {
       _buttonNames = Map();
       for (int i = 0; i < _buttons.length; i++) {
-        _buttonNames[_buttons[i].buttonID - 1] = programs.firstWhere((element) => element.id == _buttons[i].programID, orElse: () {
-              return null;
+        _buttonNames[_buttons[i].buttonID! - 1] = programs.firstWhere((element) => element.id == _buttons[i].programID, orElse: () {
+              return Program(id: -1);
             })?.name ??
             "NOT FOUND";
       }
@@ -183,7 +183,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
       try {
         var args = ArgRunProgram(
           hash: postMenuArgs.hash,
-          preflight: false, //TODO: use preflight trigger
+          preflight: false, programID: -1, //TODO: use preflight trigger
         );
         await postMenuArgs.sessionData.client.runProgram(args);
         setState(() {

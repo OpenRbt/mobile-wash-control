@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -12,7 +13,7 @@ part of openapi.api;
 class ArgLoadMoney {
   /// Returns a new [ArgLoadMoney] instance.
   ArgLoadMoney({
-    @required this.hash,
+    required this.hash,
   });
 
   String hash;
@@ -23,47 +24,88 @@ class ArgLoadMoney {
 
   @override
   int get hashCode =>
-    (hash == null ? 0 : hash.hashCode);
+    // ignore: unnecessary_parenthesis
+    (hash.hashCode);
 
   @override
   String toString() => 'ArgLoadMoney[hash=$hash]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'hash'] = hash;
+      json[r'hash'] = this.hash;
     return json;
   }
 
   /// Returns a new [ArgLoadMoney] instance and imports its values from
-  /// [json] if it's non-null, null if [json] is null.
-  static ArgLoadMoney fromJson(Map<String, dynamic> json) => json == null
-    ? null
-    : ArgLoadMoney(
-        hash: json[r'hash'],
-    );
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static ArgLoadMoney? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
 
-  static List<ArgLoadMoney> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <ArgLoadMoney>[]
-      : json.map((dynamic value) => ArgLoadMoney.fromJson(value)).toList(growable: true == growable);
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "ArgLoadMoney[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "ArgLoadMoney[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
-  static Map<String, ArgLoadMoney> mapFromJson(Map<String, dynamic> json) {
+      return ArgLoadMoney(
+        hash: mapValueOfType<String>(json, r'hash')!,
+      );
+    }
+    return null;
+  }
+
+  static List<ArgLoadMoney>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <ArgLoadMoney>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = ArgLoadMoney.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
+
+  static Map<String, ArgLoadMoney> mapFromJson(dynamic json) {
     final map = <String, ArgLoadMoney>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) => map[key] = ArgLoadMoney.fromJson(value));
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgLoadMoney.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
 
   // maps a json object with a list of ArgLoadMoney-objects as value to a dart map
-  static Map<String, List<ArgLoadMoney>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
+  static Map<String, List<ArgLoadMoney>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<ArgLoadMoney>>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) {
-        map[key] = ArgLoadMoney.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
-      });
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgLoadMoney.listFromJson(entry.value, growable: growable,);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{
+    'hash',
+  };
 }
 

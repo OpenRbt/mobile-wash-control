@@ -31,7 +31,8 @@ import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
 
-import 'package:wifi/wifi.dart';
+//import 'package:wifi/wifi.dart';
+import 'package:wifi_iot/wifi_iot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -247,13 +248,13 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
         });
       }
     } else {
-      int level = await Wifi.level;
-      String localIp = await Wifi.ip;
-      _localIP = localIp;
-      _scanIP = localIp.substring(
+      int level = await WiFiForIoTPlugin.getCurrentSignalStrength() ?? 0;
+      String? localIp = await WiFiForIoTPlugin.getIP();
+      _localIP = localIp ?? "";
+      _scanIP = localIp?.substring(
         0,
         localIp.lastIndexOf('.'),
-      );
+      ) ?? "";
       _wifi = level > 0;
       if (_wifi) {
         var subIPS = List.generate(256, (index) {

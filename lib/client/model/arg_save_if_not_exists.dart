@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -12,8 +13,8 @@ part of openapi.api;
 class ArgSaveIfNotExists {
   /// Returns a new [ArgSaveIfNotExists] instance.
   ArgSaveIfNotExists({
-    @required this.hash,
-    @required this.keyPair,
+    required this.hash,
+    required this.keyPair,
   });
 
   String hash;
@@ -27,50 +28,92 @@ class ArgSaveIfNotExists {
 
   @override
   int get hashCode =>
-    (hash == null ? 0 : hash.hashCode) +
-    (keyPair == null ? 0 : keyPair.hashCode);
+    // ignore: unnecessary_parenthesis
+    (hash.hashCode) +
+    (keyPair.hashCode);
 
   @override
   String toString() => 'ArgSaveIfNotExists[hash=$hash, keyPair=$keyPair]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'hash'] = hash;
-      json[r'keyPair'] = keyPair;
+      json[r'hash'] = this.hash;
+      json[r'keyPair'] = this.keyPair;
     return json;
   }
 
   /// Returns a new [ArgSaveIfNotExists] instance and imports its values from
-  /// [json] if it's non-null, null if [json] is null.
-  static ArgSaveIfNotExists fromJson(Map<String, dynamic> json) => json == null
-    ? null
-    : ArgSaveIfNotExists(
-        hash: json[r'hash'],
-        keyPair: KeyPair.fromJson(json[r'keyPair']),
-    );
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static ArgSaveIfNotExists? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
 
-  static List<ArgSaveIfNotExists> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <ArgSaveIfNotExists>[]
-      : json.map((dynamic value) => ArgSaveIfNotExists.fromJson(value)).toList(growable: true == growable);
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "ArgSaveIfNotExists[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "ArgSaveIfNotExists[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
-  static Map<String, ArgSaveIfNotExists> mapFromJson(Map<String, dynamic> json) {
+      return ArgSaveIfNotExists(
+        hash: mapValueOfType<String>(json, r'hash')!,
+        keyPair: KeyPair.fromJson(json[r'keyPair'])!,
+      );
+    }
+    return null;
+  }
+
+  static List<ArgSaveIfNotExists>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <ArgSaveIfNotExists>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = ArgSaveIfNotExists.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
+
+  static Map<String, ArgSaveIfNotExists> mapFromJson(dynamic json) {
     final map = <String, ArgSaveIfNotExists>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) => map[key] = ArgSaveIfNotExists.fromJson(value));
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgSaveIfNotExists.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
 
   // maps a json object with a list of ArgSaveIfNotExists-objects as value to a dart map
-  static Map<String, List<ArgSaveIfNotExists>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
+  static Map<String, List<ArgSaveIfNotExists>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<ArgSaveIfNotExists>>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) {
-        map[key] = ArgSaveIfNotExists.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
-      });
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgSaveIfNotExists.listFromJson(entry.value, growable: growable,);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{
+    'hash',
+    'keyPair',
+  };
 }
 

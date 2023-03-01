@@ -28,7 +28,7 @@ class _IncassationHistoryState extends State<IncassationHistory> {
     new Duration(days: 1, seconds: -1),
   );
 
-  List<CollectionReportWithUser> _incassations = [];
+  List<CollectionReportWithUser>? _incassations = [];
   int _totalNal = 0;
   int _totalBeznal = 0;
 
@@ -47,13 +47,14 @@ class _IncassationHistoryState extends State<IncassationHistory> {
       );
 
       var res = await incassationHistoryArgs.sessionData.client.stationCollectionReportDates(args);
-      _incassations = res.collectionReports;
+      _incassations = res?.collectionReports;
 
       _totalNal = 0;
       _totalBeznal = 0;
-      for (int i = 0; i < _incassations.length; i++) {
-        _totalNal += (_incassations[i].banknotes ?? 0) + (_incassations[i].coins ?? 0);
-        _totalBeznal += _incassations[i].electronical ?? 0;
+      int incassationsLength = _incassations?.length ?? 0;
+      for (int i = 0; i < incassationsLength; i++) {
+        _totalNal += (_incassations?[i].banknotes ?? 0) + (_incassations?[i].coins ?? 0);
+        _totalBeznal += _incassations?[i].electronical ?? 0;
       }
     } on ApiException catch (e) {
       if (e.code != 404) {
@@ -195,11 +196,11 @@ class _IncassationHistoryState extends State<IncassationHistory> {
                       ])
                     ]
                       ..addAll(
-                        List.generate(_incassations.length, (index) {
+                        List.generate(_incassations?.length ?? 0, (index) {
                           return createTableRow([
-                            formatDateTime(DateTime.fromMillisecondsSinceEpoch(_incassations[index].ctime * 1000)),
-                            (_incassations[index].banknotes ?? 0) + (_incassations[index].coins ?? 0),
-                            _incassations[index].electronical ?? 0,
+                            formatDateTime(DateTime.fromMillisecondsSinceEpoch(_incassations?[index].ctime ?? 0 * 1000)),
+                            (_incassations?[index].banknotes ?? 0) + (_incassations?[index].coins ?? 0),
+                            _incassations?[index].electronical ?? 0,
                           ]);
                         }),
                       )

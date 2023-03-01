@@ -446,13 +446,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  wifi:
+  wifi_iot:
     dependency: "direct main"
     description:
-      name: wifi
+      name: wifi_iot
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.5"
+    version: "0.3.18"
   win32:
     dependency: transitive
     description:

@@ -1,17 +1,18 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
 
 
 class DefaultApi {
-  DefaultApi([ApiClient apiClient]) : apiClient = apiClient ?? defaultApiClient;
+  DefaultApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
@@ -19,42 +20,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [AdvertisingCampaign] args (required):
-  Future<Response> addAdvertisingCampaignWithHttpInfo(AdvertisingCampaign args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> addAdvertisingCampaignWithHttpInfo(AdvertisingCampaign args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/add-advertising-campaign';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [AdvertisingCampaign] args (required):
-  Future<void> addAdvertisingCampaign(AdvertisingCampaign args) async {
-    final response = await addAdvertisingCampaignWithHttpInfo(args);
+  Future<void> addAdvertisingCampaign(AdvertisingCampaign args,) async {
+    final response = await addAdvertisingCampaignWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -64,42 +59,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgAddServiceAmount] args (required):
-  Future<Response> addServiceAmountWithHttpInfo(ArgAddServiceAmount args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> addServiceAmountWithHttpInfo(ArgAddServiceAmount args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/add-service-amount';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgAddServiceAmount] args (required):
-  Future<void> addServiceAmount(ArgAddServiceAmount args) async {
-    final response = await addServiceAmountWithHttpInfo(args);
+  Future<void> addServiceAmount(ArgAddServiceAmount args,) async {
+    final response = await addServiceAmountWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -109,301 +98,274 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgAdvertisingCampagin] args:
-  Future<Response> advertisingCampaignWithHttpInfo({ ArgAdvertisingCampagin args }) async {
-    // Verify required params are set.
-
+  Future<Response> advertisingCampaignWithHttpInfo({ ArgAdvertisingCampagin? args, }) async {
+    // ignore: prefer_const_declarations
     final path = r'/advertising-campaign';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgAdvertisingCampagin] args:
-  Future<List<AdvertisingCampaign>> advertisingCampaign({ ArgAdvertisingCampagin args }) async {
-    final response = await advertisingCampaignWithHttpInfo( args: args );
+  Future<List<AdvertisingCampaign>?> advertisingCampaign({ ArgAdvertisingCampagin? args, }) async {
+    final response = await advertisingCampaignWithHttpInfo( args: args, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<AdvertisingCampaign>') as List)
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<AdvertisingCampaign>') as List)
         .cast<AdvertisingCampaign>()
-        .toList(growable: false);
+        .toList();
+
     }
-    return Future<List<AdvertisingCampaign>>.value(null);
+    return null;
   }
 
   /// Performs an HTTP 'POST /advertising-campaign-by-id' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgAdvertisingCampaignByID] args (required):
-  Future<Response> advertisingCampaignByIDWithHttpInfo(ArgAdvertisingCampaignByID args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> advertisingCampaignByIDWithHttpInfo(ArgAdvertisingCampaignByID args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/advertising-campaign-by-id';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgAdvertisingCampaignByID] args (required):
-  Future<AdvertisingCampaign> advertisingCampaignByID(ArgAdvertisingCampaignByID args) async {
-    final response = await advertisingCampaignByIDWithHttpInfo(args);
+  Future<AdvertisingCampaign?> advertisingCampaignByID(ArgAdvertisingCampaignByID args,) async {
+    final response = await advertisingCampaignByIDWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'AdvertisingCampaign',) as AdvertisingCampaign;
-        }
-    return Future<AdvertisingCampaign>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /card-reader-config' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgCardReaderConfig] args (required):
-  Future<Response> cardReaderConfigWithHttpInfo(ArgCardReaderConfig args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> cardReaderConfigWithHttpInfo(ArgCardReaderConfig args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/card-reader-config';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgCardReaderConfig] args (required):
-  Future<CardReaderConfig> cardReaderConfig(ArgCardReaderConfig args) async {
-    final response = await cardReaderConfigWithHttpInfo(args);
+  Future<CardReaderConfig?> cardReaderConfig(ArgCardReaderConfig args,) async {
+    final response = await cardReaderConfigWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'CardReaderConfig',) as CardReaderConfig;
-        }
-    return Future<CardReaderConfig>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /card-reader-config-by-hash' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgCardReaderConfigByCash] args (required):
-  Future<Response> cardReaderConfigByHashWithHttpInfo(ArgCardReaderConfigByCash args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> cardReaderConfigByHashWithHttpInfo(ArgCardReaderConfigByCash args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/card-reader-config-by-hash';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgCardReaderConfigByCash] args (required):
-  Future<CardReaderConfig> cardReaderConfigByHash(ArgCardReaderConfigByCash args) async {
-    final response = await cardReaderConfigByHashWithHttpInfo(args);
+  Future<CardReaderConfig?> cardReaderConfigByHash(ArgCardReaderConfigByCash args,) async {
+    final response = await cardReaderConfigByHashWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'CardReaderConfig',) as CardReaderConfig;
-        }
-    return Future<CardReaderConfig>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /user' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgUserCreate] args (required):
-  Future<Response> createUserWithHttpInfo(ArgUserCreate args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> createUserWithHttpInfo(ArgUserCreate args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/user';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgUserCreate] args (required):
-  Future<ResponseUserCreate> createUser(ArgUserCreate args) async {
-    final response = await createUserWithHttpInfo(args);
+  Future<ResponseUserCreate?> createUser(ArgUserCreate args,) async {
+    final response = await createUserWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseUserCreate',) as ResponseUserCreate;
-        }
-    return Future<ResponseUserCreate>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /del-advertising-campaign' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgDelAdvertisingCampagin] args (required):
-  Future<Response> delAdvertisingCampaignWithHttpInfo(ArgDelAdvertisingCampagin args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> delAdvertisingCampaignWithHttpInfo(ArgDelAdvertisingCampagin args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/del-advertising-campaign';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgDelAdvertisingCampagin] args (required):
-  Future<void> delAdvertisingCampaign(ArgDelAdvertisingCampagin args) async {
-    final response = await delAdvertisingCampaignWithHttpInfo(args);
+  Future<void> delAdvertisingCampaign(ArgDelAdvertisingCampagin args,) async {
+    final response = await delAdvertisingCampaignWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -413,42 +375,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgDelStation] args (required):
-  Future<Response> delStationWithHttpInfo(ArgDelStation args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> delStationWithHttpInfo(ArgDelStation args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/del-station';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgDelStation] args (required):
-  Future<void> delStation(ArgDelStation args) async {
-    final response = await delStationWithHttpInfo(args);
+  Future<void> delStation(ArgDelStation args,) async {
+    final response = await delStationWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -458,42 +414,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgUserDelete] args (required):
-  Future<Response> deleteUserWithHttpInfo(ArgUserDelete args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> deleteUserWithHttpInfo(ArgUserDelete args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/user';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'DELETE',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgUserDelete] args (required):
-  Future<void> deleteUser(ArgUserDelete args) async {
-    final response = await deleteUserWithHttpInfo(args);
+  Future<void> deleteUser(ArgUserDelete args,) async {
+    final response = await deleteUserWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -503,42 +453,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [AdvertisingCampaign] args (required):
-  Future<Response> editAdvertisingCampaignWithHttpInfo(AdvertisingCampaign args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> editAdvertisingCampaignWithHttpInfo(AdvertisingCampaign args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/edit-advertising-campaign';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [AdvertisingCampaign] args (required):
-  Future<void> editAdvertisingCampaign(AdvertisingCampaign args) async {
-    final response = await editAdvertisingCampaignWithHttpInfo(args);
+  Future<void> editAdvertisingCampaign(AdvertisingCampaign args,) async {
+    final response = await editAdvertisingCampaignWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -547,183 +491,214 @@ class DefaultApi {
   /// Performs an HTTP 'POST /get-config-var-bool' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [ArgGetConfigVar1] args (required):
-  Future<Response> getConfigVarBoolWithHttpInfo(ArgGetConfigVar1 args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  /// * [ArgGetConfigVar] args (required):
+  Future<Response> getConfigVarBoolWithHttpInfo(ArgGetConfigVar args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/get-config-var-bool';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
-  /// * [ArgGetConfigVar1] args (required):
-  Future<ConfigVarBool> getConfigVarBool(ArgGetConfigVar1 args) async {
-    final response = await getConfigVarBoolWithHttpInfo(args);
+  /// * [ArgGetConfigVar] args (required):
+  Future<ConfigVarBool?> getConfigVarBool(ArgGetConfigVar args,) async {
+    final response = await getConfigVarBoolWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ConfigVarBool',) as ConfigVarBool;
-        }
-    return Future<ConfigVarBool>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /get-config-var-int' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgGetConfigVar] args (required):
-  Future<Response> getConfigVarIntWithHttpInfo(ArgGetConfigVar args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> getConfigVarIntWithHttpInfo(ArgGetConfigVar args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/get-config-var-int';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgGetConfigVar] args (required):
-  Future<ConfigVarInt> getConfigVarInt(ArgGetConfigVar args) async {
-    final response = await getConfigVarIntWithHttpInfo(args);
+  Future<ConfigVarInt?> getConfigVarInt(ArgGetConfigVar args,) async {
+    final response = await getConfigVarIntWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ConfigVarInt',) as ConfigVarInt;
-        }
-    return Future<ConfigVarInt>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /get-config-var-string' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [ArgGetConfigVar2] args (required):
-  Future<Response> getConfigVarStringWithHttpInfo(ArgGetConfigVar2 args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  /// * [ArgGetConfigVar] args (required):
+  Future<Response> getConfigVarStringWithHttpInfo(ArgGetConfigVar args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/get-config-var-string';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
-  /// * [ArgGetConfigVar2] args (required):
-  Future<ConfigVarString> getConfigVarString(ArgGetConfigVar2 args) async {
-    final response = await getConfigVarStringWithHttpInfo(args);
+  /// * [ArgGetConfigVar] args (required):
+  Future<ConfigVarString?> getConfigVarString(ArgGetConfigVar args,) async {
+    final response = await getConfigVarStringWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ConfigVarString',) as ConfigVarString;
-        }
-    return Future<ConfigVarString>.value(null);
+    
+    }
+    return null;
   }
 
-  /// Performs an HTTP 'GET /ping' operation and returns the [Response].
-  Future<Response> getPingWithHttpInfo() async {
-    final path = r'/ping';
+  /// Performs an HTTP 'POST /getLevel' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgGetLevel] args (required):
+  Future<Response> getLevelWithHttpInfo(ArgGetLevel args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/getLevel';
 
-    Object postBody;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgGetLevel] args (required):
+  Future<ResponseGetLevel?> getLevel(ArgGetLevel args,) async {
+    final response = await getLevelWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseGetLevel',) as ResponseGetLevel;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'GET /ping' operation and returns the [Response].
+  Future<Response> getPingWithHttpInfo() async {
+    // ignore: prefer_const_declarations
+    final path = r'/ping';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
       path,
       'GET',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
@@ -734,88 +709,365 @@ class DefaultApi {
     }
   }
 
-  /// Performs an HTTP 'POST /get-station-discounts' operation and returns the [Response].
+  /// Performs an HTTP 'POST /get-station-config-var-bool' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [ArgGetStationDiscounts] args (required):
-  Future<Response> getStationDiscountsWithHttpInfo(ArgGetStationDiscounts args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
+  /// * [ArgGetStationConfigVar1] args (required):
+  Future<Response> getStationConfigVarBoolWithHttpInfo(ArgGetStationConfigVar1 args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/get-station-config-var-bool';
 
-    final path = r'/get-station-discounts';
-
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
-  /// * [ArgGetStationDiscounts] args (required):
-  Future<List<ButtonDiscount>> getStationDiscounts(ArgGetStationDiscounts args) async {
-    final response = await getStationDiscountsWithHttpInfo(args);
+  /// * [ArgGetStationConfigVar1] args (required):
+  Future<StationConfigVarBool?> getStationConfigVarBool(ArgGetStationConfigVar1 args,) async {
+    final response = await getStationConfigVarBoolWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<ButtonDiscount>') as List)
-        .cast<ButtonDiscount>()
-        .toList(growable: false);
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationConfigVarBool',) as StationConfigVarBool;
+    
     }
-    return Future<List<ButtonDiscount>>.value(null);
+    return null;
   }
 
-  /// Performs an HTTP 'GET /user' operation and returns the [Response].
-  Future<Response> getUserWithHttpInfo() async {
-    final path = r'/user';
+  /// Performs an HTTP 'POST /get-station-config-var-int' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar1] args (required):
+  Future<Response> getStationConfigVarIntWithHttpInfo(ArgGetStationConfigVar1 args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/get-station-config-var-int';
 
-    Object postBody;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar1] args (required):
+  Future<StationConfigVarInt?> getStationConfigVarInt(ArgGetStationConfigVar1 args,) async {
+    final response = await getStationConfigVarIntWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationConfigVarInt',) as StationConfigVarInt;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /get-station-config-var-string' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar1] args (required):
+  Future<Response> getStationConfigVarStringWithHttpInfo(ArgGetStationConfigVar1 args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/get-station-config-var-string';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar1] args (required):
+  Future<StationConfigVarString?> getStationConfigVarString(ArgGetStationConfigVar1 args,) async {
+    final response = await getStationConfigVarStringWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationConfigVarString',) as StationConfigVarString;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /get-station-discounts' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgGetStationDiscounts] args (required):
+  Future<Response> getStationDiscountsWithHttpInfo(ArgGetStationDiscounts args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/get-station-discounts';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgGetStationDiscounts] args (required):
+  Future<List<ButtonDiscount>?> getStationDiscounts(ArgGetStationDiscounts args,) async {
+    final response = await getStationDiscountsWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<ButtonDiscount>') as List)
+        .cast<ButtonDiscount>()
+        .toList();
+
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /get-wash-config-var-bool' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar] args (required):
+  Future<Response> getStationWashConfigVarBoolWithHttpInfo(ArgGetStationConfigVar args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/get-wash-config-var-bool';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar] args (required):
+  Future<StationConfigVarBool?> getStationWashConfigVarBool(ArgGetStationConfigVar args,) async {
+    final response = await getStationWashConfigVarBoolWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationConfigVarBool',) as StationConfigVarBool;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /get-wash-config-var-int' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar] args (required):
+  Future<Response> getStationWashConfigVarIntWithHttpInfo(ArgGetStationConfigVar args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/get-wash-config-var-int';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar] args (required):
+  Future<StationConfigVarInt?> getStationWashConfigVarInt(ArgGetStationConfigVar args,) async {
+    final response = await getStationWashConfigVarIntWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationConfigVarInt',) as StationConfigVarInt;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /get-wash-config-var-string' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar] args (required):
+  Future<Response> getStationWashConfigVarStringWithHttpInfo(ArgGetStationConfigVar args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/get-wash-config-var-string';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgGetStationConfigVar] args (required):
+  Future<StationConfigVarString?> getStationWashConfigVarString(ArgGetStationConfigVar args,) async {
+    final response = await getStationWashConfigVarStringWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationConfigVarString',) as StationConfigVarString;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'GET /user' operation and returns the [Response].
+  Future<Response> getUserWithHttpInfo() async {
+    // ignore: prefer_const_declarations
+    final path = r'/user';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
       path,
       'GET',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
-  Future<UserConfig> getUser() async {
+  Future<UserConfig?> getUser() async {
     final response = await getUserWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -823,40 +1075,40 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'UserConfig',) as UserConfig;
-        }
-    return Future<UserConfig>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'GET /users' operation and returns the [Response].
   Future<Response> getUsersWithHttpInfo() async {
+    // ignore: prefer_const_declarations
     final path = r'/users';
 
-    Object postBody;
+    // ignore: prefer_final_locals
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>[];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'GET',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
-  Future<UsersReport> getUsers() async {
+  Future<UsersReport?> getUsers() async {
     final response = await getUsersWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -864,40 +1116,40 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'UsersReport',) as UsersReport;
-        }
-    return Future<UsersReport>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'GET /info' operation and returns the [Response].
   Future<Response> infoWithHttpInfo() async {
+    // ignore: prefer_const_declarations
     final path = r'/info';
 
-    Object postBody;
+    // ignore: prefer_final_locals
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>[];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'GET',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
-  Future<String> info() async {
+  Future<String?> info() async {
     final response = await infoWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -905,40 +1157,40 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'String',) as String;
-        }
-    return Future<String>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /kasse' operation and returns the [Response].
   Future<Response> kasseWithHttpInfo() async {
+    // ignore: prefer_const_declarations
     final path = r'/kasse';
 
-    Object postBody;
+    // ignore: prefer_final_locals
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>[];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
-  Future<KasseConfig> kasse() async {
+  Future<KasseConfig?> kasse() async {
     final response = await kasseWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -946,260 +1198,274 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'KasseConfig',) as KasseConfig;
-        }
-    return Future<KasseConfig>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /load' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgLoad] args (required):
-  Future<Response> loadWithHttpInfo(ArgLoad args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> loadWithHttpInfo(ArgLoad args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/load';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgLoad] args (required):
-  Future<String> load(ArgLoad args) async {
-    final response = await loadWithHttpInfo(args);
+  Future<String?> load(ArgLoad args,) async {
+    final response = await loadWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'String',) as String;
-        }
-    return Future<String>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /load-from-station' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgLoadFromStation] args (required):
-  Future<Response> loadFromStationWithHttpInfo(ArgLoadFromStation args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> loadFromStationWithHttpInfo(ArgLoadFromStation args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/load-from-station';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgLoadFromStation] args (required):
-  Future<String> loadFromStation(ArgLoadFromStation args) async {
-    final response = await loadFromStationWithHttpInfo(args);
+  Future<String?> loadFromStation(ArgLoadFromStation args,) async {
+    final response = await loadFromStationWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'String',) as String;
-        }
-    return Future<String>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /load-money' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgLoadMoney] args (required):
-  Future<Response> loadMoneyWithHttpInfo(ArgLoadMoney args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> loadMoneyWithHttpInfo(ArgLoadMoney args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/load-money';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgLoadMoney] args (required):
-  Future<MoneyReport> loadMoney(ArgLoadMoney args) async {
-    final response = await loadMoneyWithHttpInfo(args);
+  Future<MoneyReport?> loadMoney(ArgLoadMoney args,) async {
+    final response = await loadMoneyWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'MoneyReport',) as MoneyReport;
-        }
-    return Future<MoneyReport>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /load-relay' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [InlineObject] args (required):
-  Future<Response> loadRelayWithHttpInfo(InlineObject args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  /// * [LoadRelayRequest] args (required):
+  Future<Response> loadRelayWithHttpInfo(LoadRelayRequest args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/load-relay';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
-  /// * [InlineObject] args (required):
-  Future<RelayReport> loadRelay(InlineObject args) async {
-    final response = await loadRelayWithHttpInfo(args);
+  /// * [LoadRelayRequest] args (required):
+  Future<RelayReport?> loadRelay(LoadRelayRequest args,) async {
+    final response = await loadRelayWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'RelayReport',) as RelayReport;
-        }
-    return Future<RelayReport>.value(null);
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /run-dispenser' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgMeasureVolumeMilliliters] args (required):
+  Future<Response> measureVolumeMillilitersWithHttpInfo(ArgMeasureVolumeMilliliters args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/run-dispenser';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgMeasureVolumeMilliliters] args (required):
+  Future<void> measureVolumeMilliliters(ArgMeasureVolumeMilliliters args,) async {
+    final response = await measureVolumeMillilitersWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
   }
 
   /// Performs an HTTP 'POST /open-station' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgOpenStation] args (required):
-  Future<Response> openStationWithHttpInfo(ArgOpenStation args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> openStationWithHttpInfo(ArgOpenStation args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/open-station';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgOpenStation] args (required):
-  Future<void> openStation(ArgOpenStation args) async {
-    final response = await openStationWithHttpInfo(args);
+  Future<void> openStation(ArgOpenStation args,) async {
+    final response = await openStationWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1209,94 +1475,83 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgPing] args (required):
-  Future<Response> pingWithHttpInfo(ArgPing args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> pingWithHttpInfo(ArgPing args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/ping';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgPing] args (required):
-  Future<ResponsePing> ping(ArgPing args) async {
-    final response = await pingWithHttpInfo(args);
+  Future<ResponsePing?> ping(ArgPing args,) async {
+    final response = await pingWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponsePing',) as ResponsePing;
-        }
-    return Future<ResponsePing>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /press-button' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgPressButton] args (required):
-  Future<Response> pressButtonWithHttpInfo(ArgPressButton args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> pressButtonWithHttpInfo(ArgPressButton args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/press-button';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgPressButton] args (required):
-  Future<void> pressButton(ArgPressButton args) async {
-    final response = await pressButtonWithHttpInfo(args);
+  Future<void> pressButton(ArgPressButton args,) async {
+    final response = await pressButtonWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1306,93 +1561,125 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgPrograms] args (required):
-  Future<Response> programsWithHttpInfo(ArgPrograms args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> programsWithHttpInfo(ArgPrograms args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/programs';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgPrograms] args (required):
-  Future<List<Program>> programs(ArgPrograms args) async {
-    final response = await programsWithHttpInfo(args);
+  Future<List<Program>?> programs(ArgPrograms args,) async {
+    final response = await programsWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<Program>') as List)
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<Program>') as List)
         .cast<Program>()
-        .toList(growable: false);
+        .toList();
+
     }
-    return Future<List<Program>>.value(null);
+    return null;
   }
 
   /// Performs an HTTP 'POST /reset-station-stat' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgResetStationStat] args:
-  Future<Response> resetStationStatWithHttpInfo({ ArgResetStationStat args }) async {
-    // Verify required params are set.
-
+  Future<Response> resetStationStatWithHttpInfo({ ArgResetStationStat? args, }) async {
+    // ignore: prefer_const_declarations
     final path = r'/reset-station-stat';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgResetStationStat] args:
-  Future<void> resetStationStat({ ArgResetStationStat args }) async {
-    final response = await resetStationStatWithHttpInfo( args: args );
+  Future<void> resetStationStat({ ArgResetStationStat? args, }) async {
+    final response = await resetStationStatWithHttpInfo( args: args, );
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /run-2program' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ArgRun2Program] args (required):
+  Future<Response> run2ProgramWithHttpInfo(ArgRun2Program args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/run-2program';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ArgRun2Program] args (required):
+  Future<void> run2Program(ArgRun2Program args,) async {
+    final response = await run2ProgramWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1402,42 +1689,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgRunProgram] args (required):
-  Future<Response> runProgramWithHttpInfo(ArgRunProgram args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> runProgramWithHttpInfo(ArgRunProgram args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/run-program';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgRunProgram] args (required):
-  Future<void> runProgram(ArgRunProgram args) async {
-    final response = await runProgramWithHttpInfo(args);
+  Future<void> runProgram(ArgRunProgram args,) async {
+    final response = await runProgramWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1447,42 +1728,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSave] args (required):
-  Future<Response> saveWithHttpInfo(ArgSave args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> saveWithHttpInfo(ArgSave args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/save';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgSave] args (required):
-  Future<void> save(ArgSave args) async {
-    final response = await saveWithHttpInfo(args);
+  Future<void> save(ArgSave args,) async {
+    final response = await saveWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1491,43 +1766,37 @@ class DefaultApi {
   /// Performs an HTTP 'POST /save-collection' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [ArgSaveCollection] args (required):
-  Future<Response> saveCollectionWithHttpInfo(ArgSaveCollection args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  /// * [StationRequest] args (required):
+  Future<Response> saveCollectionWithHttpInfo(StationRequest args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/save-collection';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
-  /// * [ArgSaveCollection] args (required):
-  Future<void> saveCollection(ArgSaveCollection args) async {
-    final response = await saveCollectionWithHttpInfo(args);
+  /// * [StationRequest] args (required):
+  Future<void> saveCollection(StationRequest args,) async {
+    final response = await saveCollectionWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1537,42 +1806,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSaveIfNotExists] args (required):
-  Future<Response> saveIfNotExistsWithHttpInfo(ArgSaveIfNotExists args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> saveIfNotExistsWithHttpInfo(ArgSaveIfNotExists args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/save-if-not-exists';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgSaveIfNotExists] args (required):
-  Future<void> saveIfNotExists(ArgSaveIfNotExists args) async {
-    final response = await saveIfNotExistsWithHttpInfo(args);
+  Future<void> saveIfNotExists(ArgSaveIfNotExists args,) async {
+    final response = await saveIfNotExistsWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1582,42 +1845,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [MoneyReport] args (required):
-  Future<Response> saveMoneyWithHttpInfo(MoneyReport args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> saveMoneyWithHttpInfo(MoneyReport args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/save-money';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [MoneyReport] args (required):
-  Future<void> saveMoney(MoneyReport args) async {
-    final response = await saveMoneyWithHttpInfo(args);
+  Future<void> saveMoney(MoneyReport args,) async {
+    final response = await saveMoneyWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1627,42 +1884,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [RelayReport] args (required):
-  Future<Response> saveRelayWithHttpInfo(RelayReport args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> saveRelayWithHttpInfo(RelayReport args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/save-relay';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [RelayReport] args (required):
-  Future<void> saveRelay(RelayReport args) async {
-    final response = await saveRelayWithHttpInfo(args);
+  Future<void> saveRelay(RelayReport args,) async {
+    final response = await saveRelayWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1672,42 +1923,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [CardReaderConfig] args (required):
-  Future<Response> setCardReaderConfigWithHttpInfo(CardReaderConfig args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> setCardReaderConfigWithHttpInfo(CardReaderConfig args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/set-card-reader-config';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [CardReaderConfig] args (required):
-  Future<void> setCardReaderConfig(CardReaderConfig args) async {
-    final response = await setCardReaderConfigWithHttpInfo(args);
+  Future<void> setCardReaderConfig(CardReaderConfig args,) async {
+    final response = await setCardReaderConfigWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1717,42 +1962,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ConfigVarBool] args (required):
-  Future<Response> setConfigVarBoolWithHttpInfo(ConfigVarBool args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> setConfigVarBoolWithHttpInfo(ConfigVarBool args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/set-config-var-bool';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ConfigVarBool] args (required):
-  Future<void> setConfigVarBool(ConfigVarBool args) async {
-    final response = await setConfigVarBoolWithHttpInfo(args);
+  Future<void> setConfigVarBool(ConfigVarBool args,) async {
+    final response = await setConfigVarBoolWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1762,42 +2001,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ConfigVarInt] args (required):
-  Future<Response> setConfigVarIntWithHttpInfo(ConfigVarInt args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> setConfigVarIntWithHttpInfo(ConfigVarInt args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/set-config-var-int';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ConfigVarInt] args (required):
-  Future<void> setConfigVarInt(ConfigVarInt args) async {
-    final response = await setConfigVarIntWithHttpInfo(args);
+  Future<void> setConfigVarInt(ConfigVarInt args,) async {
+    final response = await setConfigVarIntWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1807,42 +2040,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ConfigVarString] args (required):
-  Future<Response> setConfigVarStringWithHttpInfo(ConfigVarString args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> setConfigVarStringWithHttpInfo(ConfigVarString args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/set-config-var-string';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ConfigVarString] args (required):
-  Future<void> setConfigVarString(ConfigVarString args) async {
-    final response = await setConfigVarStringWithHttpInfo(args);
+  Future<void> setConfigVarString(ConfigVarString args,) async {
+    final response = await setConfigVarStringWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1852,42 +2079,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [KasseConfig] args (required):
-  Future<Response> setKasseWithHttpInfo(KasseConfig args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> setKasseWithHttpInfo(KasseConfig args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/set-kasse';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [KasseConfig] args (required):
-  Future<void> setKasse(KasseConfig args) async {
-    final response = await setKasseWithHttpInfo(args);
+  Future<void> setKasse(KasseConfig args,) async {
+    final response = await setKasseWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1897,42 +2118,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [Program] args (required):
-  Future<Response> setProgramWithHttpInfo(Program args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> setProgramWithHttpInfo(Program args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/set-program';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [Program] args (required):
-  Future<void> setProgram(Program args) async {
-    final response = await setProgramWithHttpInfo(args);
+  Future<void> setProgram(Program args,) async {
+    final response = await setProgramWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1942,42 +2157,36 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [StationConfig] args (required):
-  Future<Response> setStationWithHttpInfo(StationConfig args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> setStationWithHttpInfo(StationConfig args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/set-station';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [StationConfig] args (required):
-  Future<void> setStation(StationConfig args) async {
-    final response = await setStationWithHttpInfo(args);
+  Future<void> setStation(StationConfig args,) async {
+    final response = await setStationWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1987,42 +2196,153 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSetStationButton] args (required):
-  Future<Response> setStationButtonWithHttpInfo(ArgSetStationButton args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> setStationButtonWithHttpInfo(ArgSetStationButton args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/set-station-button';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgSetStationButton] args (required):
-  Future<void> setStationButton(ArgSetStationButton args) async {
-    final response = await setStationButtonWithHttpInfo(args);
+  Future<void> setStationButton(ArgSetStationButton args,) async {
+    final response = await setStationButtonWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /set-station-config-var-bool' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [StationConfigVarBool] args (required):
+  Future<Response> setStationConfigVarBoolWithHttpInfo(StationConfigVarBool args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/set-station-config-var-bool';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [StationConfigVarBool] args (required):
+  Future<void> setStationConfigVarBool(StationConfigVarBool args,) async {
+    final response = await setStationConfigVarBoolWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /set-station-config-var-int' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [StationConfigVarInt] args (required):
+  Future<Response> setStationConfigVarIntWithHttpInfo(StationConfigVarInt args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/set-station-config-var-int';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [StationConfigVarInt] args (required):
+  Future<void> setStationConfigVarInt(StationConfigVarInt args,) async {
+    final response = await setStationConfigVarIntWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /set-station-config-var-string' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [StationConfigVarString] args (required):
+  Future<Response> setStationConfigVarStringWithHttpInfo(StationConfigVarString args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/set-station-config-var-string';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [StationConfigVarString] args (required):
+  Future<void> setStationConfigVarString(StationConfigVarString args,) async {
+    final response = await setStationConfigVarStringWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2031,497 +2351,459 @@ class DefaultApi {
   /// Performs an HTTP 'POST /station' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [ArgStation] args (required):
-  Future<Response> stationWithHttpInfo(ArgStation args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  /// * [StationRequest] args (required):
+  Future<Response> stationWithHttpInfo(StationRequest args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/station';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
-  /// * [ArgStation] args (required):
-  Future<StationConfig> station(ArgStation args) async {
-    final response = await stationWithHttpInfo(args);
+  /// * [StationRequest] args (required):
+  Future<StationConfig?> station(StationRequest args,) async {
+    final response = await stationWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationConfig',) as StationConfig;
-        }
-    return Future<StationConfig>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /station-button' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgStationButton] args (required):
-  Future<Response> stationButtonWithHttpInfo(ArgStationButton args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> stationButtonWithHttpInfo(ArgStationButton args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/station-button';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgStationButton] args (required):
-  Future<ResponseStationButton> stationButton(ArgStationButton args) async {
-    final response = await stationButtonWithHttpInfo(args);
+  Future<ResponseStationButton?> stationButton(ArgStationButton args,) async {
+    final response = await stationButtonWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseStationButton',) as ResponseStationButton;
-        }
-    return Future<ResponseStationButton>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /station-by-hash' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgStationByHash] args (required):
-  Future<Response> stationByHashWithHttpInfo(ArgStationByHash args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> stationByHashWithHttpInfo(ArgStationByHash args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/station-by-hash';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgStationByHash] args (required):
-  Future<int> stationByHash(ArgStationByHash args) async {
-    final response = await stationByHashWithHttpInfo(args);
+  Future<int?> stationByHash(ArgStationByHash args,) async {
+    final response = await stationByHashWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'int',) as int;
-        }
-    return Future<int>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /station-collection-report-dates' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgCollectionReportDates] args (required):
-  Future<Response> stationCollectionReportDatesWithHttpInfo(ArgCollectionReportDates args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> stationCollectionReportDatesWithHttpInfo(ArgCollectionReportDates args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/station-collection-report-dates';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgCollectionReportDates] args (required):
-  Future<ResponseStationCollectionReportDates> stationCollectionReportDates(ArgCollectionReportDates args) async {
-    final response = await stationCollectionReportDatesWithHttpInfo(args);
+  Future<ResponseStationCollectionReportDates?> stationCollectionReportDates(ArgCollectionReportDates args,) async {
+    final response = await stationCollectionReportDatesWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseStationCollectionReportDates',) as ResponseStationCollectionReportDates;
-        }
-    return Future<ResponseStationCollectionReportDates>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /station-program-by-hash' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgStationProgramByHash] args (required):
-  Future<Response> stationProgramByHashWithHttpInfo(ArgStationProgramByHash args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> stationProgramByHashWithHttpInfo(ArgStationProgramByHash args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/station-program-by-hash';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgStationProgramByHash] args (required):
-  Future<StationPrograms> stationProgramByHash(ArgStationProgramByHash args) async {
-    final response = await stationProgramByHashWithHttpInfo(args);
+  Future<StationPrograms?> stationProgramByHash(ArgStationProgramByHash args,) async {
+    final response = await stationProgramByHashWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationPrograms',) as StationPrograms;
-        }
-    return Future<StationPrograms>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /station-report-current-money' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgStationReportCurrentMoney] args (required):
-  Future<Response> stationReportCurrentMoneyWithHttpInfo(ArgStationReportCurrentMoney args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> stationReportCurrentMoneyWithHttpInfo(ArgStationReportCurrentMoney args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/station-report-current-money';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgStationReportCurrentMoney] args (required):
-  Future<StationReport> stationReportCurrentMoney(ArgStationReportCurrentMoney args) async {
-    final response = await stationReportCurrentMoneyWithHttpInfo(args);
+  Future<StationReport?> stationReportCurrentMoney(ArgStationReportCurrentMoney args,) async {
+    final response = await stationReportCurrentMoneyWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationReport',) as StationReport;
-        }
-    return Future<StationReport>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /station-report-dates' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgStationReportDates] args (required):
-  Future<Response> stationReportDatesWithHttpInfo(ArgStationReportDates args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> stationReportDatesWithHttpInfo(ArgStationReportDates args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/station-report-dates';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgStationReportDates] args (required):
-  Future<StationReport> stationReportDates(ArgStationReportDates args) async {
-    final response = await stationReportDatesWithHttpInfo(args);
+  Future<StationReport?> stationReportDates(ArgStationReportDates args,) async {
+    final response = await stationReportDatesWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationReport',) as StationReport;
-        }
-    return Future<StationReport>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /station-stat-current' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgStationStat] args:
-  Future<Response> stationStatCurrentWithHttpInfo({ ArgStationStat args }) async {
-    // Verify required params are set.
-
+  Future<Response> stationStatCurrentWithHttpInfo({ ArgStationStat? args, }) async {
+    // ignore: prefer_const_declarations
     final path = r'/station-stat-current';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgStationStat] args:
-  Future<List<StationStat>> stationStatCurrent({ ArgStationStat args }) async {
-    final response = await stationStatCurrentWithHttpInfo( args: args );
+  Future<List<StationStat>?> stationStatCurrent({ ArgStationStat? args, }) async {
+    final response = await stationStatCurrentWithHttpInfo( args: args, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<StationStat>') as List)
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<StationStat>') as List)
         .cast<StationStat>()
-        .toList(growable: false);
+        .toList();
+
     }
-    return Future<List<StationStat>>.value(null);
+    return null;
   }
 
   /// Performs an HTTP 'POST /station-stat-dates' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgStationStatDates] args:
-  Future<Response> stationStatDatesWithHttpInfo({ ArgStationStatDates args }) async {
-    // Verify required params are set.
-
+  Future<Response> stationStatDatesWithHttpInfo({ ArgStationStatDates? args, }) async {
+    // ignore: prefer_const_declarations
     final path = r'/station-stat-dates';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgStationStatDates] args:
-  Future<List<StationStat>> stationStatDates({ ArgStationStatDates args }) async {
-    final response = await stationStatDatesWithHttpInfo( args: args );
+  Future<List<StationStat>?> stationStatDates({ ArgStationStatDates? args, }) async {
+    final response = await stationStatDatesWithHttpInfo( args: args, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<StationStat>') as List)
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<StationStat>') as List)
         .cast<StationStat>()
-        .toList(growable: false);
+        .toList();
+
     }
-    return Future<List<StationStat>>.value(null);
+    return null;
   }
 
   /// Performs an HTTP 'POST /stations-variables' operation and returns the [Response].
   Future<Response> stationsVariablesWithHttpInfo() async {
+    // ignore: prefer_const_declarations
     final path = r'/stations-variables';
 
-    Object postBody;
+    // ignore: prefer_final_locals
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>[];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
-  Future<List<StationsVariables>> stationsVariables() async {
+  Future<List<StationsVariables>?> stationsVariables() async {
     final response = await stationsVariablesWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -2529,42 +2811,43 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
-      return (await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'List<StationsVariables>') as List)
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<StationsVariables>') as List)
         .cast<StationsVariables>()
-        .toList(growable: false);
+        .toList();
+
     }
-    return Future<List<StationsVariables>>.value(null);
+    return null;
   }
 
   /// Performs an HTTP 'GET /status' operation and returns the [Response].
   Future<Response> statusWithHttpInfo() async {
+    // ignore: prefer_const_declarations
     final path = r'/status';
 
-    Object postBody;
+    // ignore: prefer_final_locals
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>[];
+    const contentTypes = <String>[];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'GET',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
-  Future<StatusReport> status() async {
+  Future<StatusReport?> status() async {
     final response = await statusWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -2572,40 +2855,40 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StatusReport',) as StatusReport;
-        }
-    return Future<StatusReport>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'GET /status-collection' operation and returns the [Response].
   Future<Response> statusCollectionWithHttpInfo() async {
+    // ignore: prefer_const_declarations
     final path = r'/status-collection';
 
-    Object postBody;
+    // ignore: prefer_final_locals
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>[];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>[];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'GET',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
-  Future<StatusCollectionReport> statusCollection() async {
+  Future<StatusCollectionReport?> statusCollection() async {
     final response = await statusCollectionWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -2613,113 +2896,151 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StatusCollectionReport',) as StatusCollectionReport;
-        }
-    return Future<StatusCollectionReport>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'PUT /user' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgUserUpdate] args (required):
-  Future<Response> updateUserWithHttpInfo(ArgUserUpdate args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> updateUserWithHttpInfo(ArgUserUpdate args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/user';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'PUT',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgUserUpdate] args (required):
-  Future<ResponseUserUpdate> updateUser(ArgUserUpdate args) async {
-    final response = await updateUserWithHttpInfo(args);
+  Future<ResponseUserUpdate?> updateUser(ArgUserUpdate args,) async {
+    final response = await updateUserWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseUserUpdate',) as ResponseUserUpdate;
-        }
-    return Future<ResponseUserUpdate>.value(null);
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /user-password' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [ArgUserPassword] args (required):
-  Future<Response> updateUserPasswordWithHttpInfo(ArgUserPassword args) async {
-    // Verify required params are set.
-    if (args == null) {
-     throw ApiException(HttpStatus.badRequest, 'Missing required param: args');
-    }
-
+  Future<Response> updateUserPasswordWithHttpInfo(ArgUserPassword args,) async {
+    // ignore: prefer_const_declarations
     final path = r'/user-password';
 
-    Object postBody = args;
+    // ignore: prefer_final_locals
+    Object? postBody = args;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    final contentTypes = <String>['application/json'];
-    final nullableContentType = contentTypes.isNotEmpty ? contentTypes[0] : null;
-    final authNames = <String>['pinCode'];
+    const contentTypes = <String>['application/json'];
 
 
-    return await apiClient.invokeAPI(
+    return apiClient.invokeAPI(
       path,
       'POST',
       queryParams,
       postBody,
       headerParams,
       formParams,
-      nullableContentType,
-      authNames,
+      contentTypes.isEmpty ? null : contentTypes.first,
     );
   }
 
   /// Parameters:
   ///
   /// * [ArgUserPassword] args (required):
-  Future<ResponseUserPassword> updateUserPassword(ArgUserPassword args) async {
-    final response = await updateUserPasswordWithHttpInfo(args);
+  Future<ResponseUserPassword?> updateUserPassword(ArgUserPassword args,) async {
+    final response = await updateUserPasswordWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body != null && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseUserPassword',) as ResponseUserPassword;
-        }
-    return Future<ResponseUserPassword>.value(null);
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /volume-dispenser' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [VolumeDispenser] args (required):
+  Future<Response> volumeDispenserWithHttpInfo(VolumeDispenser args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/volume-dispenser';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [VolumeDispenser] args (required):
+  Future<ResponseVolumeDispenser?> volumeDispenser(VolumeDispenser args,) async {
+    final response = await volumeDispenserWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseVolumeDispenser',) as ResponseVolumeDispenser;
+    
+    }
+    return null;
   }
 }

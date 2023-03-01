@@ -29,7 +29,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
   //OldData
   late AdvertisingCampaign data;
   //Values
-  late int programDiscountValue;
+  late int? programDiscountValue;
 
   late int discountValue;
   late String discountTitle;
@@ -64,7 +64,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
   }
 
   void initValues() {
-    discountTitle = data.name;
+    discountTitle = data.name ?? "";
     discountDateRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(data.startDate * 1000), end: DateTime.fromMillisecondsSinceEpoch(data.endDate * 1000));
     discountTimeStart = TimeOfDay(hour: (data.startMinute ?? 0) ~/ 60, minute: (data.startMinute ?? 0) % 60);
     discountTimeEnd = TimeOfDay(hour: (data.endMinute ?? 0) ~/ 60, minute: (data.endMinute ?? 0) % 60);
@@ -201,7 +201,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
   Future<void> _deleteAdvertisingCampagin(SessionData sessionData) async {
     _canSave = false;
     try {
-      ArgDelAdvertisingCampagin args = ArgDelAdvertisingCampagin(id: data.id);
+      ArgDelAdvertisingCampagin args = ArgDelAdvertisingCampagin(id: data.id ?? -1);
       await sessionData.client.delAdvertisingCampaign(args);
     } catch (e) {
       print(e);
@@ -950,14 +950,14 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
       )
     ]..addAll(List.generate(SharedData.Programs.value.length, (index) {
         return DropdownMenuItem(
-          child: Text(SharedData.Programs.value[index].name),
+          child: Text(SharedData.Programs.value[index].name ?? ""),
           value: SharedData.Programs.value[index].id,
         );
       }));
 
     Set<int> ignoreItems = Set()
       ..addAll(List.generate(discountPrograms.length, (index) {
-        return discountPrograms[index].programID;
+        return discountPrograms[index].programID ?? -1;
       }));
 
     List<DiscountProgram> DiscountProgramsTmp = List.from(discountPrograms);
@@ -1262,7 +1262,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
   }
 
   Future<dynamic> showEditProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems, int index) {
-    int dropDownValue = discountProgramsList[index].programID;
+    int? dropDownValue = discountProgramsList[index].programID;
     _programDiscountController.text = "0";
     programDiscountValue = discountProgramsList[index].discount;
 
@@ -1345,7 +1345,7 @@ class _AdvertisingCampaginsEditState extends State<AdvertisingCampaginsEdit> {
                       if (dropDownValue != -1 && (discountProgramsList.indexWhere((element) => element.programID == dropDownValue) == index || !discountProgramsList.any((element) => element.programID == dropDownValue))) {
                         ignoreItems.remove(discountProgramsList[index].programID);
                         discountProgramsList[index] = DiscountProgram(programID: dropDownValue, discount: programDiscountValue);
-                        ignoreItems.add(dropDownValue);
+                        ignoreItems.add(dropDownValue ?? 0);
                       }
                       Navigator.pop(context);
                     },

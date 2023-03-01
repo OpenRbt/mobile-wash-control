@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -12,9 +13,9 @@ part of openapi.api;
 class ArgUserPassword {
   /// Returns a new [ArgUserPassword] instance.
   ArgUserPassword({
-    @required this.login,
-    @required this.oldPassword,
-    @required this.newPassword,
+    required this.login,
+    required this.oldPassword,
+    required this.newPassword,
   });
 
   String login;
@@ -31,53 +32,96 @@ class ArgUserPassword {
 
   @override
   int get hashCode =>
-    (login == null ? 0 : login.hashCode) +
-    (oldPassword == null ? 0 : oldPassword.hashCode) +
-    (newPassword == null ? 0 : newPassword.hashCode);
+    // ignore: unnecessary_parenthesis
+    (login.hashCode) +
+    (oldPassword.hashCode) +
+    (newPassword.hashCode);
 
   @override
   String toString() => 'ArgUserPassword[login=$login, oldPassword=$oldPassword, newPassword=$newPassword]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'login'] = login;
-      json[r'oldPassword'] = oldPassword;
-      json[r'newPassword'] = newPassword;
+      json[r'login'] = this.login;
+      json[r'oldPassword'] = this.oldPassword;
+      json[r'newPassword'] = this.newPassword;
     return json;
   }
 
   /// Returns a new [ArgUserPassword] instance and imports its values from
-  /// [json] if it's non-null, null if [json] is null.
-  static ArgUserPassword fromJson(Map<String, dynamic> json) => json == null
-    ? null
-    : ArgUserPassword(
-        login: json[r'login'],
-        oldPassword: json[r'oldPassword'],
-        newPassword: json[r'newPassword'],
-    );
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static ArgUserPassword? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
 
-  static List<ArgUserPassword> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <ArgUserPassword>[]
-      : json.map((dynamic value) => ArgUserPassword.fromJson(value)).toList(growable: true == growable);
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "ArgUserPassword[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "ArgUserPassword[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
-  static Map<String, ArgUserPassword> mapFromJson(Map<String, dynamic> json) {
+      return ArgUserPassword(
+        login: mapValueOfType<String>(json, r'login')!,
+        oldPassword: mapValueOfType<String>(json, r'oldPassword')!,
+        newPassword: mapValueOfType<String>(json, r'newPassword')!,
+      );
+    }
+    return null;
+  }
+
+  static List<ArgUserPassword>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <ArgUserPassword>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = ArgUserPassword.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
+
+  static Map<String, ArgUserPassword> mapFromJson(dynamic json) {
     final map = <String, ArgUserPassword>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) => map[key] = ArgUserPassword.fromJson(value));
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgUserPassword.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
 
   // maps a json object with a list of ArgUserPassword-objects as value to a dart map
-  static Map<String, List<ArgUserPassword>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
+  static Map<String, List<ArgUserPassword>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<ArgUserPassword>>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) {
-        map[key] = ArgUserPassword.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
-      });
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgUserPassword.listFromJson(entry.value, growable: growable,);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{
+    'login',
+    'oldPassword',
+    'newPassword',
+  };
 }
 

@@ -5,7 +5,7 @@ import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
 Future<List<ResponseStationButtonButtons>> GetStationButtons(PostMenuArgs postMenuArgs) async {
-  List<ResponseStationButtonButtons> result;
+  List<ResponseStationButtonButtons> result = [];
   try {
     var args = ArgStationButton(
       stationID: postMenuArgs.postID,

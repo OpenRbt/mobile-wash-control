@@ -5,14 +5,14 @@ import 'package:mobile_wash_control/client/api.dart';
 Future<bool> saveProgram(
   SessionData sessionData, {
   int id = -1,
-  int motorSpeed,
-  int motorSpeedPreflight,
-  bool preflightEnabled,
-  bool isFinishingProgram,
-  String programName,
-  int price,
-  List<int> relaysPercent,
-  List<int> relaysPreflightPercent,
+  required int motorSpeed,
+  required int motorSpeedPreflight,
+  required bool preflightEnabled,
+  required bool isFinishingProgram,
+  required String programName,
+  required int price,
+  required List<int> relaysPercent,
+  required List<int> relaysPreflightPercent,
 }) async {
   final int _relayCount = 17;
   final int _relayTime = 1000;
@@ -40,8 +40,8 @@ Future<bool> saveProgram(
     args.preflightMotorSpeedPercent = motorSpeedPreflight;
     args.isFinishingProgram = isFinishingProgram;
 
-    List<RelayConfig> relays = List();
-    List<RelayConfig> relaysPreflight = List();
+    List<RelayConfig> relays = [];
+    List<RelayConfig> relaysPreflight = [];
     for (int i = 0; i < _relayCount; i++) {
       if (relaysPercent[i] != 0) {
         var tmp = RelayConfig();
@@ -70,17 +70,17 @@ Future<bool> saveProgram(
 }
 
 class ProgramData {
-  String name;
-  int price;
-  bool preflightEnabled;
-  bool isFinishingProgram;
-  int motorSpeed;
-  int motorSpeedPreflight;
-  List<int> relays;
-  List<int> relayPreflight;
+  late String name;
+  late int price;
+  late bool preflightEnabled;
+  late bool isFinishingProgram;
+  late int motorSpeed;
+  late int motorSpeedPreflight;
+  late List<int> relays;
+  late List<int> relayPreflight;
 }
 
-Future<ProgramData> getProgram({SessionData sessionData, int programID}) async {
+Future<ProgramData?> getProgram({required SessionData sessionData, required int programID}) async {
   final int _relayCount = 17;
   final int _relayTime = 1000;
 

@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -17,18 +18,48 @@ class MoneyReport {
     this.banknotes,
     this.electronical,
     this.service,
-    @required this.hash,
+    required this.hash,
   });
 
-  int carsTotal;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? carsTotal;
 
-  int coins;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? coins;
 
-  int banknotes;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? banknotes;
 
-  int electronical;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? electronical;
 
-  int service;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? service;
 
   String hash;
 
@@ -43,72 +74,123 @@ class MoneyReport {
 
   @override
   int get hashCode =>
-    (carsTotal == null ? 0 : carsTotal.hashCode) +
-    (coins == null ? 0 : coins.hashCode) +
-    (banknotes == null ? 0 : banknotes.hashCode) +
-    (electronical == null ? 0 : electronical.hashCode) +
-    (service == null ? 0 : service.hashCode) +
-    (hash == null ? 0 : hash.hashCode);
+    // ignore: unnecessary_parenthesis
+    (carsTotal == null ? 0 : carsTotal!.hashCode) +
+    (coins == null ? 0 : coins!.hashCode) +
+    (banknotes == null ? 0 : banknotes!.hashCode) +
+    (electronical == null ? 0 : electronical!.hashCode) +
+    (service == null ? 0 : service!.hashCode) +
+    (hash.hashCode);
 
   @override
   String toString() => 'MoneyReport[carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, hash=$hash]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (carsTotal != null) {
-      json[r'carsTotal'] = carsTotal;
+    if (this.carsTotal != null) {
+      json[r'carsTotal'] = this.carsTotal;
+    } else {
+      json[r'carsTotal'] = null;
     }
-    if (coins != null) {
-      json[r'coins'] = coins;
+    if (this.coins != null) {
+      json[r'coins'] = this.coins;
+    } else {
+      json[r'coins'] = null;
     }
-    if (banknotes != null) {
-      json[r'banknotes'] = banknotes;
+    if (this.banknotes != null) {
+      json[r'banknotes'] = this.banknotes;
+    } else {
+      json[r'banknotes'] = null;
     }
-    if (electronical != null) {
-      json[r'electronical'] = electronical;
+    if (this.electronical != null) {
+      json[r'electronical'] = this.electronical;
+    } else {
+      json[r'electronical'] = null;
     }
-    if (service != null) {
-      json[r'service'] = service;
+    if (this.service != null) {
+      json[r'service'] = this.service;
+    } else {
+      json[r'service'] = null;
     }
-      json[r'hash'] = hash;
+      json[r'hash'] = this.hash;
     return json;
   }
 
   /// Returns a new [MoneyReport] instance and imports its values from
-  /// [json] if it's non-null, null if [json] is null.
-  static MoneyReport fromJson(Map<String, dynamic> json) => json == null
-    ? null
-    : MoneyReport(
-        carsTotal: json[r'carsTotal'],
-        coins: json[r'coins'],
-        banknotes: json[r'banknotes'],
-        electronical: json[r'electronical'],
-        service: json[r'service'],
-        hash: json[r'hash'],
-    );
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static MoneyReport? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
 
-  static List<MoneyReport> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <MoneyReport>[]
-      : json.map((dynamic value) => MoneyReport.fromJson(value)).toList(growable: true == growable);
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "MoneyReport[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "MoneyReport[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
-  static Map<String, MoneyReport> mapFromJson(Map<String, dynamic> json) {
+      return MoneyReport(
+        carsTotal: mapValueOfType<int>(json, r'carsTotal'),
+        coins: mapValueOfType<int>(json, r'coins'),
+        banknotes: mapValueOfType<int>(json, r'banknotes'),
+        electronical: mapValueOfType<int>(json, r'electronical'),
+        service: mapValueOfType<int>(json, r'service'),
+        hash: mapValueOfType<String>(json, r'hash')!,
+      );
+    }
+    return null;
+  }
+
+  static List<MoneyReport>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <MoneyReport>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = MoneyReport.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
+
+  static Map<String, MoneyReport> mapFromJson(dynamic json) {
     final map = <String, MoneyReport>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) => map[key] = MoneyReport.fromJson(value));
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = MoneyReport.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
 
   // maps a json object with a list of MoneyReport-objects as value to a dart map
-  static Map<String, List<MoneyReport>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
+  static Map<String, List<MoneyReport>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<MoneyReport>>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) {
-        map[key] = MoneyReport.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
-      });
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = MoneyReport.listFromJson(entry.value, growable: growable,);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{
+    'hash',
+  };
 }
 

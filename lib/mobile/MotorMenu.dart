@@ -52,19 +52,20 @@ class _MotorMenuState extends State<MotorMenu> {
           startDate: _startDate.millisecondsSinceEpoch ~/ 1000,
           endDate: _endDate.millisecondsSinceEpoch ~/ 1000,
         );
-        _stationStats = await sessionData.client.stationStatDates(args: args);
+        _stationStats = (await sessionData.client.stationStatDates(args: args))!;
       } else {
         var args = ArgStationStat();
-        _stationStats = await sessionData.client.stationStatCurrent(args: args);
+        _stationStats = (await sessionData.client.stationStatCurrent(args: args))!;
       }
-      _stationStats.sort((a, b) => a.stationID.compareTo(b.stationID));
+      _stationStats.sort((a, b) => a.stationID?.compareTo(b.stationID ?? -1) ?? 0);
       _ProgramStat = List.filled(_stationStats.length, true);
       _stationStats.forEach((element) {
         element.programStats.forEach((program) {
           if (program?.programName != null) {
-            var tmp = program.programName.indexOf('-');
-            if (tmp < program.programName.length) {
-              program.programName = program.programName.substring(tmp + 1);
+            var tmp = program.programName!.indexOf('-');
+            int programNameLength = program.programName?.length ?? 0;
+            if (tmp < programNameLength) {
+              program.programName = program.programName?.substring(tmp + 1);
             }
           }
         });
@@ -275,7 +276,7 @@ class _MotorMenuState extends State<MotorMenu> {
                                             Container(
                                               padding: EdgeInsets.all(5),
                                               child: Text(
-                                                "${_SecondsToTime(_stationStats[index].pumpTimeOn)}",
+                                                "${_SecondsToTime(_stationStats[index].pumpTimeOn ?? 0)}",
                                                 textAlign: TextAlign.right,
                                               ),
                                             ),
@@ -356,7 +357,7 @@ class _MotorMenuState extends State<MotorMenu> {
                                             actions: [
                                               TextButton(
                                                   onPressed: () async {
-                                                    bool res = await ResetStats(_stationStats[index].stationID, sessionData);
+                                                    bool res = await ResetStats(_stationStats[index].stationID ?? -1, sessionData);
                                                     if (res) {
                                                       GetMotorStats(sessionData);
                                                     }

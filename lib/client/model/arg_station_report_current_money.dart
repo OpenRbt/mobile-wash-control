@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -12,7 +13,7 @@ part of openapi.api;
 class ArgStationReportCurrentMoney {
   /// Returns a new [ArgStationReportCurrentMoney] instance.
   ArgStationReportCurrentMoney({
-    @required this.id,
+    required this.id,
   });
 
   int id;
@@ -23,47 +24,88 @@ class ArgStationReportCurrentMoney {
 
   @override
   int get hashCode =>
-    (id == null ? 0 : id.hashCode);
+    // ignore: unnecessary_parenthesis
+    (id.hashCode);
 
   @override
   String toString() => 'ArgStationReportCurrentMoney[id=$id]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'id'] = id;
+      json[r'id'] = this.id;
     return json;
   }
 
   /// Returns a new [ArgStationReportCurrentMoney] instance and imports its values from
-  /// [json] if it's non-null, null if [json] is null.
-  static ArgStationReportCurrentMoney fromJson(Map<String, dynamic> json) => json == null
-    ? null
-    : ArgStationReportCurrentMoney(
-        id: json[r'id'],
-    );
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static ArgStationReportCurrentMoney? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
 
-  static List<ArgStationReportCurrentMoney> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <ArgStationReportCurrentMoney>[]
-      : json.map((dynamic value) => ArgStationReportCurrentMoney.fromJson(value)).toList(growable: true == growable);
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "ArgStationReportCurrentMoney[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "ArgStationReportCurrentMoney[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
 
-  static Map<String, ArgStationReportCurrentMoney> mapFromJson(Map<String, dynamic> json) {
+      return ArgStationReportCurrentMoney(
+        id: mapValueOfType<int>(json, r'id')!,
+      );
+    }
+    return null;
+  }
+
+  static List<ArgStationReportCurrentMoney>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <ArgStationReportCurrentMoney>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = ArgStationReportCurrentMoney.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
+
+  static Map<String, ArgStationReportCurrentMoney> mapFromJson(dynamic json) {
     final map = <String, ArgStationReportCurrentMoney>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) => map[key] = ArgStationReportCurrentMoney.fromJson(value));
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgStationReportCurrentMoney.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
 
   // maps a json object with a list of ArgStationReportCurrentMoney-objects as value to a dart map
-  static Map<String, List<ArgStationReportCurrentMoney>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
+  static Map<String, List<ArgStationReportCurrentMoney>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<ArgStationReportCurrentMoney>>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) {
-        map[key] = ArgStationReportCurrentMoney.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
-      });
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = ArgStationReportCurrentMoney.listFromJson(entry.value, growable: growable,);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{
+    'id',
+  };
 }
 

@@ -60,7 +60,7 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
     _inUpdate = true;
     try {
       var args = ArgUserUpdate(
-        login: _inputControllers["login"]?.value.text,
+        login: _inputControllers["login"]?.value.text ?? "",
         firstName: _inputControllers["firstName"]!.value.text.isNotEmpty ? _inputControllers["firstName"]!.value.text : " ",
         lastName: _inputControllers["lastName"]!.value.text.isNotEmpty ? _inputControllers["lastName"]!.value.text : " ",
         middleName: _inputControllers["middleName"]!.value.text.isNotEmpty ? _inputControllers["middleName"]!.value.text : " ",
@@ -434,9 +434,9 @@ class _AccountsMenuEditState extends State<AccountsMenuEdit> {
                                   try {
                                     var curUser = await accountsMenuEditArgs.sessionData.client.getUser();
 
-                                    var args = ArgUserDelete(login: _inputControllers["login"]?.value.text);
+                                    var args = ArgUserDelete(login: _inputControllers["login"]?.value.text ?? "");
 
-                                    if (curUser.login != accountsMenuEditArgs.targetUser.login) {
+                                    if (curUser?.login != accountsMenuEditArgs.targetUser.login) {
                                       var res = await accountsMenuEditArgs.sessionData.client.deleteUser(args);
                                       success = true;
                                     } else {

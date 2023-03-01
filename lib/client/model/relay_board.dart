@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -31,23 +32,28 @@ class RelayBoard {
     danBoard,
   ];
 
-  static RelayBoard fromJson(dynamic value) =>
-    RelayBoardTypeTransformer().decode(value);
+  static RelayBoard? fromJson(dynamic value) => RelayBoardTypeTransformer().decode(value);
 
-  static List<RelayBoard> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <RelayBoard>[]
-      : json
-          .map((value) => RelayBoard.fromJson(value))
-          .toList(growable: true == growable);
+  static List<RelayBoard>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <RelayBoard>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = RelayBoard.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
 }
 
 /// Transformation class that can [encode] an instance of [RelayBoard] to String,
 /// and [decode] dynamic data back to [RelayBoard].
 class RelayBoardTypeTransformer {
-  const RelayBoardTypeTransformer._();
+  factory RelayBoardTypeTransformer() => _instance ??= const RelayBoardTypeTransformer._();
 
-  factory RelayBoardTypeTransformer() => _instance ??= RelayBoardTypeTransformer._();
+  const RelayBoardTypeTransformer._();
 
   String encode(RelayBoard data) => data.value;
 
@@ -59,18 +65,21 @@ class RelayBoardTypeTransformer {
   ///
   /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
   /// and users are still using an old app with the old code.
-  RelayBoard decode(dynamic data, {bool allowNull}) {
-    switch (data) {
-      case r'localGPIO': return RelayBoard.localGPIO;
-      case r'danBoard': return RelayBoard.danBoard;
-      default:
-        if (allowNull == false) {
-          throw ArgumentError('Unknown enum value to decode: $data');
-        }
+  RelayBoard? decode(dynamic data, {bool allowNull = true}) {
+    if (data != null) {
+      switch (data) {
+        case r'localGPIO': return RelayBoard.localGPIO;
+        case r'danBoard': return RelayBoard.danBoard;
+        default:
+          if (!allowNull) {
+            throw ArgumentError('Unknown enum value to decode: $data');
+          }
+      }
     }
     return null;
   }
 
   /// Singleton [RelayBoardTypeTransformer] instance.
-  static RelayBoardTypeTransformer _instance;
+  static RelayBoardTypeTransformer? _instance;
 }
+

@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -31,23 +32,28 @@ class Status {
     online,
   ];
 
-  static Status fromJson(dynamic value) =>
-    StatusTypeTransformer().decode(value);
+  static Status? fromJson(dynamic value) => StatusTypeTransformer().decode(value);
 
-  static List<Status> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <Status>[]
-      : json
-          .map((value) => Status.fromJson(value))
-          .toList(growable: true == growable);
+  static List<Status>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <Status>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = Status.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
 }
 
 /// Transformation class that can [encode] an instance of [Status] to String,
 /// and [decode] dynamic data back to [Status].
 class StatusTypeTransformer {
-  const StatusTypeTransformer._();
+  factory StatusTypeTransformer() => _instance ??= const StatusTypeTransformer._();
 
-  factory StatusTypeTransformer() => _instance ??= StatusTypeTransformer._();
+  const StatusTypeTransformer._();
 
   String encode(Status data) => data.value;
 
@@ -59,18 +65,21 @@ class StatusTypeTransformer {
   ///
   /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
   /// and users are still using an old app with the old code.
-  Status decode(dynamic data, {bool allowNull}) {
-    switch (data) {
-      case r'offline': return Status.offline;
-      case r'online': return Status.online;
-      default:
-        if (allowNull == false) {
-          throw ArgumentError('Unknown enum value to decode: $data');
-        }
+  Status? decode(dynamic data, {bool allowNull = true}) {
+    if (data != null) {
+      switch (data) {
+        case r'offline': return Status.offline;
+        case r'online': return Status.online;
+        default:
+          if (!allowNull) {
+            throw ArgumentError('Unknown enum value to decode: $data');
+          }
+      }
     }
     return null;
   }
 
   /// Singleton [StatusTypeTransformer] instance.
-  static StatusTypeTransformer _instance;
+  static StatusTypeTransformer? _instance;
 }
+

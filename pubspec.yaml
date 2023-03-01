@@ -25,7 +25,8 @@ dependency_overrides:
 
 dependencies:
   ping_discover_network: ^0.2.0+1
-  wifi: ^0.1.5
+
+  wifi_iot: ^0.3.18
   http: '>=0.13.0 <0.14.0'
   intl: '>=0.17.0 <0.18.0'
   meta: '^1.8.0'

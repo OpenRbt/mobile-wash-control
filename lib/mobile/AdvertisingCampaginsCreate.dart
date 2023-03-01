@@ -19,7 +19,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
   bool _firstLoad = true;
   bool _canSave = true;
   //Values
-  late int ProgramDiscountValue;
+  late int? ProgramDiscountValue;
 
   late int DiscountValue;
   late String DiscountTitle;
@@ -887,14 +887,14 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
       )
     ]..addAll(List.generate(SharedData.Programs.value.length, (index) {
         return DropdownMenuItem(
-          child: Text(SharedData.Programs.value[index].name),
+          child: Text(SharedData.Programs.value[index].name ?? ""),
           value: SharedData.Programs.value[index].id,
         );
       }));
 
     Set<int> ignoreItems = Set()
       ..addAll(List.generate(DiscountPrograms.length, (index) {
-        return DiscountPrograms[index].programID;
+        return DiscountPrograms[index].programID ?? -1;
       }));
 
     List<DiscountProgram> DiscountProgramsTmp = List.from(DiscountPrograms);
@@ -1199,7 +1199,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
   }
 
   Future<dynamic> showEditProgramDiscount(List<DiscountProgram> discountProgramsList, List<DropdownMenuItem> dropDownItems, Set<int> ignoreItems, int index) {
-    int dropDownValue = discountProgramsList[index].programID;
+    int? dropDownValue = discountProgramsList[index].programID;
     _programDiscountController.text = "0";
     ProgramDiscountValue = discountProgramsList[index].discount;
 
@@ -1281,7 +1281,7 @@ class _AdvertisingCampaginsCreateState extends State<AdvertisingCampaginsCreate>
                     onPressed: () {
                       if (dropDownValue != -1 && (discountProgramsList.indexWhere((element) => element.programID == dropDownValue) == index || !discountProgramsList.any((element) => element.programID == dropDownValue))) {
                         discountProgramsList[index] = DiscountProgram(programID: dropDownValue, discount: ProgramDiscountValue);
-                        ignoreItems.add(dropDownValue);
+                        ignoreItems.add(dropDownValue ?? 0);
                       }
                       Navigator.pop(context);
                     },

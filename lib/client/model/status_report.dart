@@ -1,10 +1,11 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
@@ -18,11 +19,29 @@ class StatusReport {
     this.stations = const [],
   });
 
-  String lcwInfo;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? lcwInfo;
 
-  Status kasseStatus;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  Status? kasseStatus;
 
-  String kasseInfo;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? kasseInfo;
 
   List<StationStatus> stations;
 
@@ -35,64 +54,108 @@ class StatusReport {
 
   @override
   int get hashCode =>
-    (lcwInfo == null ? 0 : lcwInfo.hashCode) +
-    (kasseStatus == null ? 0 : kasseStatus.hashCode) +
-    (kasseInfo == null ? 0 : kasseInfo.hashCode) +
-    (stations == null ? 0 : stations.hashCode);
+    // ignore: unnecessary_parenthesis
+    (lcwInfo == null ? 0 : lcwInfo!.hashCode) +
+    (kasseStatus == null ? 0 : kasseStatus!.hashCode) +
+    (kasseInfo == null ? 0 : kasseInfo!.hashCode) +
+    (stations.hashCode);
 
   @override
   String toString() => 'StatusReport[lcwInfo=$lcwInfo, kasseStatus=$kasseStatus, kasseInfo=$kasseInfo, stations=$stations]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (lcwInfo != null) {
-      json[r'lcw_info'] = lcwInfo;
+    if (this.lcwInfo != null) {
+      json[r'lcw_info'] = this.lcwInfo;
+    } else {
+      json[r'lcw_info'] = null;
     }
-    if (kasseStatus != null) {
-      json[r'kasse_status'] = kasseStatus;
+    if (this.kasseStatus != null) {
+      json[r'kasse_status'] = this.kasseStatus;
+    } else {
+      json[r'kasse_status'] = null;
     }
-    if (kasseInfo != null) {
-      json[r'kasse_info'] = kasseInfo;
+    if (this.kasseInfo != null) {
+      json[r'kasse_info'] = this.kasseInfo;
+    } else {
+      json[r'kasse_info'] = null;
     }
-    if (stations != null) {
-      json[r'stations'] = stations;
-    }
+      json[r'stations'] = this.stations;
     return json;
   }
 
   /// Returns a new [StatusReport] instance and imports its values from
-  /// [json] if it's non-null, null if [json] is null.
-  static StatusReport fromJson(Map<String, dynamic> json) => json == null
-    ? null
-    : StatusReport(
-        lcwInfo: json[r'lcw_info'],
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static StatusReport? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "StatusReport[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "StatusReport[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
+
+      return StatusReport(
+        lcwInfo: mapValueOfType<String>(json, r'lcw_info'),
         kasseStatus: Status.fromJson(json[r'kasse_status']),
-        kasseInfo: json[r'kasse_info'],
-        stations: StationStatus.listFromJson(json[r'stations']),
-    );
+        kasseInfo: mapValueOfType<String>(json, r'kasse_info'),
+        stations: StationStatus.listFromJson(json[r'stations']) ?? const [],
+      );
+    }
+    return null;
+  }
 
-  static List<StatusReport> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
-    json == null || json.isEmpty
-      ? true == emptyIsNull ? null : <StatusReport>[]
-      : json.map((dynamic value) => StatusReport.fromJson(value)).toList(growable: true == growable);
+  static List<StatusReport>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <StatusReport>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = StatusReport.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
 
-  static Map<String, StatusReport> mapFromJson(Map<String, dynamic> json) {
+  static Map<String, StatusReport> mapFromJson(dynamic json) {
     final map = <String, StatusReport>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) => map[key] = StatusReport.fromJson(value));
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = StatusReport.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
 
   // maps a json object with a list of StatusReport-objects as value to a dart map
-  static Map<String, List<StatusReport>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
+  static Map<String, List<StatusReport>> mapListFromJson(dynamic json, {bool growable = false,}) {
     final map = <String, List<StatusReport>>{};
-    if (json?.isNotEmpty == true) {
-      json.forEach((key, value) {
-        map[key] = StatusReport.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
-      });
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = StatusReport.listFromJson(entry.value, growable: growable,);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{
+  };
 }
 

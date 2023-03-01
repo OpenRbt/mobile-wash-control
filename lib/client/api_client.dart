@@ -1,23 +1,23 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.0
+// @dart=2.12
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
 
 class ApiClient {
-  ApiClient({this.basePath = 'http://localhost'}) {
-    // Setup authentications (key: authentication name, value: authentication).
-    _authentications[r'pinCode'] = ApiKeyAuth('header', 'Pin');
-  }
+  ApiClient({this.basePath = 'http://localhost', this.authentication,});
 
   final String basePath;
+  final Authentication? authentication;
 
   var _client = Client();
+  final _defaultHeaderMap = <String, String>{};
 
   /// Returns the current HTTP [Client] instance to use in this class.
   ///
@@ -25,31 +25,14 @@ class ApiClient {
   Client get client => _client;
 
   /// Requests to use a new HTTP [Client] in this class.
-  ///
-  /// If the [newClient] is null, an [ArgumentError] is thrown.
   set client(Client newClient) {
-    if (newClient == null) {
-      throw ArgumentError('New client instance cannot be null.');
-    }
     _client = newClient;
   }
 
-  final _defaultHeaderMap = <String, String>{};
-  final _authentications = <String, Authentication>{};
+  Map<String, String> get defaultHeaderMap => _defaultHeaderMap;
 
   void addDefaultHeader(String key, String value) {
      _defaultHeaderMap[key] = value;
-  }
-
-  Map<String,String> get defaultHeaderMap => _defaultHeaderMap;
-
-  /// Returns an unmodifiable [Map] of the authentications, since none should be added
-  /// or deleted.
-  Map<String, Authentication> get authentications => Map.unmodifiable(_authentications);
-
-  T getAuthentication<T extends Authentication>(String name) {
-    final authentication = _authentications[name];
-    return authentication is T ? authentication : null;
   }
 
   // We don't use a Map<String, String> for queryParams.
@@ -58,35 +41,27 @@ class ApiClient {
     String path,
     String method,
     List<QueryParam> queryParams,
-    Object body,
+    Object? body,
     Map<String, String> headerParams,
     Map<String, String> formParams,
-    String nullableContentType,
-    List<String> authNames,
+    String? contentType,
   ) async {
-    _updateParamsForAuth(authNames, queryParams, headerParams);
+    await authentication?.applyToParams(queryParams, headerParams);
 
     headerParams.addAll(_defaultHeaderMap);
-
-    final urlEncodedQueryParams = queryParams
-      .where((param) => param.value != null)
-      .map((param) => '$param');
-
-    final queryString = urlEncodedQueryParams.isNotEmpty
-      ? '?${urlEncodedQueryParams.join('&')}'
-      : '';
-
-    final Uri uri = Uri.parse('$basePath$path$queryString');
-
-    if (nullableContentType != null) {
-      headerParams['Content-Type'] = nullableContentType;
+    if (contentType != null) {
+      headerParams['Content-Type'] = contentType;
     }
+
+    final urlEncodedQueryParams = queryParams.map((param) => '$param');
+    final queryString = urlEncodedQueryParams.isNotEmpty ? '?${urlEncodedQueryParams.join('&')}' : '';
+    final uri = Uri.parse('$basePath$path$queryString');
 
     try {
       // Special case for uploading a single file which isn't a 'multipart/form-data'.
       if (
-        body is MultipartFile && (nullableContentType == null ||
-        !nullableContentType.toLowerCase().startsWith('multipart/form-data'))
+        body is MultipartFile && (contentType == null ||
+        !contentType.toLowerCase().startsWith('multipart/form-data'))
       ) {
         final request = StreamedRequest(method, uri);
         request.headers.addAll(headerParams);
@@ -94,7 +69,8 @@ class ApiClient {
         body.finalize().listen(
           request.sink.add,
           onDone: request.sink.close,
-          onError: (error, trace) => request.sink.close(),
+          // ignore: avoid_types_on_closure_parameters
+          onError: (Object error, StackTrace trace) => request.sink.close(),
           cancelOnError: true,
         );
         final response = await _client.send(request);
@@ -111,7 +87,7 @@ class ApiClient {
         return Response.fromStream(response);
       }
 
-      final msgBody = nullableContentType == 'application/x-www-form-urlencoded'
+      final msgBody = contentType == 'application/x-www-form-urlencoded'
         ? formParams
         : await serializeAsync(body);
       final nullableHeaderParams = headerParams.isEmpty ? null : headerParams;
@@ -124,74 +100,87 @@ class ApiClient {
         case 'HEAD': return await _client.head(uri, headers: nullableHeaderParams,);
         case 'GET': return await _client.get(uri, headers: nullableHeaderParams,);
       }
-    } on SocketException catch (e, trace) {
-      throw ApiException.withInner(HttpStatus.badRequest, 'Socket operation failed: $method $path', e, trace,);
-    } on TlsException catch (e, trace) {
-      throw ApiException.withInner(HttpStatus.badRequest, 'TLS/SSL communication failed: $method $path', e, trace,);
-    } on IOException catch (e, trace) {
-      throw ApiException.withInner(HttpStatus.badRequest, 'I/O operation failed: $method $path', e, trace,);
-    } on ClientException catch (e, trace) {
-      throw ApiException.withInner(HttpStatus.badRequest, 'HTTP connection failed: $method $path', e, trace,);
-    } on Exception catch (e, trace) {
-      throw ApiException.withInner(HttpStatus.badRequest, 'Exception occurred: $method $path', e, trace,);
+    } on SocketException catch (error, trace) {
+      throw ApiException.withInner(
+        HttpStatus.badRequest,
+        'Socket operation failed: $method $path',
+        error,
+        trace,
+      );
+    } on TlsException catch (error, trace) {
+      throw ApiException.withInner(
+        HttpStatus.badRequest,
+        'TLS/SSL communication failed: $method $path',
+        error,
+        trace,
+      );
+    } on IOException catch (error, trace) {
+      throw ApiException.withInner(
+        HttpStatus.badRequest,
+        'I/O operation failed: $method $path',
+        error,
+        trace,
+      );
+    } on ClientException catch (error, trace) {
+      throw ApiException.withInner(
+        HttpStatus.badRequest,
+        'HTTP connection failed: $method $path',
+        error,
+        trace,
+      );
+    } on Exception catch (error, trace) {
+      throw ApiException.withInner(
+        HttpStatus.badRequest,
+        'Exception occurred: $method $path',
+        error,
+        trace,
+      );
     }
 
-    throw ApiException(HttpStatus.badRequest, 'Invalid HTTP operation: $method $path',);
+    throw ApiException(
+      HttpStatus.badRequest,
+      'Invalid HTTP operation: $method $path',
+    );
   }
 
-  Future<dynamic> deserializeAsync(String json, String targetType, {bool growable}) async =>
+  Future<dynamic> deserializeAsync(String json, String targetType, {bool growable = false,}) async =>
     // ignore: deprecated_member_use_from_same_package
     deserialize(json, targetType, growable: growable);
 
   @Deprecated('Scheduled for removal in OpenAPI Generator 6.x. Use deserializeAsync() instead.')
-  dynamic deserialize(String json, String targetType, {bool growable}) {
+  dynamic deserialize(String json, String targetType, {bool growable = false,}) {
     // Remove all spaces. Necessary for regular expressions as well.
     targetType = targetType.replaceAll(' ', ''); // ignore: parameter_assignments
 
     // If the expected target type is String, nothing to do...
     return targetType == 'String'
       ? json
-      : _deserialize(jsonDecode(json), targetType, growable: growable == true);
+      : _deserialize(jsonDecode(json), targetType, growable: growable);
   }
 
   // ignore: deprecated_member_use_from_same_package
-  Future<String> serializeAsync(Object value) async => serialize(value);
+  Future<String> serializeAsync(Object? value) async => serialize(value);
 
   @Deprecated('Scheduled for removal in OpenAPI Generator 6.x. Use serializeAsync() instead.')
-  String serialize(Object value) => value == null ? '' : json.encode(value);
+  String serialize(Object? value) => value == null ? '' : json.encode(value);
 
-  /// Update query and header parameters based on authentication settings.
-  /// @param authNames The authentications to apply
-  void _updateParamsForAuth(
-    List<String> authNames,
-    List<QueryParam> queryParams,
-    Map<String, String> headerParams,
-  ) {
-    for(final authName in authNames) {
-      final auth = _authentications[authName];
-      if (auth == null) {
-        throw ArgumentError('Authentication undefined: $authName');
-      }
-      auth.applyToParams(queryParams, headerParams);
-    }
-  }
-
-  static dynamic _deserialize(dynamic value, String targetType, {bool growable}) {
+  static dynamic _deserialize(dynamic value, String targetType, {bool growable = false}) {
     try {
       switch (targetType) {
         case 'String':
-          return '$value';
+          return value is String ? value : value.toString();
         case 'int':
           return value is int ? value : int.parse('$value');
+        case 'double':
+          return value is double ? value : double.parse('$value');
         case 'bool':
           if (value is bool) {
             return value;
           }
           final valueString = '$value'.toLowerCase();
           return valueString == 'true' || valueString == '1';
-          break;
-        case 'double':
-          return value is double ? value : double.parse('$value');
+        case 'DateTime':
+          return value is DateTime ? value : DateTime.tryParse(value);
         case 'AdvertisingCampaign':
           return AdvertisingCampaign.fromJson(value);
         case 'ArgAddServiceAmount':
@@ -212,10 +201,12 @@ class ApiClient {
           return ArgDelStation.fromJson(value);
         case 'ArgGetConfigVar':
           return ArgGetConfigVar.fromJson(value);
-        case 'ArgGetConfigVar1':
-          return ArgGetConfigVar1.fromJson(value);
-        case 'ArgGetConfigVar2':
-          return ArgGetConfigVar2.fromJson(value);
+        case 'ArgGetLevel':
+          return ArgGetLevel.fromJson(value);
+        case 'ArgGetStationConfigVar':
+          return ArgGetStationConfigVar.fromJson(value);
+        case 'ArgGetStationConfigVar1':
+          return ArgGetStationConfigVar1.fromJson(value);
         case 'ArgGetStationDiscounts':
           return ArgGetStationDiscounts.fromJson(value);
         case 'ArgLoad':
@@ -224,6 +215,8 @@ class ApiClient {
           return ArgLoadFromStation.fromJson(value);
         case 'ArgLoadMoney':
           return ArgLoadMoney.fromJson(value);
+        case 'ArgMeasureVolumeMilliliters':
+          return ArgMeasureVolumeMilliliters.fromJson(value);
         case 'ArgOpenStation':
           return ArgOpenStation.fromJson(value);
         case 'ArgPing':
@@ -234,18 +227,16 @@ class ApiClient {
           return ArgPrograms.fromJson(value);
         case 'ArgResetStationStat':
           return ArgResetStationStat.fromJson(value);
+        case 'ArgRun2Program':
+          return ArgRun2Program.fromJson(value);
         case 'ArgRunProgram':
           return ArgRunProgram.fromJson(value);
         case 'ArgSave':
           return ArgSave.fromJson(value);
-        case 'ArgSaveCollection':
-          return ArgSaveCollection.fromJson(value);
         case 'ArgSaveIfNotExists':
           return ArgSaveIfNotExists.fromJson(value);
         case 'ArgSetStationButton':
           return ArgSetStationButton.fromJson(value);
-        case 'ArgStation':
-          return ArgStation.fromJson(value);
         case 'ArgStationButton':
           return ArgStationButton.fromJson(value);
         case 'ArgStationByHash':
@@ -282,16 +273,16 @@ class ApiClient {
           return ConfigVarInt.fromJson(value);
         case 'ConfigVarString':
           return ConfigVarString.fromJson(value);
+        case 'DeleteUser409Response':
+          return DeleteUser409Response.fromJson(value);
         case 'DiscountProgram':
           return DiscountProgram.fromJson(value);
-        case 'InlineObject':
-          return InlineObject.fromJson(value);
-        case 'InlineResponse409':
-          return InlineResponse409.fromJson(value);
         case 'KasseConfig':
           return KasseConfig.fromJson(value);
         case 'KeyPair':
           return KeyPair.fromJson(value);
+        case 'LoadRelayRequest':
+          return LoadRelayRequest.fromJson(value);
         case 'MoneyReport':
           return MoneyReport.fromJson(value);
         case 'Program':
@@ -300,19 +291,20 @@ class ApiClient {
           return ProgramStat.fromJson(value);
         case 'RelayBoard':
           return RelayBoardTypeTransformer().decode(value);
-          
         case 'RelayConfig':
           return RelayConfig.fromJson(value);
         case 'RelayReport':
           return RelayReport.fromJson(value);
         case 'RelayStat':
           return RelayStat.fromJson(value);
+        case 'ResponseGetLevel':
+          return ResponseGetLevel.fromJson(value);
         case 'ResponsePing':
           return ResponsePing.fromJson(value);
         case 'ResponseStationButton':
           return ResponseStationButton.fromJson(value);
-        case 'ResponseStationButtonButtons':
-          return ResponseStationButtonButtons.fromJson(value);
+        case 'ResponseStationButtonButtonsInner':
+          return ResponseStationButtonButtonsInner.fromJson(value);
         case 'ResponseStationCollectionReportDates':
           return ResponseStationCollectionReportDates.fromJson(value);
         case 'ResponseUserCreate':
@@ -323,14 +315,24 @@ class ApiClient {
           return ResponseUserPassword.fromJson(value);
         case 'ResponseUserUpdate':
           return ResponseUserUpdate.fromJson(value);
+        case 'ResponseVolumeDispenser':
+          return ResponseVolumeDispenser.fromJson(value);
         case 'StationConfig':
           return StationConfig.fromJson(value);
+        case 'StationConfigVarBool':
+          return StationConfigVarBool.fromJson(value);
+        case 'StationConfigVarInt':
+          return StationConfigVarInt.fromJson(value);
+        case 'StationConfigVarString':
+          return StationConfigVarString.fromJson(value);
         case 'StationPrograms':
           return StationPrograms.fromJson(value);
-        case 'StationProgramsPrograms':
-          return StationProgramsPrograms.fromJson(value);
+        case 'StationProgramsProgramsInner':
+          return StationProgramsProgramsInner.fromJson(value);
         case 'StationReport':
           return StationReport.fromJson(value);
+        case 'StationRequest':
+          return StationRequest.fromJson(value);
         case 'StationStat':
           return StationStat.fromJson(value);
         case 'StationStatus':
@@ -339,7 +341,6 @@ class ApiClient {
           return StationsVariables.fromJson(value);
         case 'Status':
           return StatusTypeTransformer().decode(value);
-          
         case 'StatusCollectionReport':
           return StatusCollectionReport.fromJson(value);
         case 'StatusReport':
@@ -348,30 +349,28 @@ class ApiClient {
           return UserConfig.fromJson(value);
         case 'UsersReport':
           return UsersReport.fromJson(value);
+        case 'VolumeDispenser':
+          return VolumeDispenser.fromJson(value);
         default:
-          Match match;
-          if (value is List && (match = _regList.firstMatch(targetType)) != null) {
-            targetType = match[1]; // ignore: parameter_assignments
+          dynamic match;
+          if (value is List && (match = _regList.firstMatch(targetType)?.group(1)) != null) {
             return value
-              .map((v) => _deserialize(v, targetType, growable: growable))
+              .map<dynamic>((dynamic v) => _deserialize(v, match, growable: growable,))
               .toList(growable: growable);
           }
-          if (value is Set && (match = _regSet.firstMatch(targetType)) != null) {
-            targetType = match[1]; // ignore: parameter_assignments
+          if (value is Set && (match = _regSet.firstMatch(targetType)?.group(1)) != null) {
             return value
-              .map((v) => _deserialize(v, targetType, growable: growable))
+              .map<dynamic>((dynamic v) => _deserialize(v, match, growable: growable,))
               .toSet();
           }
-          if (value is Map && (match = _regMap.firstMatch(targetType)) != null) {
-            targetType = match[1]; // ignore: parameter_assignments
-            return Map.fromIterables(
-              value.keys,
-              value.values.map((v) => _deserialize(v, targetType, growable: growable)),
+          if (value is Map && (match = _regMap.firstMatch(targetType)?.group(1)) != null) {
+            return Map<String, dynamic>.fromIterables(
+              value.keys.cast<String>(),
+              value.values.map<dynamic>((dynamic v) => _deserialize(v, match, growable: growable,)),
             );
           }
-          break;
       }
-    } catch (error, trace) {
+    } on Exception catch (error, trace) {
       throw ApiException.withInner(HttpStatus.internalServerError, 'Exception during deserialization.', error, trace,);
     }
     throw ApiException(HttpStatus.internalServerError, 'Could not find a suitable class for deserialization',);
@@ -381,9 +380,9 @@ class ApiClient {
 /// Primarily intended for use in an isolate.
 class DeserializationMessage {
   const DeserializationMessage({
-    @required this.json,
-    @required this.targetType,
-    this.growable,
+    required this.json,
+    required this.targetType,
+    this.growable = false,
   });
 
   /// The JSON value to deserialize.
@@ -407,9 +406,9 @@ Future<dynamic> deserializeAsync(DeserializationMessage message) async {
     : ApiClient._deserialize(
         jsonDecode(message.json),
         targetType,
-        growable: message.growable == true,
+        growable: message.growable,
       );
 }
 
 /// Primarily intended for use in an isolate.
-Future<String> serializeAsync(Object value) async => value == null ? '' : json.encode(value);
+Future<String> serializeAsync(Object? value) async => value == null ? '' : json.encode(value);
