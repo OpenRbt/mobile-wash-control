@@ -354,13 +354,13 @@ class DefaultConfig {
 
 class StationsDefaultConfig {
   List<Program> programs;
-  List<ResponseStationButtonButtons> stationPrograms;
+  List<ResponseStationButtonButtonsInner> stationPrograms;
 
   StationsDefaultConfig(this.programs, this.stationPrograms);
 }
 
 Program _getProgram(int id, String name, int price, bool preflightEnabled, int motorSpeedPercent, int preflightMotorSpeedPercent, List<RelayConfig> relays, List<RelayConfig> preflightRelays) {
-  Program tmp = Program();
+  Program tmp = Program(id: -1);
 
   tmp.id = id;
   tmp.name = name;
@@ -384,8 +384,8 @@ RelayConfig _getRelay(int id, int timeon, int timeoff) {
   return tmp;
 }
 
-ResponseStationButtonButtons _getProgramButton(int buttonID, int programID) {
-  ResponseStationButtonButtons tmp = ResponseStationButtonButtons();
+ResponseStationButtonButtonsInner _getProgramButton(int buttonID, int programID) {
+  ResponseStationButtonButtonsInner tmp = ResponseStationButtonButtonsInner();
 
   tmp.buttonID = buttonID;
   tmp.programID = programID;

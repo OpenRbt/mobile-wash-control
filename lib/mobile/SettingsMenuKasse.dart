@@ -45,10 +45,10 @@ class _SettingsMenuKasseState extends State<SettingsMenuKasse> {
       if (!mounted) {
         return;
       }
-      _dropDownValue = res.tax.value;
-      _inputControllers[0].text = res.receiptItemName;
-      _inputControllers[1].text = res.cashier;
-      _inputControllers[2].text = res.cashierINN;
+      _dropDownValue = res?.tax?.value ?? "";
+      _inputControllers[0].text = res?.receiptItemName ?? "";
+      _inputControllers[1].text = res?.cashier ?? "";
+      _inputControllers[2].text = res?.cashierINN ?? "";
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->kasse: $e\n");

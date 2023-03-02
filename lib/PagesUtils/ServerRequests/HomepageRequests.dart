@@ -4,14 +4,14 @@ import 'package:mobile_wash_control/PagesUtils/PagesArgs.dart';
 import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/client/api.dart';
 
-Future<List<ResponseStationButtonButtons>> GetStationButtons(PostMenuArgs postMenuArgs) async {
-  List<ResponseStationButtonButtons> result = [];
+Future<List<ResponseStationButtonButtonsInner>> GetStationButtons(PostMenuArgs postMenuArgs) async {
+  List<ResponseStationButtonButtonsInner> result = [];
   try {
     var args = ArgStationButton(
       stationID: postMenuArgs.postID,
     );
     var res = await postMenuArgs.sessionData.client.stationButton(args);
-    result = res.buttons;
+    result = res!.buttons;
     var programs = await postMenuArgs.sessionData.client.programs(ArgPrograms());
   } catch (e) {
     print("Exception when calling DefaultApi->/station-button: $e\n");
@@ -30,7 +30,7 @@ class PostMenuInfo {
   PostMenuInfo(this.incassBalance, this.balance, this.currentProgram, this.activePrograms);
 }
 
-Future<PostMenuInfo> GetPostInfo(PostMenuArgs postMenuArgs, List<ResponseStationButtonButtons> buttons) async {
+Future<PostMenuInfo> GetPostInfo(PostMenuArgs postMenuArgs, List<ResponseStationButtonButtonsInner> buttons) async {
   int incass = -1;
   int balance = -1;
   int currentProgram = -1;
@@ -45,13 +45,13 @@ Future<PostMenuInfo> GetPostInfo(PostMenuArgs postMenuArgs, List<ResponseStation
 
     var res = await postMenuArgs.sessionData.client.stationReportCurrentMoney(args);
 
-    incass = (res.moneyReport?.banknotes ?? 0) + (res.moneyReport?.coins ?? 0);
+    incass = (res?.moneyReport?.banknotes ?? 0) + (res?.moneyReport?.coins ?? 0);
 
     var checkboxID = buttons.firstWhere((element) => element.programID == currentProgram, orElse: () {
-          var tmp = ResponseStationButtonButtons();
+          var tmp = ResponseStationButtonButtonsInner();
           tmp.buttonID = 0;
           return tmp;
-        }).buttonID -
+        }).buttonID! -
         1;
     if (checkboxID >= 0) {
       activePrograms[checkboxID] = true;
@@ -85,7 +85,7 @@ Future<IncassationInfo> GetIncassation(PostMenuArgs postMenuArgs, DateTime _star
   try {
     var args = ArgCollectionReportDates(stationID: postMenuArgs.postID, startDate: _startDate.millisecondsSinceEpoch ~/ 1000, endDate: _endDate.millisecondsSinceEpoch ~/ 1000);
     var res = await postMenuArgs.sessionData.client.stationCollectionReportDates(args);
-    _incassations = res.collectionReports;
+    _incassations = res!.collectionReports;
 
     totalNal = 0;
     totalBeznal = 0;

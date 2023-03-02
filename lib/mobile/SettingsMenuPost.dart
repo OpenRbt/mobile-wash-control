@@ -67,10 +67,10 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       if (!mounted) {
         return;
       }
-      _relayboardValue = res.relayBoard.value ?? "localGPIO";
-      _inputControllers[2].text = res.name ?? "";
-      _inputControllers[3].text = res.hash ?? "";
-      _inputControllers[4].text = res.preflightSec?.toString() ?? "";
+      _relayboardValue = res?.relayBoard?.value ?? "localGPIO";
+      _inputControllers[2].text = res?.name ?? "";
+      _inputControllers[3].text = res?.hash ?? "";
+      _inputControllers[4].text = res?.preflightSec?.toString() ?? "";
     } catch (e) {
       print("Exception when calling DefaultApi->/station: $e\n");
     }
@@ -78,7 +78,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
   void _savePost(SettingsMenuPostArgs settingsMenuPostArgs, BuildContext context) async {
     try {
-      var args = StationConfig();
+      var args = StationConfig(id: -1);
       args.id = settingsMenuPostArgs.stationID;
       args.name = _inputControllers[2].value.text ?? "";
       args.hash = _inputControllers[3].value.text ?? "";
@@ -103,9 +103,9 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       if (!mounted) {
         return;
       }
-      _dropDownCardReader = res.cardReaderType.value ?? _dropDownCardReader;
-      _inputControllers[0].text = res.host ?? _inputControllers[0].value.text;
-      _inputControllers[1].text = res.port ?? _inputControllers[1].value.text;
+      _dropDownCardReader = res?.cardReaderType?.value ?? _dropDownCardReader;
+      _inputControllers[0].text = res?.host ?? _inputControllers[0].value.text;
+      _inputControllers[1].text = res?.port ?? _inputControllers[1].value.text;
 
       setState(() {});
     } catch (e) {
@@ -115,7 +115,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
   void _saveCardReader(SettingsMenuPostArgs settingsMenuPostArgs, BuildContext context) async {
     try {
-      var args = CardReaderConfig();
+      var args = CardReaderConfig(stationID: -1);
       args.stationID = settingsMenuPostArgs.stationID;
       switch (_dropDownCardReader) {
         case "NOT_USED":
@@ -153,11 +153,11 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       }
       _programIDs = ["------------"];
       _programNames = ["------------"];
-      for (int i = 0; i < res.length; i++) {
+      for (int i = 0; i < (res?.length ?? 0); i++) {
         _programIDs.add(
-          res[i].id.toString(),
+          res?[i].id.toString() ?? "",
         );
-        _programNames.add(res[i].name ?? "no name");
+        _programNames.add(res?[i].name ?? "no name");
       }
     } catch (e) {
       print("Exception when calling DefaultApi->/programs: $e\n");
@@ -168,13 +168,13 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
         stationID: settingsMenuPostArgs.stationID,
       );
       var res = await settingsMenuPostArgs.sessionData.client.stationButton(args);
-      res.buttons = res.buttons.where((element) => element.buttonID != null).toList();
+      res?.buttons = res.buttons.where((element) => element.buttonID != null).toList();
       if (!mounted) {
         return;
       }
-      for (int i = 0; i < res.buttons.length; i++) {
+      for (int i = 0; i < (res?.buttons.length ?? 0); i++) {
         // TODO button with known programs should be set here, button = programid and buttonid
-        _dropDownPrograms[res.buttons[i].buttonID - 1] = res.buttons[i].programID.toString();
+        _dropDownPrograms[res!.buttons[i].buttonID! - 1] = res.buttons[i].programID.toString();
       }
 
       setState(() {});
@@ -188,10 +188,10 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
       var args = ArgSetStationButton(
         stationID: settingsMenuPostArgs.stationID,
       );
-      List<ResponseStationButtonButtons> buttons =[];
+      List<ResponseStationButtonButtonsInner> buttons =[];
       for (int i = 0; i < _maxButtons; i++) {
         if (_dropDownPrograms[i] != _programIDs[0]) {
-          var value = ResponseStationButtonButtons();
+          var value = ResponseStationButtonButtonsInner();
           value.programID = int.parse(_dropDownPrograms[i]);
           value.buttonID = i + 1;
           buttons.add(value);

@@ -165,7 +165,7 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
         print(maxID);
       }
 
-      var args = Program();
+      var args = Program(id: -1);
       args.id = maxID;
       args.motorSpeedPercent = int.tryParse(_motors[0].value.text) ?? 0;
       args.name = _program[0].value.text;
@@ -182,14 +182,14 @@ class _ProgramMenuAddState extends State<ProgramMenuAdd> {
           tmp.id = i + 1;
 
           tmp.timeon = (_relayTime * (int.tryParse(_relays[i].value.text)! / 100)).round();
-          tmp.timeoff = _relayTime - tmp.timeon;
+          tmp.timeoff = _relayTime - (tmp.timeon ?? 0);
           relays.add(tmp);
         }
         if (_preflight && _relaysPreflight[i].value.text.isNotEmpty && int.tryParse(_relaysPreflight[i].value.text) != 0) {
           var tmp = RelayConfig();
           tmp.id = i + 1;
           tmp.timeon = (_relayTime * (double.tryParse(_relaysPreflight[i].value.text)! / 100)).round();
-          tmp.timeoff = _relayTime - tmp.timeon;
+          tmp.timeoff = _relayTime - (tmp.timeon ?? 0);
           relaysPreflight.add(tmp);
         }
       }

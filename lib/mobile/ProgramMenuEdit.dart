@@ -166,27 +166,27 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
       );
       var res = await programMenuEditArgs.sessionData.client.programs(args);
 
-      _program[0].text = res[0].name;
-      _program[1].text = res[0].price.toString();
+      _program[0].text = res?[0].name ?? "";
+      _program[1].text = res?[0].price.toString() ?? "";
 
-      _motors[0].text = res[0].motorSpeedPercent.toString();
-      _motors[1].text = res[0].preflightMotorSpeedPercent.toString();
+      _motors[0].text = res?[0].motorSpeedPercent.toString() ?? "";
+      _motors[1].text = res?[0].preflightMotorSpeedPercent.toString() ?? "";
 
-      _preflight = res[0].preflightEnabled ?? false;
-      _isFinishingProgram = res[0].isFinishingProgram ?? false;
+      _preflight = res?[0].preflightEnabled ?? false;
+      _isFinishingProgram = res?[0].isFinishingProgram ?? false;
 
-      for (int i = 0; i < res[0].relays.length; i++) {
-        int id = res[0].relays[i].id - 1;
+      for (int i = 0; i < (res?[0].relays.length ?? 0); i++) {
+        int id = res![0].relays[i].id! - 1;
         var timeon = res[0].relays[i].timeon ?? 0;
         var timeoff = res[0].relays[i].timeoff ?? 0;
         int percent = (100 * timeon / (timeon + timeoff)).round();
         _relays[id].text = percent.toString();
       }
 
-      for (int i = 0; i < res[0].preflightRelays.length; i++) {
-        int id = res[0].preflightRelays[i].id - 1;
-        var timeon = res[0].preflightRelays[i].timeon ?? 0;
-        var timeoff = res[0].preflightRelays[i].timeoff ?? 0;
+      for (int i = 0; i < (res?[0].preflightRelays.length ?? 0); i++) {
+        int id = (res?[0].preflightRelays[i].id ?? 0) - 1;
+        var timeon = res?[0].preflightRelays[i].timeon ?? 0;
+        var timeoff = res?[0].preflightRelays[i].timeoff ?? 0;
         int percent = (100 * timeon / (timeon + timeoff)).round();
         _relaysPreflight[id].text = percent.toString();
       }
@@ -197,7 +197,7 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
   void saveProgram(ProgramMenuEditArgs programMenuEditArgs, BuildContext context) async {
     _inUpdate = true;
     try {
-      var args = Program();
+      var args = Program(id: -1);
       args.id = programMenuEditArgs.programID;
       args.motorSpeedPercent = int.tryParse(_motors[0].value.text) ?? 0;
       args.name = _program[0].value.text;
@@ -213,14 +213,14 @@ class _ProgramMenuEditState extends State<ProgramMenuEdit> {
           var tmp = RelayConfig();
           tmp.id = i + 1;
           tmp.timeon = (_relayTime * (int.tryParse(_relays[i].value.text)! / 100)).round();
-          tmp.timeoff = _relayTime - tmp.timeon;
+          tmp.timeoff = _relayTime - (tmp.timeon ?? 0);
           relays.add(tmp);
         }
         if (_preflight && _relaysPreflight[i].value.text.isNotEmpty && int.tryParse(_relaysPreflight[i].value.text) != 0) {
           var tmp = RelayConfig();
           tmp.id = i + 1;
           tmp.timeon = (_relayTime * (double.tryParse(_relaysPreflight[i].value.text)! / 100)).round();
-          tmp.timeoff = _relayTime - tmp.timeon;
+          tmp.timeoff = _relayTime - (tmp.timeon ?? 0);
           relaysPreflight.add(tmp);
         }
       }

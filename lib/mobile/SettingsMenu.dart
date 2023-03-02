@@ -115,19 +115,19 @@ class _SettingsMenuState extends State<SettingsMenu> {
 
   Future<void> getSettings(SessionData sessionData) async {
     try {
-      _timeZone = (await sessionData.client
+      _timeZone = ((await sessionData.client
               .getConfigVarInt(ArgGetConfigVar(name: "TIMEZONE")))
-          .value;
+          ?.value) ?? 0;
       if (!_timeZoneValues.contains(_timeZone)) {
         _timeZone = -1;
       } else {
         _timeZoneValuesDropList.removeWhere((element) => element.value == -1);
       }
       var res = await sessionData.client.status();
-      var tmp = res.stations.where((element) => element.hash != null).toList();
+      var tmp = res!.stations.where((element) => element.hash != null).toList();
       _availableHashes = [];
       tmp.forEach((element) {
-        _availableHashes.add(element.hash);
+        _availableHashes.add(element.hash ?? "");
       });
       res.stations =
           res.stations.where((element) => element.id != null).toList();
@@ -136,11 +136,11 @@ class _SettingsMenuState extends State<SettingsMenu> {
       }
       _settingsData = List.generate((res.stations.length), (index) {
         return new SettingsData(
-            res.stations[index].id,
-            res.stations[index].ip,
-            res.stations[index].name,
-            res.stations[index].hash,
-            res.stations[index].status.value);
+            res.stations[index].id ?? 0,
+            res.stations[index].ip ?? "",
+            res.stations[index].name ?? "",
+            res.stations[index].hash ?? "",
+            res.stations[index].status?.value ?? "");
       });
 
       _settingsData.sort(
@@ -150,9 +150,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
 
       if (res.stations.length > 0) {
         for (int i = 0; i < res.stations.length; i++) {
-          if (res.stations[i].hash != null && res.stations[i].hash.length > 0) {
+          if (res.stations[i].hash != null && (res.stations[i].hash?.length ?? 0) > 0) {
             var args = ArgLoad(
-              hash: res.stations[i].hash,
+              hash: res.stations[i].hash ?? "",
               key: "curr_temp",
             );
             var resTemp = await sessionData.client.load(args);

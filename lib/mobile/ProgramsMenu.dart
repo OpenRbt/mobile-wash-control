@@ -224,7 +224,7 @@ class _ProgramsMenuState extends State<ProgramsMenu> {
                             },
                           ),
                           onPressed: () {
-                            var args = ProgramMenuEditArgs(SharedData.Programs.value[index].id, SharedData.Programs.value[index].name, sessionData);
+                            var args = ProgramMenuEditArgs(SharedData.Programs.value[index].id, (SharedData.Programs.value[index].name ?? ""), sessionData);
                             Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
                               (value) => SharedData.RefreshPrograms(),
                             );

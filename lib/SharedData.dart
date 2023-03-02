@@ -26,12 +26,12 @@ class HomePageData {
     this.currentBalance = status?.currentBalance ?? 0;
     this.currentProgramID = status?.currentProgram ?? 0;
     if (status?.currentProgramName != null) {
-      var tmp = status?.currentProgramName.indexOf('-') ?? 0;
-      int len = status?.currentProgramName.length ?? 0;
+      var tmp = status?.currentProgramName?.indexOf('-') ?? 0;
+      int len = status?.currentProgramName?.length ?? 0;
       if (tmp < len) {
-        this.currentProgramName = status!.currentProgramName.substring(tmp + 1);
+        this.currentProgramName = (status!.currentProgramName?.substring(tmp + 1) ?? "");
       } else {
-        this.currentProgramName = status!.currentProgramName;
+        this.currentProgramName = status!.currentProgramName ?? "";
       }
     }
   }
@@ -95,7 +95,7 @@ class SharedData {
       }
       _StatusInUpdate = true;
       var statusRes = await SharedData.sessionData?.client.status();
-      statusRes?.stations.sort((a, b) => a.id.compareTo(b.id));
+      statusRes?.stations.sort((a, b) => a.id!.compareTo(b.id!));
       List<HomePageData> tmpStationsStatus = [];
       var length = statusRes?.stations.length ?? 0;
       for (int i = 0; i < length; i++) {

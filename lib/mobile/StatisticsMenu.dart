@@ -33,7 +33,7 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
     }
     print("FROM: $_startDate, TO: $_endDate");
     _updating = true;
-    List<Future<StationReport>> reportsTmp = [];
+    List<Future<StationReport?>> reportsTmp = [];
     for (int i = 0; i < 12; i++) {
       try {
         if (_byDate) {
@@ -74,12 +74,12 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
           showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
         } else {
           var tmp = StationReport();
-          tmp.moneyReport = MoneyReport();
-          tmp.moneyReport.banknotes = 0;
-          tmp.moneyReport.coins = 0;
-          tmp.moneyReport.electronical = 0;
-          tmp.moneyReport.service = 0;
-          tmp.moneyReport.carsTotal = 0;
+          tmp.moneyReport = MoneyReport(hash: '');
+          tmp.moneyReport?.banknotes = 0;
+          tmp.moneyReport?.coins = 0;
+          tmp.moneyReport?.electronical = 0;
+          tmp.moneyReport?.service = 0;
+          tmp.moneyReport?.carsTotal = 0;
           _reports.addAll({(i + 1): tmp});
         }
       } catch (e) {
@@ -91,20 +91,20 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
     print("Recieved reports: ${_reports.length}");
 
     _total = StationReport();
-    _total.moneyReport = MoneyReport();
-    _total.moneyReport.banknotes = 0;
-    _total.moneyReport.coins = 0;
-    _total.moneyReport.electronical = 0;
-    _total.moneyReport.service = 0;
-    _total.moneyReport.carsTotal = 0;
+    _total.moneyReport = MoneyReport(hash: '');
+    _total.moneyReport?.banknotes = 0;
+    _total.moneyReport?.coins = 0;
+    _total.moneyReport?.electronical = 0;
+    _total.moneyReport?.service = 0;
+    _total.moneyReport?.carsTotal = 0;
 
     for (int i = 0; _reports != null && i < _reports.length; i++) {
       if (_reports[i] != null) {
-        _total.moneyReport.banknotes += _reports[i]?.moneyReport.banknotes ?? 0;
-        _total.moneyReport.coins += _reports[i]?.moneyReport.coins ?? 0;
-        _total.moneyReport.electronical += _reports[i]?.moneyReport.electronical ?? 0;
-        _total.moneyReport.service += _reports[i]?.moneyReport.service ?? 0;
-        _total.moneyReport.carsTotal += _reports[i]?.moneyReport.carsTotal ?? 0;
+        _total.moneyReport!.banknotes = _total.moneyReport!.banknotes! + (_reports[i]?.moneyReport?.banknotes ?? 0);
+        _total.moneyReport!.coins = _total.moneyReport!.coins! + (_reports[i]?.moneyReport?.coins ?? 0);
+        _total.moneyReport!.electronical = _total.moneyReport!.electronical! + (_reports[i]?.moneyReport?.electronical ?? 0);
+        _total.moneyReport!.service = _total.moneyReport!.service! + (_reports[i]?.moneyReport?.service ?? 0);
+        _total.moneyReport!.carsTotal = _total.moneyReport!.carsTotal! + (_reports[i]?.moneyReport?.carsTotal ?? 0);
       }
     }
 
@@ -171,12 +171,12 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
     );
 
     if (_total.moneyReport == null) {
-      _total.moneyReport = MoneyReport();
-      _total.moneyReport.banknotes = 0;
-      _total.moneyReport.coins = 0;
-      _total.moneyReport.electronical = 0;
-      _total.moneyReport.service = 0;
-      _total.moneyReport.carsTotal = 0;
+      _total.moneyReport = MoneyReport(hash: '');
+      _total.moneyReport?.banknotes = 0;
+      _total.moneyReport?.coins = 0;
+      _total.moneyReport?.electronical = 0;
+      _total.moneyReport?.service = 0;
+      _total.moneyReport?.carsTotal = 0;
     }
     if (_firstLoad) {
       _GetStatistics(sessionData);
@@ -275,17 +275,17 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                         List.generate(_reports.length, (index) {
                           return createTableRow([
                             _reports.keys.elementAt(index),
-                            _reports.values.elementAt(index).moneyReport.banknotes ?? 0,
-                            _reports.values.elementAt(index).moneyReport.coins ?? 0,
-                            _reports.values.elementAt(index).moneyReport.electronical ?? 0,
-                            _reports.values.elementAt(index).moneyReport.service ?? 0,
-                            _reports.values.elementAt(index).moneyReport.carsTotal ?? 0,
-                            (_reports.values.elementAt(index).moneyReport.carsTotal != null && _reports.values.elementAt(index).moneyReport.carsTotal > 0)
-                                ? ((((_reports.values.elementAt(index).moneyReport.banknotes ?? 0) +
-                                            (_reports.values.elementAt(index).moneyReport.coins ?? 0) +
-                                            (_reports.values.elementAt(index).moneyReport.electronical ?? 0) +
-                                            (_reports.values.elementAt(index).moneyReport.service ?? 0)) /
-                                        _reports.values.elementAt(index).moneyReport.carsTotal))
+                            _reports.values.elementAt(index).moneyReport?.banknotes ?? 0,
+                            _reports.values.elementAt(index).moneyReport?.coins ?? 0,
+                            _reports.values.elementAt(index).moneyReport?.electronical ?? 0,
+                            _reports.values.elementAt(index).moneyReport?.service ?? 0,
+                            _reports.values.elementAt(index).moneyReport?.carsTotal ?? 0,
+                            (_reports.values.elementAt(index).moneyReport?.carsTotal != null && (_reports.values.elementAt(index).moneyReport?.carsTotal ?? 0) > 0)
+                                ? ((((_reports.values.elementAt(index).moneyReport?.banknotes ?? 0) +
+                                            (_reports.values.elementAt(index).moneyReport?.coins ?? 0) +
+                                            (_reports.values.elementAt(index).moneyReport?.electronical ?? 0) +
+                                            (_reports.values.elementAt(index).moneyReport?.service ?? 0)) /
+                                        (_reports.values.elementAt(index).moneyReport?.carsTotal ?? 1)))
                                     .toStringAsFixed(2)
                                 : 0
                           ]);
@@ -294,12 +294,12 @@ class _StatisticsMenuState extends State<StatisticsMenu> {
                       ..add(
                         createTableRow([
                           "Итого",
-                          _total.moneyReport.banknotes,
-                          _total.moneyReport.coins,
-                          _total.moneyReport.electronical,
-                          _total.moneyReport.service,
-                          _total.moneyReport.carsTotal,
-                          _total.moneyReport.carsTotal > 0 ? ((_total.moneyReport.banknotes + _total.moneyReport.coins + _total.moneyReport.electronical + _total.moneyReport.service) / _total.moneyReport.carsTotal).toStringAsFixed(2) : 0,
+                          _total.moneyReport?.banknotes,
+                          _total.moneyReport?.coins,
+                          _total.moneyReport?.electronical,
+                          _total.moneyReport?.service,
+                          _total.moneyReport?.carsTotal,
+                          (_total.moneyReport?.carsTotal ?? 0) > 0 ? (((_total.moneyReport?.banknotes ?? 0) + (_total.moneyReport?.coins ?? 0) + (_total.moneyReport?.electronical ?? 0) + (_total.moneyReport?.service ?? 0)) / (_total.moneyReport?.carsTotal ?? 1)).toStringAsFixed(2) : 0,
                         ]),
                       ),
                   ),

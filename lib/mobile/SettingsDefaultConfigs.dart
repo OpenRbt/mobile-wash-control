@@ -26,7 +26,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
       int programLength = config?.programs.length ?? 0;
       for (int i = 0; i < programLength; i++) {
         try {
-          var res = await sessionData.client.setProgram(config?.programs[i]);
+          var res = await sessionData.client.setProgram(config!.programs[i]);
         } catch (e) {
           print(e);
         }

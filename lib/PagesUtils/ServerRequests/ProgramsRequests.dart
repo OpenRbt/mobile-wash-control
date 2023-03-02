@@ -31,7 +31,7 @@ Future<bool> saveProgram(
       id = maxID;
     }
 
-    var args = Program();
+    var args = Program(id: -1);
     args.id = id;
     args.motorSpeedPercent = motorSpeed;
     args.name = programName;
@@ -47,14 +47,14 @@ Future<bool> saveProgram(
         var tmp = RelayConfig();
         tmp.id = i + 1;
         tmp.timeon = (_relayTime * (relaysPercent[i] / 100)).round();
-        tmp.timeoff = _relayTime - tmp.timeon;
+        tmp.timeoff = _relayTime - (tmp.timeon ?? 0);
         relays.add(tmp);
       }
       if (preflightEnabled && relaysPreflightPercent[i] != 0) {
         var tmp = RelayConfig();
         tmp.id = i + 1;
         tmp.timeon = (_relayTime * (relaysPreflightPercent[i] / 100)).round();
-        tmp.timeoff = _relayTime - tmp.timeon;
+        tmp.timeoff = _relayTime - (tmp.timeon ?? 0);
         relaysPreflight.add(tmp);
       }
     }
@@ -99,30 +99,30 @@ Future<ProgramData?> getProgram({required SessionData sessionData, required int 
       programID: programID,
     ));
 
-    if (res.length == 0) {
+    if (res?.length == 0) {
       return null;
     }
-    Program resProgram = res[0];
+    Program? resProgram = res?[0];
 
-    program.name = resProgram.name ?? "";
-    program.price = resProgram.price ?? 0;
-    program.motorSpeed = resProgram.motorSpeedPercent ?? 0;
-    program.motorSpeedPreflight = resProgram.preflightMotorSpeedPercent ?? 0;
-    program.preflightEnabled = resProgram.preflightEnabled ?? false;
-    program.isFinishingProgram = resProgram.isFinishingProgram ?? false;
+    program.name = resProgram?.name ?? "";
+    program.price = resProgram?.price ?? 0;
+    program.motorSpeed = resProgram?.motorSpeedPercent ?? 0;
+    program.motorSpeedPreflight = resProgram?.preflightMotorSpeedPercent ?? 0;
+    program.preflightEnabled = resProgram?.preflightEnabled ?? false;
+    program.isFinishingProgram = resProgram?.isFinishingProgram ?? false;
 
-    for (int i = 0; i < resProgram.relays.length; i++) {
-      int id = resProgram.relays[i].id - 1;
-      int timeon = resProgram.relays[i].timeon ?? 0;
-      int timeoff = resProgram.relays[i].timeoff ?? 0;
+    for (int i = 0; i < (resProgram?.relays.length ?? 0); i++) {
+      int id = (resProgram?.relays[i].id ?? 0) - 1;
+      int timeon = resProgram?.relays[i].timeon ?? 0;
+      int timeoff = resProgram?.relays[i].timeoff ?? 0;
       int percent = (100 * timeon / (timeon + timeoff)).round();
       program.relays[id] = percent;
     }
 
-    for (int i = 0; i < resProgram.preflightRelays.length; i++) {
-      int id = resProgram.preflightRelays[i].id - 1;
-      int timeon = resProgram.preflightRelays[i].timeon ?? 0;
-      int timeoff = resProgram.preflightRelays[i].timeoff ?? 0;
+    for (int i = 0; i < (resProgram?.preflightRelays.length ?? 0); i++) {
+      int id = (resProgram?.preflightRelays[i].id ?? 0) - 1;
+      int timeon = resProgram?.preflightRelays[i].timeon ?? 0;
+      int timeoff = resProgram?.preflightRelays[i].timeoff ?? 0;
       int percent = (100 * timeon / (timeon + timeoff)).round();
       program.relayPreflight[id] = percent;
     }
