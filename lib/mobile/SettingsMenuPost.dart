@@ -59,7 +59,7 @@ class _SettingsMenuPostState extends State<SettingsMenuPost> {
 
   void _getPost(SettingsMenuPostArgs settingsMenuPostArgs) async {
     try {
-      var args = ArgStation(
+      var args = StationRequest(
         id: settingsMenuPostArgs.stationID,
       );
 

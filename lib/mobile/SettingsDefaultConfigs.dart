@@ -37,7 +37,7 @@ class _SettingsDefaultConfigsState extends State<SettingsDefaultConfigs> {
           try {
             var args = ArgSetStationButton(
               stationID: i + 1,
-              buttons: config?.stationPrograms,
+              buttons: config!.stationPrograms,
             );
             var res = await sessionData.client.setStationButton(args);
           } catch (e) {}

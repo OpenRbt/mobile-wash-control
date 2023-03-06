@@ -401,7 +401,7 @@ class _EditPostMenuState extends State<EditPostMenu> with RouteAware {
                       ),
                       onPressed: () async {
                         try {
-                          var args = ArgSaveCollection(
+                          var args = StationRequest(
                             id: postMenuArgs.postID,
                           );
                           var res = await postMenuArgs.sessionData.client.saveCollection(args);
