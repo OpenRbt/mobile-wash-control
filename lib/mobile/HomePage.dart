@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -59,8 +59,13 @@ class _HomePageState extends State<HomePage> with RouteAware {
   Widget build(BuildContext context) {
     final SessionData sessionData = ModalRoute.of(context)?.settings.arguments as SessionData;
 
+    log("Home Page session data: \n");
+    log(sessionData.client.toString());
+
     double screenH = MediaQuery.of(context).size.height;
     double screenW = MediaQuery.of(context).size.width;
+
+    SharedData.RefreshStatus();
 
     return Scaffold(
       key: _scaffoldKey,
@@ -71,7 +76,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
       body: ValueListenableBuilder(
         valueListenable: SharedData.StationsData,
         builder: (BuildContext context, List<HomePageData> values, Widget? child) {
-          if (SharedData.StationsData.value == null || SharedData.StationsData.value.length == 0) {
+          log(SharedData.StationsData.value.toString());
+          if (SharedData.StationsData.value.isEmpty || SharedData.StationsData.value.length == 0) {
             return child ?? Container();
           }
           return Container(

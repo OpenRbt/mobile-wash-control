@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:core';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -39,6 +40,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {
 
+  /*
   await Firebase.initializeApp(
     // Replace with actual values
     options: FirebaseOptions(
@@ -51,7 +53,7 @@ void main() async {
         measurementId: "G-4HD7TZX4BE"
     ),
   );
-
+*/
   Intl.defaultLocale = "ru_RU";
   runApp(
     MyApp(),
@@ -169,7 +171,6 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
 
     if (Platform.isLinux) {
       List<NetworkInterface?> interfaces = await NetworkInterface.list(type: InternetAddressType.IPv4);
-      print(interfaces);
       NetworkInterface? target = interfaces.firstWhere((element) => element!.name.contains("en") || element.name.contains("wlan"), orElse: () {
         return null;
       });
@@ -249,13 +250,14 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
       }
     } else {
       int level = await WiFiForIoTPlugin.getCurrentSignalStrength() ?? 0;
+      log("Wi-fi strength level: " + level.toString()); // прям на роутере: -14; очень близко: -31; относительно близко: -56; достаточно далеко: -76
       String? localIp = await WiFiForIoTPlugin.getIP();
       _localIP = localIp ?? "";
       _scanIP = localIp?.substring(
         0,
         localIp.lastIndexOf('.'),
       ) ?? "";
-      _wifi = level > 0;
+      _wifi = level > -90 && level != 0;
       if (_wifi) {
         var subIPS = List.generate(256, (index) {
           return "$index";

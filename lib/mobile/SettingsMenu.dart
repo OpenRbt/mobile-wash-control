@@ -152,7 +152,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
         for (int i = 0; i < res.stations.length; i++) {
           if (res.stations[i].hash != null && (res.stations[i].hash?.length ?? 0) > 0) {
             var args = ArgLoad(
-              hash: res.stations[i].hash ?? "",
+              hash: res.stations[i].hash!,
               key: "curr_temp",
             );
             var resTemp = await sessionData.client.load(args);
