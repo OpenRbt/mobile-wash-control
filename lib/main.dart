@@ -3,9 +3,13 @@ import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_wash_control/utils/common.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+import 'package:mobile_wash_control/wash-admin-client/api.dart';
 
 import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
@@ -39,21 +43,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {
+  
+  Common.washServersApi = WashServersApi(ApiClient(basePath: 'http://app.openwashing.com:8070', authentication: HttpBearerAuth()));
 
-  /*
-  await Firebase.initializeApp(
-    // Replace with actual values
-    options: FirebaseOptions(
-        apiKey: "AIzaSyBq2HgLyU9y3G68uw_VaTSnxfZpvL8BxIo",
-        authDomain: "openwashing.firebaseapp.com",
-        projectId: "openwashing",
-        storageBucket: "openwashing.appspot.com",
-        messagingSenderId: "931729817638",
-        appId: "1:931729817638:web:0e6a02d606f0389e1c66e7",
-        measurementId: "G-4HD7TZX4BE"
-    ),
-  );
-*/
   Intl.defaultLocale = "ru_RU";
   runApp(
     MyApp(),
@@ -82,8 +74,8 @@ class MyApp extends StatelessWidget {
         "/mobile/settings/post": (context) => SettingsMenuPost(),
         "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
         "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
-        "/mobile/settings/services": (context) => SettingsServicesPage(),
-        "/mobile/settings/services-registration": (context) => SettingsServicesRegistrationPage(),
+        "/mobile/services": (context) => SettingsServicesPage(),
+        "/mobile/services-auth": (context) => SettingsServicesRegistrationPage(),
         "/mobile/statistics": (context) => StatisticsMenu(),
         "/mobile/motors": (context) => MotorMenu(),
         "/mobile/posts": (context) => PostsMenu(),

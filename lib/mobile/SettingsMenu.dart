@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/client/api.dart';
@@ -147,7 +149,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
         (a, b) => a.id.compareTo(b.id),
       );
       _firstLoad = false;
-
+      log("res.stations.length: " + res.stations.length.toString());
       if (res.stations.length > 0) {
         for (int i = 0; i < res.stations.length; i++) {
           if (res.stations[i].hash != null && (res.stations[i].hash?.length ?? 0) > 0) {
@@ -425,29 +427,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                       height: 50,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
-                                return Colors.lightGreen;
-                              }),
-                              foregroundColor: MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.disabled)) { return Colors.black; }
-                                return Colors.white;
-                              }),
-                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
-                          ),
-                          child: Text("Сервисы"),
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, "/mobile/settings/services-registration",
-                                arguments: {'sessionData': sessionData});
-                          },
-                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 25,
                     ),
                     SizedBox(
                       height: 50,

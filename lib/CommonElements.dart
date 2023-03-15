@@ -4,7 +4,29 @@ import 'package:mobile_wash_control/SharedData.dart';
 import 'dart:io';
 import 'package:mobile_wash_control/client/api.dart';
 
-enum Pages { Main, Programs, Advertisting, Settings, Accounts, Statistics, Motors, None }
+/*
+child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                return Colors.lightGreen;
+                              }),
+                              foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                return Colors.white;
+                              }),
+                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
+                          ),
+                          child: Text("Сервисы"),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, "/mobile/services-auth",
+                                arguments: {'sessionData': sessionData});
+                          },
+                        ),
+ */
+
+enum Pages { Main, Programs, Advertisting, Settings, Accounts, Services, Statistics, Motors, None }
 
 class SessionData {
   final DefaultApi client;
@@ -13,7 +35,7 @@ class SessionData {
 }
 
 Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessionData) {
-  var texts = ["Главная", "Программы", "Управление скидками", "Настройки", "Учетки", "Статистика", "Моторесурс", "Выход"];
+  var texts = ["Главная", "Программы", "Управление скидками", "Настройки", "Учетки", "Сервисы", "Статистика", "Моторесурс", "Выход"];
 
   var routes = [
     "/mobile/home",
@@ -21,6 +43,7 @@ Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessi
     "/mobile/advertisings",
     "/mobile/settings",
     "/mobile/accounts",
+    "/mobile/services-auth",
     "/mobile/statistics",
     "/mobile/motors",
   ];
