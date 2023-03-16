@@ -3,47 +3,41 @@ import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_wash_control/utils/common.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-
-import 'package:mobile_wash_control/wash-admin-client/api.dart';
-
-import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
+import 'package:mobile_wash_control/SharedData.dart';
+import 'package:mobile_wash_control/mobile/AccountsMenu.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/AdvertisingCampagins.dart';
 import 'package:mobile_wash_control/mobile/AdvertisingCampaginsCreate.dart';
 import 'package:mobile_wash_control/mobile/AdvertisingCampaginsEdit.dart';
-import 'package:mobile_wash_control/mobile/MotorMenu.dart';
-import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
-import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
-import 'package:mobile_wash_control/mobile/SettingsServicesPage.dart';
-import 'package:mobile_wash_control/mobile/SettingsServicesRegistrationPage.dart';
-import 'package:mobile_wash_control/mobile/SettingsDefaultConfigs.dart';
-import 'package:mobile_wash_control/mobile/SettingsMenuKasse.dart';
-import 'package:mobile_wash_control/mobile/SettingsMenuPost.dart';
-import 'package:mobile_wash_control/mobile/AccountsMenu.dart';
 import 'package:mobile_wash_control/mobile/AuthPage.dart';
 import 'package:mobile_wash_control/mobile/HomePage.dart';
+import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
+import 'package:mobile_wash_control/mobile/MotorMenu.dart';
 import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/PostsMenu.dart';
+import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
+import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';
+import 'package:mobile_wash_control/mobile/SettingsDefaultConfigs.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
+import 'package:mobile_wash_control/mobile/SettingsMenuKasse.dart';
+import 'package:mobile_wash_control/mobile/SettingsMenuPost.dart';
+import 'package:mobile_wash_control/mobile/SettingsServicesPage.dart';
+import 'package:mobile_wash_control/mobile/SettingsServicesRegistrationPage.dart';
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
-import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
-
+import 'package:mobile_wash_control/utils/common.dart';
+import 'package:mobile_wash_control/wash-admin-client/api.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 //import 'package:wifi/wifi.dart';
 import 'package:wifi_iot/wifi_iot.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {
-  
   Common.washServersApi = WashServersApi(ApiClient(basePath: 'http://app.openwashing.com:8070', authentication: HttpBearerAuth()));
 
   Intl.defaultLocale = "ru_RU";
@@ -62,8 +56,11 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: "/",
-      routes:  {
-        "/": (context) => MyHomePage(title: "Главная страница", key: null,),
+      routes: {
+        "/": (context) => MyHomePage(
+              title: "Главная страница",
+              key: null,
+            ),
         "/mobile/auth": (context) => AuthPage(),
         "/mobile/home": (context) => HomePage(),
         "/mobile/editPost": (context) => EditPostMenu(),
@@ -74,7 +71,7 @@ class MyApp extends StatelessWidget {
         "/mobile/settings/post": (context) => SettingsMenuPost(),
         "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
         "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
-        "/mobile/services": (context) => SettingsServicesPage(),
+        "/mobile/services": (context) => SettingsServicesPage(sessionData: ModalRoute.of(context)?.settings.arguments as SessionData),
         "/mobile/services-auth": (context) => SettingsServicesRegistrationPage(),
         "/mobile/statistics": (context) => StatisticsMenu(),
         "/mobile/motors": (context) => MotorMenu(),
@@ -246,9 +243,10 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
       String? localIp = await WiFiForIoTPlugin.getIP();
       _localIP = localIp ?? "";
       _scanIP = localIp?.substring(
-        0,
-        localIp.lastIndexOf('.'),
-      ) ?? "";
+            0,
+            localIp.lastIndexOf('.'),
+          ) ??
+          "";
       _wifi = level > -90 && level != 0;
       if (_wifi) {
         var subIPS = List.generate(256, (index) {
@@ -379,20 +377,14 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(_canScan ? Colors.lightGreen : Colors.yellow),
-                          overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
-                      ),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(_canScan ? Colors.lightGreen : Colors.yellow), overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
                       child: new Text(_canScan ? ("Поиск серверов") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(false);
                       },
                     ),
                     ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(_canScan ? Colors.lightGreen : Colors.yellow),
-                          overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
-                      ),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(_canScan ? Colors.lightGreen : Colors.yellow), overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
                       child: new Text(_canScan ? ("QUICK SCAN") : "Сканирование"),
                       onPressed: () {
                         if (_canScan) _scanLan(true);
@@ -433,9 +425,9 @@ class _MyHomePageState extends State<MyHomePage> with RouteAware {
                           size: 30,
                         ),
                         onTap: () {
-                            var args = AuthArgs("http://" + _servers.elementAt(index) + ":8020");
-                            Navigator.pushNamed(context, "/mobile/auth", arguments: args).then((value) {}, onError: (value) {});
-                            },
+                          var args = AuthArgs("http://" + _servers.elementAt(index) + ":8020");
+                          Navigator.pushNamed(context, "/mobile/auth", arguments: args).then((value) {}, onError: (value) {});
+                        },
                       );
                     },
                   )
