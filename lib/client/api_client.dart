@@ -38,10 +38,10 @@ class ApiClient {
   final _authentications = <String, Authentication>{};
 
   void addDefaultHeader(String key, String value) {
-    _defaultHeaderMap[key] = value;
+     _defaultHeaderMap[key] = value;
   }
 
-  Map<String, String> get defaultHeaderMap => _defaultHeaderMap;
+  Map<String,String> get defaultHeaderMap => _defaultHeaderMap;
 
   /// Returns an unmodifiable [Map] of the authentications, since none should be added
   /// or deleted.
@@ -68,9 +68,13 @@ class ApiClient {
 
     headerParams.addAll(_defaultHeaderMap);
 
-    final urlEncodedQueryParams = queryParams.where((param) => param.value != null).map((param) => '$param');
+    final urlEncodedQueryParams = queryParams
+      .where((param) => param.value != null)
+      .map((param) => '$param');
 
-    final queryString = urlEncodedQueryParams.isNotEmpty ? '?${urlEncodedQueryParams.join('&')}' : '';
+    final queryString = urlEncodedQueryParams.isNotEmpty
+      ? '?${urlEncodedQueryParams.join('&')}'
+      : '';
 
     final Uri uri = Uri.parse('$basePath$path$queryString');
 
@@ -80,16 +84,19 @@ class ApiClient {
 
     try {
       // Special case for uploading a single file which isn't a 'multipart/form-data'.
-      if (body is MultipartFile && (nullableContentType == null || !nullableContentType.toLowerCase().startsWith('multipart/form-data'))) {
+      if (
+        body is MultipartFile && (nullableContentType == null ||
+        !nullableContentType.toLowerCase().startsWith('multipart/form-data'))
+      ) {
         final request = StreamedRequest(method, uri);
         request.headers.addAll(headerParams);
         request.contentLength = body.length;
         body.finalize().listen(
-              request.sink.add,
-              onDone: request.sink.close,
-              onError: (error, trace) => request.sink.close(),
-              cancelOnError: true,
-            );
+          request.sink.add,
+          onDone: request.sink.close,
+          onError: (error, trace) => request.sink.close(),
+          cancelOnError: true,
+        );
         final response = await _client.send(request);
         return Response.fromStream(response);
       }
@@ -104,91 +111,37 @@ class ApiClient {
         return Response.fromStream(response);
       }
 
-      final msgBody = nullableContentType == 'application/x-www-form-urlencoded' ? formParams : await serializeAsync(body);
+      final msgBody = nullableContentType == 'application/x-www-form-urlencoded'
+        ? formParams
+        : await serializeAsync(body);
       final nullableHeaderParams = headerParams.isEmpty ? null : headerParams;
 
-      switch (method) {
-        case 'POST':
-          return await _client.post(
-            uri,
-            headers: nullableHeaderParams,
-            body: msgBody,
-          );
-        case 'PUT':
-          return await _client.put(
-            uri,
-            headers: nullableHeaderParams,
-            body: msgBody,
-          );
-        case 'DELETE':
-          return await _client.delete(
-            uri,
-            headers: nullableHeaderParams,
-            body: msgBody,
-          );
-        case 'PATCH':
-          return await _client.patch(
-            uri,
-            headers: nullableHeaderParams,
-            body: msgBody,
-          );
-        case 'HEAD':
-          return await _client.head(
-            uri,
-            headers: nullableHeaderParams,
-          );
-        case 'GET':
-          return await _client.get(
-            uri,
-            headers: nullableHeaderParams,
-          );
+      switch(method) {
+        case 'POST': return await _client.post(uri, headers: nullableHeaderParams, body: msgBody,);
+        case 'PUT': return await _client.put(uri, headers: nullableHeaderParams, body: msgBody,);
+        case 'DELETE': return await _client.delete(uri, headers: nullableHeaderParams, body: msgBody,);
+        case 'PATCH': return await _client.patch(uri, headers: nullableHeaderParams, body: msgBody,);
+        case 'HEAD': return await _client.head(uri, headers: nullableHeaderParams,);
+        case 'GET': return await _client.get(uri, headers: nullableHeaderParams,);
       }
     } on SocketException catch (e, trace) {
-      throw ApiException.withInner(
-        HttpStatus.badRequest,
-        'Socket operation failed: $method $path',
-        e,
-        trace,
-      );
+      throw ApiException.withInner(HttpStatus.badRequest, 'Socket operation failed: $method $path', e, trace,);
     } on TlsException catch (e, trace) {
-      throw ApiException.withInner(
-        HttpStatus.badRequest,
-        'TLS/SSL communication failed: $method $path',
-        e,
-        trace,
-      );
+      throw ApiException.withInner(HttpStatus.badRequest, 'TLS/SSL communication failed: $method $path', e, trace,);
     } on IOException catch (e, trace) {
-      throw ApiException.withInner(
-        HttpStatus.badRequest,
-        'I/O operation failed: $method $path',
-        e,
-        trace,
-      );
+      throw ApiException.withInner(HttpStatus.badRequest, 'I/O operation failed: $method $path', e, trace,);
     } on ClientException catch (e, trace) {
-      throw ApiException.withInner(
-        HttpStatus.badRequest,
-        'HTTP connection failed: $method $path',
-        e,
-        trace,
-      );
+      throw ApiException.withInner(HttpStatus.badRequest, 'HTTP connection failed: $method $path', e, trace,);
     } on Exception catch (e, trace) {
-      throw ApiException.withInner(
-        HttpStatus.badRequest,
-        'Exception occurred: $method $path',
-        e,
-        trace,
-      );
+      throw ApiException.withInner(HttpStatus.badRequest, 'Exception occurred: $method $path', e, trace,);
     }
 
-    throw ApiException(
-      HttpStatus.badRequest,
-      'Invalid HTTP operation: $method $path',
-    );
+    throw ApiException(HttpStatus.badRequest, 'Invalid HTTP operation: $method $path',);
   }
 
   Future<dynamic> deserializeAsync(String json, String targetType, {bool growable}) async =>
-      // ignore: deprecated_member_use_from_same_package
-      deserialize(json, targetType, growable: growable);
+    // ignore: deprecated_member_use_from_same_package
+    deserialize(json, targetType, growable: growable);
 
   @Deprecated('Scheduled for removal in OpenAPI Generator 6.x. Use deserializeAsync() instead.')
   dynamic deserialize(String json, String targetType, {bool growable}) {
@@ -196,7 +149,9 @@ class ApiClient {
     targetType = targetType.replaceAll(' ', ''); // ignore: parameter_assignments
 
     // If the expected target type is String, nothing to do...
-    return targetType == 'String' ? json : _deserialize(jsonDecode(json), targetType, growable: growable == true);
+    return targetType == 'String'
+      ? json
+      : _deserialize(jsonDecode(json), targetType, growable: growable == true);
   }
 
   // ignore: deprecated_member_use_from_same_package
@@ -212,7 +167,7 @@ class ApiClient {
     List<QueryParam> queryParams,
     Map<String, String> headerParams,
   ) {
-    for (final authName in authNames) {
+    for(final authName in authNames) {
       final auth = _authentications[authName];
       if (auth == null) {
         throw ArgumentError('Authentication undefined: $authName');
@@ -237,24 +192,38 @@ class ApiClient {
           break;
         case 'double':
           return value is double ? value : double.parse('$value');
+        case 'AdvertisingCampaign':
+          return AdvertisingCampaign.fromJson(value);
         case 'ArgAddServiceAmount':
           return ArgAddServiceAmount.fromJson(value);
+        case 'ArgAdvertisingCampagin':
+          return ArgAdvertisingCampagin.fromJson(value);
+        case 'ArgAdvertisingCampaignByID':
+          return ArgAdvertisingCampaignByID.fromJson(value);
         case 'ArgCardReaderConfig':
           return ArgCardReaderConfig.fromJson(value);
         case 'ArgCardReaderConfigByCash':
           return ArgCardReaderConfigByCash.fromJson(value);
         case 'ArgCollectionReportDates':
           return ArgCollectionReportDates.fromJson(value);
+        case 'ArgDelAdvertisingCampagin':
+          return ArgDelAdvertisingCampagin.fromJson(value);
         case 'ArgDelStation':
           return ArgDelStation.fromJson(value);
+        case 'ArgGetConfigVar':
+          return ArgGetConfigVar.fromJson(value);
+        case 'ArgGetConfigVar1':
+          return ArgGetConfigVar1.fromJson(value);
+        case 'ArgGetConfigVar2':
+          return ArgGetConfigVar2.fromJson(value);
+        case 'ArgGetStationDiscounts':
+          return ArgGetStationDiscounts.fromJson(value);
         case 'ArgLoad':
           return ArgLoad.fromJson(value);
         case 'ArgLoadFromStation':
           return ArgLoadFromStation.fromJson(value);
         case 'ArgLoadMoney':
           return ArgLoadMoney.fromJson(value);
-        case 'ArgLoadRelay':
-          return ArgLoadRelay.fromJson(value);
         case 'ArgOpenStation':
           return ArgOpenStation.fromJson(value);
         case 'ArgPing':
@@ -299,12 +268,24 @@ class ApiClient {
           return ArgUserPassword.fromJson(value);
         case 'ArgUserUpdate':
           return ArgUserUpdate.fromJson(value);
+        case 'ButtonDiscount':
+          return ButtonDiscount.fromJson(value);
         case 'CardReaderConfig':
           return CardReaderConfig.fromJson(value);
         case 'CollectionReport':
           return CollectionReport.fromJson(value);
         case 'CollectionReportWithUser':
           return CollectionReportWithUser.fromJson(value);
+        case 'ConfigVarBool':
+          return ConfigVarBool.fromJson(value);
+        case 'ConfigVarInt':
+          return ConfigVarInt.fromJson(value);
+        case 'ConfigVarString':
+          return ConfigVarString.fromJson(value);
+        case 'DiscountProgram':
+          return DiscountProgram.fromJson(value);
+        case 'InlineObject':
+          return InlineObject.fromJson(value);
         case 'InlineResponse409':
           return InlineResponse409.fromJson(value);
         case 'KasseConfig':
@@ -319,7 +300,7 @@ class ApiClient {
           return ProgramStat.fromJson(value);
         case 'RelayBoard':
           return RelayBoardTypeTransformer().decode(value);
-
+          
         case 'RelayConfig':
           return RelayConfig.fromJson(value);
         case 'RelayReport':
@@ -358,7 +339,7 @@ class ApiClient {
           return StationsVariables.fromJson(value);
         case 'Status':
           return StatusTypeTransformer().decode(value);
-
+          
         case 'StatusCollectionReport':
           return StatusCollectionReport.fromJson(value);
         case 'StatusReport':
@@ -371,11 +352,15 @@ class ApiClient {
           Match match;
           if (value is List && (match = _regList.firstMatch(targetType)) != null) {
             targetType = match[1]; // ignore: parameter_assignments
-            return value.map((v) => _deserialize(v, targetType, growable: growable)).toList(growable: growable);
+            return value
+              .map((v) => _deserialize(v, targetType, growable: growable))
+              .toList(growable: growable);
           }
           if (value is Set && (match = _regSet.firstMatch(targetType)) != null) {
             targetType = match[1]; // ignore: parameter_assignments
-            return value.map((v) => _deserialize(v, targetType, growable: growable)).toSet();
+            return value
+              .map((v) => _deserialize(v, targetType, growable: growable))
+              .toSet();
           }
           if (value is Map && (match = _regMap.firstMatch(targetType)) != null) {
             targetType = match[1]; // ignore: parameter_assignments
@@ -387,17 +372,9 @@ class ApiClient {
           break;
       }
     } catch (error, trace) {
-      throw ApiException.withInner(
-        HttpStatus.internalServerError,
-        'Exception during deserialization.',
-        error,
-        trace,
-      );
+      throw ApiException.withInner(HttpStatus.internalServerError, 'Exception during deserialization.', error, trace,);
     }
-    throw ApiException(
-      HttpStatus.internalServerError,
-      'Could not find a suitable class for deserialization',
-    );
+    throw ApiException(HttpStatus.internalServerError, 'Could not find a suitable class for deserialization',);
   }
 }
 
@@ -426,12 +403,12 @@ Future<dynamic> deserializeAsync(DeserializationMessage message) async {
 
   // If the expected target type is String, nothing to do...
   return targetType == 'String'
-      ? message.json
-      : ApiClient._deserialize(
-          jsonDecode(message.json),
-          targetType,
-          growable: message.growable == true,
-        );
+    ? message.json
+    : ApiClient._deserialize(
+        jsonDecode(message.json),
+        targetType,
+        growable: message.growable == true,
+      );
 }
 
 /// Primarily intended for use in an isolate.

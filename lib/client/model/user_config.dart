@@ -36,26 +36,31 @@ class UserConfig {
   bool isEngineer;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is UserConfig && other.login == login && other.firstName == firstName && other.middleName == middleName && other.lastName == lastName && other.isAdmin == isAdmin && other.isOperator == isOperator && other.isEngineer == isEngineer;
+  bool operator ==(Object other) => identical(this, other) || other is UserConfig &&
+     other.login == login &&
+     other.firstName == firstName &&
+     other.middleName == middleName &&
+     other.lastName == lastName &&
+     other.isAdmin == isAdmin &&
+     other.isOperator == isOperator &&
+     other.isEngineer == isEngineer;
 
   @override
   int get hashCode =>
-      (login == null ? 0 : login.hashCode) +
-      (firstName == null ? 0 : firstName.hashCode) +
-      (middleName == null ? 0 : middleName.hashCode) +
-      (lastName == null ? 0 : lastName.hashCode) +
-      (isAdmin == null ? 0 : isAdmin.hashCode) +
-      (isOperator == null ? 0 : isOperator.hashCode) +
-      (isEngineer == null ? 0 : isEngineer.hashCode);
+    (login == null ? 0 : login.hashCode) +
+    (firstName == null ? 0 : firstName.hashCode) +
+    (middleName == null ? 0 : middleName.hashCode) +
+    (lastName == null ? 0 : lastName.hashCode) +
+    (isAdmin == null ? 0 : isAdmin.hashCode) +
+    (isOperator == null ? 0 : isOperator.hashCode) +
+    (isEngineer == null ? 0 : isEngineer.hashCode);
 
   @override
   String toString() => 'UserConfig[login=$login, firstName=$firstName, middleName=$middleName, lastName=$lastName, isAdmin=$isAdmin, isOperator=$isOperator, isEngineer=$isEngineer]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'login'] = login;
+      json[r'login'] = login;
     if (firstName != null) {
       json[r'firstName'] = firstName;
     }
@@ -80,27 +85,21 @@ class UserConfig {
   /// Returns a new [UserConfig] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static UserConfig fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : UserConfig(
-          login: json[r'login'],
-          firstName: json[r'firstName'],
-          middleName: json[r'middleName'],
-          lastName: json[r'lastName'],
-          isAdmin: json[r'isAdmin'],
-          isOperator: json[r'isOperator'],
-          isEngineer: json[r'isEngineer'],
-        );
+    ? null
+    : UserConfig(
+        login: json[r'login'],
+        firstName: json[r'firstName'],
+        middleName: json[r'middleName'],
+        lastName: json[r'lastName'],
+        isAdmin: json[r'isAdmin'],
+        isOperator: json[r'isOperator'],
+        isEngineer: json[r'isEngineer'],
+    );
 
-  static List<UserConfig> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <UserConfig>[]
-          : json.map((dynamic value) => UserConfig.fromJson(value)).toList(growable: true == growable);
+  static List<UserConfig> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <UserConfig>[]
+      : json.map((dynamic value) => UserConfig.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, UserConfig> mapFromJson(Map<String, dynamic> json) {
     final map = <String, UserConfig>{};
@@ -111,21 +110,14 @@ class UserConfig {
   }
 
   // maps a json object with a list of UserConfig-objects as value to a dart map
-  static Map<String, List<UserConfig>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<UserConfig>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<UserConfig>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = UserConfig.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = UserConfig.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

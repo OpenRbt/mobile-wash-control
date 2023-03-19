@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,12 +26,16 @@ class _AuthPageState extends State<AuthPage> {
   SessionData _sessionData;
   String _currentPin = "";
 
-  void _loadPage() async{
+  void _loadPage() async {
     final prefs = await SharedPreferences.getInstance();
     final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
     GlobalData.AddServiceValue = addServiceValue;
     SystemChrome.setPreferredOrientations([]);
-    Navigator.pushReplacementNamed(context, "/mobile/home", arguments: _sessionData);
+    Navigator.pushReplacementNamed(
+      context,
+      "/mobile/home",
+      arguments: _sessionData,
+    );
   }
 
   void _authCheck() async {
@@ -40,6 +45,10 @@ class _AuthPageState extends State<AuthPage> {
       );
       _sessionData.client.apiClient.addDefaultHeader("Pin", _currentPin);
       var res = await _sessionData.client.getUser();
+      SharedData.sessionData = _sessionData;
+      if (!await SharedData.StartTimers()) {
+        print("Failed to start Timers");
+      }
       _loadPage();
     } on ApiException catch (e) {
       if (e.code == 401) {
@@ -66,72 +75,66 @@ class _AuthPageState extends State<AuthPage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    return WillPopScope(
-      onWillPop: () async {
-        SystemNavigator.pop();
-        return false;
-      },
-      child: Scaffold(
-        key: _scaffoldKey,
-        body: SafeArea(
-          child: OrientationBuilder(
-            builder: (context, orientation) {
-              return new Container(
-                width: screenW,
-                height: screenH,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ListView(children: [
-                    Container(
-                      height: 62,
-                      width: screenW / 4 * 3,
-                      child: DecoratedBox(
-                        child: Center(
-                          child: Text(
-                            _toDisplay(),
-                            style: TextStyle(fontSize: 40),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.black),
+    return Scaffold(
+      key: _scaffoldKey,
+      body: SafeArea(
+        child: OrientationBuilder(
+          builder: (context, orientation) {
+            return new Container(
+              width: screenW,
+              height: screenH,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView(children: [
+                  Container(
+                    height: 62,
+                    width: screenW / 4 * 3,
+                    child: DecoratedBox(
+                      child: Center(
+                        child: Text(
+                          _toDisplay(),
+                          style: TextStyle(fontSize: 40),
                         ),
                       ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black),
+                      ),
                     ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [_keyPadKey('1', screenW, screenH), _keyPadKey('2', screenW, screenH), _keyPadKey('3', screenW, screenH)],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [_keyPadKey('4', screenW, screenH), _keyPadKey('5', screenW, screenH), _keyPadKey('6', screenW, screenH)],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [_keyPadKey('7', screenW, screenH), _keyPadKey('8', screenW, screenH), _keyPadKey('9', screenW, screenH)],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _keyPadKey('с', screenW, screenH), // russian
-                        _keyPadKey('0', screenW, screenH),
-                        _keyPadKey(
-                          'Ок',
-                          screenW,
-                          screenH,
-                        ) // russian
-                      ],
-                    )
-                  ]),
-                ),
-              );
-            },
-          ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [_keyPadKey('1', screenW, screenH), _keyPadKey('2', screenW, screenH), _keyPadKey('3', screenW, screenH)],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [_keyPadKey('4', screenW, screenH), _keyPadKey('5', screenW, screenH), _keyPadKey('6', screenW, screenH)],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [_keyPadKey('7', screenW, screenH), _keyPadKey('8', screenW, screenH), _keyPadKey('9', screenW, screenH)],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _keyPadKey('с', screenW, screenH), // russian
+                      _keyPadKey('0', screenW, screenH),
+                      _keyPadKey(
+                        'Ок',
+                        screenW,
+                        screenH,
+                      ) // russian
+                    ],
+                  )
+                ]),
+              ),
+            );
+          },
         ),
       ),
     );

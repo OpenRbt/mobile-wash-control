@@ -18,38 +18,34 @@ class ArgSaveCollection {
   int id;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ArgSaveCollection && other.id == id;
+  bool operator ==(Object other) => identical(this, other) || other is ArgSaveCollection &&
+     other.id == id;
 
   @override
-  int get hashCode => (id == null ? 0 : id.hashCode);
+  int get hashCode =>
+    (id == null ? 0 : id.hashCode);
 
   @override
   String toString() => 'ArgSaveCollection[id=$id]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'id'] = id;
+      json[r'id'] = id;
     return json;
   }
 
   /// Returns a new [ArgSaveCollection] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static ArgSaveCollection fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : ArgSaveCollection(
-          id: json[r'id'],
-        );
+    ? null
+    : ArgSaveCollection(
+        id: json[r'id'],
+    );
 
-  static List<ArgSaveCollection> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <ArgSaveCollection>[]
-          : json.map((dynamic value) => ArgSaveCollection.fromJson(value)).toList(growable: true == growable);
+  static List<ArgSaveCollection> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <ArgSaveCollection>[]
+      : json.map((dynamic value) => ArgSaveCollection.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, ArgSaveCollection> mapFromJson(Map<String, dynamic> json) {
     final map = <String, ArgSaveCollection>{};
@@ -60,21 +56,14 @@ class ArgSaveCollection {
   }
 
   // maps a json object with a list of ArgSaveCollection-objects as value to a dart map
-  static Map<String, List<ArgSaveCollection>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<ArgSaveCollection>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<ArgSaveCollection>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = ArgSaveCollection.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = ArgSaveCollection.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

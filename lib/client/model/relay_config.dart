@@ -25,10 +25,16 @@ class RelayConfig {
   int timeoff;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is RelayConfig && other.id == id && other.timeon == timeon && other.timeoff == timeoff;
+  bool operator ==(Object other) => identical(this, other) || other is RelayConfig &&
+     other.id == id &&
+     other.timeon == timeon &&
+     other.timeoff == timeoff;
 
   @override
-  int get hashCode => (id == null ? 0 : id.hashCode) + (timeon == null ? 0 : timeon.hashCode) + (timeoff == null ? 0 : timeoff.hashCode);
+  int get hashCode =>
+    (id == null ? 0 : id.hashCode) +
+    (timeon == null ? 0 : timeon.hashCode) +
+    (timeoff == null ? 0 : timeoff.hashCode);
 
   @override
   String toString() => 'RelayConfig[id=$id, timeon=$timeon, timeoff=$timeoff]';
@@ -50,23 +56,17 @@ class RelayConfig {
   /// Returns a new [RelayConfig] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static RelayConfig fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : RelayConfig(
-          id: json[r'id'],
-          timeon: json[r'timeon'],
-          timeoff: json[r'timeoff'],
-        );
+    ? null
+    : RelayConfig(
+        id: json[r'id'],
+        timeon: json[r'timeon'],
+        timeoff: json[r'timeoff'],
+    );
 
-  static List<RelayConfig> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <RelayConfig>[]
-          : json.map((dynamic value) => RelayConfig.fromJson(value)).toList(growable: true == growable);
+  static List<RelayConfig> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <RelayConfig>[]
+      : json.map((dynamic value) => RelayConfig.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, RelayConfig> mapFromJson(Map<String, dynamic> json) {
     final map = <String, RelayConfig>{};
@@ -77,21 +77,14 @@ class RelayConfig {
   }
 
   // maps a json object with a list of RelayConfig-objects as value to a dart map
-  static Map<String, List<RelayConfig>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<RelayConfig>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<RelayConfig>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = RelayConfig.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = RelayConfig.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

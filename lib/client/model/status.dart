@@ -9,6 +9,7 @@
 
 part of openapi.api;
 
+
 class Status {
   /// Instantiate a new enum with the provided [value].
   const Status._(this.value);
@@ -30,18 +31,15 @@ class Status {
     online,
   ];
 
-  static Status fromJson(dynamic value) => StatusTypeTransformer().decode(value);
+  static Status fromJson(dynamic value) =>
+    StatusTypeTransformer().decode(value);
 
-  static List<Status> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <Status>[]
-          : json.map((value) => Status.fromJson(value)).toList(growable: true == growable);
+  static List<Status> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <Status>[]
+      : json
+          .map((value) => Status.fromJson(value))
+          .toList(growable: true == growable);
 }
 
 /// Transformation class that can [encode] an instance of [Status] to String,
@@ -63,10 +61,8 @@ class StatusTypeTransformer {
   /// and users are still using an old app with the old code.
   Status decode(dynamic data, {bool allowNull}) {
     switch (data) {
-      case r'offline':
-        return Status.offline;
-      case r'online':
-        return Status.online;
+      case r'offline': return Status.offline;
+      case r'online': return Status.online;
       default:
         if (allowNull == false) {
           throw ArgumentError('Unknown enum value to decode: $data');

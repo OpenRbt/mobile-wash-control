@@ -24,10 +24,16 @@ class ProgramStat {
   int timeOn;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ProgramStat && other.programID == programID && other.programName == programName && other.timeOn == timeOn;
+  bool operator ==(Object other) => identical(this, other) || other is ProgramStat &&
+     other.programID == programID &&
+     other.programName == programName &&
+     other.timeOn == timeOn;
 
   @override
-  int get hashCode => (programID == null ? 0 : programID.hashCode) + (programName == null ? 0 : programName.hashCode) + (timeOn == null ? 0 : timeOn.hashCode);
+  int get hashCode =>
+    (programID == null ? 0 : programID.hashCode) +
+    (programName == null ? 0 : programName.hashCode) +
+    (timeOn == null ? 0 : timeOn.hashCode);
 
   @override
   String toString() => 'ProgramStat[programID=$programID, programName=$programName, timeOn=$timeOn]';
@@ -49,23 +55,17 @@ class ProgramStat {
   /// Returns a new [ProgramStat] instance and imports its values from
   /// [json] if it's non-null, null if [json] is null.
   static ProgramStat fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : ProgramStat(
-          programID: json[r'programID'],
-          programName: json[r'programName'],
-          timeOn: json[r'timeOn'],
-        );
+    ? null
+    : ProgramStat(
+        programID: json[r'programID'],
+        programName: json[r'programName'],
+        timeOn: json[r'timeOn'],
+    );
 
-  static List<ProgramStat> listFromJson(
-    List<dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) =>
-      json == null || json.isEmpty
-          ? true == emptyIsNull
-              ? null
-              : <ProgramStat>[]
-          : json.map((dynamic value) => ProgramStat.fromJson(value)).toList(growable: true == growable);
+  static List<ProgramStat> listFromJson(List<dynamic> json, {bool emptyIsNull, bool growable,}) =>
+    json == null || json.isEmpty
+      ? true == emptyIsNull ? null : <ProgramStat>[]
+      : json.map((dynamic value) => ProgramStat.fromJson(value)).toList(growable: true == growable);
 
   static Map<String, ProgramStat> mapFromJson(Map<String, dynamic> json) {
     final map = <String, ProgramStat>{};
@@ -76,21 +76,14 @@ class ProgramStat {
   }
 
   // maps a json object with a list of ProgramStat-objects as value to a dart map
-  static Map<String, List<ProgramStat>> mapListFromJson(
-    Map<String, dynamic> json, {
-    bool emptyIsNull,
-    bool growable,
-  }) {
+  static Map<String, List<ProgramStat>> mapListFromJson(Map<String, dynamic> json, {bool emptyIsNull, bool growable,}) {
     final map = <String, List<ProgramStat>>{};
     if (json?.isNotEmpty == true) {
       json.forEach((key, value) {
-        map[key] = ProgramStat.listFromJson(
-          value,
-          emptyIsNull: emptyIsNull,
-          growable: growable,
-        );
+        map[key] = ProgramStat.listFromJson(value, emptyIsNull: emptyIsNull, growable: growable,);
       });
     }
     return map;
   }
 }
+

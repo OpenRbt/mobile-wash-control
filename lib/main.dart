@@ -3,11 +3,16 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
+import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/desktop/_DesktopPages.dart' as desktop;
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/desktop/DViewPage.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/AdvertisingCampagins.dart';
+import 'package:mobile_wash_control/mobile/AdvertisingCampaginsCreate.dart';
+import 'package:mobile_wash_control/mobile/AdvertisingCampaginsEdit.dart';
 import 'package:mobile_wash_control/mobile/MotorMenu.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
@@ -20,7 +25,6 @@ import 'package:mobile_wash_control/mobile/HomePage.dart';
 import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/PostsMenu.dart';
 import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';
-import 'package:mobile_wash_control/mobile/ServersPage.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
@@ -29,6 +33,7 @@ import 'package:wifi/wifi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {
   Intl.defaultLocale = "ru_RU";
   runApp(
@@ -47,13 +52,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: Platform.isAndroid ? PagesRoutes.routes["MOBILE"] : PagesRoutes.routes["DESKTOP"],
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate
-      ],
-      supportedLocales: [
-        const Locale('en'),
-        const Locale('ru')
-      ],
+      localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+      supportedLocales: [const Locale('en'), const Locale('ru')],
+      navigatorObservers: <NavigatorObserver>[routeObserver],
     );
   }
 }
@@ -67,7 +68,31 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with RouteAware {
+  PackageInfo _packageInfo = PackageInfo(
+    appName: '',
+    packageName: '',
+    version: '',
+    buildNumber: '',
+    buildSignature: '',
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  void didPopNext() {
+    SharedData.StopTimers();
+  }
+
   String _scanMSG = "";
   String _localIP = "0.0.0.0";
   String _scanIP = "";
@@ -80,6 +105,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _servers = new HashSet();
+    _initPackageInfo();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
   }
 
   void _scanLan(bool quick) async {
@@ -261,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var appBar = AppBar(
       title: Text("${widget.title}"),
-      leading: Text("${DefaultConfig.appVersion}"),
+      leading: Text("${_packageInfo.version}"),
     );
 
     var screenW = MediaQuery.of(context).size.width;
@@ -366,7 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.pushNamed(context, "/desktop/auth", arguments: args);
                           } else {
                             var args = AuthArgs("http://" + _servers.elementAt(index) + ":8020");
-                            Navigator.pushNamed(context, "/mobile/auth", arguments: args);
+                            Navigator.pushNamed(context, "/mobile/auth", arguments: args).then((value) {}, onError: (value) {});
                           }
                         },
                       );
@@ -413,7 +446,7 @@ class PagesRoutes {
       "/mobile/settings/kasse": (context) => SettingsMenuKasse(),
       "/mobile/settings/default": (context) => SettingsDefaultConfigs(),
       "/dekstop/incassation": (context) => desktop.DIncassationHistory(),
-      "/desktop/motors":(context) => desktop.DMotorMenu(),
+      "/desktop/motors": (context) => desktop.DMotorMenu(),
     },
     "MOBILE": {
       "/": (context) => MyHomePage(title: "Главная страница"),
@@ -434,6 +467,9 @@ class PagesRoutes {
       "/mobile/accounts/edit": (context) => AccountsMenuEdit(),
       "/mobile/accounts/add": (context) => AccountsMenuAdd(),
       "/mobile/incassation": (context) => IncassationHistory(),
+      "/mobile/advertisings": (conmtext) => AdvertisingCampagins(),
+      "/mobile/advertisings/create": (context) => AdvertisingCampaginsCreate(),
+      "/mobile/advertisings/edit": (context) => AdvertisingCampaginsEdit(),
     }
   };
 }

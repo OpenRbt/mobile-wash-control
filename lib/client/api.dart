@@ -28,15 +28,22 @@ part 'auth/http_bearer_auth.dart';
 
 part 'api/default_api.dart';
 
+part 'model/advertising_campaign.dart';
 part 'model/arg_add_service_amount.dart';
+part 'model/arg_advertising_campagin.dart';
+part 'model/arg_advertising_campaign_by_id.dart';
 part 'model/arg_card_reader_config.dart';
 part 'model/arg_card_reader_config_by_cash.dart';
 part 'model/arg_collection_report_dates.dart';
+part 'model/arg_del_advertising_campagin.dart';
 part 'model/arg_del_station.dart';
+part 'model/arg_get_config_var.dart';
+part 'model/arg_get_config_var1.dart';
+part 'model/arg_get_config_var2.dart';
+part 'model/arg_get_station_discounts.dart';
 part 'model/arg_load.dart';
 part 'model/arg_load_from_station.dart';
 part 'model/arg_load_money.dart';
-part 'model/arg_load_relay.dart';
 part 'model/arg_open_station.dart';
 part 'model/arg_ping.dart';
 part 'model/arg_press_button.dart';
@@ -59,9 +66,15 @@ part 'model/arg_user_create.dart';
 part 'model/arg_user_delete.dart';
 part 'model/arg_user_password.dart';
 part 'model/arg_user_update.dart';
+part 'model/button_discount.dart';
 part 'model/card_reader_config.dart';
 part 'model/collection_report.dart';
 part 'model/collection_report_with_user.dart';
+part 'model/config_var_bool.dart';
+part 'model/config_var_int.dart';
+part 'model/config_var_string.dart';
+part 'model/discount_program.dart';
+part 'model/inline_object.dart';
 part 'model/inline_response409.dart';
 part 'model/kasse_config.dart';
 part 'model/key_pair.dart';
@@ -92,6 +105,7 @@ part 'model/status_collection_report.dart';
 part 'model/status_report.dart';
 part 'model/user_config.dart';
 part 'model/users_report.dart';
+
 
 const _delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};
 const _dateEpochMarker = 'epoch';
