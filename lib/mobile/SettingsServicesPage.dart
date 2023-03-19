@@ -92,13 +92,27 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     var sessionData = widget.sessionData;
 
     try {
-      var washServer = await Common.washServersApi!.callGet(body: WashServerGet(id: _washServer.id!));
+      var washServer = await Common.washServersApi!.getWashServer(_washServer.id!);
 
       setState(() {
         _washServer.name = washServer?.name;
         _washServer.description = washServer?.description;
         _washServer.serviceKey = washServer?.serviceKey;
+
+        _serverNameController.text = _washServer.name ?? "";
+        _serverDescriptionController.text = _washServer.description ?? "";
       });
+    } on WashAdminApi.ApiException catch (e) {
+      if (kDebugMode) print("WashAdminApiException: $e");
+    } catch (e) {
+      if (kDebugMode) print("OtherException: $e");
+    }
+  }
+
+  Future<void> _updateWashServer() async {
+    try {
+      var res = await Common.washServersApi!.update(body: WashServerUpdate(id: _washServer.id!, name: _serverNameController.text, description: _serverDescriptionController.text));
+      await _getWashServer();
     } on WashAdminApi.ApiException catch (e) {
       if (kDebugMode) print("WashAdminApiException: $e");
     } catch (e) {
@@ -281,7 +295,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
               children: [
                 Flexible(
                   flex: 1,
-                  fit: FlexFit.loose,
                   child: ElevatedButton(
                     onPressed: _remoteWashServer == null && (_washServer.id ?? "").isEmpty ? _RegisterWash : null,
                     child: Text(
@@ -292,9 +305,12 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                 ),
                 Flexible(
                   flex: 1,
-                  fit: FlexFit.loose,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_serverNameController.text.isNotEmpty) {
+                        _updateWashServer();
+                      }
+                    },
                     child: Text(
                       "Сохранить изменения",
                       maxLines: 2,
@@ -304,17 +320,22 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: _remoteWashServer != null || (_washServer.id ?? "").isNotEmpty ? _saveParams : null,
-                child: Text(
-                  "Повторно записать ID и ключ",
-                  maxLines: 2,
+          Card(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: _remoteWashServer != null || (_washServer.id ?? "").isNotEmpty ? _saveParams : null,
+                    child: Text(
+                      "Повторно записать ID и ключ",
+                      maxLines: 2,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

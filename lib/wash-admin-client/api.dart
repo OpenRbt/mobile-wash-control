@@ -36,7 +36,6 @@ part 'model/pagination.dart';
 part 'model/wash_server.dart';
 part 'model/wash_server_add.dart';
 part 'model/wash_server_delete.dart';
-part 'model/wash_server_get.dart';
 part 'model/wash_server_update.dart';
 
 

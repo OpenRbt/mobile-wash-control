@@ -193,8 +193,6 @@ class ApiClient {
           return WashServerAdd.fromJson(value);
         case 'WashServerDelete':
           return WashServerDelete.fromJson(value);
-        case 'WashServerGet':
-          return WashServerGet.fromJson(value);
         case 'WashServerUpdate':
           return WashServerUpdate.fromJson(value);
         default:
