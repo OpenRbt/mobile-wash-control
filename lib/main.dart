@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/SharedData.dart';
+import 'package:mobile_wash_control/application/Application.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenu.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuAdd.dart';
 import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
@@ -38,11 +39,11 @@ import 'package:wifi_iot/wifi_iot.dart';
 
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {
-  Common.washServersApi = WashServersApi(ApiClient(basePath: 'http://app.openwashing.com:8070', authentication: HttpBearerAuth()));
+  Common.washServersApi = WashServersApi(ApiClient(basePath: 'http://192.168.1.4:8082', authentication: HttpBearerAuth()));
 
   Intl.defaultLocale = "ru_RU";
   runApp(
-    MyApp(),
+    Application(),
   );
 }
 

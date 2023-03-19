@@ -1,30 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:mobile_wash_control/SharedData.dart';
 import 'dart:io';
-import 'package:mobile_wash_control/client/api.dart';
 
-/*
-child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
-                                return Colors.lightGreen;
-                              }),
-                              foregroundColor: MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.disabled)) { return Colors.black; }
-                                return Colors.white;
-                              }),
-                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
-                          ),
-                          child: Text("Сервисы"),
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, "/mobile/services-auth",
-                                arguments: {'sessionData': sessionData});
-                          },
-                        ),
- */
+import 'package:flutter/material.dart';
+import 'package:mobile_wash_control/SharedData.dart';
+import 'package:mobile_wash_control/client/api.dart';
 
 enum Pages { Main, Programs, Advertisting, Settings, Accounts, Services, Statistics, Motors, None }
 
@@ -35,7 +13,29 @@ class SessionData {
 }
 
 Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessionData) {
-  var texts = ["Главная", "Программы", "Управление скидками", "Настройки", "Учетки", "Сервисы", "Статистика", "Моторесурс", "Выход"];
+  var texts = [
+    "Главная",
+    "Программы",
+    "Управление скидками",
+    "Настройки",
+    "Учетки",
+    "Сервисы",
+    "Статистика",
+    "Моторесурс",
+    "Выход",
+  ];
+
+  var icons = <Icon>[
+    Icon(Icons.home_outlined),
+    Icon(Icons.schema_outlined),
+    Icon(Icons.discount_outlined),
+    Icon(Icons.settings_outlined),
+    Icon(Icons.people_outline),
+    Icon(Icons.power_outlined),
+    Icon(Icons.show_chart_outlined),
+    Icon(Icons.table_chart_outlined),
+    Icon(Icons.exit_to_app_outlined),
+  ];
 
   var routes = [
     "/mobile/home",
@@ -48,100 +48,79 @@ Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessi
     "/mobile/motors",
   ];
 
+  var theme = Theme.of(context);
+
   var styles = new List.filled(
     texts.length,
-    TextStyle(fontSize: 30),
+    theme.textTheme.titleMedium,
   );
-  styles[selectedPage.index] = TextStyle(fontSize: 40, fontWeight: FontWeight.bold);
+  styles[selectedPage.index] = theme.textTheme.titleLarge;
 
-  var textElements = [];
+  var textElements = <Widget>[];
   for (int i = 0; i < texts.length; i++) {
-    textElements.add(
-      Text(texts[i], style: styles[i]),
-    );
+    textElements.add(NavigationDrawerDestination(
+      icon: icons[i],
+      label: Text(
+        texts[i],
+        style: styles[i],
+      ),
+    ));
   }
 
   var screenWidth = MediaQuery.of(context).size.width;
   var screenHeight = MediaQuery.of(context).size.height;
   var isPortrait = screenWidth < screenHeight;
 
-  return SafeArea(
-    minimum: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-    child: ScrollConfiguration(
-      behavior: MyScrollingBehavior(),
-      child: FittedBox(
-        child: Container(
-          width: screenWidth * 3 / 4 * (isPortrait ? 1 : screenHeight / screenWidth),
-          height: screenHeight,
-          child: CustomPaint(
-            painter: MyPainter(context),
-            child: ListTileTheme(
-              style: ListTileStyle.drawer,
-              child: Flex(direction: Axis.horizontal, children: [
-                Expanded(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: texts.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var onTap = index == texts.length - 1
-                          ? () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text("Выход"),
-                                  content: Text("Выйти из приложения?"),
-                                  actionsPadding: EdgeInsets.all(10),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        exit(0);
-                                      },
-                                      child: Text("Да"),
-                                    ),
-                                    ElevatedButton(
-                                      style: ButtonStyle(
-                                          backgroundColor: MaterialStateProperty.resolveWith((states) {
-                                            if (states.contains(MaterialState.disabled)) { return Colors.grey; }
-                                            return Colors.lightGreen;
-                                          }),
-                                          foregroundColor: MaterialStateProperty.resolveWith((states) {
-                                            if (states.contains(MaterialState.disabled)) { return Colors.black; }
-                                            return Colors.white;
-                                          }),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text("Нет"),
-                                    )
-                                  ],
-                                ),
-                              );
-                            }
-                          : () {
-                              if (routes[index] != routes[0]) {
-                                SharedData.CanUpdateStatus = false;
-                              } else {
-                                SharedData.CanUpdateStatus = true;
-                              }
-                              Navigator.pop(context); //Closing Drawer
-                              Navigator.pushReplacementNamed(Navigator.of(context).context, routes[index], arguments: sessionData);
-                            };
-                      return ListTile(title: textElements[index], onTap: onTap);
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(
-                        height: screenHeight / (isPortrait ? 12 : 24),
-                      );
-                    },
-                  ),
-                )
-              ]),
-            ),
+  return NavigationDrawer(
+    children: textElements,
+    selectedIndex: selectedPage.index,
+    onDestinationSelected: (int index) {
+      if (index == texts.length - 1) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Выход"),
+            content: Text("Выйти из приложения?"),
+            actionsPadding: EdgeInsets.all(10),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  exit(0);
+                },
+                child: Text("Да"),
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.disabled)) {
+                      return Colors.grey;
+                    }
+                    return Colors.lightGreen;
+                  }),
+                  foregroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.disabled)) {
+                      return Colors.black;
+                    }
+                    return Colors.white;
+                  }),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Нет"),
+              )
+            ],
           ),
-        ),
-      ),
-    ),
+        );
+      }
+      if (routes[index] != routes[0]) {
+        SharedData.CanUpdateStatus = false;
+      } else {
+        SharedData.CanUpdateStatus = true;
+      }
+      Navigator.pop(context); //Closing Drawer
+      Navigator.pushReplacementNamed(Navigator.of(context).context, routes[index], arguments: sessionData);
+    },
   );
 }
 
@@ -186,14 +165,18 @@ void showErrorDialog(BuildContext context, String text) {
       actions: [
         ElevatedButton(
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
-                return Colors.lightGreen;
-              }),
-              foregroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.disabled)) { return Colors.black; }
-                return Colors.white;
-              }),
+            backgroundColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return Colors.grey;
+              }
+              return Colors.lightGreen;
+            }),
+            foregroundColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return Colors.black;
+              }
+              return Colors.white;
+            }),
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -222,16 +205,19 @@ void showInfoSnackBar(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey
     if (scaffoldKey.currentState == null) return;
   }
   isSnackBarActive.value = true;
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        text ?? ('Успешно выполнено'),
-        style: TextStyle(color: Colors.white),
-      ),
-      backgroundColor: color ?? Colors.grey,
-      duration: Duration(seconds: 2),
-    ),
-  ).closed.then((SnackBarClosedReason reason) {
+  ScaffoldMessenger.of(context)
+      .showSnackBar(
+        SnackBar(
+          content: Text(
+            text ?? ('Успешно выполнено'),
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: color ?? Colors.grey,
+          duration: Duration(seconds: 2),
+        ),
+      )
+      .closed
+      .then((SnackBarClosedReason reason) {
     isSnackBarActive.value = false;
   }).timeout(Duration(seconds: 4), onTimeout: () {
     isSnackBarActive.value = false;
@@ -415,7 +401,6 @@ ResponseStationButtonButtonsInner _getProgramButton(int buttonID, int programID)
 
   return tmp;
 }
-
 
 class GlobalData {
   static int AddServiceValue = 10;
