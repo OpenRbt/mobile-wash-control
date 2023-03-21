@@ -289,53 +289,49 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
               ),
             ),
           ),
-          Card(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: _remoteWashServer == null && (_washServer.id ?? "").isEmpty ? _RegisterWash : null,
-                    child: Text(
-                      "Зарегистрировать мойку",
-                      maxLines: 2,
-                    ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Flexible(
+                flex: 1,
+                child: ElevatedButton(
+                  onPressed: _remoteWashServer == null && (_washServer.id ?? "").isEmpty ? _RegisterWash : null,
+                  child: Text(
+                    "Зарегистрировать мойку",
+                    maxLines: 2,
                   ),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_serverNameController.text.isNotEmpty) {
-                        _updateWashServer();
-                      }
-                    },
-                    child: Text(
-                      "Сохранить изменения",
-                      maxLines: 2,
-                    ),
+              ),
+              Flexible(
+                flex: 1,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_serverNameController.text.isNotEmpty) {
+                      _updateWashServer();
+                    }
+                  },
+                  child: Text(
+                    "Сохранить изменения",
+                    maxLines: 2,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Card(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: _remoteWashServer != null || (_washServer.id ?? "").isNotEmpty ? _saveParams : null,
-                    child: Text(
-                      "Повторно записать ID и ключ",
-                      maxLines: 2,
-                    ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Flexible(
+                flex: 1,
+                child: ElevatedButton(
+                  onPressed: _remoteWashServer != null || (_washServer.id ?? "").isNotEmpty ? _saveParams : null,
+                  child: Text(
+                    "Повторно записать ID и ключ",
+                    maxLines: 2,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

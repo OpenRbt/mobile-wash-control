@@ -18,7 +18,7 @@ class HomePageData {
   HomePageData(this.id, this.name, this.ip, this.hash, this.status, this.info, this.currentBalance, this.currentProgramName, this.currentProgramID);
   HomePageData.fromStationStatus(StationStatus? status) {
     this.id = status?.id ?? 0;
-    this.ip = status?.ip ?? "___.___.___.___";
+    this.ip = status?.ip ?? "Нет данных";
     this.name = status?.name ?? "";
     this.hash = status?.hash ?? "";
     this.status = status?.status?.value ?? "";
@@ -33,6 +33,8 @@ class HomePageData {
       } else {
         this.currentProgramName = status!.currentProgramName ?? "";
       }
+    } else {
+      this.currentProgramName = "Ожидание...";
     }
   }
 }
@@ -41,8 +43,7 @@ class SharedData {
   static late SessionData? sessionData;
 
   static ValueNotifier<String> StatuslcwInfo = ValueNotifier("");
-  static ValueNotifier<String> StatusKasseInfo = ValueNotifier("");
-  static ValueNotifier<String> StatusKasse = ValueNotifier("");
+  static ValueNotifier<String?> StatusKasse = ValueNotifier(null);
 
   static ValueNotifier<List<HomePageData>> StationsData = ValueNotifier([]);
   static ValueNotifier<List<Program>> Programs = ValueNotifier([]);
@@ -80,8 +81,7 @@ class SharedData {
       SharedData.StationsData.value = [];
 
       SharedData.StatuslcwInfo.value = "";
-      SharedData.StatusKasse.value = "";
-      SharedData.StatusKasseInfo.value = "";
+      SharedData.StatusKasse.value = null;
     } catch (Exception) {
       return false;
     }
@@ -105,8 +105,7 @@ class SharedData {
       }
       SharedData.StationsData.value = tmpStationsStatus;
       SharedData.StatuslcwInfo.value = statusRes?.lcwInfo ?? "";
-      SharedData.StatusKasse.value = statusRes?.kasseInfo ?? "";
-      SharedData.StatusKasseInfo.value = statusRes?.kasseInfo ?? "";
+      SharedData.StatusKasse.value = statusRes?.kasseStatus?.toString();
     } catch (Exception) {
       print(Exception);
     }

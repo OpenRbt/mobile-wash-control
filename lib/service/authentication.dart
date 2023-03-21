@@ -30,9 +30,7 @@ class Authentication {
         print(e);
       }
     } else {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
-
-      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
 
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;

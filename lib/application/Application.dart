@@ -7,7 +7,6 @@ import 'package:mobile_wash_control/mobile/AccountsMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/AdvertisingCampagins.dart';
 import 'package:mobile_wash_control/mobile/AdvertisingCampaginsCreate.dart';
 import 'package:mobile_wash_control/mobile/AdvertisingCampaginsEdit.dart';
-import 'package:mobile_wash_control/mobile/HomePage.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
 import 'package:mobile_wash_control/mobile/MotorMenu.dart';
 import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
@@ -24,6 +23,7 @@ import 'package:mobile_wash_control/mobile/SettingsServicesRegistrationPage.dart
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
 import 'package:mobile_wash_control/mobile/pages/auth.dart';
 import 'package:mobile_wash_control/mobile/pages/home.dart';
+import 'package:mobile_wash_control/mobile/pages/overview.dart';
 
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 
@@ -42,7 +42,7 @@ class Application extends StatelessWidget {
         "/mobile/auth": (context) => Auth(
               host: ModalRoute.of(context)?.settings.arguments as String,
             ),
-        "/mobile/home": (context) => HomePage(),
+        "/mobile/home": (context) => OverviewPage(sessionData: ModalRoute.of(context)?.settings.arguments as SessionData),
         "/mobile/editPost": (context) => EditPostMenu(),
         "/mobile/programs": (context) => ProgramsMenu(),
         "/mobile/programs/edit": (context) => ProgramMenuEdit(),
