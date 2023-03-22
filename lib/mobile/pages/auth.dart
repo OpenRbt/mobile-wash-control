@@ -61,7 +61,7 @@ class _AuthState extends State<Auth> {
   }
 
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: Column(
@@ -98,7 +98,7 @@ class _AuthState extends State<Auth> {
             ],
           ),
           GridView.count(
-            physics: BouncingScrollPhysics(),
+            physics: ClampingScrollPhysics(),
             shrinkWrap: true,
             padding: const EdgeInsets.all(20),
             crossAxisSpacing: 10,

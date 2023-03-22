@@ -95,14 +95,16 @@ class SharedData {
       }
       _StatusInUpdate = true;
       var statusRes = await SharedData.sessionData?.client.status();
-      statusRes?.stations.sort((a, b) => a.id!.compareTo(b.id!));
+      statusRes?.stations.where((element) => element.id != null).toList().sort((a, b) => a.id!.compareTo(b.id!));
+
       List<HomePageData> tmpStationsStatus = [];
-      var length = statusRes?.stations.length ?? 0;
-      for (int i = 0; i < length; i++) {
-        if ((statusRes?.stations[i].hash ?? "").isNotEmpty) {
-          tmpStationsStatus.add(HomePageData.fromStationStatus(statusRes?.stations[i]));
+      statusRes?.stations.forEach((element) {
+        if (element.id != null) {
+          tmpStationsStatus.add(HomePageData.fromStationStatus(element));
         }
-      }
+      });
+      tmpStationsStatus.sort((a, b) => a.id.compareTo(b.id));
+
       SharedData.StationsData.value = tmpStationsStatus;
       SharedData.StatuslcwInfo.value = statusRes?.lcwInfo ?? "";
       SharedData.StatusKasse.value = statusRes?.kasseStatus?.toString();

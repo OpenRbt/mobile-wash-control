@@ -12,8 +12,6 @@ import 'package:mobile_wash_control/mobile/MotorMenu.dart';
 import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
 import 'package:mobile_wash_control/mobile/PostsMenu.dart';
 import 'package:mobile_wash_control/mobile/ProgramMenuAdd.dart';
-import 'package:mobile_wash_control/mobile/ProgramMenuEdit.dart';
-import 'package:mobile_wash_control/mobile/ProgramsMenu.dart';
 import 'package:mobile_wash_control/mobile/SettingsDefaultConfigs.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
 import 'package:mobile_wash_control/mobile/SettingsMenuKasse.dart';
@@ -23,7 +21,10 @@ import 'package:mobile_wash_control/mobile/SettingsServicesRegistrationPage.dart
 import 'package:mobile_wash_control/mobile/StatisticsMenu.dart';
 import 'package:mobile_wash_control/mobile/pages/auth.dart';
 import 'package:mobile_wash_control/mobile/pages/home.dart';
+import 'package:mobile_wash_control/mobile/pages/home/managePost.dart';
 import 'package:mobile_wash_control/mobile/pages/overview.dart';
+import 'package:mobile_wash_control/mobile/pages/programs.dart';
+import 'package:mobile_wash_control/mobile/pages/programs/editProgram.dart';
 
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 
@@ -43,9 +44,11 @@ class Application extends StatelessWidget {
               host: ModalRoute.of(context)?.settings.arguments as String,
             ),
         "/mobile/home": (context) => OverviewPage(sessionData: ModalRoute.of(context)?.settings.arguments as SessionData),
-        "/mobile/editPost": (context) => EditPostMenu(),
-        "/mobile/programs": (context) => ProgramsMenu(),
-        "/mobile/programs/edit": (context) => ProgramMenuEdit(),
+        "/mobile/editPost": (context) => ManagePostPage(postMenuArgs: ModalRoute.of(context)?.settings.arguments as PostMenuArgs),
+        "/mobile/programs": (context) => ProgramsPage(),
+        "/mobile/programs/edit": (context) => EditProgramPage(
+              editArgs: ModalRoute.of(context)?.settings.arguments as EditProgramArgs,
+            ),
         "/mobile/programs/add": (context) => ProgramMenuAdd(),
         "/mobile/settings": (context) => SettingsMenu(),
         "/mobile/settings/post": (context) => SettingsMenuPost(),

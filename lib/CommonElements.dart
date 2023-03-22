@@ -48,7 +48,7 @@ Widget prepareDrawer(BuildContext context, Pages selectedPage, SessionData sessi
     "/mobile/motors",
   ];
 
-  var theme = Theme.of(context);
+  final theme = Theme.of(context);
 
   var styles = new List.filled(
     texts.length,

@@ -52,7 +52,7 @@ class _OverviewPageState extends State<OverviewPage> with RouteAware {
   @override
   Widget build(BuildContext context) {
     SharedData.RefreshStatus();
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -98,7 +98,7 @@ class _OverviewPageState extends State<OverviewPage> with RouteAware {
                   padding: EdgeInsets.all(8.0),
                   shrinkWrap: true,
                   itemCount: SharedData.StationsData.value.length,
-                  physics: BouncingScrollPhysics(),
+                  physics: ClampingScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     var data = SharedData.StationsData.value[index];
                     return StationCard(

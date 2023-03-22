@@ -140,7 +140,9 @@ class _HomeState extends State<Home> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
+
+    SharedData.RefreshStatus();
 
     return Scaffold(
       appBar: AppBar(

@@ -150,7 +150,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
       );
     }
 
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(title: Text("Сервисы")),

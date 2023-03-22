@@ -10,16 +10,23 @@ class StationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
+
+    Icon icon;
+    if (data.hash.isNotEmpty) {
+      icon = Icon(
+        Icons.circle,
+        color: data.status == "online" ? Colors.green : Colors.red,
+      );
+    } else {
+      icon = Icon(Icons.circle_outlined);
+    }
 
     return Card(
       child: ExpansionTile(
         title: Text("Пост: ${data.name}"),
         subtitle: Text("Баланс: ${data.currentBalance}"),
-        leading: Icon(
-          Icons.circle,
-          color: data.status == "online" ? Colors.green : Colors.red,
-        ),
+        leading: icon,
         childrenPadding: EdgeInsets.all(8.0),
         expandedAlignment: Alignment.center,
         expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
