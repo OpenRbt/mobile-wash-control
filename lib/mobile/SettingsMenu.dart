@@ -117,9 +117,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
 
   Future<void> getSettings(SessionData sessionData) async {
     try {
-      _timeZone = ((await sessionData.client
-              .getConfigVarInt(ArgGetConfigVar(name: "TIMEZONE")))
-          ?.value) ?? 0;
+      _timeZone = ((await sessionData.client.getConfigVarInt(ArgGetConfigVar(name: "TIMEZONE")))?.value) ?? 0;
       if (!_timeZoneValues.contains(_timeZone)) {
         _timeZone = -1;
       } else {
@@ -131,18 +129,12 @@ class _SettingsMenuState extends State<SettingsMenu> {
       tmp.forEach((element) {
         _availableHashes.add(element.hash ?? "");
       });
-      res.stations =
-          res.stations.where((element) => element.id != null).toList();
+      res.stations = res.stations.where((element) => element.id != null).toList();
       if (!mounted) {
         return;
       }
       _settingsData = List.generate((res.stations.length), (index) {
-        return new SettingsData(
-            res.stations[index].id ?? 0,
-            res.stations[index].ip ?? "",
-            res.stations[index].name ?? "",
-            res.stations[index].hash ?? "",
-            res.stations[index].status?.value ?? "");
+        return new SettingsData(res.stations[index].id ?? 0, res.stations[index].ip ?? "", res.stations[index].name ?? "", res.stations[index].hash ?? "", res.stations[index].status?.value ?? "");
       });
 
       _settingsData.sort(
@@ -170,8 +162,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
       setState(() {});
     } catch (e) {
       print("Exception when calling DefaultApi->Status: $e\n");
-      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive,
-          "Произошла ошибка при запросе к api", Colors.red);
+      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
     }
     setState(() {});
   }
@@ -214,48 +205,44 @@ class _SettingsMenuState extends State<SettingsMenu> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: Center(
-                              child: Text(
-                                "Дата ",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 2,
+                        child: Center(
+                          child: Text(
+                            "Дата ",
+                            style: TextStyle(fontSize: 16),
                           ),
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text(
-                                  "${currentTime.day}.${currentTime.month}.${currentTime.year}"),
-                            ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 2,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: Text("${currentTime.day}.${currentTime.month}.${currentTime.year}"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 2,
+                        child: Center(
+                          child: Text(
+                            "Tемп ",
+                            style: TextStyle(fontSize: 16),
                           ),
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: Center(
-                              child: Text(
-                                "Tемп ",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                            width: screenW / 9 * 2,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text("${_currentTemp}"),
-                            ),
-                          ),
-                        ]),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: screenW / 9 * 2,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: Text("${_currentTemp}"),
+                        ),
+                      ),
+                    ]),
                     _TimeZoneRow(sessionData),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -268,8 +255,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             child: Text(
                               "Список постов",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -280,8 +266,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             child: Text(
                               "Хэш",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -292,8 +277,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                             child: Text(
                               "Статус",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         )
@@ -309,9 +293,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               width: screenW / 7 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
@@ -326,9 +308,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               width: screenW / 7 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
@@ -343,20 +323,14 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               width: screenW / 7 * 2,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: Center(
                                   child: Text(
                                     "${_settingsData[index].status}",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: _settingsData[index].status ==
-                                                "online"
-                                            ? Colors.lightGreen
-                                            : Colors.red),
+                                    style: TextStyle(color: _settingsData[index].status == "online" ? Colors.lightGreen : Colors.red),
                                   ),
                                 ),
                               ),
@@ -366,23 +340,14 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               width: screenW / 7,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.white
-                                      : Colors.black12,
+                                  color: index % 2 == 0 ? Colors.white : Colors.black12,
                                   border: Border.all(color: Colors.black38),
                                 ),
                                 child: IconButton(
                                   icon: Icon(Icons.more_horiz),
                                   onPressed: () {
-                                    var args = SettingsMenuPostArgs(
-                                        _settingsData[index].id,
-                                        _settingsData[index].ip,
-                                        _availableHashes,
-                                        sessionData);
-                                    Navigator.pushNamed(
-                                            context, "/mobile/settings/post",
-                                            arguments: args)
-                                        .then((value) {
+                                    var args = SettingsMenuPostArgs(_settingsData[index].id, _settingsData[index].ip, _availableHashes, sessionData);
+                                    Navigator.pushNamed(context, "/mobile/settings/post", arguments: args).then((value) {
                                       getSettings(sessionData);
                                     });
                                   },
@@ -403,19 +368,21 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.grey;
+                                }
                                 return Colors.lightGreen;
                               }),
                               foregroundColor: MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.black;
+                                }
                                 return Colors.white;
                               }),
-                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
-                          ),
+                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
                           child: Text("Настройки кассы"),
                           onPressed: () {
-                            Navigator.pushNamed(context, "/mobile/settings/kasse",
-                                arguments: sessionData);
+                            Navigator.pushNamed(context, "/mobile/settings/kasse", arguments: sessionData);
                           },
                         ),
                       ),
@@ -436,20 +403,21 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.disabled)) { return Colors.grey; }
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.grey;
+                                }
                                 return Colors.lightGreen;
                               }),
                               foregroundColor: MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.disabled)) { return Colors.black; }
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.black;
+                                }
                                 return Colors.white;
                               }),
-                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)
-                          ),
+                              overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
                           child: Text("Стандартные настройки"),
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context, "/mobile/settings/default",
-                                arguments: sessionData);
+                            Navigator.pushNamed(context, "/mobile/settings/default", arguments: sessionData);
                           },
                         ),
                       ),
@@ -493,18 +461,12 @@ class _SettingsMenuState extends State<SettingsMenu> {
                 value: _timeZone,
                 onChanged: (val) async {
                   try {
-                    await sessionData.client.setConfigVarInt(ConfigVarInt(
-                        name: "TIMEZONE",
-                        value: val,
-                        description: "UTC in minutes"));
-                    if (_timeZone == -1)
-                      _timeZoneValuesDropList
-                          .removeWhere((element) => element.value == -1);
+                    await sessionData.client.setConfigVarInt(ConfigVarInt(name: "TIMEZONE", value: val, description: "UTC in minutes"));
+                    if (_timeZone == -1) _timeZoneValuesDropList.removeWhere((element) => element.value == -1);
                     _timeZone = val;
                   } catch (e) {
                     print(e);
-                    showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive,
-                        "Не удалось изменить таймзону", Colors.red);
+                    showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Не удалось изменить таймзону", Colors.red);
                   }
                   setState(() {});
                 },

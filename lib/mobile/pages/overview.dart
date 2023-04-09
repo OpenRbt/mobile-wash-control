@@ -3,6 +3,7 @@ import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/SharedData.dart';
 import 'package:mobile_wash_control/application/Application.dart';
 import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/overview/stationCard.dart';
 
 class OverviewPage extends StatefulWidget {
@@ -56,75 +57,68 @@ class _OverviewPageState extends State<OverviewPage> with RouteAware {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text("Обзор"),
-      ),
-      drawer: prepareDrawer(context, Pages.Main, widget.sessionData),
-      body: Column(
-        children: [
-          ValueListenableBuilder(
-            valueListenable: SharedData.StationsData,
-            builder: (BuildContext context, List<HomePageData> values, Widget? child) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      "Всего постов: ${values.length}",
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    Text(
-                      "Активно: ${values.where((element) => element.status == "online").length}",
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    Text(
-                      "Статус кассы: ${SharedData.StatusKasse.value ?? "Нет данных"}",
-                      style: theme.textTheme.titleMedium,
-                    )
-                  ],
-                ),
-              );
-            },
+      appBar: AppBar(title: Text("Главная"), actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Text("Касса: "),
+              ValueListenableBuilder(
+                valueListenable: SharedData.StationsData,
+                builder: (BuildContext context, List<HomePageData> values, Widget? child) {
+                  return Text(
+                    "${SharedData.StatusKasse.value ?? "Нет данных"}",
+                  );
+                },
+              ),
+            ],
           ),
-          ValueListenableBuilder(
-            valueListenable: SharedData.StationsData,
-            builder: (BuildContext context, List<HomePageData> values, Widget? child) {
-              if (SharedData.StationsData.value.isEmpty || SharedData.StationsData.value.length == 0) {
-                return child ?? Container();
-              }
-              return Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.all(8.0),
-                  shrinkWrap: true,
-                  itemCount: SharedData.StationsData.value.length,
-                  physics: ClampingScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    var data = SharedData.StationsData.value[index];
-                    return StationCard(
-                      data: data,
-                      onPressed: () {
-                        var args = PostMenuArgs(
-                          data.id,
-                          data.ip,
-                          data.hash,
-                          data.currentProgramID,
-                          widget.sessionData,
-                        );
-                        Navigator.pushNamed(context, "/mobile/editPost", arguments: args);
-                      },
-                    );
-                  },
+        ),
+      ]),
+      drawer: WashNavigationDrawer(selected: SelectedPage.Main),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ValueListenableBuilder(
+              valueListenable: SharedData.StationsData,
+              builder: (BuildContext context, List<HomePageData> values, Widget? child) {
+                if (SharedData.StationsData.value.isEmpty || SharedData.StationsData.value.length == 0) {
+                  return child ?? Container();
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: SharedData.StationsData.value.length,
+                    physics: ClampingScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      var data = SharedData.StationsData.value[index];
+                      return StationCard(
+                        data: data,
+                        onPressed: () {
+                          var args = PostMenuArgs(
+                            data.id,
+                            data.ip,
+                            data.hash,
+                            data.currentProgramID,
+                            widget.sessionData,
+                          );
+                          Navigator.pushNamed(context, "/mobile/editPost", arguments: args);
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-              );
-            },
-            child: Container(
-              child: Center(
-                child: CircularProgressIndicator(),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

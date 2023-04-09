@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/SharedData.dart';
+import 'package:mobile_wash_control/client/api.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/programms/programListTile.dart';
 
 class ProgramsPage extends StatefulWidget {
@@ -27,84 +29,86 @@ class _ProgramsPageState extends State<ProgramsPage> {
       appBar: AppBar(
         title: Text("Программы"),
       ),
-      drawer: prepareDrawer(context, Pages.Programs, sessionData),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      "ID",
-                      style: theme.textTheme.titleLarge,
+      drawer: WashNavigationDrawer(selected: SelectedPage.Programs),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await SharedData.RefreshPrograms();
+        },
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Center(
+                      child: Text(
+                        "ID",
+                        style: theme.textTheme.titleLarge,
+                      ),
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Center(
-                    child: Text(
-                      "Название",
-                      style: theme.textTheme.titleLarge,
+                  Flexible(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        "Название",
+                        style: theme.textTheme.titleLarge,
+                      ),
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Center(
-                    child: Text(
-                      "Прокачка",
-                      style: theme.textTheme.titleLarge,
+                  Flexible(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        "Прокачка",
+                        style: theme.textTheme.titleLarge,
+                      ),
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Center(
-                    child: Text(
-                      "Чистовая",
-                      style: theme.textTheme.titleLarge,
+                  Flexible(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        "Чистовая",
+                        style: theme.textTheme.titleLarge,
+                      ),
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Container(),
-                ),
-              ],
+                  Flexible(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Divider(),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await SharedData.RefreshPrograms();
-                setState(() {});
-              },
-              child: ListView.builder(
-                shrinkWrap: false,
-                physics: AlwaysScrollableScrollPhysics(),
-                itemCount: SharedData.Programs.value.length,
-                itemBuilder: (context, index) {
-                  return ProgramListTile(program: SharedData.Programs.value[index]);
+            Divider(),
+            Expanded(
+              child: ValueListenableBuilder(
+                valueListenable: SharedData.Programs,
+                builder: (BuildContext context, List<Program> value, Widget? child) {
+                  return ListView.builder(
+                    itemCount: SharedData.Programs.value.length,
+                    itemBuilder: (context, index) {
+                      return ProgramListTile(program: SharedData.Programs.value[index]);
+                    },
+                  );
                 },
               ),
             ),
-          ),
-          Divider(),
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/mobile/programs/add", arguments: sessionData).then(
-                (value) => SharedData.RefreshPrograms(),
-              );
-            },
-            child: Text("Добавить программу"),
-          ),
-        ],
+            Divider(),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/mobile/programs/add", arguments: sessionData).then(
+                  (value) => SharedData.RefreshPrograms(),
+                );
+              },
+              child: Text("Добавить программу"),
+            ),
+          ],
+        ),
       ),
     );
   }

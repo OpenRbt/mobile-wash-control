@@ -370,66 +370,48 @@ class _EditProgramPageState extends State<EditProgramPage> {
                     style: theme.textTheme.headlineSmall,
                   ),
                   Divider(),
-                  Row(
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: Center(
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Center(
                             child: Text(
                           "ID",
                           style: theme.textTheme.titleLarge,
                         )),
-                      ),
-                      VerticalDivider(),
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: Center(
-                            child: Text(
-                          "%",
-                          style: theme.textTheme.titleLarge,
-                        )),
-                      ),
-                      VerticalDivider(),
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: Center(
-                            child: Text(
-                          "% прокачки",
-                          style: theme.textTheme.titleLarge,
-                        )),
-                      ),
-                    ],
+                        VerticalDivider(),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: Center(
+                              child: Text(
+                            "%",
+                            style: theme.textTheme.titleLarge,
+                          )),
+                        ),
+                        VerticalDivider(),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: Center(
+                              child: Text(
+                            "% прокачки",
+                            style: theme.textTheme.titleLarge,
+                          )),
+                        ),
+                      ],
+                    ),
                   )
                 ]..addAll(List.generate(program.relays.length, (index) => RelayListTile(id: index + 1, relay: _relaysControllers["relays"]![index], relayPreflight: _relaysControllers["relaysPreflight"]![index]))),
               ),
             ),
           ),
-          Wrap(
-            direction: Axis.horizontal,
-            alignment: WrapAlignment.center,
-            spacing: 25,
-            children: [
-              SizedBox(
-                height: 50,
-                width: screenW / 3,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.disabled)) {
-                          return Colors.grey;
-                        }
-                        return Colors.lightGreen;
-                      }),
-                      foregroundColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.disabled)) {
-                          return Colors.black;
-                        }
-                        return Colors.white;
-                      }),
-                      overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
                   onPressed: _inUpdate
                       ? null
                       : () {
@@ -437,25 +419,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                         },
                   child: Text(_inUpdate ? "Сохранение..." : "Сохранить"),
                 ),
-              ),
-              SizedBox(
-                height: 50,
-                width: screenW / 3,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.disabled)) {
-                          return Colors.grey;
-                        }
-                        return Colors.lightGreen;
-                      }),
-                      foregroundColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.disabled)) {
-                          return Colors.black;
-                        }
-                        return Colors.white;
-                      }),
-                      overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
+                ElevatedButton(
                   onPressed: _inUpdate
                       ? null
                       : () {
@@ -463,8 +427,8 @@ class _EditProgramPageState extends State<EditProgramPage> {
                         },
                   child: Text("Отменить"),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

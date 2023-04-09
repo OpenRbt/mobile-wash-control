@@ -10,52 +10,50 @@ class RelayListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: Center(child: Text("$id")),
-        ),
-        VerticalDivider(),
-        Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: TextField(
-            controller: relay,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            keyboardType: TextInputType.number,
-            onChanged: (val) {
-              if (val.isEmpty) {
-                relay.text = "0";
-              } else {
-                if (int.parse(val) > 100) {
-                  relay.text = "100";
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Center(child: Text("$id")),
+          VerticalDivider(),
+          Flexible(
+            fit: FlexFit.tight,
+            child: TextField(
+              controller: relay,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.number,
+              onChanged: (val) {
+                if (val.isEmpty) {
+                  relay.text = "0";
+                } else {
+                  if (int.parse(val) > 100) {
+                    relay.text = "100";
+                  }
                 }
-              }
-            },
+              },
+            ),
           ),
-        ),
-        VerticalDivider(),
-        Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: TextField(
-            controller: relayPreflight,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            keyboardType: TextInputType.number,
-            onChanged: (val) {
-              if (val.isEmpty) {
-                relayPreflight.text = "0";
-              } else {
-                if (int.parse(val) > 100) {
-                  relayPreflight.text = "100";
+          VerticalDivider(),
+          Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: TextField(
+              controller: relayPreflight,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.number,
+              onChanged: (val) {
+                if (val.isEmpty) {
+                  relayPreflight.text = "0";
+                } else {
+                  if (int.parse(val) > 100) {
+                    relayPreflight.text = "100";
+                  }
                 }
-              }
-            },
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

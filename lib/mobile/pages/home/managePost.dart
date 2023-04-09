@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/SharedData.dart';
+import 'package:mobile_wash_control/application/Application.dart';
 import 'package:mobile_wash_control/client/api.dart';
 import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
 import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../application/Application.dart';
 
 class ManagePostPage extends StatefulWidget {
   final PostMenuArgs postMenuArgs;
