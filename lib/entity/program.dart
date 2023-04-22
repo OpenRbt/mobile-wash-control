@@ -7,7 +7,7 @@ class Program {
 
   final int? id;
 
-  String name = "program";
+  String name = "";
   int price = 10;
   bool preflightEnabled = false;
   bool ifFinishingProgram = false;

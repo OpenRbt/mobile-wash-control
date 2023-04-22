@@ -1,9 +1,6 @@
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/SharedData.dart';
-import 'package:mobile_wash_control/application/Application.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -12,7 +9,7 @@ class Home extends StatefulWidget {
   State<StatefulWidget> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with RouteAware {
+class _HomeState extends State<Home> {
   PackageInfo _packageInfo = PackageInfo(
     appName: '',
     packageName: '',
@@ -22,32 +19,15 @@ class _HomeState extends State<Home> with RouteAware {
   );
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
-  }
-
-  @override
   void dispose() {
-    routeObserver.unsubscribe(this);
+    scanPos.dispose();
+    hosts.dispose();
     super.dispose();
   }
-
-  void didPopNext() {
-    SharedData.StopTimers();
-  }
-
-  String _localIP = "0.0.0.0";
-  String _scanIP = "";
-  int _pos = 0;
-  bool _wifi = false;
-  bool _canScan = true;
-  late HashSet<String> _servers;
 
   @override
   void initState() {
     super.initState();
-    _servers = new HashSet();
     _initPackageInfo();
     _initNetworkInfo();
   }
@@ -141,9 +121,6 @@ class _HomeState extends State<Home> with RouteAware {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    SharedData.RefreshStatus();
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Доступные серверы"),

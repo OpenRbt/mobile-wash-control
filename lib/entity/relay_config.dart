@@ -1,25 +1,31 @@
 part of 'entity.dart';
 
 class RelayConfig {
-  static final int RelayTime = 1000;
+  static final int relayTime = 1000;
 
   int id;
-  late int timeOn;
-  late int timeOff;
+  int timeOn = 0;
+  int timeOff = 0;
 
   int percent() {
-    return (100 * timeOn / (timeOn + timeOff)).round();
+    return (timeOn / relayTime * 100).round();
   }
 
   RelayConfig({required this.id, int percent = 0}) {
-    timeOn = (RelayTime * percent / 100).round();
-    timeOff = (RelayTime * percent / 100).round();
+    timeOn = (relayTime * percent / 100).round();
+    timeOff = (relayTime * percent / 100).round();
+  }
+
+  void SetPercent(int percent) {
+    timeOn = (relayTime / 100 * percent).round();
+    timeOff = relayTime - timeOn;
   }
 
   static RelayConfig FromApi(int id, int timeOn, int timeOff) {
     var res = RelayConfig(id: id);
     res.timeOn = timeOn;
     res.timeOff = timeOff;
+
     return res;
   }
 }

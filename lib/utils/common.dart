@@ -1,4 +1,4 @@
-import 'package:mobile_wash_control/wash-admin-client/api.dart';
+import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
 
 class Common {
   static WashServersApi? washServersApi;

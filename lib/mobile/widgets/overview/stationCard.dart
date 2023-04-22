@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/SharedData.dart';
+import 'package:mobile_wash_control/entity/entity.dart';
 
 class StationCard extends StatelessWidget {
-  final HomePageData data;
+  final Station data;
 
   final void Function()? onPressed;
 
@@ -12,21 +12,41 @@ class StationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    Icon icon;
-    if (data.hash.isNotEmpty) {
-      icon = Icon(
-        Icons.circle,
-        color: data.status == "online" ? Colors.green : Colors.red,
-      );
+    Widget leading;
+    if (data.hash != null) {
+      if (data.status != null) {
+        if (data.currentProgram != null) {
+          leading = Container(
+            height: theme.iconTheme.size ?? 24,
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: CircularProgressIndicator(color: Colors.green),
+            ),
+          );
+        } else {
+          leading = Icon(
+            Icons.circle,
+            color: data.status == "online" ? Colors.green : Colors.red,
+          );
+        }
+      } else {
+        leading = Icon(
+          Icons.circle,
+        );
+      }
     } else {
-      icon = Icon(Icons.circle_outlined);
+      leading = Icon(Icons.circle_outlined);
     }
 
     return Card(
       child: ExpansionTile(
-        title: Text("Пост: ${data.name}"),
-        subtitle: Text("Баланс: ${data.currentBalance}"),
-        leading: icon,
+        title: Text("Пост: ${data.name} | Баланс: ${data.currentBalance ?? "-"}"),
+        subtitle: Row(
+          children: [
+            Text("Программа: ${data.hash != null ? data.currentProgramName ?? "Ожидание клиента" : "-"} "),
+          ],
+        ),
+        leading: leading,
         childrenPadding: EdgeInsets.all(8.0),
         expandedAlignment: Alignment.center,
         expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
@@ -38,11 +58,11 @@ class StationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "IP: ${data.ip}",
+                    "IP: ${data.ip ?? "-"}",
                     style: theme.textTheme.bodyMedium,
                   ),
                   Text(
-                    "Программа: ${data.currentProgramName}",
+                    "Хэш: ${data.hash ?? "-"}",
                     style: theme.textTheme.bodyMedium,
                   ),
                 ],

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/SharedData.dart';
-import 'package:mobile_wash_control/client/api.dart';
-import 'package:mobile_wash_control/mobile/pages/programs/editProgram.dart';
+import 'package:mobile_wash_control/entity/entity.dart';
 
 class ProgramListTile extends StatelessWidget {
   final Function()? onPress;
@@ -12,8 +9,6 @@ class ProgramListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SessionData sessionData = SharedData.sessionData!;
-
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -44,7 +39,7 @@ class ProgramListTile extends StatelessWidget {
             Flexible(
               flex: 2,
               fit: FlexFit.tight,
-              child: Center(child: Text("${"${(program.isFinishingProgram ?? false) ? "Да" : "Нет"}"}")),
+              child: Center(child: Text("${"${(program.ifFinishingProgram ?? false) ? "Да" : "Нет"}"}")),
             ),
             Flexible(
               flex: 1,
@@ -58,12 +53,7 @@ class ProgramListTile extends StatelessWidget {
                     );
                   },
                 ),
-                onPressed: () {
-                  var args = EditProgramArgs(program.id, program.name ?? "");
-                  Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
-                    (value) => SharedData.RefreshPrograms(),
-                  );
-                },
+                onPressed: onPress,
               ),
             ),
           ],

@@ -1,13 +1,22 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/SharedData.dart';
-import 'package:mobile_wash_control/client/api.dart';
-import 'package:mobile_wash_control/mobile/SettingsMenu.dart';
-import 'package:mobile_wash_control/mobile/SettingsMenuPost.dart';
+import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
+import 'package:mobile_wash_control/mobile/widgets/settings/settingsStationListTile.dart';
+import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
+import 'package:mobile_wash_control/repository/repository.dart';
+
+//TODO: remove this!
+class SettingsData {
+  final int id;
+  final String ip;
+  final String name;
+  final String hash;
+  final String status;
+
+  SettingsData(this.id, this.ip, this.name, this.hash, this.status);
+}
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -16,17 +25,14 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  late SessionData sessionData;
   @override
   void initState() {
     _dateFormat = new DateFormat("dd.MM.yyyy");
-    sessionData = SharedData.sessionData!;
 
     _timeZoneValuesDropList = _getTimeZoneValuesDropList();
     super.initState();
   }
 
-  bool _firstLoad = true;
   String _currentTemp = "__";
   List<SettingsData> _settingsData = List.generate(10, (index) {
     return new SettingsData(-1, "...", "Loading", "$index", "loading");
@@ -91,71 +97,30 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         value: _timeZoneValues[index],
       ),
-    )..add(DropdownMenuItem(
-        enabled: false,
-        child: Center(
+    )..add(
+        DropdownMenuItem(
+          enabled: false,
+          child: Center(
             child: Text(
-          "Invalid value",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+              "...",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-        )),
-        value: -1,
-      ));
+          value: -1,
+        ),
+      );
   }
 
   List<DropdownMenuItem> _timeZoneValuesDropList = [];
 
-  Future<void> getSettings(SessionData sessionData) async {
-    try {
-      _timeZone = ((await sessionData.client.getConfigVarInt(ArgGetConfigVar(name: "TIMEZONE")))?.value) ?? 0;
-      if (!_timeZoneValues.contains(_timeZone)) {
-        _timeZone = -1;
-      } else {
-        _timeZoneValuesDropList.removeWhere((element) => element.value == -1);
-      }
-      var res = await sessionData.client.status();
-      var tmp = res!.stations.where((element) => element.hash != null).toList();
-      _availableHashes = [];
-      tmp.forEach((element) {
-        _availableHashes.add(element.hash ?? "");
-      });
-      res.stations = res.stations.where((element) => element.id != null).toList();
-      if (!mounted) {
-        return;
-      }
-      _settingsData = List.generate((res.stations.length), (index) {
-        return new SettingsData(res.stations[index].id ?? 0, res.stations[index].ip ?? "", res.stations[index].name ?? "", res.stations[index].hash ?? "", res.stations[index].status?.value ?? "");
-      });
+  ValueNotifier<LeaCentralConfig?> _config = ValueNotifier(null);
 
-      _settingsData.sort(
-        (a, b) => a.id.compareTo(b.id),
-      );
-      _firstLoad = false;
-      log("res.stations.length: " + res.stations.length.toString());
-      if (res.stations.length > 0) {
-        for (int i = 0; i < res.stations.length; i++) {
-          if (res.stations[i].hash != null && (res.stations[i].hash?.length ?? 0) > 0) {
-            var args = ArgLoad(
-              hash: res.stations[i].hash!,
-              key: "curr_temp",
-            );
-            var resTemp = await sessionData.client.load(args);
-            _currentTemp = resTemp ?? _currentTemp;
-
-            _currentTemp = double.tryParse(
-              _currentTemp.replaceAll(String.fromCharCode(34), ''),
-            ).toString();
-            break;
-          }
-        }
-      }
-      setState(() {});
-    } catch (e) {
-      print("Exception when calling DefaultApi->Status: $e\n");
-    }
-    setState(() {});
+  Future<void> getSettings(Repository repository) async {
+    var timezone = await repository.getConfigVarInt("TIMEZONE");
+    _config.value = LeaCentralConfig(timeZone: timezone);
   }
 
   late DateFormat _dateFormat;
@@ -164,163 +129,139 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final DateTime currentTime = DateTime.now();
-    final SessionData sessionData = SharedData.sessionData!;
 
-    if (_firstLoad) {
-      getSettings(sessionData);
-    }
+    final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+    final repository = args[PageArgCode.repository] as LeaCentralRepository;
 
-    double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Настройки"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Дата: ${_dateFormat.format(currentTime)}",
+                ),
+              ],
+            ),
+          )
+        ],
       ),
       drawer: WashNavigationDrawer(
         selected: SelectedPage.Settings,
+        repository: repository,
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          var tmp = await getSettings(sessionData);
-          setState(() {});
-        },
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.all(8),
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
+      body: FutureBuilder(
+        future: getSettings(repository),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              await getSettings(repository);
+            },
+            child: ListView(
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
                       children: [
-                        Text(
-                          "Дата: ${_dateFormat.format(currentTime)}",
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Температура: $_currentTemp",
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Часовой пояс: ",
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                        Expanded(
-                          child: DropdownButton(
-                            isExpanded: true,
-                            items: _timeZoneValuesDropList,
-                            value: _timeZone,
-                            onChanged: (val) async {
-                              try {
-                                await sessionData.client.setConfigVarInt(ConfigVarInt(name: "TIMEZONE", value: val, description: "UTC in minutes"));
-                                if (_timeZone == -1) _timeZoneValuesDropList.removeWhere((element) => element.value == -1);
-                                _timeZone = val;
-                              } catch (e) {
-                                print(e);
-                              }
-                              setState(() {});
-                            },
-                          ),
+                        Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                "Часовой пояс: ",
+                                style: theme.textTheme.bodyLarge,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: DropdownButton(
+                                isExpanded: true,
+                                items: _timeZoneValuesDropList,
+                                value: _config.value?.timeZone ?? -1,
+                                onChanged: (val) async {
+                                  await repository.setConfigVarInt("TIMEZONE", val).then((value) => getSettings(repository));
+                                },
+                              ),
+                            )
+                          ],
                         )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: Text("Настройки кассы"),
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/mobile/settings/kasse", arguments: sessionData);
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text("Предустановки постов"),
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/mobile/settings/default", arguments: sessionData);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Пост",
-                    style: theme.textTheme.titleLarge,
-                  ),
-                  Text(
-                    "Хэш",
-                    style: theme.textTheme.titleLarge,
-                  ),
-                  Text(
-                    "Статус",
-                    style: theme.textTheme.titleLarge,
-                  ),
-                  SizedBox(),
-                ],
-              ),
-            ),
-            Column(
-              children: List.generate(_settingsData.length, (index) {
-                return Padding(
+                Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Text(
-                          "${_settingsData[index].name}",
-                        ),
+                      ElevatedButton(
+                        child: Text("Настройки кассы"),
+                        onPressed: () {
+                          var args = Map<PageArgCode, dynamic>();
+                          args[PageArgCode.repository] = repository;
+
+                          Navigator.pushNamed(
+                            context,
+                            "/mobile/settings/kasse",
+                            arguments: args,
+                          );
+                        },
                       ),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Text(
-                          "${_settingsData[index].hash}",
-                        ),
+                      ElevatedButton(
+                        child: Text("Предустановки постов"),
+                        onPressed: () {
+                          args[PageArgCode.repository] = repository;
+                          Navigator.pushNamed(
+                            context,
+                            "/mobile/settings/default",
+                            arguments: args,
+                          );
+                        },
                       ),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Text(
-                          "${_settingsData[index].status}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: _settingsData[index].status == "online" ? Colors.lightGreen : Colors.red),
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            var args = SettingsMenuPostArgs(_settingsData[index].id, _settingsData[index].ip, _availableHashes, sessionData);
-                            Navigator.pushNamed(context, "/mobile/settings/post", arguments: args).then((value) {
-                              getSettings(sessionData);
-                            });
-                          },
-                          icon: Icon(Icons.settings_outlined)),
                     ],
                   ),
-                );
-              }),
+                ),
+                Card(
+                  child: ValueListenableBuilder(
+                    valueListenable: repository.getStationsNotifier(),
+                    builder: (BuildContext context, List<Station>? value, Widget? child) {
+                      return Column(
+                        children: List.generate(
+                          value?.length ?? 0,
+                          (index) => SettingsStationListTile(
+                            index: index + 1,
+                            station: value![index],
+                            repository: repository,
+                            onPressed: () {
+                              var args = Map<PageArgCode, dynamic>();
+                              args[PageArgCode.stationID] = value[index].id;
+                              args[PageArgCode.stationIP] = value[index].ip;
+                              args[PageArgCode.repository] = repository;
+
+                              Navigator.pushNamed(context, "/mobile/settings/post", arguments: args).then(
+                                (value) {
+                                  getSettings(repository);
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

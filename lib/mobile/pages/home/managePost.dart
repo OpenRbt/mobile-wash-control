@@ -1,232 +1,98 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/SharedData.dart';
-import 'package:mobile_wash_control/application/Application.dart';
-import 'package:mobile_wash_control/client/api.dart';
-import 'package:mobile_wash_control/mobile/IncassationHistory.dart';
-import 'package:mobile_wash_control/mobile/PostMenuEdit.dart';
+import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ManagePostPage extends StatefulWidget {
-  final PostMenuArgs postMenuArgs;
-
-  const ManagePostPage({super.key, required this.postMenuArgs});
+  const ManagePostPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _ManagePostPageState();
 }
 
 //TODO: Cleanup and rework
-class _ManagePostPageState extends State<ManagePostPage> with RouteAware {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
-  }
-
+class _ManagePostPageState extends State<ManagePostPage> {
   @override
   void dispose() {
-    routeObserver.unsubscribe(this);
-    if (_updateBalanceTimer != null && _updateBalanceTimer.isActive) _updateBalanceTimer.cancel();
+    _addAmount.dispose();
     super.dispose();
-  }
-
-  @override
-  void didPush() {
-    SharedData.CanUpdateStatus = true;
-  }
-
-  @override
-  void didPushNext() {
-    SharedData.CanUpdateStatus = false;
-  }
-
-  @override
-  void didPop() {
-    // SharedData.CanUpdateStatus = false;
-  }
-
-  @override
-  void didPopNext() {
-    SharedData.CanUpdateStatus = true;
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   var _isSnackBarActive = ValueWrapper(false);
-  bool _firstLoad = true;
-  late Timer _updateBalanceTimer;
-  int _incassBalance = 0;
-  int _balance = 0;
-  int _currentProgram = -1;
-  final int _maxButtons = 20;
 
-  List<ResponseStationButtonButtonsInner> _buttons = [];
+  int _currentProgram = -1;
+
   @override
   void initState() {
     super.initState();
   }
 
-  List<bool> _checkboxList = [];
-  Map<int, String> _buttonNames = Map();
-
-  void _loadButtons(PostMenuArgs postMenuArgs) async {
-    try {
-      var args = ArgStationButton(stationID: postMenuArgs.postID);
-      var res = await postMenuArgs.sessionData.client.stationButton(args);
-      _buttons = res!.buttons;
-
-      if (!mounted) {
-        return;
-      }
-      _unpackNames();
-    } catch (e) {
-      print("Exception when calling DefaultApi->/station-button: $e\n");
-      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-    }
-  }
-
-  void _getBalance(PostMenuArgs postMenuArgs) async {
-    final SessionData sessionData = postMenuArgs.sessionData;
-    _updateBalanceTimer.cancel();
-    try {
-      _currentProgram = SharedData.StationsData.value.firstWhere((element) => element.id == postMenuArgs.postID)?.currentProgramID ?? -1;
-      _balance = SharedData.StationsData.value.firstWhere((element) => element.id == postMenuArgs.postID)?.currentBalance ?? 0;
-
-      var args = ArgStationReportCurrentMoney(
-        id: postMenuArgs.postID,
-      );
-      var res = await sessionData.client.stationReportCurrentMoney(args);
-
-      _incassBalance = (res?.moneyReport?.banknotes ?? 0) + (res?.moneyReport?.coins ?? 0);
-      if (!mounted) {
-        return;
-      }
-
-      _checkboxList = List.filled(_maxButtons, false);
-      var checkboxID = -1;
-
-      if (_buttons.where((element) => element.programID == _currentProgram).length != 0) {
-        checkboxID = (_buttons.firstWhere((element) => element.programID == _currentProgram).buttonID ?? 0) - 1;
-      }
-      if (checkboxID >= 0) {
-        _checkboxList[checkboxID] = true;
-      }
-    } on ApiException catch (e) {
-      if (e.code != 404) {
-        print("Exception when calling DefaultApi->/station-report-current-money: $e\n");
-        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-      }
-    } catch (e) {
-      if (!(e is ApiException)) {
-        print("Other Exception: $e\n");
-      }
-    }
-    _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-      _getBalance(postMenuArgs);
-    });
-    setState(() {});
-  }
-
-  void _unpackNames() async {
-    if (SharedData.Programs.value == null) {
-      await SharedData.RefreshPrograms();
-    }
-    var programs = SharedData.Programs.value;
-    if ((_buttons?.length ?? 0) > 0) {
-      _buttonNames = Map();
-      for (int i = 0; i < _buttons.length; i++) {
-        _buttonNames[_buttons[i].buttonID! - 1] = programs.firstWhere((element) => element.id == _buttons[i].programID, orElse: () {
-              return Program(id: -1);
-            })?.name ??
-            "NOT FOUND";
-      }
-    }
-    setState(() {});
-  }
+  List<StationButton> _stationButtons = [];
 
   void _changeServiceValue({int value = 10}) async {
     GlobalData.AddServiceValue += value;
     if (GlobalData.AddServiceValue < 0) {
       GlobalData.AddServiceValue = 0;
     }
-    setState(() {});
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt("AddServiceValue", GlobalData.AddServiceValue);
+    _addAmount.value = GlobalData.AddServiceValue;
   }
 
-  void _addServiceMoney(PostMenuArgs postMenuArgs) async {
-    try {
-      var args = ArgAddServiceAmount(
-        hash: postMenuArgs.hash,
-        amount: GlobalData.AddServiceValue,
-      );
-      var res = await postMenuArgs.sessionData.client.addServiceAmount(args);
-    } catch (e) {
-      print("Exception when calling DefaultApi->/add-service-amount: $e\n");
-      showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-    }
-  }
+  // TODO: recreate functional
+  // class PostMenuArgs {
+  // final int postID;
+  // final String ip;
+  // final String hash;
+  // final int currentProgramID;
+  // final SessionData sessionData;
+  //
+  // PostMenuArgs(this.postID, this.ip, this.hash, this.currentProgramID, this.sessionData);
+  // }
+  //
+  // void _programButtonListener(index, PostMenuArgs postMenuArgs) async {
+  //   if (index != _currentProgram) {
+  //     try {
+  //       var args = ArgRunProgram(
+  //         hash: postMenuArgs.hash,
+  //         preflight: false, programID: -1, //TODO: use preflight trigger
+  //       );
+  //       await postMenuArgs.sessionData.client.runProgram(args);
+  //       setState(() {});
+  //     } catch (e) {
+  //       print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+  //       showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+  //     }
+  //   } else {
+  //     try {
+  //       var args = ArgRunProgram(
+  //         hash: postMenuArgs.hash,
+  //         programID: -1,
+  //         preflight: false, //TODO: use preflight trigger
+  //       );
+  //       await postMenuArgs.sessionData.client.runProgram(args);
+  //       setState(() {});
+  //     } catch (e) {
+  //       print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
+  //       showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
+  //     }
+  //   }
+  // }
 
-  //TODO: add preflight parameter
-  void _programButtonListener(index, PostMenuArgs postMenuArgs) async {
-    if (index != _currentProgram) {
-      try {
-        var args = ArgRunProgram(
-          hash: postMenuArgs.hash,
-          preflight: false, programID: -1, //TODO: use preflight trigger
-        );
-        await postMenuArgs.sessionData.client.runProgram(args);
-        setState(() {
-          if (_currentProgram != -1) _checkboxList[_currentProgram ?? 1] = false;
-          _checkboxList[index] = true;
-          _currentProgram = index;
-        });
-      } catch (e) {
-        print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-      }
-    } else {
-      try {
-        var args = ArgRunProgram(
-          hash: postMenuArgs.hash,
-          programID: -1,
-          preflight: false, //TODO: use preflight trigger
-        );
-        await postMenuArgs.sessionData.client.runProgram(args);
-        setState(() {
-          if (_currentProgram != -1) _checkboxList[_currentProgram ?? 1] = false;
-          _currentProgram = -1;
-        });
-      } catch (e) {
-        print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-      }
-    }
-  }
+  ValueNotifier<int> _addAmount = ValueNotifier(GlobalData.AddServiceValue);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final AppBar appBar = AppBar(
-      title: Text("Пост: ${widget.postMenuArgs.postID} | Инкасс: ${_incassBalance ?? 0} руб"),
-    );
-
-    if (_firstLoad) {
-      _loadButtons(widget.postMenuArgs);
-      _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-        _getBalance(widget.postMenuArgs);
-      });
-
-      _firstLoad = false;
-    }
-
-    double screenH = MediaQuery.of(context).size.height;
-    double screenW = MediaQuery.of(context).size.width;
+    var args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+    final Repository repository = args[PageArgCode.repository];
+    final int stationID = args[PageArgCode.stationID];
 
     return WillPopScope(
       onWillPop: () async {
@@ -235,448 +101,289 @@ class _ManagePostPageState extends State<ManagePostPage> with RouteAware {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        appBar: appBar,
-        body: OrientationBuilder(
-          builder: (context, orientation) {
+        appBar: AppBar(
+          title: FutureBuilder(
+            future: repository.getStationMoneyReport(stationID),
+            builder: (BuildContext context, AsyncSnapshot<StationMoneyReport?> snapshot) {
+              var moneyReport = snapshot.data;
+              return Text("Пост: $stationID | Инкасс: ${(moneyReport?.banknotes ?? 0) + (moneyReport?.coins ?? 0)} руб");
+            },
+          ),
+        ),
+        body: FutureBuilder(
+          future: repository.getStationButtons(stationID),
+          builder: (BuildContext context, AsyncSnapshot<List<StationButton>?> snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.data != null) _stationButtons = snapshot.data!;
+
             return ListView(
               children: [
                 Card(
-                  child: Column(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Текущий Баланс",
+                          style: theme.textTheme.headlineSmall,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Container(),
+                              ),
+                              Flexible(
+                                flex: 4,
+                                fit: FlexFit.tight,
+                                child: InputDecorator(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  child: Center(
+                                    child: ValueListenableBuilder(
+                                      valueListenable: repository.getStationsNotifier(),
+                                      builder: (BuildContext context, List<Station>? value, Widget? child) {
+                                        final int? balance = value?.firstWhere((element) => element.id == stationID, orElse: null).currentBalance;
+
+                                        return Text(
+                                          "${balance ?? "-"}",
+                                          style: theme.textTheme.bodyLarge,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Container(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          "Добавить сервисные",
+                          style: theme.textTheme.titleLarge,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.loose,
+                              child: IconButton(
+                                icon: Icon(Icons.remove_circle_outline),
+                                onPressed: () {
+                                  _changeServiceValue(value: -10);
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Center(
+                                child: ValueListenableBuilder(
+                                  valueListenable: _addAmount,
+                                  builder: (BuildContext context, int value, Widget? child) {
+                                    return Text(
+                                      "$value руб",
+                                      style: theme.textTheme.titleLarge,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.loose,
+                              child: IconButton(
+                                icon: Icon(Icons.add_circle_outline),
+                                onPressed: () {
+                                  _changeServiceValue(value: 10);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        ElevatedButton(
+                          child: Text(
+                            "Отправить",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          onPressed: () {
+                            repository.addServiceMoney(stationID, GlobalData.AddServiceValue);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: ExpansionTile(
+                    title: Text(
+                      "Управление постом",
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                    childrenPadding: EdgeInsets.all(8),
                     children: [
-                      Text(
-                        "Текущий Баланс",
-                        style: theme.textTheme.headlineSmall,
+                      ValueListenableBuilder(
+                        valueListenable: repository.getStationsNotifier(),
+                        builder: (BuildContext context, List<Station>? value, Widget? child) {
+                          var ip = value?.firstWhere((element) => element.id == stationID).ip;
+                          return Text(
+                            "IP: ${ip ?? "-"}",
+                            style: theme.textTheme.bodyLarge,
+                          );
+                        },
                       ),
-                      Row(
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.tight,
-                            child: Container(),
-                          ),
-                          Flexible(
-                            flex: 4,
-                            fit: FlexFit.tight,
-                            child: InputDecorator(
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                              ),
-                              child: Center(child: Text("$_balance")),
+                      ElevatedButton(
+                        child: Text(
+                          "Инкассировать",
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Инакссировать"),
+                              content: Text("Вы уверены?"),
+                              actionsPadding: EdgeInsets.all(8),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    await repository.stationSaveCollection(stationID);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Да"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Нет"),
+                                )
+                              ],
                             ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.tight,
-                            child: Container(),
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                      Text(
-                        "Добавить сервисные",
-                        style: theme.textTheme.titleLarge,
+                      ElevatedButton(
+                        child: Text(
+                          "Открыть дверь",
+                        ),
+                        onPressed: () async {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Открыть дверь"),
+                              content: Text("Вы уверены?"),
+                              actionsPadding: EdgeInsets.all(8),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    await repository.stationOpenDoor(stationID);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Да"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Нет"),
+                                )
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.loose,
-                            child: IconButton(
-                              icon: Icon(Icons.remove_circle_outline),
-                              onPressed: () {
-                                _changeServiceValue(value: -10);
-                              },
-                            ),
-                          ),
-                          Flexible(
-                            flex: 2,
-                            fit: FlexFit.tight,
-                            child: Center(
-                              child: Text(
-                                "${GlobalData.AddServiceValue} руб",
-                                style: theme.textTheme.titleLarge,
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.loose,
-                            child: IconButton(
-                              icon: Icon(Icons.add_circle_outline),
-                              onPressed: () {
-                                _changeServiceValue(value: 10);
-                              },
-                            ),
-                          ),
-                        ],
+                      ElevatedButton(
+                        child: Text(
+                          "История инкассаций",
+                        ),
+                        onPressed: () {
+                          var args = Map<PageArgCode, dynamic>();
+                          args[PageArgCode.repository] = repository;
+                          args[PageArgCode.stationID] = stationID;
+                          Navigator.pushNamed(context, "/mobile/home/incassation-history", arguments: args);
+                        },
                       ),
                     ],
                   ),
                 ),
-                Text("A"),
-                Divider(),
-                SizedBox(height: screenH - appBar.preferredSize.height, width: screenW, child: _getMenu(screenH > screenW, screenW, widget.postMenuArgs)),
+                Card(
+                  child: ExpansionTile(
+                    title: Text(
+                      "Кнопки поста",
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                    childrenPadding: EdgeInsets.all(8),
+                    children: List.generate(_stationButtons.length, (index) {
+                      var btn = _stationButtons[index];
+                      return Row(
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                //_programButtonListener(index, postMenuArgs);
+                                //
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "${btn.buttonID} : ",
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      "${btn.programName ?? "-"}",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            child: ValueListenableBuilder(
+                              valueListenable: repository.getStationsNotifier(),
+                              builder: (BuildContext context, List<Station>? value, Widget? child) {
+                                var program = repository.getCurrentProgram(stationID);
+
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Активна",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                    Checkbox(value: btn.programID == program?.id, onChanged: null)
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+                  ),
+                ),
               ],
             );
           },
         ),
-      ),
-    );
-  }
-
-  Widget _getMenu(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
-    if (isPortrait) {
-      return new ListView(
-        children: [
-          _getMainColumn(isPortrait, screenW, postMenuArgs),
-          Divider(
-            height: 5,
-            thickness: 5,
-            color: Colors.lightGreen,
-          ),
-          Row(
-            children: [_getButtonsColumn(isPortrait, screenW, postMenuArgs), _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)],
-          )
-        ],
-      );
-    } else {
-      return new FittedBox(
-        fit: BoxFit.fill,
-        child: Row(children: [_getMainColumn(isPortrait, screenW, postMenuArgs), _getButtonsColumn(isPortrait, screenW, postMenuArgs), _getCheckBoxColumn(isPortrait, screenW, postMenuArgs)]),
-      );
-    }
-  }
-
-  Widget _getMainColumn(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
-    return new Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(5),
-          child: SizedBox(
-            height: 50,
-            width: isPortrait ? screenW / 2 : ((_buttons?.length ?? 0) > 0 ? screenW / 3 - 20 : screenW - 100),
-            child: DecoratedBox(
-              child: FittedBox(
-                fit: BoxFit.fitHeight,
-                child: Padding(
-                  padding: EdgeInsets.all(2),
-                  child: Text("${_balance}"),
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.black12,
-                border: Border.all(color: Colors.lightGreen),
-              ),
-            ),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Icon(Icons.remove_circle_outline),
-              color: Colors.lightGreen,
-              splashColor: Colors.lightGreenAccent,
-              onPressed: () {
-                _changeServiceValue(value: -10);
-              },
-            ),
-            Container(
-              child: Text(
-                "${GlobalData.AddServiceValue} руб",
-                style: TextStyle(fontSize: 36),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.add_circle_outline),
-              color: Colors.lightGreen,
-              splashColor: Colors.lightGreenAccent,
-              onPressed: () {
-                _changeServiceValue(value: 10);
-              },
-            ),
-          ],
-        ),
-        Container(
-          padding: EdgeInsets.all(5),
-          width: isPortrait ? screenW / 2 : screenW / 3 - 20,
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.grey;
-                  }
-                  return Colors.lightGreen;
-                }),
-                foregroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.black;
-                  }
-                  return Colors.white;
-                }),
-                overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
-            child: Text(
-              "Отправить",
-              style: TextStyle(fontSize: 15),
-            ),
-            onPressed: () {
-              _addServiceMoney(postMenuArgs);
-            },
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(5),
-          width: isPortrait ? screenW / 2 : screenW / 3 - 20,
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.grey;
-                  }
-                  return Colors.lightGreen;
-                }),
-                foregroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.black;
-                  }
-                  return Colors.white;
-                }),
-                overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
-            child: Text(
-              "Инкассировать",
-              style: TextStyle(fontSize: 15),
-            ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text("Инакссировать?"),
-                  content: Text("Вы уверены?"),
-                  actionsPadding: EdgeInsets.all(10),
-                  actions: [
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith((states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return Colors.grey;
-                          }
-                          return Colors.lightGreen;
-                        }),
-                        foregroundColor: MaterialStateProperty.resolveWith((states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return Colors.black;
-                          }
-                          return Colors.white;
-                        }),
-                      ),
-                      onPressed: () async {
-                        try {
-                          var args = StationRequest(
-                            id: postMenuArgs.postID,
-                          );
-                          var res = await postMenuArgs.sessionData.client.saveCollection(args);
-                        } on ApiException catch (e) {
-                          if (e.code == 401) {
-                            print("Exception when calling DefaultApi->/save-collection: $e\n");
-                            showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Нет доступа", Colors.red);
-                          } else {
-                            showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-                          }
-                        } catch (e) {
-                          if (!(e is ApiException)) {
-                            print("Other Exception: $e\n");
-                          }
-                        }
-                        showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Пост проинкассирован", Colors.green);
-                        Navigator.pop(context);
-                      },
-                      child: Text("Да"),
-                    ),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith((states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return Colors.grey;
-                          }
-                          return Colors.white;
-                        }),
-                        foregroundColor: MaterialStateProperty.resolveWith((states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return Colors.black;
-                          }
-                          return Colors.black;
-                        }),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text("Нет"),
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(5),
-          width: isPortrait ? screenW / 2 : screenW / 3 - 20,
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.grey;
-                  }
-                  return Colors.lightGreen;
-                }),
-                foregroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.black;
-                  }
-                  return Colors.white;
-                }),
-                overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
-            child: Text(
-              "Открыть дверь",
-              style: TextStyle(fontSize: 15),
-            ),
-            onPressed: () {
-              try {
-                var args = ArgOpenStation(
-                  stationID: postMenuArgs.postID,
-                );
-                var res = postMenuArgs.sessionData.client.openStation(args);
-              } catch (e) {
-                print("Exception when calling DefaultApi->/open-station: $e\n");
-                showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-              }
-            },
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(5),
-          width: isPortrait ? screenW / 2 : screenW / 3 - 20,
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.grey;
-                  }
-                  return Colors.lightGreen;
-                }),
-                foregroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.black;
-                  }
-                  return Colors.white;
-                }),
-                overlayColor: MaterialStateProperty.all(Colors.lightGreenAccent)),
-            child: Text(
-              "История инкассаций",
-              style: TextStyle(fontSize: 15),
-            ),
-            onPressed: () {
-              var args = IncassationHistoryArgs(postMenuArgs.postID, postMenuArgs.sessionData);
-              if (_updateBalanceTimer.isActive) {
-                _updateBalanceTimer.cancel();
-              }
-              Navigator.pushNamed(context, "/mobile/incassation", arguments: args).then((value) {
-                _updateBalanceTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
-                  _getBalance(postMenuArgs);
-                });
-                setState(() {});
-              });
-
-              setState(() {});
-            },
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(5),
-          child: SizedBox(
-              height: 20,
-              width: isPortrait ? screenW / 2 : screenW / 3 - 20,
-              child: Center(
-                child: Text(
-                  "IP поста: ${postMenuArgs.ip}",
-                  style: TextStyle(fontSize: 14),
-                ),
-              )),
-        ),
-      ],
-    );
-  }
-
-  Widget _getButtonsColumn(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
-    return new Column(
-      children: List.generate(_maxButtons, (index) {
-        return Padding(
-          padding: EdgeInsets.all(10),
-          child: SizedBox(
-            height: 50,
-            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-            child: _getListButton(index, postMenuArgs),
-          ),
-        );
-      }),
-    );
-  }
-
-  Widget _getCheckBoxColumn(bool isPortrait, double screenW, PostMenuArgs postMenuArgs) {
-    return new Column(
-      children: List.generate(_maxButtons, (index) {
-        return Padding(
-          padding: EdgeInsets.all(10),
-          child: SizedBox(
-            height: 50,
-            width: isPortrait ? screenW / 2 - 20 : screenW / 3 - 20,
-            child: _getCheckBox(index, postMenuArgs),
-          ),
-        );
-      }),
-    );
-  }
-
-  Widget _getCheckBox(int index, PostMenuArgs postMenuArgs) {
-    return CheckboxListTile(
-      controlAffinity: ListTileControlAffinity.trailing,
-      title: Text(
-        'Активный',
-        style: TextStyle(fontSize: 15),
-      ),
-      value: index < _checkboxList.length ? _checkboxList[index] : false,
-      onChanged: (newValue) async {
-        //_programButtonListener(index, postMenuArgs);
-      },
-    );
-  }
-
-  Widget _getListButton(int index, PostMenuArgs postMenuArgs) {
-    return new ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return Colors.grey;
-          }
-          return Colors.lightGreen;
-        }),
-        foregroundColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return Colors.black;
-          }
-          return Colors.white;
-        }),
-      ),
-      onPressed: () async {
-        //_programButtonListener(index, postMenuArgs);
-      },
-      child: Text(
-        "${_buttonNames[index] ?? "${index + 1}"}",
-        style: TextStyle(fontSize: 15),
-        textAlign: TextAlign.left,
       ),
     );
   }

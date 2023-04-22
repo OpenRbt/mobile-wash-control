@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
-import 'package:mobile_wash_control/SharedData.dart';
-import 'package:mobile_wash_control/client/api.dart';
+import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/auth/authButton.dart';
+import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart' as lcw;
+import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth extends StatefulWidget {
@@ -16,7 +17,6 @@ class Auth extends StatefulWidget {
 }
 
 class _AuthState extends State<Auth> {
-  @override
   List<String> labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "0", "-"];
 
   late TextEditingController pinController;
@@ -33,31 +33,25 @@ class _AuthState extends State<Auth> {
     super.dispose();
   }
 
-  late SessionData _sessionData;
-
   Future<void> _tryAuth() async {
     try {
-      _sessionData = new SessionData(DefaultApi(ApiClient(basePath: widget.host)));
-      _sessionData.client.apiClient.addDefaultHeader("Pin", pinController.text);
-      var res = await _sessionData.client.getUser();
-      SharedData.sessionData = _sessionData;
-      if (!await SharedData.StartTimers()) {
-        print("Failed to start Timers");
-      }
-      _loadPage();
-    } catch (e) {}
-  }
+      var client = lcw.DefaultApi(lcw.ApiClient(basePath: widget.host));
+      client.apiClient.addDefaultHeader("Pin", pinController.text);
+      final prefs = await SharedPreferences.getInstance();
+      final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
 
-  void _loadPage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
-    GlobalData.AddServiceValue = addServiceValue;
-    SystemChrome.setPreferredOrientations([]);
-    Navigator.pushReplacementNamed(
-      context,
-      "/mobile/home",
-      arguments: _sessionData,
-    );
+      var args = Map<PageArgCode, dynamic>();
+      var repo = LeaCentralRepository(client);
+      args[PageArgCode.repository] = repo;
+
+      GlobalData.AddServiceValue = addServiceValue;
+      SystemChrome.setPreferredOrientations([]);
+      Navigator.pushReplacementNamed(
+        context,
+        "/mobile/home",
+        arguments: args,
+      );
+    } catch (e) {}
   }
 
   Widget build(BuildContext context) {
@@ -111,32 +105,33 @@ class _AuthState extends State<Auth> {
                 return AuthButton(
                   label: labels[index],
                   onPressed: () {
-                    setState(() {
-                      switch (labels[index]) {
-                        case "+":
-                          _tryAuth();
-                          break;
-                        case "-":
-                          var tmp = pinController.text;
-                          if (tmp.length > 1) {
-                            tmp = tmp.substring(0, tmp.length - 1);
-                          } else {
-                            tmp = "";
-                          }
-                          pinController.text = tmp;
-                          break;
-                        default:
-                          var tmp = pinController.text;
-                          if (tmp.length == 16) {
+                    setState(
+                      () {
+                        switch (labels[index]) {
+                          case "+":
+                            _tryAuth();
                             break;
-                          }
+                          case "-":
+                            var tmp = pinController.text;
+                            if (tmp.length > 1) {
+                              tmp = tmp.substring(0, tmp.length - 1);
+                            } else {
+                              tmp = "";
+                            }
+                            pinController.text = tmp;
+                            break;
+                          default:
+                            var tmp = pinController.text;
+                            if (tmp.length == 16) {
+                              break;
+                            }
 
-                          tmp += labels[index];
-                          pinController.text = tmp;
-                          break;
-                      }
-                      print(pinController.text);
-                    });
+                            tmp += labels[index];
+                            pinController.text = tmp;
+                            break;
+                        }
+                      },
+                    );
                   },
                   onLongPressed: (labels[index] == "-")
                       ? () {
