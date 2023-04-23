@@ -91,55 +91,60 @@ class _AuthState extends State<Auth> {
               )
             ],
           ),
-          GridView.count(
-            physics: ClampingScrollPhysics(),
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(20),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            crossAxisCount: 3,
-            childAspectRatio: 2,
-            children: List.generate(
-              labels.length ?? 0,
-              (index) {
-                return AuthButton(
-                  label: labels[index],
-                  onPressed: () {
-                    setState(
-                      () {
-                        switch (labels[index]) {
-                          case "+":
-                            _tryAuth();
-                            break;
-                          case "-":
-                            var tmp = pinController.text;
-                            if (tmp.length > 1) {
-                              tmp = tmp.substring(0, tmp.length - 1);
-                            } else {
-                              tmp = "";
-                            }
-                            pinController.text = tmp;
-                            break;
-                          default:
-                            var tmp = pinController.text;
-                            if (tmp.length == 16) {
-                              break;
-                            }
+          Expanded(
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 500),
+              child: GridView.count(
+                physics: ClampingScrollPhysics(),
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(20),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                crossAxisCount: 3,
+                childAspectRatio: 2,
+                children: List.generate(
+                  labels.length ?? 0,
+                  (index) {
+                    return AuthButton(
+                      label: labels[index],
+                      onPressed: () {
+                        setState(
+                          () {
+                            switch (labels[index]) {
+                              case "+":
+                                _tryAuth();
+                                break;
+                              case "-":
+                                var tmp = pinController.text;
+                                if (tmp.length > 1) {
+                                  tmp = tmp.substring(0, tmp.length - 1);
+                                } else {
+                                  tmp = "";
+                                }
+                                pinController.text = tmp;
+                                break;
+                              default:
+                                var tmp = pinController.text;
+                                if (tmp.length == 16) {
+                                  break;
+                                }
 
-                            tmp += labels[index];
-                            pinController.text = tmp;
-                            break;
-                        }
+                                tmp += labels[index];
+                                pinController.text = tmp;
+                                break;
+                            }
+                          },
+                        );
                       },
+                      onLongPressed: (labels[index] == "-")
+                          ? () {
+                              pinController.text = "";
+                            }
+                          : null,
                     );
                   },
-                  onLongPressed: (labels[index] == "-")
-                      ? () {
-                          pinController.text = "";
-                        }
-                      : null,
-                );
-              },
+                ),
+              ),
             ),
           ),
         ],

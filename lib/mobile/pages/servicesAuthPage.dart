@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
@@ -16,6 +18,8 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
   @override
   Widget build(BuildContext context) {
     bool _isSigningIn = false;
+
+    final theme = Theme.of(context);
 
     final args = ModalRoute.of(context)!.settings.arguments as Map<PageArgCode, dynamic>;
     final repository = args[PageArgCode.repository] as Repository;
@@ -40,7 +44,16 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
             future: Auth.Authentication.initializeFirebase(context: context),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
+                if (Platform.isAndroid) {
+                  return Text(snapshot.error.toString());
+                }
+                return Text(
+                  "Используйте мобильную версию приложения!",
+                  style: theme.textTheme.bodyLarge!.copyWith(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
               }
 
               if (snapshot.connectionState == ConnectionState.done) {

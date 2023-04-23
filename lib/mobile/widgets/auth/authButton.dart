@@ -12,19 +12,18 @@ class AuthButton extends StatelessWidget {
 
     switch (label) {
       case "+":
-        return TextButton(
+        return OutlinedButton(
           onPressed: onPressed,
           child: Icon(Icons.login_outlined),
         );
       case "-":
-        return TextButton(
+        return OutlinedButton(
           onPressed: onPressed,
-          onLongPress: onLongPressed,
           child: Icon(Icons.backspace_outlined),
         );
       default:
         if (label.isNotEmpty) {
-          return TextButton(
+          return OutlinedButton(
             onPressed: onPressed,
             child: Text(
               label,
@@ -34,17 +33,5 @@ class AuthButton extends StatelessWidget {
         }
         return SizedBox();
     }
-
-    return label.isNotEmpty
-        ? TextButton(
-            onPressed: onPressed,
-            child: label == "-"
-                ? Icon(Icons.backspace_outlined)
-                : Text(
-                    label,
-                    style: theme.textTheme.displaySmall,
-                  ),
-          )
-        : SizedBox();
   }
 }

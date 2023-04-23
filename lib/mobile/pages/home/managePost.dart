@@ -151,7 +151,9 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                     child: ValueListenableBuilder(
                                       valueListenable: repository.getStationsNotifier(),
                                       builder: (BuildContext context, List<Station>? value, Widget? child) {
-                                        final int? balance = value?.firstWhere((element) => element.id == stationID, orElse: null).currentBalance;
+                                        final int? balance = value
+                                            ?.firstWhere((element) => element.id == stationID, orElse: null)
+                                            .currentBalance;
 
                                         return Text(
                                           "${balance ?? "-"}",
@@ -233,7 +235,6 @@ class _ManagePostPageState extends State<ManagePostPage> {
                       "Управление постом",
                       style: theme.textTheme.bodyLarge,
                     ),
-                    childrenPadding: EdgeInsets.all(8),
                     children: [
                       ValueListenableBuilder(
                         valueListenable: repository.getStationsNotifier(),
@@ -245,76 +246,85 @@ class _ManagePostPageState extends State<ManagePostPage> {
                           );
                         },
                       ),
-                      ElevatedButton(
-                        child: Text(
-                          "Инкассировать",
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: ElevatedButton(
+                          child: Text(
+                            "Инкассировать",
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("Инкассировать"),
+                                content: Text("Вы уверены?"),
+                                actionsPadding: EdgeInsets.all(8),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      await repository.stationSaveCollection(stationID);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Да"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Нет"),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text("Инакссировать"),
-                              content: Text("Вы уверены?"),
-                              actionsPadding: EdgeInsets.all(8),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    await repository.stationSaveCollection(stationID);
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Да"),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Нет"),
-                                )
-                              ],
-                            ),
-                          );
-                        },
                       ),
-                      ElevatedButton(
-                        child: Text(
-                          "Открыть дверь",
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          child: Text(
+                            "Открыть дверь",
+                          ),
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("Открыть дверь"),
+                                content: Text("Вы уверены?"),
+                                actionsPadding: EdgeInsets.all(8),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      await repository.stationOpenDoor(stationID);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Да"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Нет"),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                        onPressed: () async {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text("Открыть дверь"),
-                              content: Text("Вы уверены?"),
-                              actionsPadding: EdgeInsets.all(8),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    await repository.stationOpenDoor(stationID);
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Да"),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Нет"),
-                                )
-                              ],
-                            ),
-                          );
-                        },
                       ),
-                      ElevatedButton(
-                        child: Text(
-                          "История инкассаций",
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          child: Text(
+                            "История инкассаций",
+                          ),
+                          onPressed: () {
+                            var args = Map<PageArgCode, dynamic>();
+                            args[PageArgCode.repository] = repository;
+                            args[PageArgCode.stationID] = stationID;
+                            Navigator.pushNamed(context, "/mobile/home/incassation-history", arguments: args);
+                          },
                         ),
-                        onPressed: () {
-                          var args = Map<PageArgCode, dynamic>();
-                          args[PageArgCode.repository] = repository;
-                          args[PageArgCode.stationID] = stationID;
-                          Navigator.pushNamed(context, "/mobile/home/incassation-history", arguments: args);
-                        },
                       ),
                     ],
                   ),

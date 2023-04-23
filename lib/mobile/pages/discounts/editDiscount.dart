@@ -69,7 +69,8 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
 
   Future<void> _resetUI() async {
     if (_discount.value != null) {
-      _currentDiscount.value = _discount.value!.copyWith(startDate: null, endDate: null, name: _discount.value!.name ?? "Новая скидочная ппрограмма");
+      _currentDiscount.value = _discount.value!
+          .copyWith(startDate: null, endDate: null, name: _discount.value!.name ?? "Новая скидочная ппрограмма");
     }
 
     _controllers["name"]!.text = _currentDiscount.value.name ?? "";
@@ -145,7 +146,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                 Card(
                   child: ExpansionTile(
                     title: Text(
-                      "Параметры скидочной кампании",
+                      "Параметры скидочной программы",
                       style: theme.textTheme.titleLarge,
                     ),
                     childrenPadding: EdgeInsets.all(8),
@@ -442,7 +443,8 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                           onPressed: () {
                             showGeneralDialog(
                               context: context,
-                              pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                              pageBuilder:
+                                  (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
                                 return ProgramDiscountDialog(campaign: _currentDiscount, repository: repository);
                               },
                             );

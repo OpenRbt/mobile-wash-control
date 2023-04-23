@@ -25,7 +25,7 @@ class DiscountCampaignListTile extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(campaign.name ?? "Скидочная кампания ${campaign.id!}"),
+            Text(campaign.name ?? "Скидочная программа ${campaign.id!}"),
             Icon(
               Icons.circle,
               color: (campaign.enabled ?? false) ? Colors.green : Colors.red,
