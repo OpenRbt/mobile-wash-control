@@ -44,6 +44,8 @@ class _AuthState extends State<Auth> {
       var repo = LeaCentralRepository(client);
       args[PageArgCode.repository] = repo;
 
+      final res = await repo.getCurrentUser();
+
       GlobalData.AddServiceValue = addServiceValue;
       SystemChrome.setPreferredOrientations([]);
       Navigator.pushReplacementNamed(
@@ -57,6 +59,7 @@ class _AuthState extends State<Auth> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    var appBarPadding = AppBar().preferredSize.height + MediaQuery.of(context).padding.top;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -64,6 +67,9 @@ class _AuthState extends State<Auth> {
         children: [
           Column(
             children: [
+              Container(
+                height: appBarPadding,
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
