@@ -73,9 +73,9 @@ class _HomeState extends State<Home> {
     }
     scanTargets.addAll(
       List.generate(
-        256,
+        255,
         (index) {
-          return "$scanIP.$index";
+          return "$scanIP.${index + 1}";
         },
       ),
     );
@@ -89,6 +89,20 @@ class _HomeState extends State<Home> {
   }
 
   Future<bool> _scanHost(String host) async {
+    try {
+      var client = HttpClient();
+      client.connectionTimeout = Duration(seconds: 3);
+      final res = await client.get(host, 8020, "/ping");
+      final response = await res.close();
+      if (response.statusCode != 200) {
+        return false;
+      }
+      return true;
+    } catch (e) {}
+    return false;
+  }
+
+  Future<bool> _scanManual(String host) async {
     try {
       var client = HttpClient();
       client.connectionTimeout = Duration(seconds: 3);
@@ -175,7 +189,7 @@ class _HomeState extends State<Home> {
                                     child: StatefulBuilder(
                                       builder: (BuildContext context, void Function(void Function()) setState) {
                                         return FutureBuilder(
-                                          future: _scanHost(_hostField.value.text),
+                                          future: _scanManual(_hostField.value.text),
                                           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                                             TextButton button;
 
