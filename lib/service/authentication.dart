@@ -12,7 +12,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 class Authentication {
   static Future<User?> authorize({required BuildContext context, String? email, String? password}) async {
     FirebaseAuth auth = FirebaseAuth.instanceFor(app: Firebase.app("openwashing"));
-    User? user;
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -66,12 +65,11 @@ class Authentication {
           final credential = GoogleAuthProvider.credential(accessToken: accessToken, idToken: idtoken);
 
           final res = await auth.signInWithCredential(credential);
-          user = auth.currentUser;
         }
 
         break;
     }
-    return user;
+    return auth.currentUser;
   }
 
   static Future<void> signOut({required BuildContext context}) async {
