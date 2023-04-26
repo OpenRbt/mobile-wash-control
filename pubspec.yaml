@@ -22,21 +22,24 @@ environment:
 
 
 dependencies:
-  flutter_localizations:
-    sdk: flutter
+  flutter_localization: ^0.1.10
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.0
-
-  package_info_plus: ^1.3.0
-  network_info_plus: ^3.0.2
+  package_info_plus: ^3.1.0
+  network_info_plus: ^3.0.3
   http: '>=0.13.0 <0.14.0'
-  intl: '>=0.17.0 <0.18.0'
+  intl: '>=0.17.0 <0.18.1'
   meta: '^1.8.0'
   shared_preferences: ^2.0.17
-  firebase_core: ^2.8.0
-  firebase_auth: ^4.3.0
+  firebase_core: '>=1.20.0 <2.10.0'
+  firebase_auth: '>=3.6.2 <4.4.2'
   google_sign_in: ^6.0.2
+  firebase_core_desktop: ^1.0.2
+  firebase_auth_desktop: ^1.0.2
+  desktop_webview_auth: ^0.0.11
+
+dependency_overrides:
+  firebase_core_platform_interface: 4.5.1
 
 dev_dependencies:
   flutter_test:

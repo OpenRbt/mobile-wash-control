@@ -32,12 +32,10 @@ class ScanHostListTile extends StatelessWidget {
           );
         }
 
-        return Card(
-          child: ListTile(
-            title: Text(host),
-            leading: icon,
-            onTap: ok ? onPressed : null,
-          ),
+        return ListTile(
+          title: Text(host),
+          leading: icon,
+          onTap: ok ? onPressed : null,
         );
       },
     );
