@@ -62,7 +62,7 @@ class Helpers {
             relaysPreflight: [],
           ),
           _getProgram(
-            id: 1,
+            id: 5,
             name: "wsh-osmosian",
             price: 25,
             preflightEnabled: false,
@@ -75,7 +75,7 @@ class Helpers {
             relaysPreflight: [],
           ),
           _getProgram(
-            id: 1,
+            id: 6,
             name: "wsh-pause",
             price: 25,
             preflightEnabled: false,

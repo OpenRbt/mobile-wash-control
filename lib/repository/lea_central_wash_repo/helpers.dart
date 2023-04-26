@@ -18,7 +18,8 @@ class Helpers {
     });
     program.preflightRelays.forEach((element) {
       if ((element.timeon ?? 0) + (element.timeoff ?? 0) > 0) {
-        res.relaysPreflight[element.id! - 1] = entity.RelayConfig.FromApi(element.id!, element.timeon ?? 0, element.timeoff ?? 0);
+        res.relaysPreflight[element.id! - 1] =
+            entity.RelayConfig.FromApi(element.id!, element.timeon ?? 0, element.timeoff ?? 0);
       }
     });
     return res;
@@ -89,7 +90,7 @@ class Helpers {
     );
   }
 
-  static entity.DiscountCampaign discountCampaignFromApi(DiscountCampaign campaign) {
+  static entity.DiscountCampaign discountCampaignFromApi(AdvertisingCampaign campaign) {
     Set<entity.WeekDay> weekDays = Set();
 
     campaign.weekday.forEach((element) {
@@ -107,7 +108,8 @@ class Helpers {
       discountPrograms: Set.from(
         List.generate(
           campaign.discountPrograms.length ?? 0,
-          (index) => entity.DiscountProgram(programID: campaign.discountPrograms[index].programID, discount: campaign.discountPrograms[index].discount),
+          (index) => entity.DiscountProgram(
+              programID: campaign.discountPrograms[index].programID, discount: campaign.discountPrograms[index].discount),
         ),
       ),
       weekDays: weekDays,
@@ -115,7 +117,7 @@ class Helpers {
     );
   }
 
-  static DiscountCampaign discountCampaignToApi(entity.DiscountCampaign campaign) {
+  static AdvertisingCampaign discountCampaignToApi(entity.DiscountCampaign campaign) {
     List<AdvertisingCampaignWeekdayEnum> weekdays = [];
 
     campaign.weekDays?.forEach(
@@ -153,7 +155,7 @@ class Helpers {
       discountPrograms.add(DiscountProgram(programID: element.programID, discount: element.discount));
     });
 
-    return DiscountCampaign(
+    return AdvertisingCampaign(
       id: campaign.id,
       startDate: campaign.startDate.millisecondsSinceEpoch ~/ 1000,
       endDate: campaign.endDate.millisecondsSinceEpoch ~/ 1000,
@@ -199,7 +201,10 @@ class Helpers {
   }
 
   static entity.StationCardReaderConfig cardReaderConfigFromAPI(CardReaderConfig config) {
-    return entity.StationCardReaderConfig(host: config.host, port: config.port, cardReader: entity.CardReader.fromString(config.cardReaderType?.toString() ?? ""));
+    return entity.StationCardReaderConfig(
+        host: config.host,
+        port: config.port,
+        cardReader: entity.CardReader.fromString(config.cardReaderType?.toString() ?? ""));
   }
 
   static CardReaderConfig cardReaderConfigToAPI(int id, entity.StationCardReaderConfig config) {

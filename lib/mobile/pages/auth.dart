@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
@@ -61,6 +63,14 @@ class _AuthState extends State<Auth> {
 
     var appBarPadding = AppBar().preferredSize.height + MediaQuery.of(context).padding.top;
     return Scaffold(
+      floatingActionButton: Platform.isAndroid
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.exit_to_app_outlined),
+            ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         // crossAxisAlignment: CrossAxisAlignment.center,
