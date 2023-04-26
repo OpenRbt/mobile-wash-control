@@ -76,7 +76,6 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
               setState(() {
                 _isSigningIn = false;
               });
-              print("User: ${user?.uid}");
               if (user != null) {
                 Common.SetAuthToken(await user.getIdToken());
 

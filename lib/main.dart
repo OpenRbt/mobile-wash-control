@@ -10,6 +10,7 @@ import 'package:mobile_wash_control/utils/common.dart';
 
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   FirebaseApp app;
   try {
     app = Firebase.app("openwashing");

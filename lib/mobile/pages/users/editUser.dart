@@ -345,8 +345,6 @@ class _UserEditPageState extends State<UserEditPage> {
               ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      print("save login: ${_currentUser.value!.login}");
-
                       if (argUser != null) {
                         await repository.updateUser(_currentUser.value!);
                         _user = _currentUser.value!.copyWith(login: _currentUser.value!.login);

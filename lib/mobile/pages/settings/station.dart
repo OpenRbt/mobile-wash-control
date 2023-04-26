@@ -425,7 +425,6 @@ class _StationPageState extends State<StationPage> {
                           children: List.generate(
                             buttons.length,
                             (index) {
-                              print("Button ${buttons[index].buttonID} Program ${buttons[index].programID ?? -1}");
                               return Row(
                                 children: [
                                   Flexible(

@@ -28,10 +28,6 @@ class Authentication {
 
           try {
             final UserCredential userCredential = await auth.signInWithCredential(credential);
-
-            user = userCredential.user;
-            final token = await user!.getIdToken();
-            print(token);
           } on FirebaseAuthException catch (e) {
             if (e.code == 'account-exists-with-different-credential') {
               ScaffoldMessenger.of(context).showSnackBar(

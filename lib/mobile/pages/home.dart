@@ -140,9 +140,14 @@ class _HomeState extends State<Home> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
+          Card(
+            child: ExpansionTile(
+              initiallyExpanded: true,
+              title: Text(
+                "Информация о сети",
+                style: theme.textTheme.titleLarge,
+              ),
+              childrenPadding: EdgeInsets.all(8),
               children: [
                 Text("IP: ${lanIP ?? ""}"),
                 Text("Broadcast: ${lanBroadcast ?? ""}"),
@@ -160,7 +165,12 @@ class _HomeState extends State<Home> {
             ),
           ),
           Card(
-            child: Column(
+            child: ExpansionTile(
+              initiallyExpanded: true,
+              title: Text(
+                "Сканирование",
+                style: theme.textTheme.titleLarge,
+              ),
               children: [
                 StatefulBuilder(
                   builder: (BuildContext context, void Function(void Function()) setState) {
@@ -180,7 +190,7 @@ class _HomeState extends State<Home> {
                             ),
                             onPressed: null,
                             label: Text(
-                              "Сканирование",
+                              "Сканирование...",
                             ),
                           );
                         } else {
@@ -194,7 +204,6 @@ class _HomeState extends State<Home> {
                             ),
                           );
                         }
-
                         return Column(
                           children: [
                             Padding(
@@ -254,9 +263,7 @@ class _HomeState extends State<Home> {
                                                     constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
                                                     child: ElevatedButton(
                                                       onPressed: () {
-                                                        Navigator.pushNamed(context, "/mobile/auth",
-                                                                arguments: "http://${manualHost ?? ""}:8020")
-                                                            .then((value) {}, onError: (value) {});
+                                                        Navigator.pushNamed(context, "/mobile/auth", arguments: "http://${manualHost ?? ""}:8020").then((value) {}, onError: (value) {});
                                                       },
                                                       child: Text(manualHost ?? ""),
                                                     ),
@@ -278,14 +285,13 @@ class _HomeState extends State<Home> {
                     );
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextButton.icon(
-                    onPressed: _findServers,
-                    label: Text("Сканировать сеть"),
-                    icon: Container(
-                      height: 24,
-                      width: 24,
+                TextButton.icon(
+                  onPressed: _findServers,
+                  label: Text("Сканировать сеть"),
+                  icon: Container(
+                    height: theme.iconTheme.size ?? 24,
+                    child: FittedBox(
+                      fit: BoxFit.fitHeight,
                       child: Icon(Icons.search_rounded),
                     ),
                   ),
@@ -293,9 +299,8 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
-          Divider(),
           Text(
-            "Сканирование сети",
+            "Результаты сканирования",
             style: theme.textTheme.titleLarge,
           ),
           Divider(),
@@ -310,8 +315,7 @@ class _HomeState extends State<Home> {
                       action: _scanHost(value[index]),
                       host: value[index],
                       onPressed: () {
-                        Navigator.pushNamed(context, "/mobile/auth", arguments: "http://" + value[index] + ":8020")
-                            .then((value) {}, onError: (value) {});
+                        Navigator.pushNamed(context, "/mobile/auth", arguments: "http://" + value[index] + ":8020").then((value) {}, onError: (value) {});
                       },
                     ),
                   ),
