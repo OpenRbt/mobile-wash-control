@@ -131,4 +131,3 @@ app.*.symbols
 
 **/google-services.json
 **/build_config.json
-**/firebase_options.dart
