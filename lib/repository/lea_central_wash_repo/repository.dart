@@ -23,8 +23,12 @@ class LeaCentralRepository extends Repository {
   ValueNotifier<List<String>?> _hashes = ValueNotifier(null);
 
   LeaCentralRepository(this.api) {
-    refresh = Timer.periodic(Duration(seconds: 3), (timer) async {
+    _startTimer();
+  }
+  void _startTimer() {
+    refresh = Timer(Duration(seconds: 1), () async {
       await updateStatus();
+      _startTimer();
     });
   }
 
@@ -114,7 +118,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось обновить статус, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось обновить статус, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -150,7 +155,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить список программ, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить список программ, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -176,7 +182,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось загрузить программу, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось загрузить программу, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -229,7 +236,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики для поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики для поста $id"));
           }
           break;
         default:
@@ -286,7 +294,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики для поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики для поста $id"));
           }
           break;
         default:
@@ -310,7 +319,8 @@ class LeaCentralRepository extends Repository {
       final args = ArgOpenStation(stationID: id);
       final response = await api.openStation(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Выполнена открытие двери нв посту $id"));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Выполнена открытие двери нв посту $id"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -429,7 +439,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сохранить программу, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сохранить программу, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -473,7 +484,8 @@ class LeaCentralRepository extends Repository {
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить список пользователей, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBars.getErrorSnackBar(message: "Не удалось получить список пользователей, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -499,7 +511,8 @@ class LeaCentralRepository extends Repository {
       final response = api.updateUser(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно обновлен"));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно обновлен"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -510,7 +523,8 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином не найден"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином не найден"));
           }
           break;
 
@@ -548,7 +562,8 @@ class LeaCentralRepository extends Repository {
       final response = await api.createUser(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно добавлен"));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно добавлен"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -559,7 +574,8 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.conflict:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином уже существует"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином уже существует"));
           }
           break;
 
@@ -645,8 +661,10 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<entity.StationMoneyReport?> getStationMoneyReportsByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context}) async {
-    final args = ArgStationReportDates(id: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
+  Future<entity.StationMoneyReport?> getStationMoneyReportsByDates(int id, DateTime startDate, DateTime endDate,
+      {BuildContext? context}) async {
+    final args = ArgStationReportDates(
+        id: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
 
     try {
       final response = await api.stationReportDates(args);
@@ -656,7 +674,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики для поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики для поста $id"));
           }
           break;
         default:
@@ -675,20 +694,25 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<List<entity.StationCollectionReport>?> getStationCollectionReports(int id, DateTime startDate, DateTime endDate) async {
-    final args = ArgCollectionReportDates(stationID: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
+  Future<List<entity.StationCollectionReport>?> getStationCollectionReports(
+      int id, DateTime startDate, DateTime endDate) async {
+    final args = ArgCollectionReportDates(
+        stationID: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
     final response = await api.stationCollectionReportDates(args);
 
     if (response?.collectionReports != null) {
-      return List.generate(response!.collectionReports.length, (index) => Helpers.stationCollectionReportFromAPI(response!.collectionReports[index]));
+      return List.generate(response!.collectionReports.length,
+          (index) => Helpers.stationCollectionReportFromAPI(response!.collectionReports[index]));
     }
 
     return null;
   }
 
   @override
-  Future<List<entity.StationStats>?> getStationsStatsByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context}) async {
-    final args = ArgStationStatDates(stationID: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
+  Future<List<entity.StationStats>?> getStationsStatsByDates(int id, DateTime startDate, DateTime endDate,
+      {BuildContext? context}) async {
+    final args = ArgStationStatDates(
+        stationID: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
     try {
       final response = await api.stationStatDates(args: args);
 
@@ -699,7 +723,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса для поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса для поста $id"));
           }
           break;
         case HttpStatus.unauthorized:
@@ -740,7 +765,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса  для поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса  для поста $id"));
           }
           break;
         case HttpStatus.unauthorized:
@@ -774,9 +800,11 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<entity.StationStats?> getStationStatsByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context}) async {
+  Future<entity.StationStats?> getStationStatsByDates(int id, DateTime startDate, DateTime endDate,
+      {BuildContext? context}) async {
     try {
-      final args = ArgStationStatDates(stationID: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
+      final args = ArgStationStatDates(
+          stationID: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
       final response = await api.stationStatDates(args: args);
 
       if (response != null && response.length > 0) {
@@ -786,7 +814,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса для поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса для поста $id"));
           }
           break;
         case HttpStatus.unauthorized:
@@ -827,7 +856,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса для поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса для поста $id"));
           }
           break;
         case HttpStatus.unauthorized:
@@ -905,7 +935,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
           }
           break;
         case HttpStatus.unauthorized:
@@ -994,13 +1025,15 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найден параметр конфига - $name"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найден параметр конфига - $name"));
           }
           break;
 
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить параметр конфига - $name, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBars.getErrorSnackBar(message: "Не удалось получить параметр конфига - $name, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -1059,13 +1092,15 @@ class LeaCentralRepository extends Repository {
       var args = ConfigVarInt(name: name, value: value);
       final response = await api.setConfigVarInt(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Параметр конфига $name успешно установлен"));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Параметр конфига $name успешно установлен"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось установить параметр конфига - $name, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBars.getErrorSnackBar(message: "Не удалось установить параметр конфига - $name, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -1100,7 +1135,8 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста $id"));
           }
           break;
         default:
@@ -1125,7 +1161,8 @@ class LeaCentralRepository extends Repository {
       final response = await api.setStation(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация поста ${config.id} успешно сохранена"));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация поста ${config.id} успешно сохранена"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -1136,7 +1173,8 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста ${config.id}"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста ${config.id}"));
           }
           break;
         case HttpStatus.unprocessableEntity:
@@ -1170,7 +1208,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера для поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера для поста $id"));
           }
           break;
         default:
@@ -1195,7 +1234,8 @@ class LeaCentralRepository extends Repository {
       final response = await api.setCardReaderConfig(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кардридера поста $id успешно сохранена"));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кардридера поста $id успешно сохранена"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -1206,7 +1246,8 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера поста $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера поста $id"));
           }
           break;
         case HttpStatus.unprocessableEntity:
@@ -1239,13 +1280,15 @@ class LeaCentralRepository extends Repository {
         stationID: id,
         buttons: List.generate(
           buttonsToSave.length,
-          (index) => ResponseStationButtonButtonsInner(buttonID: buttonsToSave.elementAt(index).buttonID, programID: buttonsToSave.elementAt(index).programID),
+          (index) => ResponseStationButtonButtonsInner(
+              buttonID: buttonsToSave.elementAt(index).buttonID, programID: buttonsToSave.elementAt(index).programID),
         ),
       );
 
       final response = await api.setStationButton(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кнопок поста $id сохранена"));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кнопок поста $id сохранена"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -1280,7 +1323,8 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
           }
           break;
         case HttpStatus.unauthorized:
