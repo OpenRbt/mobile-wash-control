@@ -35,10 +35,10 @@ class _ProgramsPageState extends State<ProgramsPage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await repository.updatePrograms();
+          await repository.updatePrograms(context: context);
         },
         child: FutureBuilder(
-          future: repository.updatePrograms(),
+          future: repository.updatePrograms(context: context),
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return Center(
@@ -140,8 +140,8 @@ class _ProgramsPageState extends State<ProgramsPage> {
                     var args = Map<PageArgCode, dynamic>();
                     args[PageArgCode.repository] = repository;
                     args[PageArgCode.programID] = null;
-                    Navigator.pushNamed(context, "/mobile/programs/add", arguments: args).then(
-                      (value) => repository.updatePrograms(),
+                    Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
+                      (value) => repository.updatePrograms(context: context),
                     );
                   },
                   child: Text("Добавить программу"),

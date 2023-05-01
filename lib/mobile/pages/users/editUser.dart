@@ -63,7 +63,7 @@ class _UserEditPageState extends State<UserEditPage> {
         title: Text(argUser != null ? "Редактирование пользователя" : "Создание пользователя"),
         actions: [
           FutureBuilder(
-            future: repository.getCurrentUser(),
+            future: repository.getCurrentUser(context: context),
             builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
               if (argUser == null || snapshot.connectionState != ConnectionState.done) {
                 return Container();
@@ -80,7 +80,7 @@ class _UserEditPageState extends State<UserEditPage> {
                             actions: [
                               TextButton(
                                 onPressed: () async {
-                                  await repository.deleteUser(argUser.login);
+                                  await repository.deleteUser(argUser.login, context: context);
                                   Navigator.pop(context);
                                   Navigator.of(context).pop();
                                 },
@@ -346,12 +346,12 @@ class _UserEditPageState extends State<UserEditPage> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       if (argUser != null) {
-                        await repository.updateUser(_currentUser.value!);
+                        await repository.updateUser(_currentUser.value!, context: context);
                         _user = _currentUser.value!.copyWith(login: _currentUser.value!.login);
 
                         Navigator.pop(context);
                       } else {
-                        await repository.createUser(_currentUser.value!, _controllers["pin"]!.text);
+                        await repository.createUser(_currentUser.value!, _controllers["pin"]!.text, context: context);
                         Navigator.pop(context);
                       }
                     }

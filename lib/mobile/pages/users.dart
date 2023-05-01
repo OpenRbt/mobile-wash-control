@@ -28,7 +28,7 @@ class _UsersPageState extends State<UsersPage> {
         repository: repository,
       ),
       body: FutureBuilder(
-        future: repository.updateUsers(),
+        future: repository.updateUsers(context: context),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           return RefreshIndicator(
             child: Column(
@@ -47,7 +47,7 @@ class _UsersPageState extends State<UsersPage> {
                               var args = Map<PageArgCode, dynamic>();
                               args[PageArgCode.repository] = repository;
                               args[PageArgCode.user] = users![index];
-                              Navigator.pushNamed(context, "/mobile/users/edit", arguments: args).then((value) => repository.updateUsers());
+                              Navigator.pushNamed(context, "/mobile/users/edit", arguments: args).then((value) => repository.updateUsers(context: context));
                             },
                           );
                         },
@@ -60,14 +60,14 @@ class _UsersPageState extends State<UsersPage> {
                     var args = Map<PageArgCode, dynamic>();
                     args[PageArgCode.repository] = repository;
                     args[PageArgCode.user] = null;
-                    Navigator.pushNamed(context, "/mobile/users/edit", arguments: args).then((value) => repository.updateUsers());
+                    Navigator.pushNamed(context, "/mobile/users/edit", arguments: args).then((value) => repository.updateUsers(context: context));
                   },
                   child: Text("добавить пользователя"),
                 ),
               ],
             ),
             onRefresh: () async {
-              await repository.updateUsers();
+              await repository.updateUsers(context: context);
             },
           );
         },

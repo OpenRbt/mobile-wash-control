@@ -78,14 +78,14 @@ class _EditProgramPageState extends State<EditProgramPage> {
     super.dispose();
   }
 
-  Future<void> getProgram(int? id, Repository repo) async {
+  Future<void> getProgram(int? id, Repository repository, BuildContext context) async {
     if (id == null) {
       _program.value = entity.Program(null);
       updateUIState();
       return;
     }
 
-    var prog = await repo.getProgram(id);
+    var prog = await repository.getProgram(id, context: context);
     _program.value = prog!;
     updateUIState();
   }
@@ -110,11 +110,10 @@ class _EditProgramPageState extends State<EditProgramPage> {
   }
 
   void saveProgram(BuildContext context, int? id, Repository repository) async {
-    await repository.saveProgram(_program.value);
+    await repository.saveProgram(_program.value, context: context);
     if (_program.value.id != null) {
-      await getProgram(id, repository);
+      await getProgram(id, repository, context);
     }
-    repository.updatePrograms();
   }
 
   @override
@@ -136,7 +135,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
         ),
         key: _scaffoldKey,
         body: FutureBuilder(
-          future: getProgram(id, repository),
+          future: getProgram(id, repository, context),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return Center(
@@ -377,7 +376,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                getProgram(id, repository);
+                                getProgram(id, repository, context);
                               },
                               child: Text("Отменить"),
                             ),

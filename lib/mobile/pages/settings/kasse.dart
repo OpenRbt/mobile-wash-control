@@ -45,8 +45,8 @@ class _KassePageState extends State<KassePage> {
     super.dispose();
   }
 
-  Future<void> _getKasseConfig(Repository repository) async {
-    _config.value = await repository.getKasseConfig() ?? KasseConfig(taxType: TaxType.no);
+  Future<void> _getKasseConfig(Repository repository, BuildContext context) async {
+    _config.value = await repository.getKasseConfig(context: context) ?? KasseConfig(taxType: TaxType.no);
 
     _controller["receipt"]!.text = _config.value.receiptItemName ?? "";
     _controller["cashier"]!.text = _config.value.cashier ?? "";
@@ -68,7 +68,7 @@ class _KassePageState extends State<KassePage> {
         physics: BouncingScrollPhysics(),
         children: [
           FutureBuilder(
-            future: _getKasseConfig(repository),
+            future: _getKasseConfig(repository, context),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
               return ValueListenableBuilder(
                 valueListenable: _config,
@@ -218,22 +218,23 @@ class _KassePageState extends State<KassePage> {
                               ),
                             ],
                           ),
+                          Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              ElevatedButton(
+                              TextButton(
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
-                                    await repository.saveKasseConfig(_config.value);
+                                    await repository.saveKasseConfig(_config.value, context: context);
                                   }
                                 },
                                 child: Text("Сохранить"),
                               ),
-                              ElevatedButton(
+                              TextButton(
                                 onPressed: () async {
-                                  await _getKasseConfig(repository);
+                                  await _getKasseConfig(repository, context);
                                 },
-                                child: Text("Сбросить"),
+                                child: Text("Получить текущую конфигурацию"),
                               ),
                             ],
                           ),

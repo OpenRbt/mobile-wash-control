@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
-import 'package:mobile_wash_control/mobile/helpers.dart';
+import 'package:mobile_wash_control/mobile/utils/ConfigPresets.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 class PresetsPage extends StatefulWidget {
@@ -13,7 +13,7 @@ class PresetsPage extends StatefulWidget {
 class _PresetsPageState extends State<PresetsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  final List<StationPreset> presets = Helpers.getStationPresets();
+  final List<StationPreset> presets = ConfigPresets.getStationPresets();
   ValueNotifier<String> _selectedPreset = ValueNotifier("");
 
   late List<DropdownMenuItem> _presetsDropdownItems;
@@ -40,18 +40,18 @@ class _PresetsPageState extends State<PresetsPage> {
     super.initState();
   }
 
-  Future<void> _applyPreset(Repository repository) async {
+  Future<void> _applyPreset(Repository repository, BuildContext context) async {
     final selectedPreset = _selectedPreset.value;
     if (selectedPreset.isNotEmpty) {
       final preset = presets.where((element) => element.name == selectedPreset).single;
 
       for (int i = 0; i < preset.programs.length; i++) {
-        await repository.saveProgram(preset.programs[i]);
+        await repository.saveProgram(preset.programs[i], context: context);
       }
 
       for (int i = 0; i < _stationsToSave.length; i++) {
         if (_stationsToSave[i]) {
-          repository.saveStationButtons(i + 1, preset.stationButtons);
+          repository.saveStationButtons(i + 1, preset.stationButtons, context: context);
         }
       }
 
@@ -129,7 +129,7 @@ class _PresetsPageState extends State<PresetsPage> {
                       actions: [
                         ElevatedButton(
                           onPressed: () {
-                            _applyPreset(repository);
+                            _applyPreset(repository, context);
                             Navigator.pop(context);
                           },
                           child: Text("Да"),

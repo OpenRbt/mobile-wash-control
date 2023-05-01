@@ -56,12 +56,12 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
     super.dispose();
   }
 
-  Future<void> _getDiscount(int? id, Repository repository) async {
+  Future<void> _getDiscount(int? id, Repository repository, BuildContext context) async {
     if (id == null) {
       return;
     }
 
-    final discount = await repository.getDiscountCampaign(id);
+    final discount = await repository.getDiscountCampaign(id, context: context);
     if (_discount.value == null) {
       _discount.value = discount;
     }
@@ -69,8 +69,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
 
   Future<void> _resetUI() async {
     if (_discount.value != null) {
-      _currentDiscount.value = _discount.value!
-          .copyWith(startDate: null, endDate: null, name: _discount.value!.name ?? "Новая скидочная ппрограмма");
+      _currentDiscount.value = _discount.value!.copyWith(startDate: null, endDate: null, name: _discount.value!.name ?? "Новая скидочная ппрограмма");
     }
 
     _controllers["name"]!.text = _currentDiscount.value.name ?? "";
@@ -106,7 +105,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                           actions: [
                             TextButton(
                               onPressed: () async {
-                                await repository.deleteDiscountCampaign(discountID);
+                                await repository.deleteDiscountCampaign(discountID, context: context);
                                 Navigator.of(context).pop();
                                 Navigator.pop(context);
                               },
@@ -136,7 +135,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
         ],
       ),
       body: FutureBuilder(
-        future: _getDiscount(discountID, repository).then((value) => _resetUI()),
+        future: _getDiscount(discountID, repository, context).then((value) => _resetUI()),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           return Form(
             key: _formKey,
@@ -443,8 +442,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                           onPressed: () {
                             showGeneralDialog(
                               context: context,
-                              pageBuilder:
-                                  (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                              pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
                                 return ProgramDiscountDialog(campaign: _currentDiscount, repository: repository);
                               },
                             );
@@ -460,8 +458,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          await repository.saveDiscountCampaign(_currentDiscount.value);
-                          Navigator.pop(context);
+                          await repository.saveDiscountCampaign(_currentDiscount.value, context: context);
                         }
                       },
                       child: Text("Сохранить"),

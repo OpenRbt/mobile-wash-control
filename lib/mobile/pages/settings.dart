@@ -4,19 +4,7 @@ import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/settings/settingsStationListTile.dart';
-import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
-
-//TODO: remove this!
-class SettingsData {
-  final int id;
-  final String ip;
-  final String name;
-  final String hash;
-  final String status;
-
-  SettingsData(this.id, this.ip, this.name, this.hash, this.status);
-}
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -33,14 +21,6 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
   }
 
-  String _currentTemp = "__";
-  List<SettingsData> _settingsData = List.generate(10, (index) {
-    return new SettingsData(-1, "...", "Loading", "$index", "loading");
-  });
-
-  List<String> _availableHashes = [];
-
-  int _timeZone = -1;
   final List<int> _timeZoneValues = [
     -12 * 60,
     -11 * 60,
@@ -118,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   ValueNotifier<LeaCentralConfig?> _config = ValueNotifier(null);
 
-  Future<void> getSettings(Repository repository) async {
+  Future<void> getSettings(Repository repository, BuildContext context) async {
     var timezone = await repository.getConfigVarInt("TIMEZONE");
     _config.value = LeaCentralConfig(timeZone: timezone);
   }
@@ -131,7 +111,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final DateTime currentTime = DateTime.now();
 
     final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
-    final repository = args[PageArgCode.repository] as LeaCentralRepository;
+    final repository = args[PageArgCode.repository] as Repository;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -156,11 +136,11 @@ class _SettingsPageState extends State<SettingsPage> {
         repository: repository,
       ),
       body: FutureBuilder(
-        future: getSettings(repository),
+        future: getSettings(repository, context),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           return RefreshIndicator(
             onRefresh: () async {
-              await getSettings(repository);
+              await getSettings(repository, context);
             },
             child: ListView(
               children: [
@@ -182,12 +162,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             Flexible(
                               flex: 2,
                               fit: FlexFit.tight,
-                              child: DropdownButton(
-                                isExpanded: true,
-                                items: _timeZoneValuesDropList,
-                                value: _config.value?.timeZone ?? -1,
-                                onChanged: (val) async {
-                                  await repository.setConfigVarInt("TIMEZONE", val).then((value) => getSettings(repository));
+                              child: StatefulBuilder(
+                                builder: (BuildContext context, void Function(void Function()) setState) {
+                                  return DropdownButton(
+                                    isExpanded: true,
+                                    items: _timeZoneValuesDropList,
+                                    value: _config.value?.timeZone ?? -1,
+                                    onChanged: (val) async {
+                                      await repository.setConfigVarInt("TIMEZONE", val, context: context).then((value) => getSettings(repository, context));
+                                      setState(() {});
+                                    },
+                                  );
                                 },
                               ),
                             )
@@ -248,7 +233,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                               Navigator.pushNamed(context, "/mobile/settings/post", arguments: args).then(
                                 (value) {
-                                  getSettings(repository);
+                                  getSettings(repository, context);
                                 },
                               );
                             },

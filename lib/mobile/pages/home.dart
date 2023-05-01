@@ -21,9 +21,13 @@ class _HomeState extends State<Home> {
     buildSignature: '',
   );
 
+  ValueNotifier<List<String>> _scanActions = ValueNotifier([]);
+
+  Map<String, bool> _scanActionInProgress = {};
+
   @override
   void dispose() {
-    hosts.dispose();
+    _scanActions.dispose();
     _hostField.dispose();
     super.dispose();
   }
@@ -83,22 +87,33 @@ class _HomeState extends State<Home> {
     scanTargets.remove(lanBroadcast!);
     scanTargets.remove(lanGateway!);
     scanTargets.remove(lanIP!);
-    hosts.value = scanTargets;
+
+    _scanActionInProgress.clear();
+    _scanActions.value = List<String>.from(scanTargets);
+    scanTargets.forEach((element) {
+      _scanHost(element);
+    });
 
     return;
   }
 
   Future<bool> _scanHost(String host) async {
+    _scanActionInProgress[host] = true;
     try {
       var client = HttpClient();
       client.connectionTimeout = Duration(seconds: 3);
       final res = await client.get(host, 8020, "/ping");
       final response = await res.close();
       if (response.statusCode != 200) {
+        _scanActionInProgress[host] = false;
+        _scanActions.value = List.from(_scanActions.value)..remove(host);
         return false;
       }
+      _scanActionInProgress[host] = false;
       return true;
     } catch (e) {}
+    _scanActionInProgress[host] = false;
+    _scanActions.value = List.from(_scanActions.value)..remove(host);
     return false;
   }
 
@@ -126,8 +141,6 @@ class _HomeState extends State<Home> {
   String? lanGateway;
 
   bool _canCheckInfo = true;
-
-  ValueNotifier<List<String>> hosts = ValueNotifier([]);
 
   @override
   Widget build(BuildContext context) {
@@ -306,14 +319,14 @@ class _HomeState extends State<Home> {
           Divider(),
           Expanded(
             child: ValueListenableBuilder(
-              valueListenable: hosts,
+              valueListenable: _scanActions,
               builder: (BuildContext context, List<String> value, Widget? child) {
                 return ListView(
                   children: List.generate(
-                    hosts.value.length,
+                    value.length,
                     (index) => ScanHostListTile(
-                      action: _scanHost(value[index]),
                       host: value[index],
+                      inProgress: _scanActionInProgress[value[index]] ?? true,
                       onPressed: () {
                         Navigator.pushNamed(context, "/mobile/auth", arguments: "http://" + value[index] + ":8020").then((value) {}, onError: (value) {});
                       },
@@ -322,7 +335,7 @@ class _HomeState extends State<Home> {
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );

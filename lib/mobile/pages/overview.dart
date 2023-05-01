@@ -23,7 +23,6 @@ class _OverviewPageState extends State<OverviewPage> {
     super.dispose();
   }
 
-  @override
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -32,8 +31,6 @@ class _OverviewPageState extends State<OverviewPage> {
 
     final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
     final repository = args[PageArgCode.repository] as LeaCentralRepository;
-
-    repository.updateStatus();
 
     return Scaffold(
       key: _scaffoldKey,
@@ -63,7 +60,7 @@ class _OverviewPageState extends State<OverviewPage> {
         repository: repository,
       ),
       body: FutureBuilder(
-        future: repository.updateStatus(),
+        future: repository.updateStatus(context: context),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Center(
