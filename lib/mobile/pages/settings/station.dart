@@ -61,17 +61,18 @@ class _StationPageState extends State<StationPage> {
     super.dispose();
   }
 
-  Future<void> _getPostConfig(Repository repository, int id) async {
-    _config.value = await repository.getStationConfig(id) ??
+  Future<void> _getPostConfig(Repository repository, int id, BuildContext context) async {
+    _config.value = await repository.getStationConfig(id, context: context) ??
         entity.StationConfig(
           id: id,
           relayBoard: entity.RelayBoard.localGPIO,
         );
     _controllers["postName"]!.text = _config.value.name ?? "station ${id}";
+    _controllers["postPreflightSec"]!.text = _config.value.preflightSec?.toString() ?? "0";
   }
 
   Future<void> _getCardReaderConfig(Repository repository, int id) async {
-    _cardReaderConfig.value = await repository.getCardReaderConfig(id) ?? entity.StationCardReaderConfig(cardReader: entity.CardReader.not_used);
+    _cardReaderConfig.value = await repository.getCardReaderConfig(id, context: context) ?? entity.StationCardReaderConfig(cardReader: entity.CardReader.not_used);
 
     _controllers["cardReaderHost"]!.text = _cardReaderConfig.value.host ?? "";
     _controllers["cardReaderPort"]!.text = _cardReaderConfig.value.port ?? "";
@@ -80,7 +81,7 @@ class _StationPageState extends State<StationPage> {
   Future<void> _getStationButtonsConfig(Repository repository, int id) async {
     var buttons = List.generate(maxButtons, (index) => entity.StationButton(buttonID: index + 1));
 
-    final res = await repository.getStationButtons(id) ?? <entity.StationButton>[];
+    final res = await repository.getStationButtons(id, context: context) ?? <entity.StationButton>[];
     res.forEach((element) {
       buttons[element.buttonID - 1] = element;
     });
@@ -115,7 +116,7 @@ class _StationPageState extends State<StationPage> {
         physics: BouncingScrollPhysics(),
         children: [
           FutureBuilder(
-            future: _getPostConfig(repository, id),
+            future: _getPostConfig(repository, id, context),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
               return ValueListenableBuilder(
                 valueListenable: _config,
@@ -199,7 +200,7 @@ class _StationPageState extends State<StationPage> {
                                 flex: 1,
                                 fit: FlexFit.tight,
                                 child: Text(
-                                  "Прокачка",
+                                  "Прокачка (сек)",
                                   style: theme.textTheme.bodyLarge,
                                 ),
                               ),
@@ -266,16 +267,16 @@ class _StationPageState extends State<StationPage> {
                               TextButton(
                                 onPressed: () async {
                                   if (_formKeyPost.currentState!.validate()) {
-                                    await repository.saveStationConfig(_config.value).then((value) => _getPostConfig(repository, id));
+                                    await repository.saveStationConfig(_config.value, context: context).then((value) => _getPostConfig(repository, id, context));
                                   }
                                 },
                                 child: Text("Сохранить"),
                               ),
                               TextButton(
                                 onPressed: () async {
-                                  await _getPostConfig(repository, id);
+                                  await _getPostConfig(repository, id, context);
                                 },
-                                child: Text("Сбросить"),
+                                child: Text("Получить текущую конфигурацию"),
                               ),
                             ],
                           ),
@@ -386,7 +387,7 @@ class _StationPageState extends State<StationPage> {
                               TextButton(
                                 onPressed: () async {
                                   if (_formKeyCardReader.currentState!.validate()) {
-                                    await repository.saveCardReaderConfig(id, _cardReaderConfig.value).then((value) => _getCardReaderConfig(repository, id));
+                                    await repository.saveCardReaderConfig(id, _cardReaderConfig.value, context: context).then((value) => _getCardReaderConfig(repository, id));
                                   }
                                 },
                                 child: Text("Сохранить"),
@@ -395,7 +396,7 @@ class _StationPageState extends State<StationPage> {
                                 onPressed: () async {
                                   await _getCardReaderConfig(repository, id);
                                 },
-                                child: Text("Сбросить"),
+                                child: Text("Получить текущую конфигурацию"),
                               ),
                             ],
                           ),
@@ -465,7 +466,7 @@ class _StationPageState extends State<StationPage> {
                           children: [
                             TextButton(
                               onPressed: () async {
-                                await repository.saveStationButtons(id, _buttonsConfig.value).then((value) => _getStationButtonsConfig(repository, id));
+                                await repository.saveStationButtons(id, _buttonsConfig.value, context: context).then((value) => _getStationButtonsConfig(repository, id));
                               },
                               child: Text("Сохранить"),
                             ),
@@ -473,7 +474,7 @@ class _StationPageState extends State<StationPage> {
                               onPressed: () async {
                                 await _getStationButtonsConfig(repository, id);
                               },
-                              child: Text("Сбросить"),
+                              child: Text("Получить текущую конфигурацию"),
                             ),
                           ],
                         ),

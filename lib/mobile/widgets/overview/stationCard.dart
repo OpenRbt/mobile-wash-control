@@ -15,20 +15,10 @@ class StationCard extends StatelessWidget {
     Widget leading;
     if (data.hash != null) {
       if (data.status != null) {
-        if (data.currentProgram != null) {
-          leading = Container(
-            height: theme.iconTheme.size ?? 24,
-            child: FittedBox(
-              fit: BoxFit.fitHeight,
-              child: CircularProgressIndicator(color: Colors.green),
-            ),
-          );
-        } else {
-          leading = Icon(
-            Icons.circle,
-            color: data.status == "online" ? Colors.green : Colors.red,
-          );
-        }
+        leading = Icon(
+          Icons.circle,
+          color: data.status == "online" ? Colors.green : Colors.red,
+        );
       } else {
         leading = Icon(
           Icons.circle,

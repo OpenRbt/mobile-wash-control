@@ -226,7 +226,7 @@ class _MotorPageState extends State<MotorPage> {
                             itemCount: 12,
                             itemBuilder: (BuildContext context, int index) {
                               return FutureBuilder(
-                                future: byDates ? repository.getStationStatsByDates(index + 1, dateRange.start, dateRange.end) : repository.getStationStatsCurrent(index + 1),
+                                future: byDates ? repository.getStationStatsByDates(index + 1, dateRange.start, dateRange.end, context: context) : repository.getStationStatsCurrent(index + 1, context: context),
                                 builder: (BuildContext context, AsyncSnapshot<StationStats?> snapshot) {
                                   if (snapshot.connectionState != ConnectionState.done) {
                                     return Card(

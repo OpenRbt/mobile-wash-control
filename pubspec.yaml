@@ -22,7 +22,8 @@ environment:
 
 
 dependencies:
-  flutter_localization: ^0.1.10
+  flutter_localization:
+    sdk: flutter
   flutter:
     sdk: flutter
   package_info_plus: ^3.1.0

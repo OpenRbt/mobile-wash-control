@@ -22,8 +22,6 @@ class _ManagePostPageState extends State<ManagePostPage> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  var _isSnackBarActive = ValueWrapper(false);
-
   int _currentProgram = -1;
 
   @override
@@ -103,7 +101,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
         key: _scaffoldKey,
         appBar: AppBar(
           title: FutureBuilder(
-            future: repository.getStationMoneyReport(stationID),
+            future: repository.getStationMoneyReport(stationID, context: context),
             builder: (BuildContext context, AsyncSnapshot<StationMoneyReport?> snapshot) {
               var moneyReport = snapshot.data;
               return Text("Пост: $stationID | Инкасс: ${(moneyReport?.banknotes ?? 0) + (moneyReport?.coins ?? 0)} руб");
@@ -111,7 +109,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           ),
         ),
         body: FutureBuilder(
-          future: repository.getStationButtons(stationID),
+          future: repository.getStationButtons(stationID, context: context),
           builder: (BuildContext context, AsyncSnapshot<List<StationButton>?> snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return Center(
@@ -151,9 +149,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                     child: ValueListenableBuilder(
                                       valueListenable: repository.getStationsNotifier(),
                                       builder: (BuildContext context, List<Station>? value, Widget? child) {
-                                        final int? balance = value
-                                            ?.firstWhere((element) => element.id == stationID, orElse: null)
-                                            .currentBalance;
+                                        final int? balance = value?.firstWhere((element) => element.id == stationID, orElse: null).currentBalance;
 
                                         return Text(
                                           "${balance ?? "-"}",
@@ -222,7 +218,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
                             style: TextStyle(fontSize: 15),
                           ),
                           onPressed: () {
-                            repository.addServiceMoney(stationID, GlobalData.AddServiceValue);
+                            repository.addServiceMoney(stationID, GlobalData.AddServiceValue, context: context);
                           },
                         ),
                       ],
@@ -262,7 +258,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                 actions: [
                                   ElevatedButton(
                                     onPressed: () async {
-                                      await repository.stationSaveCollection(stationID);
+                                      await repository.stationSaveCollection(stationID, context: context);
                                       Navigator.pop(context);
                                     },
                                     child: Text("Да"),
@@ -295,7 +291,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                 actions: [
                                   ElevatedButton(
                                     onPressed: () async {
-                                      await repository.stationOpenDoor(stationID);
+                                      await repository.stationOpenDoor(stationID, context: context);
                                       Navigator.pop(context);
                                     },
                                     child: Text("Да"),

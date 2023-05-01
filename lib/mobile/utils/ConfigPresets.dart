@@ -1,6 +1,6 @@
 import 'package:mobile_wash_control/entity/entity.dart';
 
-class Helpers {
+class ConfigPresets {
   static List<StationPreset> getStationPresets() {
     return [
       StationPreset(

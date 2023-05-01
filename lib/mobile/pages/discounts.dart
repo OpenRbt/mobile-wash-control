@@ -30,14 +30,14 @@ class _DiscountsPageState extends State<DiscountsPage> {
         children: [
           Expanded(
             child: FutureBuilder(
-              future: repository.updateDiscounts(),
+              future: repository.updateDiscounts(context: context),
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 return ValueListenableBuilder(
                   valueListenable: repository.getDiscountsNotifier(),
                   builder: (BuildContext context, List<DiscountCampaign>? campaigns, Widget? child) {
                     return RefreshIndicator(
                       onRefresh: () async {
-                        await repository.updateDiscounts();
+                        await repository.updateDiscounts(context: context);
                       },
                       child: ListView.builder(
                         itemCount: campaigns?.length ?? 0,
@@ -50,7 +50,7 @@ class _DiscountsPageState extends State<DiscountsPage> {
                               args[PageArgCode.repository] = repository;
                               args[PageArgCode.discountID] = campaigns![index].id;
 
-                              Navigator.pushNamed(context, "/mobile/discounts/edit", arguments: args).then((value) => repository.updateDiscounts());
+                              Navigator.pushNamed(context, "/mobile/discounts/edit", arguments: args).then((value) => repository.updateDiscounts(context: context));
                             },
                           );
                         },
@@ -67,7 +67,7 @@ class _DiscountsPageState extends State<DiscountsPage> {
               args[PageArgCode.repository] = repository;
               args[PageArgCode.discountID] = null;
 
-              Navigator.pushNamed(context, "/mobile/discounts/edit", arguments: args).then((value) => repository.updateDiscounts());
+              Navigator.pushNamed(context, "/mobile/discounts/edit", arguments: args).then((value) => repository.updateDiscounts(context: context));
             },
             child: Text("Добавить скидочную программу"),
           ),

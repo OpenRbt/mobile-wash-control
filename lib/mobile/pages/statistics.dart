@@ -208,7 +208,7 @@ class _StatisctisPageState extends State<StatisticsPage> {
                             itemCount: 12,
                             itemBuilder: (context, index) {
                               return FutureBuilder(
-                                future: byDates ? repository.getStationMoneyReportsByDates(index + 1, dateRange.start, dateRange.end) : repository.getStationMoneyReport(index + 1),
+                                future: byDates ? repository.getStationMoneyReportsByDates(index + 1, dateRange.start, dateRange.end, context: context) : repository.getStationMoneyReport(index + 1, context: context),
                                 builder: (BuildContext context, AsyncSnapshot<StationMoneyReport?> snapshot) {
                                   final report = snapshot.data;
 
