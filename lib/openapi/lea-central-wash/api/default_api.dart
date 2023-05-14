@@ -10,7 +10,6 @@
 
 part of openapi.api;
 
-
 class DefaultApi {
   DefaultApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
@@ -20,7 +19,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [AdvertisingCampaign] args (required):
-  Future<Response> addAdvertisingCampaignWithHttpInfo(AdvertisingCampaign args,) async {
+  Future<Response> addAdvertisingCampaignWithHttpInfo(
+    AdvertisingCampaign args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/add-advertising-campaign';
 
@@ -33,7 +34,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -48,8 +48,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [AdvertisingCampaign] args (required):
-  Future<void> addAdvertisingCampaign(AdvertisingCampaign args,) async {
-    final response = await addAdvertisingCampaignWithHttpInfo(args,);
+  Future<void> addAdvertisingCampaign(
+    AdvertisingCampaign args,
+  ) async {
+    final response = await addAdvertisingCampaignWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -59,7 +63,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgAddServiceAmount] args (required):
-  Future<Response> addServiceAmountWithHttpInfo(ArgAddServiceAmount args,) async {
+  Future<Response> addServiceAmountWithHttpInfo(
+    ArgAddServiceAmount args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/add-service-amount';
 
@@ -72,7 +78,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -87,8 +92,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgAddServiceAmount] args (required):
-  Future<void> addServiceAmount(ArgAddServiceAmount args,) async {
-    final response = await addServiceAmountWithHttpInfo(args,);
+  Future<void> addServiceAmount(
+    ArgAddServiceAmount args,
+  ) async {
+    final response = await addServiceAmountWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -98,7 +107,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgAdvertisingCampagin] args:
-  Future<Response> advertisingCampaignWithHttpInfo({ ArgAdvertisingCampagin? args, }) async {
+  Future<Response> advertisingCampaignWithHttpInfo({
+    ArgAdvertisingCampagin? args,
+  }) async {
     // ignore: prefer_const_declarations
     final path = r'/advertising-campaign';
 
@@ -111,7 +122,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -126,8 +136,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgAdvertisingCampagin] args:
-  Future<List<AdvertisingCampaign>?> advertisingCampaign({ ArgAdvertisingCampagin? args, }) async {
-    final response = await advertisingCampaignWithHttpInfo( args: args, );
+  Future<List<AdvertisingCampaign>?> advertisingCampaign({
+    ArgAdvertisingCampagin? args,
+  }) async {
+    final response = await advertisingCampaignWithHttpInfo(
+      args: args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -137,9 +151,8 @@ class DefaultApi {
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
       return (await apiClient.deserializeAsync(responseBody, 'List<AdvertisingCampaign>') as List)
-        .cast<AdvertisingCampaign>()
-        .toList();
-
+          .cast<AdvertisingCampaign>()
+          .toList();
     }
     return null;
   }
@@ -148,7 +161,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgAdvertisingCampaignByID] args (required):
-  Future<Response> advertisingCampaignByIDWithHttpInfo(ArgAdvertisingCampaignByID args,) async {
+  Future<Response> advertisingCampaignByIDWithHttpInfo(
+    ArgAdvertisingCampaignByID args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/advertising-campaign-by-id';
 
@@ -161,7 +176,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -176,8 +190,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgAdvertisingCampaignByID] args (required):
-  Future<AdvertisingCampaign?> advertisingCampaignByID(ArgAdvertisingCampaignByID args,) async {
-    final response = await advertisingCampaignByIDWithHttpInfo(args,);
+  Future<AdvertisingCampaign?> advertisingCampaignByID(
+    ArgAdvertisingCampaignByID args,
+  ) async {
+    final response = await advertisingCampaignByIDWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -185,8 +203,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'AdvertisingCampaign',) as AdvertisingCampaign;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'AdvertisingCampaign',
+      ) as AdvertisingCampaign;
     }
     return null;
   }
@@ -195,7 +215,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgCardReaderConfig] args (required):
-  Future<Response> cardReaderConfigWithHttpInfo(ArgCardReaderConfig args,) async {
+  Future<Response> cardReaderConfigWithHttpInfo(
+    ArgCardReaderConfig args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/card-reader-config';
 
@@ -208,7 +230,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -223,8 +244,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgCardReaderConfig] args (required):
-  Future<CardReaderConfig?> cardReaderConfig(ArgCardReaderConfig args,) async {
-    final response = await cardReaderConfigWithHttpInfo(args,);
+  Future<CardReaderConfig?> cardReaderConfig(
+    ArgCardReaderConfig args,
+  ) async {
+    final response = await cardReaderConfigWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -232,8 +257,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'CardReaderConfig',) as CardReaderConfig;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'CardReaderConfig',
+      ) as CardReaderConfig;
     }
     return null;
   }
@@ -242,7 +269,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgCardReaderConfigByCash] args (required):
-  Future<Response> cardReaderConfigByHashWithHttpInfo(ArgCardReaderConfigByCash args,) async {
+  Future<Response> cardReaderConfigByHashWithHttpInfo(
+    ArgCardReaderConfigByCash args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/card-reader-config-by-hash';
 
@@ -255,7 +284,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -270,8 +298,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgCardReaderConfigByCash] args (required):
-  Future<CardReaderConfig?> cardReaderConfigByHash(ArgCardReaderConfigByCash args,) async {
-    final response = await cardReaderConfigByHashWithHttpInfo(args,);
+  Future<CardReaderConfig?> cardReaderConfigByHash(
+    ArgCardReaderConfigByCash args,
+  ) async {
+    final response = await cardReaderConfigByHashWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -279,8 +311,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'CardReaderConfig',) as CardReaderConfig;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'CardReaderConfig',
+      ) as CardReaderConfig;
     }
     return null;
   }
@@ -289,7 +323,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [CreateSession] args (required):
-  Future<Response> createSessionWithHttpInfo(CreateSession args,) async {
+  Future<Response> createSessionWithHttpInfo(
+    CreateSession args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/create-session';
 
@@ -302,7 +338,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -317,8 +352,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [CreateSession] args (required):
-  Future<Session?> createSession(CreateSession args,) async {
-    final response = await createSessionWithHttpInfo(args,);
+  Future<Session?> createSession(
+    CreateSession args,
+  ) async {
+    final response = await createSessionWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -326,8 +365,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Session',) as Session;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'Session',
+      ) as Session;
     }
     return null;
   }
@@ -336,7 +377,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgUserCreate] args (required):
-  Future<Response> createUserWithHttpInfo(ArgUserCreate args,) async {
+  Future<Response> createUserWithHttpInfo(
+    ArgUserCreate args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/user';
 
@@ -348,7 +391,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -364,8 +406,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgUserCreate] args (required):
-  Future<ResponseUserCreate?> createUser(ArgUserCreate args,) async {
-    final response = await createUserWithHttpInfo(args,);
+  Future<ResponseUserCreate?> createUser(
+    ArgUserCreate args,
+  ) async {
+    final response = await createUserWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -373,8 +419,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseUserCreate',) as ResponseUserCreate;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseUserCreate',
+      ) as ResponseUserCreate;
     }
     return null;
   }
@@ -383,7 +431,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgDelAdvertisingCampagin] args (required):
-  Future<Response> delAdvertisingCampaignWithHttpInfo(ArgDelAdvertisingCampagin args,) async {
+  Future<Response> delAdvertisingCampaignWithHttpInfo(
+    ArgDelAdvertisingCampagin args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/del-advertising-campaign';
 
@@ -396,7 +446,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -411,8 +460,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgDelAdvertisingCampagin] args (required):
-  Future<void> delAdvertisingCampaign(ArgDelAdvertisingCampagin args,) async {
-    final response = await delAdvertisingCampaignWithHttpInfo(args,);
+  Future<void> delAdvertisingCampaign(
+    ArgDelAdvertisingCampagin args,
+  ) async {
+    final response = await delAdvertisingCampaignWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -422,7 +475,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgDelStation] args (required):
-  Future<Response> delStationWithHttpInfo(ArgDelStation args,) async {
+  Future<Response> delStationWithHttpInfo(
+    ArgDelStation args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/del-station';
 
@@ -434,7 +489,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -450,8 +504,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgDelStation] args (required):
-  Future<void> delStation(ArgDelStation args,) async {
-    final response = await delStationWithHttpInfo(args,);
+  Future<void> delStation(
+    ArgDelStation args,
+  ) async {
+    final response = await delStationWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -461,7 +519,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgUserDelete] args (required):
-  Future<Response> deleteUserWithHttpInfo(ArgUserDelete args,) async {
+  Future<Response> deleteUserWithHttpInfo(
+    ArgUserDelete args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/user';
 
@@ -473,7 +533,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -489,8 +548,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgUserDelete] args (required):
-  Future<void> deleteUser(ArgUserDelete args,) async {
-    final response = await deleteUserWithHttpInfo(args,);
+  Future<void> deleteUser(
+    ArgUserDelete args,
+  ) async {
+    final response = await deleteUserWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -500,7 +563,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [AdvertisingCampaign] args (required):
-  Future<Response> editAdvertisingCampaignWithHttpInfo(AdvertisingCampaign args,) async {
+  Future<Response> editAdvertisingCampaignWithHttpInfo(
+    AdvertisingCampaign args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/edit-advertising-campaign';
 
@@ -513,7 +578,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -528,8 +592,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [AdvertisingCampaign] args (required):
-  Future<void> editAdvertisingCampaign(AdvertisingCampaign args,) async {
-    final response = await editAdvertisingCampaignWithHttpInfo(args,);
+  Future<void> editAdvertisingCampaign(
+    AdvertisingCampaign args,
+  ) async {
+    final response = await editAdvertisingCampaignWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -539,7 +607,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgEndSession] args (required):
-  Future<Response> endhSessionWithHttpInfo(ArgEndSession args,) async {
+  Future<Response> endhSessionWithHttpInfo(
+    ArgEndSession args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/end-session';
 
@@ -552,7 +622,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -567,8 +636,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgEndSession] args (required):
-  Future<void> endhSession(ArgEndSession args,) async {
-    final response = await endhSessionWithHttpInfo(args,);
+  Future<void> endhSession(
+    ArgEndSession args,
+  ) async {
+    final response = await endhSessionWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -578,7 +651,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetConfigVar] args (required):
-  Future<Response> getConfigVarBoolWithHttpInfo(ArgGetConfigVar args,) async {
+  Future<Response> getConfigVarBoolWithHttpInfo(
+    ArgGetConfigVar args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/get-config-var-bool';
 
@@ -591,7 +666,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -606,8 +680,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetConfigVar] args (required):
-  Future<ConfigVarBool?> getConfigVarBool(ArgGetConfigVar args,) async {
-    final response = await getConfigVarBoolWithHttpInfo(args,);
+  Future<ConfigVarBool?> getConfigVarBool(
+    ArgGetConfigVar args,
+  ) async {
+    final response = await getConfigVarBoolWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -615,8 +693,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ConfigVarBool',) as ConfigVarBool;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ConfigVarBool',
+      ) as ConfigVarBool;
     }
     return null;
   }
@@ -625,7 +705,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetConfigVar] args (required):
-  Future<Response> getConfigVarIntWithHttpInfo(ArgGetConfigVar args,) async {
+  Future<Response> getConfigVarIntWithHttpInfo(
+    ArgGetConfigVar args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/get-config-var-int';
 
@@ -638,7 +720,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -653,8 +734,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetConfigVar] args (required):
-  Future<ConfigVarInt?> getConfigVarInt(ArgGetConfigVar args,) async {
-    final response = await getConfigVarIntWithHttpInfo(args,);
+  Future<ConfigVarInt?> getConfigVarInt(
+    ArgGetConfigVar args,
+  ) async {
+    final response = await getConfigVarIntWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -662,8 +747,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ConfigVarInt',) as ConfigVarInt;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ConfigVarInt',
+      ) as ConfigVarInt;
     }
     return null;
   }
@@ -672,7 +759,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetConfigVar] args (required):
-  Future<Response> getConfigVarStringWithHttpInfo(ArgGetConfigVar args,) async {
+  Future<Response> getConfigVarStringWithHttpInfo(
+    ArgGetConfigVar args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/get-config-var-string';
 
@@ -685,7 +774,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -700,8 +788,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetConfigVar] args (required):
-  Future<ConfigVarString?> getConfigVarString(ArgGetConfigVar args,) async {
-    final response = await getConfigVarStringWithHttpInfo(args,);
+  Future<ConfigVarString?> getConfigVarString(
+    ArgGetConfigVar args,
+  ) async {
+    final response = await getConfigVarStringWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -709,8 +801,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ConfigVarString',) as ConfigVarString;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ConfigVarString',
+      ) as ConfigVarString;
     }
     return null;
   }
@@ -719,7 +813,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetLevel] args (required):
-  Future<Response> getLevelWithHttpInfo(ArgGetLevel args,) async {
+  Future<Response> getLevelWithHttpInfo(
+    ArgGetLevel args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/getLevel';
 
@@ -731,7 +827,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -747,8 +842,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetLevel] args (required):
-  Future<ResponseGetLevel?> getLevel(ArgGetLevel args,) async {
-    final response = await getLevelWithHttpInfo(args,);
+  Future<ResponseGetLevel?> getLevel(
+    ArgGetLevel args,
+  ) async {
+    final response = await getLevelWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -756,8 +855,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseGetLevel',) as ResponseGetLevel;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseGetLevel',
+      ) as ResponseGetLevel;
     }
     return null;
   }
@@ -774,8 +875,7 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
-
+    const contentTypes = <String>['application/json'];
 
     return apiClient.invokeAPI(
       path,
@@ -799,7 +899,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetStationDiscounts] args (required):
-  Future<Response> getStationDiscountsWithHttpInfo(ArgGetStationDiscounts args,) async {
+  Future<Response> getStationDiscountsWithHttpInfo(
+    ArgGetStationDiscounts args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/get-station-discounts';
 
@@ -811,7 +913,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -827,8 +928,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgGetStationDiscounts] args (required):
-  Future<List<ButtonDiscount>?> getStationDiscounts(ArgGetStationDiscounts args,) async {
-    final response = await getStationDiscountsWithHttpInfo(args,);
+  Future<List<ButtonDiscount>?> getStationDiscounts(
+    ArgGetStationDiscounts args,
+  ) async {
+    final response = await getStationDiscountsWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -837,10 +942,7 @@ class DefaultApi {
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<ButtonDiscount>') as List)
-        .cast<ButtonDiscount>()
-        .toList();
-
+      return (await apiClient.deserializeAsync(responseBody, 'List<ButtonDiscount>') as List).cast<ButtonDiscount>().toList();
     }
     return null;
   }
@@ -857,8 +959,7 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
-
+    const contentTypes = <String>['application/json'];
 
     return apiClient.invokeAPI(
       path,
@@ -880,8 +981,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'UserConfig',) as UserConfig;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'UserConfig',
+      ) as UserConfig;
     }
     return null;
   }
@@ -898,8 +1001,7 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
-
+    const contentTypes = <String>['application/json'];
 
     return apiClient.invokeAPI(
       path,
@@ -921,8 +1023,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'UsersReport',) as UsersReport;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'UsersReport',
+      ) as UsersReport;
     }
     return null;
   }
@@ -939,8 +1043,7 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
-
+    const contentTypes = <String>['application/json'];
 
     return apiClient.invokeAPI(
       path,
@@ -962,8 +1065,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'String',) as String;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'String',
+      ) as String;
     }
     return null;
   }
@@ -972,7 +1077,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgIsAuthorized] args (required):
-  Future<Response> isAuthorizedWithHttpInfo(ArgIsAuthorized args,) async {
+  Future<Response> isAuthorizedWithHttpInfo(
+    ArgIsAuthorized args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/is-authorized';
 
@@ -984,7 +1091,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -1000,8 +1106,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgIsAuthorized] args (required):
-  Future<IsAuthorized?> isAuthorized(ArgIsAuthorized args,) async {
-    final response = await isAuthorizedWithHttpInfo(args,);
+  Future<IsAuthorized?> isAuthorized(
+    ArgIsAuthorized args,
+  ) async {
+    final response = await isAuthorizedWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1009,8 +1119,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'IsAuthorized',) as IsAuthorized;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'IsAuthorized',
+      ) as IsAuthorized;
     }
     return null;
   }
@@ -1027,8 +1139,7 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
-
+    const contentTypes = <String>['application/json'];
 
     return apiClient.invokeAPI(
       path,
@@ -1050,8 +1161,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'KasseConfig',) as KasseConfig;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'KasseConfig',
+      ) as KasseConfig;
     }
     return null;
   }
@@ -1060,7 +1173,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgLoad] args (required):
-  Future<Response> loadWithHttpInfo(ArgLoad args,) async {
+  Future<Response> loadWithHttpInfo(
+    ArgLoad args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/load';
 
@@ -1073,7 +1188,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1088,8 +1202,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgLoad] args (required):
-  Future<String?> load(ArgLoad args,) async {
-    final response = await loadWithHttpInfo(args,);
+  Future<String?> load(
+    ArgLoad args,
+  ) async {
+    final response = await loadWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1097,8 +1215,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'String',) as String;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'String',
+      ) as String;
     }
     return null;
   }
@@ -1107,7 +1227,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgLoadFromStation] args (required):
-  Future<Response> loadFromStationWithHttpInfo(ArgLoadFromStation args,) async {
+  Future<Response> loadFromStationWithHttpInfo(
+    ArgLoadFromStation args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/load-from-station';
 
@@ -1120,7 +1242,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1135,8 +1256,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgLoadFromStation] args (required):
-  Future<String?> loadFromStation(ArgLoadFromStation args,) async {
-    final response = await loadFromStationWithHttpInfo(args,);
+  Future<String?> loadFromStation(
+    ArgLoadFromStation args,
+  ) async {
+    final response = await loadFromStationWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1144,8 +1269,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'String',) as String;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'String',
+      ) as String;
     }
     return null;
   }
@@ -1154,7 +1281,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgLoadMoney] args (required):
-  Future<Response> loadMoneyWithHttpInfo(ArgLoadMoney args,) async {
+  Future<Response> loadMoneyWithHttpInfo(
+    ArgLoadMoney args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/load-money';
 
@@ -1167,7 +1296,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1182,8 +1310,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgLoadMoney] args (required):
-  Future<MoneyReport?> loadMoney(ArgLoadMoney args,) async {
-    final response = await loadMoneyWithHttpInfo(args,);
+  Future<MoneyReport?> loadMoney(
+    ArgLoadMoney args,
+  ) async {
+    final response = await loadMoneyWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1191,8 +1323,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'MoneyReport',) as MoneyReport;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'MoneyReport',
+      ) as MoneyReport;
     }
     return null;
   }
@@ -1201,7 +1335,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [LoadRelayRequest] args (required):
-  Future<Response> loadRelayWithHttpInfo(LoadRelayRequest args,) async {
+  Future<Response> loadRelayWithHttpInfo(
+    LoadRelayRequest args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/load-relay';
 
@@ -1214,7 +1350,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1229,8 +1364,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [LoadRelayRequest] args (required):
-  Future<RelayReport?> loadRelay(LoadRelayRequest args,) async {
-    final response = await loadRelayWithHttpInfo(args,);
+  Future<RelayReport?> loadRelay(
+    LoadRelayRequest args,
+  ) async {
+    final response = await loadRelayWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1238,8 +1377,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'RelayReport',) as RelayReport;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'RelayReport',
+      ) as RelayReport;
     }
     return null;
   }
@@ -1248,7 +1389,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgMeasureVolumeMilliliters] args (required):
-  Future<Response> measureVolumeMillilitersWithHttpInfo(ArgMeasureVolumeMilliliters args,) async {
+  Future<Response> measureVolumeMillilitersWithHttpInfo(
+    ArgMeasureVolumeMilliliters args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/run-dispenser';
 
@@ -1261,7 +1404,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1276,8 +1418,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgMeasureVolumeMilliliters] args (required):
-  Future<void> measureVolumeMilliliters(ArgMeasureVolumeMilliliters args,) async {
-    final response = await measureVolumeMillilitersWithHttpInfo(args,);
+  Future<void> measureVolumeMilliliters(
+    ArgMeasureVolumeMilliliters args,
+  ) async {
+    final response = await measureVolumeMillilitersWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1287,7 +1433,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgOpenStation] args (required):
-  Future<Response> openStationWithHttpInfo(ArgOpenStation args,) async {
+  Future<Response> openStationWithHttpInfo(
+    ArgOpenStation args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/open-station';
 
@@ -1300,7 +1448,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1315,8 +1462,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgOpenStation] args (required):
-  Future<void> openStation(ArgOpenStation args,) async {
-    final response = await openStationWithHttpInfo(args,);
+  Future<void> openStation(
+    ArgOpenStation args,
+  ) async {
+    final response = await openStationWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1326,7 +1477,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgPing] args (required):
-  Future<Response> pingWithHttpInfo(ArgPing args,) async {
+  Future<Response> pingWithHttpInfo(
+    ArgPing args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/ping';
 
@@ -1339,7 +1492,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1354,8 +1506,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgPing] args (required):
-  Future<ResponsePing?> ping(ArgPing args,) async {
-    final response = await pingWithHttpInfo(args,);
+  Future<ResponsePing?> ping(
+    ArgPing args,
+  ) async {
+    final response = await pingWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1363,8 +1519,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponsePing',) as ResponsePing;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponsePing',
+      ) as ResponsePing;
     }
     return null;
   }
@@ -1373,7 +1531,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgPressButton] args (required):
-  Future<Response> pressButtonWithHttpInfo(ArgPressButton args,) async {
+  Future<Response> pressButtonWithHttpInfo(
+    ArgPressButton args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/press-button';
 
@@ -1386,7 +1546,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1401,8 +1560,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgPressButton] args (required):
-  Future<void> pressButton(ArgPressButton args,) async {
-    final response = await pressButtonWithHttpInfo(args,);
+  Future<void> pressButton(
+    ArgPressButton args,
+  ) async {
+    final response = await pressButtonWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1412,7 +1575,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgPrograms] args (required):
-  Future<Response> programsWithHttpInfo(ArgPrograms args,) async {
+  Future<Response> programsWithHttpInfo(
+    ArgPrograms args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/programs';
 
@@ -1425,7 +1590,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1440,8 +1604,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgPrograms] args (required):
-  Future<List<Program>?> programs(ArgPrograms args,) async {
-    final response = await programsWithHttpInfo(args,);
+  Future<List<Program>?> programs(
+    ArgPrograms args,
+  ) async {
+    final response = await programsWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1450,10 +1618,7 @@ class DefaultApi {
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<Program>') as List)
-        .cast<Program>()
-        .toList();
-
+      return (await apiClient.deserializeAsync(responseBody, 'List<Program>') as List).cast<Program>().toList();
     }
     return null;
   }
@@ -1462,7 +1627,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [RefreshSession] args (required):
-  Future<Response> refreshSessionWithHttpInfo(RefreshSession args,) async {
+  Future<Response> refreshSessionWithHttpInfo(
+    RefreshSession args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/refresh-session';
 
@@ -1475,7 +1642,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1490,8 +1656,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [RefreshSession] args (required):
-  Future<SessionRefresh?> refreshSession(RefreshSession args,) async {
-    final response = await refreshSessionWithHttpInfo(args,);
+  Future<SessionRefresh?> refreshSession(
+    RefreshSession args,
+  ) async {
+    final response = await refreshSessionWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1499,8 +1669,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'SessionRefresh',) as SessionRefresh;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'SessionRefresh',
+      ) as SessionRefresh;
     }
     return null;
   }
@@ -1509,7 +1681,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgResetStationStat] args:
-  Future<Response> resetStationStatWithHttpInfo({ ArgResetStationStat? args, }) async {
+  Future<Response> resetStationStatWithHttpInfo({
+    ArgResetStationStat? args,
+  }) async {
     // ignore: prefer_const_declarations
     final path = r'/reset-station-stat';
 
@@ -1522,7 +1696,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1537,8 +1710,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgResetStationStat] args:
-  Future<void> resetStationStat({ ArgResetStationStat? args, }) async {
-    final response = await resetStationStatWithHttpInfo( args: args, );
+  Future<void> resetStationStat({
+    ArgResetStationStat? args,
+  }) async {
+    final response = await resetStationStatWithHttpInfo(
+      args: args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1548,7 +1725,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgRun2Program] args (required):
-  Future<Response> run2ProgramWithHttpInfo(ArgRun2Program args,) async {
+  Future<Response> run2ProgramWithHttpInfo(
+    ArgRun2Program args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/run-2program';
 
@@ -1561,7 +1740,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1576,8 +1754,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgRun2Program] args (required):
-  Future<void> run2Program(ArgRun2Program args,) async {
-    final response = await run2ProgramWithHttpInfo(args,);
+  Future<void> run2Program(
+    ArgRun2Program args,
+  ) async {
+    final response = await run2ProgramWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1587,7 +1769,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgRunProgram] args (required):
-  Future<Response> runProgramWithHttpInfo(ArgRunProgram args,) async {
+  Future<Response> runProgramWithHttpInfo(
+    ArgRunProgram args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/run-program';
 
@@ -1600,7 +1784,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1615,8 +1798,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgRunProgram] args (required):
-  Future<void> runProgram(ArgRunProgram args,) async {
-    final response = await runProgramWithHttpInfo(args,);
+  Future<void> runProgram(
+    ArgRunProgram args,
+  ) async {
+    final response = await runProgramWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1626,7 +1813,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSave] args (required):
-  Future<Response> saveWithHttpInfo(ArgSave args,) async {
+  Future<Response> saveWithHttpInfo(
+    ArgSave args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/save';
 
@@ -1639,7 +1828,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1654,8 +1842,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSave] args (required):
-  Future<void> save(ArgSave args,) async {
-    final response = await saveWithHttpInfo(args,);
+  Future<void> save(
+    ArgSave args,
+  ) async {
+    final response = await saveWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1665,7 +1857,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [StationRequest] args (required):
-  Future<Response> saveCollectionWithHttpInfo(StationRequest args,) async {
+  Future<Response> saveCollectionWithHttpInfo(
+    StationRequest args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/save-collection';
 
@@ -1678,7 +1872,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1693,8 +1886,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [StationRequest] args (required):
-  Future<void> saveCollection(StationRequest args,) async {
-    final response = await saveCollectionWithHttpInfo(args,);
+  Future<void> saveCollection(
+    StationRequest args,
+  ) async {
+    final response = await saveCollectionWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1704,7 +1901,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSaveIfNotExists] args (required):
-  Future<Response> saveIfNotExistsWithHttpInfo(ArgSaveIfNotExists args,) async {
+  Future<Response> saveIfNotExistsWithHttpInfo(
+    ArgSaveIfNotExists args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/save-if-not-exists';
 
@@ -1717,7 +1916,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1732,8 +1930,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSaveIfNotExists] args (required):
-  Future<void> saveIfNotExists(ArgSaveIfNotExists args,) async {
-    final response = await saveIfNotExistsWithHttpInfo(args,);
+  Future<void> saveIfNotExists(
+    ArgSaveIfNotExists args,
+  ) async {
+    final response = await saveIfNotExistsWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1743,7 +1945,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [MoneyReport] args (required):
-  Future<Response> saveMoneyWithHttpInfo(MoneyReport args,) async {
+  Future<Response> saveMoneyWithHttpInfo(
+    MoneyReport args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/save-money';
 
@@ -1756,7 +1960,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1771,8 +1974,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [MoneyReport] args (required):
-  Future<void> saveMoney(MoneyReport args,) async {
-    final response = await saveMoneyWithHttpInfo(args,);
+  Future<void> saveMoney(
+    MoneyReport args,
+  ) async {
+    final response = await saveMoneyWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1782,7 +1989,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [RelayReport] args (required):
-  Future<Response> saveRelayWithHttpInfo(RelayReport args,) async {
+  Future<Response> saveRelayWithHttpInfo(
+    RelayReport args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/save-relay';
 
@@ -1795,7 +2004,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1810,8 +2018,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [RelayReport] args (required):
-  Future<void> saveRelay(RelayReport args,) async {
-    final response = await saveRelayWithHttpInfo(args,);
+  Future<void> saveRelay(
+    RelayReport args,
+  ) async {
+    final response = await saveRelayWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1821,7 +2033,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSetBonuses] args (required):
-  Future<Response> setBonusesWithHttpInfo(ArgSetBonuses args,) async {
+  Future<Response> setBonusesWithHttpInfo(
+    ArgSetBonuses args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/set-bonuses';
 
@@ -1834,7 +2048,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1849,8 +2062,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSetBonuses] args (required):
-  Future<void> setBonuses(ArgSetBonuses args,) async {
-    final response = await setBonusesWithHttpInfo(args,);
+  Future<void> setBonuses(
+    ArgSetBonuses args,
+  ) async {
+    final response = await setBonusesWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1860,7 +2077,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [CardReaderConfig] args (required):
-  Future<Response> setCardReaderConfigWithHttpInfo(CardReaderConfig args,) async {
+  Future<Response> setCardReaderConfigWithHttpInfo(
+    CardReaderConfig args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/set-card-reader-config';
 
@@ -1873,7 +2092,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1888,8 +2106,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [CardReaderConfig] args (required):
-  Future<void> setCardReaderConfig(CardReaderConfig args,) async {
-    final response = await setCardReaderConfigWithHttpInfo(args,);
+  Future<void> setCardReaderConfig(
+    CardReaderConfig args,
+  ) async {
+    final response = await setCardReaderConfigWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1899,7 +2121,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ConfigVarBool] args (required):
-  Future<Response> setConfigVarBoolWithHttpInfo(ConfigVarBool args,) async {
+  Future<Response> setConfigVarBoolWithHttpInfo(
+    ConfigVarBool args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/set-config-var-bool';
 
@@ -1912,7 +2136,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1927,8 +2150,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ConfigVarBool] args (required):
-  Future<void> setConfigVarBool(ConfigVarBool args,) async {
-    final response = await setConfigVarBoolWithHttpInfo(args,);
+  Future<void> setConfigVarBool(
+    ConfigVarBool args,
+  ) async {
+    final response = await setConfigVarBoolWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1938,7 +2165,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ConfigVarInt] args (required):
-  Future<Response> setConfigVarIntWithHttpInfo(ConfigVarInt args,) async {
+  Future<Response> setConfigVarIntWithHttpInfo(
+    ConfigVarInt args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/set-config-var-int';
 
@@ -1951,7 +2180,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -1966,8 +2194,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ConfigVarInt] args (required):
-  Future<void> setConfigVarInt(ConfigVarInt args,) async {
-    final response = await setConfigVarIntWithHttpInfo(args,);
+  Future<void> setConfigVarInt(
+    ConfigVarInt args,
+  ) async {
+    final response = await setConfigVarIntWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1977,7 +2209,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ConfigVarString] args (required):
-  Future<Response> setConfigVarStringWithHttpInfo(ConfigVarString args,) async {
+  Future<Response> setConfigVarStringWithHttpInfo(
+    ConfigVarString args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/set-config-var-string';
 
@@ -1990,7 +2224,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2005,8 +2238,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ConfigVarString] args (required):
-  Future<void> setConfigVarString(ConfigVarString args,) async {
-    final response = await setConfigVarStringWithHttpInfo(args,);
+  Future<void> setConfigVarString(
+    ConfigVarString args,
+  ) async {
+    final response = await setConfigVarStringWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2016,7 +2253,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [KasseConfig] args (required):
-  Future<Response> setKasseWithHttpInfo(KasseConfig args,) async {
+  Future<Response> setKasseWithHttpInfo(
+    KasseConfig args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/set-kasse';
 
@@ -2029,7 +2268,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2044,8 +2282,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [KasseConfig] args (required):
-  Future<void> setKasse(KasseConfig args,) async {
-    final response = await setKasseWithHttpInfo(args,);
+  Future<void> setKasse(
+    KasseConfig args,
+  ) async {
+    final response = await setKasseWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2055,7 +2297,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [Program] args (required):
-  Future<Response> setProgramWithHttpInfo(Program args,) async {
+  Future<Response> setProgramWithHttpInfo(
+    Program args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/set-program';
 
@@ -2068,7 +2312,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2083,8 +2326,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [Program] args (required):
-  Future<void> setProgram(Program args,) async {
-    final response = await setProgramWithHttpInfo(args,);
+  Future<void> setProgram(
+    Program args,
+  ) async {
+    final response = await setProgramWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2094,7 +2341,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [StationConfig] args (required):
-  Future<Response> setStationWithHttpInfo(StationConfig args,) async {
+  Future<Response> setStationWithHttpInfo(
+    StationConfig args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/set-station';
 
@@ -2107,7 +2356,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2122,8 +2370,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [StationConfig] args (required):
-  Future<void> setStation(StationConfig args,) async {
-    final response = await setStationWithHttpInfo(args,);
+  Future<void> setStation(
+    StationConfig args,
+  ) async {
+    final response = await setStationWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2133,7 +2385,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSetStationButton] args (required):
-  Future<Response> setStationButtonWithHttpInfo(ArgSetStationButton args,) async {
+  Future<Response> setStationButtonWithHttpInfo(
+    ArgSetStationButton args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/set-station-button';
 
@@ -2146,7 +2400,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2161,8 +2414,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgSetStationButton] args (required):
-  Future<void> setStationButton(ArgSetStationButton args,) async {
-    final response = await setStationButtonWithHttpInfo(args,);
+  Future<void> setStationButton(
+    ArgSetStationButton args,
+  ) async {
+    final response = await setStationButtonWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2172,7 +2429,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [StationRequest] args (required):
-  Future<Response> stationWithHttpInfo(StationRequest args,) async {
+  Future<Response> stationWithHttpInfo(
+    StationRequest args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/station';
 
@@ -2185,7 +2444,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2200,8 +2458,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [StationRequest] args (required):
-  Future<StationConfig?> station(StationRequest args,) async {
-    final response = await stationWithHttpInfo(args,);
+  Future<StationConfig?> station(
+    StationRequest args,
+  ) async {
+    final response = await stationWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2209,8 +2471,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationConfig',) as StationConfig;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StationConfig',
+      ) as StationConfig;
     }
     return null;
   }
@@ -2219,7 +2483,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationButton] args (required):
-  Future<Response> stationButtonWithHttpInfo(ArgStationButton args,) async {
+  Future<Response> stationButtonWithHttpInfo(
+    ArgStationButton args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/station-button';
 
@@ -2232,7 +2498,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2247,8 +2512,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationButton] args (required):
-  Future<ResponseStationButton?> stationButton(ArgStationButton args,) async {
-    final response = await stationButtonWithHttpInfo(args,);
+  Future<ResponseStationButton?> stationButton(
+    ArgStationButton args,
+  ) async {
+    final response = await stationButtonWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2256,8 +2525,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseStationButton',) as ResponseStationButton;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseStationButton',
+      ) as ResponseStationButton;
     }
     return null;
   }
@@ -2266,7 +2537,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationByHash] args (required):
-  Future<Response> stationByHashWithHttpInfo(ArgStationByHash args,) async {
+  Future<Response> stationByHashWithHttpInfo(
+    ArgStationByHash args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/station-by-hash';
 
@@ -2279,7 +2552,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2294,8 +2566,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationByHash] args (required):
-  Future<int?> stationByHash(ArgStationByHash args,) async {
-    final response = await stationByHashWithHttpInfo(args,);
+  Future<int?> stationByHash(
+    ArgStationByHash args,
+  ) async {
+    final response = await stationByHashWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2303,8 +2579,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'int',) as int;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'int',
+      ) as int;
     }
     return null;
   }
@@ -2313,7 +2591,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgCollectionReportDates] args (required):
-  Future<Response> stationCollectionReportDatesWithHttpInfo(ArgCollectionReportDates args,) async {
+  Future<Response> stationCollectionReportDatesWithHttpInfo(
+    ArgCollectionReportDates args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/station-collection-report-dates';
 
@@ -2326,7 +2606,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2341,8 +2620,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgCollectionReportDates] args (required):
-  Future<ResponseStationCollectionReportDates?> stationCollectionReportDates(ArgCollectionReportDates args,) async {
-    final response = await stationCollectionReportDatesWithHttpInfo(args,);
+  Future<ResponseStationCollectionReportDates?> stationCollectionReportDates(
+    ArgCollectionReportDates args,
+  ) async {
+    final response = await stationCollectionReportDatesWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2350,8 +2633,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseStationCollectionReportDates',) as ResponseStationCollectionReportDates;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseStationCollectionReportDates',
+      ) as ResponseStationCollectionReportDates;
     }
     return null;
   }
@@ -2360,7 +2645,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationProgramByHash] args (required):
-  Future<Response> stationProgramByHashWithHttpInfo(ArgStationProgramByHash args,) async {
+  Future<Response> stationProgramByHashWithHttpInfo(
+    ArgStationProgramByHash args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/station-program-by-hash';
 
@@ -2373,7 +2660,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2388,8 +2674,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationProgramByHash] args (required):
-  Future<StationPrograms?> stationProgramByHash(ArgStationProgramByHash args,) async {
-    final response = await stationProgramByHashWithHttpInfo(args,);
+  Future<StationPrograms?> stationProgramByHash(
+    ArgStationProgramByHash args,
+  ) async {
+    final response = await stationProgramByHashWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2397,8 +2687,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationPrograms',) as StationPrograms;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StationPrograms',
+      ) as StationPrograms;
     }
     return null;
   }
@@ -2407,7 +2699,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationReportCurrentMoney] args (required):
-  Future<Response> stationReportCurrentMoneyWithHttpInfo(ArgStationReportCurrentMoney args,) async {
+  Future<Response> stationReportCurrentMoneyWithHttpInfo(
+    ArgStationReportCurrentMoney args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/station-report-current-money';
 
@@ -2420,7 +2714,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2435,8 +2728,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationReportCurrentMoney] args (required):
-  Future<StationReport?> stationReportCurrentMoney(ArgStationReportCurrentMoney args,) async {
-    final response = await stationReportCurrentMoneyWithHttpInfo(args,);
+  Future<StationReport?> stationReportCurrentMoney(
+    ArgStationReportCurrentMoney args,
+  ) async {
+    final response = await stationReportCurrentMoneyWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2444,8 +2741,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationReport',) as StationReport;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StationReport',
+      ) as StationReport;
     }
     return null;
   }
@@ -2454,7 +2753,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationReportDates] args (required):
-  Future<Response> stationReportDatesWithHttpInfo(ArgStationReportDates args,) async {
+  Future<Response> stationReportDatesWithHttpInfo(
+    ArgStationReportDates args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/station-report-dates';
 
@@ -2467,7 +2768,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2482,8 +2782,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationReportDates] args (required):
-  Future<StationReport?> stationReportDates(ArgStationReportDates args,) async {
-    final response = await stationReportDatesWithHttpInfo(args,);
+  Future<StationReport?> stationReportDates(
+    ArgStationReportDates args,
+  ) async {
+    final response = await stationReportDatesWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2491,8 +2795,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationReport',) as StationReport;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StationReport',
+      ) as StationReport;
     }
     return null;
   }
@@ -2501,7 +2807,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationStat] args:
-  Future<Response> stationStatCurrentWithHttpInfo({ ArgStationStat? args, }) async {
+  Future<Response> stationStatCurrentWithHttpInfo({
+    ArgStationStat? args,
+  }) async {
     // ignore: prefer_const_declarations
     final path = r'/station-stat-current';
 
@@ -2514,7 +2822,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2529,8 +2836,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationStat] args:
-  Future<List<StationStat>?> stationStatCurrent({ ArgStationStat? args, }) async {
-    final response = await stationStatCurrentWithHttpInfo( args: args, );
+  Future<List<StationStat>?> stationStatCurrent({
+    ArgStationStat? args,
+  }) async {
+    final response = await stationStatCurrentWithHttpInfo(
+      args: args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2539,10 +2850,7 @@ class DefaultApi {
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<StationStat>') as List)
-        .cast<StationStat>()
-        .toList();
-
+      return (await apiClient.deserializeAsync(responseBody, 'List<StationStat>') as List).cast<StationStat>().toList();
     }
     return null;
   }
@@ -2551,7 +2859,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationStatDates] args:
-  Future<Response> stationStatDatesWithHttpInfo({ ArgStationStatDates? args, }) async {
+  Future<Response> stationStatDatesWithHttpInfo({
+    ArgStationStatDates? args,
+  }) async {
     // ignore: prefer_const_declarations
     final path = r'/station-stat-dates';
 
@@ -2563,7 +2873,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -2579,8 +2888,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgStationStatDates] args:
-  Future<List<StationStat>?> stationStatDates({ ArgStationStatDates? args, }) async {
-    final response = await stationStatDatesWithHttpInfo( args: args, );
+  Future<List<StationStat>?> stationStatDates({
+    ArgStationStatDates? args,
+  }) async {
+    final response = await stationStatDatesWithHttpInfo(
+      args: args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2589,10 +2902,7 @@ class DefaultApi {
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<StationStat>') as List)
-        .cast<StationStat>()
-        .toList();
-
+      return (await apiClient.deserializeAsync(responseBody, 'List<StationStat>') as List).cast<StationStat>().toList();
     }
     return null;
   }
@@ -2609,8 +2919,7 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
-
+    const contentTypes = <String>['application/json'];
 
     return apiClient.invokeAPI(
       path,
@@ -2634,9 +2943,8 @@ class DefaultApi {
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
       return (await apiClient.deserializeAsync(responseBody, 'List<StationsVariables>') as List)
-        .cast<StationsVariables>()
-        .toList();
-
+          .cast<StationsVariables>()
+          .toList();
     }
     return null;
   }
@@ -2653,8 +2961,7 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
-
+    const contentTypes = <String>['application/json'];
 
     return apiClient.invokeAPI(
       path,
@@ -2676,8 +2983,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StatusReport',) as StatusReport;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StatusReport',
+      ) as StatusReport;
     }
     return null;
   }
@@ -2694,8 +3003,7 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
-
+    const contentTypes = <String>['application/json'];
 
     return apiClient.invokeAPI(
       path,
@@ -2717,8 +3025,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StatusCollectionReport',) as StatusCollectionReport;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StatusCollectionReport',
+      ) as StatusCollectionReport;
     }
     return null;
   }
@@ -2727,7 +3037,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgUserUpdate] args (required):
-  Future<Response> updateUserWithHttpInfo(ArgUserUpdate args,) async {
+  Future<Response> updateUserWithHttpInfo(
+    ArgUserUpdate args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/user';
 
@@ -2739,7 +3051,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -2755,8 +3066,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgUserUpdate] args (required):
-  Future<ResponseUserUpdate?> updateUser(ArgUserUpdate args,) async {
-    final response = await updateUserWithHttpInfo(args,);
+  Future<ResponseUserUpdate?> updateUser(
+    ArgUserUpdate args,
+  ) async {
+    final response = await updateUserWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2764,8 +3079,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseUserUpdate',) as ResponseUserUpdate;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseUserUpdate',
+      ) as ResponseUserUpdate;
     }
     return null;
   }
@@ -2774,7 +3091,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgUserPassword] args (required):
-  Future<Response> updateUserPasswordWithHttpInfo(ArgUserPassword args,) async {
+  Future<Response> updateUserPasswordWithHttpInfo(
+    ArgUserPassword args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/user-password';
 
@@ -2787,7 +3106,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -2802,8 +3120,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgUserPassword] args (required):
-  Future<ResponseUserPassword?> updateUserPassword(ArgUserPassword args,) async {
-    final response = await updateUserPasswordWithHttpInfo(args,);
+  Future<ResponseUserPassword?> updateUserPassword(
+    ArgUserPassword args,
+  ) async {
+    final response = await updateUserPasswordWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2811,8 +3133,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseUserPassword',) as ResponseUserPassword;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseUserPassword',
+      ) as ResponseUserPassword;
     }
     return null;
   }
@@ -2821,7 +3145,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [VolumeDispenser] args (required):
-  Future<Response> volumeDispenserWithHttpInfo(VolumeDispenser args,) async {
+  Future<Response> volumeDispenserWithHttpInfo(
+    VolumeDispenser args,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/volume-dispenser';
 
@@ -2833,7 +3159,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -2849,8 +3174,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [VolumeDispenser] args (required):
-  Future<ResponseVolumeDispenser?> volumeDispenser(VolumeDispenser args,) async {
-    final response = await volumeDispenserWithHttpInfo(args,);
+  Future<ResponseVolumeDispenser?> volumeDispenser(
+    VolumeDispenser args,
+  ) async {
+    final response = await volumeDispenserWithHttpInfo(
+      args,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -2858,8 +3187,10 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ResponseVolumeDispenser',) as ResponseVolumeDispenser;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'ResponseVolumeDispenser',
+      ) as ResponseVolumeDispenser;
     }
     return null;
   }

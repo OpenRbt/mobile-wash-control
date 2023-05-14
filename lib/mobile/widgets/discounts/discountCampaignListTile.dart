@@ -18,10 +18,7 @@ class DiscountCampaignListTile extends StatelessWidget {
 
     return Card(
       child: ExpansionTile(
-        leading: IconButton(
-          icon: Icon(Icons.edit_outlined),
-          onPressed: onPressed,
-        ),
+        leading: Icon(Icons.discount_outlined),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -147,7 +144,11 @@ class DiscountCampaignListTile extends StatelessWidget {
                 return ProgramDiscountListTile(discount: campaign.discountPrograms!.elementAt(index), repository: repository);
               },
             ),
-          ])
+          ]),
+          TextButton(
+            onPressed: onPressed,
+            child: Text("Редактировать"),
+          ),
         ],
       ),
     );

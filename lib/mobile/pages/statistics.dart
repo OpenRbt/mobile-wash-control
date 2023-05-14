@@ -8,18 +8,40 @@ import 'package:mobile_wash_control/repository/repository.dart';
 
 class StatisticsPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _StatisctisPageState();
+  State<StatefulWidget> createState() => _StatisticsPageState();
 }
 
-class _StatisctisPageState extends State<StatisticsPage> {
-  Map<int, List<StationMoneyReport>> _stationReports = Map();
-
+class _StatisticsPageState extends State<StatisticsPage> {
   ValueNotifier<bool> _showMode = ValueNotifier(true);
 
   ValueNotifier<DateTimeRange> _dateRange = ValueNotifier(DateTimeRange(start: DateTime.now(), end: DateTime.now()));
 
   final _dateFormatter = DateFormat('dd.MM.yyyy');
-  final _numberFormatter = NumberFormat("#####");
+
+  Map<int, StationMoneyReport?> _moneyReports = Map();
+
+  Future<void> _loadMoneyReports(Repository repository, BuildContext context, bool byDates, DateTimeRange range) async {
+    _moneyReports.clear();
+
+    var total = StationMoneyReport(banknotes: 0, electronical: 0, carsTotal: 0, coins: 0, service: 0);
+    for (int i = 1; i <= 12; i++) {
+      final res = await (byDates ? repository.getStationMoneyReportsByDates(i, range.start, range.end, context: context) : repository.getStationMoneyReport(i, context: context));
+      _moneyReports[i] = res;
+
+      if (res != null) {
+        total.banknotes = (total.banknotes ?? 0) + (res.banknotes ?? 0);
+        total.electronical = (total.electronical ?? 0) + (res.electronical ?? 0);
+        total.carsTotal = (total.carsTotal ?? 0) + (res.carsTotal ?? 0);
+        total.coins = (total.coins ?? 0) + (res.coins ?? 0);
+        total.service = (total.service ?? 0) + (res.service ?? 0);
+      }
+
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+    _moneyReports[0] = total;
+
+    return;
+  }
 
   @override
   void initState() {
@@ -204,18 +226,35 @@ class _StatisctisPageState extends State<StatisticsPage> {
                       return ValueListenableBuilder(
                         valueListenable: _dateRange,
                         builder: (BuildContext context, DateTimeRange dateRange, Widget? child) {
-                          return ListView.builder(
-                            itemCount: 12,
-                            itemBuilder: (context, index) {
-                              return FutureBuilder(
-                                future: byDates ? repository.getStationMoneyReportsByDates(index + 1, dateRange.start, dateRange.end, context: context) : repository.getStationMoneyReport(index + 1, context: context),
-                                builder: (BuildContext context, AsyncSnapshot<StationMoneyReport?> snapshot) {
-                                  final report = snapshot.data;
-
-                                  return StatisticsListTile(
-                                    stationID: index + 1,
-                                    report: report,
-                                  );
+                          return FutureBuilder(
+                            future: _loadMoneyReports(repository, context, byDates, dateRange),
+                            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                              if (snapshot.connectionState != ConnectionState.done) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return ListView.separated(
+                                itemCount: 13,
+                                itemBuilder: (context, index) {
+                                  if (index < 12) {
+                                    return StatisticsListTile(
+                                      title: "Пост ${index + 1}",
+                                      report: _moneyReports[index + 1],
+                                    );
+                                  } else {
+                                    return StatisticsListTile(
+                                      title: "Итого",
+                                      report: _moneyReports[0],
+                                    );
+                                  }
+                                },
+                                separatorBuilder: (BuildContext context, int index) {
+                                  if (index < 11) {
+                                    return Container();
+                                  } else {
+                                    return Divider();
+                                  }
                                 },
                               );
                             },

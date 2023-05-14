@@ -46,8 +46,10 @@ class _AuthState extends State<Auth> {
       var repo = LeaCentralRepository(client);
       args[PageArgCode.repository] = repo;
 
-      final res = await repo.getCurrentUser();
-
+      final user = await repo.getCurrentUser();
+      if (user == null) {
+        return;
+      }
       GlobalData.AddServiceValue = addServiceValue;
       SystemChrome.setPreferredOrientations([]);
       Navigator.pushReplacementNamed(

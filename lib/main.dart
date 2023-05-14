@@ -18,8 +18,9 @@ void main() async {
     app = await Firebase.initializeApp(name: "openwashing", options: DefaultFirebaseOptions.currentPlatform);
   }
 
+  //TODO: Move into repository
   Common.washServersApi = WashServersApi(ApiClient(
-    basePath: 'http://app.openwashing.com:8070',
+    basePath: 'https://app.openwashing.com/api/admin',
     authentication: HttpBearerAuth(),
   ));
 

@@ -33,6 +33,19 @@ class _MotorPageState extends State<MotorPage> {
     super.initState();
   }
 
+  Map<int, StationStats?> _stationStats = Map();
+
+  Future<void> _loadStationsStats(Repository repository, BuildContext context, bool byDates, DateTimeRange range) async {
+    _stationStats.clear();
+    for (int i = 1; i <= 12; i++) {
+      _stationStats[i] = await (byDates ? repository.getStationStatsByDates(i, range.start, range.end, context: context) : repository.getStationStatsCurrent(i, context: context));
+
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+
+    return;
+  }
+
   @override
   void dispose() {
     _showMode.dispose();
@@ -178,27 +191,28 @@ class _MotorPageState extends State<MotorPage> {
                             },
                           ),
                           ElevatedButton(
-                              onPressed: () async {
-                                DateTimeRange? range = await showDateRangePicker(
-                                  context: context,
-                                  firstDate: DateTime(2018),
-                                  lastDate: DateTime.now(),
-                                  initialEntryMode: DatePickerEntryMode.calendar,
-                                  initialDateRange: DateTimeRange(
-                                    start: _dateRange.value.start,
-                                    end: _dateRange.value.end,
+                            onPressed: () async {
+                              DateTimeRange? range = await showDateRangePicker(
+                                context: context,
+                                firstDate: DateTime(2018),
+                                lastDate: DateTime.now(),
+                                initialEntryMode: DatePickerEntryMode.calendar,
+                                initialDateRange: DateTimeRange(
+                                  start: _dateRange.value.start,
+                                  end: _dateRange.value.end,
+                                ),
+                              );
+                              if (range != null) {
+                                _dateRange.value = DateTimeRange(
+                                  start: range.start,
+                                  end: range.end.add(
+                                    Duration(days: 1, microseconds: -1),
                                   ),
                                 );
-                                if (range != null) {
-                                  _dateRange.value = DateTimeRange(
-                                    start: range.start,
-                                    end: range.end.add(
-                                      Duration(days: 1, microseconds: -1),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Text("Выбрать период"))
+                              }
+                            },
+                            child: Text("Выбрать период"),
+                          ),
                         ],
                       );
                     }
@@ -208,72 +222,61 @@ class _MotorPageState extends State<MotorPage> {
               ],
             ),
           ),
-          Expanded(child: StatefulBuilder(
-            builder: (context, setState) {
-              return Padding(
-                padding: EdgeInsets.all(8),
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    setState(() {});
-                  },
-                  child: ValueListenableBuilder(
-                    valueListenable: _showMode,
-                    builder: (BuildContext context, bool byDates, Widget? child) {
-                      return ValueListenableBuilder(
-                        valueListenable: _dateRange,
-                        builder: (BuildContext context, DateTimeRange dateRange, Widget? child) {
-                          return ListView.builder(
-                            itemCount: 12,
-                            itemBuilder: (BuildContext context, int index) {
-                              return FutureBuilder(
-                                future: byDates ? repository.getStationStatsByDates(index + 1, dateRange.start, dateRange.end, context: context) : repository.getStationStatsCurrent(index + 1, context: context),
-                                builder: (BuildContext context, AsyncSnapshot<StationStats?> snapshot) {
-                                  if (snapshot.connectionState != ConnectionState.done) {
-                                    return Card(
-                                      child: ExpansionTile(
-                                        title: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Пост: ${index + 1}",
-                                              style: theme.textTheme.titleLarge,
-                                            ),
-                                            CircularProgressIndicator(),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }
-
-                                  final stats = snapshot.data;
-
-                                  return ValueListenableBuilder(
-                                    valueListenable: _showRelays,
-                                    builder: (BuildContext context, bool showRelayStats, Widget? child) {
-                                      if (showRelayStats) {
-                                        return RelayStatsListTile(
-                                          id: index + 1,
-                                          stats: stats,
-                                        );
-                                      }
-                                      return MotorStatsListTile(
-                                        id: index + 1,
-                                        stats: stats,
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                      );
+          Expanded(
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Padding(
+                  padding: EdgeInsets.all(8),
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      setState(() {});
                     },
+                    child: ValueListenableBuilder(
+                      valueListenable: _showMode,
+                      builder: (BuildContext context, bool byDates, Widget? child) {
+                        return ValueListenableBuilder(
+                          valueListenable: _dateRange,
+                          builder: (BuildContext context, DateTimeRange dateRange, Widget? child) {
+                            return FutureBuilder(
+                              future: _loadStationsStats(repository, context, byDates, dateRange),
+                              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                                if (snapshot.connectionState != ConnectionState.done) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                return ListView.builder(
+                                  itemCount: 12,
+                                  itemBuilder: (context, index) {
+                                    return ValueListenableBuilder(
+                                      valueListenable: _showRelays,
+                                      builder: (BuildContext context, bool showRelayStats, Widget? child) {
+                                        if (showRelayStats) {
+                                          return RelayStatsListTile(
+                                            id: index + 1,
+                                            stats: _stationStats[index + 1],
+                                          );
+                                        }
+                                        return MotorStatsListTile(
+                                          id: index + 1,
+                                          stats: _stationStats[index + 1],
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              );
-            },
-          ))
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

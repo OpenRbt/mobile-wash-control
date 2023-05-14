@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 
 class StatisticsListTile extends StatelessWidget {
-  final int stationID;
+  final String title;
   final StationMoneyReport? report;
 
-  const StatisticsListTile({super.key, this.report, required this.stationID});
+  const StatisticsListTile({super.key, this.report, required this.title});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    var carsTotal = report?.carsTotal ?? 0;
+    if (carsTotal == 0) {
+      carsTotal = 1;
+    }
 
     return Column(
       children: [
@@ -19,7 +24,7 @@ class StatisticsListTile extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "Пост $stationID",
+                title,
                 style: theme.textTheme.titleLarge,
               ),
             ),
@@ -84,7 +89,7 @@ class StatisticsListTile extends StatelessWidget {
               style: theme.textTheme.titleMedium!.copyWith(color: theme.primaryColor),
             ),
             Text(
-              report != null ? "${(((report!.coins ?? 0) + (report!.banknotes ?? 0) + (report!.electronical ?? 0)) / (report!.carsTotal ?? 1)).toStringAsFixed(2)}" : "...",
+              report != null ? "${(((report!.coins ?? 0) + (report!.banknotes ?? 0) + (report!.electronical ?? 0)) / carsTotal).toStringAsFixed(2)}" : "...",
               style: theme.textTheme.titleMedium!.copyWith(color: theme.primaryColor),
             ),
           ],

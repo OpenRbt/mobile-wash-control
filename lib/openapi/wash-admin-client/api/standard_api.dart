@@ -10,7 +10,6 @@
 
 part of openapi.api;
 
-
 class StandardApi {
   StandardApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
@@ -28,8 +27,7 @@ class StandardApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
-
+    const contentTypes = <String>['application/json'];
 
     return apiClient.invokeAPI(
       path,
@@ -51,8 +49,10 @@ class StandardApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'HealthCheck200Response',) as HealthCheck200Response;
-    
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'HealthCheck200Response',
+      ) as HealthCheck200Response;
     }
     return null;
   }
