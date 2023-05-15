@@ -73,5 +73,7 @@ abstract class Repository {
   Future<KasseConfig?> getKasseConfig({BuildContext? context});
   Future<void> saveKasseConfig(KasseConfig config, {BuildContext? context});
 
+  User? currentUser();
+
   void dispose();
 }

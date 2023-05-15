@@ -10,54 +10,42 @@
 
 part of openapi.api;
 
-class ArgMeasureVolumeMilliliters {
-  /// Returns a new [ArgMeasureVolumeMilliliters] instance.
-  ArgMeasureVolumeMilliliters({
+class ArgDispenserStop {
+  /// Returns a new [ArgDispenserStop] instance.
+  ArgDispenserStop({
     required this.hash,
-    required this.volume,
-    required this.startProgramID,
     required this.stopProgramID,
   });
 
   String hash;
 
-  int volume;
-
-  int startProgramID;
-
   int stopProgramID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ArgMeasureVolumeMilliliters &&
+  bool operator ==(Object other) => identical(this, other) || other is ArgDispenserStop &&
      other.hash == hash &&
-     other.volume == volume &&
-     other.startProgramID == startProgramID &&
      other.stopProgramID == stopProgramID;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (hash.hashCode) +
-    (volume.hashCode) +
-    (startProgramID.hashCode) +
     (stopProgramID.hashCode);
 
   @override
-  String toString() => 'ArgMeasureVolumeMilliliters[hash=$hash, volume=$volume, startProgramID=$startProgramID, stopProgramID=$stopProgramID]';
+  String toString() => 'ArgDispenserStop[hash=$hash, stopProgramID=$stopProgramID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'hash'] = this.hash;
-      json[r'volume'] = this.volume;
-      json[r'startProgramID'] = this.startProgramID;
       json[r'stopProgramID'] = this.stopProgramID;
     return json;
   }
 
-  /// Returns a new [ArgMeasureVolumeMilliliters] instance and imports its values from
+  /// Returns a new [ArgDispenserStop] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static ArgMeasureVolumeMilliliters? fromJson(dynamic value) {
+  static ArgDispenserStop? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -66,27 +54,25 @@ class ArgMeasureVolumeMilliliters {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "ArgMeasureVolumeMilliliters[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ArgMeasureVolumeMilliliters[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "ArgDispenserStop[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "ArgDispenserStop[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return ArgMeasureVolumeMilliliters(
+      return ArgDispenserStop(
         hash: mapValueOfType<String>(json, r'hash')!,
-        volume: mapValueOfType<int>(json, r'volume')!,
-        startProgramID: mapValueOfType<int>(json, r'startProgramID')!,
         stopProgramID: mapValueOfType<int>(json, r'stopProgramID')!,
       );
     }
     return null;
   }
 
-  static List<ArgMeasureVolumeMilliliters>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <ArgMeasureVolumeMilliliters>[];
+  static List<ArgDispenserStop>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <ArgDispenserStop>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = ArgMeasureVolumeMilliliters.fromJson(row);
+        final value = ArgDispenserStop.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -95,12 +81,12 @@ class ArgMeasureVolumeMilliliters {
     return result.toList(growable: growable);
   }
 
-  static Map<String, ArgMeasureVolumeMilliliters> mapFromJson(dynamic json) {
-    final map = <String, ArgMeasureVolumeMilliliters>{};
+  static Map<String, ArgDispenserStop> mapFromJson(dynamic json) {
+    final map = <String, ArgDispenserStop>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = ArgMeasureVolumeMilliliters.fromJson(entry.value);
+        final value = ArgDispenserStop.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -109,13 +95,13 @@ class ArgMeasureVolumeMilliliters {
     return map;
   }
 
-  // maps a json object with a list of ArgMeasureVolumeMilliliters-objects as value to a dart map
-  static Map<String, List<ArgMeasureVolumeMilliliters>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<ArgMeasureVolumeMilliliters>>{};
+  // maps a json object with a list of ArgDispenserStop-objects as value to a dart map
+  static Map<String, List<ArgDispenserStop>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<ArgDispenserStop>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = ArgMeasureVolumeMilliliters.listFromJson(entry.value, growable: growable,);
+        final value = ArgDispenserStop.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -127,8 +113,6 @@ class ArgMeasureVolumeMilliliters {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'hash',
-    'volume',
-    'startProgramID',
     'stopProgramID',
   };
 }

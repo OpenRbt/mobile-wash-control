@@ -52,11 +52,11 @@ class _AuthState extends State<Auth> {
       }
       GlobalData.AddServiceValue = addServiceValue;
       SystemChrome.setPreferredOrientations([]);
-      Navigator.pushReplacementNamed(
+      Navigator.pushNamed(
         context,
         "/mobile/home",
         arguments: args,
-      );
+      ).then((value) => {repo.dispose()}, onError: (error) => {repo.dispose()});
     } catch (e) {}
   }
 

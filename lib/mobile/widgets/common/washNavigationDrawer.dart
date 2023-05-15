@@ -10,7 +10,7 @@ class WashNavigationDrawer extends StatelessWidget {
   final SelectedPage _selected;
   final Repository _repository;
 
-  final _destinations = <NavigationDrawerDestination>[
+  var _destinations = <NavigationDrawerDestination>[
     NavigationDrawerDestination(icon: Icon(Icons.home_outlined), label: Text("Главная")),
     NavigationDrawerDestination(icon: Icon(Icons.schema_outlined), label: Text("Программы")),
     NavigationDrawerDestination(icon: Icon(Icons.discount_outlined), label: Text("Управление скидками")),
@@ -22,7 +22,7 @@ class WashNavigationDrawer extends StatelessWidget {
     NavigationDrawerDestination(icon: Icon(Icons.exit_to_app_outlined), label: Text("Выход")),
   ];
 
-  final routes = <String>[
+  var routes = <String>[
     "/mobile/home",
     "/mobile/programs",
     "/mobile/discounts",
@@ -35,12 +35,24 @@ class WashNavigationDrawer extends StatelessWidget {
 
   WashNavigationDrawer({super.key, required SelectedPage selected, required Repository repository})
       : _selected = selected,
-        _repository = repository;
+        _repository = repository {
+    final user = repository.currentUser();
+    if (user?.isOperator ?? false) {
+      _destinations = <NavigationDrawerDestination>[
+        NavigationDrawerDestination(icon: Icon(Icons.home_outlined), label: Text("Главная")),
+        NavigationDrawerDestination(icon: Icon(Icons.exit_to_app_outlined), label: Text("Выход")),
+      ];
+
+      routes = <String>[
+        "/mobile/home",
+      ];
+    }
+    _repository.getCurrentUser();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return NavigationDrawer(
       children: _destinations,
       selectedIndex: _selected.index,

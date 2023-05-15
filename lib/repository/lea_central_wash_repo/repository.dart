@@ -11,6 +11,7 @@ import 'package:mobile_wash_control/repository/repository.dart';
 
 class LeaCentralRepository extends Repository {
   final DefaultApi api;
+  entity.User? _currentUser;
 
   Timer? refresh;
 
@@ -356,6 +357,11 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
         default:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
@@ -512,6 +518,11 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
         case HttpStatus.notFound:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином не найден"));
@@ -561,6 +572,11 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
         case HttpStatus.conflict:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином уже существует"));
@@ -586,18 +602,32 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
+  entity.User? currentUser() {
+    return _currentUser;
+  }
+
+  @override
   Future<entity.User?> getCurrentUser({BuildContext? context}) async {
+    if (_currentUser != null) {
+      return _currentUser;
+    }
     try {
       final response = await api.getUser();
 
       if (response != null) {
-        return Helpers.userFromApi(response);
+        _currentUser = Helpers.userFromApi(response);
+        return _currentUser;
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
           }
           break;
         default:
@@ -1103,6 +1133,11 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
         case HttpStatus.notFound:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста $id"));
@@ -1137,6 +1172,11 @@ class LeaCentralRepository extends Repository {
         case HttpStatus.unauthorized:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
           }
           break;
         case HttpStatus.notFound:
@@ -1207,6 +1247,11 @@ class LeaCentralRepository extends Repository {
         case HttpStatus.unauthorized:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
           }
           break;
         case HttpStatus.notFound:
