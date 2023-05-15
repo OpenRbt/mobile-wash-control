@@ -315,7 +315,7 @@ class LeaCentralRepository extends Repository {
       final args = ArgOpenStation(stationID: id);
       final response = await api.openStation(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Выполнена открытие двери нв посту $id"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Выполнена открытие двери на посту $id"));
       }
     } on ApiException catch (e) {
       switch (e.code) {

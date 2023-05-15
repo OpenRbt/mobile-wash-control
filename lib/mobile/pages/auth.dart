@@ -7,6 +7,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/auth/authButton.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart' as lcw;
 import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
+import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth extends StatefulWidget {
@@ -23,6 +24,8 @@ class _AuthState extends State<Auth> {
 
   late TextEditingController pinController;
 
+  Repository? _repo = null;
+
   @override
   void initState() {
     pinController = TextEditingController();
@@ -32,6 +35,7 @@ class _AuthState extends State<Auth> {
   @override
   void dispose() {
     pinController.dispose();
+    _repo?.dispose();
     super.dispose();
   }
 
@@ -48,15 +52,18 @@ class _AuthState extends State<Auth> {
 
       final user = await repo.getCurrentUser();
       if (user == null) {
+        repo.dispose();
         return;
       }
+      _repo?.dispose();
+      _repo = repo;
       GlobalData.AddServiceValue = addServiceValue;
       SystemChrome.setPreferredOrientations([]);
       Navigator.pushNamed(
         context,
         "/mobile/home",
         arguments: args,
-      ).then((value) => {repo.dispose()}, onError: (error) => {repo.dispose()});
+      );
     } catch (e) {}
   }
 
