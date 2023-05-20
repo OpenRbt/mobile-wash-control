@@ -172,55 +172,91 @@ class _ManagePostPageState extends State<ManagePostPage> {
                           "Добавить сервисные",
                           style: theme.textTheme.titleLarge,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              flex: 1,
-                              fit: FlexFit.loose,
-                              child: IconButton(
-                                icon: Icon(Icons.remove_circle_outline),
-                                onPressed: () {
-                                  _changeServiceValue(value: -10);
+                        (repository.currentUser()?.isAdmin ?? false)
+                            ? Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          flex: 1,
+                                          fit: FlexFit.loose,
+                                          child: IconButton(
+                                            icon: Icon(Icons.remove_circle_outline),
+                                            onPressed: () {
+                                              _changeServiceValue(value: -10);
+                                            },
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 2,
+                                          fit: FlexFit.tight,
+                                          child: Center(
+                                            child: ValueListenableBuilder(
+                                              valueListenable: _addAmount,
+                                              builder: (BuildContext context, int value, Widget? child) {
+                                                return Text(
+                                                  "$value руб",
+                                                  style: theme.textTheme.titleLarge,
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          fit: FlexFit.loose,
+                                          child: IconButton(
+                                            icon: Icon(Icons.add_circle_outline),
+                                            onPressed: () {
+                                              _changeServiceValue(value: 10);
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    child: Text(
+                                      "Отправить",
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                    onPressed: () {
+                                      repository.addServiceMoney(stationID, GlobalData.AddServiceValue, context: context);
+                                    },
+                                  )
+                                ],
+                              )
+                            : FutureBuilder(
+                                future: repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY", context: context),
+                                builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {
+                                  if (snapshot.connectionState != ConnectionState.done) {
+                                    return LinearProgressIndicator();
+                                  }
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          "${snapshot.data ?? 10} руб",
+                                          style: theme.textTheme.titleLarge,
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        child: Text(
+                                          "Отправить",
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                        onPressed: () {
+                                          repository.addServiceMoney(stationID, snapshot.data ?? 10, context: context);
+                                        },
+                                      )
+                                    ],
+                                  );
                                 },
                               ),
-                            ),
-                            Flexible(
-                              flex: 2,
-                              fit: FlexFit.tight,
-                              child: Center(
-                                child: ValueListenableBuilder(
-                                  valueListenable: _addAmount,
-                                  builder: (BuildContext context, int value, Widget? child) {
-                                    return Text(
-                                      "$value руб",
-                                      style: theme.textTheme.titleLarge,
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              flex: 1,
-                              fit: FlexFit.loose,
-                              child: IconButton(
-                                icon: Icon(Icons.add_circle_outline),
-                                onPressed: () {
-                                  _changeServiceValue(value: 10);
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        ElevatedButton(
-                          child: Text(
-                            "Отправить",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          onPressed: () {
-                            repository.addServiceMoney(stationID, GlobalData.AddServiceValue, context: context);
-                          },
-                        ),
                       ],
                     ),
                   ),
@@ -242,39 +278,41 @@ class _ManagePostPageState extends State<ManagePostPage> {
                           );
                         },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: ElevatedButton(
-                          child: Text(
-                            "Инкассировать",
-                          ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text("Инкассировать"),
-                                content: Text("Вы уверены?"),
-                                actionsPadding: EdgeInsets.all(8),
-                                actions: [
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      await repository.stationSaveCollection(stationID, context: context);
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Да"),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Нет"),
-                                  )
-                                ],
+                      (repository.currentUser()?.isAdmin ?? false)
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: ElevatedButton(
+                                child: Text(
+                                  "Инкассировать",
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("Инкассировать"),
+                                      content: Text("Вы уверены?"),
+                                      actionsPadding: EdgeInsets.all(8),
+                                      actions: [
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            await repository.stationSaveCollection(stationID, context: context);
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Да"),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Нет"),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            )
+                          : SizedBox(),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
@@ -308,20 +346,22 @@ class _ManagePostPageState extends State<ManagePostPage> {
                           },
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          child: Text(
-                            "История инкассаций",
-                          ),
-                          onPressed: () {
-                            var args = Map<PageArgCode, dynamic>();
-                            args[PageArgCode.repository] = repository;
-                            args[PageArgCode.stationID] = stationID;
-                            Navigator.pushNamed(context, "/mobile/home/incassation-history", arguments: args);
-                          },
-                        ),
-                      ),
+                      (repository.currentUser()?.isAdmin ?? false)
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                child: Text(
+                                  "История инкассаций",
+                                ),
+                                onPressed: () {
+                                  var args = Map<PageArgCode, dynamic>();
+                                  args[PageArgCode.repository] = repository;
+                                  args[PageArgCode.stationID] = stationID;
+                                  Navigator.pushNamed(context, "/mobile/home/incassation-history", arguments: args);
+                                },
+                              ),
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ),
