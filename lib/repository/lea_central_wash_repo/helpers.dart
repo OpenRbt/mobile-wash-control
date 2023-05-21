@@ -9,7 +9,7 @@ class Helpers {
     res.motorSpeedPercent = program.motorSpeedPercent ?? 100;
     res.preflightMotorSpeedPercent = program.preflightMotorSpeedPercent ?? 100;
     res.preflightEnabled = program.preflightEnabled ?? false;
-    res.ifFinishingProgram = program.isFinishingProgram ?? false;
+    res.isFinishingProgram = program.isFinishingProgram ?? false;
 
     program.relays.forEach((element) {
       if ((element.timeon ?? 0) + (element.timeoff ?? 0) > 0) {
@@ -18,8 +18,7 @@ class Helpers {
     });
     program.preflightRelays.forEach((element) {
       if ((element.timeon ?? 0) + (element.timeoff ?? 0) > 0) {
-        res.relaysPreflight[element.id! - 1] =
-            entity.RelayConfig.FromApi(element.id!, element.timeon ?? 0, element.timeoff ?? 0);
+        res.relaysPreflight[element.id! - 1] = entity.RelayConfig.FromApi(element.id!, element.timeon ?? 0, element.timeoff ?? 0);
       }
     });
     return res;
@@ -108,8 +107,7 @@ class Helpers {
       discountPrograms: Set.from(
         List.generate(
           campaign.discountPrograms.length ?? 0,
-          (index) => entity.DiscountProgram(
-              programID: campaign.discountPrograms[index].programID, discount: campaign.discountPrograms[index].discount),
+          (index) => entity.DiscountProgram(programID: campaign.discountPrograms[index].programID, discount: campaign.discountPrograms[index].discount),
         ),
       ),
       weekDays: weekDays,
@@ -201,10 +199,7 @@ class Helpers {
   }
 
   static entity.StationCardReaderConfig cardReaderConfigFromAPI(CardReaderConfig config) {
-    return entity.StationCardReaderConfig(
-        host: config.host,
-        port: config.port,
-        cardReader: entity.CardReader.fromString(config.cardReaderType?.toString() ?? ""));
+    return entity.StationCardReaderConfig(host: config.host, port: config.port, cardReader: entity.CardReader.fromString(config.cardReaderType?.toString() ?? ""));
   }
 
   static CardReaderConfig cardReaderConfigToAPI(int id, entity.StationCardReaderConfig config) {

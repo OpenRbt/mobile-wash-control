@@ -169,14 +169,9 @@ class LeaCentralRepository extends Repository {
   @override
   Future<entity.Program?> getProgram(int id, {BuildContext? context}) async {
     try {
-      var programs = _programs.value;
-      if (programs == null) {
-        await updatePrograms();
-        programs = _programs.value;
-      }
+      var programs = await api.programs(ArgPrograms(programID: id));
 
-      var programsFiltered = programs!.where((program) => program.id == id);
-      return programsFiltered.isNotEmpty ? programsFiltered.first : null;
+      return Helpers.programFromApi(programs!.single);
     } on ApiException catch (e) {
       switch (e.code) {
         default:
@@ -408,26 +403,12 @@ class LeaCentralRepository extends Repository {
         id: id,
         name: program.name,
         price: program.price,
-        isFinishingProgram: program.ifFinishingProgram,
+        isFinishingProgram: program.isFinishingProgram,
         motorSpeedPercent: program.motorSpeedPercent,
         preflightMotorSpeedPercent: program.preflightMotorSpeedPercent,
         preflightEnabled: program.preflightEnabled,
-        relays: List.generate(
-          program.relays.length,
-          (index) => RelayConfig(
-            id: program.relays[index].id,
-            timeon: program.relays[index].timeOn,
-            timeoff: program.relays[index].timeOff,
-          ),
-        ),
-        preflightRelays: List.generate(
-          program.relaysPreflight.length,
-          (index) => RelayConfig(
-            id: program.relaysPreflight[index].id,
-            timeon: program.relaysPreflight[index].timeOn,
-            timeoff: program.relaysPreflight[index].timeOff,
-          ),
-        ),
+        relays: program.relays.where((element) => element.timeOn > 0).map((e) => RelayConfig(id: e.id, timeon: e.timeOn, timeoff: e.timeOff)).toList(),
+        preflightRelays: program.relaysPreflight.where((element) => element.timeOn > 0).map((e) => RelayConfig(id: e.id, timeon: e.timeOn, timeoff: e.timeOff)).toList(),
       );
 
       await api.setProgram(args);

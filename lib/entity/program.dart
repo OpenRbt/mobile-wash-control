@@ -10,7 +10,7 @@ class Program {
   String name = "";
   int price = 10;
   bool preflightEnabled = false;
-  bool ifFinishingProgram = false;
+  bool isFinishingProgram = false;
   int motorSpeedPercent = 100;
   int preflightMotorSpeedPercent = 100;
 
@@ -18,4 +18,26 @@ class Program {
   List<RelayConfig> relaysPreflight = List.generate(relayCount, (index) => RelayConfig(id: index + 1));
 
   Program(this.id);
+
+  Program copyWith({
+    int? id,
+    String? name,
+    int? price,
+    bool? preflightEnabled,
+    bool? isFinishingProgram,
+    int? motorSpeedPercent,
+    int? preflightMotorSpeedPercent,
+    List<RelayConfig>? relays,
+    List<RelayConfig>? relaysPreflight,
+  }) {
+    return Program(id ?? this.id)
+      ..name = name ?? this.name
+      ..price = price ?? this.price
+      ..preflightEnabled = preflightEnabled ?? this.preflightEnabled
+      ..isFinishingProgram = isFinishingProgram ?? this.isFinishingProgram
+      ..motorSpeedPercent = motorSpeedPercent ?? this.motorSpeedPercent
+      ..preflightMotorSpeedPercent = preflightMotorSpeedPercent ?? this.preflightMotorSpeedPercent
+      ..relays = relays ?? this.relays
+      ..relaysPreflight = relaysPreflight ?? this.relaysPreflight;
+  }
 }

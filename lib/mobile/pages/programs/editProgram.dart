@@ -15,8 +15,6 @@ class _EditProgramPageState extends State<EditProgramPage> {
 
   ValueNotifier<entity.Program> _program = ValueNotifier(entity.Program(null));
 
-  entity.Program program = entity.Program(null);
-
   Map<String, TextEditingController> _controllers = Map();
   Map<String, List<TextEditingController>> _relaysControllers = Map();
 
@@ -145,7 +143,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
             return StatefulBuilder(builder: (context, setState) {
               return ValueListenableBuilder(
                 valueListenable: _program,
-                builder: (BuildContext context, entity.Program? value, Widget? child) {
+                builder: (BuildContext context, entity.Program program, Widget? child) {
                   return ListView(
                     padding: EdgeInsets.all(8.0),
                     children: [
@@ -173,6 +171,9 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   child: TextField(
                                     controller: _controllers["name"],
                                     keyboardType: TextInputType.text,
+                                    onChanged: (value) {
+                                      _program.value = program.copyWith(name: value);
+                                    },
                                   ),
                                 ),
                               ],
@@ -194,6 +195,10 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     controller: _controllers["price"],
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value) {
+                                      int price = int.tryParse(value) ?? 0;
+                                      _program.value = program.copyWith(price: price);
+                                    },
                                   ),
                                 ),
                               ],
@@ -219,11 +224,9 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                         style: theme.textTheme.labelSmall,
                                       ),
                                       Switch(
-                                        value: program.ifFinishingProgram,
+                                        value: program.isFinishingProgram,
                                         onChanged: (val) {
-                                          setState(() {
-                                            program.ifFinishingProgram = val;
-                                          });
+                                          _program.value = _program.value.copyWith(isFinishingProgram: val);
                                         },
                                       ),
                                       Text(
@@ -263,14 +266,18 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     controller: _controllers["motor"],
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                     keyboardType: TextInputType.number,
-                                    onChanged: (val) {
-                                      if (val.isEmpty) {
+                                    onChanged: (value) {
+                                      if (value.isEmpty) {
                                         _controllers["motor"]!.text = "0";
                                       } else {
-                                        if (int.parse(val) > 100) {
+                                        if (int.parse(value) > 100) {
                                           _controllers["motor"]!.text = "100";
                                         }
                                       }
+
+                                      int percent = int.tryParse(value) ?? 0;
+
+                                      _program.value = program.copyWith(motorSpeedPercent: percent);
                                     },
                                   ),
                                 ),
@@ -299,9 +306,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                       Switch(
                                         value: program.preflightEnabled,
                                         onChanged: (val) {
-                                          setState(() {
-                                            program.preflightEnabled = val;
-                                          });
+                                          _program.value = _program.value.copyWith(preflightEnabled: val);
                                         },
                                       ),
                                       Text(
@@ -330,14 +335,18 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     controller: _controllers["motorPreflight"],
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                     keyboardType: TextInputType.number,
-                                    onChanged: (val) {
-                                      if (val.isEmpty) {
+                                    onChanged: (value) {
+                                      if (value.isEmpty) {
                                         _controllers["motorPreflight"]!.text = "0";
                                       } else {
-                                        if (int.parse(val) > 100) {
+                                        if (int.parse(value) > 100) {
                                           _controllers["motorPreflight"]!.text = "100";
                                         }
                                       }
+
+                                      int percent = int.tryParse(value) ?? 0;
+
+                                      _program.value = program.copyWith(preflightMotorSpeedPercent: percent);
                                     },
                                   ),
                                 ),

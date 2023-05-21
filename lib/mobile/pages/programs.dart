@@ -97,10 +97,9 @@ class _ProgramsPageState extends State<ProgramsPage> {
                 ),
                 Divider(),
                 Expanded(
-                  child: ValueListenableBuilder<dynamic>(
+                  child: ValueListenableBuilder(
                     valueListenable: repository.getProgramsNotifier(),
-                    builder: (BuildContext context, dynamic value, Widget? child) {
-                      var programs = value as List<Program>?;
+                    builder: (BuildContext context, List<Program>? programs, Widget? child) {
                       if (programs == null || programs.length == 0) {
                         return child!;
                       }
@@ -115,7 +114,9 @@ class _ProgramsPageState extends State<ProgramsPage> {
                               args[PageArgCode.repository] = repository;
                               args[PageArgCode.programID] = programs[index].id;
 
-                              Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args);
+                              Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
+                                (value) => repository.updatePrograms(context: context),
+                              );
                             },
                           );
                         },

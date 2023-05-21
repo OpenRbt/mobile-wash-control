@@ -39,7 +39,7 @@ class ProgramListTile extends StatelessWidget {
             Flexible(
               flex: 2,
               fit: FlexFit.tight,
-              child: Center(child: Text("${"${(program.ifFinishingProgram ?? false) ? "Да" : "Нет"}"}")),
+              child: Center(child: Text("${"${(program.isFinishingProgram ?? false) ? "Да" : "Нет"}"}")),
             ),
             Flexible(
               flex: 1,
