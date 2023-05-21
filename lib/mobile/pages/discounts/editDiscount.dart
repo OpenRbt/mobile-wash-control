@@ -459,6 +459,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           await repository.saveDiscountCampaign(_currentDiscount.value, context: context);
+                          Navigator.pop(context);
                         }
                       },
                       child: Text("Сохранить"),

@@ -109,9 +109,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
 
   void saveProgram(BuildContext context, int? id, Repository repository) async {
     await repository.saveProgram(_program.value, context: context);
-    if (_program.value.id != null) {
-      await getProgram(id, repository, context);
-    }
+    Navigator.pop(context);
   }
 
   @override
