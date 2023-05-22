@@ -11,12 +11,7 @@ import 'package:mobile_wash_control/utils/common.dart';
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseApp app;
-  try {
-    app = Firebase.app("openwashing");
-  } catch (e) {
-    app = await Firebase.initializeApp(name: "openwashing", options: DefaultFirebaseOptions.currentPlatform);
-  }
+  await Firebase.initializeApp(name: "openwashing", options: DefaultFirebaseOptions.currentPlatform);
 
   //TODO: Move into repository
   Common.washServersApi = WashServersApi(ApiClient(

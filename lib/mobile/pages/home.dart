@@ -86,7 +86,9 @@ class _HomeState extends State<Home> {
 
     scanTargets.remove(lanBroadcast!);
     scanTargets.remove(lanGateway!);
-    scanTargets.remove(lanIP!);
+    if (Platform.isAndroid) {
+      scanTargets.remove(lanIP!);
+    }
 
     _scanActionInProgress.clear();
     _scanActions.value = List<String>.from(scanTargets);
