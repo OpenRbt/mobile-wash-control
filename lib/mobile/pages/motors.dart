@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/dialogs/motors/resetMotorsStatsDialog.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/motors/motorStatsListTile.dart';
 import 'package:mobile_wash_control/mobile/widgets/motors/relayStatsListTile.dart';
@@ -36,14 +37,16 @@ class _MotorPageState extends State<MotorPage> {
   Map<int, StationStats?> _stationStats = Map();
 
   Future<void> _loadStationsStats(Repository repository, BuildContext context, bool byDates, DateTimeRange range) async {
+    var startTime = DateTime.now();
     _stationStats.clear();
-    for (int i = 1; i <= 12; i++) {
-      _stationStats[i] = await (byDates ? repository.getStationStatsByDates(i, range.start, range.end, context: context) : repository.getStationStatsCurrent(i, context: context));
 
-      await Future.delayed(Duration(milliseconds: 100));
-    }
+    List<Future> futures = List.generate(12, (index) async {
+      _stationStats[index + 1] = await (byDates ? repository.getStationStatsByDates(index + 1, range.start, range.end, context: context) : repository.getStationStatsCurrent(index + 1, context: context));
+    });
+    await Future.wait(futures);
 
-    return;
+    var timeTotal = DateTime.now().difference(startTime);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getInfoSnackBar(message: "Статистика загружена за ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} секунд"));
   }
 
   @override

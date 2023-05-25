@@ -258,4 +258,9 @@ class Helpers {
       cashierINN: config.cashierINN,
     );
   }
+
+  ///Currently config.preflight locked to false
+  static ArgRunProgram RunProgramConfigToAPI(entity.RunProgramConfig config) {
+    return ArgRunProgram(hash: config.stationHash, programID: config.programID, preflight: false);
+  }
 }

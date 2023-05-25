@@ -91,6 +91,7 @@ class _OverviewPageState extends State<OverviewPage> {
                               var args = Map<PageArgCode, dynamic>();
                               args[PageArgCode.repository] = repository;
                               args[PageArgCode.stationID] = data.id;
+                              args[PageArgCode.stationHash] = data.hash;
                               Navigator.pushNamed(context, "/mobile/home/managePost", arguments: args);
                             },
                           );

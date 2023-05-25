@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
-import 'package:mobile_wash_control/mobile/widgets/statistics/statisticsListTile.dart';
+import 'package:mobile_wash_control/mobile/widgets/statistics/StatistcViewFromLastIncass.dart';
+import 'package:mobile_wash_control/mobile/widgets/statistics/StatisticsViewDates.dart';
+import 'package:mobile_wash_control/mobile/widgets/statistics/StatisticsViewLastIncass.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 class StatisticsPage extends StatefulWidget {
@@ -11,38 +12,13 @@ class StatisticsPage extends StatefulWidget {
   State<StatefulWidget> createState() => _StatisticsPageState();
 }
 
-class _StatisticsPageState extends State<StatisticsPage> {
-  ValueNotifier<bool> _showMode = ValueNotifier(true);
+enum StatisticsShowMode { Dates, FromLastIncass, LastIncass }
 
+class _StatisticsPageState extends State<StatisticsPage> {
+  ValueNotifier<StatisticsShowMode> _mode = ValueNotifier(StatisticsShowMode.Dates);
   ValueNotifier<DateTimeRange> _dateRange = ValueNotifier(DateTimeRange(start: DateTime.now(), end: DateTime.now()));
 
   final _dateFormatter = DateFormat('dd.MM.yyyy');
-
-  Map<int, StationMoneyReport?> _moneyReports = Map();
-
-  Future<void> _loadMoneyReports(Repository repository, BuildContext context, bool byDates, DateTimeRange range) async {
-    _moneyReports.clear();
-
-    var total = StationMoneyReport(banknotes: 0, electronical: 0, carsTotal: 0, coins: 0, service: 0);
-    for (int i = 1; i <= 12; i++) {
-      final res = await (byDates ? repository.getStationMoneyReportsByDates(i, range.start, range.end, context: context) : repository.getStationMoneyReport(i, context: context));
-      _moneyReports[i] = res;
-
-      if (res != null) {
-        total.banknotes = (total.banknotes ?? 0) + (res.banknotes ?? 0);
-        total.electronical = (total.electronical ?? 0) + (res.electronical ?? 0);
-        total.carsTotal = (total.carsTotal ?? 0) + (res.carsTotal ?? 0);
-        total.coins = (total.coins ?? 0) + (res.coins ?? 0);
-        total.service = (total.service ?? 0) + (res.service ?? 0);
-      }
-
-      await Future.delayed(Duration(milliseconds: 100));
-    }
-    _moneyReports[0] = total;
-
-    return;
-  }
-
   @override
   void initState() {
     var now = DateTime.now();
@@ -57,7 +33,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   @override
   void dispose() {
-    _showMode.dispose();
+    _mode.dispose();
     _dateRange.dispose();
     super.dispose();
   }
@@ -84,96 +60,98 @@ class _StatisticsPageState extends State<StatisticsPage> {
               ),
               childrenPadding: EdgeInsets.all(8),
               children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "с последней инкассации",
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                    ),
-                    ValueListenableBuilder(
-                      valueListenable: _showMode,
-                      builder: (BuildContext context, bool value, Widget? child) {
-                        return Switch(
-                          value: value,
-                          onChanged: (value) {
-                            _showMode.value = value;
-                          },
-                        );
+                ValueListenableBuilder<StatisticsShowMode>(
+                  valueListenable: _mode,
+                  builder: (BuildContext context, StatisticsShowMode value, Widget? child) {
+                    return SegmentedButton<StatisticsShowMode>(
+                      segments: [
+                        ButtonSegment(
+                          value: StatisticsShowMode.Dates,
+                          label: Text("По датам"),
+                        ),
+                        ButtonSegment(
+                          value: StatisticsShowMode.FromLastIncass,
+                          label: Text("С последней инкассации"),
+                        ),
+                        ButtonSegment(
+                          value: StatisticsShowMode.LastIncass,
+                          label: Text("Последняя инкассация"),
+                        ),
+                      ],
+                      selected: {value},
+                      multiSelectionEnabled: false,
+                      onSelectionChanged: (val) {
+                        _mode.value = val.single;
                       },
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        "по датам",
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
                 ValueListenableBuilder(
-                  valueListenable: _showMode,
-                  builder: (BuildContext context, bool value, Widget? child) {
-                    if (value) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ValueListenableBuilder(
-                            valueListenable: _dateRange,
-                            builder: (BuildContext context, DateTimeRange value, Widget? child) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Период с ",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  Text(
-                                    _dateFormatter.format(value.start),
-                                    style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
-                                  ),
-                                  Text(
-                                    " по ",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  Text(
-                                    _dateFormatter.format(value.end),
-                                    style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              DateTimeRange? range = await showDateRangePicker(
-                                context: context,
-                                firstDate: DateTime(2018),
-                                lastDate: DateTime.now(),
-                                initialEntryMode: DatePickerEntryMode.calendar,
-                                initialDateRange: DateTimeRange(
-                                  start: _dateRange.value.start,
-                                  end: _dateRange.value.end,
-                                ),
-                              );
-                              if (range != null) {
-                                _dateRange.value = DateTimeRange(
-                                  start: range.start,
-                                  end: range.end.add(
-                                    Duration(days: 1, microseconds: -1),
+                  valueListenable: _mode,
+                  builder: (BuildContext context, StatisticsShowMode value, Widget? child) {
+                    switch (value) {
+                      case StatisticsShowMode.Dates:
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ValueListenableBuilder(
+                              valueListenable: _dateRange,
+                              builder: (BuildContext context, DateTimeRange value, Widget? child) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Период с ",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                    Text(
+                                      _dateFormatter.format(value.start),
+                                      style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
+                                    ),
+                                    Text(
+                                      " по ",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                    Text(
+                                      _dateFormatter.format(value.end),
+                                      style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                DateTimeRange? range = await showDateRangePicker(
+                                  context: context,
+                                  firstDate: DateTime(2018),
+                                  lastDate: DateTime.now(),
+                                  initialEntryMode: DatePickerEntryMode.calendar,
+                                  initialDateRange: DateTimeRange(
+                                    start: _dateRange.value.start,
+                                    end: _dateRange.value.end,
                                   ),
                                 );
-                              }
-                            },
-                            child: Text("Выбрать период"),
-                          )
-                        ],
-                      );
+                                if (range != null) {
+                                  _dateRange.value = DateTimeRange(
+                                    start: range.start,
+                                    end: range.end.add(
+                                      Duration(days: 1, microseconds: -1),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text("Выбрать период"),
+                            )
+                          ],
+                        );
+                      case StatisticsShowMode.FromLastIncass:
+                        return SizedBox();
+                      case StatisticsShowMode.LastIncass:
+                        return SizedBox();
+                      default:
+                        return SizedBox();
                     }
-                    return Container();
                   },
                 ),
               ],
@@ -212,61 +190,29 @@ class _StatisticsPageState extends State<StatisticsPage> {
             ),
           ),
           Divider(),
-          Expanded(child: StatefulBuilder(
-            builder: (BuildContext context, void Function(void Function()) setState) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    setState(() {});
-                  },
-                  child: ValueListenableBuilder(
-                    valueListenable: _showMode,
-                    builder: (BuildContext context, bool byDates, Widget? child) {
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ValueListenableBuilder(
+                valueListenable: _mode,
+                builder: (BuildContext context, StatisticsShowMode value, Widget? child) {
+                  switch (value) {
+                    case StatisticsShowMode.Dates:
                       return ValueListenableBuilder(
                         valueListenable: _dateRange,
-                        builder: (BuildContext context, DateTimeRange dateRange, Widget? child) {
-                          return FutureBuilder(
-                            future: _loadMoneyReports(repository, context, byDates, dateRange),
-                            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                              if (snapshot.connectionState != ConnectionState.done) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              return ListView.separated(
-                                itemCount: 13,
-                                itemBuilder: (context, index) {
-                                  if (index < 12) {
-                                    return StatisticsListTile(
-                                      title: "Пост ${index + 1}",
-                                      report: _moneyReports[index + 1],
-                                    );
-                                  } else {
-                                    return StatisticsListTile(
-                                      title: "Итого",
-                                      report: _moneyReports[0],
-                                    );
-                                  }
-                                },
-                                separatorBuilder: (BuildContext context, int index) {
-                                  if (index < 11) {
-                                    return Container();
-                                  } else {
-                                    return Divider();
-                                  }
-                                },
-                              );
-                            },
-                          );
+                        builder: (BuildContext context, DateTimeRange value, Widget? child) {
+                          return StatisticsViewDates(dateTimeRange: value, repository: repository);
                         },
                       );
-                    },
-                  ),
-                ),
-              );
-            },
-          )),
+                    case StatisticsShowMode.FromLastIncass:
+                      return StatisticsViewFromLastIncass(repository: repository);
+                    case StatisticsShowMode.LastIncass:
+                      return StatisticsViewLastIncass(repository: repository);
+                  }
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -1388,4 +1388,66 @@ class LeaCentralRepository extends Repository {
       }
     }
   }
+
+  @override
+  Future<void> runProgram(entity.RunProgramConfig cfg, {BuildContext? context}) async {
+    try {
+      final args = Helpers.RunProgramConfigToAPI(cfg);
+      final response = await api.runProgram(args);
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Программа запущена"));
+      }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.notFound:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось выполнить программу, Ошибка: ${e.message ?? "не найден один из параметров переданного конфига"}"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<Map<int, entity.StationMoneyReport?>> lastCollectionReportsStats({BuildContext? context}) async {
+    Map<int, entity.StationMoneyReport> collectionReports = Map();
+    try {
+      final response = await api.statusCollection();
+
+      response?.stations?.forEach((element) {
+        collectionReports[element.id!] = entity.StationMoneyReport(
+          carsTotal: element.carsTotal,
+          coins: element.coins,
+          banknotes: element.banknotes,
+          electronical: element.electronical,
+          service: element.service,
+        );
+      });
+
+      return collectionReports;
+    } on ApiException catch (e) {
+      switch (e.code) {
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+    return collectionReports;
+  }
 }

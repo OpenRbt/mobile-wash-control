@@ -201,27 +201,32 @@ class WashNavigationDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     if (_availablePages[index] == SelectedPage.Exit) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Выход"),
-                          content: Text("Выйти из приложения?"),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () {
-                                exit(0);
-                              },
-                              child: Text("Да"),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("Нет"),
-                            )
-                          ],
-                        ),
-                      );
+                      if (Platform.isAndroid) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Выход"),
+                            content: Text("Выйти из приложения?"),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  exit(0);
+                                },
+                                child: Text("Да"),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Нет"),
+                              )
+                            ],
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).pop();
+                        Navigator.pop(context);
+                      }
                       return;
                     }
 

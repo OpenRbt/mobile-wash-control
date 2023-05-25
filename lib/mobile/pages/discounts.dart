@@ -18,6 +18,11 @@ class _DiscountsPageState extends State<DiscountsPage> {
     var args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
     final Repository repository = args[PageArgCode.repository];
 
+    var programs = repository.getProgramsNotifier().value;
+    if (programs == null || programs.length == 0) {
+      repository.updatePrograms(context: context);
+    }
+
     return Scaffold(
       drawer: WashNavigationDrawer(
         selected: SelectedPage.Discounts,

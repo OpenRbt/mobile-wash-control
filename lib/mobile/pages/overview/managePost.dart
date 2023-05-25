@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/dialogs/overview/ConfirmRunProgram.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,46 +44,6 @@ class _ManagePostPageState extends State<ManagePostPage> {
     _addAmount.value = GlobalData.AddServiceValue;
   }
 
-  // TODO: recreate functional
-  // class PostMenuArgs {
-  // final int postID;
-  // final String ip;
-  // final String hash;
-  // final int currentProgramID;
-  // final SessionData sessionData;
-  //
-  // PostMenuArgs(this.postID, this.ip, this.hash, this.currentProgramID, this.sessionData);
-  // }
-  //
-  // void _programButtonListener(index, PostMenuArgs postMenuArgs) async {
-  //   if (index != _currentProgram) {
-  //     try {
-  //       var args = ArgRunProgram(
-  //         hash: postMenuArgs.hash,
-  //         preflight: false, programID: -1, //TODO: use preflight trigger
-  //       );
-  //       await postMenuArgs.sessionData.client.runProgram(args);
-  //       setState(() {});
-  //     } catch (e) {
-  //       print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-  //       showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-  //     }
-  //   } else {
-  //     try {
-  //       var args = ArgRunProgram(
-  //         hash: postMenuArgs.hash,
-  //         programID: -1,
-  //         preflight: false, //TODO: use preflight trigger
-  //       );
-  //       await postMenuArgs.sessionData.client.runProgram(args);
-  //       setState(() {});
-  //     } catch (e) {
-  //       print("Exception when calling DefaultApi->runProgram in EditPostMenu: $e\n");
-  //       showInfoSnackBar(context, _scaffoldKey, _isSnackBarActive, "Произошла ошибка при запросе к api", Colors.red);
-  //     }
-  //   }
-  // }
-
   ValueNotifier<int> _addAmount = ValueNotifier(GlobalData.AddServiceValue);
 
   @override
@@ -91,6 +53,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
     var args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
     final Repository repository = args[PageArgCode.repository];
     final int stationID = args[PageArgCode.stationID];
+    final String? stationHash = args[PageArgCode.stationHash];
 
     return WillPopScope(
       onWillPop: () async {
@@ -104,7 +67,13 @@ class _ManagePostPageState extends State<ManagePostPage> {
             future: repository.getStationMoneyReport(stationID, context: context),
             builder: (BuildContext context, AsyncSnapshot<StationMoneyReport?> snapshot) {
               var moneyReport = snapshot.data;
-              return Text("Пост: $stationID | Инкасс: ${(moneyReport?.banknotes ?? 0) + (moneyReport?.coins ?? 0)} руб");
+              return (repository.currentUser()?.isAdmin ?? false)
+                  ? Text(
+                      "Пост: $stationID | Инкасс: ${(moneyReport?.banknotes ?? 0) + (moneyReport?.coins ?? 0)} руб",
+                    )
+                  : Text(
+                      "Пост: $stationID",
+                    );
             },
           ),
         ),
@@ -261,25 +230,25 @@ class _ManagePostPageState extends State<ManagePostPage> {
                     ),
                   ),
                 ),
-                Card(
-                  child: ExpansionTile(
-                    title: Text(
-                      "Управление постом",
-                      style: theme.textTheme.bodyLarge,
-                    ),
-                    children: [
-                      ValueListenableBuilder(
-                        valueListenable: repository.getStationsNotifier(),
-                        builder: (BuildContext context, List<Station>? value, Widget? child) {
-                          var ip = value?.firstWhere((element) => element.id == stationID).ip;
-                          return Text(
-                            "IP: ${ip ?? "-"}",
+                (repository.currentUser()?.isAdmin ?? false)
+                    ? Card(
+                        child: ExpansionTile(
+                          title: Text(
+                            "Управление постом",
                             style: theme.textTheme.bodyLarge,
-                          );
-                        },
-                      ),
-                      (repository.currentUser()?.isAdmin ?? false)
-                          ? Padding(
+                          ),
+                          children: [
+                            ValueListenableBuilder(
+                              valueListenable: repository.getStationsNotifier(),
+                              builder: (BuildContext context, List<Station>? value, Widget? child) {
+                                var ip = value?.firstWhere((element) => element.id == stationID).ip;
+                                return Text(
+                                  "IP: ${ip ?? "-"}",
+                                  style: theme.textTheme.bodyLarge,
+                                );
+                              },
+                            ),
+                            Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: ElevatedButton(
                                 child: Text(
@@ -311,43 +280,41 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                   );
                                 },
                               ),
-                            )
-                          : SizedBox(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          child: Text(
-                            "Открыть дверь",
-                          ),
-                          onPressed: () async {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text("Открыть дверь"),
-                                content: Text("Вы уверены?"),
-                                actionsPadding: EdgeInsets.all(8),
-                                actions: [
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      await repository.stationOpenDoor(stationID, context: context);
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Да"),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Нет"),
-                                  )
-                                ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                child: Text(
+                                  "Открыть дверь",
+                                ),
+                                onPressed: () async {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("Открыть дверь"),
+                                      content: Text("Вы уверены?"),
+                                      actionsPadding: EdgeInsets.all(8),
+                                      actions: [
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            await repository.stationOpenDoor(stationID, context: context);
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Да"),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Нет"),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                      (repository.currentUser()?.isAdmin ?? false)
-                          ? Padding(
+                            ),
+                            Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ElevatedButton(
                                 child: Text(
@@ -360,72 +327,86 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                   Navigator.pushNamed(context, "/mobile/home/incassation-history", arguments: args);
                                 },
                               ),
-                            )
-                          : SizedBox(),
-                    ],
-                  ),
-                ),
-                Card(
-                  child: ExpansionTile(
-                    title: Text(
-                      "Кнопки поста",
-                      style: theme.textTheme.bodyLarge,
-                    ),
-                    childrenPadding: EdgeInsets.all(8),
-                    children: List.generate(_stationButtons.length, (index) {
-                      var btn = _stationButtons[index];
-                      return Row(
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.tight,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                //_programButtonListener(index, postMenuArgs);
-                                //
-                              },
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "${btn.buttonID} : ",
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      "${btn.programName ?? "-"}",
-                                      overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox(),
+                (repository.currentUser()?.isAdmin ?? false)
+                    ? Card(
+                        child: ExpansionTile(
+                          title: Text(
+                            "Кнопки поста",
+                            style: theme.textTheme.bodyLarge,
+                          ),
+                          childrenPadding: EdgeInsets.all(8),
+                          children: List.generate(_stationButtons.length, (index) {
+                            var btn = _stationButtons[index];
+                            return Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  fit: FlexFit.tight,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      if (stationHash != null) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return ConfirmRunProgramDialog(config: RunProgramConfig(stationHash: stationHash, programID: btn.programID!, programName: btn.programName, stationID: stationID), repository: repository);
+                                          },
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBars.getErrorSnackBar(
+                                            message: "Не удалось вызвать запуск программы, так как нет данных о хэше станции",
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "${btn.buttonID} : ",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "${btn.programName ?? "-"}",
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.tight,
-                            child: ValueListenableBuilder(
-                              valueListenable: repository.getStationsNotifier(),
-                              builder: (BuildContext context, List<Station>? value, Widget? child) {
-                                var program = repository.getCurrentProgram(stationID);
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  fit: FlexFit.tight,
+                                  child: ValueListenableBuilder(
+                                    valueListenable: repository.getStationsNotifier(),
+                                    builder: (BuildContext context, List<Station>? value, Widget? child) {
+                                      var program = repository.getCurrentProgram(stationID);
 
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Активна",
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                    Checkbox(value: btn.programID == program?.id, onChanged: null)
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
-                  ),
-                ),
+                                      return Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Активна",
+                                            style: theme.textTheme.bodyLarge,
+                                          ),
+                                          Checkbox(value: btn.programID == program?.id, onChanged: null)
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      )
+                    : SizedBox(),
               ],
             );
           },

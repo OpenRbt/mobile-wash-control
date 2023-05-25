@@ -444,3 +444,14 @@ class StationPreset {
 
   StationPreset({required this.programs, required this.stationButtons, required this.name});
 }
+
+class RunProgramConfig {
+  String stationHash;
+  int? stationID;
+  int programID;
+  String? programName;
+  //UNUSED
+  bool Prefligth = false;
+
+  RunProgramConfig({required this.stationHash, required this.programID, this.Prefligth = false, this.programName, this.stationID});
+}

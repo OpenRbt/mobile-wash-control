@@ -76,4 +76,8 @@ abstract class Repository {
   User? currentUser();
 
   void dispose();
+
+  Future<void> runProgram(RunProgramConfig cfg, {BuildContext? context});
+
+  Future<Map<int, StationMoneyReport?>> lastCollectionReportsStats({BuildContext? context});
 }

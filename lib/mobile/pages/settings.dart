@@ -199,40 +199,48 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: StatefulBuilder(
                             builder: (BuildContext context, void Function(void Function()) setState) {
                               return FutureBuilder(
-                                future: repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY", context: context),
+                                future: repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY", context: context).then((value) {
+                                  _operatorServiceAmountController.text = value?.toString() ?? "10";
+                                }),
                                 builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {
-                                  return Column(
-                                    children: [
-                                      Text("Сервисные деньги, которую зачисляет оператор"),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: (snapshot.connectionState != ConnectionState.done)
-                                            ? LinearProgressIndicator()
-                                            : TextFormField(
-                                                controller: _operatorServiceAmountController,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.digitsOnly,
-                                                ],
-                                                validator: (value) {
-                                                  if (value == null || value.isEmpty) {
-                                                    return "поле не может быть пустым";
-                                                  }
-                                                  return null;
-                                                },
-                                              ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () async {
-                                          if (_formKey.currentState!.validate()) {
-                                            int amount = int.tryParse(_operatorServiceAmountController.value.text) ?? 0;
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: (snapshot.connectionState != ConnectionState.done)
+                                              ? LinearProgressIndicator()
+                                              : TextFormField(
+                                                  controller: _operatorServiceAmountController,
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter.digitsOnly,
+                                                  ],
+                                                  validator: (value) {
+                                                    if (value == null || value.isEmpty) {
+                                                      return "поле не может быть пустым";
+                                                    }
+                                                    return null;
+                                                  },
+                                                ),
+                                        ),
+                                        Text("Сервисные деньги, которые зачисляет оператор"),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              if (_formKey.currentState!.validate()) {
+                                                int amount = int.tryParse(_operatorServiceAmountController.value.text) ?? 0;
 
-                                            await repository.setConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY", amount);
-                                            setState(() {});
-                                          }
-                                        },
-                                        child: Text("Сохранить"),
-                                      ),
-                                    ],
+                                                await repository.setConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY", amount);
+                                                setState(() {});
+                                              }
+                                            },
+                                            child: Text("Сохранить"),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 },
                               );
