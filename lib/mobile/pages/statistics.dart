@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/statistics/StatistcViewFromLastIncass.dart';
+import 'package:mobile_wash_control/mobile/widgets/statistics/StatisticsListViewHeader.dart';
 import 'package:mobile_wash_control/mobile/widgets/statistics/StatisticsViewDates.dart';
 import 'package:mobile_wash_control/mobile/widgets/statistics/StatisticsViewLastIncass.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
@@ -159,35 +160,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(
-                    child: Text(
-                      "Пост",
-                      style: theme.textTheme.titleLarge,
-                    ),
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.circle_outlined)),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.money)),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.credit_card_outlined)),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.directions_car_outlined)),
-                ),
-              ],
-            ),
+            child: StatisticsListViewHeader(),
           ),
           Divider(),
           Expanded(

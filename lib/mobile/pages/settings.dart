@@ -199,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: StatefulBuilder(
                             builder: (BuildContext context, void Function(void Function()) setState) {
                               return FutureBuilder(
-                                future: repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY", context: context).then((value) {
+                                future: repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY").then((value) {
                                   _operatorServiceAmountController.text = value?.toString() ?? "10";
                                 }),
                                 builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {

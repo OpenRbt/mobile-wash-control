@@ -63,7 +63,7 @@ class StatisticsListTile extends StatelessWidget {
               fit: FlexFit.tight,
               child: Center(
                 child: Text(
-                  report != null ? "${(report!.carsTotal ?? 0)}" : "...",
+                  report != null ? "${report!.service ?? 0}" : "...",
                   style: theme.textTheme.titleLarge,
                 ),
               ),
@@ -73,12 +73,12 @@ class StatisticsListTile extends StatelessWidget {
         Row(
           children: [
             Text(
-              "Сервисные: ",
-              style: theme.textTheme.titleMedium,
+              "Всего машин: ",
+              style: theme.textTheme.titleLarge,
             ),
             Text(
-              report != null ? "${report!.service ?? 0}" : "...",
-              style: theme.textTheme.titleMedium!,
+              report != null ? "${(report!.carsTotal ?? 0)}" : "...",
+              style: theme.textTheme.titleLarge!,
             ),
           ],
         ),

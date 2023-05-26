@@ -199,7 +199,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                 ],
                               )
                             : FutureBuilder(
-                                future: repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY", context: context),
+                                future: repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY"),
                                 builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {
                                   if (snapshot.connectionState != ConnectionState.done) {
                                     return LinearProgressIndicator();
