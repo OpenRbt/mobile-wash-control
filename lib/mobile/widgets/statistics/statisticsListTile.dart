@@ -21,7 +21,7 @@ class StatisticsListTile extends StatelessWidget {
         Row(
           children: [
             Flexible(
-              flex: 1,
+              flex: 2,
               fit: FlexFit.tight,
               child: Text(
                 title,
@@ -59,7 +59,7 @@ class StatisticsListTile extends StatelessWidget {
               ),
             ),
             Flexible(
-              flex: 1,
+              flex: 2,
               fit: FlexFit.tight,
               child: Center(
                 child: Text(

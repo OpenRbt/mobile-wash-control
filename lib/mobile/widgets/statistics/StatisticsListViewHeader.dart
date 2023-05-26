@@ -8,6 +8,7 @@ class StatisticsListViewHeader extends StatelessWidget {
       children: [
         Flexible(
           fit: FlexFit.tight,
+          flex: 2,
           child: Center(
             child: Text(
               "Пост",
@@ -29,6 +30,7 @@ class StatisticsListViewHeader extends StatelessWidget {
         ),
         Flexible(
           fit: FlexFit.tight,
+          flex: 2,
           child: Center(
             child: Text(
               "Сервисные",
