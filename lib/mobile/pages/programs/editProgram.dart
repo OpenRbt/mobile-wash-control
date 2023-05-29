@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/programms/relayListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
@@ -107,7 +108,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
     });
   }
 
-  void saveProgram(BuildContext context, int? id, Repository repository) async {
+  Future<void> saveProgram(BuildContext context, int? id, Repository repository) async {
     await repository.saveProgram(_program.value, context: context);
     Navigator.pop(context);
   }
@@ -375,9 +376,9 @@ class _EditProgramPageState extends State<EditProgramPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                saveProgram(context, id, repository);
+                            ProgressButton(
+                              onPressed: () async {
+                                await saveProgram(context, id, repository);
                               },
                               child: Text("Сохранить"),
                             ),

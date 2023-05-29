@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/utils/ConfigPresets.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 class PresetsPage extends StatefulWidget {
@@ -51,17 +52,17 @@ class _PresetsPageState extends State<PresetsPage> {
 
       for (int i = 0; i < _stationsToSave.length; i++) {
         if (_stationsToSave[i]) {
-          repository.saveStationButtons(i + 1, preset.stationButtons, context: context);
+          await repository.saveStationButtons(i + 1, preset.stationButtons, context: context);
         }
       }
 
       _stationsToSave = List.filled(12, false);
     }
+
+    await repository.updatePrograms();
   }
 
   List<bool> _stationsToSave = List.filled(12, false);
-
-  bool _canSet = true;
 
   @override
   Widget build(BuildContext context) {
@@ -116,34 +117,35 @@ class _PresetsPageState extends State<PresetsPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-                child: Text(
-                  "Установить",
-                ),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text("Загрузить настройки?"),
-                      content: Text("Настройки для программи кнопок будут установлены по умолчанию"),
-                      actionsPadding: EdgeInsets.all(10),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _applyPreset(repository, context);
-                            Navigator.pop(context);
-                          },
-                          child: Text("Да"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text("Нет"),
-                        )
-                      ],
-                    ),
-                  );
-                }),
+              child: Text(
+                "Установить",
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text("Загрузить настройки?"),
+                    content: Text("Настройки для программи кнопок будут установлены по умолчанию"),
+                    actionsPadding: EdgeInsets.all(10),
+                    actions: [
+                      ProgressButton(
+                        onPressed: () async {
+                          await _applyPreset(repository, context);
+                          Navigator.pop(context);
+                        },
+                        child: Text("Да"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Нет"),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

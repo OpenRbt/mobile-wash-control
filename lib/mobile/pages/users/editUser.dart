@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 class UserEditPage extends StatefulWidget {
@@ -78,7 +80,7 @@ class _UserEditPageState extends State<UserEditPage> {
                           return AlertDialog(
                             title: Text("Удалить пользователя - ${argUser.login} ?"),
                             actions: [
-                              TextButton(
+                              ProgressTextButton(
                                 onPressed: () async {
                                   await repository.deleteUser(argUser.login, context: context);
                                   Navigator.pop(context);
@@ -342,27 +344,29 @@ class _UserEditPageState extends State<UserEditPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      if (argUser != null) {
-                        await repository.updateUser(_currentUser.value!, context: context);
-                        _user = _currentUser.value!.copyWith(login: _currentUser.value!.login);
+              ProgressButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    if (argUser != null) {
+                      await repository.updateUser(_currentUser.value!, context: context);
+                      _user = _currentUser.value!.copyWith(login: _currentUser.value!.login);
 
-                        Navigator.pop(context);
-                      } else {
-                        await repository.createUser(_currentUser.value!, _controllers["pin"]!.text, context: context);
-                        Navigator.pop(context);
-                      }
+                      Navigator.pop(context);
+                    } else {
+                      await repository.createUser(_currentUser.value!, _controllers["pin"]!.text, context: context);
+                      Navigator.pop(context);
                     }
-                  },
-                  child: Text("Сохранить")),
+                  }
+                },
+                child: Text("Сохранить"),
+              ),
               ElevatedButton(
-                  onPressed: () {
-                    _currentUser.value = _user!.copyWith(login: _user!.login);
-                    initControllersValues();
-                  },
-                  child: Text("Отменить")),
+                onPressed: () {
+                  _currentUser.value = _user!.copyWith(login: _user!.login);
+                  initControllersValues();
+                },
+                child: Text("Отменить"),
+              ),
             ],
           )
         ],

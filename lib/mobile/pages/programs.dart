@@ -45,11 +45,11 @@ class _ProgramsPageState extends State<ProgramsPage> {
                 child: CircularProgressIndicator(),
               );
             }
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Flexible(
@@ -94,60 +94,60 @@ class _ProgramsPageState extends State<ProgramsPage> {
                       ),
                     ],
                   ),
-                ),
-                Divider(),
-                Expanded(
-                  child: ValueListenableBuilder(
-                    valueListenable: repository.getProgramsNotifier(),
-                    builder: (BuildContext context, List<Program>? programs, Widget? child) {
-                      if (programs == null || programs.length == 0) {
-                        return child!;
-                      }
+                  Divider(),
+                  Expanded(
+                    child: ValueListenableBuilder(
+                      valueListenable: repository.getProgramsNotifier(),
+                      builder: (BuildContext context, List<Program>? programs, Widget? child) {
+                        if (programs == null || programs.length == 0) {
+                          return child!;
+                        }
 
-                      return ListView.builder(
-                        itemCount: programs.length,
-                        itemBuilder: (context, index) {
-                          return ProgramListTile(
-                            program: programs[index],
-                            onPress: () {
-                              var args = Map<PageArgCode, dynamic>();
-                              args[PageArgCode.repository] = repository;
-                              args[PageArgCode.programID] = programs[index].id;
+                        return ListView.builder(
+                          itemCount: programs.length,
+                          itemBuilder: (context, index) {
+                            return ProgramListTile(
+                              program: programs[index],
+                              onPress: () {
+                                var args = Map<PageArgCode, dynamic>();
+                                args[PageArgCode.repository] = repository;
+                                args[PageArgCode.programID] = programs[index].id;
 
-                              Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
-                                (value) => repository.updatePrograms(context: context),
-                              );
-                            },
-                          );
-                        },
+                                Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
+                                  (value) => repository.updatePrograms(context: context),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      child: Center(
+                        child: Container(),
+                      ),
+                      // builder: (BuildContext context, List<Program> value, Widget? child) {
+                      //   return ListView.builder(
+                      //     itemCount: SharedData.Programs.value.length,
+                      //     itemBuilder: (context, index) {
+                      //       return ProgramListTile(program: SharedData.Programs.value[index]);
+                      //     },
+                      //   );
+                      // },
+                    ),
+                  ),
+                  Divider(),
+                  TextButton(
+                    onPressed: () {
+                      var args = Map<PageArgCode, dynamic>();
+                      args[PageArgCode.repository] = repository;
+                      args[PageArgCode.programID] = null;
+                      Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
+                        (value) => repository.updatePrograms(context: context),
                       );
                     },
-                    child: Center(
-                      child: Container(),
-                    ),
-                    // builder: (BuildContext context, List<Program> value, Widget? child) {
-                    //   return ListView.builder(
-                    //     itemCount: SharedData.Programs.value.length,
-                    //     itemBuilder: (context, index) {
-                    //       return ProgramListTile(program: SharedData.Programs.value[index]);
-                    //     },
-                    //   );
-                    // },
+                    child: Text("Добавить программу"),
                   ),
-                ),
-                Divider(),
-                TextButton(
-                  onPressed: () {
-                    var args = Map<PageArgCode, dynamic>();
-                    args[PageArgCode.repository] = repository;
-                    args[PageArgCode.programID] = null;
-                    Navigator.pushNamed(context, "/mobile/programs/edit", arguments: args).then(
-                      (value) => repository.updatePrograms(context: context),
-                    );
-                  },
-                  child: Text("Добавить программу"),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),

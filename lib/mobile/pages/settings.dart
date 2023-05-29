@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/settings/settingsStationListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
@@ -227,13 +228,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                         Text("Сервисные деньги, которые зачисляет оператор"),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: ElevatedButton(
+                                          child: ProgressButton(
                                             onPressed: () async {
                                               if (_formKey.currentState!.validate()) {
                                                 int amount = int.tryParse(_operatorServiceAmountController.value.text) ?? 0;
 
                                                 await repository.setConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY", amount);
-                                                setState(() {});
+                                                var value = await repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY");
+                                                _operatorServiceAmountController.text = value?.toString() ?? "10";
                                               }
                                             },
                                             child: Text("Сохранить"),

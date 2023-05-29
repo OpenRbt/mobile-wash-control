@@ -872,9 +872,23 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<void> resetStationStats(int id) async {
-    final args = ArgResetStationStat(stationID: id);
-    final res = await api.resetStationStat(args: args);
+  Future<void> resetStationStats(int id, {BuildContext? context}) async {
+    try {
+      final args = ArgResetStationStat(stationID: id);
+      final res = await api.resetStationStat(args: args);
+    } on ApiException catch (e) {
+      switch (e.code) {
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сбросить статистику поста - $id, Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
   }
 
   @override
@@ -1044,19 +1058,33 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<String?> getStationTemperature(int id) async {
-    if (_stations.value == null) {
-      await updateStatus();
-    }
-    final stations = _stations.value;
+  Future<String?> getStationTemperature(int id, {BuildContext? context}) async {
+    try {
+      if (_stations.value == null) {
+        await updateStatus();
+      }
+      final stations = _stations.value;
 
-    final stationFiltered = stations?.where((element) => element.id == id);
-    if ((stationFiltered?.length ?? 0) > 0) {
-      final station = stationFiltered!.single;
-      if (station.hash != null) {
-        final args = ArgLoad(hash: station.hash!, key: "curr_temp");
-        final response = api.load(args);
-        return response;
+      final stationFiltered = stations?.where((element) => element.id == id);
+      if ((stationFiltered?.length ?? 0) > 0) {
+        final station = stationFiltered!.single;
+        if (station.hash != null) {
+          final args = ArgLoad(hash: station.hash!, key: "curr_temp");
+          final response = api.load(args);
+          return response;
+        }
+      }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить температуру, Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
       }
     }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 class ConfirmRunProgramDialog extends StatelessWidget {
@@ -37,7 +38,7 @@ class ConfirmRunProgramDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        ElevatedButton(
+        ProgressButton(
           onPressed: () async {
             await repository.runProgram(config, context: context);
             Navigator.pop(context);

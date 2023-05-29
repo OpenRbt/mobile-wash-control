@@ -25,10 +25,13 @@ class _HomeState extends State<Home> {
 
   Map<String, bool> _scanActionInProgress = {};
 
+  ScrollController _scrollController = ScrollController();
+
   @override
   void dispose() {
     _scanActions.dispose();
     _hostField.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -109,6 +112,7 @@ class _HomeState extends State<Home> {
       if (response.statusCode != 200) {
         _scanActionInProgress[host] = false;
         _scanActions.value = List.from(_scanActions.value)..remove(host);
+        _scrollController.jumpTo(0);
         return false;
       }
       _scanActionInProgress[host] = false;
@@ -324,6 +328,7 @@ class _HomeState extends State<Home> {
               valueListenable: _scanActions,
               builder: (BuildContext context, List<String> value, Widget? child) {
                 return ListView(
+                  controller: _scrollController,
                   children: List.generate(
                     value.length,
                     (index) => ScanHostListTile(

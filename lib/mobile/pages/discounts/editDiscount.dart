@@ -6,6 +6,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/dialogs/discounts/edit/pickDaysDialog.dart';
 import 'package:mobile_wash_control/mobile/dialogs/discounts/edit/programDiscountDialog.dart';
 import 'package:mobile_wash_control/mobile/dialogs/discounts/edit/timeRangeDialog.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/discounts/edit/programDiscountListTIle.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
@@ -455,7 +456,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
+                    ProgressButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           await repository.saveDiscountCampaign(_currentDiscount.value, context: context);

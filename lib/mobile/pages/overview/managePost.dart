@@ -3,6 +3,7 @@ import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/dialogs/overview/ConfirmRunProgram.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -187,15 +188,15 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                       ],
                                     ),
                                   ),
-                                  ElevatedButton(
+                                  ProgressButton(
+                                    onPressed: () async {
+                                      await repository.addServiceMoney(stationID, GlobalData.AddServiceValue, context: context);
+                                    },
                                     child: Text(
                                       "Отправить",
                                       style: TextStyle(fontSize: 15),
                                     ),
-                                    onPressed: () {
-                                      repository.addServiceMoney(stationID, GlobalData.AddServiceValue, context: context);
-                                    },
-                                  )
+                                  ),
                                 ],
                               )
                             : FutureBuilder(
@@ -213,15 +214,15 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                           style: theme.textTheme.titleLarge,
                                         ),
                                       ),
-                                      ElevatedButton(
+                                      ProgressButton(
+                                        onPressed: () async {
+                                          await repository.addServiceMoney(stationID, snapshot.data ?? 10, context: context);
+                                        },
                                         child: Text(
                                           "Отправить",
                                           style: TextStyle(fontSize: 15),
                                         ),
-                                        onPressed: () {
-                                          repository.addServiceMoney(stationID, snapshot.data ?? 10, context: context);
-                                        },
-                                      )
+                                      ),
                                     ],
                                   );
                                 },
@@ -262,7 +263,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                       content: Text("Вы уверены?"),
                                       actionsPadding: EdgeInsets.all(8),
                                       actions: [
-                                        ElevatedButton(
+                                        ProgressButton(
                                           onPressed: () async {
                                             await repository.stationSaveCollection(stationID, context: context);
                                             Navigator.pop(context);
@@ -295,7 +296,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                       content: Text("Вы уверены?"),
                                       actionsPadding: EdgeInsets.all(8),
                                       actions: [
-                                        ElevatedButton(
+                                        ProgressButton(
                                           onPressed: () async {
                                             await repository.stationOpenDoor(stationID, context: context);
                                             Navigator.pop(context);

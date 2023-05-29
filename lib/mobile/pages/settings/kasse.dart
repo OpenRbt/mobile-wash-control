@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 class KassePage extends StatefulWidget {
@@ -70,179 +71,183 @@ class _KassePageState extends State<KassePage> {
           FutureBuilder(
             future: _getKasseConfig(repository, context),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return ValueListenableBuilder(
-                valueListenable: _config,
-                builder: (BuildContext context, KasseConfig value, Widget? child) {
-                  return Form(
-                    key: _formKey,
-                    child: Card(
-                      child: ExpansionTile(
-                        title: Text(
-                          "Параметры кассы",
-                          style: theme.textTheme.titleLarge,
-                        ),
-                        childrenPadding: EdgeInsets.all(8),
-                        children: [
-                          Row(
+              return Card(
+                child: ExpansionTile(
+                  title: Text(
+                    "Параметры кассы",
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  childrenPadding: EdgeInsets.all(8),
+                  children: [
+                    ValueListenableBuilder(
+                      valueListenable: _config,
+                      builder: (BuildContext context, KasseConfig value, Widget? child) {
+                        return Form(
+                          key: _formKey,
+                          child: Column(
                             children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "TAX",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: DropdownButtonFormField(
-                                  isExpanded: true,
-                                  value: _config.value.taxType,
-                                  items: List.generate(
-                                    TaxType.values.length,
-                                    (index) => DropdownMenuItem(
-                                      child: Text(
-                                        TaxType.values[index].label(),
-                                      ),
-                                      value: TaxType.values[index],
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "TAX",
+                                      style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
-                                  onChanged: (val) {
-                                    _config.value = _config.value.copyWith(taxType: val);
-                                  },
-                                ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: DropdownButtonFormField(
+                                      isExpanded: true,
+                                      value: _config.value.taxType,
+                                      items: List.generate(
+                                        TaxType.values.length,
+                                        (index) => DropdownMenuItem(
+                                          child: Text(
+                                            TaxType.values[index].label(),
+                                          ),
+                                          value: TaxType.values[index],
+                                        ),
+                                      ),
+                                      onChanged: (val) {
+                                        _config.value = _config.value.copyWith(taxType: val);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "Товар",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: TextFormField(
-                                  controller: _controller["receipt"],
-                                  validator: (val) {
-                                    if ((val ?? "").trim().isEmpty) {
-                                      return "Поле не может быть пустым";
-                                    }
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "Товар",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: TextFormField(
+                                      controller: _controller["receipt"],
+                                      validator: (val) {
+                                        if ((val ?? "").trim().isEmpty) {
+                                          return "Поле не может быть пустым";
+                                        }
 
-                                    return null;
-                                  },
-                                ),
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "Кассир",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: TextFormField(
-                                  controller: _controller["cashier"],
-                                  validator: (val) {
-                                    if (val?.isNotEmpty ?? false) {
-                                      var trimmed = (val ?? "").trim();
-                                      if (trimmed.isEmpty) {
-                                        return "поле не может быть пустым";
-                                      }
-                                      if (trimmed.length < 1) {
-                                        return "не менее 1 символа";
-                                      }
-                                    }
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "Кассир",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: TextFormField(
+                                      controller: _controller["cashier"],
+                                      validator: (val) {
+                                        if (val?.isNotEmpty ?? false) {
+                                          var trimmed = (val ?? "").trim();
+                                          if (trimmed.isEmpty) {
+                                            return "поле не может быть пустым";
+                                          }
+                                          if (trimmed.length < 1) {
+                                            return "не менее 1 символа";
+                                          }
+                                        }
 
-                                    return null;
-                                  },
-                                  onChanged: (val) {
-                                    val = (val ?? "").trim();
-                                    _config.value = _config.value.copyWith(cashier: val);
-                                  },
-                                ),
+                                        return null;
+                                      },
+                                      onChanged: (val) {
+                                        val = (val ?? "").trim();
+                                        _config.value = _config.value.copyWith(cashier: val);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "ИНН Кассира",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: TextFormField(
-                                  controller: _controller["cashierINN"],
-                                  maxLength: 12,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    FilteringTextInputFormatter.singleLineFormatter,
-                                  ],
-                                  validator: (val) {
-                                    if (_config.value.cashier?.isNotEmpty ?? false) {
-                                      var trimmed = (val ?? "").trim();
-                                      if (trimmed.isEmpty) {
-                                        return "поле не может быть пустым";
-                                      }
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "ИНН Кассира",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: TextFormField(
+                                      controller: _controller["cashierINN"],
+                                      maxLength: 12,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        FilteringTextInputFormatter.singleLineFormatter,
+                                      ],
+                                      validator: (val) {
+                                        if (_config.value.cashier?.isNotEmpty ?? false) {
+                                          var trimmed = (val ?? "").trim();
+                                          if (trimmed.isEmpty) {
+                                            return "поле не может быть пустым";
+                                          }
 
-                                      if (trimmed.length < 12) {
-                                        return "Требуется длина 12 символов";
-                                      }
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (val) {
-                                    val = (val ?? "").trim();
-                                    _config.value = _config.value.copyWith(cashierINN: val);
-                                  },
-                                ),
+                                          if (trimmed.length < 12) {
+                                            return "Требуется длина 12 символов";
+                                          }
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (val) {
+                                        val = (val ?? "").trim();
+                                        _config.value = _config.value.copyWith(cashierINN: val);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    await repository.saveKasseConfig(_config.value, context: context);
-                                  }
-                                },
-                                child: Text("Сохранить"),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  await _getKasseConfig(repository, context);
-                                },
-                                child: Text("Получить текущую конфигурацию"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  );
-                },
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ProgressTextButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              await repository.saveKasseConfig(_config.value, context: context);
+                            }
+                          },
+                          child: Text("Сохранить"),
+                        ),
+                        ProgressTextButton(
+                          onPressed: () async {
+                            await _getKasseConfig(repository, context);
+                          },
+                          child: Text("Получить текущую конфигурацию"),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               );
             },
           ),

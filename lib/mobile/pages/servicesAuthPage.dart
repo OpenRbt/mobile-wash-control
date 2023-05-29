@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
@@ -61,15 +62,15 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
+                    child: ProgressButton(
+                      onPressed: () async {
                         if (Platform.isAndroid) {
-                          GoogleSignIn().signOut();
+                          await GoogleSignIn().signOut();
                         }
                         if (Platform.isLinux) {
-                          authBridge.signOut();
+                          await authBridge.signOut();
                         }
-                        auth.signOut();
+                        await auth.signOut();
                       },
                       child: Text("Выйти из учетной записи ${snapshot.data!.email ?? ""}"),
                     ),
@@ -77,8 +78,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                 ],
               );
             } else {
-              return ElevatedButton(
-                child: Text("Войти с помощью Google"),
+              return ProgressButton(
                 onPressed: () async {
                   if (Platform.isAndroid) {
                     try {
@@ -110,6 +110,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                     }
                   }
                 },
+                child: Text("Войти с помощью Google"),
               );
             }
           },

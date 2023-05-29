@@ -36,7 +36,7 @@ abstract class Repository {
   Future<List<StationStats>?> getStationsStatsCurrent(int id);
   Future<StationStats?> getStationStatsByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context});
   Future<StationStats?> getStationStatsCurrent(int id, {BuildContext? context});
-  Future<void> resetStationStats(int id);
+  Future<void> resetStationStats(int id, {BuildContext? context});
 
   Future<DiscountCampaign?> getDiscountCampaign(int id, {BuildContext? context});
 
@@ -59,7 +59,7 @@ abstract class Repository {
   Future<void> setConfigVarString(String name, String value);
   Future<void> setConfigVarBool(String name, bool value);
 
-  Future<String?> getStationTemperature(int id);
+  Future<String?> getStationTemperature(int id, {BuildContext? context});
 
   Future<StationConfig?> getStationConfig(int id, {BuildContext? context});
   Future<void> saveStationConfig(StationConfig config, {BuildContext? context});
