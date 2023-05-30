@@ -13,7 +13,8 @@ class LeaCentralRepository extends Repository {
   final DefaultApi api;
   entity.User? _currentUser;
 
-  Timer? refresh;
+  Future? refresh;
+  final refreshDelay = Duration(seconds: 1, milliseconds: 500);
 
   ValueNotifier<List<entity.Station>?> _stations = ValueNotifier(null);
   ValueNotifier<entity.KasseStatus?> _kasseStatus = ValueNotifier(null);
@@ -24,20 +25,18 @@ class LeaCentralRepository extends Repository {
   ValueNotifier<List<String>?> _hashes = ValueNotifier(null);
 
   LeaCentralRepository(this.api) {
-    _startTimer();
+    _prepareStatusRefresh();
   }
-  void _startTimer() {
-    refresh = Timer(Duration(seconds: 1), () async {
+
+  void _prepareStatusRefresh() {
+    refresh = Future.delayed(refreshDelay, () async {
       await updateStatus();
-      _startTimer();
+      _prepareStatusRefresh();
     });
   }
 
   @override
   void dispose() {
-    refresh?.cancel();
-    refresh = null;
-
     _stations.dispose();
     _kasseStatus.dispose();
     _lcwRepo.dispose();
