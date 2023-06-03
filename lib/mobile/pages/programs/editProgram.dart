@@ -126,7 +126,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
           title: ValueListenableBuilder(
             valueListenable: _program,
             builder: (BuildContext context, entity.Program? value, Widget? child) {
-              return Text(value != null ? "Программа ${value.name ?? "-"}" : "Новая программа");
+              return Text(value != null ? "Программа ${value.name}" : "Новая программа");
             },
           ),
         ),

@@ -104,10 +104,11 @@ class _HomeState extends State<Home> {
 
   Future<bool> _scanHost(String host) async {
     _scanActionInProgress[host] = true;
+    var client = HttpClient();
     try {
-      var client = HttpClient();
-      client.connectionTimeout = Duration(seconds: 3);
-      final res = await client.get(host, 8020, "/ping");
+      client.idleTimeout = Duration(seconds: 1);
+      client.connectionTimeout = Duration(seconds: 1);
+      final res = await client.get(host, 8020, "/ping").timeout(Duration(seconds: 1));
       final response = await res.close();
       if (response.statusCode != 200) {
         _scanActionInProgress[host] = false;
@@ -117,25 +118,34 @@ class _HomeState extends State<Home> {
       }
       _scanActionInProgress[host] = false;
       return true;
-    } catch (e) {}
-    _scanActionInProgress[host] = false;
+    } catch (e) {
+      _scanActionInProgress[host] = false;
+    }
+    client.close();
+
     _scanActions.value = List.from(_scanActions.value)..remove(host);
     return false;
   }
 
   Future<bool> _scanManual(String host) async {
+    var client = HttpClient();
     try {
-      var client = HttpClient();
-      client.connectionTimeout = Duration(seconds: 3);
-      final res = await client.get(host, 8020, "/ping");
+      client.idleTimeout = Duration(seconds: 1);
+      client.connectionTimeout = Duration(seconds: 1);
+      final res = await client.get(host, 8020, "/ping").timeout(Duration(seconds: 1));
       final response = await res.close();
+      client.close();
       if (response.statusCode != 200) {
         manualHost = null;
         return false;
       }
       manualHost = host;
       return true;
-    } catch (e) {}
+    } catch (e) {
+      _scanActionInProgress[host] = false;
+    }
+    client.close();
+
     manualHost = null;
     return false;
   }
@@ -334,9 +344,11 @@ class _HomeState extends State<Home> {
                     (index) => ScanHostListTile(
                       host: value[index],
                       inProgress: _scanActionInProgress[value[index]] ?? true,
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/mobile/auth", arguments: "http://" + value[index] + ":8020").then((value) {}, onError: (value) {});
-                      },
+                      onPressed: !(_scanActionInProgress[value[index]] ?? true)
+                          ? () {
+                              Navigator.pushNamed(context, "/mobile/auth", arguments: "http://" + value[index] + ":8020").then((value) {}, onError: (value) {});
+                            }
+                          : null,
                     ),
                   ),
                 );

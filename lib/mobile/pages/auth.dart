@@ -128,7 +128,7 @@ class _AuthState extends State<Auth> {
                 crossAxisCount: 3,
                 childAspectRatio: 2,
                 children: List.generate(
-                  labels.length ?? 0,
+                  labels.length,
                   (index) {
                     return AuthButton(
                       label: labels[index],

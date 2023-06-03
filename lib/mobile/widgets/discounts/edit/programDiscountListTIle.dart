@@ -54,7 +54,7 @@ class EditProgramDiscountListTile extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "${discount.discount!} %",
+                "${discount.discount ?? 0} %",
                 style: theme.textTheme.titleMedium,
               ),
             ),
