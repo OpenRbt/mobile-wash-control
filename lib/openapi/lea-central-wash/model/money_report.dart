@@ -21,6 +21,7 @@ class MoneyReport {
     this.bonuses,
     this.hash,
     this.sessionId,
+    this.qrMoney,
   });
 
   ///
@@ -87,6 +88,14 @@ class MoneyReport {
   ///
   String? sessionId;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? qrMoney;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is MoneyReport &&
      other.carsTotal == carsTotal &&
@@ -96,7 +105,8 @@ class MoneyReport {
      other.service == service &&
      other.bonuses == bonuses &&
      other.hash == hash &&
-     other.sessionId == sessionId;
+     other.sessionId == sessionId &&
+     other.qrMoney == qrMoney;
 
   @override
   int get hashCode =>
@@ -108,10 +118,11 @@ class MoneyReport {
     (service == null ? 0 : service!.hashCode) +
     (bonuses == null ? 0 : bonuses!.hashCode) +
     (hash == null ? 0 : hash!.hashCode) +
-    (sessionId == null ? 0 : sessionId!.hashCode);
+    (sessionId == null ? 0 : sessionId!.hashCode) +
+    (qrMoney == null ? 0 : qrMoney!.hashCode);
 
   @override
-  String toString() => 'MoneyReport[carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, hash=$hash, sessionId=$sessionId]';
+  String toString() => 'MoneyReport[carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, hash=$hash, sessionId=$sessionId, qrMoney=$qrMoney]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -155,6 +166,11 @@ class MoneyReport {
     } else {
       json[r'sessionId'] = null;
     }
+    if (this.qrMoney != null) {
+      json[r'qrMoney'] = this.qrMoney;
+    } else {
+      json[r'qrMoney'] = null;
+    }
     return json;
   }
 
@@ -185,6 +201,7 @@ class MoneyReport {
         bonuses: mapValueOfType<int>(json, r'bonuses'),
         hash: mapValueOfType<String>(json, r'hash'),
         sessionId: mapValueOfType<String>(json, r'sessionId'),
+        qrMoney: mapValueOfType<int>(json, r'qrMoney'),
       );
     }
     return null;

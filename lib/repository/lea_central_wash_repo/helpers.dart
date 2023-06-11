@@ -36,20 +36,14 @@ class Helpers {
     );
   }
 
-  static entity.StationMoneyReport stationMoneyReportFromAPI(MoneyReport report) {
-    return entity.StationMoneyReport(
-      coins: report.coins,
-      banknotes: report.banknotes,
-      electronical: report.electronical,
-      service: report.service,
-      carsTotal: report.carsTotal,
-    );
+  static entity.StationMoneyReport stationMoneyReportFromAPI(MoneyReport report, int post) {
+    return entity.StationMoneyReport(coins: report.coins, banknotes: report.banknotes, electronical: report.electronical, service: report.service, carsTotal: report.carsTotal, qrMoney: report.qrMoney, bonuses: report.bonuses, post: post);
   }
 
   static entity.StationCollectionReport stationCollectionReportFromAPI(CollectionReportWithUser report) {
     DateTime? dateTime;
     if (report.ctime != null) {
-      dateTime = DateTime.fromMillisecondsSinceEpoch(report.ctime! * 1000);
+      dateTime = DateTime.fromMillisecondsSinceEpoch(report.ctime! * 1000, isUtc: true).toLocal();
     }
 
     return entity.StationCollectionReport(
@@ -98,8 +92,8 @@ class Helpers {
 
     return entity.DiscountCampaign(
       id: campaign.id,
-      startDate: DateTime.fromMillisecondsSinceEpoch(campaign.startDate * 1000),
-      endDate: DateTime.fromMillisecondsSinceEpoch(campaign.endDate * 1000),
+      startDate: DateTime.fromMillisecondsSinceEpoch(campaign.startDate * 1000, isUtc: true).toLocal(),
+      endDate: DateTime.fromMillisecondsSinceEpoch(campaign.endDate * 1000, isUtc: true).toLocal(),
       enabled: campaign.enabled,
       startMinute: campaign.startMinute,
       endMinute: campaign.endMinute,
@@ -155,8 +149,8 @@ class Helpers {
 
     return AdvertisingCampaign(
       id: campaign.id,
-      startDate: campaign.startDate.millisecondsSinceEpoch ~/ 1000,
-      endDate: campaign.endDate.millisecondsSinceEpoch ~/ 1000,
+      startDate: campaign.startDate.toUtc().millisecondsSinceEpoch ~/ 1000,
+      endDate: campaign.endDate.toUtc().millisecondsSinceEpoch ~/ 1000,
       enabled: campaign.enabled,
       startMinute: campaign.startMinute,
       endMinute: campaign.endMinute,

@@ -1,13 +1,15 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobile_wash_control/mobile/pages/auth.dart';
 import 'package:mobile_wash_control/mobile/pages/discounts.dart';
 import 'package:mobile_wash_control/mobile/pages/discounts/editDiscount.dart';
 import 'package:mobile_wash_control/mobile/pages/home.dart';
-import 'package:mobile_wash_control/mobile/pages/overview/managePost.dart';
-import 'package:mobile_wash_control/mobile/pages/overview/postInkassHistory.dart';
 import 'package:mobile_wash_control/mobile/pages/motors.dart';
 import 'package:mobile_wash_control/mobile/pages/overview.dart';
+import 'package:mobile_wash_control/mobile/pages/overview/managePost.dart';
+import 'package:mobile_wash_control/mobile/pages/overview/postInkassHistory.dart';
 import 'package:mobile_wash_control/mobile/pages/programs.dart';
 import 'package:mobile_wash_control/mobile/pages/programs/editProgram.dart';
 import 'package:mobile_wash_control/mobile/pages/servicesAuthPage.dart';
@@ -20,11 +22,17 @@ import 'package:mobile_wash_control/mobile/pages/statistics.dart';
 import 'package:mobile_wash_control/mobile/pages/users.dart';
 import 'package:mobile_wash_control/mobile/pages/users/editUser.dart';
 
-//TODO: remove setState in all possible places or isolate them
 class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scrollBehavior: MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.unknown,
+        },
+      ),
       title: "Mobile Wash Control",
       theme: ThemeData(
         useMaterial3: false,
@@ -48,10 +56,10 @@ class Application extends StatelessWidget {
         "/mobile/settings/default": (context) => PresetsPage(),
         "/mobile/services": (context) => SettingsServicesPage(),
         "/mobile/services-auth": (context) => SettingsServicesRegistrationPage(),
-        "/mobile/statistics": (context) => StatisticsPage(), //+
-        "/mobile/motors": (context) => MotorPage(), //+
-        "/mobile/users": (context) => UsersPage(), //+
-        "/mobile/users/edit": (context) => UserEditPage(), //+
+        "/mobile/statistics": (context) => StatisticsPage(),
+        "/mobile/motors": (context) => MotorPage(),
+        "/mobile/users": (context) => UsersPage(),
+        "/mobile/users/edit": (context) => UserEditPage(),
         "/mobile/discounts": (context) => DiscountsPage(),
         "/mobile/discounts/edit": (context) => EditDiscountPage(),
       },

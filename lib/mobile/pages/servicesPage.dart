@@ -95,7 +95,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
   Future<void> _updateWashServer() async {
     try {
       var res = await Common.washServersApi!.update(body: WashServerUpdate(id: _server.value.id!, name: _serverNameController.text, description: _serverDescriptionController.text));
-      await _getWashServer();
     } on ApiException catch (e) {
       if (kDebugMode) print("WashAdminApiException: $e");
     } catch (e) {

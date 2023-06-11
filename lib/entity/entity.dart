@@ -31,12 +31,29 @@ class StationButton {
 }
 
 class StationMoneyReport {
+  int? post;
   int? coins;
   int? banknotes;
   int? electronical;
+  int? qrMoney;
   int? service;
+  int? bonuses;
   int? carsTotal;
-  StationMoneyReport({this.coins, this.banknotes, this.electronical, this.service, this.carsTotal});
+  DateTime? dateTime;
+
+  StationMoneyReport({this.coins, this.banknotes, this.electronical, this.service, this.carsTotal, this.qrMoney, this.bonuses, this.post, this.dateTime});
+
+  double Average() {
+    if ((carsTotal ?? 0) == 0) {
+      return 0;
+    }
+
+    return ((coins ?? 0) + (banknotes ?? 0) + (electronical ?? 0) + (qrMoney ?? 0)) / carsTotal!;
+  }
+
+  bool notEmpty() {
+    return (coins ?? 0) != 0 || (banknotes ?? 0) != 0 || (electronical ?? 0) != 0 || (qrMoney ?? 0) != 0 || (service ?? 0) != 0 || (bonuses ?? 0) != 0 || (carsTotal ?? 0) != 0;
+  }
 }
 
 class User {

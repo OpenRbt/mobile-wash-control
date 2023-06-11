@@ -19,7 +19,9 @@ class CollectionReport {
     this.banknotes,
     this.electronical,
     this.service,
+    this.bonuses,
     this.ctime,
+    this.qrMoney,
   });
 
   ///
@@ -76,7 +78,23 @@ class CollectionReport {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
+  int? bonuses;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
   int? ctime;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? qrMoney;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is CollectionReport &&
@@ -86,7 +104,9 @@ class CollectionReport {
      other.banknotes == banknotes &&
      other.electronical == electronical &&
      other.service == service &&
-     other.ctime == ctime;
+     other.bonuses == bonuses &&
+     other.ctime == ctime &&
+     other.qrMoney == qrMoney;
 
   @override
   int get hashCode =>
@@ -97,10 +117,12 @@ class CollectionReport {
     (banknotes == null ? 0 : banknotes!.hashCode) +
     (electronical == null ? 0 : electronical!.hashCode) +
     (service == null ? 0 : service!.hashCode) +
-    (ctime == null ? 0 : ctime!.hashCode);
+    (bonuses == null ? 0 : bonuses!.hashCode) +
+    (ctime == null ? 0 : ctime!.hashCode) +
+    (qrMoney == null ? 0 : qrMoney!.hashCode);
 
   @override
-  String toString() => 'CollectionReport[id=$id, carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, ctime=$ctime]';
+  String toString() => 'CollectionReport[id=$id, carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, ctime=$ctime, qrMoney=$qrMoney]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -134,10 +156,20 @@ class CollectionReport {
     } else {
       json[r'service'] = null;
     }
+    if (this.bonuses != null) {
+      json[r'bonuses'] = this.bonuses;
+    } else {
+      json[r'bonuses'] = null;
+    }
     if (this.ctime != null) {
       json[r'ctime'] = this.ctime;
     } else {
       json[r'ctime'] = null;
+    }
+    if (this.qrMoney != null) {
+      json[r'qrMoney'] = this.qrMoney;
+    } else {
+      json[r'qrMoney'] = null;
     }
     return json;
   }
@@ -167,7 +199,9 @@ class CollectionReport {
         banknotes: mapValueOfType<int>(json, r'banknotes'),
         electronical: mapValueOfType<int>(json, r'electronical'),
         service: mapValueOfType<int>(json, r'service'),
+        bonuses: mapValueOfType<int>(json, r'bonuses'),
         ctime: mapValueOfType<int>(json, r'ctime'),
+        qrMoney: mapValueOfType<int>(json, r'qrMoney'),
       );
     }
     return null;

@@ -29,13 +29,18 @@ abstract class Repository {
   Future<void> updateUser(User user, {BuildContext? context});
   Future<void> deleteUser(String login, {BuildContext? context});
 
-  Future<StationMoneyReport?> getStationMoneyReportsByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context});
+  Future<StationMoneyReport?> getStationMoneyReportByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context});
   Future<List<StationCollectionReport>?> getStationCollectionReports(int id, DateTime startDate, DateTime endDate);
 
   Future<List<StationStats>?> getStationsStatsByDates(int id, DateTime startDate, DateTime endDate);
   Future<List<StationStats>?> getStationsStatsCurrent(int id);
+
   Future<StationStats?> getStationStatsByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context});
   Future<StationStats?> getStationStatsCurrent(int id, {BuildContext? context});
+
+  Future<List<StationStats>> getAllStationStatsByDates(DateTime startDate, DateTime endDate, {BuildContext? context});
+  Future<List<StationStats>> getAllStationStatsCurrent({BuildContext? context});
+
   Future<void> resetStationStats(int id, {BuildContext? context});
 
   Future<DiscountCampaign?> getDiscountCampaign(int id, {BuildContext? context});
@@ -79,5 +84,5 @@ abstract class Repository {
 
   Future<void> runProgram(RunProgramConfig cfg, {BuildContext? context});
 
-  Future<Map<int, StationMoneyReport?>> lastCollectionReportsStats({BuildContext? context});
+  Future<List<StationMoneyReport>> lastCollectionReportsStats({BuildContext? context});
 }
