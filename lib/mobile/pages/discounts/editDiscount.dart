@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -267,18 +269,18 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                                 style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                               ),
                               ValueListenableBuilder(
-                                valueListenable: _dateRange,
-                                builder: (BuildContext context, DateTimeRange dateRange, Widget? child) {
+                                valueListenable: _currentDiscount,
+                                builder: (BuildContext context,  DiscountCampaign value, Widget? child) {
                                   return Row(
                                     children: [
                                       Text("С "),
                                       Text(
-                                        _dateFormatter.format(dateRange.start),
+                                        _dateFormatter.format(value.startDate),
                                         style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
                                       ),
                                       Text(" по "),
                                       Text(
-                                        _dateFormatter.format(dateRange.end),
+                                        _dateFormatter.format(value.endDate),
                                         style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
                                       ),
                                     ],
@@ -297,12 +299,17 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                                 initialDateRange: _dateRange.value,
                               );
                               if (range != null) {
+                                log("date start: ");
+                                log(range.start.toString());
                                 _dateRange.value = DateTimeRange(
                                   start: range.start,
                                   end: range.end.add(
                                     Duration(days: 1, microseconds: -1),
                                   ),
                                 );
+                                _currentDiscount.value.startDate = _dateRange.value.start;
+                                _currentDiscount.value.endDate = _dateRange.value.end;
+                                _currentDiscount.notifyListeners();
                               }
                             },
                             child: Text(
