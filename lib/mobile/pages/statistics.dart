@@ -15,7 +15,7 @@ class StatisticsPage extends StatefulWidget {
 enum StatisticsShowMode { Dates, FromLastIncass, LastIncass }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  ValueNotifier<StatisticsShowMode> _mode = ValueNotifier(StatisticsShowMode.Dates);
+  ValueNotifier<StatisticsShowMode> _mode = ValueNotifier(StatisticsShowMode.FromLastIncass);
   ValueNotifier<DateTimeRange> _dateRange = ValueNotifier(DateTimeRange(start: DateTime.now(), end: DateTime.now()));
 
   final _dateFormatter = DateFormat('dd.MM.yyyy');
@@ -62,12 +62,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     return SegmentedButton<StatisticsShowMode>(
                       segments: [
                         ButtonSegment(
-                          value: StatisticsShowMode.Dates,
-                          label: Text("По датам"),
-                        ),
-                        ButtonSegment(
                           value: StatisticsShowMode.FromLastIncass,
                           label: Text("С последней инкассации"),
+                        ),
+                        ButtonSegment(
+                          value: StatisticsShowMode.Dates,
+                          label: Text("По датам"),
                         ),
                         ButtonSegment(
                           value: StatisticsShowMode.LastIncass,
