@@ -232,6 +232,13 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                                       FilteringTextInputFormatter.singleLineFormatter,
                                     ],
                                     onChanged: (val) {
+                                      if (val.isEmpty) {
+                                        //_controllers["motor"]!.text = "0";
+                                      } else {
+                                        if (int.parse(val) > 100) {
+                                          _controllers["discount"]!.text = "100";
+                                        }
+                                      }
                                       int discount = int.tryParse(val ?? "0") ?? 0;
                                       _currentDiscount.value = _currentDiscount.value.copyWith(defaultDiscount: discount);
                                     },

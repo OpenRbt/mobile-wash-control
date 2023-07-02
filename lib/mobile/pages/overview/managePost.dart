@@ -16,20 +16,28 @@ class ManagePostPage extends StatefulWidget {
 }
 
 //TODO: Cleanup and rework
-class _ManagePostPageState extends State<ManagePostPage> {
+class _ManagePostPageState extends State<ManagePostPage> with TickerProviderStateMixin {
+
   @override
   void dispose() {
-    _addAmount.dispose();
+    _controller.stop();
+    _controller.dispose();
     super.dispose();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  late final AnimationController _controller;
+  final ValueNotifier<int> refreshTrigger = ValueNotifier(0);
+  bool _isRefreshing = false;
   int _currentProgram = -1;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2), // this will decide the speed of the rotation
+      vsync: this,
+    );
   }
 
   List<StationButton> _stationButtons = [];
@@ -64,17 +72,44 @@ class _ManagePostPageState extends State<ManagePostPage> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: FutureBuilder(
-            future: repository.getStationMoneyReport(stationID, context: context),
-            builder: (BuildContext context, AsyncSnapshot<StationMoneyReport?> snapshot) {
-              var moneyReport = snapshot.data;
-              return (repository.currentUser()?.isAdmin ?? false)
-                  ? Text(
-                      "Пост: $stationID | Инкасс: ${(moneyReport?.banknotes ?? 0) + (moneyReport?.coins ?? 0)} руб",
-                    )
-                  : Text(
-                      "Пост: $stationID",
-                    );
+          title: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return FutureBuilder<StationMoneyReport?>(
+                future: () async {
+                  if (_isRefreshing) return null;
+                  _isRefreshing = true;
+                  _controller.repeat();
+                  var result = await repository.getStationMoneyReport(stationID, context: context);
+                  _controller.stop();
+                  _isRefreshing = false;
+                  return result;
+                }(),
+                builder: (BuildContext context, AsyncSnapshot<StationMoneyReport?> snapshot) {
+                  var moneyReport = snapshot.data;
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: (repository.currentUser()?.isAdmin ?? false)
+                            ? Text(
+                          "Пост: ${stationID} | Инкасс: ${(moneyReport?.banknotes ?? 0) + (moneyReport?.coins ?? 0)} руб",
+                        )
+                            : Text(
+                          "Пост: ${stationID}",
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {});
+                        },
+                        icon: RotationTransition(
+                          turns: _controller,
+                          child: Icon(Icons.refresh),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ),
@@ -120,7 +155,6 @@ class _ManagePostPageState extends State<ManagePostPage> {
                                       valueListenable: repository.getStationsNotifier(),
                                       builder: (BuildContext context, List<Station>? value, Widget? child) {
                                         final int? balance = value?.firstWhere((element) => element.id == stationID, orElse: null).currentBalance;
-
                                         return Text(
                                           "${balance ?? "-"}",
                                           style: theme.textTheme.bodyLarge,

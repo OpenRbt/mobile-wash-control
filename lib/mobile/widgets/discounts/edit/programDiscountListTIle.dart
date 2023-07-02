@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
+import '../../../dialogs/discounts/edit/programDiscountDialog.dart';
+
 class EditProgramDiscountListTile extends StatelessWidget {
   final int index;
   final ValueNotifier<DiscountCampaign> campaign;
@@ -70,6 +72,17 @@ class EditProgramDiscountListTile extends StatelessWidget {
                 campaign.value = campaign.value.copyWith(discountPrograms: discounts);
               },
               child: Text("Удалить"),
+            ),
+            TextButton(
+              onPressed: () {
+                showGeneralDialog(
+                  context: context,
+                  pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                    return ProgramDiscountDialog(campaign: campaign, repository: repository, discount: discount, index: index);
+                  },
+                );
+              },
+              child: Text("Редактировать"),
             ),
           ],
         ),

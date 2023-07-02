@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
@@ -172,7 +174,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   ],
                                 );
                               }
-                              return StatisticsView(reports: snapshot.data!);
+                              if(snapshot.hasData){
+                                return StatisticsView(reports: snapshot.data!);
+                              }
+                              return StatisticsView(reports: [],);
                             },
                           );
                         },
@@ -181,6 +186,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       return FutureBuilder(
                         future: _loadStatisticsFromLastIncass(repository, context),
                         builder: (BuildContext context, AsyncSnapshot<List<StationMoneyReport>> snapshot) {
+                          log(snapshot.hasData.toString());
                           if (snapshot.connectionState != ConnectionState.done) {
                             return Column(
                               children: [
@@ -191,7 +197,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               ],
                             );
                           }
-                          return StatisticsView(reports: snapshot.data!);
+                          if(snapshot.hasData){
+                            return StatisticsView(reports: snapshot.data!);
+                          }
+                          return StatisticsView(reports: [],);
                         },
                       );
                     case StatisticsShowMode.LastIncass:
@@ -208,7 +217,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               ],
                             );
                           }
-                          return StatisticsView(reports: snapshot.data!);
+                          if(snapshot.hasData){
+                            return StatisticsView(reports: snapshot.data!);
+                          }
+                          return StatisticsView(reports: [],);
                         },
                       );
                   }

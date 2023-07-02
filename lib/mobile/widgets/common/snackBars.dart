@@ -47,7 +47,7 @@ class SnackBars {
 
   static SnackBar getErrorSnackBar({required String message}) {
     return SnackBar(
-      duration: Duration(seconds: 1),
+      duration: Duration(seconds: 2),
       backgroundColor: Colors.red,
       content: Row(
         children: [

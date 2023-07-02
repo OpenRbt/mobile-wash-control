@@ -64,17 +64,27 @@ class DiscountCampaignListTile extends StatelessWidget {
               Flexible(
                 flex: 2,
                 fit: FlexFit.tight,
-                child: Row(
+                child: Wrap(
                   children: [
-                    Text("С ", style: theme.textTheme.titleMedium),
-                    Text(
-                      _dateFormatter.format(campaign.startDate),
-                      style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("С ", style: theme.textTheme.titleMedium),
+                        Text(
+                          _dateFormatter.format(campaign.startDate) + " ",
+                          style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+                        ),
+                      ],
                     ),
-                    Text(" по ", style: theme.textTheme.titleMedium),
-                    Text(
-                      _dateFormatter.format(campaign.endDate),
-                      style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("по ", style: theme.textTheme.titleMedium),
+                        Text(
+                          _dateFormatter.format(campaign.endDate),
+                          style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -10,6 +10,8 @@ import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../widgets/common/snackBars.dart';
+
 class Auth extends StatefulWidget {
   final String host;
 
@@ -52,6 +54,11 @@ class _AuthState extends State<Auth> {
 
       final user = await repo.getCurrentUser();
       if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "Пользователя с таким паролем не существует",
+          ),
+        );
         repo.dispose();
         return;
       }
@@ -64,7 +71,8 @@ class _AuthState extends State<Auth> {
         "/mobile/home",
         arguments: args,
       );
-    } catch (e) {}
+    } catch (e) {
+    }
   }
 
   Widget build(BuildContext context) {

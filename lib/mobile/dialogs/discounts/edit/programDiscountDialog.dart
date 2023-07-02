@@ -66,7 +66,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
 
     return AlertDialog(
       title: Text(
-        "Добавление скидки для программы",
+        (widget.discount == null ? "Добавление": "Редактирование") + " скидки для программы",
       ),
       content: SingleChildScrollView(
         child: Form(
@@ -76,6 +76,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
             children: [
               Column(
                 children: [
+                  widget.discount != null ? Container():
                   Row(
                     children: [
                       Flexible(
@@ -106,6 +107,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
                       ),
                     ],
                   ),
+                  widget.discount != null ? Container():
                   Text(
                     "Добавление уже имеющейся программы перезапишет старое значение",
                     style: theme.textTheme.labelLarge!.copyWith(

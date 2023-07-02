@@ -6,6 +6,8 @@ import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/programms/relayListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
+import '../../widgets/common/snackBars.dart';
+
 class EditProgramPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _EditProgramPageState();
@@ -267,7 +269,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) {
                                       if (value.isEmpty) {
-                                        _controllers["motor"]!.text = "0";
+                                        //_controllers["motor"]!.text = "0";
                                       } else {
                                         if (int.parse(value) > 100) {
                                           _controllers["motor"]!.text = "100";
@@ -336,7 +338,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) {
                                       if (value.isEmpty) {
-                                        _controllers["motorPreflight"]!.text = "0";
+                                        //_controllers["motorPreflight"]!.text = "0";
                                       } else {
                                         if (int.parse(value) > 100) {
                                           _controllers["motorPreflight"]!.text = "100";
@@ -378,7 +380,16 @@ class _EditProgramPageState extends State<EditProgramPage> {
                           children: [
                             ProgressButton(
                               onPressed: () async {
-                                await saveProgram(context, id, repository);
+                                if(_controllers["name"]!.text.isEmpty){
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBars.getErrorSnackBar(
+                                      message: "Поле с именем программы не может быть пустым",
+                                    ),
+                                  );
+                                }
+                                else{
+                                  await saveProgram(context, id, repository);
+                                }
                               },
                               child: Text("Сохранить"),
                             ),
