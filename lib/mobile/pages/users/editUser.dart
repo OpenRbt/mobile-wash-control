@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
@@ -6,15 +8,19 @@ import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
+enum UserRole { operator, engineer, admin }
+
 class UserEditPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _UserEditPageState();
 }
 
 class _UserEditPageState extends State<UserEditPage> {
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ValueNotifier<User?> _currentUser = ValueNotifier(null);
 
+  late UserRole? _selectedRole;
   User? _user;
   Map<String, TextEditingController> _controllers = Map();
 
@@ -53,6 +59,7 @@ class _UserEditPageState extends State<UserEditPage> {
     final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
     final Repository repository = args[PageArgCode.repository];
     User? argUser = args[PageArgCode.user];
+
     if (_currentUser.value == null) {
       var user = argUser ?? User(login: '');
       _currentUser.value = user;
@@ -295,9 +302,11 @@ class _UserEditPageState extends State<UserEditPage> {
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Checkbox(
-                                  value: u?.isOperator ?? false,
+                                  value: ((u?.isOperator ?? false) && ((u?.isEngineer ?? false) == false) && ((u?.isAdmin ?? false) == false)) ? true : false,
                                   onChanged: (bool? value) {
-                                    _currentUser.value = _currentUser.value!.copyWith(isOperator: value);
+                                    _currentUser.value = _currentUser.value!.copyWith(isOperator: true);
+                                    _currentUser.value = _currentUser.value!.copyWith(isEngineer: false);
+                                    _currentUser.value = _currentUser.value!.copyWith(isAdmin: false);
                                   },
                                 ),
                               ],
@@ -310,9 +319,11 @@ class _UserEditPageState extends State<UserEditPage> {
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Checkbox(
-                                  value: u?.isEngineer ?? false,
+                                  value: (((u?.isOperator ?? false) == false) && (u?.isEngineer ?? false) && ((u?.isAdmin ?? false) == false)) ? true : false,
                                   onChanged: (bool? value) {
-                                    _currentUser.value = _currentUser.value!.copyWith(isEngineer: value);
+                                    _currentUser.value = _currentUser.value!.copyWith(isEngineer: true);
+                                    _currentUser.value = _currentUser.value!.copyWith(isOperator: false);
+                                    _currentUser.value = _currentUser.value!.copyWith(isAdmin: false);
                                   },
                                 ),
                               ],
@@ -325,9 +336,11 @@ class _UserEditPageState extends State<UserEditPage> {
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Checkbox(
-                                  value: u?.isAdmin ?? false,
+                                  value: (((u?.isOperator ?? false) == false) && ((u?.isEngineer ?? false) == false) && (u?.isAdmin ?? false)) ? true : false,
                                   onChanged: (bool? value) {
-                                    _currentUser.value = _currentUser.value!.copyWith(isAdmin: value);
+                                    _currentUser.value = _currentUser.value!.copyWith(isAdmin: true);
+                                    _currentUser.value = _currentUser.value!.copyWith(isEngineer: false);
+                                    _currentUser.value = _currentUser.value!.copyWith(isOperator: false);
                                   },
                                 ),
                               ],
@@ -364,6 +377,7 @@ class _UserEditPageState extends State<UserEditPage> {
                 onPressed: () {
                   _currentUser.value = _user!.copyWith(login: _user!.login);
                   initControllersValues();
+                  repository.updateUsers(context: context);
                 },
                 child: Text("Отменить"),
               ),

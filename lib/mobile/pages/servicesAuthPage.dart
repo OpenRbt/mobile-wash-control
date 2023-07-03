@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -93,6 +94,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
 
                       await auth.signInWithCredential(credential);
                     } catch (err) {
+                      log(err.toString());
                       ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось авторизоваться"));
                     }
                   } else {
