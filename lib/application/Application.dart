@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+//import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobile_wash_control/mobile/pages/auth.dart';
 import 'package:mobile_wash_control/mobile/pages/discounts.dart';
 import 'package:mobile_wash_control/mobile/pages/discounts/editDiscount.dart';
@@ -21,6 +21,7 @@ import 'package:mobile_wash_control/mobile/pages/settings/station.dart';
 import 'package:mobile_wash_control/mobile/pages/statistics.dart';
 import 'package:mobile_wash_control/mobile/pages/users.dart';
 import 'package:mobile_wash_control/mobile/pages/users/editUser.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -63,7 +64,11 @@ class Application extends StatelessWidget {
         "/mobile/discounts": (context) => DiscountsPage(),
         "/mobile/discounts/edit": (context) => EditDiscountPage(),
       },
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       supportedLocales: [const Locale('en'), const Locale('ru')],
     );
   }

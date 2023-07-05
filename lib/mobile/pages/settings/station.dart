@@ -280,12 +280,19 @@ class _StationPageState extends State<StationPage> {
                           },
                           child: Text("Сохранить"),
                         ),
-                        ProgressTextButton(
-                          onPressed: () async {
-                            await _getPostConfig(repository, id, context);
-                          },
-                          child: Text("Получить текущую конфигурацию"),
-                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child: ProgressTextButton(
+                            onPressed: () async {
+                              await _getPostConfig(repository, id, context);
+                            },
+                            child: Text(
+                              "Получить текущую конфигурацию",
+                              softWrap: true,
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ],
@@ -404,11 +411,18 @@ class _StationPageState extends State<StationPage> {
                           },
                           child: Text("Сохранить"),
                         ),
-                        ProgressTextButton(
-                          onPressed: () async {
-                            await _getCardReaderConfig(repository, id);
-                          },
-                          child: Text("Получить текущую конфигурацию"),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child:ProgressTextButton(
+                            onPressed: () async {
+                              await _getCardReaderConfig(repository, id);
+                              },
+                            child: Text(
+                              "Получить текущую конфигурацию",
+                              softWrap: true,
+                            ),
+                        ),
                         ),
                       ],
                     ),
@@ -481,12 +495,16 @@ class _StationPageState extends State<StationPage> {
                           },
                           child: Text("Сохранить"),
                         ),
-                        ProgressTextButton(
-                          onPressed: () async {
-                            await _getStationButtonsConfig(repository, id);
-                          },
-                          child: Text("Получить текущую конфигурацию"),
-                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child: ProgressTextButton(
+                            onPressed: () async {
+                              await _getStationButtonsConfig(repository, id);
+                            },
+                            child: Text("Получить текущую конфигурацию"),
+                          ),
+                        )
                       ],
                     ),
                   ],

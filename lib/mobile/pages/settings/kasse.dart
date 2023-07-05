@@ -238,12 +238,16 @@ class _KassePageState extends State<KassePage> {
                           },
                           child: Text("Сохранить"),
                         ),
-                        ProgressTextButton(
-                          onPressed: () async {
-                            await _getKasseConfig(repository, context);
-                          },
-                          child: Text("Получить текущую конфигурацию"),
-                        ),
+                        Flexible(
+                          flex: 1,
+                            fit: FlexFit.tight,
+                            child: ProgressTextButton(
+                              onPressed: () async {
+                                await _getKasseConfig(repository, context);
+                              },
+                              child: Text("Получить текущую конфигурацию"),
+                            )
+                        )
                       ],
                     ),
                   ],

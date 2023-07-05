@@ -79,48 +79,32 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
                       );
                     },
                   ),
-                  ElevatedButton(
-                      onPressed: () async {
-                        DateTimeRange? range = await showDateRangePicker(
-                          context: context,
-                          firstDate: DateTime(2018),
-                          lastDate: DateTime.now(),
-                          initialEntryMode: DatePickerEntryMode.calendar,
-                          initialDateRange: DateTimeRange(
-                            start: _dateRange.value.start,
-                            end: _dateRange.value.end,
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
                           ),
-                        );
-                        if (range != null) {
-                          _dateRange.value = DateTimeRange(start: range.start, end: range.end.add(Duration(days: 1, microseconds: -1)));
-                        }
-                      },
-                      child: Text("Выбрать период")),
+                          onPressed: () async {
+                            DateTimeRange? range = await showDateRangePicker(
+                              context: context,
+                              firstDate: DateTime(2018),
+                              lastDate: DateTime.now(),
+                              initialEntryMode: DatePickerEntryMode.calendar,
+                              initialDateRange: DateTimeRange(
+                                start: _dateRange.value.start,
+                                end: _dateRange.value.end,
+                              ),
+                            );
+                            if (range != null) {
+                              _dateRange.value = DateTimeRange(start: range.start, end: range.end.add(Duration(days: 1, microseconds: -1)));
+                            }
+                          },
+                          child: Text("Выбрать период")),
+                  )
                 ],
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.date_range_outlined)),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.circle_outlined)),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.money)),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.credit_card_outlined)),
-                ),
-              ],
             ),
           ),
           Expanded(
@@ -168,11 +152,36 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
                               children: [
                                 Expanded(
                                   child: ListView.builder(
-                                    itemCount: snapshot.data?.length ?? 0,
+                                    itemCount: snapshot.data?.length == null ? 1 : snapshot.data!.length + 1,
                                     itemBuilder: (BuildContext context, int index) {
+                                      if (index == 0) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Center(child: Icon(Icons.date_range_outlined)),
+                                              ),
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Center(child: Icon(Icons.circle_outlined)),
+                                              ),
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Center(child: Icon(Icons.money)),
+                                              ),
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Center(child: Icon(Icons.credit_card_outlined)),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 4),
-                                        child: IncassationHistoryListTile(report: snapshot.data![index]),
+                                        child: IncassationHistoryListTile(report: snapshot.data![index - 1]),
                                       );
                                     },
                                   ),

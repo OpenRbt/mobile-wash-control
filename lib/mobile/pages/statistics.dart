@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
@@ -15,7 +17,7 @@ class StatisticsPage extends StatefulWidget {
 enum StatisticsShowMode { Dates, FromLastIncass, LastIncass }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  ValueNotifier<StatisticsShowMode> _mode = ValueNotifier(StatisticsShowMode.Dates);
+  ValueNotifier<StatisticsShowMode> _mode = ValueNotifier(StatisticsShowMode.FromLastIncass);
   ValueNotifier<DateTimeRange> _dateRange = ValueNotifier(DateTimeRange(start: DateTime.now(), end: DateTime.now()));
 
   final _dateFormatter = DateFormat('dd.MM.yyyy');
@@ -62,12 +64,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     return SegmentedButton<StatisticsShowMode>(
                       segments: [
                         ButtonSegment(
-                          value: StatisticsShowMode.Dates,
-                          label: Text("По датам"),
-                        ),
-                        ButtonSegment(
                           value: StatisticsShowMode.FromLastIncass,
                           label: Text("С последней инкассации"),
+                        ),
+                        ButtonSegment(
+                          value: StatisticsShowMode.Dates,
+                          label: Text("По датам"),
                         ),
                         ButtonSegment(
                           value: StatisticsShowMode.LastIncass,
@@ -172,7 +174,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   ],
                                 );
                               }
-                              return StatisticsView(reports: snapshot.data!);
+                              if(snapshot.hasData){
+                                return StatisticsView(reports: snapshot.data!);
+                              }
+                              return StatisticsView(reports: [],);
                             },
                           );
                         },
@@ -181,6 +186,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       return FutureBuilder(
                         future: _loadStatisticsFromLastIncass(repository, context),
                         builder: (BuildContext context, AsyncSnapshot<List<StationMoneyReport>> snapshot) {
+                          log(snapshot.hasData.toString());
                           if (snapshot.connectionState != ConnectionState.done) {
                             return Column(
                               children: [
@@ -191,7 +197,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               ],
                             );
                           }
-                          return StatisticsView(reports: snapshot.data!);
+                          if(snapshot.hasData){
+                            return StatisticsView(reports: snapshot.data!);
+                          }
+                          return StatisticsView(reports: [],);
                         },
                       );
                     case StatisticsShowMode.LastIncass:
@@ -208,7 +217,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               ],
                             );
                           }
-                          return StatisticsView(reports: snapshot.data!);
+                          if(snapshot.hasData){
+                            return StatisticsView(reports: snapshot.data!);
+                          }
+                          return StatisticsView(reports: [],);
                         },
                       );
                   }

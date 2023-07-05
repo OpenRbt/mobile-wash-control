@@ -15,7 +15,7 @@ void main() async {
 
   //TODO: Move into repository
   Common.washServersApi = WashServersApi(ApiClient(
-    basePath: 'https://app.openwashing.com/api/admin',
+    basePath: 'https://dev.openwashing.com/api/admin',
     authentication: HttpBearerAuth(),
   ));
 
