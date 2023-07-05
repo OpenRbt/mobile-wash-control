@@ -102,7 +102,7 @@ class LeaCentralRepository extends Repository {
         _lcwRepo.value = res?.lcwInfo;
       }
 
-      var hashes = <String>["-"];
+      var hashes = <String>[""];
       res?.stations.where((element) => element.hash != null).forEach((element) {
         hashes.add(element.hash!);
       });
@@ -223,6 +223,9 @@ class LeaCentralRepository extends Repository {
           programName: (programsFiltered != null && programsFiltered.isNotEmpty) ? programsFiltered.first.name : null,
         ));
       });
+
+      res.sort((a, b) => a.buttonID.compareTo(b.buttonID));
+
       return res;
     } on ApiException catch (e) {
       switch (e.code) {

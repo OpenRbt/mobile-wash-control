@@ -179,7 +179,7 @@ class _StationPageState extends State<StationPage> {
                                     fit: FlexFit.tight,
                                     child: DropdownButtonFormField(
                                       isExpanded: true,
-                                      value: config?.hash ?? "-",
+                                      value: config?.hash ?? "",
                                       items: List.generate(
                                         hashes.length,
                                         (index) => DropdownMenuItem(
@@ -191,7 +191,7 @@ class _StationPageState extends State<StationPage> {
                                         _config.value = _config.value.copyWith(hash: value);
                                       },
                                       validator: (value) {
-                                        return value == "-" ? "Необходимо указать хэш" : null;
+                                        return null;
                                       },
                                     ),
                                   ),

@@ -21,7 +21,7 @@ class ResponsePing {
     this.lastUpdate,
     this.lastDiscountUpdate,
     this.buttonID,
-    this.isAuthorized,
+    this.authorizedSessionID,
   });
 
   int serviceAmount;
@@ -76,7 +76,13 @@ class ResponsePing {
   ///
   int? buttonID;
 
-  bool? isAuthorized;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? authorizedSessionID;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is ResponsePing &&
@@ -88,7 +94,7 @@ class ResponsePing {
      other.lastUpdate == lastUpdate &&
      other.lastDiscountUpdate == lastDiscountUpdate &&
      other.buttonID == buttonID &&
-     other.isAuthorized == isAuthorized;
+     other.authorizedSessionID == authorizedSessionID;
 
   @override
   int get hashCode =>
@@ -101,10 +107,10 @@ class ResponsePing {
     (lastUpdate == null ? 0 : lastUpdate!.hashCode) +
     (lastDiscountUpdate == null ? 0 : lastDiscountUpdate!.hashCode) +
     (buttonID == null ? 0 : buttonID!.hashCode) +
-    (isAuthorized == null ? 0 : isAuthorized!.hashCode);
+    (authorizedSessionID == null ? 0 : authorizedSessionID!.hashCode);
 
   @override
-  String toString() => 'ResponsePing[serviceAmount=$serviceAmount, sessionID=$sessionID, bonusAmount=$bonusAmount, bonusSystemActive=$bonusSystemActive, openStation=$openStation, lastUpdate=$lastUpdate, lastDiscountUpdate=$lastDiscountUpdate, buttonID=$buttonID, isAuthorized=$isAuthorized]';
+  String toString() => 'ResponsePing[serviceAmount=$serviceAmount, sessionID=$sessionID, bonusAmount=$bonusAmount, bonusSystemActive=$bonusSystemActive, openStation=$openStation, lastUpdate=$lastUpdate, lastDiscountUpdate=$lastDiscountUpdate, buttonID=$buttonID, authorizedSessionID=$authorizedSessionID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -140,10 +146,10 @@ class ResponsePing {
     } else {
       json[r'ButtonID'] = null;
     }
-    if (this.isAuthorized != null) {
-      json[r'isAuthorized'] = this.isAuthorized;
+    if (this.authorizedSessionID != null) {
+      json[r'AuthorizedSessionID'] = this.authorizedSessionID;
     } else {
-      json[r'isAuthorized'] = null;
+      json[r'AuthorizedSessionID'] = null;
     }
     return json;
   }
@@ -175,7 +181,7 @@ class ResponsePing {
         lastUpdate: mapValueOfType<int>(json, r'lastUpdate'),
         lastDiscountUpdate: mapValueOfType<int>(json, r'lastDiscountUpdate'),
         buttonID: mapValueOfType<int>(json, r'ButtonID'),
-        isAuthorized: mapValueOfType<bool>(json, r'isAuthorized'),
+        authorizedSessionID: mapValueOfType<String>(json, r'AuthorizedSessionID'),
       );
     }
     return null;

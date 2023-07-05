@@ -294,7 +294,8 @@ class LeaCentralConfig {
 
 enum RelayBoard {
   localGPIO,
-  danBoard;
+  danBoard,
+  all;
 
   static RelayBoard? fromString(String str) {
     switch (str) {
@@ -302,6 +303,8 @@ enum RelayBoard {
         return RelayBoard.localGPIO;
       case "danBoard":
         return RelayBoard.danBoard;
+      case "all":
+        return RelayBoard.all;
       default:
         return null;
     }
@@ -313,6 +316,8 @@ enum RelayBoard {
         return "localGPIO";
       case RelayBoard.danBoard:
         return "danBoard";
+      case RelayBoard.all:
+        return "all";
       default:
         return "unknown";
     }
@@ -324,6 +329,8 @@ enum RelayBoard {
         return "локально";
       case RelayBoard.danBoard:
         return "на сервере";
+      case RelayBoard.all:
+        return "везде";
       default:
         return "unknown";
     }

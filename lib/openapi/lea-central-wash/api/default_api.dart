@@ -578,7 +578,7 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgEndSession] args (required):
-  Future<Response> endhSessionWithHttpInfo(ArgEndSession args,) async {
+  Future<Response> endSessionWithHttpInfo(ArgEndSession args,) async {
     // ignore: prefer_const_declarations
     final path = r'/end-session';
 
@@ -606,8 +606,8 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [ArgEndSession] args (required):
-  Future<void> endhSession(ArgEndSession args,) async {
-    final response = await endhSessionWithHttpInfo(args,);
+  Future<void> endSession(ArgEndSession args,) async {
+    final response = await endSessionWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1289,53 +1289,6 @@ class DefaultApi {
     return null;
   }
 
-  /// Performs an HTTP 'POST /is-authorized' operation and returns the [Response].
-  /// Parameters:
-  ///
-  /// * [ArgIsAuthorized] args (required):
-  Future<Response> isAuthorizedWithHttpInfo(ArgIsAuthorized args,) async {
-    // ignore: prefer_const_declarations
-    final path = r'/is-authorized';
-
-    // ignore: prefer_final_locals
-    Object? postBody = args;
-
-    final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
-    final formParams = <String, String>{};
-
-    const contentTypes = <String>['application/json'];
-
-
-    return apiClient.invokeAPI(
-      path,
-      'POST',
-      queryParams,
-      postBody,
-      headerParams,
-      formParams,
-      contentTypes.isEmpty ? null : contentTypes.first,
-    );
-  }
-
-  /// Parameters:
-  ///
-  /// * [ArgIsAuthorized] args (required):
-  Future<IsAuthorized?> isAuthorized(ArgIsAuthorized args,) async {
-    final response = await isAuthorizedWithHttpInfo(args,);
-    if (response.statusCode >= HttpStatus.badRequest) {
-      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
-    }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'IsAuthorized',) as IsAuthorized;
-    
-    }
-    return null;
-  }
-
   /// Performs an HTTP 'POST /kasse' operation and returns the [Response].
   Future<Response> kasseWithHttpInfo() async {
     // ignore: prefer_const_declarations
@@ -1775,53 +1728,6 @@ class DefaultApi {
         .cast<Program>()
         .toList();
 
-    }
-    return null;
-  }
-
-  /// Performs an HTTP 'POST /refresh-session' operation and returns the [Response].
-  /// Parameters:
-  ///
-  /// * [RefreshSession] args (required):
-  Future<Response> refreshSessionWithHttpInfo(RefreshSession args,) async {
-    // ignore: prefer_const_declarations
-    final path = r'/refresh-session';
-
-    // ignore: prefer_final_locals
-    Object? postBody = args;
-
-    final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
-    final formParams = <String, String>{};
-
-    const contentTypes = <String>['application/json'];
-
-
-    return apiClient.invokeAPI(
-      path,
-      'POST',
-      queryParams,
-      postBody,
-      headerParams,
-      formParams,
-      contentTypes.isEmpty ? null : contentTypes.first,
-    );
-  }
-
-  /// Parameters:
-  ///
-  /// * [RefreshSession] args (required):
-  Future<SessionRefresh?> refreshSession(RefreshSession args,) async {
-    final response = await refreshSessionWithHttpInfo(args,);
-    if (response.statusCode >= HttpStatus.badRequest) {
-      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
-    }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'SessionRefresh',) as SessionRefresh;
-    
     }
     return null;
   }
