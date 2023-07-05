@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
-import 'package:mobile_wash_control/mobile/dialogs/overview/ConfirmRunProgram.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
-import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
+import 'package:mobile_wash_control/mobile/widgets/home/managePost/WashPostButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -341,70 +340,15 @@ class _ManagePostPageState extends State<ManagePostPage> {
                             style: theme.textTheme.bodyLarge,
                           ),
                           childrenPadding: EdgeInsets.all(8),
-                          children: List.generate(_stationButtons.length, (index) {
-                            var btn = _stationButtons[index];
-                            return Row(
-                              children: [
-                                Flexible(
-                                  flex: 1,
-                                  fit: FlexFit.tight,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      if (stationHash != null) {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return ConfirmRunProgramDialog(config: RunProgramConfig(stationHash: stationHash, programID: btn.programID!, programName: btn.programName, stationID: stationID), repository: repository);
-                                          },
-                                        );
-                                      } else {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBars.getErrorSnackBar(
-                                            message: "Не удалось вызвать запуск программы, так как нет данных о хэше станции",
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "${btn.buttonID} : ",
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "${btn.programName ?? "-"}",
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  fit: FlexFit.tight,
-                                  child: ValueListenableBuilder(
-                                    valueListenable: repository.getStationsNotifier(),
-                                    builder: (BuildContext context, List<Station>? value, Widget? child) {
-                                      var program = repository.getCurrentProgram(stationID);
-
-                                      return Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Активна",
-                                            style: theme.textTheme.bodyLarge,
-                                          ),
-                                          Checkbox(value: btn.programID == program?.id, onChanged: null)
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          }),
+                          children: List.generate(
+                            _stationButtons.length,
+                            (index) => WashPostButton(
+                              btn: _stationButtons[index],
+                              stationHash: stationHash,
+                              repository: repository,
+                              stationID: stationID,
+                            ),
+                          ),
                         ),
                       )
                     : SizedBox(),

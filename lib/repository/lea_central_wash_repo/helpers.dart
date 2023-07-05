@@ -181,6 +181,9 @@ class Helpers {
       case entity.RelayBoard.danBoard:
         relayBoard = RelayBoard.danBoard;
         break;
+      case entity.RelayBoard.all:
+        relayBoard = RelayBoard.all;
+        break;
     }
 
     return StationConfig(
