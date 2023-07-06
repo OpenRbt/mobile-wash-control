@@ -16,55 +16,55 @@ class IncassationHistoryListTile extends StatelessWidget {
 
     return Column(
       children: [
-        Row(
-          children: [
-            Flexible(
-              flex: 0,
-              fit: FlexFit.tight,
-              child: Column(
+        LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return Row(
                 children: [
-                  Text(
-                    "${report.ctime != null ? _dateFormatter.format(report.ctime!) : "нет данных"}",
-                    style: theme.textTheme.titleLarge,
+                  Container(
+                    width: constraints.maxWidth * 0.4,
+                    child: Column(
+                      children: [
+                        Text(
+                          "${report.ctime != null ? _dateFormatter.format(report.ctime!) : "нет данных"}",
+                          style: theme.textTheme.titleLarge,
+                        ),
+                        Text(
+                          "${report.ctime != null ? _timeFormatter.format(report.ctime!) : "нет данных"}",
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
                   ),
-                  Text(
-                    "${report.ctime != null ? _timeFormatter.format(report.ctime!) : "нет данных"}",
-                    style: theme.textTheme.titleMedium,
+                  Container(
+                    width: constraints.maxWidth * 0.2,
+                    child: Center(
+                      child: Text(
+                        "${report.coins ?? 0}",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: constraints.maxWidth * 0.2,
+                    child: Center(
+                      child: Text(
+                        "${report.banknotes ?? 0}",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: constraints.maxWidth * 0.2,
+                    child: Center(
+                      child: Text(
+                        "${report.electronical ?? 0}",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
                   ),
                 ],
-              )
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(
-                  "${report.coins ?? 0}",
-                  style: theme.textTheme.titleLarge,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(
-                  "${report.banknotes ?? 0}",
-                  style: theme.textTheme.titleLarge,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(
-                  "${report.electronical ?? 0}",
-                  style: theme.textTheme.titleLarge,
-                ),
-              ),
-            ),
-          ],
+              );
+            }
         ),
         Row(),
       ],

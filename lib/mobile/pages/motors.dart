@@ -19,6 +19,7 @@ class _MotorPageState extends State<MotorPage> {
   ValueNotifier<bool> _showMode = ValueNotifier(true);
   ValueNotifier<bool> _showRelays = ValueNotifier(true);
   ValueNotifier<MotorStatsViewMode> _statsMode = ValueNotifier(MotorStatsViewMode.current);
+  ValueNotifier<MotorsViewMode> _mode = ValueNotifier(MotorsViewMode.relays);
 
   ValueNotifier<DateTimeRange> _dateRange = ValueNotifier(DateTimeRange(start: DateTime.now(), end: DateTime.now()));
 
@@ -64,6 +65,7 @@ class _MotorPageState extends State<MotorPage> {
 
   @override
   void dispose() {
+    _mode.dispose();
     _showMode.dispose();
     _dateRange.dispose();
     _statsMode.dispose();
@@ -88,15 +90,23 @@ class _MotorPageState extends State<MotorPage> {
                   return ResetMotorsStatsDialog(repository: repository);
                 },
               );
+              setState(() {});
             },
             icon: Icon(
               Icons.clear_all,
               color: theme.colorScheme.onPrimary,
             ),
             label: Text(
-              "Сбросить статистику",
+              "Сброс",
               style: theme.textTheme.titleMedium!.copyWith(color: theme.colorScheme.onPrimary),
             ),
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+              });
+            },
+            icon: Icon(Icons.refresh)
           ),
         ],
       ),
@@ -215,12 +225,13 @@ class _MotorPageState extends State<MotorPage> {
                                 Expanded(
                                   child: MotorsView(
                                     stationsStats: [],
+                                    mode: _mode,
                                   ),
                                 ),
                               ],
                             );
                           }
-                          return MotorsView(stationsStats: snapshot.data ?? []);
+                          return MotorsView(stationsStats: snapshot.data ?? [], mode: _mode);
                         },
                       );
 
@@ -238,12 +249,13 @@ class _MotorPageState extends State<MotorPage> {
                                     Expanded(
                                       child: MotorsView(
                                         stationsStats: [],
+                                        mode: _mode,
                                       ),
                                     ),
                                   ],
                                 );
                               }
-                              return MotorsView(stationsStats: snapshot.data ?? []);
+                              return MotorsView(stationsStats: snapshot.data ?? [], mode: _mode,);
                             },
                           );
                         },

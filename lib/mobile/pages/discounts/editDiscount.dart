@@ -278,6 +278,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                               ValueListenableBuilder(
                                 valueListenable: _currentDiscount,
                                 builder: (BuildContext context,  DiscountCampaign value, Widget? child) {
+                                  _dateRange.value = DateTimeRange(start: value.startDate, end: value.endDate);
                                   return Row(
                                     children: [
                                       Text("С "),

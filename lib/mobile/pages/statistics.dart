@@ -16,9 +16,11 @@ class StatisticsPage extends StatefulWidget {
 
 enum StatisticsShowMode { Dates, FromLastIncass, LastIncass }
 
-class _StatisticsPageState extends State<StatisticsPage> {
+class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStateMixin {
   ValueNotifier<StatisticsShowMode> _mode = ValueNotifier(StatisticsShowMode.FromLastIncass);
   ValueNotifier<DateTimeRange> _dateRange = ValueNotifier(DateTimeRange(start: DateTime.now(), end: DateTime.now()));
+
+  late final AnimationController _animationController;
 
   final _dateFormatter = DateFormat('dd.MM.yyyy');
   @override
@@ -31,10 +33,17 @@ class _StatisticsPageState extends State<StatisticsPage> {
     );
 
     super.initState();
+
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 2), // this will decide the speed of the rotation
+      vsync: this,
+    );
   }
 
   @override
   void dispose() {
+    _animationController.stop();
+    _animationController.dispose();
     _mode.dispose();
     _dateRange.dispose();
     super.dispose();
@@ -47,7 +56,27 @@ class _StatisticsPageState extends State<StatisticsPage> {
     final Repository repository = args[PageArgCode.repository];
 
     return Scaffold(
-      appBar: AppBar(title: Text("Статистика")),
+      appBar: AppBar(
+          title: Row(
+            children: [
+              Text("Статистика"),
+              Align(
+                alignment: Alignment.centerRight
+              )
+            ],
+          ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {});
+            },
+            icon: RotationTransition(
+              turns: _animationController,
+              child: Icon(Icons.refresh),
+            ),
+          ),
+        ],
+      ),
       drawer: WashNavigationDrawer(
         selected: SelectedPage.Statistics,
         repository: repository,

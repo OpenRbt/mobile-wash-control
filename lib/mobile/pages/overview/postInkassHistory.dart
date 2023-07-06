@@ -150,34 +150,39 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
 
                             return Column(
                               children: [
+                                LayoutBuilder(
+                                    builder: (BuildContext context, BoxConstraints constraints) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: constraints.maxWidth * 0.4,
+                                              child: Center(child: Icon(Icons.date_range_outlined)),
+                                            ),
+                                            Container(
+                                              width: constraints.maxWidth * 0.2,
+                                              child: Center(child: Icon(Icons.circle_outlined)),
+                                            ),
+                                            Container(
+                                              width: constraints.maxWidth * 0.2,
+                                              child: Center(child: Icon(Icons.money)),
+                                            ),
+                                            Container(
+                                              width: constraints.maxWidth * 0.2,
+                                              child: Center(child: Icon(Icons.credit_card_outlined)),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                ),
                                 Expanded(
                                   child: ListView.builder(
                                     itemCount: snapshot.data?.length == null ? 1 : snapshot.data!.length + 1,
                                     itemBuilder: (BuildContext context, int index) {
                                       if (index == 0) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: Row(
-                                            children: [
-                                              Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Center(child: Icon(Icons.date_range_outlined)),
-                                              ),
-                                              Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Center(child: Icon(Icons.circle_outlined)),
-                                              ),
-                                              Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Center(child: Icon(Icons.money)),
-                                              ),
-                                              Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Center(child: Icon(Icons.credit_card_outlined)),
-                                              ),
-                                            ],
-                                          ),
-                                        );
+                                        return SizedBox.shrink();
                                       }
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 4),

@@ -3,8 +3,9 @@ import 'package:mobile_wash_control/entity/entity.dart';
 
 class MotorsView extends StatefulWidget {
   final List<StationStats> stationsStats;
+  final ValueNotifier<MotorsViewMode> mode;
 
-  const MotorsView({super.key, required this.stationsStats});
+  const MotorsView({super.key, required this.stationsStats, required this.mode});
 
   @override
   State<StatefulWidget> createState() => _MotorsViewState();
@@ -13,11 +14,9 @@ class MotorsView extends StatefulWidget {
 enum MotorsViewMode { relays, programs }
 
 class _MotorsViewState extends State<MotorsView> {
-  ValueNotifier<MotorsViewMode> _mode = ValueNotifier(MotorsViewMode.relays);
 
   @override
   void dispose() {
-    _mode.dispose();
     super.dispose();
   }
 
@@ -199,7 +198,7 @@ class _MotorsViewState extends State<MotorsView> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ValueListenableBuilder<MotorsViewMode>(
-            valueListenable: _mode,
+            valueListenable: widget.mode,
             builder: (BuildContext context, MotorsViewMode value, Widget? child) {
               return SegmentedButton<MotorsViewMode>(
                 segments: [
@@ -215,7 +214,7 @@ class _MotorsViewState extends State<MotorsView> {
                 selected: {value},
                 multiSelectionEnabled: false,
                 onSelectionChanged: (val) {
-                  _mode.value = val.single;
+                  widget.mode.value = val.single;
                 },
               );
             },
@@ -227,7 +226,7 @@ class _MotorsViewState extends State<MotorsView> {
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
                 child: ValueListenableBuilder(
-                  valueListenable: _mode,
+                  valueListenable: widget.mode,
                   builder: (BuildContext context, MotorsViewMode value, Widget? child) {
                     switch (value) {
                       case MotorsViewMode.relays:

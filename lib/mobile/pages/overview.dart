@@ -14,6 +14,8 @@ class OverviewPage extends StatefulWidget {
   State<StatefulWidget> createState() => _OverviewPageState();
 }
 
+enum PostsViewMode { all, active }
+
 class _OverviewPageState extends State<OverviewPage> {
   @override
   void didChangeDependencies() {
@@ -22,15 +24,16 @@ class _OverviewPageState extends State<OverviewPage> {
 
   @override
   void dispose() {
+    _postsMode.dispose();
     super.dispose();
   }
 
+  ValueNotifier<PostsViewMode> _postsMode = ValueNotifier(PostsViewMode.all);
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
     final repository = args[PageArgCode.repository] as LeaCentralRepository;
 
@@ -62,54 +65,100 @@ class _OverviewPageState extends State<OverviewPage> {
         repository: repository,
       ),
       body: FutureBuilder(
-        future: repository.updateStatus(context: context),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ValueListenableBuilder(
-                  valueListenable: repository.getStationsNotifier(),
-                  builder: (BuildContext context, List<Station>? value, Widget? child) {
-                    if (value == null) {
-                      return child!;
-                    }
-                    return Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: value.length,
-                        physics: ClampingScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          var data = value[index];
-                          return StationCard(
-                            data: data,
-                            onPressed: () {
-                              var args = Map<PageArgCode, dynamic>();
-                              args[PageArgCode.repository] = repository;
-                              args[PageArgCode.stationID] = data.id;
-                              args[PageArgCode.stationHash] = data.hash;
-                              Navigator.pushNamed(context, "/mobile/home/managePost", arguments: args);
+            future: repository.updateStatus(context: context),
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      heightFactor: 1.5,
+                      child: ValueListenableBuilder(
+                        valueListenable: _postsMode,
+                        builder: (BuildContext context, PostsViewMode value, Widget? child) {
+                          return SegmentedButton<PostsViewMode>(
+                            segments: [
+                              ButtonSegment(
+                                value: PostsViewMode.all,
+                                label: Text("Все"),
+                              ),
+                              ButtonSegment(
+                                value: PostsViewMode.active,
+                                label: Text("Активные"),
+                              ),
+                            ],
+                            selected: {value},
+                            onSelectionChanged: (val) {
+                              _postsMode.value = val.single;
                             },
                           );
                         },
                       ),
-                    );
-                  },
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: repository.getStationsNotifier(),
+                      builder: (BuildContext context, List<Station>? value, Widget? child) {
+                        if (value == null) {
+                          return child!;
+                        }
+                        return ValueListenableBuilder(
+                            valueListenable: _postsMode,
+                            builder: (BuildContext context, PostsViewMode postViewMode, Widget? child) {
+                              return Expanded(
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: value.length,
+                                  physics: ClampingScrollPhysics(),
+                                  itemBuilder: (BuildContext context, int index) {
+                                    var data = value[index];
+                                    switch (postViewMode) {
+                                      case PostsViewMode.active:
+                                        if(data.status == "online"){
+                                          return StationCard(
+                                            data: data,
+                                            onPressed: () {
+                                              var args = Map<PageArgCode, dynamic>();
+                                              args[PageArgCode.repository] = repository;
+                                              args[PageArgCode.stationID] = data.id;
+                                              args[PageArgCode.stationHash] = data.hash;
+                                              Navigator.pushNamed(context, "/mobile/home/managePost", arguments: args);
+                                            },
+                                          );
+                                        }
+                                        break;
+                                      case PostsViewMode.all:
+                                        return StationCard(
+                                          data: data,
+                                          onPressed: () {
+                                            var args = Map<PageArgCode, dynamic>();
+                                            args[PageArgCode.repository] = repository;
+                                            args[PageArgCode.stationID] = data.id;
+                                            args[PageArgCode.stationHash] = data.hash;
+                                            Navigator.pushNamed(context, "/mobile/home/managePost", arguments: args);
+                                          },
+                                        );
+                                    }
+                                  },
+                                ),
+                              );
+                            }
+                        );
+                      },
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
     );
   }
 }

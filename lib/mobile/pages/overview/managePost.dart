@@ -19,13 +19,13 @@ class _ManagePostPageState extends State<ManagePostPage> with TickerProviderStat
 
   @override
   void dispose() {
-    _controller.stop();
-    _controller.dispose();
+    _animationController.stop();
+    _animationController.dispose();
     super.dispose();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  late final AnimationController _controller;
+  late final AnimationController _animationController;
   final ValueNotifier<int> refreshTrigger = ValueNotifier(0);
   bool _isRefreshing = false;
   int _currentProgram = -1;
@@ -33,7 +33,7 @@ class _ManagePostPageState extends State<ManagePostPage> with TickerProviderStat
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _animationController = AnimationController(
       duration: const Duration(seconds: 2), // this will decide the speed of the rotation
       vsync: this,
     );
@@ -77,9 +77,9 @@ class _ManagePostPageState extends State<ManagePostPage> with TickerProviderStat
                 future: () async {
                   if (_isRefreshing) return null;
                   _isRefreshing = true;
-                  _controller.repeat();
+                  _animationController.repeat();
                   var result = await repository.getStationMoneyReport(stationID, context: context);
-                  _controller.stop();
+                  _animationController.stop();
                   _isRefreshing = false;
                   return result;
                 }(),
@@ -95,22 +95,24 @@ class _ManagePostPageState extends State<ManagePostPage> with TickerProviderStat
                             : Text(
                           "Пост: ${stationID}",
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {});
-                        },
-                        icon: RotationTransition(
-                          turns: _controller,
-                          child: Icon(Icons.refresh),
-                        ),
-                      ),
+                      )
                     ],
                   );
                 },
               );
             },
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                setState(() {});
+              },
+              icon: RotationTransition(
+                turns: _animationController,
+                child: Icon(Icons.refresh),
+              ),
+            ),
+          ],
         ),
         body: FutureBuilder(
           future: repository.getStationButtons(stationID, context: context),

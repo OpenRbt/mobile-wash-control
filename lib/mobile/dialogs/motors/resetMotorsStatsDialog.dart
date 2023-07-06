@@ -67,6 +67,7 @@ class ResetMotorsStatsDialog extends StatelessWidget {
                                     }
                                   });
                                   Navigator.pop(context);
+
                                   Navigator.of(context).pop();
                                 },
                                 child: Text("Да"),
