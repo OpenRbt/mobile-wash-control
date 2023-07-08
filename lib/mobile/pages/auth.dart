@@ -5,11 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/auth/authButton.dart';
+import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart' as lcw;
 import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/common.dart';
 import '../widgets/common/snackBars.dart';
 
 class Auth extends StatefulWidget {
@@ -66,6 +68,13 @@ class _AuthState extends State<Auth> {
       _repo = repo;
       GlobalData.AddServiceValue = addServiceValue;
       SystemChrome.setPreferredOrientations([]);
+
+      String? bonusUrl = await repo.getServerInfo(context: context);
+      String basePath = (bonusUrl ?? "") + '/api/admin';
+      Common.washServersApi = WashServersApi(ApiClient(
+        basePath: basePath,
+        authentication: HttpBearerAuth(),
+      ));
       Navigator.pushNamed(
         context,
         "/mobile/home",

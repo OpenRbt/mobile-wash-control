@@ -38,7 +38,6 @@ class _UsersPageState extends State<UsersPage> {
           return FutureBuilder(
             future: _updateData(repository),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              log("update");
               return RefreshIndicator(
                 child: Column(
                   children: [

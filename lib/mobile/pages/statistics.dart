@@ -215,7 +215,6 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
                       return FutureBuilder(
                         future: _loadStatisticsFromLastIncass(repository, context),
                         builder: (BuildContext context, AsyncSnapshot<List<StationMoneyReport>> snapshot) {
-                          log(snapshot.hasData.toString());
                           if (snapshot.connectionState != ConnectionState.done) {
                             return Column(
                               children: [

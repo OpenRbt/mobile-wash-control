@@ -834,6 +834,47 @@ class DefaultApi {
     }
   }
 
+  /// Performs an HTTP 'GET /server/info' operation and returns the [Response].
+  Future<Response> getServerInfoWithHttpInfo() async {
+    // ignore: prefer_const_declarations
+    final path = r'/server/info';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<ServerInfo?> getServerInfo() async {
+    final response = await getServerInfoWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ServerInfo',) as ServerInfo;
+    
+    }
+    return null;
+  }
+
   /// Performs an HTTP 'POST /get-station-config-var-bool' operation and returns the [Response].
   /// Parameters:
   ///
@@ -1969,8 +2010,8 @@ class DefaultApi {
   /// Performs an HTTP 'POST /save-money' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [MoneyReport] args (required):
-  Future<Response> saveMoneyWithHttpInfo(MoneyReport args,) async {
+  /// * [MoneyReportCreation] args (required):
+  Future<Response> saveMoneyWithHttpInfo(MoneyReportCreation args,) async {
     // ignore: prefer_const_declarations
     final path = r'/save-money';
 
@@ -1997,8 +2038,8 @@ class DefaultApi {
 
   /// Parameters:
   ///
-  /// * [MoneyReport] args (required):
-  Future<void> saveMoney(MoneyReport args,) async {
+  /// * [MoneyReportCreation] args (required):
+  Future<void> saveMoney(MoneyReportCreation args,) async {
     final response = await saveMoneyWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));

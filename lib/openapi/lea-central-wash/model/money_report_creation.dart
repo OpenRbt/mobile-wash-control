@@ -10,27 +10,21 @@
 
 part of openapi.api;
 
-class StationStatus {
-  /// Returns a new [StationStatus] instance.
-  StationStatus({
-    this.id,
-    this.name,
-    this.hash,
-    this.status,
-    this.info,
-    this.currentBalance,
-    this.currentProgram,
-    this.currentProgramName,
-    this.ip,
+class MoneyReportCreation {
+  /// Returns a new [MoneyReportCreation] instance.
+  MoneyReportCreation({
+    required this.hash,
+    this.carsTotal,
+    this.coins,
+    this.banknotes,
+    this.electronical,
+    this.service,
+    this.bonuses,
+    this.sessionId,
+    this.qrMoney,
   });
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  int? id;
+  String hash;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -38,7 +32,7 @@ class StationStatus {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? name;
+  int? carsTotal;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -46,7 +40,7 @@ class StationStatus {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? hash;
+  int? coins;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -54,7 +48,7 @@ class StationStatus {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  Status? status;
+  int? banknotes;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -62,7 +56,7 @@ class StationStatus {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? info;
+  int? electronical;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -70,7 +64,7 @@ class StationStatus {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? currentBalance;
+  int? service;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -78,7 +72,7 @@ class StationStatus {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? currentProgram;
+  int? bonuses;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -86,7 +80,7 @@ class StationStatus {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? currentProgramName;
+  String? sessionId;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -94,90 +88,86 @@ class StationStatus {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? ip;
+  int? qrMoney;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is StationStatus &&
-     other.id == id &&
-     other.name == name &&
+  bool operator ==(Object other) => identical(this, other) || other is MoneyReportCreation &&
      other.hash == hash &&
-     other.status == status &&
-     other.info == info &&
-     other.currentBalance == currentBalance &&
-     other.currentProgram == currentProgram &&
-     other.currentProgramName == currentProgramName &&
-     other.ip == ip;
+     other.carsTotal == carsTotal &&
+     other.coins == coins &&
+     other.banknotes == banknotes &&
+     other.electronical == electronical &&
+     other.service == service &&
+     other.bonuses == bonuses &&
+     other.sessionId == sessionId &&
+     other.qrMoney == qrMoney;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (id == null ? 0 : id!.hashCode) +
-    (name == null ? 0 : name!.hashCode) +
-    (hash == null ? 0 : hash!.hashCode) +
-    (status == null ? 0 : status!.hashCode) +
-    (info == null ? 0 : info!.hashCode) +
-    (currentBalance == null ? 0 : currentBalance!.hashCode) +
-    (currentProgram == null ? 0 : currentProgram!.hashCode) +
-    (currentProgramName == null ? 0 : currentProgramName!.hashCode) +
-    (ip == null ? 0 : ip!.hashCode);
+    (hash.hashCode) +
+    (carsTotal == null ? 0 : carsTotal!.hashCode) +
+    (coins == null ? 0 : coins!.hashCode) +
+    (banknotes == null ? 0 : banknotes!.hashCode) +
+    (electronical == null ? 0 : electronical!.hashCode) +
+    (service == null ? 0 : service!.hashCode) +
+    (bonuses == null ? 0 : bonuses!.hashCode) +
+    (sessionId == null ? 0 : sessionId!.hashCode) +
+    (qrMoney == null ? 0 : qrMoney!.hashCode);
 
   @override
-  String toString() => 'StationStatus[id=$id, name=$name, hash=$hash, status=$status, info=$info, currentBalance=$currentBalance, currentProgram=$currentProgram, currentProgramName=$currentProgramName, ip=$ip]';
+  String toString() => 'MoneyReportCreation[hash=$hash, carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, sessionId=$sessionId, qrMoney=$qrMoney]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.id != null) {
-      json[r'id'] = this.id;
-    } else {
-      json[r'id'] = null;
-    }
-    if (this.name != null) {
-      json[r'name'] = this.name;
-    } else {
-      json[r'name'] = null;
-    }
-    if (this.hash != null) {
       json[r'hash'] = this.hash;
+    if (this.carsTotal != null) {
+      json[r'carsTotal'] = this.carsTotal;
     } else {
-      json[r'hash'] = null;
+      json[r'carsTotal'] = null;
     }
-    if (this.status != null) {
-      json[r'status'] = this.status;
+    if (this.coins != null) {
+      json[r'coins'] = this.coins;
     } else {
-      json[r'status'] = null;
+      json[r'coins'] = null;
     }
-    if (this.info != null) {
-      json[r'info'] = this.info;
+    if (this.banknotes != null) {
+      json[r'banknotes'] = this.banknotes;
     } else {
-      json[r'info'] = null;
+      json[r'banknotes'] = null;
     }
-    if (this.currentBalance != null) {
-      json[r'currentBalance'] = this.currentBalance;
+    if (this.electronical != null) {
+      json[r'electronical'] = this.electronical;
     } else {
-      json[r'currentBalance'] = null;
+      json[r'electronical'] = null;
     }
-    if (this.currentProgram != null) {
-      json[r'currentProgram'] = this.currentProgram;
+    if (this.service != null) {
+      json[r'service'] = this.service;
     } else {
-      json[r'currentProgram'] = null;
+      json[r'service'] = null;
     }
-    if (this.currentProgramName != null) {
-      json[r'currentProgramName'] = this.currentProgramName;
+    if (this.bonuses != null) {
+      json[r'bonuses'] = this.bonuses;
     } else {
-      json[r'currentProgramName'] = null;
+      json[r'bonuses'] = null;
     }
-    if (this.ip != null) {
-      json[r'ip'] = this.ip;
+    if (this.sessionId != null) {
+      json[r'sessionId'] = this.sessionId;
     } else {
-      json[r'ip'] = null;
+      json[r'sessionId'] = null;
+    }
+    if (this.qrMoney != null) {
+      json[r'qrMoney'] = this.qrMoney;
+    } else {
+      json[r'qrMoney'] = null;
     }
     return json;
   }
 
-  /// Returns a new [StationStatus] instance and imports its values from
+  /// Returns a new [MoneyReportCreation] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static StationStatus? fromJson(dynamic value) {
+  static MoneyReportCreation? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -186,32 +176,32 @@ class StationStatus {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "StationStatus[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "StationStatus[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "MoneyReportCreation[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "MoneyReportCreation[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return StationStatus(
-        id: mapValueOfType<int>(json, r'id'),
-        name: mapValueOfType<String>(json, r'name'),
-        hash: mapValueOfType<String>(json, r'hash'),
-        status: Status.fromJson(json[r'status']),
-        info: mapValueOfType<String>(json, r'info'),
-        currentBalance: mapValueOfType<int>(json, r'currentBalance'),
-        currentProgram: mapValueOfType<int>(json, r'currentProgram'),
-        currentProgramName: mapValueOfType<String>(json, r'currentProgramName'),
-        ip: mapValueOfType<String>(json, r'ip'),
+      return MoneyReportCreation(
+        hash: mapValueOfType<String>(json, r'hash')!,
+        carsTotal: mapValueOfType<int>(json, r'carsTotal'),
+        coins: mapValueOfType<int>(json, r'coins'),
+        banknotes: mapValueOfType<int>(json, r'banknotes'),
+        electronical: mapValueOfType<int>(json, r'electronical'),
+        service: mapValueOfType<int>(json, r'service'),
+        bonuses: mapValueOfType<int>(json, r'bonuses'),
+        sessionId: mapValueOfType<String>(json, r'sessionId'),
+        qrMoney: mapValueOfType<int>(json, r'qrMoney'),
       );
     }
     return null;
   }
 
-  static List<StationStatus>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <StationStatus>[];
+  static List<MoneyReportCreation>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <MoneyReportCreation>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = StationStatus.fromJson(row);
+        final value = MoneyReportCreation.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -220,12 +210,12 @@ class StationStatus {
     return result.toList(growable: growable);
   }
 
-  static Map<String, StationStatus> mapFromJson(dynamic json) {
-    final map = <String, StationStatus>{};
+  static Map<String, MoneyReportCreation> mapFromJson(dynamic json) {
+    final map = <String, MoneyReportCreation>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = StationStatus.fromJson(entry.value);
+        final value = MoneyReportCreation.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -234,13 +224,13 @@ class StationStatus {
     return map;
   }
 
-  // maps a json object with a list of StationStatus-objects as value to a dart map
-  static Map<String, List<StationStatus>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<StationStatus>>{};
+  // maps a json object with a list of MoneyReportCreation-objects as value to a dart map
+  static Map<String, List<MoneyReportCreation>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<MoneyReportCreation>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = StationStatus.listFromJson(entry.value, growable: growable,);
+        final value = MoneyReportCreation.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -251,6 +241,7 @@ class StationStatus {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
+    'hash',
   };
 }
 

@@ -10,11 +10,10 @@
 
 part of openapi.api;
 
-class ButtonDiscount {
-  /// Returns a new [ButtonDiscount] instance.
-  ButtonDiscount({
-    this.buttonID,
-    this.discount,
+class ServerInfo {
+  /// Returns a new [ServerInfo] instance.
+  ServerInfo({
+    this.bonusServiceURL,
   });
 
   ///
@@ -23,49 +22,34 @@ class ButtonDiscount {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? buttonID;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  int? discount;
+  String? bonusServiceURL;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ButtonDiscount &&
-     other.buttonID == buttonID &&
-     other.discount == discount;
+  bool operator ==(Object other) => identical(this, other) || other is ServerInfo &&
+     other.bonusServiceURL == bonusServiceURL;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (buttonID == null ? 0 : buttonID!.hashCode) +
-    (discount == null ? 0 : discount!.hashCode);
+    (bonusServiceURL == null ? 0 : bonusServiceURL!.hashCode);
 
   @override
-  String toString() => 'ButtonDiscount[buttonID=$buttonID, discount=$discount]';
+  String toString() => 'ServerInfo[bonusServiceURL=$bonusServiceURL]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.buttonID != null) {
-      json[r'buttonID'] = this.buttonID;
+    if (this.bonusServiceURL != null) {
+      json[r'bonusServiceURL'] = this.bonusServiceURL;
     } else {
-      json[r'buttonID'] = null;
-    }
-    if (this.discount != null) {
-      json[r'discount'] = this.discount;
-    } else {
-      json[r'discount'] = null;
+      json[r'bonusServiceURL'] = null;
     }
     return json;
   }
 
-  /// Returns a new [ButtonDiscount] instance and imports its values from
+  /// Returns a new [ServerInfo] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static ButtonDiscount? fromJson(dynamic value) {
+  static ServerInfo? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -74,25 +58,24 @@ class ButtonDiscount {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "ButtonDiscount[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ButtonDiscount[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "ServerInfo[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "ServerInfo[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return ButtonDiscount(
-        buttonID: mapValueOfType<int>(json, r'buttonID'),
-        discount: mapValueOfType<int>(json, r'discount'),
+      return ServerInfo(
+        bonusServiceURL: mapValueOfType<String>(json, r'bonusServiceURL'),
       );
     }
     return null;
   }
 
-  static List<ButtonDiscount>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <ButtonDiscount>[];
+  static List<ServerInfo>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <ServerInfo>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = ButtonDiscount.fromJson(row);
+        final value = ServerInfo.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -101,12 +84,12 @@ class ButtonDiscount {
     return result.toList(growable: growable);
   }
 
-  static Map<String, ButtonDiscount> mapFromJson(dynamic json) {
-    final map = <String, ButtonDiscount>{};
+  static Map<String, ServerInfo> mapFromJson(dynamic json) {
+    final map = <String, ServerInfo>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = ButtonDiscount.fromJson(entry.value);
+        final value = ServerInfo.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -115,13 +98,13 @@ class ButtonDiscount {
     return map;
   }
 
-  // maps a json object with a list of ButtonDiscount-objects as value to a dart map
-  static Map<String, List<ButtonDiscount>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<ButtonDiscount>>{};
+  // maps a json object with a list of ServerInfo-objects as value to a dart map
+  static Map<String, List<ServerInfo>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<ServerInfo>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = ButtonDiscount.listFromJson(entry.value, growable: growable,);
+        final value = ServerInfo.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

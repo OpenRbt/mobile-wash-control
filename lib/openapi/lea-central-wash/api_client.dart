@@ -293,6 +293,8 @@ class ApiClient {
           return LoadRelayRequest.fromJson(value);
         case 'MoneyReport':
           return MoneyReport.fromJson(value);
+        case 'MoneyReportCreation':
+          return MoneyReportCreation.fromJson(value);
         case 'Program':
           return Program.fromJson(value);
         case 'ProgramStat':
@@ -325,6 +327,8 @@ class ApiClient {
           return ResponseUserUpdate.fromJson(value);
         case 'ResponseVolumeDispenser':
           return ResponseVolumeDispenser.fromJson(value);
+        case 'ServerInfo':
+          return ServerInfo.fromJson(value);
         case 'Session':
           return Session.fromJson(value);
         case 'StationConfig':

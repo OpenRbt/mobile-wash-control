@@ -584,6 +584,36 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
+  Future<String?> getServerInfo({BuildContext? context}) async {
+    try {
+      final response = await api.getServerInfo();
+      return response?.bonusServiceURL;
+    }
+    on ApiException catch (e){
+      switch (e.code) {
+        case HttpStatus.unauthorized:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить ссылку на сервер бонусов, Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    }
+    catch (e) {
+
+    }
+  }
+
+  @override
   Future<entity.User?> getCurrentUser({BuildContext? context}) async {
     if (_currentUser != null) {
       return _currentUser;

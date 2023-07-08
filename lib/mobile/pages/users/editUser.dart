@@ -155,8 +155,9 @@ class _UserEditPageState extends State<UserEditPage> {
                         ),
                       ],
                     ),
-                    argUser == null
-                        ? Row(
+                    SizedBox(height: 20),
+                    argUser != null ? Container():
+                    Row(
                             children: [
                               Flexible(
                                 flex: 1,
@@ -181,14 +182,12 @@ class _UserEditPageState extends State<UserEditPage> {
                                     FilteringTextInputFormatter.singleLineFormatter,
                                   ],
                                   keyboardType: TextInputType.number,
-                                  enabled: argUser == null,
                                 ),
                               ),
                             ],
-                          )
-                        : Container(),
-                    argUser == null
-                        ? Row(
+                          ),
+                    argUser != null ? Container():
+                    Row(
                             children: [
                               Flexible(
                                 flex: 1,
@@ -217,12 +216,10 @@ class _UserEditPageState extends State<UserEditPage> {
                                     FilteringTextInputFormatter.singleLineFormatter,
                                   ],
                                   keyboardType: TextInputType.number,
-                                  enabled: argUser == null,
                                 ),
                               ),
                             ],
-                          )
-                        : Container(),
+                          ),
                     Row(
                       children: [
                         Flexible(
@@ -292,7 +289,8 @@ class _UserEditPageState extends State<UserEditPage> {
                     ValueListenableBuilder(
                       valueListenable: _currentUser,
                       builder: (BuildContext context, User? u, Widget? child) {
-                        return Column(
+                        return repository.currentUser()?.login == u?.login ? Container():
+                        Column(
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

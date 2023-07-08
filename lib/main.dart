@@ -13,12 +13,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(name: "openwashing", options: DefaultFirebaseOptions.currentPlatform);
 
-  //TODO: Move into repository
-  Common.washServersApi = WashServersApi(ApiClient(
-    basePath: 'https://dev.openwashing.com/api/admin',
-    authentication: HttpBearerAuth(),
-  ));
-
   Intl.defaultLocale = "ru_RU";
   runApp(
     Application(),

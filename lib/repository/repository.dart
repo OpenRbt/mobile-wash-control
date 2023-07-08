@@ -24,6 +24,7 @@ abstract class Repository {
   Future<void> addServiceMoney(int id, int amount, {BuildContext? context});
 
   Future<List<User>?> getUsers();
+  Future<String?> getServerInfo({BuildContext? context});
   Future<User?> getCurrentUser({BuildContext? context});
   Future<void> createUser(User user, String pin, {BuildContext? context});
   Future<void> updateUser(User user, {BuildContext? context});

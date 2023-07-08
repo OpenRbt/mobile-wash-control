@@ -19,7 +19,6 @@ class MoneyReport {
     this.electronical,
     this.service,
     this.bonuses,
-    this.hash,
     this.sessionId,
     this.qrMoney,
   });
@@ -78,14 +77,6 @@ class MoneyReport {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? hash;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
   String? sessionId;
 
   ///
@@ -104,7 +95,6 @@ class MoneyReport {
      other.electronical == electronical &&
      other.service == service &&
      other.bonuses == bonuses &&
-     other.hash == hash &&
      other.sessionId == sessionId &&
      other.qrMoney == qrMoney;
 
@@ -117,12 +107,11 @@ class MoneyReport {
     (electronical == null ? 0 : electronical!.hashCode) +
     (service == null ? 0 : service!.hashCode) +
     (bonuses == null ? 0 : bonuses!.hashCode) +
-    (hash == null ? 0 : hash!.hashCode) +
     (sessionId == null ? 0 : sessionId!.hashCode) +
     (qrMoney == null ? 0 : qrMoney!.hashCode);
 
   @override
-  String toString() => 'MoneyReport[carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, hash=$hash, sessionId=$sessionId, qrMoney=$qrMoney]';
+  String toString() => 'MoneyReport[carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, sessionId=$sessionId, qrMoney=$qrMoney]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -155,11 +144,6 @@ class MoneyReport {
       json[r'bonuses'] = this.bonuses;
     } else {
       json[r'bonuses'] = null;
-    }
-    if (this.hash != null) {
-      json[r'hash'] = this.hash;
-    } else {
-      json[r'hash'] = null;
     }
     if (this.sessionId != null) {
       json[r'sessionId'] = this.sessionId;
@@ -199,7 +183,6 @@ class MoneyReport {
         electronical: mapValueOfType<int>(json, r'electronical'),
         service: mapValueOfType<int>(json, r'service'),
         bonuses: mapValueOfType<int>(json, r'bonuses'),
-        hash: mapValueOfType<String>(json, r'hash'),
         sessionId: mapValueOfType<String>(json, r'sessionId'),
         qrMoney: mapValueOfType<int>(json, r'qrMoney'),
       );

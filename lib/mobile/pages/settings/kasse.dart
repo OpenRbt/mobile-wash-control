@@ -140,6 +140,10 @@ class _KassePageState extends State<KassePage> {
 
                                         return null;
                                       },
+                                      onChanged: (val) {
+                                        val = (val ?? "").trim();
+                                        _config.value = _config.value.copyWith(receiptItemName: val);
+                                      },
                                     ),
                                   ),
                                 ],
