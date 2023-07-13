@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
@@ -5,6 +7,8 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/home/incassationHistoryListTile.dart';
 import 'package:mobile_wash_control/mobile/widgets/home/incassationHistoryTotalListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+
+import '../../widgets/incasHistory/IncasHistoryView.dart';
 
 class IncassationHistoryPage extends StatefulWidget {
   @override
@@ -148,52 +152,7 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
                               total.service = (total.service ?? 0) + (element.service ?? 0);
                             });
 
-                            return Column(
-                              children: [
-                                LayoutBuilder(
-                                    builder: (BuildContext context, BoxConstraints constraints) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 8),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: constraints.maxWidth * 0.4,
-                                              child: Center(child: Icon(Icons.date_range_outlined)),
-                                            ),
-                                            Container(
-                                              width: constraints.maxWidth * 0.2,
-                                              child: Center(child: Icon(Icons.circle_outlined)),
-                                            ),
-                                            Container(
-                                              width: constraints.maxWidth * 0.2,
-                                              child: Center(child: Icon(Icons.money)),
-                                            ),
-                                            Container(
-                                              width: constraints.maxWidth * 0.2,
-                                              child: Center(child: Icon(Icons.credit_card_outlined)),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                ),
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: snapshot.data?.length == null ? 1 : snapshot.data!.length + 1,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      if (index == 0) {
-                                        return SizedBox.shrink();
-                                      }
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 4),
-                                        child: IncassationHistoryListTile(report: snapshot.data![index - 1]),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                IncassationHistoryTotalListTile(report: total),
-                              ],
-                            );
+                            return IncasHistoryView(reports: (snapshot.data ?? []));
                           },
                         );
                       },

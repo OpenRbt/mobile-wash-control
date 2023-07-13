@@ -54,10 +54,19 @@ class IncassationHistoryListTile extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: constraints.maxWidth * 0.2,
+                    width: constraints.maxWidth * 0.1,
                     child: Center(
                       child: Text(
                         "${report.electronical ?? 0}",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: constraints.maxWidth * 0.1,
+                    child: Center(
+                      child: Text(
+                        "${report.bonuses ?? 0}",
                         style: theme.textTheme.titleLarge,
                       ),
                     ),

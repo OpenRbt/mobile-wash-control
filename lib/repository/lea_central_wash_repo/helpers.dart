@@ -52,6 +52,8 @@ class Helpers {
       banknotes: report.banknotes,
       electronical: report.electronical,
       service: report.service,
+      bonuses: report.bonuses,
+      qrMoney: report.qrMoney,
       carsTotal: report.carsTotal,
       ctime: dateTime,
       user: report.user,

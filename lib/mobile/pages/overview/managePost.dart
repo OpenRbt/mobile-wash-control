@@ -301,6 +301,7 @@ class _ManagePostPageState extends State<ManagePostPage> with TickerProviderStat
                                         ProgressButton(
                                           onPressed: () async {
                                             await repository.stationSaveCollection(stationID, context: context);
+                                            setState(() {});
                                             Navigator.pop(context);
                                           },
                                           child: Text("Да"),

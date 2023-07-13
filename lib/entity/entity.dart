@@ -105,10 +105,12 @@ class StationCollectionReport {
   int? banknotes;
   int? electronical;
   int? service;
+  int? bonuses;
+  int? qrMoney;
   DateTime? ctime;
   String? user;
 
-  StationCollectionReport({this.id, this.carsTotal, this.coins, this.banknotes, this.electronical, this.service, this.ctime, this.user});
+  StationCollectionReport({this.id, this.carsTotal, this.coins, this.banknotes, this.electronical, this.service, this.bonuses, this.qrMoney, this.ctime, this.user});
 }
 
 class StationStats {

@@ -28,6 +28,7 @@ abstract class Repository {
   Future<User?> getCurrentUser({BuildContext? context});
   Future<void> createUser(User user, String pin, {BuildContext? context});
   Future<void> updateUser(User user, {BuildContext? context});
+  Future<void> updateUserPassword(User user, User currentUser, String oldPassword, String newPassword, {BuildContext? context});
   Future<void> deleteUser(String login, {BuildContext? context});
 
   Future<StationMoneyReport?> getStationMoneyReportByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context});

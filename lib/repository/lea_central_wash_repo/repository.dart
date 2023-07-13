@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -503,6 +504,58 @@ class LeaCentralRepository extends Repository {
         case HttpStatus.notFound:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином не найден"));
+          }
+          break;
+
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<void> updateUserPassword(entity.User user, entity.User currentUser, String oldPassword, String newPassword, {BuildContext? context}) async {
+    try {
+      final args = ArgUserPassword(
+        login: user.login,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      );
+      final response = await api.updateUserPassword(args);
+      if(user.login == currentUser.login){
+        api.apiClient.addDefaultHeader("Pin", newPassword);
+      }
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пароль пользователя ${user.login} успешно обновлен"));
+      }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.unauthorized:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.notFound:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
 

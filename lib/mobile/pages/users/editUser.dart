@@ -18,6 +18,7 @@ class UserEditPage extends StatefulWidget {
 class _UserEditPageState extends State<UserEditPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _changePinKey = GlobalKey<FormState>();
   ValueNotifier<User?> _currentUser = ValueNotifier(null);
 
   late UserRole? _selectedRole;
@@ -30,6 +31,7 @@ class _UserEditPageState extends State<UserEditPage> {
     _controllers["firstname"] = TextEditingController();
     _controllers["lastname"] = TextEditingController();
     _controllers["middlename"] = TextEditingController();
+    _controllers["oldpin"] = TextEditingController();
     _controllers["pin"] = TextEditingController();
     _controllers["pinRepeat"] = TextEditingController();
     super.initState();
@@ -40,6 +42,7 @@ class _UserEditPageState extends State<UserEditPage> {
     _controllers["firstname"]!.text = _currentUser.value?.firstName ?? "";
     _controllers["lastname"]!.text = _currentUser.value?.lastName ?? "";
     _controllers["middlename"]!.text = _currentUser.value?.middleName ?? "";
+    _controllers["oldpin"]!.text = "";
     _controllers["pin"]!.text = "";
     _controllers["pinRepeat"]!.text = "";
   }
@@ -206,7 +209,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                   maxLength: 16,
                                   validator: (String? value) {
                                     if (value != _controllers["pin"]!.text) {
-                                      return "Введенные пины не совпадают";
+                                      return "Пины не совпадают";
                                     }
 
                                     return value!.length < 4 ? "Требуется не менее 4х символов" : null;
@@ -285,6 +288,142 @@ class _UserEditPageState extends State<UserEditPage> {
                           ),
                         ),
                       ],
+                    ),
+                    argUser == null ? Container():
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: ElevatedButton(
+                        child: Text("Сменить пин"),
+                        onPressed: () {
+                          _controllers["oldpin"]!.text = "";
+                          _controllers["pin"]!.text = "";
+                          _controllers["pinRepeat"]!.text = "";
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Сменить пин"),
+                              content: SingleChildScrollView(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(maxHeight: 230), // Укажите максимальную высоту, которую вы хотите
+                                  child: Form(
+                                    key: _changePinKey,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              flex: 1,
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                "Старый пин:",
+                                                style: theme.textTheme.bodyLarge,
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              fit: FlexFit.tight,
+                                              child: TextFormField(
+                                                controller: _controllers["oldpin"]!,
+                                                maxLength: 16,
+                                                obscureText: true,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.digitsOnly,
+                                                  FilteringTextInputFormatter.singleLineFormatter,
+                                                ],
+                                                keyboardType: TextInputType.number,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              flex: 1,
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                "Новый пин:",
+                                                style: theme.textTheme.bodyLarge,
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              fit: FlexFit.tight,
+                                              child: TextFormField(
+                                                controller: _controllers["pin"]!,
+                                                obscureText: true,
+                                                maxLength: 16,
+                                                validator: (String? value) {
+                                                  return value!.length < 4 ? "Требуется не менее 4х символов" : null;
+                                                },
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.digitsOnly,
+                                                  FilteringTextInputFormatter.singleLineFormatter,
+                                                ],
+                                                keyboardType: TextInputType.number,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              flex: 1,
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                "Повторите новый пин:",
+                                                style: theme.textTheme.bodyLarge,
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              fit: FlexFit.tight,
+                                              child: TextFormField(
+                                                controller: _controllers["pinRepeat"]!,
+                                                obscureText: true,
+                                                maxLength: 16,
+                                                validator: (String? value) {
+                                                  if (value != _controllers["pin"]!.text) {
+                                                    return "Введенные пины не совпадают";
+                                                  }
+                                                  return value!.length < 4 ? "Требуется не менее 4х символов" : null;
+                                                },
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.digitsOnly,
+                                                  FilteringTextInputFormatter.singleLineFormatter,
+                                                ],
+                                                keyboardType: TextInputType.number,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              actionsPadding: EdgeInsets.all(8),
+                              actions: [
+                                ProgressButton(
+                                  onPressed: () async {
+                                    if (_changePinKey.currentState!.validate()) {
+                                      await repository.updateUserPassword(_currentUser.value!, repository.currentUser()!, _controllers["oldpin"]!.text, _controllers["pin"]!.text, context: context);
+                                      Navigator.pop(context);
+                                      //setState(() {});
+                                    }
+                                  },
+                                  child: Text("Подтвердить"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Отмена"),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                     ValueListenableBuilder(
                       valueListenable: _currentUser,

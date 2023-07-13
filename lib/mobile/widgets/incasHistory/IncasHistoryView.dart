@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 
 class IncasHistoryView extends StatefulWidget {
-  final List<StationMoneyReport> reports;
+  final List<StationCollectionReport> reports;
 
   const IncasHistoryView({super.key, required this.reports});
 
@@ -12,6 +12,10 @@ class IncasHistoryView extends StatefulWidget {
 }
 
 class _IncasHistoryViewState extends State<IncasHistoryView> {
+
+  final _dateFormatter = DateFormat('dd.MM.yyyy');
+  final _timeFormatter = DateFormat('HH:mm:ss');
+
   ScrollController _scrollableController = ScrollController();
   ScrollController _viewScrollController = ScrollController();
 
@@ -41,9 +45,17 @@ class _IncasHistoryViewState extends State<IncasHistoryView> {
       (index) => DataRow(
         cells: [
           DataCell(
-            Text(
-              widget.reports[index].post!.toString(),
-              style: theme.textTheme.titleLarge,
+            Column(
+              children: [
+                Text(
+                  "${widget.reports[index].ctime != null ? _dateFormatter.format(widget.reports[index].ctime!) : "нет данных"}",
+                  style: theme.textTheme.titleLarge,
+                ),
+                Text(
+                  "${widget.reports[index].ctime != null ? _timeFormatter.format(widget.reports[index].ctime!) : "нет данных"}",
+                  style: theme.textTheme.titleMedium,
+                )
+              ],
             ),
           ),
         ],
@@ -75,9 +87,8 @@ class _IncasHistoryViewState extends State<IncasHistoryView> {
       total.banknotes = total.banknotes! + (report.banknotes ?? 0);
       total.electronical = total.electronical! + (report.electronical ?? 0);
       total.qrMoney = total.qrMoney! + (report.qrMoney ?? 0);
-      total.service = total.service! + (report.service ?? 0);
       total.bonuses = total.bonuses! + (report.bonuses ?? 0);
-      total.carsTotal = total.carsTotal! + (report.carsTotal ?? 0);
+      total.service = total.service! + (report.service ?? 0);
     });
 
     var columns = [
@@ -114,18 +125,6 @@ class _IncasHistoryViewState extends State<IncasHistoryView> {
       DataColumn(
         label: Text(
           "Сервисные",
-          style: theme.textTheme.titleLarge,
-        ),
-      ),
-      DataColumn(
-        label: Text(
-          "Число машин",
-          style: theme.textTheme.titleLarge,
-        ),
-      ),
-      DataColumn(
-        label: Text(
-          "Средний чек",
           style: theme.textTheme.titleLarge,
         ),
       ),
@@ -168,18 +167,6 @@ class _IncasHistoryViewState extends State<IncasHistoryView> {
             DataCell(
               Text(
                 widget.reports[index].service?.toString() ?? "0",
-                style: theme.textTheme.titleMedium,
-              ),
-            ),
-            DataCell(
-              Text(
-                widget.reports[index].carsTotal?.toString() ?? "0",
-                style: theme.textTheme.titleMedium,
-              ),
-            ),
-            DataCell(
-              Text(
-                widget.reports[index].Average().toStringAsFixed(2),
                 style: theme.textTheme.titleMedium,
               ),
             ),
@@ -234,22 +221,6 @@ class _IncasHistoryViewState extends State<IncasHistoryView> {
         DataCell(
           Text(
             total.service?.toString() ?? "0",
-            style: theme.textTheme.titleMedium!.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ),
-        DataCell(
-          Text(
-            total.carsTotal?.toString() ?? "0",
-            style: theme.textTheme.titleMedium!.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ),
-        DataCell(
-          Text(
-            total.Average().toStringAsFixed(2),
             style: theme.textTheme.titleMedium!.copyWith(
               color: theme.colorScheme.primary,
             ),
