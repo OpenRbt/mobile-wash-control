@@ -656,7 +656,7 @@ class LeaCentralRepository extends Repository {
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить ссылку на сервер бонусов, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить ссылку на сервис бонусов, Ошибка: ${e.code}"));
           }
           break;
       }

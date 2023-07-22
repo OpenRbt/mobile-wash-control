@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
+import '../../../utils/common.dart';
+
 enum SelectedPage {
   Main,
   Programs,
@@ -129,6 +131,7 @@ class WashNavigationDrawer extends StatelessWidget {
         shrinkWrap: true,
         children: [
           DrawerHeader(
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,10 +180,23 @@ class WashNavigationDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
+
               ],
             ),
             decoration: BoxDecoration(color: theme.colorScheme.primary),
           ),
+          (Common.washServersApi?.apiClient.basePath ?? "").isNotEmpty ?
+          Container(
+            color: theme.colorScheme.primary,
+            child: Text(
+
+              "URL сервера бонусов: ${Common.washServersApi?.apiClient.basePath}",
+              style: theme.textTheme.titleLarge!.copyWith(
+                color: theme.colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ): Text(""),
         ]..addAll(
             List.generate(
               _availablePages.length,
