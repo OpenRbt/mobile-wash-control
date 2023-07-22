@@ -27,15 +27,20 @@ part 'auth/oauth.dart';
 part 'auth/http_basic_auth.dart';
 part 'auth/http_bearer_auth.dart';
 
+part 'api/sessions_api.dart';
 part 'api/standard_api.dart';
+part 'api/users_api.dart';
 part 'api/wash_servers_api.dart';
 
+part 'model/bonus_charge.dart';
 part 'model/error.dart';
 part 'model/health_check200_response.dart';
 part 'model/pagination.dart';
+part 'model/session.dart';
+part 'model/user.dart';
+part 'model/user_update.dart';
 part 'model/wash_server.dart';
-part 'model/wash_server_add.dart';
-part 'model/wash_server_delete.dart';
+part 'model/wash_server_creation.dart';
 part 'model/wash_server_update.dart';
 
 

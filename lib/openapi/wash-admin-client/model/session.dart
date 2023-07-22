@@ -10,11 +10,12 @@
 
 part of openapi.api;
 
-class WashServerUpdate {
-  /// Returns a new [WashServerUpdate] instance.
-  WashServerUpdate({
-    this.name,
-    this.description,
+class Session {
+  /// Returns a new [Session] instance.
+  Session({
+    this.washServer,
+    this.postID,
+    this.postBalance,
   });
 
   ///
@@ -23,7 +24,7 @@ class WashServerUpdate {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? name;
+  WashServer? washServer;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -31,41 +32,56 @@ class WashServerUpdate {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? description;
+  int? postID;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? postBalance;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WashServerUpdate &&
-     other.name == name &&
-     other.description == description;
+  bool operator ==(Object other) => identical(this, other) || other is Session &&
+     other.washServer == washServer &&
+     other.postID == postID &&
+     other.postBalance == postBalance;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (name == null ? 0 : name!.hashCode) +
-    (description == null ? 0 : description!.hashCode);
+    (washServer == null ? 0 : washServer!.hashCode) +
+    (postID == null ? 0 : postID!.hashCode) +
+    (postBalance == null ? 0 : postBalance!.hashCode);
 
   @override
-  String toString() => 'WashServerUpdate[name=$name, description=$description]';
+  String toString() => 'Session[washServer=$washServer, postID=$postID, postBalance=$postBalance]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.name != null) {
-      json[r'name'] = this.name;
+    if (this.washServer != null) {
+      json[r'washServer'] = this.washServer;
     } else {
-      json[r'name'] = null;
+      json[r'washServer'] = null;
     }
-    if (this.description != null) {
-      json[r'description'] = this.description;
+    if (this.postID != null) {
+      json[r'postID'] = this.postID;
     } else {
-      json[r'description'] = null;
+      json[r'postID'] = null;
+    }
+    if (this.postBalance != null) {
+      json[r'postBalance'] = this.postBalance;
+    } else {
+      json[r'postBalance'] = null;
     }
     return json;
   }
 
-  /// Returns a new [WashServerUpdate] instance and imports its values from
+  /// Returns a new [Session] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static WashServerUpdate? fromJson(dynamic value) {
+  static Session? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -74,25 +90,26 @@ class WashServerUpdate {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "WashServerUpdate[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "WashServerUpdate[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "Session[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "Session[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return WashServerUpdate(
-        name: mapValueOfType<String>(json, r'name'),
-        description: mapValueOfType<String>(json, r'description'),
+      return Session(
+        washServer: WashServer.fromJson(json[r'washServer']),
+        postID: mapValueOfType<int>(json, r'postID'),
+        postBalance: mapValueOfType<int>(json, r'postBalance'),
       );
     }
     return null;
   }
 
-  static List<WashServerUpdate>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <WashServerUpdate>[];
+  static List<Session>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <Session>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = WashServerUpdate.fromJson(row);
+        final value = Session.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -101,12 +118,12 @@ class WashServerUpdate {
     return result.toList(growable: growable);
   }
 
-  static Map<String, WashServerUpdate> mapFromJson(dynamic json) {
-    final map = <String, WashServerUpdate>{};
+  static Map<String, Session> mapFromJson(dynamic json) {
+    final map = <String, Session>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServerUpdate.fromJson(entry.value);
+        final value = Session.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -115,13 +132,13 @@ class WashServerUpdate {
     return map;
   }
 
-  // maps a json object with a list of WashServerUpdate-objects as value to a dart map
-  static Map<String, List<WashServerUpdate>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<WashServerUpdate>>{};
+  // maps a json object with a list of Session-objects as value to a dart map
+  static Map<String, List<Session>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<Session>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServerUpdate.listFromJson(entry.value, growable: growable,);
+        final value = Session.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

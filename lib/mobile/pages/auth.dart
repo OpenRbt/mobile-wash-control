@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -70,7 +71,8 @@ class _AuthState extends State<Auth> {
       SystemChrome.setPreferredOrientations([]);
 
       String? bonusUrl = await repo.getServerInfo(context: context);
-      String basePath = (bonusUrl ?? "") + '/api/admin';
+      String basePath = (bonusUrl ?? "") + '/api';
+      log(basePath);
       Common.washServersApi = WashServersApi(ApiClient(
         basePath: basePath,
         authentication: HttpBearerAuth(),

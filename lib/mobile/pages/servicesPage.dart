@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,15 +27,16 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
 
   Future<void> _RegisterWash(Repository repository) async {
     if (_serverNameController.text.isNotEmpty) {
-      var arg = WashServerAdd(name: _serverNameController.text, description: _serverDescriptionController.text);
+      var arg = WashServerCreation(name: _serverNameController.text, description: _serverDescriptionController.text);
 
       try {
-        final res = await Common.washServersApi!.add(body: arg);
+        final res = await Common.washServersApi!.createWashServer(body: arg);
         _server.value = _server.value.copyWith(
           id: res!.id,
           name: res!.name,
           serviceKey: res!.serviceKey,
         );
+        print("pre save params");
         await _saveParams(repository);
       } on ApiException catch (e) {
         if (kDebugMode) print("WashAdminApiException: $e");
@@ -69,13 +70,13 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
 
       await _getWashServer();
     } catch (e) {
-      if (kDebugMode) print("OtherException: $e");
+      if (kDebugMode) print("_loadWashServer OtherException: $e");
     }
   }
 
   Future<void> _getWashServer() async {
     try {
-      var washServer = await Common.washServersApi!.getWashServer(_server.value.id!);
+      var washServer = await Common.washServersApi!.getWashServerById(_server.value.id!);
 
       _server.value = _server.value.copyWith(
         name: washServer?.name,
@@ -88,13 +89,14 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     } on ApiException catch (e) {
       if (kDebugMode) print("WashAdminApiException: $e");
     } catch (e) {
-      if (kDebugMode) print("OtherException: $e");
+      if (kDebugMode) print("_getWashServer OtherException: $e");
     }
   }
 
   Future<void> _updateWashServer() async {
     try {
-      var res = await Common.washServersApi!.update(body: WashServerUpdate(id: _server.value.id!, name: _serverNameController.text, description: _serverDescriptionController.text));
+      var arg = WashServerUpdate(name: _serverNameController.text, description: _serverDescriptionController.text);
+      var res = await Common.washServersApi!.updateWashServer(_server.value.id!.toString(), body: arg);
     } on ApiException catch (e) {
       if (kDebugMode) print("WashAdminApiException: $e");
     } catch (e) {
@@ -102,7 +104,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     }
   }
 
-  User? user = FirebaseAuth.instanceFor(app: Firebase.app("openwashing")).currentUser;
+  auth.User? user = auth.FirebaseAuth.instanceFor(app: Firebase.app("openwashing")).currentUser;
 
   @override
   void initState() {

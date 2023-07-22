@@ -10,36 +10,46 @@
 
 part of openapi.api;
 
-class WashServerDelete {
-  /// Returns a new [WashServerDelete] instance.
-  WashServerDelete({
-    required this.id,
+class BonusCharge {
+  /// Returns a new [BonusCharge] instance.
+  BonusCharge({
+    this.amount,
   });
 
-  String id;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? amount;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WashServerDelete &&
-     other.id == id;
+  bool operator ==(Object other) => identical(this, other) || other is BonusCharge &&
+     other.amount == amount;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (id.hashCode);
+    (amount == null ? 0 : amount!.hashCode);
 
   @override
-  String toString() => 'WashServerDelete[id=$id]';
+  String toString() => 'BonusCharge[amount=$amount]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'id'] = this.id;
+    if (this.amount != null) {
+      json[r'amount'] = this.amount;
+    } else {
+      json[r'amount'] = null;
+    }
     return json;
   }
 
-  /// Returns a new [WashServerDelete] instance and imports its values from
+  /// Returns a new [BonusCharge] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static WashServerDelete? fromJson(dynamic value) {
+  static BonusCharge? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -48,24 +58,24 @@ class WashServerDelete {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "WashServerDelete[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "WashServerDelete[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "BonusCharge[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "BonusCharge[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return WashServerDelete(
-        id: mapValueOfType<String>(json, r'id')!,
+      return BonusCharge(
+        amount: mapValueOfType<int>(json, r'amount'),
       );
     }
     return null;
   }
 
-  static List<WashServerDelete>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <WashServerDelete>[];
+  static List<BonusCharge>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <BonusCharge>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = WashServerDelete.fromJson(row);
+        final value = BonusCharge.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -74,12 +84,12 @@ class WashServerDelete {
     return result.toList(growable: growable);
   }
 
-  static Map<String, WashServerDelete> mapFromJson(dynamic json) {
-    final map = <String, WashServerDelete>{};
+  static Map<String, BonusCharge> mapFromJson(dynamic json) {
+    final map = <String, BonusCharge>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServerDelete.fromJson(entry.value);
+        final value = BonusCharge.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -88,13 +98,13 @@ class WashServerDelete {
     return map;
   }
 
-  // maps a json object with a list of WashServerDelete-objects as value to a dart map
-  static Map<String, List<WashServerDelete>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<WashServerDelete>>{};
+  // maps a json object with a list of BonusCharge-objects as value to a dart map
+  static Map<String, List<BonusCharge>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<BonusCharge>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServerDelete.listFromJson(entry.value, growable: growable,);
+        final value = BonusCharge.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -105,7 +115,6 @@ class WashServerDelete {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'id',
   };
 }
 

@@ -53,6 +53,9 @@ class ApiClient {
       headerParams['Content-Type'] = contentType;
     }
 
+    print("CrateWashServer");
+    headerParams.forEach((key, value) {print("key: " + key + "\nvalue: " + value); });
+
     final urlEncodedQueryParams = queryParams.map((param) => '$param');
     final queryString = urlEncodedQueryParams.isNotEmpty ? '?${urlEncodedQueryParams.join('&')}' : '';
     final uri = Uri.parse('$basePath$path$queryString');
@@ -181,18 +184,24 @@ class ApiClient {
           return valueString == 'true' || valueString == '1';
         case 'DateTime':
           return value is DateTime ? value : DateTime.tryParse(value);
+        case 'BonusCharge':
+          return BonusCharge.fromJson(value);
         case 'Error':
           return Error.fromJson(value);
         case 'HealthCheck200Response':
           return HealthCheck200Response.fromJson(value);
         case 'Pagination':
           return Pagination.fromJson(value);
+        case 'Session':
+          return Session.fromJson(value);
+        case 'User':
+          return User.fromJson(value);
+        case 'UserUpdate':
+          return UserUpdate.fromJson(value);
         case 'WashServer':
           return WashServer.fromJson(value);
-        case 'WashServerAdd':
-          return WashServerAdd.fromJson(value);
-        case 'WashServerDelete':
-          return WashServerDelete.fromJson(value);
+        case 'WashServerCreation':
+          return WashServerCreation.fromJson(value);
         case 'WashServerUpdate':
           return WashServerUpdate.fromJson(value);
         default:
