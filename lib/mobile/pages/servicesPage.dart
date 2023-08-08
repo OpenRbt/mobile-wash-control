@@ -6,9 +6,14 @@ import 'package:mobile_wash_control/entity/entity.dart' as entity;
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
+import 'package:mobile_wash_control/mobile/widgets/overview/organizationCard.dart';
 import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:mobile_wash_control/utils/common.dart';
+
+import '../../entity/entity.dart';
+import '../widgets/overview/stationCard.dart';
+import '../widgets/servicesWashParams/servisecWashParamsView.dart';
 
 class SettingsServicesPage extends StatefulWidget {
   const SettingsServicesPage({
@@ -27,7 +32,8 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
 
   Future<void> _RegisterWash(Repository repository) async {
     if (_serverNameController.text.isNotEmpty) {
-      var arg = WashServerCreation(name: _serverNameController.text, description: _serverDescriptionController.text);
+      var arg = WashServerCreation(name: _serverNameController.text,
+          description: _serverDescriptionController.text);
 
       try {
         final res = await Common.washServersApi!.createWashServer(body: arg);
@@ -49,10 +55,12 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
   }
 
   Future<void> _saveParams(Repository repository) async {
-    if (_server.value.id?.isNotEmpty == true && _server.value.serviceKey?.isNotEmpty == true) {
+    if (_server.value.id?.isNotEmpty == true &&
+        _server.value.serviceKey?.isNotEmpty == true) {
       try {
         await repository.setConfigVarString("server_id", _server.value.id!);
-        await repository.setConfigVarString("server_key", _server.value.serviceKey!);
+        await repository.setConfigVarString(
+            "server_key", _server.value.serviceKey!);
       } catch (e) {
         if (kDebugMode) print("OtherException: $e");
       }
@@ -76,7 +84,8 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
 
   Future<void> _getWashServer() async {
     try {
-      var washServer = await Common.washServersApi!.getWashServerById(_server.value.id!);
+      var washServer = await Common.washServersApi!.getWashServerById(
+          _server.value.id!);
 
       _server.value = _server.value.copyWith(
         name: washServer?.name,
@@ -95,8 +104,10 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
 
   Future<void> _updateWashServer() async {
     try {
-      var arg = WashServerUpdate(name: _serverNameController.text, description: _serverDescriptionController.text);
-      var res = await Common.washServersApi!.updateWashServer(_server.value.id!.toString(), body: arg);
+      var arg = WashServerUpdate(name: _serverNameController.text,
+          description: _serverDescriptionController.text);
+      var res = await Common.washServersApi!.updateWashServer(
+          _server.value.id!.toString(), body: arg);
     } on ApiException catch (e) {
       if (kDebugMode) print("WashAdminApiException: $e");
     } catch (e) {
@@ -104,7 +115,9 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     }
   }
 
-  auth.User? user = auth.FirebaseAuth.instanceFor(app: Firebase.app("openwashing")).currentUser;
+  auth.User? user = auth.FirebaseAuth
+      .instanceFor(app: Firebase.app("openwashing"))
+      .currentUser;
 
   @override
   void initState() {
@@ -115,13 +128,17 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+    final args = ModalRoute
+        .of(context)
+        ?.settings
+        .arguments as Map<PageArgCode, dynamic>;
     final Repository repository = args[PageArgCode.repository];
 
     if (user == null) {
       return Scaffold(
         appBar: AppBar(title: Text("Сервисы")),
-        drawer: WashNavigationDrawer(selected: SelectedPage.Services, repository: repository),
+        drawer: WashNavigationDrawer(
+            selected: SelectedPage.Services, repository: repository),
         body: Center(
           child: Text("Unauthorized"),
         ),
@@ -131,269 +148,52 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text("Сервисы")),
-      drawer: WashNavigationDrawer(selected: SelectedPage.Services, repository: repository),
-      body: FutureBuilder(
-        future: _loadWashServer(repository),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          return ListView(
-            children: [
-              Card(
-                child: Padding(
+        appBar: AppBar(title: Text("Сервисы")),
+        drawer: WashNavigationDrawer(
+            selected: SelectedPage.Services, repository: repository),
+        body: FutureBuilder(
+            future: repository.updateOrganizations(context: context),
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
-                    children: [
-                      ValueListenableBuilder(
-                        valueListenable: _server,
-                        builder: (BuildContext context, entity.WashServer server, Widget? child) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Параметры мойки",
-                                    style: theme.textTheme.titleLarge,
-                                  ),
-                                  IconButton(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ValueListenableBuilder(
+                            valueListenable: repository.getOrganizationsNotifier(),
+                            builder: (BuildContext context, List<Organization>? value, Widget? child) {
+                              if (value == null) {
+                                return Container();
+                              }
+                              return Expanded(
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: value.length,
+                                  physics: ClampingScrollPhysics(),
+                                  itemBuilder: (BuildContext context,
+                                      int index) {
+                                    var data = value[index];
+                                    return OrganizationCard(
+                                      data: data,
                                       onPressed: () {
-                                        _loadWashServer(repository);
+
                                       },
-                                      icon: Icon(Icons.refresh)),
-                                ],
-                              ),
-                              Divider(),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Имя",
-                                        style: theme.textTheme.bodyMedium,
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextField(
-                                        controller: _serverNameController,
-                                        style: theme.textTheme.bodyMedium,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Описание",
-                                        style: theme.textTheme.bodyMedium,
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextField(
-                                        maxLines: null,
-                                        controller: _serverDescriptionController,
-                                        style: theme.textTheme.bodyMedium,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("ID"),
-                                          Text(
-                                            "ID на сервере",
-                                            style: theme.textTheme.bodySmall,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextButton(
-                                        onPressed: null,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              server.id ?? "Не зарегистрирована",
-                                              style: theme.textTheme.labelMedium,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            FutureBuilder(
-                                              future: repository.getConfigVarString("server_id"),
-                                              builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                                                return Text(
-                                                  snapshot.data ?? "",
-                                                  style: theme.textTheme.bodySmall,
-                                                  overflow: TextOverflow.ellipsis,
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "SERVICE_KEY",
-                                            style: theme.textTheme.labelMedium,
-                                          ),
-                                          Text(
-                                            "SERVICE_KEY на сервере",
-                                            style: theme.textTheme.bodySmall,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextButton(
-                                        onPressed: null,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              server.serviceKey ?? "Не зарегистрирована",
-                                              style: theme.textTheme.labelMedium,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            FutureBuilder(
-                                              future: repository.getConfigVarString("server_key"),
-                                              builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                                                return Text(
-                                                  snapshot.data ?? "",
-                                                  style: theme.textTheme.bodySmall,
-                                                  overflow: TextOverflow.ellipsis,
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: ProgressButton(
-                                      onPressed: (server.id ?? "").isEmpty
-                                          ? () async {
-                                              await _RegisterWash(repository);
-                                            }
-                                          : null,
-                                      child: Text(
-                                        "Зарегистрировать мойку",
-                                        maxLines: 2,
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: ProgressButton(
-                                      onPressed: () async {
-                                        if (_serverNameController.text.isNotEmpty) {
-                                          await _updateWashServer();
-                                        }
-                                      },
-                                      child: Text(
-                                        "Сохранить изменения",
-                                        maxLines: 2,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: ProgressButton(
-                                      onPressed: (_server.value.id ?? "").isNotEmpty
-                                          ? () async {
-                                              await _saveParams(repository);
-                                            }
-                                          : null,
-                                      child: Text(
-                                        "Повторно записать ID и ключ",
-                                        maxLines: 2,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                        )
+                      ]
+                  )
+              );
+            }
+        )
     );
   }
 }

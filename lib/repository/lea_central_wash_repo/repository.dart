@@ -18,6 +18,7 @@ class LeaCentralRepository extends Repository {
   final refreshDelay = Duration(seconds: 1, milliseconds: 500);
 
   ValueNotifier<List<entity.Station>?> _stations = ValueNotifier(null);
+  ValueNotifier<List<entity.Organization>?> _organizations = ValueNotifier(null);
   ValueNotifier<entity.KasseStatus?> _kasseStatus = ValueNotifier(null);
   ValueNotifier<String?> _lcwRepo = ValueNotifier(null);
   ValueNotifier<List<entity.Program>?> _programs = ValueNotifier(null);
@@ -39,6 +40,7 @@ class LeaCentralRepository extends Repository {
   @override
   void dispose() {
     _stations.dispose();
+    _organizations.dispose();
     _kasseStatus.dispose();
     _lcwRepo.dispose();
     _programs.dispose();
@@ -47,6 +49,9 @@ class LeaCentralRepository extends Repository {
 
   @override
   ValueNotifier<List<entity.Station>?> getStationsNotifier() => _stations;
+
+  @override
+  ValueNotifier<List<entity.Organization>?> getOrganizationsNotifier() => _organizations;
 
   @override
   ValueNotifier<entity.KasseStatus?> getKasseStatusNotifier() => _kasseStatus;
@@ -68,12 +73,23 @@ class LeaCentralRepository extends Repository {
 
   @override
   Future<List<entity.Station>?> getStations() async {
+    print("get Stations");
     final stations = _stations.value;
     if (stations == null) {
       await updateStatus();
     }
 
     return _stations.value;
+  }
+
+  @override
+  Future<List<entity.Organization>?> getOrganizations() async {
+    final stations = _organizations.value;
+    if (stations == null) {
+      await updateOrganizations();
+    }
+
+    return _organizations.value;
   }
 
   @override
@@ -115,6 +131,47 @@ class LeaCentralRepository extends Repository {
       if (_kasseStatus.value != kasseStatus) {
         _kasseStatus.value = kasseStatus;
       }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось обновить статус, Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<void> updateOrganizations({BuildContext? context}) async {
+    try {
+      //final res = await api.organizations();
+
+      var organizations = <entity.Organization>[];
+      for(int i = 0; i < 12; i++){
+        organizations.add(entity.Organization(
+          id: i,
+          name: "Organization$i",
+          description: "Описание$i",
+          owner: "Владелец$i",
+          isDefault: true,
+        ));
+      }
+
+      organizations.sort((a, b) => a.id.compareTo(b.id));
+      if (!listEquals(_organizations.value, organizations)) {
+        _organizations.value = organizations;
+      }
+      /*
+      if (_lcwRepo.value != res?.lcwInfo) {
+        _lcwRepo.value = res?.lcwInfo;
+      }
+      */
+
     } on ApiException catch (e) {
       switch (e.code) {
         default:
@@ -191,6 +248,7 @@ class LeaCentralRepository extends Repository {
 
   @override
   Future<entity.Station?> getStation(int id) async {
+    print("GetStations");
     var stations = _stations.value;
     if (stations == null) {
       await updateStatus();
@@ -203,6 +261,22 @@ class LeaCentralRepository extends Repository {
     }
 
     return stationsFiltered.first;
+  }
+
+  @override
+  Future<entity.Organization?> getOrganization(int id) async {
+    var organizations = _organizations.value;
+    if (organizations == null) {
+      await updateOrganizations();
+      organizations = _organizations.value;
+    }
+
+    var organizationsFiltered = organizations!.where((element) => element.id == id);
+    if (organizationsFiltered.length == 0) {
+      return null;
+    }
+
+    return organizationsFiltered.first;
   }
 
   @override

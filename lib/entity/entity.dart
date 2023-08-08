@@ -15,6 +15,17 @@ class Station {
   Station({required this.id, this.name, this.hash, this.status, this.currentBalance, this.currentProgram, this.currentProgramName, this.ip});
 }
 
+class Organization {
+  //ID, Имя, Описание, кому принадлежит, дефолтная лм
+  int id;
+  String? name;
+  String? description;
+  String? owner;
+  bool? isDefault;
+
+  Organization({required this.id, this.name, this.description, this.owner, this.isDefault});
+}
+
 class KasseStatus {
   String? status;
   String? info;

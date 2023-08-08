@@ -4,12 +4,15 @@ import 'package:mobile_wash_control/entity/entity.dart';
 abstract class Repository {
   //Update func handlers
   Future<void> updateStatus({BuildContext? context});
+  Future<void> updateOrganizations({BuildContext? context});
   Future<void> updatePrograms({BuildContext? context});
   Future<void> updateUsers({BuildContext? context});
   Future<void> updateDiscounts({BuildContext? context});
 
   Future<List<Station>?> getStations();
+  Future<List<Organization>?> getOrganizations();
   Future<Station?> getStation(int id);
+  Future<Organization?> getOrganization(int id);
   Future<List<StationButton>?> getStationButtons(int id, {BuildContext? context});
   Future<StationMoneyReport?> getStationMoneyReport(int id, {BuildContext? context});
 
@@ -48,6 +51,7 @@ abstract class Repository {
   Future<DiscountCampaign?> getDiscountCampaign(int id, {BuildContext? context});
 
   ValueNotifier<List<Station>?> getStationsNotifier();
+  ValueNotifier<List<Organization>?> getOrganizationsNotifier();
   ValueNotifier<KasseStatus?> getKasseStatusNotifier();
   ValueNotifier<String?> getLCWRepoNotifier();
   ValueNotifier<List<Program>?> getProgramsNotifier();

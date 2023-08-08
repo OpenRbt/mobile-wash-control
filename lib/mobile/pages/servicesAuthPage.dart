@@ -48,7 +48,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                     child: ElevatedButton(
                       child: Text("Продолжить"),
                       onPressed: () async {
-                        Common.SetAuthToken(await snapshot.data!.getIdToken());
+                        Common.SetAuthToken((await snapshot.data!.getIdToken() ?? ""));
 
                         var args = Map<PageArgCode, dynamic>();
                         args[PageArgCode.repository] = repository;
