@@ -57,14 +57,14 @@ class UsersApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /users/{id}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /users/{userId}' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] id (required):
-  Future<Response> getUserByIdWithHttpInfo(String id,) async {
+  /// * [String] userId (required):
+  Future<Response> getUserByIdWithHttpInfo(String userId,) async {
     // ignore: prefer_const_declarations
-    final path = r'/users/{id}'
-      .replaceAll('{id}', id);
+    final path = r'/users/{userId}'
+      .replaceAll('{userId}', userId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -89,9 +89,9 @@ class UsersApi {
 
   /// Parameters:
   ///
-  /// * [String] id (required):
-  Future<User?> getUserById(String id,) async {
-    final response = await getUserByIdWithHttpInfo(id,);
+  /// * [String] userId (required):
+  Future<User?> getUserById(String userId,) async {
+    final response = await getUserByIdWithHttpInfo(userId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -105,16 +105,66 @@ class UsersApi {
     return null;
   }
 
-  /// Performs an HTTP 'PATCH /users/{id}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /users' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] id (required):
-  ///
-  /// * [UserUpdate] update (required):
-  Future<Response> updateUserWithHttpInfo(String id, UserUpdate update,) async {
+  /// * [Pagination] body:
+  Future<Response> getUsersWithHttpInfo({ Pagination? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/users/{id}'
-      .replaceAll('{id}', id);
+    final path = r'/users';
+
+    // ignore: prefer_final_locals
+    Object? postBody = body;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [Pagination] body:
+  Future<List<User>?> getUsers({ Pagination? body, }) async {
+    final response = await getUsersWithHttpInfo( body: body, );
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<User>') as List)
+        .cast<User>()
+        .toList();
+
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'PATCH /users/{userId}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  ///
+  /// * [UserRoleUpdate] update (required):
+  Future<Response> updateUserRoleWithHttpInfo(String userId, UserRoleUpdate update,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/users/{userId}'
+      .replaceAll('{userId}', userId);
 
     // ignore: prefer_final_locals
     Object? postBody = update;
@@ -139,11 +189,11 @@ class UsersApi {
 
   /// Parameters:
   ///
-  /// * [String] id (required):
+  /// * [String] userId (required):
   ///
-  /// * [UserUpdate] update (required):
-  Future<void> updateUser(String id, UserUpdate update,) async {
-    final response = await updateUserWithHttpInfo(id, update,);
+  /// * [UserRoleUpdate] update (required):
+  Future<void> updateUserRole(String userId, UserRoleUpdate update,) async {
+    final response = await updateUserRoleWithHttpInfo(userId, update,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

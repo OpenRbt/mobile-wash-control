@@ -53,9 +53,6 @@ class ApiClient {
       headerParams['Content-Type'] = contentType;
     }
 
-    print("CrateWashServer");
-    headerParams.forEach((key, value) {print("key: " + key + "\nvalue: " + value); });
-
     final urlEncodedQueryParams = queryParams.map((param) => '$param');
     final queryString = urlEncodedQueryParams.isNotEmpty ? '?${urlEncodedQueryParams.join('&')}' : '';
     final uri = Uri.parse('$basePath$path$queryString');
@@ -190,14 +187,28 @@ class ApiClient {
           return Error.fromJson(value);
         case 'HealthCheck200Response':
           return HealthCheck200Response.fromJson(value);
+        case 'Organization':
+          return Organization.fromJson(value);
+        case 'OrganizationCreation':
+          return OrganizationCreation.fromJson(value);
+        case 'OrganizationUpdate':
+          return OrganizationUpdate.fromJson(value);
         case 'Pagination':
           return Pagination.fromJson(value);
+        case 'ServerGroup':
+          return ServerGroup.fromJson(value);
+        case 'ServerGroupCreation':
+          return ServerGroupCreation.fromJson(value);
+        case 'ServerGroupUpdate':
+          return ServerGroupUpdate.fromJson(value);
         case 'Session':
           return Session.fromJson(value);
         case 'User':
           return User.fromJson(value);
-        case 'UserUpdate':
-          return UserUpdate.fromJson(value);
+        case 'UserRoleUpdate':
+          return UserRoleUpdate.fromJson(value);
+        case 'Wallet':
+          return Wallet.fromJson(value);
         case 'WashServer':
           return WashServer.fromJson(value);
         case 'WashServerCreation':

@@ -11,22 +11,22 @@
 part of openapi.api;
 
 
-class WashServersApi {
-  WashServersApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+class OrganizationsApi {
+  OrganizationsApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'POST /server-groups/{groupId}/wash-servers/{serverId}' operation and returns the [Response].
+  /// Performs an HTTP 'POST /organizations/{organizationId}/users/{userId}' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] groupId (required):
+  /// * [String] organizationId (required):
   ///
-  /// * [String] serverId (required):
-  Future<Response> assignServerToGroupWithHttpInfo(String groupId, String serverId,) async {
+  /// * [String] userId (required):
+  Future<Response> assignUserToOrganizationWithHttpInfo(String organizationId, String userId,) async {
     // ignore: prefer_const_declarations
-    final path = r'/server-groups/{groupId}/wash-servers/{serverId}'
-      .replaceAll('{groupId}', groupId)
-      .replaceAll('{serverId}', serverId);
+    final path = r'/organizations/{organizationId}/users/{userId}'
+      .replaceAll('{organizationId}', organizationId)
+      .replaceAll('{userId}', userId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -51,23 +51,23 @@ class WashServersApi {
 
   /// Parameters:
   ///
-  /// * [String] groupId (required):
+  /// * [String] organizationId (required):
   ///
-  /// * [String] serverId (required):
-  Future<void> assignServerToGroup(String groupId, String serverId,) async {
-    final response = await assignServerToGroupWithHttpInfo(groupId, serverId,);
+  /// * [String] userId (required):
+  Future<void> assignUserToOrganization(String organizationId, String userId,) async {
+    final response = await assignUserToOrganizationWithHttpInfo(organizationId, userId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'POST /wash-servers/' operation and returns the [Response].
+  /// Performs an HTTP 'POST /organizations' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [WashServerCreation] body:
-  Future<Response> createWashServerWithHttpInfo({ WashServerCreation? body, }) async {
+  /// * [OrganizationCreation] body:
+  Future<Response> createOrganizationWithHttpInfo({ OrganizationCreation? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-servers/';
+    final path = r'/organizations';
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -92,9 +92,9 @@ class WashServersApi {
 
   /// Parameters:
   ///
-  /// * [WashServerCreation] body:
-  Future<WashServer?> createWashServer({ WashServerCreation? body, }) async {
-    final response = await createWashServerWithHttpInfo( body: body, );
+  /// * [OrganizationCreation] body:
+  Future<Organization?> createOrganization({ OrganizationCreation? body, }) async {
+    final response = await createOrganizationWithHttpInfo( body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -102,20 +102,20 @@ class WashServersApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'WashServer',) as WashServer;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Organization',) as Organization;
     
     }
     return null;
   }
 
-  /// Performs an HTTP 'DELETE /wash-servers/{serverId}' operation and returns the [Response].
+  /// Performs an HTTP 'DELETE /organizations/{organizationId}' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] serverId (required):
-  Future<Response> deleteWashServerWithHttpInfo(String serverId,) async {
+  /// * [String] organizationId (required):
+  Future<Response> deleteOrganizationWithHttpInfo(String organizationId,) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-servers/{serverId}'
-      .replaceAll('{serverId}', serverId);
+    final path = r'/organizations/{organizationId}'
+      .replaceAll('{organizationId}', organizationId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -140,22 +140,22 @@ class WashServersApi {
 
   /// Parameters:
   ///
-  /// * [String] serverId (required):
-  Future<void> deleteWashServer(String serverId,) async {
-    final response = await deleteWashServerWithHttpInfo(serverId,);
+  /// * [String] organizationId (required):
+  Future<void> deleteOrganization(String organizationId,) async {
+    final response = await deleteOrganizationWithHttpInfo(organizationId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'GET /wash-servers/{serverId}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /organizations/{organizationId}' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] serverId (required):
-  Future<Response> getWashServerByIdWithHttpInfo(String serverId,) async {
+  /// * [String] organizationId (required):
+  Future<Response> getOrganizationByIdWithHttpInfo(String organizationId,) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-servers/{serverId}'
-      .replaceAll('{serverId}', serverId);
+    final path = r'/organizations/{organizationId}'
+      .replaceAll('{organizationId}', organizationId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -180,9 +180,9 @@ class WashServersApi {
 
   /// Parameters:
   ///
-  /// * [String] serverId (required):
-  Future<WashServer?> getWashServerById(String serverId,) async {
-    final response = await getWashServerByIdWithHttpInfo(serverId,);
+  /// * [String] organizationId (required):
+  Future<Organization?> getOrganizationById(String organizationId,) async {
+    final response = await getOrganizationByIdWithHttpInfo(organizationId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -190,23 +190,21 @@ class WashServersApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'WashServer',) as WashServer;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Organization',) as Organization;
     
     }
     return null;
   }
 
-  /// Performs an HTTP 'GET /wash-servers/' operation and returns the [Response].
+  /// Performs an HTTP 'GET /organizations' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] organizationId:
-  ///
-  /// * [String] groupId:
+  /// * [List<String>] ids:
   ///
   /// * [Pagination] body:
-  Future<Response> getWashServersWithHttpInfo({ String? organizationId, String? groupId, Pagination? body, }) async {
+  Future<Response> getOrganizationsWithHttpInfo({ List<String>? ids, Pagination? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-servers/';
+    final path = r'/organizations';
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -215,11 +213,8 @@ class WashServersApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    if (organizationId != null) {
-      queryParams.addAll(_queryParams('', 'organizationId', organizationId));
-    }
-    if (groupId != null) {
-      queryParams.addAll(_queryParams('', 'groupId', groupId));
+    if (ids != null) {
+      queryParams.addAll(_queryParams('csv', 'ids', ids));
     }
 
     const contentTypes = <String>['application/json'];
@@ -238,13 +233,11 @@ class WashServersApi {
 
   /// Parameters:
   ///
-  /// * [String] organizationId:
-  ///
-  /// * [String] groupId:
+  /// * [List<String>] ids:
   ///
   /// * [Pagination] body:
-  Future<List<WashServer>?> getWashServers({ String? organizationId, String? groupId, Pagination? body, }) async {
-    final response = await getWashServersWithHttpInfo( organizationId: organizationId, groupId: groupId, body: body, );
+  Future<List<Organization>?> getOrganizations({ List<String>? ids, Pagination? body, }) async {
+    final response = await getOrganizationsWithHttpInfo( ids: ids, body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -253,24 +246,69 @@ class WashServersApi {
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<WashServer>') as List)
-        .cast<WashServer>()
+      return (await apiClient.deserializeAsync(responseBody, 'List<Organization>') as List)
+        .cast<Organization>()
         .toList();
 
     }
     return null;
   }
 
-  /// Performs an HTTP 'PATCH /wash-servers/{serverId}' operation and returns the [Response].
+  /// Performs an HTTP 'DELETE /organizations/{organizationId}/users/{userId}' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] serverId (required):
+  /// * [String] organizationId (required):
   ///
-  /// * [WashServerUpdate] body:
-  Future<Response> updateWashServerWithHttpInfo(String serverId, { WashServerUpdate? body, }) async {
+  /// * [String] userId (required):
+  Future<Response> removeUserFromOrganizationWithHttpInfo(String organizationId, String userId,) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-servers/{serverId}'
-      .replaceAll('{serverId}', serverId);
+    final path = r'/organizations/{organizationId}/users/{userId}'
+      .replaceAll('{organizationId}', organizationId)
+      .replaceAll('{userId}', userId);
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] organizationId (required):
+  ///
+  /// * [String] userId (required):
+  Future<void> removeUserFromOrganization(String organizationId, String userId,) async {
+    final response = await removeUserFromOrganizationWithHttpInfo(organizationId, userId,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'PATCH /organizations/{organizationId}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] organizationId (required):
+  ///
+  /// * [OrganizationUpdate] body:
+  Future<Response> updateOrganizationWithHttpInfo(String organizationId, { OrganizationUpdate? body, }) async {
+    // ignore: prefer_const_declarations
+    final path = r'/organizations/{organizationId}'
+      .replaceAll('{organizationId}', organizationId);
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -295,11 +333,11 @@ class WashServersApi {
 
   /// Parameters:
   ///
-  /// * [String] serverId (required):
+  /// * [String] organizationId (required):
   ///
-  /// * [WashServerUpdate] body:
-  Future<WashServer?> updateWashServer(String serverId, { WashServerUpdate? body, }) async {
-    final response = await updateWashServerWithHttpInfo(serverId,  body: body, );
+  /// * [OrganizationUpdate] body:
+  Future<Organization?> updateOrganization(String organizationId, { OrganizationUpdate? body, }) async {
+    final response = await updateOrganizationWithHttpInfo(organizationId,  body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -307,7 +345,7 @@ class WashServersApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'WashServer',) as WashServer;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Organization',) as Organization;
     
     }
     return null;

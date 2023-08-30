@@ -10,16 +10,14 @@
 
 part of openapi.api;
 
-class WashServer {
-  /// Returns a new [WashServer] instance.
-  WashServer({
+class Wallet {
+  /// Returns a new [Wallet] instance.
+  Wallet({
     this.id,
-    this.name,
-    this.description,
-    this.serviceKey,
-    this.createdBy,
-    this.groupId,
+    this.userId,
     this.organizationId,
+    this.balance,
+    this.pendingBalance,
   });
 
   ///
@@ -36,39 +34,7 @@ class WashServer {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? name;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? description;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? serviceKey;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? createdBy;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? groupId;
+  String? userId;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -78,29 +44,41 @@ class WashServer {
   ///
   String? organizationId;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? balance;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? pendingBalance;
+
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WashServer &&
+  bool operator ==(Object other) => identical(this, other) || other is Wallet &&
      other.id == id &&
-     other.name == name &&
-     other.description == description &&
-     other.serviceKey == serviceKey &&
-     other.createdBy == createdBy &&
-     other.groupId == groupId &&
-     other.organizationId == organizationId;
+     other.userId == userId &&
+     other.organizationId == organizationId &&
+     other.balance == balance &&
+     other.pendingBalance == pendingBalance;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (id == null ? 0 : id!.hashCode) +
-    (name == null ? 0 : name!.hashCode) +
-    (description == null ? 0 : description!.hashCode) +
-    (serviceKey == null ? 0 : serviceKey!.hashCode) +
-    (createdBy == null ? 0 : createdBy!.hashCode) +
-    (groupId == null ? 0 : groupId!.hashCode) +
-    (organizationId == null ? 0 : organizationId!.hashCode);
+    (userId == null ? 0 : userId!.hashCode) +
+    (organizationId == null ? 0 : organizationId!.hashCode) +
+    (balance == null ? 0 : balance!.hashCode) +
+    (pendingBalance == null ? 0 : pendingBalance!.hashCode);
 
   @override
-  String toString() => 'WashServer[id=$id, name=$name, description=$description, serviceKey=$serviceKey, createdBy=$createdBy, groupId=$groupId, organizationId=$organizationId]';
+  String toString() => 'Wallet[id=$id, userId=$userId, organizationId=$organizationId, balance=$balance, pendingBalance=$pendingBalance]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -109,43 +87,33 @@ class WashServer {
     } else {
       json[r'id'] = null;
     }
-    if (this.name != null) {
-      json[r'name'] = this.name;
+    if (this.userId != null) {
+      json[r'userId'] = this.userId;
     } else {
-      json[r'name'] = null;
-    }
-    if (this.description != null) {
-      json[r'description'] = this.description;
-    } else {
-      json[r'description'] = null;
-    }
-    if (this.serviceKey != null) {
-      json[r'serviceKey'] = this.serviceKey;
-    } else {
-      json[r'serviceKey'] = null;
-    }
-    if (this.createdBy != null) {
-      json[r'createdBy'] = this.createdBy;
-    } else {
-      json[r'createdBy'] = null;
-    }
-    if (this.groupId != null) {
-      json[r'groupId'] = this.groupId;
-    } else {
-      json[r'groupId'] = null;
+      json[r'userId'] = null;
     }
     if (this.organizationId != null) {
       json[r'organizationId'] = this.organizationId;
     } else {
       json[r'organizationId'] = null;
     }
+    if (this.balance != null) {
+      json[r'balance'] = this.balance;
+    } else {
+      json[r'balance'] = null;
+    }
+    if (this.pendingBalance != null) {
+      json[r'pendingBalance'] = this.pendingBalance;
+    } else {
+      json[r'pendingBalance'] = null;
+    }
     return json;
   }
 
-  /// Returns a new [WashServer] instance and imports its values from
+  /// Returns a new [Wallet] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static WashServer? fromJson(dynamic value) {
+  static Wallet? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -154,30 +122,28 @@ class WashServer {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "WashServer[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "WashServer[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "Wallet[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "Wallet[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return WashServer(
+      return Wallet(
         id: mapValueOfType<String>(json, r'id'),
-        name: mapValueOfType<String>(json, r'name'),
-        description: mapValueOfType<String>(json, r'description'),
-        serviceKey: mapValueOfType<String>(json, r'serviceKey'),
-        createdBy: mapValueOfType<String>(json, r'createdBy'),
-        groupId: mapValueOfType<String>(json, r'groupId'),
+        userId: mapValueOfType<String>(json, r'userId'),
         organizationId: mapValueOfType<String>(json, r'organizationId'),
+        balance: mapValueOfType<int>(json, r'balance'),
+        pendingBalance: mapValueOfType<int>(json, r'pendingBalance'),
       );
     }
     return null;
   }
 
-  static List<WashServer>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <WashServer>[];
+  static List<Wallet>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <Wallet>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = WashServer.fromJson(row);
+        final value = Wallet.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -186,12 +152,12 @@ class WashServer {
     return result.toList(growable: growable);
   }
 
-  static Map<String, WashServer> mapFromJson(dynamic json) {
-    final map = <String, WashServer>{};
+  static Map<String, Wallet> mapFromJson(dynamic json) {
+    final map = <String, Wallet>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServer.fromJson(entry.value);
+        final value = Wallet.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -200,13 +166,13 @@ class WashServer {
     return map;
   }
 
-  // maps a json object with a list of WashServer-objects as value to a dart map
-  static Map<String, List<WashServer>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<WashServer>>{};
+  // maps a json object with a list of Wallet-objects as value to a dart map
+  static Map<String, List<Wallet>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<Wallet>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServer.listFromJson(entry.value, growable: growable,);
+        final value = Wallet.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

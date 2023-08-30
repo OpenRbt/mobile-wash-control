@@ -16,14 +16,39 @@ class Station {
 }
 
 class Organization {
-  //ID, Имя, Описание, кому принадлежит, дефолтная лм
-  int id;
+  String? id;
   String? name;
   String? description;
-  String? owner;
   bool? isDefault;
 
-  Organization({required this.id, this.name, this.description, this.owner, this.isDefault});
+  Organization({this.id, this.name, this.description, this.isDefault});
+
+  Organization copyWith({String? id, String? name, String? description, bool? isDefault}) {
+    return Organization(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        isDefault: isDefault ?? this.isDefault,
+    );
+  }
+}
+
+class ServerGroup {
+  String? id;
+  String? name;
+  String? description;
+  String? organizationId;
+
+  ServerGroup({this.id, this.name, this.description, this.organizationId});
+
+  ServerGroup copyWith({String? id, String? name, String? description, String? organizationId}) {
+    return ServerGroup(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      organizationId: organizationId ?? this.organizationId,
+    );
+  }
 }
 
 class KasseStatus {

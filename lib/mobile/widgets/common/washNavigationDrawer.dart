@@ -114,7 +114,7 @@ class WashNavigationDrawer extends StatelessWidget {
       : _selected = selected,
         _repository = repository {
     final user = repository.currentUser();
-    if (!(user?.isAdmin ?? false)) {
+    if ((user?.isOperator ?? false)) {
       _availablePages = [SelectedPage.Main, SelectedPage.Exit];
     }
     _repository.getCurrentUser();
@@ -185,12 +185,12 @@ class WashNavigationDrawer extends StatelessWidget {
             ),
             decoration: BoxDecoration(color: theme.colorScheme.primary),
           ),
-          (Common.washServersApi?.apiClient.basePath ?? "").isNotEmpty ?
+          (Common.washServerApi?.apiClient.basePath ?? "").isNotEmpty ?
           Container(
             color: theme.colorScheme.primary,
             child: Text(
 
-              "URL сервера бонусов: ${Common.washServersApi?.apiClient.basePath}",
+              "URL сервера бонусов: ${Common.washServerApi?.apiClient.basePath}",
               style: theme.textTheme.titleLarge!.copyWith(
                 color: theme.colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,

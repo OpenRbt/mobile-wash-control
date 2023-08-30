@@ -83,16 +83,6 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<List<entity.Organization>?> getOrganizations() async {
-    final stations = _organizations.value;
-    if (stations == null) {
-      await updateOrganizations();
-    }
-
-    return _organizations.value;
-  }
-
-  @override
   Future<void> updateStatus({BuildContext? context}) async {
     try {
       final res = await api.status();
@@ -154,15 +144,13 @@ class LeaCentralRepository extends Repository {
       var organizations = <entity.Organization>[];
       for(int i = 0; i < 12; i++){
         organizations.add(entity.Organization(
-          id: i,
+          id: i.toString(),
           name: "Organization$i",
           description: "Описание$i",
-          owner: "Владелец$i",
-          isDefault: true,
         ));
       }
 
-      organizations.sort((a, b) => a.id.compareTo(b.id));
+      organizations.sort((a, b) => a.id!.compareTo(b.id!));
       if (!listEquals(_organizations.value, organizations)) {
         _organizations.value = organizations;
       }
@@ -261,22 +249,6 @@ class LeaCentralRepository extends Repository {
     }
 
     return stationsFiltered.first;
-  }
-
-  @override
-  Future<entity.Organization?> getOrganization(int id) async {
-    var organizations = _organizations.value;
-    if (organizations == null) {
-      await updateOrganizations();
-      organizations = _organizations.value;
-    }
-
-    var organizationsFiltered = organizations!.where((element) => element.id == id);
-    if (organizationsFiltered.length == 0) {
-      return null;
-    }
-
-    return organizationsFiltered.first;
   }
 
   @override
@@ -1269,7 +1241,7 @@ class LeaCentralRepository extends Repository {
   Future<String?> getConfigVarString(String name) async {
     var args = ArgGetConfigVar(name: name);
     final response = await api.getConfigVarString(args);
-    return response?.value;
+    return response?.value ?? "";
   }
 
   @override

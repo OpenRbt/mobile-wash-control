@@ -71,12 +71,11 @@ class _AuthState extends State<Auth> {
       SystemChrome.setPreferredOrientations([]);
 
       String? bonusUrl = await repo.getServerInfo(context: context);
-      String basePath = (bonusUrl ?? "") + '/api';
-      log(basePath);
-      Common.washServersApi = WashServersApi(ApiClient(
-        basePath: basePath,
-        authentication: HttpBearerAuth(),
-      ));
+      String basePath = "";
+      if(bonusUrl?.isNotEmpty ?? false){
+        basePath = (bonusUrl)! + '/api';
+      }
+      Common.initializeApis(basePath);
       Navigator.pushNamed(
         context,
         "/mobile/home",

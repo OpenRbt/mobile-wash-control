@@ -102,24 +102,30 @@ class _OverviewPageState extends State<OverviewPage> {
                       ),
                     ),
                     ValueListenableBuilder(
-                      valueListenable: repository.getStationsNotifier(),
-                      builder: (BuildContext context, List<Station>? value, Widget? child) {
-                        if (value == null) {
-                          return child!;
-                        }
-                        return ValueListenableBuilder(
-                            valueListenable: _postsMode,
-                            builder: (BuildContext context, PostsViewMode postViewMode, Widget? child) {
-                              return Expanded(
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: value.length,
-                                  physics: ClampingScrollPhysics(),
-                                  itemBuilder: (BuildContext context, int index) {
-                                    var data = value[index];
-                                    switch (postViewMode) {
-                                      case PostsViewMode.active:
-                                        if(data.status == "online"){
+                        valueListenable: repository.getStationsNotifier(),
+                        builder: (BuildContext context, List<Station>? stations, Widget? child) {
+                          return ValueListenableBuilder(
+                              valueListenable: _postsMode,
+                              builder: (BuildContext context, PostsViewMode postViewMode, Widget? _) {
+                                if (stations == null) {
+                                  return Center(child: CircularProgressIndicator());
+                                }
+
+                                List<Station> filteredStations;
+
+                                if (postViewMode == PostsViewMode.active) {
+                                  filteredStations = stations.where((station) => station.status == "online").toList();
+                                } else {
+                                  filteredStations = stations;
+                                }
+
+                                return Expanded(
+                                    child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: filteredStations.length,
+                                        physics: ClampingScrollPhysics(),
+                                        itemBuilder: (BuildContext context, int index) {
+                                          var data = filteredStations[index];
                                           return StationCard(
                                             data: data,
                                             onPressed: () {
@@ -131,29 +137,12 @@ class _OverviewPageState extends State<OverviewPage> {
                                             },
                                           );
                                         }
-                                        break;
-                                      case PostsViewMode.all:
-                                        return StationCard(
-                                          data: data,
-                                          onPressed: () {
-                                            var args = Map<PageArgCode, dynamic>();
-                                            args[PageArgCode.repository] = repository;
-                                            args[PageArgCode.stationID] = data.id;
-                                            args[PageArgCode.stationHash] = data.hash;
-                                            Navigator.pushNamed(context, "/mobile/home/managePost", arguments: args);
-                                          },
-                                        );
-                                    }
-                                  },
-                                ),
-                              );
-                            }
-                        );
-                      },
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
+                                    )
+                                );
+                              }
+                          );
+                        }
+                    )
                   ],
                 ),
               );

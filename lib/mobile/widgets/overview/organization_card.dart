@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../../entity/entity.dart';
+import 'package:mobile_wash_control/entity/entity.dart';
 
 class OrganizationCard extends StatelessWidget {
   final Organization data;
@@ -19,12 +17,14 @@ class OrganizationCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         title: Text("Организация: ${data.name} "),
-        subtitle: Row(
+        subtitle: const Row(
+          /*
           children: [
-            Text("Владелец: ${data.owner ?? "-"}"),
+            Text("Описание: ${data.description ?? "-"}"),
           ],
+           */
         ),
-        childrenPadding: EdgeInsets.all(8.0),
+        childrenPadding: const EdgeInsets.all(8.0),
         expandedAlignment: Alignment.center,
         expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -35,10 +35,6 @@ class OrganizationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Стандартная: ${(data.isDefault ?? true) ? "Да": "Нет"} ",
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                  Text(
                     "Описание: ${data.description} ",
                     style: theme.textTheme.bodyMedium,
                   ),
@@ -46,8 +42,8 @@ class OrganizationCard extends StatelessWidget {
               ),
               OutlinedButton.icon(
                 onPressed: onPressed,
-                icon: Icon(Icons.settings_outlined),
-                label: Text("Управление"),
+                icon: const Icon(Icons.settings_outlined),
+                label: const Text("Управление"),
               )
             ],
           )

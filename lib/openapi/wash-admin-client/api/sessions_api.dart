@@ -16,14 +16,14 @@ class SessionsApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'POST /session/{id}/assign-user' operation and returns the [Response].
+  /// Performs an HTTP 'POST /sessions/{sessionId}/assign-user' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] id (required):
-  Future<Response> assignUserToSessionWithHttpInfo(String id,) async {
+  /// * [String] sessionId (required):
+  Future<Response> assignUserToSessionWithHttpInfo(String sessionId,) async {
     // ignore: prefer_const_declarations
-    final path = r'/session/{id}/assign-user'
-      .replaceAll('{id}', id);
+    final path = r'/sessions/{sessionId}/assign-user'
+      .replaceAll('{sessionId}', sessionId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -48,24 +48,24 @@ class SessionsApi {
 
   /// Parameters:
   ///
-  /// * [String] id (required):
-  Future<void> assignUserToSession(String id,) async {
-    final response = await assignUserToSessionWithHttpInfo(id,);
+  /// * [String] sessionId (required):
+  Future<void> assignUserToSession(String sessionId,) async {
+    final response = await assignUserToSessionWithHttpInfo(sessionId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'POST /sessions/{id}/bonuses' operation and returns the [Response].
+  /// Performs an HTTP 'POST /sessions/{sessionId}/bonuses' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] id (required):
+  /// * [String] sessionId (required):
   ///
   /// * [BonusCharge] body:
-  Future<Response> chargeBonusesOnSessionWithHttpInfo(String id, { BonusCharge? body, }) async {
+  Future<Response> chargeBonusesOnSessionWithHttpInfo(String sessionId, { BonusCharge? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/sessions/{id}/bonuses'
-      .replaceAll('{id}', id);
+    final path = r'/sessions/{sessionId}/bonuses'
+      .replaceAll('{sessionId}', sessionId);
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -90,11 +90,11 @@ class SessionsApi {
 
   /// Parameters:
   ///
-  /// * [String] id (required):
+  /// * [String] sessionId (required):
   ///
   /// * [BonusCharge] body:
-  Future<BonusCharge?> chargeBonusesOnSession(String id, { BonusCharge? body, }) async {
-    final response = await chargeBonusesOnSessionWithHttpInfo(id,  body: body, );
+  Future<BonusCharge?> chargeBonusesOnSession(String sessionId, { BonusCharge? body, }) async {
+    final response = await chargeBonusesOnSessionWithHttpInfo(sessionId,  body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -108,14 +108,14 @@ class SessionsApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /sessions/{id}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /sessions/{sessionId}' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] id (required):
-  Future<Response> getSessionByIdWithHttpInfo(String id,) async {
+  /// * [String] sessionId (required):
+  Future<Response> getSessionByIdWithHttpInfo(String sessionId,) async {
     // ignore: prefer_const_declarations
-    final path = r'/sessions/{id}'
-      .replaceAll('{id}', id);
+    final path = r'/sessions/{sessionId}'
+      .replaceAll('{sessionId}', sessionId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -140,9 +140,9 @@ class SessionsApi {
 
   /// Parameters:
   ///
-  /// * [String] id (required):
-  Future<Session?> getSessionById(String id,) async {
-    final response = await getSessionByIdWithHttpInfo(id,);
+  /// * [String] sessionId (required):
+  Future<Session?> getSessionById(String sessionId,) async {
+    final response = await getSessionByIdWithHttpInfo(sessionId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

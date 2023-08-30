@@ -26,10 +26,10 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
 
   Future<void> _RegisterWash(Repository repository) async {
     if (_serverNameController.text.isNotEmpty) {
-      var arg = WashServerCreation(name: _serverNameController.text, description: _serverDescriptionController.text);
+      var arg = WashServerCreation(groupId: "", name: _serverNameController.text, description: _serverDescriptionController.text);
 
       try {
-        final res = await Common.washServersApi!.createWashServer(body: arg);
+        final res = await Common.washServerApi!.createWashServer(body: arg);
         _server.value = _server.value.copyWith(
           id: res!.id,
           name: res!.name,
@@ -75,7 +75,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
 
   Future<void> _getWashServer() async {
     try {
-      var washServer = await Common.washServersApi!.getWashServerById(_server.value.id!);
+      var washServer = await Common.washServerApi!.getWashServerById(_server.value.id!);
 
       _server.value = _server.value.copyWith(
         name: washServer?.name,
@@ -95,7 +95,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
   Future<void> _updateWashServer() async {
     try {
       var arg = WashServerUpdate(name: _serverNameController.text, description: _serverDescriptionController.text);
-      var res = await Common.washServersApi!.updateWashServer(_server.value.id!.toString(), body: arg);
+      var res = await Common.washServerApi!.updateWashServer(_server.value.id!.toString(), body: arg);
     } on ApiException catch (e) {
       if (kDebugMode) print("WashAdminApiException: $e");
     } catch (e) {

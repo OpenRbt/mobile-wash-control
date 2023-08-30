@@ -25,6 +25,20 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
   FirebaseAuth auth = FirebaseAuth.instanceFor(app: Firebase.app("openwashing"));
   DesktopAuthBridge authBridge = DesktopAuthBridge(FirebaseAuth.instanceFor(app: Firebase.app("openwashing")));
 
+  Future<void> getServerUrl(Repository repository) async {
+    try{
+      String? bonusUrl = await repository.getServerInfo(context: context);
+      String basePath = "";
+      if(bonusUrl?.isNotEmpty ?? false){
+        basePath = (bonusUrl)! + '/api';
+      }
+      print(basePath);
+      Common.initializeApis(basePath);
+    } catch (e){
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -36,87 +50,99 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
       appBar: AppBar(title: Text("Авторизация в сервисах")),
       drawer: WashNavigationDrawer(selected: SelectedPage.Services, repository: repository),
       body: Center(
-        child: StreamBuilder(
-          stream: auth.userChanges(),
-          builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-            if (snapshot.data != null) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      child: Text("Продолжить"),
-                      onPressed: () async {
-                        Common.SetAuthToken((await snapshot.data!.getIdToken() ?? ""));
+        child: FutureBuilder<void>(
+          future: getServerUrl(repository),
+          builder: (BuildContext context, AsyncSnapshot<void> snapshot){
+            if(snapshot.connectionState == ConnectionState.done){
+              return StreamBuilder(
+                stream: auth.userChanges(),
+                builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+                  if (snapshot.data != null) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            child: Text("Продолжить"),
+                            onPressed: () async {
+                              Common.setAuthToken((await snapshot.data!.getIdToken() ?? ""));
 
-                        var args = Map<PageArgCode, dynamic>();
-                        args[PageArgCode.repository] = repository;
+                              var args = Map<PageArgCode, dynamic>();
+                              args[PageArgCode.repository] = repository;
 
-                        Navigator.pushReplacementNamed(
-                          context,
-                          "/mobile/services",
-                          arguments: args,
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ProgressButton(
+                              Navigator.pushReplacementNamed(
+                                context,
+                                "/mobile/services",
+                                arguments: args,
+                              );
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ProgressButton(
+                            onPressed: () async {
+                              if (Platform.isAndroid) {
+                                await GoogleSignIn().signOut();
+                              }
+                              if (Platform.isLinux) {
+                                await authBridge.signOut();
+                              }
+                              await auth.signOut();
+                            },
+                            child: Text("Выйти из учетной записи ${snapshot.data!.email ?? ""}"),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return ProgressButton(
                       onPressed: () async {
                         if (Platform.isAndroid) {
-                          await GoogleSignIn().signOut();
+                          try {
+                            final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+                            final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+                            final credential = GoogleAuthProvider.credential(
+                              accessToken: googleAuth?.accessToken,
+                              idToken: googleAuth?.idToken,
+                            );
+
+                            await auth.signInWithCredential(credential);
+                          } catch (err) {
+                            log(err.toString());
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось авторизоваться"));
+                          }
+                        } else {
+                          try {
+                            oauth2.Credentials credentials = await authBridge.login();
+
+                            AuthCredential authCredential = GoogleAuthProvider.credential(
+                              idToken: credentials.idToken,
+                              accessToken: credentials.accessToken,
+                            );
+
+                            await auth.signInWithCredential(authCredential);
+                          } catch (err) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось авторизоваться"));
+                          }
                         }
-                        if (Platform.isLinux) {
-                          await authBridge.signOut();
-                        }
-                        await auth.signOut();
                       },
-                      child: Text("Выйти из учетной записи ${snapshot.data!.email ?? ""}"),
-                    ),
-                  ),
-                ],
-              );
-            } else {
-              return ProgressButton(
-                onPressed: () async {
-                  if (Platform.isAndroid) {
-                    try {
-                      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-                      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-                      final credential = GoogleAuthProvider.credential(
-                        accessToken: googleAuth?.accessToken,
-                        idToken: googleAuth?.idToken,
-                      );
-
-                      await auth.signInWithCredential(credential);
-                    } catch (err) {
-                      log(err.toString());
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось авторизоваться"));
-                    }
-                  } else {
-                    try {
-                      oauth2.Credentials credentials = await authBridge.login();
-
-                      AuthCredential authCredential = GoogleAuthProvider.credential(
-                        idToken: credentials.idToken,
-                        accessToken: credentials.accessToken,
-                      );
-
-                      await auth.signInWithCredential(authCredential);
-                    } catch (err) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось авторизоваться"));
-                    }
+                      child: Text("Войти с помощью Google"),
+                    );
                   }
                 },
-                child: Text("Войти с помощью Google"),
+              );
+            }
+            else {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             }
           },
-        ),
+        )
       ),
     );
   }

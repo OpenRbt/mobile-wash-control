@@ -10,16 +10,16 @@
 
 part of openapi.api;
 
-class UserUpdate {
-  /// Returns a new [UserUpdate] instance.
-  UserUpdate({
+class UserRoleUpdate {
+  /// Returns a new [UserRoleUpdate] instance.
+  UserRoleUpdate({
     this.role,
   });
 
-  UserUpdateRoleEnum? role;
+  UserRoleUpdateRoleEnum? role;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is UserUpdate &&
+  bool operator ==(Object other) => identical(this, other) || other is UserRoleUpdate &&
      other.role == role;
 
   @override
@@ -28,7 +28,7 @@ class UserUpdate {
     (role == null ? 0 : role!.hashCode);
 
   @override
-  String toString() => 'UserUpdate[role=$role]';
+  String toString() => 'UserRoleUpdate[role=$role]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -40,10 +40,10 @@ class UserUpdate {
     return json;
   }
 
-  /// Returns a new [UserUpdate] instance and imports its values from
+  /// Returns a new [UserRoleUpdate] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static UserUpdate? fromJson(dynamic value) {
+  static UserRoleUpdate? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -52,24 +52,24 @@ class UserUpdate {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "UserUpdate[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "UserUpdate[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "UserRoleUpdate[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "UserRoleUpdate[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return UserUpdate(
-        role: UserUpdateRoleEnum.fromJson(json[r'role']),
+      return UserRoleUpdate(
+        role: UserRoleUpdateRoleEnum.fromJson(json[r'role']),
       );
     }
     return null;
   }
 
-  static List<UserUpdate>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <UserUpdate>[];
+  static List<UserRoleUpdate>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <UserRoleUpdate>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = UserUpdate.fromJson(row);
+        final value = UserRoleUpdate.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -78,12 +78,12 @@ class UserUpdate {
     return result.toList(growable: growable);
   }
 
-  static Map<String, UserUpdate> mapFromJson(dynamic json) {
-    final map = <String, UserUpdate>{};
+  static Map<String, UserRoleUpdate> mapFromJson(dynamic json) {
+    final map = <String, UserRoleUpdate>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = UserUpdate.fromJson(entry.value);
+        final value = UserRoleUpdate.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -92,13 +92,13 @@ class UserUpdate {
     return map;
   }
 
-  // maps a json object with a list of UserUpdate-objects as value to a dart map
-  static Map<String, List<UserUpdate>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<UserUpdate>>{};
+  // maps a json object with a list of UserRoleUpdate-objects as value to a dart map
+  static Map<String, List<UserRoleUpdate>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<UserRoleUpdate>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = UserUpdate.listFromJson(entry.value, growable: growable,);
+        final value = UserRoleUpdate.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -113,9 +113,9 @@ class UserUpdate {
 }
 
 
-class UserUpdateRoleEnum {
+class UserRoleUpdateRoleEnum {
   /// Instantiate a new enum with the provided [value].
-  const UserUpdateRoleEnum._(this.value);
+  const UserRoleUpdateRoleEnum._(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -125,24 +125,24 @@ class UserUpdateRoleEnum {
 
   String toJson() => value;
 
-  static const user = UserUpdateRoleEnum._(r'user');
-  static const admin = UserUpdateRoleEnum._(r'admin');
-  static const engineer = UserUpdateRoleEnum._(r'engineer');
+  static const user = UserRoleUpdateRoleEnum._(r'user');
+  static const admin = UserRoleUpdateRoleEnum._(r'admin');
+  static const engineer = UserRoleUpdateRoleEnum._(r'engineer');
 
-  /// List of all possible values in this [enum][UserUpdateRoleEnum].
-  static const values = <UserUpdateRoleEnum>[
+  /// List of all possible values in this [enum][UserRoleUpdateRoleEnum].
+  static const values = <UserRoleUpdateRoleEnum>[
     user,
     admin,
     engineer,
   ];
 
-  static UserUpdateRoleEnum? fromJson(dynamic value) => UserUpdateRoleEnumTypeTransformer().decode(value);
+  static UserRoleUpdateRoleEnum? fromJson(dynamic value) => UserRoleUpdateRoleEnumTypeTransformer().decode(value);
 
-  static List<UserUpdateRoleEnum>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <UserUpdateRoleEnum>[];
+  static List<UserRoleUpdateRoleEnum>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <UserRoleUpdateRoleEnum>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = UserUpdateRoleEnum.fromJson(row);
+        final value = UserRoleUpdateRoleEnum.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -152,16 +152,16 @@ class UserUpdateRoleEnum {
   }
 }
 
-/// Transformation class that can [encode] an instance of [UserUpdateRoleEnum] to String,
-/// and [decode] dynamic data back to [UserUpdateRoleEnum].
-class UserUpdateRoleEnumTypeTransformer {
-  factory UserUpdateRoleEnumTypeTransformer() => _instance ??= const UserUpdateRoleEnumTypeTransformer._();
+/// Transformation class that can [encode] an instance of [UserRoleUpdateRoleEnum] to String,
+/// and [decode] dynamic data back to [UserRoleUpdateRoleEnum].
+class UserRoleUpdateRoleEnumTypeTransformer {
+  factory UserRoleUpdateRoleEnumTypeTransformer() => _instance ??= const UserRoleUpdateRoleEnumTypeTransformer._();
 
-  const UserUpdateRoleEnumTypeTransformer._();
+  const UserRoleUpdateRoleEnumTypeTransformer._();
 
-  String encode(UserUpdateRoleEnum data) => data.value;
+  String encode(UserRoleUpdateRoleEnum data) => data.value;
 
-  /// Decodes a [dynamic value][data] to a UserUpdateRoleEnum.
+  /// Decodes a [dynamic value][data] to a UserRoleUpdateRoleEnum.
   ///
   /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
   /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
@@ -169,12 +169,12 @@ class UserUpdateRoleEnumTypeTransformer {
   ///
   /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
   /// and users are still using an old app with the old code.
-  UserUpdateRoleEnum? decode(dynamic data, {bool allowNull = true}) {
+  UserRoleUpdateRoleEnum? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
-        case r'user': return UserUpdateRoleEnum.user;
-        case r'admin': return UserUpdateRoleEnum.admin;
-        case r'engineer': return UserUpdateRoleEnum.engineer;
+        case r'user': return UserRoleUpdateRoleEnum.user;
+        case r'admin': return UserRoleUpdateRoleEnum.admin;
+        case r'engineer': return UserRoleUpdateRoleEnum.engineer;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
@@ -184,8 +184,8 @@ class UserUpdateRoleEnumTypeTransformer {
     return null;
   }
 
-  /// Singleton [UserUpdateRoleEnumTypeTransformer] instance.
-  static UserUpdateRoleEnumTypeTransformer? _instance;
+  /// Singleton [UserRoleUpdateRoleEnumTypeTransformer] instance.
+  static UserRoleUpdateRoleEnumTypeTransformer? _instance;
 }
 
 

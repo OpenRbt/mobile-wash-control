@@ -10,16 +10,14 @@
 
 part of openapi.api;
 
-class WashServer {
-  /// Returns a new [WashServer] instance.
-  WashServer({
+class ServerGroup {
+  /// Returns a new [ServerGroup] instance.
+  ServerGroup({
     this.id,
     this.name,
     this.description,
-    this.serviceKey,
-    this.createdBy,
-    this.groupId,
     this.organizationId,
+    this.isDefault,
   });
 
   ///
@@ -52,41 +50,23 @@ class WashServer {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? serviceKey;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? createdBy;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? groupId;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
   String? organizationId;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  bool? isDefault;
+
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WashServer &&
+  bool operator ==(Object other) => identical(this, other) || other is ServerGroup &&
      other.id == id &&
      other.name == name &&
      other.description == description &&
-     other.serviceKey == serviceKey &&
-     other.createdBy == createdBy &&
-     other.groupId == groupId &&
-     other.organizationId == organizationId;
+     other.organizationId == organizationId &&
+     other.isDefault == isDefault;
 
   @override
   int get hashCode =>
@@ -94,13 +74,11 @@ class WashServer {
     (id == null ? 0 : id!.hashCode) +
     (name == null ? 0 : name!.hashCode) +
     (description == null ? 0 : description!.hashCode) +
-    (serviceKey == null ? 0 : serviceKey!.hashCode) +
-    (createdBy == null ? 0 : createdBy!.hashCode) +
-    (groupId == null ? 0 : groupId!.hashCode) +
-    (organizationId == null ? 0 : organizationId!.hashCode);
+    (organizationId == null ? 0 : organizationId!.hashCode) +
+    (isDefault == null ? 0 : isDefault!.hashCode);
 
   @override
-  String toString() => 'WashServer[id=$id, name=$name, description=$description, serviceKey=$serviceKey, createdBy=$createdBy, groupId=$groupId, organizationId=$organizationId]';
+  String toString() => 'ServerGroup[id=$id, name=$name, description=$description, organizationId=$organizationId, isDefault=$isDefault]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -119,33 +97,23 @@ class WashServer {
     } else {
       json[r'description'] = null;
     }
-    if (this.serviceKey != null) {
-      json[r'serviceKey'] = this.serviceKey;
-    } else {
-      json[r'serviceKey'] = null;
-    }
-    if (this.createdBy != null) {
-      json[r'createdBy'] = this.createdBy;
-    } else {
-      json[r'createdBy'] = null;
-    }
-    if (this.groupId != null) {
-      json[r'groupId'] = this.groupId;
-    } else {
-      json[r'groupId'] = null;
-    }
     if (this.organizationId != null) {
       json[r'organizationId'] = this.organizationId;
     } else {
       json[r'organizationId'] = null;
     }
+    if (this.isDefault != null) {
+      json[r'isDefault'] = this.isDefault;
+    } else {
+      json[r'isDefault'] = null;
+    }
     return json;
   }
 
-  /// Returns a new [WashServer] instance and imports its values from
+  /// Returns a new [ServerGroup] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static WashServer? fromJson(dynamic value) {
+  static ServerGroup? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -154,30 +122,28 @@ class WashServer {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "WashServer[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "WashServer[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "ServerGroup[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "ServerGroup[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return WashServer(
+      return ServerGroup(
         id: mapValueOfType<String>(json, r'id'),
         name: mapValueOfType<String>(json, r'name'),
         description: mapValueOfType<String>(json, r'description'),
-        serviceKey: mapValueOfType<String>(json, r'serviceKey'),
-        createdBy: mapValueOfType<String>(json, r'createdBy'),
-        groupId: mapValueOfType<String>(json, r'groupId'),
         organizationId: mapValueOfType<String>(json, r'organizationId'),
+        isDefault: mapValueOfType<bool>(json, r'isDefault'),
       );
     }
     return null;
   }
 
-  static List<WashServer>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <WashServer>[];
+  static List<ServerGroup>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <ServerGroup>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = WashServer.fromJson(row);
+        final value = ServerGroup.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -186,12 +152,12 @@ class WashServer {
     return result.toList(growable: growable);
   }
 
-  static Map<String, WashServer> mapFromJson(dynamic json) {
-    final map = <String, WashServer>{};
+  static Map<String, ServerGroup> mapFromJson(dynamic json) {
+    final map = <String, ServerGroup>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServer.fromJson(entry.value);
+        final value = ServerGroup.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -200,13 +166,13 @@ class WashServer {
     return map;
   }
 
-  // maps a json object with a list of WashServer-objects as value to a dart map
-  static Map<String, List<WashServer>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<WashServer>>{};
+  // maps a json object with a list of ServerGroup-objects as value to a dart map
+  static Map<String, List<ServerGroup>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<ServerGroup>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServer.listFromJson(entry.value, growable: growable,);
+        final value = ServerGroup.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

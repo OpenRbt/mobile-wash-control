@@ -10,9 +10,7 @@ abstract class Repository {
   Future<void> updateDiscounts({BuildContext? context});
 
   Future<List<Station>?> getStations();
-  Future<List<Organization>?> getOrganizations();
   Future<Station?> getStation(int id);
-  Future<Organization?> getOrganization(int id);
   Future<List<StationButton>?> getStationButtons(int id, {BuildContext? context});
   Future<StationMoneyReport?> getStationMoneyReport(int id, {BuildContext? context});
 

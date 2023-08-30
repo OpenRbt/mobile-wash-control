@@ -304,7 +304,7 @@ class _UserEditPageState extends State<UserEditPage> {
                               title: Text("Сменить пин"),
                               content: SingleChildScrollView(
                                 child: ConstrainedBox(
-                                  constraints: BoxConstraints(maxHeight: 230), // Укажите максимальную высоту, которую вы хотите
+                                  constraints: BoxConstraints(maxHeight: 230),
                                   child: Form(
                                     key: _changePinKey,
                                     child: Column(
@@ -465,6 +465,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                 ),
                               ],
                             ),
+                            repository.currentUser()?.isAdmin == true ?
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -481,7 +482,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                   },
                                 ),
                               ],
-                            ),
+                            ): Container(),
                           ],
                         );
                       },

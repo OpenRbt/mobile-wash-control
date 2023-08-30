@@ -15,9 +15,8 @@ class User {
   User({
     this.id,
     this.active,
-    this.balance,
-    this.pendingBalance,
     this.role,
+    this.organizationIds = const [],
   });
 
   ///
@@ -36,43 +35,27 @@ class User {
   ///
   bool? active;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  int? balance;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  int? pendingBalance;
-
   UserRoleEnum? role;
+
+  List<String> organizationIds;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is User &&
      other.id == id &&
      other.active == active &&
-     other.balance == balance &&
-     other.pendingBalance == pendingBalance &&
-     other.role == role;
+     other.role == role &&
+     other.organizationIds == organizationIds;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (id == null ? 0 : id!.hashCode) +
     (active == null ? 0 : active!.hashCode) +
-    (balance == null ? 0 : balance!.hashCode) +
-    (pendingBalance == null ? 0 : pendingBalance!.hashCode) +
-    (role == null ? 0 : role!.hashCode);
+    (role == null ? 0 : role!.hashCode) +
+    (organizationIds.hashCode);
 
   @override
-  String toString() => 'User[id=$id, active=$active, balance=$balance, pendingBalance=$pendingBalance, role=$role]';
+  String toString() => 'User[id=$id, active=$active, role=$role, organizationIds=$organizationIds]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -86,21 +69,12 @@ class User {
     } else {
       json[r'active'] = null;
     }
-    if (this.balance != null) {
-      json[r'balance'] = this.balance;
-    } else {
-      json[r'balance'] = null;
-    }
-    if (this.pendingBalance != null) {
-      json[r'pendingBalance'] = this.pendingBalance;
-    } else {
-      json[r'pendingBalance'] = null;
-    }
     if (this.role != null) {
       json[r'role'] = this.role;
     } else {
       json[r'role'] = null;
     }
+      json[r'organizationIds'] = this.organizationIds;
     return json;
   }
 
@@ -125,9 +99,10 @@ class User {
       return User(
         id: mapValueOfType<String>(json, r'id'),
         active: mapValueOfType<bool>(json, r'active'),
-        balance: mapValueOfType<int>(json, r'balance'),
-        pendingBalance: mapValueOfType<int>(json, r'pendingBalance'),
         role: UserRoleEnum.fromJson(json[r'role']),
+        organizationIds: json[r'organizationIds'] is List
+            ? (json[r'organizationIds'] as List).cast<String>()
+            : const [],
       );
     }
     return null;

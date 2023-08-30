@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 //import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobile_wash_control/mobile/pages/auth.dart';
+import 'package:mobile_wash_control/mobile/pages/current_group.dart';
+import 'package:mobile_wash_control/mobile/pages/current_organization.dart';
 import 'package:mobile_wash_control/mobile/pages/discounts.dart';
 import 'package:mobile_wash_control/mobile/pages/discounts/editDiscount.dart';
 import 'package:mobile_wash_control/mobile/pages/home.dart';
@@ -22,6 +24,8 @@ import 'package:mobile_wash_control/mobile/pages/statistics.dart';
 import 'package:mobile_wash_control/mobile/pages/users.dart';
 import 'package:mobile_wash_control/mobile/pages/users/editUser.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+import '../mobile/pages/organizations.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -56,6 +60,9 @@ class Application extends StatelessWidget {
         "/mobile/settings/kasse": (context) => KassePage(),
         "/mobile/settings/default": (context) => PresetsPage(),
         "/mobile/services": (context) => SettingsServicesPage(),
+        "/mobile/services/organizations": (context) => OrganizationsView(),
+        "/mobile/services/current-organization": (context) => CurrentOrganizationView(),
+        "/mobile/services/current-organization/current-group": (context) => CurrentGroupView(),
         "/mobile/services-auth": (context) => SettingsServicesRegistrationPage(),
         "/mobile/statistics": (context) => StatisticsPage(),
         "/mobile/motors": (context) => MotorPage(),

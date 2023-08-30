@@ -7,4 +7,6 @@ enum PageArgCode {
   programID,
   user,
   discountID,
+  currentOrganizationID,
+  currentGroupID
 }
