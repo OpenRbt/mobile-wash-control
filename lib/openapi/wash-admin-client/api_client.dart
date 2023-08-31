@@ -193,8 +193,6 @@ class ApiClient {
           return OrganizationCreation.fromJson(value);
         case 'OrganizationUpdate':
           return OrganizationUpdate.fromJson(value);
-        case 'Pagination':
-          return Pagination.fromJson(value);
         case 'ServerGroup':
           return ServerGroup.fromJson(value);
         case 'ServerGroupCreation':

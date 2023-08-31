@@ -67,19 +67,30 @@ class WalletsApi {
   /// Performs an HTTP 'GET /wallets' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [Pagination] body:
-  Future<Response> getWalletsWithHttpInfo({ Pagination? body, }) async {
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
+  ///
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  Future<Response> getWalletsWithHttpInfo({ int? offset, int? limit, }) async {
     // ignore: prefer_const_declarations
     final path = r'/wallets';
 
     // ignore: prefer_final_locals
-    Object? postBody = body;
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>['application/json'];
+    if (offset != null) {
+      queryParams.addAll(_queryParams('', 'offset', offset));
+    }
+    if (limit != null) {
+      queryParams.addAll(_queryParams('', 'limit', limit));
+    }
+
+    const contentTypes = <String>[];
 
 
     return apiClient.invokeAPI(
@@ -95,9 +106,13 @@ class WalletsApi {
 
   /// Parameters:
   ///
-  /// * [Pagination] body:
-  Future<List<Wallet>?> getWallets({ Pagination? body, }) async {
-    final response = await getWalletsWithHttpInfo( body: body, );
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
+  ///
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  Future<List<Wallet>?> getWallets({ int? offset, int? limit, }) async {
+    final response = await getWalletsWithHttpInfo( offset: offset, limit: limit, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

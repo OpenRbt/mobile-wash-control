@@ -199,22 +199,37 @@ class WashServersApi {
   /// Performs an HTTP 'GET /wash-servers/' operation and returns the [Response].
   /// Parameters:
   ///
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
+  ///
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  ///
+  /// * [bool] isManagedByMe:
+  ///
   /// * [String] organizationId:
   ///
   /// * [String] groupId:
-  ///
-  /// * [Pagination] body:
-  Future<Response> getWashServersWithHttpInfo({ String? organizationId, String? groupId, Pagination? body, }) async {
+  Future<Response> getWashServersWithHttpInfo({ int? offset, int? limit, bool? isManagedByMe, String? organizationId, String? groupId, }) async {
     // ignore: prefer_const_declarations
     final path = r'/wash-servers/';
 
     // ignore: prefer_final_locals
-    Object? postBody = body;
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
+    if (offset != null) {
+      queryParams.addAll(_queryParams('', 'offset', offset));
+    }
+    if (limit != null) {
+      queryParams.addAll(_queryParams('', 'limit', limit));
+    }
+    if (isManagedByMe != null) {
+      queryParams.addAll(_queryParams('', 'isManagedByMe', isManagedByMe));
+    }
     if (organizationId != null) {
       queryParams.addAll(_queryParams('', 'organizationId', organizationId));
     }
@@ -222,7 +237,7 @@ class WashServersApi {
       queryParams.addAll(_queryParams('', 'groupId', groupId));
     }
 
-    const contentTypes = <String>['application/json'];
+    const contentTypes = <String>[];
 
 
     return apiClient.invokeAPI(
@@ -238,13 +253,19 @@ class WashServersApi {
 
   /// Parameters:
   ///
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
+  ///
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  ///
+  /// * [bool] isManagedByMe:
+  ///
   /// * [String] organizationId:
   ///
   /// * [String] groupId:
-  ///
-  /// * [Pagination] body:
-  Future<List<WashServer>?> getWashServers({ String? organizationId, String? groupId, Pagination? body, }) async {
-    final response = await getWashServersWithHttpInfo( organizationId: organizationId, groupId: groupId, body: body, );
+  Future<List<WashServer>?> getWashServers({ int? offset, int? limit, bool? isManagedByMe, String? organizationId, String? groupId, }) async {
+    final response = await getWashServersWithHttpInfo( offset: offset, limit: limit, isManagedByMe: isManagedByMe, organizationId: organizationId, groupId: groupId, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

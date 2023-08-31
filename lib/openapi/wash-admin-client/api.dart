@@ -41,7 +41,6 @@ part 'model/health_check200_response.dart';
 part 'model/organization.dart';
 part 'model/organization_creation.dart';
 part 'model/organization_update.dart';
-part 'model/pagination.dart';
 part 'model/server_group.dart';
 part 'model/server_group_creation.dart';
 part 'model/server_group_update.dart';

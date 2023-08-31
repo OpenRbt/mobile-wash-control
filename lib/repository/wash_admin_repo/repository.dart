@@ -9,7 +9,7 @@ class WashAdminRepository {
     try {
 
 
-      final res = await Common.organizationApi!.getOrganizations(body: Pagination(limit: 100, offset: 0));
+      final res = await Common.organizationApi!.getOrganizations(limit: 100, offset: 0);
 
       var organizations = <entity.Organization>[];
       for(int i = 0; i < res!.length; i++){
@@ -163,7 +163,7 @@ class WashAdminRepository {
   static Future<List<entity.ServerGroup>?> getServerGroups(String organizationId) async {
     try{
 
-      final res = await Common.serversGroupApi!.getServerGroups(organizationId: organizationId, body: Pagination(limit: 100));
+      final res = await Common.serversGroupApi!.getServerGroups(organizationId: organizationId, limit: 100, offset: 0);
 
       var serverGroups = <entity.ServerGroup>[];
       for(int i = 0; i < res!.length; i++) {

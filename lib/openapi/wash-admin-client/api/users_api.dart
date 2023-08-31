@@ -108,19 +108,30 @@ class UsersApi {
   /// Performs an HTTP 'GET /users' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [Pagination] body:
-  Future<Response> getUsersWithHttpInfo({ Pagination? body, }) async {
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
+  ///
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  Future<Response> getUsersWithHttpInfo({ int? offset, int? limit, }) async {
     // ignore: prefer_const_declarations
     final path = r'/users';
 
     // ignore: prefer_final_locals
-    Object? postBody = body;
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>['application/json'];
+    if (offset != null) {
+      queryParams.addAll(_queryParams('', 'offset', offset));
+    }
+    if (limit != null) {
+      queryParams.addAll(_queryParams('', 'limit', limit));
+    }
+
+    const contentTypes = <String>[];
 
 
     return apiClient.invokeAPI(
@@ -136,9 +147,13 @@ class UsersApi {
 
   /// Parameters:
   ///
-  /// * [Pagination] body:
-  Future<List<User>?> getUsers({ Pagination? body, }) async {
-    final response = await getUsersWithHttpInfo( body: body, );
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
+  ///
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  Future<List<User>?> getUsers({ int? offset, int? limit, }) async {
+    final response = await getUsersWithHttpInfo( offset: offset, limit: limit, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

@@ -154,25 +154,40 @@ class ServerGroupsApi {
   /// Performs an HTTP 'GET /server-groups' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] organizationId:
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
   ///
-  /// * [Pagination] body:
-  Future<Response> getServerGroupsWithHttpInfo({ String? organizationId, Pagination? body, }) async {
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  ///
+  /// * [bool] isManagedByMe:
+  ///
+  /// * [String] organizationId:
+  Future<Response> getServerGroupsWithHttpInfo({ int? offset, int? limit, bool? isManagedByMe, String? organizationId, }) async {
     // ignore: prefer_const_declarations
     final path = r'/server-groups';
 
     // ignore: prefer_final_locals
-    Object? postBody = body;
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
+    if (offset != null) {
+      queryParams.addAll(_queryParams('', 'offset', offset));
+    }
+    if (limit != null) {
+      queryParams.addAll(_queryParams('', 'limit', limit));
+    }
+    if (isManagedByMe != null) {
+      queryParams.addAll(_queryParams('', 'isManagedByMe', isManagedByMe));
+    }
     if (organizationId != null) {
       queryParams.addAll(_queryParams('', 'organizationId', organizationId));
     }
 
-    const contentTypes = <String>['application/json'];
+    const contentTypes = <String>[];
 
 
     return apiClient.invokeAPI(
@@ -188,11 +203,17 @@ class ServerGroupsApi {
 
   /// Parameters:
   ///
-  /// * [String] organizationId:
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
   ///
-  /// * [Pagination] body:
-  Future<List<ServerGroup>?> getServerGroups({ String? organizationId, Pagination? body, }) async {
-    final response = await getServerGroupsWithHttpInfo( organizationId: organizationId, body: body, );
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  ///
+  /// * [bool] isManagedByMe:
+  ///
+  /// * [String] organizationId:
+  Future<List<ServerGroup>?> getServerGroups({ int? offset, int? limit, bool? isManagedByMe, String? organizationId, }) async {
+    final response = await getServerGroupsWithHttpInfo( offset: offset, limit: limit, isManagedByMe: isManagedByMe, organizationId: organizationId, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

@@ -199,25 +199,40 @@ class OrganizationsApi {
   /// Performs an HTTP 'GET /organizations' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [List<String>] ids:
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
   ///
-  /// * [Pagination] body:
-  Future<Response> getOrganizationsWithHttpInfo({ List<String>? ids, Pagination? body, }) async {
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  ///
+  /// * [bool] isManagedByMe:
+  ///
+  /// * [List<String>] ids:
+  Future<Response> getOrganizationsWithHttpInfo({ int? offset, int? limit, bool? isManagedByMe, List<String>? ids, }) async {
     // ignore: prefer_const_declarations
     final path = r'/organizations';
 
     // ignore: prefer_final_locals
-    Object? postBody = body;
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
+    if (offset != null) {
+      queryParams.addAll(_queryParams('', 'offset', offset));
+    }
+    if (limit != null) {
+      queryParams.addAll(_queryParams('', 'limit', limit));
+    }
+    if (isManagedByMe != null) {
+      queryParams.addAll(_queryParams('', 'isManagedByMe', isManagedByMe));
+    }
     if (ids != null) {
       queryParams.addAll(_queryParams('csv', 'ids', ids));
     }
 
-    const contentTypes = <String>['application/json'];
+    const contentTypes = <String>[];
 
 
     return apiClient.invokeAPI(
@@ -233,11 +248,17 @@ class OrganizationsApi {
 
   /// Parameters:
   ///
-  /// * [List<String>] ids:
+  /// * [int] offset:
+  ///   Number of records to skip for pagination
   ///
-  /// * [Pagination] body:
-  Future<List<Organization>?> getOrganizations({ List<String>? ids, Pagination? body, }) async {
-    final response = await getOrganizationsWithHttpInfo( ids: ids, body: body, );
+  /// * [int] limit:
+  ///   Maximum number of records to return
+  ///
+  /// * [bool] isManagedByMe:
+  ///
+  /// * [List<String>] ids:
+  Future<List<Organization>?> getOrganizations({ int? offset, int? limit, bool? isManagedByMe, List<String>? ids, }) async {
+    final response = await getOrganizationsWithHttpInfo( offset: offset, limit: limit, isManagedByMe: isManagedByMe, ids: ids, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

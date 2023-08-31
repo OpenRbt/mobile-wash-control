@@ -195,6 +195,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     try {
       var arg = WashServerUpdate(name: _serverNameController.text, description: _serverDescriptionController.text);
       var res = await Common.washServerApi!.updateWashServer(_server.value.id!.toString(), body: arg);
+      await Common.washServerApi?.assignServerToGroup(newGroupId, (_server.value.id ?? ""));
     } on ApiException catch (e) {
       if (kDebugMode) print("WashAdminApiException: $e");
     } catch (e) {
