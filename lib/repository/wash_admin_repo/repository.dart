@@ -9,7 +9,7 @@ class WashAdminRepository {
     try {
 
 
-      final res = await Common.organizationApi!.getOrganizations(limit: 100, offset: 0);
+      final res = await Common.organizationApi!.getOrganizations(limit: 100, offset: 0, isManagedByMe: true);
 
       var organizations = <entity.Organization>[];
       for(int i = 0; i < res!.length; i++){

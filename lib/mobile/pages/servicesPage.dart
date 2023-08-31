@@ -41,6 +41,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     print("register Wash");
     if (_serverNameController.text.isNotEmpty) {
       print("RegisterWash groupId: " + newGroupId);
+      print("newGroupId: " + newGroupId.toString());
       var arg = WashServerCreation(name: _serverNameController.text, description: _serverDescriptionController.text, groupId: newGroupId);
 
       try {
@@ -87,16 +88,19 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
 
     }
     try {
-      print("before");
       var id = await repository.getConfigVarString("server_id");
       var key = await repository.getConfigVarString("server_key");
-      print("after");
       _server.value = _server.value.copyWith(
           id: id,
           serviceKey: key
       );
       await _getWashServer();
       await manageOrganizations();
+      if((_server.value.groupId?.isEmpty ?? true)){
+        print("groupIdisEmpty");
+        var res = await WashAdminRepository.getServerGroups((organizations.value.where((element) => element.isDefault ?? true).first.id ?? ""));
+        newGroupId = res?.first.id ?? "";
+      }
     } catch (e) {
       if (kDebugMode) print("_loadWashServer OtherException: $e");
     }
