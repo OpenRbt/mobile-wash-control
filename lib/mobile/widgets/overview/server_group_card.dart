@@ -47,7 +47,7 @@ class ServerGroupCard extends StatelessWidget {
           const Divider(),
           OutlinedButton(
             onPressed: onPressed,
-            child: const Text("Открыть настройки"),
+            child: const Text("Редактировать"),
           ),
         ],
       ),

@@ -1321,6 +1321,11 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
+  Future<void> deleteConfigVarString(String name, String value) async {
+
+  }
+
+  @override
   Future<entity.StationConfig?> getStationConfig(int id, {BuildContext? context}) async {
     try {
       final args = StationRequest(id: id);

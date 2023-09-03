@@ -61,7 +61,7 @@ class Application extends StatelessWidget {
         "/mobile/settings/default": (context) => PresetsPage(),
         "/mobile/services": (context) => SettingsServicesPage(),
         "/mobile/services/organizations": (context) => OrganizationsView(),
-        "/mobile/services/current-organization": (context) => CurrentOrganizationView(),
+        "/mobile/services/groups": (context) => CurrentOrganizationView(),
         "/mobile/services/current-organization/current-group": (context) => CurrentGroupView(),
         "/mobile/services-auth": (context) => SettingsServicesRegistrationPage(),
         "/mobile/statistics": (context) => StatisticsPage(),

@@ -22,7 +22,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
   late entity.Organization? currentOrganization;
   late List<entity.ServerGroup>? serverGroups;
 
-  final GlobalKey<FormState> editOrganizationKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> editGroupKey = GlobalKey<FormState>();
   final GlobalKey<FormState> addGroupKey = GlobalKey<FormState>();
 
   Map<String, TextEditingController> _controllers = Map();
@@ -61,22 +61,12 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context, -1);
-        //await routeMaster.pop();
-        return false;
+        Navigator.pop(context, true);
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Организация ${currentOrganizationID}"),
-          actions: [
-            IconButton(
-              onPressed: () async {
-                await WashAdminRepository.deleteOrganization((currentOrganizationID));
-                //Navigator.pop(context, -1);
-              },
-              icon: const Icon(Icons.delete_forever_outlined),
-            ),
-          ],
+          title: Text("Управление группами"),
         ),
         body: FutureBuilder<void>(
             future: getPageData(currentOrganizationID),
@@ -94,8 +84,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                 Card(
                 child: Column(
                 children: [
-                  Form(
-                  key: editOrganizationKey,
+                  Container(
                   child: Column(
                     children: [
                       Row(
@@ -113,15 +102,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                             fit: FlexFit.tight,
                             child: TextFormField(
                               controller: _controllers["organizationName"],
-                              onChanged: (val) {
-                                //_config.value = _config.value.copyWith(name: val);
-                              },
-                              validator: (val) {
-                                if ((val ?? "").trim().isEmpty) {
-                                  return "Поле не может быть пустым";
-                                }
-                                return null;
-                              },
+                              enabled: false,
                             ),
                           ),
                         ],
@@ -142,45 +123,13 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                             child: TextFormField(
                               maxLines: null,
                               controller: _controllers["organizationDescription"],
-                              onChanged: (val) {},
+                              enabled: false,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(
                         height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ProgressTextButton(
-                            onPressed: () async {
-                              if (editOrganizationKey.currentState!.validate()){
-                                await WashAdminRepository.updateOrganization(
-                                    entity.Organization(
-                                      id: currentOrganizationID,
-                                      name: _controllers["organizationName"]!.text,
-                                      description: _controllers["organizationDescription"]!.text,
-                                    )
-                                );
-                              }
-                            },
-                            child: const Text("Сохранить"),
-                          ),
-                          Flexible(
-                            fit: FlexFit.tight,
-                            flex: 1,
-                            child: ProgressTextButton(
-                              onPressed: () async {
-                                await getPageData(currentOrganizationID);
-                              },
-                              child: const Text(
-                                "Получить текущую конфигурацию",
-                                softWrap: true,
-                              ),
-                            ),
-                          )
-                        ],
                       ),
                     ],
                   ),
@@ -200,12 +149,59 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                             return ServerGroupCard(
                               data: (data ?? entity.ServerGroup()),
                               onPressed: () {
-                                print(index);
-                                var args = Map<PageArgCode, dynamic>();
-                                args[PageArgCode.currentOrganizationID] = currentOrganizationID;
-                                args[PageArgCode.currentGroupID] = data?.id;
-                                Navigator.pushNamed(context, "/mobile/services/current-organization/current-group", arguments: args);
-                                //routeMaster.push("/organizations/$index");
+                                TextEditingController firstController = TextEditingController(text: data?.name);
+                                TextEditingController secondController = TextEditingController(text: data?.description);
+                                showDialog(
+                                    context: context,
+                                    builder: (context) =>  TwoFieldDialog(
+                                      title: "Редактировать группу",
+                                      firstFieldName: 'Название',
+                                      seconFieldName: 'Описание',
+                                      firstController: firstController,
+                                      secondController: secondController,
+                                      validateKey: editGroupKey,
+                                      actions:[
+                                        Center(
+                                          child: Column(
+                                            children: [
+                                              ProgressButton(
+                                                onPressed: () async {
+                                                  if (editGroupKey.currentState!.validate()){
+                                                    WashAdminRepository.updateServerGroup(
+                                                        entity.ServerGroup(
+                                                          id: data?.id ?? "",
+                                                          name: firstController.text,
+                                                          description: secondController.text,
+                                                          organizationId: currentOrganizationID,
+                                                        )
+                                                    );
+                                                    Navigator.pop(context);
+                                                    setState(() {});
+                                                  }
+                                                },
+                                                child: const Text("Сохранить"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text("Отмена"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () async {
+                                                  await WashAdminRepository.deleteServerGroup(data?.id ?? "");;
+                                                  Navigator.pop(context);
+                                                  setState(() {});
+                                                },
+                                                child: const Text("Удалить"),
+                                              ),
+
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                );
                               },
                             );
                           },

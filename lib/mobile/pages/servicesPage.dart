@@ -90,6 +90,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     try {
       var id = await repository.getConfigVarString("server_id");
       var key = await repository.getConfigVarString("server_key");
+
       _server.value = _server.value.copyWith(
           id: id,
           serviceKey: key
@@ -103,6 +104,19 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
       }
     } catch (e) {
       if (kDebugMode) print("_loadWashServer OtherException: $e");
+    }
+  }
+
+  Future<void> _deleteWashServer(Repository repository) async {
+    print("_deleteWashServer");
+    if (_server.value.id?.isNotEmpty == true && _server.value.serviceKey?.isNotEmpty == true) {
+      try {
+        await repository.deleteConfigVarString("server_id", _server.value.id!);
+        await repository.deleteConfigVarString("server_key", _server.value.serviceKey!);
+      } catch (e) {
+        if (kDebugMode) print("OtherException: $e");
+      }
+      return;
     }
   }
 
@@ -197,6 +211,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
   Future<void> _updateWashServer() async {
     print("_updateWashServer");
     try {
+      print("_updateWashServer newGroupId: " + newGroupId);
       var arg = WashServerUpdate(name: _serverNameController.text, description: _serverDescriptionController.text);
       var res = await Common.washServerApi!.updateWashServer(_server.value.id!.toString(), body: arg);
       await Common.washServerApi?.assignServerToGroup(newGroupId, (_server.value.id ?? ""));
@@ -387,6 +402,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                                                           currentOrganization.value = (await WashAdminRepository.getOrganization(value!))!;
                                                                           await _getGroups();
                                                                           currentServerGroup.value = serverGroups.value[0];
+                                                                          newGroupId = serverGroups.value[0].id ?? "";
                                                                           block.value = false;
                                                                         },
                                                                       ),
@@ -611,6 +627,48 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                                   : null,
                                               child: Text(
                                                 "Повторно записать ID и ключ",
+                                                maxLines: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Flexible(
+                                            flex: 1,
+                                            child: ProgressButton(
+                                              onPressed: (_server.value.id ?? "").isNotEmpty
+                                                  ? () async {
+                                                await _deleteWashServer(repository);
+                                              }
+                                                  : null,
+                                              child: Text(
+                                                "Удалить ID и ключ",
+                                                maxLines: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Flexible(
+                                            flex: 1,
+                                            child: ProgressButton(
+                                              onPressed: () async {
+                                                var args = Map<PageArgCode, dynamic>();
+                                                print(currentOrganization.value.id);
+                                                args[PageArgCode.currentOrganizationID] = currentOrganization.value.id;
+                                                var res = Navigator.pushNamed(context, "/mobile/services/groups", arguments: args);
+                                                if(await res == true){
+                                                  setState(() {});
+                                                }
+                                              },
+                                              child: Text(
+                                                "Управление группами (в выбранной организации)",
                                                 maxLines: 2,
                                               ),
                                             ),

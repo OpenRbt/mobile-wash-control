@@ -66,6 +66,7 @@ abstract class Repository {
   Future<bool?> getConfigVarBool(String name);
   Future<void> setConfigVarInt(String name, int value, {BuildContext? context});
   Future<void> setConfigVarString(String name, String value);
+  Future<void> deleteConfigVarString(String name, String value);
   Future<void> setConfigVarBool(String name, bool value);
 
   Future<String?> getStationTemperature(int id, {BuildContext? context});
