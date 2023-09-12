@@ -205,12 +205,10 @@ class WashServersApi {
   /// * [int] limit:
   ///   Maximum number of records to return
   ///
-  /// * [bool] isManagedByMe:
-  ///
   /// * [String] organizationId:
   ///
   /// * [String] groupId:
-  Future<Response> getWashServersWithHttpInfo({ int? offset, int? limit, bool? isManagedByMe, String? organizationId, String? groupId, }) async {
+  Future<Response> getWashServersWithHttpInfo({ int? offset, int? limit, String? organizationId, String? groupId, }) async {
     // ignore: prefer_const_declarations
     final path = r'/wash-servers/';
 
@@ -226,9 +224,6 @@ class WashServersApi {
     }
     if (limit != null) {
       queryParams.addAll(_queryParams('', 'limit', limit));
-    }
-    if (isManagedByMe != null) {
-      queryParams.addAll(_queryParams('', 'isManagedByMe', isManagedByMe));
     }
     if (organizationId != null) {
       queryParams.addAll(_queryParams('', 'organizationId', organizationId));
@@ -259,13 +254,11 @@ class WashServersApi {
   /// * [int] limit:
   ///   Maximum number of records to return
   ///
-  /// * [bool] isManagedByMe:
-  ///
   /// * [String] organizationId:
   ///
   /// * [String] groupId:
-  Future<List<WashServer>?> getWashServers({ int? offset, int? limit, bool? isManagedByMe, String? organizationId, String? groupId, }) async {
-    final response = await getWashServersWithHttpInfo( offset: offset, limit: limit, isManagedByMe: isManagedByMe, organizationId: organizationId, groupId: groupId, );
+  Future<List<WashServer>?> getWashServers({ int? offset, int? limit, String? organizationId, String? groupId, }) async {
+    final response = await getWashServersWithHttpInfo( offset: offset, limit: limit, organizationId: organizationId, groupId: groupId, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

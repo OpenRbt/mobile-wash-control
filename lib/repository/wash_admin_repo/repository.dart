@@ -9,7 +9,7 @@ class WashAdminRepository {
     try {
 
 
-      final res = await Common.organizationApi!.getOrganizations(limit: 100, offset: 0, isManagedByMe: true);
+      final res = await Common.organizationApi!.getOrganizations(limit: 100, offset: 0);
 
       var organizations = <entity.Organization>[];
       for(int i = 0; i < res!.length; i++){
@@ -20,18 +20,6 @@ class WashAdminRepository {
           isDefault: res[i].isDefault,
         ));
       }
-
-      /*
-      var organizations = <entity.Organization>[];
-      for(int i = 0; i < 12; i++){
-        organizations.add(entity.Organization(
-          id: "$i",
-          name: "Organization$i",
-          description: "Описание$i",
-        ));
-      }
-
-       */
 
       return organizations;
 
@@ -59,15 +47,6 @@ class WashAdminRepository {
         name: res?.name,
         description: res?.description,
       );
-
-       /*
-      var organization = entity.Organization(
-        id: "1",
-        name: "Organization2",
-        description: "Описание3",
-      );
-
-        */
 
       return organization;
 
@@ -163,7 +142,7 @@ class WashAdminRepository {
   static Future<List<entity.ServerGroup>?> getServerGroups(String organizationId) async {
     try{
 
-      final res = await Common.serversGroupApi!.getServerGroups(organizationId: organizationId, limit: 100, offset: 0);
+      final res = await Common.serversGroupApi!.getServerGroups(limit: 100, offset: 0);
 
       var serverGroups = <entity.ServerGroup>[];
       for(int i = 0; i < res!.length; i++) {
@@ -174,23 +153,13 @@ class WashAdminRepository {
             organizationId: res[i].organizationId
         ));
       }
-      /*
-      var serverGroups = <entity.ServerGroup>[];
-      for(int i = 0; i < 5; i++){
-        serverGroups.add(entity.ServerGroup(
-          id: "$i",
-          name: "Группа$i",
-          description: "Описание$i",
-          organizationId: "organizationId$i",
-        ));
-      }
-       */
       return serverGroups;
 
     } on ApiException catch (e) {
       switch (e.code){
         default:
           print("Не удалось получить список групп, Ошибка: ${e.code}");
+          print(e.message);
           break;
       }
       return null;
@@ -210,16 +179,6 @@ class WashAdminRepository {
           description: res?.description,
           organizationId: res?.organizationId
       );
-
-/*
-      var serverGroup = entity.ServerGroup(
-        id: "1",
-        name: "Группа2",
-        description: "Описание3",
-        organizationId: "organizationId4",
-      );
-
- */
 
       return serverGroup;
 
@@ -473,4 +432,35 @@ class WashAdminRepository {
     }
     return;
   }
+
+  static Future<AdminApplication?> sendApplication(entity.FirebaseUser firebaseUser) async { //запрос на отправку заявки юзером
+    try {
+      final res = await Common.applicationApi!.createAdminApplication(
+          CreateAdminApplicationRequest(
+              application: AdminApplicationCreation(
+                  user: FirebaseUser(
+                    id: firebaseUser.id ?? "",
+                    name: firebaseUser.name ?? "",
+                    email: firebaseUser.email ?? "",
+                  )
+              )
+          )
+      );
+
+      return res;
+    }
+    on ApiException catch (e) {
+      switch (e.code){
+        default:
+          print("Не удалось отправить заявку, Ошибка: ${e.code}");
+          break;
+      }
+      return null;
+    } catch (e) {
+      print("Произошла неизвестная ошибка: $e");
+    }
+    return null;
+  }
+
+
 }

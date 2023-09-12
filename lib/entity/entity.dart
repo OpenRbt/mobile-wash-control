@@ -51,6 +51,14 @@ class ServerGroup {
   }
 }
 
+class FirebaseUser {
+  String? id;
+  String? name;
+  String? email;
+
+  FirebaseUser({this.id, this.name, this.email});
+}
+
 class KasseStatus {
   String? status;
   String? info;

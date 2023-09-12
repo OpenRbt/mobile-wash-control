@@ -10,14 +10,14 @@
 
 part of openapi.api;
 
-class Wallet {
-  /// Returns a new [Wallet] instance.
-  Wallet({
+class WashServerUpdate {
+  /// Returns a new [WashServerUpdate] instance.
+  WashServerUpdate({
     this.id,
-    this.userId,
-    this.organizationId,
-    this.balance,
-    this.pendingBalance,
+    this.name,
+    this.description,
+    this.terminalKey,
+    this.terminalPassword,
   });
 
   ///
@@ -34,7 +34,7 @@ class Wallet {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? userId;
+  String? name;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -42,7 +42,7 @@ class Wallet {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? organizationId;
+  String? description;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -50,7 +50,7 @@ class Wallet {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? balance;
+  String? terminalKey;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -58,27 +58,27 @@ class Wallet {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? pendingBalance;
+  String? terminalPassword;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is Wallet &&
+  bool operator ==(Object other) => identical(this, other) || other is WashServerUpdate &&
      other.id == id &&
-     other.userId == userId &&
-     other.organizationId == organizationId &&
-     other.balance == balance &&
-     other.pendingBalance == pendingBalance;
+     other.name == name &&
+     other.description == description &&
+     other.terminalKey == terminalKey &&
+     other.terminalPassword == terminalPassword;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (id == null ? 0 : id!.hashCode) +
-    (userId == null ? 0 : userId!.hashCode) +
-    (organizationId == null ? 0 : organizationId!.hashCode) +
-    (balance == null ? 0 : balance!.hashCode) +
-    (pendingBalance == null ? 0 : pendingBalance!.hashCode);
+    (name == null ? 0 : name!.hashCode) +
+    (description == null ? 0 : description!.hashCode) +
+    (terminalKey == null ? 0 : terminalKey!.hashCode) +
+    (terminalPassword == null ? 0 : terminalPassword!.hashCode);
 
   @override
-  String toString() => 'Wallet[id=$id, userId=$userId, organizationId=$organizationId, balance=$balance, pendingBalance=$pendingBalance]';
+  String toString() => 'WashServerUpdate[id=$id, name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -87,33 +87,33 @@ class Wallet {
     } else {
       json[r'id'] = null;
     }
-    if (this.userId != null) {
-      json[r'userId'] = this.userId;
+    if (this.name != null) {
+      json[r'name'] = this.name;
     } else {
-      json[r'userId'] = null;
+      json[r'name'] = null;
     }
-    if (this.organizationId != null) {
-      json[r'organizationId'] = this.organizationId;
+    if (this.description != null) {
+      json[r'description'] = this.description;
     } else {
-      json[r'organizationId'] = null;
+      json[r'description'] = null;
     }
-    if (this.balance != null) {
-      json[r'balance'] = this.balance;
+    if (this.terminalKey != null) {
+      json[r'terminal_key'] = this.terminalKey;
     } else {
-      json[r'balance'] = null;
+      json[r'terminal_key'] = null;
     }
-    if (this.pendingBalance != null) {
-      json[r'pendingBalance'] = this.pendingBalance;
+    if (this.terminalPassword != null) {
+      json[r'terminal_password'] = this.terminalPassword;
     } else {
-      json[r'pendingBalance'] = null;
+      json[r'terminal_password'] = null;
     }
     return json;
   }
 
-  /// Returns a new [Wallet] instance and imports its values from
+  /// Returns a new [WashServerUpdate] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static Wallet? fromJson(dynamic value) {
+  static WashServerUpdate? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -122,28 +122,28 @@ class Wallet {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Wallet[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Wallet[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "WashServerUpdate[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "WashServerUpdate[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return Wallet(
+      return WashServerUpdate(
         id: mapValueOfType<String>(json, r'id'),
-        userId: mapValueOfType<String>(json, r'userId'),
-        organizationId: mapValueOfType<String>(json, r'organizationId'),
-        balance: mapValueOfType<int>(json, r'balance'),
-        pendingBalance: mapValueOfType<int>(json, r'pendingBalance'),
+        name: mapValueOfType<String>(json, r'name'),
+        description: mapValueOfType<String>(json, r'description'),
+        terminalKey: mapValueOfType<String>(json, r'terminal_key'),
+        terminalPassword: mapValueOfType<String>(json, r'terminal_password'),
       );
     }
     return null;
   }
 
-  static List<Wallet>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <Wallet>[];
+  static List<WashServerUpdate>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <WashServerUpdate>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = Wallet.fromJson(row);
+        final value = WashServerUpdate.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -152,12 +152,12 @@ class Wallet {
     return result.toList(growable: growable);
   }
 
-  static Map<String, Wallet> mapFromJson(dynamic json) {
-    final map = <String, Wallet>{};
+  static Map<String, WashServerUpdate> mapFromJson(dynamic json) {
+    final map = <String, WashServerUpdate>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Wallet.fromJson(entry.value);
+        final value = WashServerUpdate.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -166,13 +166,13 @@ class Wallet {
     return map;
   }
 
-  // maps a json object with a list of Wallet-objects as value to a dart map
-  static Map<String, List<Wallet>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<Wallet>>{};
+  // maps a json object with a list of WashServerUpdate-objects as value to a dart map
+  static Map<String, List<WashServerUpdate>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<WashServerUpdate>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Wallet.listFromJson(entry.value, growable: growable,);
+        final value = WashServerUpdate.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

@@ -205,10 +205,8 @@ class OrganizationsApi {
   /// * [int] limit:
   ///   Maximum number of records to return
   ///
-  /// * [bool] isManagedByMe:
-  ///
   /// * [List<String>] ids:
-  Future<Response> getOrganizationsWithHttpInfo({ int? offset, int? limit, bool? isManagedByMe, List<String>? ids, }) async {
+  Future<Response> getOrganizationsWithHttpInfo({ int? offset, int? limit, List<String>? ids, }) async {
     // ignore: prefer_const_declarations
     final path = r'/organizations';
 
@@ -224,9 +222,6 @@ class OrganizationsApi {
     }
     if (limit != null) {
       queryParams.addAll(_queryParams('', 'limit', limit));
-    }
-    if (isManagedByMe != null) {
-      queryParams.addAll(_queryParams('', 'isManagedByMe', isManagedByMe));
     }
     if (ids != null) {
       queryParams.addAll(_queryParams('csv', 'ids', ids));
@@ -254,11 +249,9 @@ class OrganizationsApi {
   /// * [int] limit:
   ///   Maximum number of records to return
   ///
-  /// * [bool] isManagedByMe:
-  ///
   /// * [List<String>] ids:
-  Future<List<Organization>?> getOrganizations({ int? offset, int? limit, bool? isManagedByMe, List<String>? ids, }) async {
-    final response = await getOrganizationsWithHttpInfo( offset: offset, limit: limit, isManagedByMe: isManagedByMe, ids: ids, );
+  Future<List<Organization>?> getOrganizations({ int? offset, int? limit, List<String>? ids, }) async {
+    final response = await getOrganizationsWithHttpInfo( offset: offset, limit: limit, ids: ids, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

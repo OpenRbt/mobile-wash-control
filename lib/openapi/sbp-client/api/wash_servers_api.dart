@@ -11,18 +11,202 @@
 part of openapi.api;
 
 
-class ServerGroupsApi {
-  ServerGroupsApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+class WashServersApi {
+  WashServersApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'POST /server-groups' operation and returns the [Response].
+  /// Performs an HTTP 'PUT /wash-server/' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [ServerGroupCreation] body:
-  Future<Response> createServerGroupWithHttpInfo({ ServerGroupCreation? body, }) async {
+  /// * [WashServerCreate] body:
+  Future<Response> createWithHttpInfo({ WashServerCreate? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/server-groups';
+    final path = r'/wash-server/';
+
+    // ignore: prefer_final_locals
+    Object? postBody = body;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'PUT',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [WashServerCreate] body:
+  Future<WashServer?> create({ WashServerCreate? body, }) async {
+    final response = await createWithHttpInfo( body: body, );
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'WashServer',) as WashServer;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'DELETE /wash-server/' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [WashServerDelete] body:
+  Future<Response> deleteWithHttpInfo({ WashServerDelete? body, }) async {
+    // ignore: prefer_const_declarations
+    final path = r'/wash-server/';
+
+    // ignore: prefer_final_locals
+    Object? postBody = body;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [WashServerDelete] body:
+  Future<void> delete({ WashServerDelete? body, }) async {
+    final response = await deleteWithHttpInfo( body: body, );
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'GET /wash-server/{id}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] id (required):
+  Future<Response> getWashServerWithHttpInfo(String id,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/wash-server/{id}'
+      .replaceAll('{id}', id);
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] id (required):
+  Future<WashServer?> getWashServer(String id,) async {
+    final response = await getWashServerWithHttpInfo(id,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'WashServer',) as WashServer;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'GET /wash-server/list' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [Pagination] body:
+  Future<Response> listWithHttpInfo({ Pagination? body, }) async {
+    // ignore: prefer_const_declarations
+    final path = r'/wash-server/list';
+
+    // ignore: prefer_final_locals
+    Object? postBody = body;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [Pagination] body:
+  Future<List<WashServer>?> list({ Pagination? body, }) async {
+    final response = await listWithHttpInfo( body: body, );
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<WashServer>') as List)
+        .cast<WashServer>()
+        .toList();
+
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /notification' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [Notification] body:
+  Future<Response> notificationWithHttpInfo({ Notification? body, }) async {
+    // ignore: prefer_const_declarations
+    final path = r'/notification';
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -47,9 +231,9 @@ class ServerGroupsApi {
 
   /// Parameters:
   ///
-  /// * [ServerGroupCreation] body:
-  Future<ServerGroup?> createServerGroup({ ServerGroupCreation? body, }) async {
-    final response = await createServerGroupWithHttpInfo( body: body, );
+  /// * [Notification] body:
+  Future<String?> notification({ Notification? body, }) async {
+    final response = await notificationWithHttpInfo( body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -57,182 +241,19 @@ class ServerGroupsApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ServerGroup',) as ServerGroup;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'String',) as String;
     
     }
     return null;
   }
 
-  /// Performs an HTTP 'DELETE /server-groups/{groupId}' operation and returns the [Response].
+  /// Performs an HTTP 'PATCH /wash-server/' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] groupId (required):
-  Future<Response> deleteServerGroupWithHttpInfo(String groupId,) async {
+  /// * [WashServerUpdate] body:
+  Future<Response> updateWithHttpInfo({ WashServerUpdate? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/server-groups/{groupId}'
-      .replaceAll('{groupId}', groupId);
-
-    // ignore: prefer_final_locals
-    Object? postBody;
-
-    final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
-    final formParams = <String, String>{};
-
-    const contentTypes = <String>[];
-
-
-    return apiClient.invokeAPI(
-      path,
-      'DELETE',
-      queryParams,
-      postBody,
-      headerParams,
-      formParams,
-      contentTypes.isEmpty ? null : contentTypes.first,
-    );
-  }
-
-  /// Parameters:
-  ///
-  /// * [String] groupId (required):
-  Future<void> deleteServerGroup(String groupId,) async {
-    final response = await deleteServerGroupWithHttpInfo(groupId,);
-    if (response.statusCode >= HttpStatus.badRequest) {
-      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
-    }
-  }
-
-  /// Performs an HTTP 'GET /server-groups/{groupId}' operation and returns the [Response].
-  /// Parameters:
-  ///
-  /// * [String] groupId (required):
-  Future<Response> getServerGroupByIdWithHttpInfo(String groupId,) async {
-    // ignore: prefer_const_declarations
-    final path = r'/server-groups/{groupId}'
-      .replaceAll('{groupId}', groupId);
-
-    // ignore: prefer_final_locals
-    Object? postBody;
-
-    final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
-    final formParams = <String, String>{};
-
-    const contentTypes = <String>[];
-
-
-    return apiClient.invokeAPI(
-      path,
-      'GET',
-      queryParams,
-      postBody,
-      headerParams,
-      formParams,
-      contentTypes.isEmpty ? null : contentTypes.first,
-    );
-  }
-
-  /// Parameters:
-  ///
-  /// * [String] groupId (required):
-  Future<ServerGroup?> getServerGroupById(String groupId,) async {
-    final response = await getServerGroupByIdWithHttpInfo(groupId,);
-    if (response.statusCode >= HttpStatus.badRequest) {
-      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
-    }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ServerGroup',) as ServerGroup;
-    
-    }
-    return null;
-  }
-
-  /// Performs an HTTP 'GET /server-groups' operation and returns the [Response].
-  /// Parameters:
-  ///
-  /// * [int] offset:
-  ///   Number of records to skip for pagination
-  ///
-  /// * [int] limit:
-  ///   Maximum number of records to return
-  ///
-  /// * [String] organizationId:
-  Future<Response> getServerGroupsWithHttpInfo({ int? offset, int? limit, String? organizationId, }) async {
-    // ignore: prefer_const_declarations
-    final path = r'/server-groups';
-
-    // ignore: prefer_final_locals
-    Object? postBody;
-
-    final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
-    final formParams = <String, String>{};
-
-    if (offset != null) {
-      queryParams.addAll(_queryParams('', 'offset', offset));
-    }
-    if (limit != null) {
-      queryParams.addAll(_queryParams('', 'limit', limit));
-    }
-    if (organizationId != null) {
-      queryParams.addAll(_queryParams('', 'organizationId', organizationId));
-    }
-
-    const contentTypes = <String>[];
-
-
-    return apiClient.invokeAPI(
-      path,
-      'GET',
-      queryParams,
-      postBody,
-      headerParams,
-      formParams,
-      contentTypes.isEmpty ? null : contentTypes.first,
-    );
-  }
-
-  /// Parameters:
-  ///
-  /// * [int] offset:
-  ///   Number of records to skip for pagination
-  ///
-  /// * [int] limit:
-  ///   Maximum number of records to return
-  ///
-  /// * [String] organizationId:
-  Future<List<ServerGroup>?> getServerGroups({ int? offset, int? limit, String? organizationId, }) async {
-    final response = await getServerGroupsWithHttpInfo( offset: offset, limit: limit, organizationId: organizationId, );
-    if (response.statusCode >= HttpStatus.badRequest) {
-      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
-    }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<ServerGroup>') as List)
-        .cast<ServerGroup>()
-        .toList();
-
-    }
-    return null;
-  }
-
-  /// Performs an HTTP 'PATCH /server-groups/{groupId}' operation and returns the [Response].
-  /// Parameters:
-  ///
-  /// * [String] groupId (required):
-  ///
-  /// * [ServerGroupUpdate] body:
-  Future<Response> updateServerGroupWithHttpInfo(String groupId, { ServerGroupUpdate? body, }) async {
-    // ignore: prefer_const_declarations
-    final path = r'/server-groups/{groupId}'
-      .replaceAll('{groupId}', groupId);
+    final path = r'/wash-server/';
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -257,21 +278,11 @@ class ServerGroupsApi {
 
   /// Parameters:
   ///
-  /// * [String] groupId (required):
-  ///
-  /// * [ServerGroupUpdate] body:
-  Future<ServerGroup?> updateServerGroup(String groupId, { ServerGroupUpdate? body, }) async {
-    final response = await updateServerGroupWithHttpInfo(groupId,  body: body, );
+  /// * [WashServerUpdate] body:
+  Future<void> update({ WashServerUpdate? body, }) async {
+    final response = await updateWithHttpInfo( body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'ServerGroup',) as ServerGroup;
-    
-    }
-    return null;
   }
 }

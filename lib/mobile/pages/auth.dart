@@ -13,6 +13,7 @@ import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/common.dart';
+import '../../utils/sbp_common.dart';
 import '../widgets/common/snackBars.dart';
 
 class Auth extends StatefulWidget {
@@ -73,9 +74,10 @@ class _AuthState extends State<Auth> {
       String? bonusUrl = await repo.getServerInfo(context: context);
       String basePath = "";
       if(bonusUrl?.isNotEmpty ?? false){
-        basePath = (bonusUrl)! + '/api';
+        basePath = (bonusUrl)! + '/api/bonus/admin';
       }
       Common.initializeApis(basePath);
+      SbpCommon.initializeApis((bonusUrl)! + '/api/sbp');
       Navigator.pushNamed(
         context,
         "/mobile/home",

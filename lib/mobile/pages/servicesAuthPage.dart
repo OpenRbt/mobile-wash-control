@@ -11,6 +11,7 @@ import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:mobile_wash_control/utils/sbp_common.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,7 +31,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
       String? bonusUrl = await repository.getServerInfo(context: context);
       String basePath = "";
       if(bonusUrl?.isNotEmpty ?? false){
-        basePath = (bonusUrl)! + '/api';
+        basePath = (bonusUrl)! + '/api/bonus/admin';
       }
       print(basePath);
       Common.initializeApis(basePath);
@@ -67,7 +68,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                             child: Text("Продолжить"),
                             onPressed: () async {
                               Common.setAuthToken((await snapshot.data!.getIdToken() ?? ""));
-
+                              SbpCommon.setAuthToken((await snapshot.data!.getIdToken() ?? ""));
                               var args = Map<PageArgCode, dynamic>();
                               args[PageArgCode.repository] = repository;
 

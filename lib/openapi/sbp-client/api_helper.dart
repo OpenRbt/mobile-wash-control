@@ -55,9 +55,6 @@ String parameterToString(dynamic value) {
   if (value is DateTime) {
     return value.toUtc().toIso8601String();
   }
-  if (value is ApplicationStatusEnum) {
-    return ApplicationStatusEnumTypeTransformer().encode(value).toString();
-  }
   return value.toString();
 }
 

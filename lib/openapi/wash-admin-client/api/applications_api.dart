@@ -11,33 +11,32 @@
 part of openapi.api;
 
 
-class UsersApi {
-  UsersApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+class ApplicationsApi {
+  ApplicationsApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /users/{userId}' operation and returns the [Response].
+  /// Performs an HTTP 'POST /users/applications' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] userId (required):
-  Future<Response> getAdminUserByIdWithHttpInfo(String userId,) async {
+  /// * [CreateAdminApplicationRequest] body (required):
+  Future<Response> createAdminApplicationWithHttpInfo(CreateAdminApplicationRequest body,) async {
     // ignore: prefer_const_declarations
-    final path = r'/users/{userId}'
-      .replaceAll('{userId}', userId);
+    final path = r'/users/applications';
 
     // ignore: prefer_final_locals
-    Object? postBody;
+    Object? postBody = body;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
     return apiClient.invokeAPI(
       path,
-      'GET',
+      'POST',
       queryParams,
       postBody,
       headerParams,
@@ -48,9 +47,9 @@ class UsersApi {
 
   /// Parameters:
   ///
-  /// * [String] userId (required):
-  Future<AdminUser?> getAdminUserById(String userId,) async {
-    final response = await getAdminUserByIdWithHttpInfo(userId,);
+  /// * [CreateAdminApplicationRequest] body (required):
+  Future<AdminApplication?> createAdminApplication(CreateAdminApplicationRequest body,) async {
+    final response = await createAdminApplicationWithHttpInfo(body,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -58,13 +57,13 @@ class UsersApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'AdminUser',) as AdminUser;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'AdminApplication',) as AdminApplication;
     
     }
     return null;
   }
 
-  /// Performs an HTTP 'GET /users' operation and returns the [Response].
+  /// Performs an HTTP 'GET /users/applications' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [int] offset:
@@ -72,9 +71,11 @@ class UsersApi {
   ///
   /// * [int] limit:
   ///   Maximum number of records to return
-  Future<Response> getAdminUsersWithHttpInfo({ int? offset, int? limit, }) async {
+  ///
+  /// * [String] status:
+  Future<Response> getAdminApplicationsWithHttpInfo({ int? offset, int? limit, String? status, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/users';
+    final path = r'/users/applications';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -89,6 +90,9 @@ class UsersApi {
     if (limit != null) {
       queryParams.addAll(_queryParams('', 'limit', limit));
     }
+    if (status != null) {
+      queryParams.addAll(_queryParams('', 'status', status));
+    }
 
     const contentTypes = <String>[];
 
@@ -111,8 +115,10 @@ class UsersApi {
   ///
   /// * [int] limit:
   ///   Maximum number of records to return
-  Future<List<AdminUser>?> getAdminUsers({ int? offset, int? limit, }) async {
-    final response = await getAdminUsersWithHttpInfo( offset: offset, limit: limit, );
+  ///
+  /// * [String] status:
+  Future<GetAdminApplications200Response?> getAdminApplications({ int? offset, int? limit, String? status, }) async {
+    final response = await getAdminApplicationsWithHttpInfo( offset: offset, limit: limit, status: status, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -120,25 +126,22 @@ class UsersApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<AdminUser>') as List)
-        .cast<AdminUser>()
-        .toList();
-
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'GetAdminApplications200Response',) as GetAdminApplications200Response;
+    
     }
     return null;
   }
 
-  /// Performs an HTTP 'PATCH /users/{userId}' operation and returns the [Response].
+  /// Performs an HTTP 'POST /users/applications/{id}' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [String] userId (required):
+  /// * [String] id (required):
   ///
-  /// * [UpdateAdminUserRoleRequest] body (required):
-  Future<Response> updateAdminUserRoleWithHttpInfo(String userId, UpdateAdminUserRoleRequest body,) async {
+  /// * [AdminApplicationReview] body (required):
+  Future<Response> reviewAdminApplicationWithHttpInfo(String id, AdminApplicationReview body,) async {
     // ignore: prefer_const_declarations
-    final path = r'/users/{userId}'
-      .replaceAll('{userId}', userId);
+    final path = r'/users/applications/{id}'
+      .replaceAll('{id}', id);
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -152,7 +155,7 @@ class UsersApi {
 
     return apiClient.invokeAPI(
       path,
-      'PATCH',
+      'POST',
       queryParams,
       postBody,
       headerParams,
@@ -163,11 +166,11 @@ class UsersApi {
 
   /// Parameters:
   ///
-  /// * [String] userId (required):
+  /// * [String] id (required):
   ///
-  /// * [UpdateAdminUserRoleRequest] body (required):
-  Future<void> updateAdminUserRole(String userId, UpdateAdminUserRoleRequest body,) async {
-    final response = await updateAdminUserRoleWithHttpInfo(userId, body,);
+  /// * [AdminApplicationReview] body (required):
+  Future<void> reviewAdminApplication(String id, AdminApplicationReview body,) async {
+    final response = await reviewAdminApplicationWithHttpInfo(id, body,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

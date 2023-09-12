@@ -10,13 +10,14 @@
 
 part of openapi.api;
 
-class User {
-  /// Returns a new [User] instance.
-  User({
+class AdminUser {
+  /// Returns a new [AdminUser] instance.
+  AdminUser({
     this.id,
-    this.active,
+    this.name,
+    this.email,
     this.role,
-    this.organizationIds = const [],
+    this.organizationId,
   });
 
   ///
@@ -33,29 +34,39 @@ class User {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  bool? active;
+  String? name;
 
-  UserRoleEnum? role;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? email;
 
-  List<String> organizationIds;
+  AdminUserRoleEnum? role;
+
+  String? organizationId;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is User &&
+  bool operator ==(Object other) => identical(this, other) || other is AdminUser &&
      other.id == id &&
-     other.active == active &&
+     other.name == name &&
+     other.email == email &&
      other.role == role &&
-     other.organizationIds == organizationIds;
+     other.organizationId == organizationId;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (id == null ? 0 : id!.hashCode) +
-    (active == null ? 0 : active!.hashCode) +
+    (name == null ? 0 : name!.hashCode) +
+    (email == null ? 0 : email!.hashCode) +
     (role == null ? 0 : role!.hashCode) +
-    (organizationIds.hashCode);
+    (organizationId == null ? 0 : organizationId!.hashCode);
 
   @override
-  String toString() => 'User[id=$id, active=$active, role=$role, organizationIds=$organizationIds]';
+  String toString() => 'AdminUser[id=$id, name=$name, email=$email, role=$role, organizationId=$organizationId]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -64,24 +75,33 @@ class User {
     } else {
       json[r'id'] = null;
     }
-    if (this.active != null) {
-      json[r'active'] = this.active;
+    if (this.name != null) {
+      json[r'name'] = this.name;
     } else {
-      json[r'active'] = null;
+      json[r'name'] = null;
+    }
+    if (this.email != null) {
+      json[r'email'] = this.email;
+    } else {
+      json[r'email'] = null;
     }
     if (this.role != null) {
       json[r'role'] = this.role;
     } else {
       json[r'role'] = null;
     }
-      json[r'organizationIds'] = this.organizationIds;
+    if (this.organizationId != null) {
+      json[r'organizationId'] = this.organizationId;
+    } else {
+      json[r'organizationId'] = null;
+    }
     return json;
   }
 
-  /// Returns a new [User] instance and imports its values from
+  /// Returns a new [AdminUser] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static User? fromJson(dynamic value) {
+  static AdminUser? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -90,29 +110,28 @@ class User {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "User[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "User[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "AdminUser[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "AdminUser[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return User(
+      return AdminUser(
         id: mapValueOfType<String>(json, r'id'),
-        active: mapValueOfType<bool>(json, r'active'),
-        role: UserRoleEnum.fromJson(json[r'role']),
-        organizationIds: json[r'organizationIds'] is List
-            ? (json[r'organizationIds'] as List).cast<String>()
-            : const [],
+        name: mapValueOfType<String>(json, r'name'),
+        email: mapValueOfType<String>(json, r'email'),
+        role: AdminUserRoleEnum.fromJson(json[r'role']),
+        organizationId: mapValueOfType<String>(json, r'organizationId'),
       );
     }
     return null;
   }
 
-  static List<User>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <User>[];
+  static List<AdminUser>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <AdminUser>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = User.fromJson(row);
+        final value = AdminUser.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -121,12 +140,12 @@ class User {
     return result.toList(growable: growable);
   }
 
-  static Map<String, User> mapFromJson(dynamic json) {
-    final map = <String, User>{};
+  static Map<String, AdminUser> mapFromJson(dynamic json) {
+    final map = <String, AdminUser>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = User.fromJson(entry.value);
+        final value = AdminUser.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -135,13 +154,13 @@ class User {
     return map;
   }
 
-  // maps a json object with a list of User-objects as value to a dart map
-  static Map<String, List<User>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<User>>{};
+  // maps a json object with a list of AdminUser-objects as value to a dart map
+  static Map<String, List<AdminUser>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<AdminUser>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = User.listFromJson(entry.value, growable: growable,);
+        final value = AdminUser.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -156,9 +175,9 @@ class User {
 }
 
 
-class UserRoleEnum {
+class AdminUserRoleEnum {
   /// Instantiate a new enum with the provided [value].
-  const UserRoleEnum._(this.value);
+  const AdminUserRoleEnum._(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -168,24 +187,22 @@ class UserRoleEnum {
 
   String toJson() => value;
 
-  static const user = UserRoleEnum._(r'user');
-  static const admin = UserRoleEnum._(r'admin');
-  static const engineer = UserRoleEnum._(r'engineer');
+  static const systemManager = AdminUserRoleEnum._(r'systemManager');
+  static const admin = AdminUserRoleEnum._(r'admin');
 
-  /// List of all possible values in this [enum][UserRoleEnum].
-  static const values = <UserRoleEnum>[
-    user,
+  /// List of all possible values in this [enum][AdminUserRoleEnum].
+  static const values = <AdminUserRoleEnum>[
+    systemManager,
     admin,
-    engineer,
   ];
 
-  static UserRoleEnum? fromJson(dynamic value) => UserRoleEnumTypeTransformer().decode(value);
+  static AdminUserRoleEnum? fromJson(dynamic value) => AdminUserRoleEnumTypeTransformer().decode(value);
 
-  static List<UserRoleEnum>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <UserRoleEnum>[];
+  static List<AdminUserRoleEnum>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <AdminUserRoleEnum>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = UserRoleEnum.fromJson(row);
+        final value = AdminUserRoleEnum.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -195,16 +212,16 @@ class UserRoleEnum {
   }
 }
 
-/// Transformation class that can [encode] an instance of [UserRoleEnum] to String,
-/// and [decode] dynamic data back to [UserRoleEnum].
-class UserRoleEnumTypeTransformer {
-  factory UserRoleEnumTypeTransformer() => _instance ??= const UserRoleEnumTypeTransformer._();
+/// Transformation class that can [encode] an instance of [AdminUserRoleEnum] to String,
+/// and [decode] dynamic data back to [AdminUserRoleEnum].
+class AdminUserRoleEnumTypeTransformer {
+  factory AdminUserRoleEnumTypeTransformer() => _instance ??= const AdminUserRoleEnumTypeTransformer._();
 
-  const UserRoleEnumTypeTransformer._();
+  const AdminUserRoleEnumTypeTransformer._();
 
-  String encode(UserRoleEnum data) => data.value;
+  String encode(AdminUserRoleEnum data) => data.value;
 
-  /// Decodes a [dynamic value][data] to a UserRoleEnum.
+  /// Decodes a [dynamic value][data] to a AdminUserRoleEnum.
   ///
   /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
   /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
@@ -212,12 +229,11 @@ class UserRoleEnumTypeTransformer {
   ///
   /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
   /// and users are still using an old app with the old code.
-  UserRoleEnum? decode(dynamic data, {bool allowNull = true}) {
+  AdminUserRoleEnum? decode(dynamic data, {bool allowNull = true}) {
     if (data != null) {
       switch (data) {
-        case r'user': return UserRoleEnum.user;
-        case r'admin': return UserRoleEnum.admin;
-        case r'engineer': return UserRoleEnum.engineer;
+        case r'systemManager': return AdminUserRoleEnum.systemManager;
+        case r'admin': return AdminUserRoleEnum.admin;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
@@ -227,8 +243,8 @@ class UserRoleEnumTypeTransformer {
     return null;
   }
 
-  /// Singleton [UserRoleEnumTypeTransformer] instance.
-  static UserRoleEnumTypeTransformer? _instance;
+  /// Singleton [AdminUserRoleEnumTypeTransformer] instance.
+  static AdminUserRoleEnumTypeTransformer? _instance;
 }
 
 

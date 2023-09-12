@@ -11,7 +11,7 @@
 part of openapi.api;
 
 class ApiClient {
-  ApiClient({this.basePath = '/admin', this.authentication,});
+  ApiClient({this.basePath = 'http://localhost', this.authentication,});
 
   final String basePath;
   final Authentication? authentication;
@@ -181,42 +181,26 @@ class ApiClient {
           return valueString == 'true' || valueString == '1';
         case 'DateTime':
           return value is DateTime ? value : DateTime.tryParse(value);
-        case 'AdminApplication':
-          return AdminApplication.fromJson(value);
-        case 'AdminApplicationCreation':
-          return AdminApplicationCreation.fromJson(value);
-        case 'AdminApplicationReview':
-          return AdminApplicationReview.fromJson(value);
-        case 'AdminUser':
-          return AdminUser.fromJson(value);
-        case 'ApplicationStatusEnum':
-          return ApplicationStatusEnumTypeTransformer().decode(value);
-        case 'CreateAdminApplicationRequest':
-          return CreateAdminApplicationRequest.fromJson(value);
+        case 'Cancel':
+          return Cancel.fromJson(value);
         case 'Error':
           return Error.fromJson(value);
-        case 'FirebaseUser':
-          return FirebaseUser.fromJson(value);
-        case 'GetAdminApplications200Response':
-          return GetAdminApplications200Response.fromJson(value);
-        case 'Organization':
-          return Organization.fromJson(value);
-        case 'OrganizationCreation':
-          return OrganizationCreation.fromJson(value);
-        case 'OrganizationUpdate':
-          return OrganizationUpdate.fromJson(value);
-        case 'ServerGroup':
-          return ServerGroup.fromJson(value);
-        case 'ServerGroupCreation':
-          return ServerGroupCreation.fromJson(value);
-        case 'ServerGroupUpdate':
-          return ServerGroupUpdate.fromJson(value);
-        case 'UpdateAdminUserRoleRequest':
-          return UpdateAdminUserRoleRequest.fromJson(value);
+        case 'HealthCheck200Response':
+          return HealthCheck200Response.fromJson(value);
+        case 'Notification':
+          return Notification.fromJson(value);
+        case 'Pagination':
+          return Pagination.fromJson(value);
+        case 'Pay':
+          return Pay.fromJson(value);
+        case 'PayResponse':
+          return PayResponse.fromJson(value);
         case 'WashServer':
           return WashServer.fromJson(value);
-        case 'WashServerCreation':
-          return WashServerCreation.fromJson(value);
+        case 'WashServerCreate':
+          return WashServerCreate.fromJson(value);
+        case 'WashServerDelete':
+          return WashServerDelete.fromJson(value);
         case 'WashServerUpdate':
           return WashServerUpdate.fromJson(value);
         default:

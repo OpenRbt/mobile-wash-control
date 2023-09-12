@@ -10,12 +10,12 @@
 
 part of openapi.api;
 
-class Session {
-  /// Returns a new [Session] instance.
-  Session({
-    this.washServer,
-    this.postID,
-    this.postBalance,
+class FirebaseUser {
+  /// Returns a new [FirebaseUser] instance.
+  FirebaseUser({
+    this.id,
+    this.name,
+    this.email,
   });
 
   ///
@@ -24,7 +24,7 @@ class Session {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  WashServer? washServer;
+  String? id;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -32,7 +32,7 @@ class Session {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? postID;
+  String? name;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -40,48 +40,48 @@ class Session {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? postBalance;
+  String? email;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is Session &&
-     other.washServer == washServer &&
-     other.postID == postID &&
-     other.postBalance == postBalance;
+  bool operator ==(Object other) => identical(this, other) || other is FirebaseUser &&
+     other.id == id &&
+     other.name == name &&
+     other.email == email;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (washServer == null ? 0 : washServer!.hashCode) +
-    (postID == null ? 0 : postID!.hashCode) +
-    (postBalance == null ? 0 : postBalance!.hashCode);
+    (id == null ? 0 : id!.hashCode) +
+    (name == null ? 0 : name!.hashCode) +
+    (email == null ? 0 : email!.hashCode);
 
   @override
-  String toString() => 'Session[washServer=$washServer, postID=$postID, postBalance=$postBalance]';
+  String toString() => 'FirebaseUser[id=$id, name=$name, email=$email]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.washServer != null) {
-      json[r'washServer'] = this.washServer;
+    if (this.id != null) {
+      json[r'id'] = this.id;
     } else {
-      json[r'washServer'] = null;
+      json[r'id'] = null;
     }
-    if (this.postID != null) {
-      json[r'postID'] = this.postID;
+    if (this.name != null) {
+      json[r'name'] = this.name;
     } else {
-      json[r'postID'] = null;
+      json[r'name'] = null;
     }
-    if (this.postBalance != null) {
-      json[r'postBalance'] = this.postBalance;
+    if (this.email != null) {
+      json[r'email'] = this.email;
     } else {
-      json[r'postBalance'] = null;
+      json[r'email'] = null;
     }
     return json;
   }
 
-  /// Returns a new [Session] instance and imports its values from
+  /// Returns a new [FirebaseUser] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static Session? fromJson(dynamic value) {
+  static FirebaseUser? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -90,26 +90,26 @@ class Session {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Session[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Session[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "FirebaseUser[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "FirebaseUser[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return Session(
-        washServer: WashServer.fromJson(json[r'washServer']),
-        postID: mapValueOfType<int>(json, r'postID'),
-        postBalance: mapValueOfType<int>(json, r'postBalance'),
+      return FirebaseUser(
+        id: mapValueOfType<String>(json, r'id'),
+        name: mapValueOfType<String>(json, r'name'),
+        email: mapValueOfType<String>(json, r'email'),
       );
     }
     return null;
   }
 
-  static List<Session>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <Session>[];
+  static List<FirebaseUser>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <FirebaseUser>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = Session.fromJson(row);
+        final value = FirebaseUser.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -118,12 +118,12 @@ class Session {
     return result.toList(growable: growable);
   }
 
-  static Map<String, Session> mapFromJson(dynamic json) {
-    final map = <String, Session>{};
+  static Map<String, FirebaseUser> mapFromJson(dynamic json) {
+    final map = <String, FirebaseUser>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Session.fromJson(entry.value);
+        final value = FirebaseUser.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -132,13 +132,13 @@ class Session {
     return map;
   }
 
-  // maps a json object with a list of Session-objects as value to a dart map
-  static Map<String, List<Session>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<Session>>{};
+  // maps a json object with a list of FirebaseUser-objects as value to a dart map
+  static Map<String, List<FirebaseUser>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<FirebaseUser>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Session.listFromJson(entry.value, growable: growable,);
+        final value = FirebaseUser.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
