@@ -13,8 +13,26 @@ part of openapi.api;
 class Cancel {
   /// Returns a new [Cancel] instance.
   Cancel({
+    this.washID,
+    this.postID,
     this.orderID,
   });
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? washID;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? postID;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -26,18 +44,32 @@ class Cancel {
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is Cancel &&
+     other.washID == washID &&
+     other.postID == postID &&
      other.orderID == orderID;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
+    (washID == null ? 0 : washID!.hashCode) +
+    (postID == null ? 0 : postID!.hashCode) +
     (orderID == null ? 0 : orderID!.hashCode);
 
   @override
-  String toString() => 'Cancel[orderID=$orderID]';
+  String toString() => 'Cancel[washID=$washID, postID=$postID, orderID=$orderID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    if (this.washID != null) {
+      json[r'washID'] = this.washID;
+    } else {
+      json[r'washID'] = null;
+    }
+    if (this.postID != null) {
+      json[r'postID'] = this.postID;
+    } else {
+      json[r'postID'] = null;
+    }
     if (this.orderID != null) {
       json[r'orderID'] = this.orderID;
     } else {
@@ -65,6 +97,8 @@ class Cancel {
       }());
 
       return Cancel(
+        washID: mapValueOfType<String>(json, r'washID'),
+        postID: mapValueOfType<String>(json, r'postID'),
         orderID: mapValueOfType<String>(json, r'orderID'),
       );
     }

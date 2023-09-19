@@ -13,8 +13,9 @@ part of openapi.api;
 class Pay {
   /// Returns a new [Pay] instance.
   Pay({
-    this.serverId,
+    this.washId,
     this.postId,
+    this.orderId,
     this.amount,
   });
 
@@ -24,7 +25,7 @@ class Pay {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? serverId;
+  String? washId;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -40,35 +41,50 @@ class Pay {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
+  String? orderId;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
   int? amount;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is Pay &&
-     other.serverId == serverId &&
+     other.washId == washId &&
      other.postId == postId &&
+     other.orderId == orderId &&
      other.amount == amount;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (serverId == null ? 0 : serverId!.hashCode) +
+    (washId == null ? 0 : washId!.hashCode) +
     (postId == null ? 0 : postId!.hashCode) +
+    (orderId == null ? 0 : orderId!.hashCode) +
     (amount == null ? 0 : amount!.hashCode);
 
   @override
-  String toString() => 'Pay[serverId=$serverId, postId=$postId, amount=$amount]';
+  String toString() => 'Pay[washId=$washId, postId=$postId, orderId=$orderId, amount=$amount]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.serverId != null) {
-      json[r'serverId'] = this.serverId;
+    if (this.washId != null) {
+      json[r'washId'] = this.washId;
     } else {
-      json[r'serverId'] = null;
+      json[r'washId'] = null;
     }
     if (this.postId != null) {
       json[r'postId'] = this.postId;
     } else {
       json[r'postId'] = null;
+    }
+    if (this.orderId != null) {
+      json[r'orderId'] = this.orderId;
+    } else {
+      json[r'orderId'] = null;
     }
     if (this.amount != null) {
       json[r'amount'] = this.amount;
@@ -97,8 +113,9 @@ class Pay {
       }());
 
       return Pay(
-        serverId: mapValueOfType<String>(json, r'serverId'),
+        washId: mapValueOfType<String>(json, r'washId'),
         postId: mapValueOfType<String>(json, r'postId'),
+        orderId: mapValueOfType<String>(json, r'orderId'),
         amount: mapValueOfType<int>(json, r'amount'),
       );
     }

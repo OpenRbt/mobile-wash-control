@@ -10,16 +10,16 @@
 
 part of openapi.api;
 
-class WashServerDelete {
-  /// Returns a new [WashServerDelete] instance.
-  WashServerDelete({
+class WashDelete {
+  /// Returns a new [WashDelete] instance.
+  WashDelete({
     required this.id,
   });
 
   String id;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WashServerDelete &&
+  bool operator ==(Object other) => identical(this, other) || other is WashDelete &&
      other.id == id;
 
   @override
@@ -28,7 +28,7 @@ class WashServerDelete {
     (id.hashCode);
 
   @override
-  String toString() => 'WashServerDelete[id=$id]';
+  String toString() => 'WashDelete[id=$id]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -36,10 +36,10 @@ class WashServerDelete {
     return json;
   }
 
-  /// Returns a new [WashServerDelete] instance and imports its values from
+  /// Returns a new [WashDelete] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static WashServerDelete? fromJson(dynamic value) {
+  static WashDelete? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -48,24 +48,24 @@ class WashServerDelete {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "WashServerDelete[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "WashServerDelete[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "WashDelete[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "WashDelete[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return WashServerDelete(
+      return WashDelete(
         id: mapValueOfType<String>(json, r'id')!,
       );
     }
     return null;
   }
 
-  static List<WashServerDelete>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <WashServerDelete>[];
+  static List<WashDelete>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <WashDelete>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = WashServerDelete.fromJson(row);
+        final value = WashDelete.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -74,12 +74,12 @@ class WashServerDelete {
     return result.toList(growable: growable);
   }
 
-  static Map<String, WashServerDelete> mapFromJson(dynamic json) {
-    final map = <String, WashServerDelete>{};
+  static Map<String, WashDelete> mapFromJson(dynamic json) {
+    final map = <String, WashDelete>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServerDelete.fromJson(entry.value);
+        final value = WashDelete.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -88,13 +88,13 @@ class WashServerDelete {
     return map;
   }
 
-  // maps a json object with a list of WashServerDelete-objects as value to a dart map
-  static Map<String, List<WashServerDelete>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<WashServerDelete>>{};
+  // maps a json object with a list of WashDelete-objects as value to a dart map
+  static Map<String, List<WashDelete>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<WashDelete>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServerDelete.listFromJson(entry.value, growable: growable,);
+        final value = WashDelete.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

@@ -28,19 +28,20 @@ part 'auth/http_basic_auth.dart';
 part 'auth/http_bearer_auth.dart';
 
 part 'api/standard_api.dart';
-part 'api/wash_servers_api.dart';
+part 'api/wash_api.dart';
 
 part 'model/cancel.dart';
 part 'model/error.dart';
+part 'model/firebase_token.dart';
 part 'model/health_check200_response.dart';
 part 'model/notification.dart';
 part 'model/pagination.dart';
 part 'model/pay.dart';
 part 'model/pay_response.dart';
-part 'model/wash_server.dart';
-part 'model/wash_server_create.dart';
-part 'model/wash_server_delete.dart';
-part 'model/wash_server_update.dart';
+part 'model/wash.dart';
+part 'model/wash_create.dart';
+part 'model/wash_delete.dart';
+part 'model/wash_update.dart';
 
 
 const _delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};

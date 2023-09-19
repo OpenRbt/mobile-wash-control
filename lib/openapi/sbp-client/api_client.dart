@@ -185,6 +185,8 @@ class ApiClient {
           return Cancel.fromJson(value);
         case 'Error':
           return Error.fromJson(value);
+        case 'FirebaseToken':
+          return FirebaseToken.fromJson(value);
         case 'HealthCheck200Response':
           return HealthCheck200Response.fromJson(value);
         case 'Notification':
@@ -195,14 +197,14 @@ class ApiClient {
           return Pay.fromJson(value);
         case 'PayResponse':
           return PayResponse.fromJson(value);
-        case 'WashServer':
-          return WashServer.fromJson(value);
-        case 'WashServerCreate':
-          return WashServerCreate.fromJson(value);
-        case 'WashServerDelete':
-          return WashServerDelete.fromJson(value);
-        case 'WashServerUpdate':
-          return WashServerUpdate.fromJson(value);
+        case 'Wash':
+          return Wash.fromJson(value);
+        case 'WashCreate':
+          return WashCreate.fromJson(value);
+        case 'WashDelete':
+          return WashDelete.fromJson(value);
+        case 'WashUpdate':
+          return WashUpdate.fromJson(value);
         default:
           dynamic match;
           if (value is List && (match = _regList.firstMatch(targetType)?.group(1)) != null) {

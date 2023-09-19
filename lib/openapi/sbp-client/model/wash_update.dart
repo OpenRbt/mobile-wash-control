@@ -10,16 +10,31 @@
 
 part of openapi.api;
 
-class WashServerCreate {
-  /// Returns a new [WashServerCreate] instance.
-  WashServerCreate({
-    required this.name,
+class WashUpdate {
+  /// Returns a new [WashUpdate] instance.
+  WashUpdate({
+    this.id,
+    this.name,
     this.description,
     this.terminalKey,
     this.terminalPassword,
   });
 
-  String name;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? id;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? name;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -46,7 +61,8 @@ class WashServerCreate {
   String? terminalPassword;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WashServerCreate &&
+  bool operator ==(Object other) => identical(this, other) || other is WashUpdate &&
+     other.id == id &&
      other.name == name &&
      other.description == description &&
      other.terminalKey == terminalKey &&
@@ -55,17 +71,27 @@ class WashServerCreate {
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (name.hashCode) +
+    (id == null ? 0 : id!.hashCode) +
+    (name == null ? 0 : name!.hashCode) +
     (description == null ? 0 : description!.hashCode) +
     (terminalKey == null ? 0 : terminalKey!.hashCode) +
     (terminalPassword == null ? 0 : terminalPassword!.hashCode);
 
   @override
-  String toString() => 'WashServerCreate[name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword]';
+  String toString() => 'WashUpdate[id=$id, name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    if (this.id != null) {
+      json[r'id'] = this.id;
+    } else {
+      json[r'id'] = null;
+    }
+    if (this.name != null) {
       json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
+    }
     if (this.description != null) {
       json[r'description'] = this.description;
     } else {
@@ -84,10 +110,10 @@ class WashServerCreate {
     return json;
   }
 
-  /// Returns a new [WashServerCreate] instance and imports its values from
+  /// Returns a new [WashUpdate] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static WashServerCreate? fromJson(dynamic value) {
+  static WashUpdate? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -96,14 +122,15 @@ class WashServerCreate {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "WashServerCreate[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "WashServerCreate[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "WashUpdate[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "WashUpdate[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return WashServerCreate(
-        name: mapValueOfType<String>(json, r'name')!,
+      return WashUpdate(
+        id: mapValueOfType<String>(json, r'id'),
+        name: mapValueOfType<String>(json, r'name'),
         description: mapValueOfType<String>(json, r'description'),
         terminalKey: mapValueOfType<String>(json, r'terminal_key'),
         terminalPassword: mapValueOfType<String>(json, r'terminal_password'),
@@ -112,11 +139,11 @@ class WashServerCreate {
     return null;
   }
 
-  static List<WashServerCreate>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <WashServerCreate>[];
+  static List<WashUpdate>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <WashUpdate>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = WashServerCreate.fromJson(row);
+        final value = WashUpdate.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -125,12 +152,12 @@ class WashServerCreate {
     return result.toList(growable: growable);
   }
 
-  static Map<String, WashServerCreate> mapFromJson(dynamic json) {
-    final map = <String, WashServerCreate>{};
+  static Map<String, WashUpdate> mapFromJson(dynamic json) {
+    final map = <String, WashUpdate>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServerCreate.fromJson(entry.value);
+        final value = WashUpdate.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -139,13 +166,13 @@ class WashServerCreate {
     return map;
   }
 
-  // maps a json object with a list of WashServerCreate-objects as value to a dart map
-  static Map<String, List<WashServerCreate>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<WashServerCreate>>{};
+  // maps a json object with a list of WashUpdate-objects as value to a dart map
+  static Map<String, List<WashUpdate>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<WashUpdate>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashServerCreate.listFromJson(entry.value, growable: growable,);
+        final value = WashUpdate.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -156,7 +183,6 @@ class WashServerCreate {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'name',
   };
 }
 

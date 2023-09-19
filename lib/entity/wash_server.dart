@@ -24,3 +24,12 @@ class WashServer {
   }
 }
 
+class SbpWashServer {
+  String? id;
+  String? name;
+  String? description;
+  String? servicePassword;
+
+  SbpWashServer({this.id, this.name, this.description, this.servicePassword});
+}
+

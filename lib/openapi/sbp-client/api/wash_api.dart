@@ -11,18 +11,57 @@
 part of openapi.api;
 
 
-class WashServersApi {
-  WashServersApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+class WashApi {
+  WashApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'PUT /wash-server/' operation and returns the [Response].
+  /// Performs an HTTP 'POST /cancel' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [WashServerCreate] body:
-  Future<Response> createWithHttpInfo({ WashServerCreate? body, }) async {
+  /// * [Cancel] body:
+  Future<Response> cancelWithHttpInfo({ Cancel? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-server/';
+    final path = r'/cancel';
+
+    // ignore: prefer_final_locals
+    Object? postBody = body;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [Cancel] body:
+  Future<void> cancel({ Cancel? body, }) async {
+    final response = await cancelWithHttpInfo( body: body, );
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'PUT /wash/' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [WashCreate] body:
+  Future<Response> createWithHttpInfo({ WashCreate? body, }) async {
+    // ignore: prefer_const_declarations
+    final path = r'/wash/';
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -47,8 +86,8 @@ class WashServersApi {
 
   /// Parameters:
   ///
-  /// * [WashServerCreate] body:
-  Future<WashServer?> create({ WashServerCreate? body, }) async {
+  /// * [WashCreate] body:
+  Future<Wash?> create({ WashCreate? body, }) async {
     final response = await createWithHttpInfo( body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -57,19 +96,19 @@ class WashServersApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'WashServer',) as WashServer;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Wash',) as Wash;
     
     }
     return null;
   }
 
-  /// Performs an HTTP 'DELETE /wash-server/' operation and returns the [Response].
+  /// Performs an HTTP 'DELETE /wash/' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [WashServerDelete] body:
-  Future<Response> deleteWithHttpInfo({ WashServerDelete? body, }) async {
+  /// * [WashDelete] body:
+  Future<Response> deleteWithHttpInfo({ WashDelete? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-server/';
+    final path = r'/wash/';
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -94,21 +133,21 @@ class WashServersApi {
 
   /// Parameters:
   ///
-  /// * [WashServerDelete] body:
-  Future<void> delete({ WashServerDelete? body, }) async {
+  /// * [WashDelete] body:
+  Future<void> delete({ WashDelete? body, }) async {
     final response = await deleteWithHttpInfo( body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'GET /wash-server/{id}' operation and returns the [Response].
+  /// Performs an HTTP 'GET /wash/{id}' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [String] id (required):
-  Future<Response> getWashServerWithHttpInfo(String id,) async {
+  Future<Response> getWashWithHttpInfo(String id,) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-server/{id}'
+    final path = r'/wash/{id}'
       .replaceAll('{id}', id);
 
     // ignore: prefer_final_locals
@@ -135,8 +174,8 @@ class WashServersApi {
   /// Parameters:
   ///
   /// * [String] id (required):
-  Future<WashServer?> getWashServer(String id,) async {
-    final response = await getWashServerWithHttpInfo(id,);
+  Future<Wash?> getWash(String id,) async {
+    final response = await getWashWithHttpInfo(id,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -144,19 +183,19 @@ class WashServersApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'WashServer',) as WashServer;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Wash',) as Wash;
     
     }
     return null;
   }
 
-  /// Performs an HTTP 'GET /wash-server/list' operation and returns the [Response].
+  /// Performs an HTTP 'GET /wash/list' operation and returns the [Response].
   /// Parameters:
   ///
   /// * [Pagination] body:
   Future<Response> listWithHttpInfo({ Pagination? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-server/list';
+    final path = r'/wash/list';
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -182,7 +221,7 @@ class WashServersApi {
   /// Parameters:
   ///
   /// * [Pagination] body:
-  Future<List<WashServer>?> list({ Pagination? body, }) async {
+  Future<List<Wash>?> list({ Pagination? body, }) async {
     final response = await listWithHttpInfo( body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -192,8 +231,8 @@ class WashServersApi {
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<WashServer>') as List)
-        .cast<WashServer>()
+      return (await apiClient.deserializeAsync(responseBody, 'List<Wash>') as List)
+        .cast<Wash>()
         .toList();
 
     }
@@ -247,13 +286,101 @@ class WashServersApi {
     return null;
   }
 
-  /// Performs an HTTP 'PATCH /wash-server/' operation and returns the [Response].
+  /// Performs an HTTP 'POST /pay' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [WashServerUpdate] body:
-  Future<Response> updateWithHttpInfo({ WashServerUpdate? body, }) async {
+  /// * [Pay] body:
+  Future<Response> payWithHttpInfo({ Pay? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/wash-server/';
+    final path = r'/pay';
+
+    // ignore: prefer_final_locals
+    Object? postBody = body;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [Pay] body:
+  Future<PayResponse?> pay({ Pay? body, }) async {
+    final response = await payWithHttpInfo( body: body, );
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'PayResponse',) as PayResponse;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'POST /signup' operation and returns the [Response].
+  Future<Response> signupWithHttpInfo() async {
+    // ignore: prefer_const_declarations
+    final path = r'/signup';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<FirebaseToken?> signup() async {
+    final response = await signupWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'FirebaseToken',) as FirebaseToken;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'PATCH /wash/' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [WashUpdate] body:
+  Future<Response> updateWithHttpInfo({ WashUpdate? body, }) async {
+    // ignore: prefer_const_declarations
+    final path = r'/wash/';
 
     // ignore: prefer_final_locals
     Object? postBody = body;
@@ -278,8 +405,8 @@ class WashServersApi {
 
   /// Parameters:
   ///
-  /// * [WashServerUpdate] body:
-  Future<void> update({ WashServerUpdate? body, }) async {
+  /// * [WashUpdate] body:
+  Future<void> update({ WashUpdate? body, }) async {
     final response = await updateWithHttpInfo( body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
