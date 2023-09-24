@@ -290,7 +290,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
       );
       await repository.setConfigVarString("sbp_server_id", "");
       await repository.setConfigVarString("sbp_server_password", "");
-      setState(() {});
     } on sbp.ApiException catch (e) {
       print(e.code);
       print(e.message);
@@ -982,6 +981,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                                 child: ProgressButton(
                                                   onPressed: (sbpServer.id ?? "").isNotEmpty ? () async {
                                                     await _deleteWashForSbp(repository);
+                                                    setState(() {});
                                                   } : null,
                                                   child: Text(
                                                     "Удалить мойку из СБП",
