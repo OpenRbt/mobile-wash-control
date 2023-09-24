@@ -27,7 +27,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
   ValueNotifier<entity.WashServer> _server = ValueNotifier(entity.WashServer());
   ValueNotifier<entity.SbpWashServer> _sbpServer = ValueNotifier(entity.SbpWashServer());
 
-  ValueNotifier<List<entity.Organization>> organizations = ValueNotifier([]);
   ValueNotifier<List<entity.ServerGroup>> serverGroups = ValueNotifier([]);
   ValueNotifier<entity.Organization> currentOrganization = ValueNotifier(entity.Organization(id: "", name: "", description: ""));
   ValueNotifier<entity.ServerGroup> currentServerGroup = ValueNotifier(entity.ServerGroup(id: "", name: "", description: "", organizationId: ""));
@@ -99,7 +98,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     print("_loadWashServer");
     try{
       adminUser = await _getUser(user?.uid ?? "");
-      await _getOrganizations();
     } catch (e) {
       print(e);
     }
@@ -115,8 +113,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
       await manageOrganizations();
       if((_server.value.groupId?.isEmpty ?? true)){
         print("groupIdisEmpty");
-        var res = await WashAdminRepository.getServerGroups((organizations.value.where((element) => element.isDefault ?? true).first.id ?? ""));
-        newGroupId = res?.first.id ?? "";
+        newGroupId = serverGroups.value.first.id!;
       }
     } catch (e) {
       if (kDebugMode) print("_loadWashServer OtherException: $e");
@@ -145,9 +142,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     await _getOrganization();
     await _getGroups();
     await _getGroup();
-    if(organizations.value.isEmpty){
-      organizations.value = [currentOrganization.value];
-    }
     if(serverGroups.value.isEmpty){
       serverGroups.value = [currentServerGroup.value];
     }
@@ -157,12 +151,8 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     print("_getOrganization");
     try{
       var org;
-      if(organizations.value.isEmpty){
-        var currentUser = await Common.userApi!.getAdminUserById(user?.uid ?? "");
-        org = await Common.organizationApi?.getOrganizationById(currentUser?.organizationId ?? "");
-      } else{
-        org = await Common.organizationApi?.getOrganizationById(_server.value.organizationId ?? organizations.value[0].id!);
-      }
+      var currentUser = await Common.userApi!.getAdminUserById(user?.uid ?? "");
+      org = await Common.organizationApi?.getOrganizationById(currentUser?.organizationId ?? "");
       currentOrganization.value = currentOrganization.value.copyWith(
         id: org?.id ?? "",
         name: org?.name ?? "",
@@ -175,17 +165,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
       print("WashAdminApiException: ${e.message}");
     } catch (e) {
       if (kDebugMode) print("_getOrganization OtherException: $e");
-    }
-  }
-
-  Future<void> _getOrganizations() async {
-    print("_getOrganizations");
-    try{
-      organizations.value = (await WashAdminRepository.getOrganizations() ?? []);
-    } on ApiException catch (e) {
-      if (kDebugMode) print("WashAdminApiException: $e");
-    } catch (e) {
-      if (kDebugMode) print("_getOrganizations OtherException: $e");
     }
   }
 
@@ -211,6 +190,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
   Future<void> _getGroups() async {
     print("_getGroups");
     try{
+      print("currentOrganization.value.id: " + currentOrganization.value.id.toString());
       serverGroups.value = (await WashAdminRepository.getServerGroups(currentOrganization.value.id ?? "") ?? []);
     } on ApiException catch (e) {
       if (kDebugMode) print("WashAdminApiException: $e");
@@ -272,6 +252,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
       print(res);
       await repository.setConfigVarString("sbp_server_id", res?.id ?? "");
       await repository.setConfigVarString("sbp_server_password", res?.password ?? "");
+      setState(() {});
     } on sbp.ApiException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: $e"));
       //print(e.code);
@@ -292,6 +273,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
             terminalPassword: _sbpTerminalPasswordController.text,
           )
       );
+      setState(() {});
     } on sbp.ApiException catch (e) {
       print(e.code);
       print(e.message);
@@ -306,7 +288,9 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
       await SbpCommon.washApi!.delete(
         body: sbp.WashDelete(id: _sbpServer.value.id!)
       );
-
+      await repository.setConfigVarString("sbp_server_id", "");
+      await repository.setConfigVarString("sbp_server_password", "");
+      setState(() {});
     } on sbp.ApiException catch (e) {
       print(e.code);
       print(e.message);
@@ -532,60 +516,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                                 return Column(
                                                   mainAxisSize: MainAxisSize.min,
                                                   children: [
-                                                    ValueListenableBuilder(
-                                                        valueListenable: organizations,
-                                                        builder: (BuildContext context, List<entity.Organization> orgs, Widget? widget){
-                                                          return Row(
-                                                            mainAxisSize: MainAxisSize.max,
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: [
-                                                              Flexible(
-                                                                fit: FlexFit.loose,
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
-                                                                  child: Text(
-                                                                    "Организация",
-                                                                    style: theme.textTheme.bodyMedium,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              ValueListenableBuilder(
-                                                                  valueListenable: currentOrganization,
-                                                                  builder: (BuildContext context, entity.Organization org, Widget? widget) {
-                                                                    return Flexible(
-                                                                        flex: 2,
-                                                                        fit: FlexFit.loose,
-                                                                        child: Padding(
-                                                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                                                          child: DropdownButtonFormField(
-                                                                            isExpanded: true,
-                                                                            value: (currentOrganization.value.id?.isEmpty ?? true) ? orgs[0].id: currentOrganization.value.id,
-                                                                            items: List.generate(
-                                                                              orgs.length ?? 0,
-                                                                                  (index) => DropdownMenuItem(
-                                                                                child: Text(orgs[index].name!),
-                                                                                value: orgs[index].id!,
-                                                                              ),
-                                                                            ),
-                                                                            onChanged: (String? value) async {
-                                                                              block.value = true;
-                                                                              currentOrganization.value = (await WashAdminRepository.getOrganization(value!))!;
-                                                                              await _getGroups();
-                                                                              currentServerGroup.value = serverGroups.value[0];
-                                                                              newGroupId = serverGroups.value[0].id ?? "";
-                                                                              block.value = false;
-                                                                            },
-                                                                          ),
-                                                                        )
-                                                                    );
-                                                                  }
-                                                              )
-                                                            ],
-                                                          );
-                                                        }
-                                                    ),
                                                     ValueListenableBuilder(
                                                         valueListenable: serverGroups,
                                                         builder: (BuildContext context, List<entity.ServerGroup> grps, Widget? widget) {
@@ -1051,9 +981,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                               Center(
                                                 child: ProgressButton(
                                                   onPressed: (sbpServer.id ?? "").isNotEmpty ? () async {
-                                                    if (_sbpFormKey.currentState!.validate()) {
-                                                      await _deleteWashForSbp(repository);
-                                                    }
+                                                    await _deleteWashForSbp(repository);
                                                   } : null,
                                                   child: Text(
                                                     "Удалить мойку из СБП",
