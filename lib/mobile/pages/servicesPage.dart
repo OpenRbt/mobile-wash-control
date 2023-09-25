@@ -125,19 +125,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     return res;
   }
 
-  Future<void> _deleteWashServer(Repository repository) async {
-    print("_deleteWashServer");
-    if (_server.value.id?.isNotEmpty == true && _server.value.serviceKey?.isNotEmpty == true) {
-      try {
-        await repository.deleteConfigVarString("server_id", _server.value.id!);
-        await repository.deleteConfigVarString("server_key", _server.value.serviceKey!);
-      } catch (e) {
-        if (kDebugMode) print("OtherException: $e");
-      }
-      return;
-    }
-  }
-
   Future<void> manageOrganizations() async {
     await _getOrganization();
     await _getGroups();
@@ -252,7 +239,6 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
       print(res);
       await repository.setConfigVarString("sbp_server_id", res?.id ?? "");
       await repository.setConfigVarString("sbp_server_password", res?.password ?? "");
-      setState(() {});
     } on sbp.ApiException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: $e"));
       //print(e.code);
@@ -949,7 +935,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                                   onPressed: (sbpServer.id ?? "").isEmpty ? () async {
                                                     if (_sbpFormKey.currentState!.validate()) {
                                                       await _registerWashForSbp(repository, context);
-                                                      //setState(() {});
+                                                      setState(() {});
                                                     }
                                                   } : null,
                                                   child: Text(
@@ -981,6 +967,10 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                                 child: ProgressButton(
                                                   onPressed: (sbpServer.id ?? "").isNotEmpty ? () async {
                                                     await _deleteWashForSbp(repository);
+                                                    setState(() {
+                                                      sbpServer.id = null;
+                                                      sbpServer.servicePassword = null;
+                                                    });
                                                     setState(() {});
                                                   } : null,
                                                   child: Text(
