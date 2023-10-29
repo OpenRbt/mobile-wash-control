@@ -17,11 +17,16 @@ class ResponsePing {
     this.sessionID,
     this.bonusAmount,
     this.bonusSystemActive,
+    required this.qrMoney,
+    required this.qrUrl,
+    required this.qrOrderId,
+    required this.qrFailed,
     required this.openStation,
     this.lastUpdate,
     this.lastDiscountUpdate,
     this.buttonID,
     this.authorizedSessionID,
+    this.sbpSystemActive,
   });
 
   int serviceAmount;
@@ -49,6 +54,14 @@ class ResponsePing {
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   bool? bonusSystemActive;
+
+  int qrMoney;
+
+  String qrUrl;
+
+  String qrOrderId;
+
+  bool qrFailed;
 
   bool openStation;
 
@@ -84,17 +97,30 @@ class ResponsePing {
   ///
   String? authorizedSessionID;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  bool? sbpSystemActive;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is ResponsePing &&
      other.serviceAmount == serviceAmount &&
      other.sessionID == sessionID &&
      other.bonusAmount == bonusAmount &&
      other.bonusSystemActive == bonusSystemActive &&
+     other.qrMoney == qrMoney &&
+     other.qrUrl == qrUrl &&
+     other.qrOrderId == qrOrderId &&
+     other.qrFailed == qrFailed &&
      other.openStation == openStation &&
      other.lastUpdate == lastUpdate &&
      other.lastDiscountUpdate == lastDiscountUpdate &&
      other.buttonID == buttonID &&
-     other.authorizedSessionID == authorizedSessionID;
+     other.authorizedSessionID == authorizedSessionID &&
+     other.sbpSystemActive == sbpSystemActive;
 
   @override
   int get hashCode =>
@@ -103,14 +129,19 @@ class ResponsePing {
     (sessionID == null ? 0 : sessionID!.hashCode) +
     (bonusAmount == null ? 0 : bonusAmount!.hashCode) +
     (bonusSystemActive == null ? 0 : bonusSystemActive!.hashCode) +
+    (qrMoney.hashCode) +
+    (qrUrl.hashCode) +
+    (qrOrderId.hashCode) +
+    (qrFailed.hashCode) +
     (openStation.hashCode) +
     (lastUpdate == null ? 0 : lastUpdate!.hashCode) +
     (lastDiscountUpdate == null ? 0 : lastDiscountUpdate!.hashCode) +
     (buttonID == null ? 0 : buttonID!.hashCode) +
-    (authorizedSessionID == null ? 0 : authorizedSessionID!.hashCode);
+    (authorizedSessionID == null ? 0 : authorizedSessionID!.hashCode) +
+    (sbpSystemActive == null ? 0 : sbpSystemActive!.hashCode);
 
   @override
-  String toString() => 'ResponsePing[serviceAmount=$serviceAmount, sessionID=$sessionID, bonusAmount=$bonusAmount, bonusSystemActive=$bonusSystemActive, openStation=$openStation, lastUpdate=$lastUpdate, lastDiscountUpdate=$lastDiscountUpdate, buttonID=$buttonID, authorizedSessionID=$authorizedSessionID]';
+  String toString() => 'ResponsePing[serviceAmount=$serviceAmount, sessionID=$sessionID, bonusAmount=$bonusAmount, bonusSystemActive=$bonusSystemActive, qrMoney=$qrMoney, qrUrl=$qrUrl, qrOrderId=$qrOrderId, qrFailed=$qrFailed, openStation=$openStation, lastUpdate=$lastUpdate, lastDiscountUpdate=$lastDiscountUpdate, buttonID=$buttonID, authorizedSessionID=$authorizedSessionID, sbpSystemActive=$sbpSystemActive]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -130,6 +161,10 @@ class ResponsePing {
     } else {
       json[r'bonusSystemActive'] = null;
     }
+      json[r'qrMoney'] = this.qrMoney;
+      json[r'qrUrl'] = this.qrUrl;
+      json[r'qrOrderId'] = this.qrOrderId;
+      json[r'qrFailed'] = this.qrFailed;
       json[r'openStation'] = this.openStation;
     if (this.lastUpdate != null) {
       json[r'lastUpdate'] = this.lastUpdate;
@@ -150,6 +185,11 @@ class ResponsePing {
       json[r'AuthorizedSessionID'] = this.authorizedSessionID;
     } else {
       json[r'AuthorizedSessionID'] = null;
+    }
+    if (this.sbpSystemActive != null) {
+      json[r'sbpSystemActive'] = this.sbpSystemActive;
+    } else {
+      json[r'sbpSystemActive'] = null;
     }
     return json;
   }
@@ -177,11 +217,16 @@ class ResponsePing {
         sessionID: mapValueOfType<String>(json, r'sessionID'),
         bonusAmount: mapValueOfType<int>(json, r'bonusAmount'),
         bonusSystemActive: mapValueOfType<bool>(json, r'bonusSystemActive'),
+        qrMoney: mapValueOfType<int>(json, r'qrMoney')!,
+        qrUrl: mapValueOfType<String>(json, r'qrUrl')!,
+        qrOrderId: mapValueOfType<String>(json, r'qrOrderId')!,
+        qrFailed: mapValueOfType<bool>(json, r'qrFailed')!,
         openStation: mapValueOfType<bool>(json, r'openStation')!,
         lastUpdate: mapValueOfType<int>(json, r'lastUpdate'),
         lastDiscountUpdate: mapValueOfType<int>(json, r'lastDiscountUpdate'),
         buttonID: mapValueOfType<int>(json, r'ButtonID'),
         authorizedSessionID: mapValueOfType<String>(json, r'AuthorizedSessionID'),
+        sbpSystemActive: mapValueOfType<bool>(json, r'sbpSystemActive'),
       );
     }
     return null;
@@ -232,6 +277,10 @@ class ResponsePing {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'serviceAmount',
+    'qrMoney',
+    'qrUrl',
+    'qrOrderId',
+    'qrFailed',
     'openStation',
   };
 }

@@ -51,6 +51,8 @@ abstract class Repository {
   ValueNotifier<List<Station>?> getStationsNotifier();
   ValueNotifier<List<Organization>?> getOrganizationsNotifier();
   ValueNotifier<KasseStatus?> getKasseStatusNotifier();
+  ValueNotifier<ServiceStatus?> getBonusStatusNotifier();
+  ValueNotifier<ServiceStatus?> getSbpStatusNotifier();
   ValueNotifier<String?> getLCWRepoNotifier();
   ValueNotifier<List<Program>?> getProgramsNotifier();
   ValueNotifier<List<User>?> getUsersNotifier();

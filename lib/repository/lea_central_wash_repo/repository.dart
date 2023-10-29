@@ -20,6 +20,8 @@ class LeaCentralRepository extends Repository {
   ValueNotifier<List<entity.Station>?> _stations = ValueNotifier(null);
   ValueNotifier<List<entity.Organization>?> _organizations = ValueNotifier(null);
   ValueNotifier<entity.KasseStatus?> _kasseStatus = ValueNotifier(null);
+  ValueNotifier<entity.ServiceStatus?> _bonusStatus = ValueNotifier(null);
+  ValueNotifier<entity.ServiceStatus?> _sbpStatus = ValueNotifier(null);
   ValueNotifier<String?> _lcwRepo = ValueNotifier(null);
   ValueNotifier<List<entity.Program>?> _programs = ValueNotifier(null);
   ValueNotifier<List<entity.User>?> _users = ValueNotifier(null);
@@ -42,6 +44,8 @@ class LeaCentralRepository extends Repository {
     _stations.dispose();
     _organizations.dispose();
     _kasseStatus.dispose();
+    _bonusStatus.dispose();
+    _sbpStatus.dispose();
     _lcwRepo.dispose();
     _programs.dispose();
     _users.dispose();
@@ -55,6 +59,12 @@ class LeaCentralRepository extends Repository {
 
   @override
   ValueNotifier<entity.KasseStatus?> getKasseStatusNotifier() => _kasseStatus;
+
+  @override
+  ValueNotifier<entity.ServiceStatus?> getBonusStatusNotifier() => _bonusStatus;
+
+  @override
+  ValueNotifier<entity.ServiceStatus?> getSbpStatusNotifier() => _sbpStatus;
 
   @override
   ValueNotifier<String?> getLCWRepoNotifier() => _lcwRepo;
@@ -117,10 +127,38 @@ class LeaCentralRepository extends Repository {
         _hashes.value = hashes;
       }
 
+      //bonus_status
+      //sbp_status
+      //res?.bonusStatus?;
       var kasseStatus = entity.KasseStatus(status: res?.kasseStatus?.value, info: res?.kasseInfo);
       if (_kasseStatus.value != kasseStatus) {
         _kasseStatus.value = kasseStatus;
       }
+
+      var bonusStatus = entity.ServiceStatus(
+          available: res?.bonusStatus?.available,
+          disabledOnServer: res?.bonusStatus?.disabledOnServer,
+          isConnected: res?.bonusStatus?.isConnected,
+          lastErr: res?.bonusStatus?.lastErr,
+          dateLastErrUTC: res?.bonusStatus?.dateLastErrUTC,
+          unpaidStations: res?.bonusStatus?.unpaidStations
+      );
+      if (_bonusStatus.value != bonusStatus) {
+        _bonusStatus.value = bonusStatus;
+      }
+
+      var sbpStatus = entity.ServiceStatus(
+          available: res?.sbpStatus?.available,
+          disabledOnServer: res?.sbpStatus?.disabledOnServer,
+          isConnected: res?.sbpStatus?.isConnected,
+          lastErr: res?.sbpStatus?.lastErr,
+          dateLastErrUTC: res?.sbpStatus?.dateLastErrUTC,
+          unpaidStations: res?.sbpStatus?.unpaidStations
+      );
+      if (_sbpStatus.value != sbpStatus) {
+        _sbpStatus.value = sbpStatus;
+      }
+
     } on ApiException catch (e) {
       switch (e.code) {
         default:

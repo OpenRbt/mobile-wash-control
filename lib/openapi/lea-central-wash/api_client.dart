@@ -295,6 +295,10 @@ class ApiClient {
           return MoneyReport.fromJson(value);
         case 'MoneyReportCreation':
           return MoneyReportCreation.fromJson(value);
+        case 'Pay':
+          return Pay.fromJson(value);
+        case 'PayReceived':
+          return PayReceived.fromJson(value);
         case 'Program':
           return Program.fromJson(value);
         case 'ProgramStat':
@@ -329,6 +333,8 @@ class ApiClient {
           return ResponseVolumeDispenser.fromJson(value);
         case 'ServerInfo':
           return ServerInfo.fromJson(value);
+        case 'ServiceStatus':
+          return ServiceStatus.fromJson(value);
         case 'Session':
           return Session.fromJson(value);
         case 'StationConfig':

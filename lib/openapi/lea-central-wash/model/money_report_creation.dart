@@ -13,18 +13,16 @@ part of openapi.api;
 class MoneyReportCreation {
   /// Returns a new [MoneyReportCreation] instance.
   MoneyReportCreation({
-    required this.hash,
     this.carsTotal,
     this.coins,
     this.banknotes,
     this.electronical,
     this.service,
     this.bonuses,
+    required this.hash,
     this.sessionId,
     this.qrMoney,
   });
-
-  String hash;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -74,6 +72,8 @@ class MoneyReportCreation {
   ///
   int? bonuses;
 
+  String hash;
+
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -92,35 +92,34 @@ class MoneyReportCreation {
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is MoneyReportCreation &&
-     other.hash == hash &&
      other.carsTotal == carsTotal &&
      other.coins == coins &&
      other.banknotes == banknotes &&
      other.electronical == electronical &&
      other.service == service &&
      other.bonuses == bonuses &&
+     other.hash == hash &&
      other.sessionId == sessionId &&
      other.qrMoney == qrMoney;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (hash.hashCode) +
     (carsTotal == null ? 0 : carsTotal!.hashCode) +
     (coins == null ? 0 : coins!.hashCode) +
     (banknotes == null ? 0 : banknotes!.hashCode) +
     (electronical == null ? 0 : electronical!.hashCode) +
     (service == null ? 0 : service!.hashCode) +
     (bonuses == null ? 0 : bonuses!.hashCode) +
+    (hash.hashCode) +
     (sessionId == null ? 0 : sessionId!.hashCode) +
     (qrMoney == null ? 0 : qrMoney!.hashCode);
 
   @override
-  String toString() => 'MoneyReportCreation[hash=$hash, carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, sessionId=$sessionId, qrMoney=$qrMoney]';
+  String toString() => 'MoneyReportCreation[carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, hash=$hash, sessionId=$sessionId, qrMoney=$qrMoney]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'hash'] = this.hash;
     if (this.carsTotal != null) {
       json[r'carsTotal'] = this.carsTotal;
     } else {
@@ -151,6 +150,7 @@ class MoneyReportCreation {
     } else {
       json[r'bonuses'] = null;
     }
+      json[r'hash'] = this.hash;
     if (this.sessionId != null) {
       json[r'sessionId'] = this.sessionId;
     } else {
@@ -183,13 +183,13 @@ class MoneyReportCreation {
       }());
 
       return MoneyReportCreation(
-        hash: mapValueOfType<String>(json, r'hash')!,
         carsTotal: mapValueOfType<int>(json, r'carsTotal'),
         coins: mapValueOfType<int>(json, r'coins'),
         banknotes: mapValueOfType<int>(json, r'banknotes'),
         electronical: mapValueOfType<int>(json, r'electronical'),
         service: mapValueOfType<int>(json, r'service'),
         bonuses: mapValueOfType<int>(json, r'bonuses'),
+        hash: mapValueOfType<String>(json, r'hash')!,
         sessionId: mapValueOfType<String>(json, r'sessionId'),
         qrMoney: mapValueOfType<int>(json, r'qrMoney'),
       );

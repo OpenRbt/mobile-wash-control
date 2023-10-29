@@ -66,6 +66,17 @@ class KasseStatus {
   KasseStatus({this.status, this.info});
 }
 
+class ServiceStatus {
+  bool? available;
+  bool? disabledOnServer;
+  bool? isConnected;
+  String? lastErr;
+  int? dateLastErrUTC;
+  List<int>? unpaidStations;
+
+  ServiceStatus({this.available, this.disabledOnServer, this.isConnected, this.lastErr, this.dateLastErrUTC, this.unpaidStations});
+}
+
 class StationButton {
   int buttonID;
   int? programID;

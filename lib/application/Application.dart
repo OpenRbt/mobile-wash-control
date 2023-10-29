@@ -25,7 +25,9 @@ import 'package:mobile_wash_control/mobile/pages/users.dart';
 import 'package:mobile_wash_control/mobile/pages/users/editUser.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import '../mobile/pages/bonus_status.dart';
 import '../mobile/pages/organizations.dart';
+import '../mobile/pages/sbp_status.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -51,6 +53,8 @@ class Application extends StatelessWidget {
               host: ModalRoute.of(context)?.settings.arguments as String,
             ),
         "/mobile/home": (context) => OverviewPage(),
+        "/mobile/home/bonus-status": (context) => BonusStatusPage(),
+        "/mobile/home/sbp-status": (context) => SbpStatusPage(),
         "/mobile/home/managePost": (context) => ManagePostPage(),
         "/mobile/home/incassation-history": (context) => IncassationHistoryPage(),
         "/mobile/programs": (context) => ProgramsPage(),

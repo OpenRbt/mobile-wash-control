@@ -14,7 +14,7 @@ class OverviewPage extends StatefulWidget {
   State<StatefulWidget> createState() => _OverviewPageState();
 }
 
-enum PostsViewMode { all, active }
+enum PostsViewMode { hashes, all, active }
 
 class _OverviewPageState extends State<OverviewPage> {
   @override
@@ -28,7 +28,34 @@ class _OverviewPageState extends State<OverviewPage> {
     super.dispose();
   }
 
-  ValueNotifier<PostsViewMode> _postsMode = ValueNotifier(PostsViewMode.all);
+  Widget buildServiceStatusIcon(IconData mainIcon, bool serviceAvailable, Function onPressed) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        IconButton(
+          icon: Icon(mainIcon, color: Colors.white),
+          iconSize:  30.0,
+          splashRadius: 30,
+          onPressed: () {
+            onPressed();
+          },
+        ),
+        if (!serviceAvailable)
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Opacity(
+              opacity: 1,
+              child: CustomPaint(
+                painter: CrossPainter(color: Color.fromRGBO(73, 61, 71, 1)),
+                size: Size(10, 10),
+              ),
+            ),
+          )
+      ],
+    );
+  }
+  ValueNotifier<PostsViewMode> _postsMode = ValueNotifier(PostsViewMode.hashes);
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -40,6 +67,7 @@ class _OverviewPageState extends State<OverviewPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        backgroundColor: Colors.red,
         title: Text("Главная"),
         actions: [
           Padding(
@@ -53,6 +81,36 @@ class _OverviewPageState extends State<OverviewPage> {
                     return Text(
                       "${value?.status ?? "Нет данных"}",
                     );
+                  },
+                ),
+                SizedBox(width: 20.0),
+
+                ValueListenableBuilder(
+                  valueListenable: repository.getBonusStatusNotifier(),
+                  builder: (BuildContext context, ServiceStatus? srvStat, Widget? child) {
+                    if (srvStat?.isConnected != true){
+                      return Container();
+                    }
+                    return buildServiceStatusIcon(Icons.monetization_on, srvStat?.available == true, () {
+                      var args = Map<PageArgCode, dynamic>();
+                      args[PageArgCode.repository] = repository;
+                      Navigator.pushNamed(context, "/mobile/home/bonus-status", arguments: args);
+                    });
+                  },
+                ),
+                SizedBox(width: 20.0),
+
+                ValueListenableBuilder(
+                  valueListenable: repository.getSbpStatusNotifier(),
+                  builder: (BuildContext context, ServiceStatus? sbpStat, Widget? child) {
+                    if (sbpStat?.isConnected != true){
+                      return Container();
+                    }
+                    return buildServiceStatusIcon(Icons.qr_code_2, sbpStat?.available == true, () {
+                      var args = Map<PageArgCode, dynamic>();
+                      args[PageArgCode.repository] = repository;
+                      Navigator.pushNamed(context, "/mobile/home/sbp-status", arguments: args);
+                    });
                   },
                 ),
               ],
@@ -85,12 +143,16 @@ class _OverviewPageState extends State<OverviewPage> {
                           return SegmentedButton<PostsViewMode>(
                             segments: [
                               ButtonSegment(
-                                value: PostsViewMode.all,
-                                label: Text("Все"),
+                                value: PostsViewMode.hashes,
+                                label: Text("С хэшем"),
                               ),
                               ButtonSegment(
                                 value: PostsViewMode.active,
                                 label: Text("Активные"),
+                              ),
+                              ButtonSegment(
+                                value: PostsViewMode.all,
+                                label: Text("Все"),
                               ),
                             ],
                             selected: {value},
@@ -115,6 +177,8 @@ class _OverviewPageState extends State<OverviewPage> {
 
                                 if (postViewMode == PostsViewMode.active) {
                                   filteredStations = stations.where((station) => station.status == "online").toList();
+                                } else if(postViewMode == PostsViewMode.hashes) {
+                                  filteredStations = stations.where((station) => (station.hash?.isNotEmpty ?? false)).toList();
                                 } else {
                                   filteredStations = stations;
                                 }
@@ -149,5 +213,26 @@ class _OverviewPageState extends State<OverviewPage> {
             },
           ),
     );
+  }
+}
+
+class CrossPainter extends CustomPainter {
+  final Color color;
+
+  CrossPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = color
+      ..strokeWidth = 4.0;
+
+    canvas.drawLine(Offset(0, 0), Offset(size.width, size.height), paint);
+    canvas.drawLine(Offset(size.width, 0), Offset(0, size.height), paint);
+  }
+
+  @override
+  bool shouldRepaint(CrossPainter oldDelegate) {
+    return oldDelegate.color != color;
   }
 }

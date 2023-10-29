@@ -741,9 +741,9 @@ class DefaultApi {
   /// * [ArgGetConfigVar] args (required):
   Future<ConfigVarString?> getConfigVarString(ArgGetConfigVar args,) async {
     final response = await getConfigVarStringWithHttpInfo(args,);
-    //if (response.statusCode >= HttpStatus.badRequest) {
-      //throw ApiException(response.statusCode, await _decodeBodyBytes(response));
-    //}
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
@@ -1632,6 +1632,84 @@ class DefaultApi {
   /// * [ArgOpenStation] args (required):
   Future<void> openStation(ArgOpenStation args,) async {
     final response = await openStationWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /pay' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [Pay] args (required):
+  Future<Response> payWithHttpInfo(Pay args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/pay';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [Pay] args (required):
+  Future<void> pay(Pay args,) async {
+    final response = await payWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /pay/received' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [PayReceived] args (required):
+  Future<Response> payReceivedWithHttpInfo(PayReceived args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/pay/received';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [PayReceived] args (required):
+  Future<void> payReceived(PayReceived args,) async {
+    final response = await payReceivedWithHttpInfo(args,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
