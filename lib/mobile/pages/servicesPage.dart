@@ -694,6 +694,26 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                               ),
                                             ],
                                           ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Flexible(
+                                                flex: 1,
+                                                child: ProgressButton(
+                                                  onPressed: (_server.value.id ?? "").isNotEmpty
+                                                      ? () {
+                                                    var args = Map<PageArgCode, dynamic>();
+                                                    args[PageArgCode.repository] = repository;
+                                                    Navigator.pushNamed(context, "/mobile/home/bonus-status", arguments: args);
+                                                  } : null,
+                                                  child: Text(
+                                                    "Статус сервиса",
+                                                    maxLines: 2,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       );
                                     },
@@ -975,6 +995,26 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                                   } : null,
                                                   child: Text(
                                                     "Удалить мойку из СБП",
+                                                    maxLines: 2,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Flexible(
+                                                flex: 1,
+                                                child: ProgressButton(
+                                                  onPressed: (_server.value.id ?? "").isNotEmpty
+                                                      ? () {
+                                                    var args = Map<PageArgCode, dynamic>();
+                                                    args[PageArgCode.repository] = repository;
+                                                    Navigator.pushNamed(context, "/mobile/home/sbp-status", arguments: args);
+                                                  } : null,
+                                                  child: Text(
+                                                    "Статус сервиса",
                                                     maxLines: 2,
                                                   ),
                                                 ),

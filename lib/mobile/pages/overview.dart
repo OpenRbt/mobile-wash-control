@@ -14,7 +14,7 @@ class OverviewPage extends StatefulWidget {
   State<StatefulWidget> createState() => _OverviewPageState();
 }
 
-enum PostsViewMode { hashes, all, active }
+enum PostsViewMode { hashes, active }
 
 class _OverviewPageState extends State<OverviewPage> {
   @override
@@ -144,15 +144,11 @@ class _OverviewPageState extends State<OverviewPage> {
                             segments: [
                               ButtonSegment(
                                 value: PostsViewMode.hashes,
-                                label: Text("С хэшем"),
+                                label: Text("Не активные"),
                               ),
                               ButtonSegment(
                                 value: PostsViewMode.active,
                                 label: Text("Активные"),
-                              ),
-                              ButtonSegment(
-                                value: PostsViewMode.all,
-                                label: Text("Все"),
                               ),
                             ],
                             selected: {value},
