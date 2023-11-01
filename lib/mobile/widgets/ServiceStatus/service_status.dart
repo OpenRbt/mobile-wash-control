@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ServiceStatus extends StatelessWidget {
   final String serviceName;
@@ -100,7 +101,7 @@ class ServiceStatus extends StatelessWidget {
                     Text("$lastErr"),
                     SizedBox(height: 10),
                     Text(
-                      "Время ошибки: ${DateTime.fromMillisecondsSinceEpoch(dateLastErrUTC!)}",
+                      "Время ошибки: ${DateFormat('d MMMM y HH:mm', 'ru_RU').format(DateTime.fromMillisecondsSinceEpoch(dateLastErrUTC! * 1000).toLocal())}",
                     ),
                   ],
                 ),

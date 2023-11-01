@@ -694,6 +694,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                               ),
                                             ],
                                           ),
+                                          SizedBox(height: 20,),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
@@ -1001,6 +1002,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                               ),
                                             ],
                                           ),
+                                          SizedBox(height: 20,),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [

@@ -144,7 +144,7 @@ class _OverviewPageState extends State<OverviewPage> {
                             segments: [
                               ButtonSegment(
                                 value: PostsViewMode.hashes,
-                                label: Text("Не активные"),
+                                label: Text("Все"),
                               ),
                               ButtonSegment(
                                 value: PostsViewMode.active,

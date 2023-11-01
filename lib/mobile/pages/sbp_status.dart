@@ -29,16 +29,11 @@ class _SbpStatusPageState extends State<SbpStatusPage> {
           builder: (context, sbpStatus, _) {
             return ServiceStatus(
               serviceName: 'Сервис СБП',
-              disabledOnServer: true,
-              //disabledOnServer: sbpStatus?.disabledOnServer,
-              isConnected: false,
-              //isConnected: sbpStatus?.isConnected,
-              lastErr: "Упало соединение в кролике",
-              //lastErr: sbpStatus?.lastErr,
-              dateLastErrUTC: DateTime.now().day,
-              //dateLastErrUTC: sbpStatus?.dateLastErrUTC,
-              unpaidStations: [1, 2, 5],
-              //unpaidStations: sbpStatus?.unpaidStations,
+              disabledOnServer: sbpStatus?.disabledOnServer,
+              isConnected: sbpStatus?.isConnected,
+              lastErr: sbpStatus?.lastErr,
+              dateLastErrUTC: sbpStatus?.dateLastErrUTC,
+              unpaidStations: sbpStatus?.unpaidStations,
             );
           },
         )
