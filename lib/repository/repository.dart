@@ -85,6 +85,12 @@ abstract class Repository {
   Future<KasseConfig?> getKasseConfig({BuildContext? context});
   Future<void> saveKasseConfig(KasseConfig config, {BuildContext? context});
 
+  Future<List<FirmwareVersion>?> getPostVersions(int id, {BuildContext? context});
+  Future<void> getServerVersions({BuildContext? context});
+  Future<void> getApplicationVersions({BuildContext? context});
+
+  Future<List<Task>?> getTasks(int id, String status, {BuildContext? context});
+
   User? currentUser();
 
   void dispose();

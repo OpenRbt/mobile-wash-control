@@ -1655,6 +1655,134 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
+  Future<List<entity.FirmwareVersion>?> getPostVersions(int id, {BuildContext? context}) async {
+    try {
+
+      //final response = await api.getStationFirmwareVersions(id);
+      List<entity.FirmwareVersion> firmwareVersions = [];
+/*
+      for(int i = 0; i < response!.length; i++){
+        firmwareVersions.add(
+            entity.FirmwareVersion(
+              id: response[i].id,
+              hashLua: response[i].hashLua,
+              hashEnv: response[i].hashEnv,
+              hashBinar: response[i].hashBinar,
+              builtAt: response[i].builtAt,
+              commitedAt:response[i].commitedAt
+            )
+        );
+      }
+
+ */
+
+      for(int i = 0; i < 10; i++){
+        firmwareVersions.add(
+            entity.FirmwareVersion(
+                id: i + 1,
+                hashLua: "response[i].hashLua",
+                hashEnv: "response[i].hashEnv",
+                hashBinar: "response[i].hashBinar",
+                builtAt: DateTime(2023, 12, 22),
+                commitedAt: DateTime(2023, 12, 10),
+            )
+        );
+      }
+
+      return firmwareVersions;
+
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.notFound:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось выполнить программу, Ошибка: ${e.message ?? "не найден один из параметров переданного конфига"}"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<void> getServerVersions({BuildContext? context}) async {
+
+  }
+
+  @override
+  Future<void> getApplicationVersions({BuildContext? context}) async {
+
+  }
+
+  @override
+  Future<List<entity.Task>?> getTasks(int id, String status, {BuildContext? context}) async {
+    try {
+
+      final response = await api.getListTasks(stationID: id, status: status);
+      List<entity.Task> tasks = [];
+
+      for(int i = 0; i < response!.length; i++){
+        tasks.add(
+            entity.Task(
+              id: response[i].id,
+              stationID: response[i].hashCode,
+              type: entity.TaskType.fromString(response[i].type.value),
+              status: entity.TaskStatus.fromString(response[i].status.value),
+              error: response[i].error,
+              createdAt: response[i].createdAt,
+              startedAt: response[i].startedAt,
+              stoppedAt: response[i].startedAt,
+            )
+        );
+      }
+
+
+/*
+      for(int i = 0; i < 10; i++){
+        firmwareVersions.add(
+            entity.FirmwareVersion(
+              id: i + 1,
+              hashLua: "response[i].hashLua",
+              hashEnv: "response[i].hashEnv",
+              hashBinar: "response[i].hashBinar",
+              builtAt: DateTime(2023, 12, 22),
+              commitedAt: DateTime(2023, 12, 10),
+            )
+        );
+      }
+
+ */
+
+      return tasks;
+
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.notFound:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось выполнить программу, Ошибка: ${e.message ?? "не найден один из параметров переданного конфига"}"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
   Future<void> runProgram(entity.RunProgramConfig cfg, {BuildContext? context}) async {
     try {
       final args = Helpers.RunProgramConfigToAPI(cfg);

@@ -28,6 +28,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../mobile/pages/bonus_status.dart';
 import '../mobile/pages/organizations.dart';
 import '../mobile/pages/sbp_status.dart';
+import '../mobile/pages/script_station.dart';
+import '../mobile/pages/scripts_page.dart';
+import '../mobile/pages/tasks.dart';
+import '../mobile/pages/update_station.dart';
+import '../mobile/pages/updates_page.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -74,6 +79,14 @@ class Application extends StatelessWidget {
         "/mobile/users/edit": (context) => UserEditPage(),
         "/mobile/discounts": (context) => DiscountsPage(),
         "/mobile/discounts/edit": (context) => EditDiscountPage(),
+
+        "/mobile/scripts": (context) => ScriptsPage(),
+        "/mobile/scripts/post": (context) => ScriptStationPage(),
+        "/mobile/updates": (context) => UpdatesPage(),
+        "/mobile/updates/post": (context) => UpdateStationPage(),
+
+        "/mobile/tasks": (context) => TasksPage(),
+
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

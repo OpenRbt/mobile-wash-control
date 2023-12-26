@@ -13,6 +13,7 @@ import 'package:mobile_wash_control/utils/common.dart';
 import '../../repository/wash_admin_repo/repository.dart';
 import '../../utils/sbp_common.dart';
 import '../widgets/common/snackBars.dart';
+import '../widgets/dropDowns/double_drop_down_with_refresh.dart';
 
 class SettingsServicesPage extends StatefulWidget {
   const SettingsServicesPage({
@@ -50,6 +51,14 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
   late TextEditingController _sbpTerminalPasswordController;
 
   late String sbpServerId;
+
+  Future<void> changeGroup(String? value) async {
+
+  }
+
+  Future<void> changeServer(String? value) async {
+
+  }
 
   Future<void> _RegisterWash(Repository repository) async {
     print("register Wash");
@@ -175,9 +184,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
   }
 
   Future<void> _getGroups() async {
-    print("_getGroups");
     try{
-      print("currentOrganization.value.id: " + currentOrganization.value.id.toString());
       serverGroups.value = (await WashAdminRepository.getServerGroups(currentOrganization.value.id ?? "") ?? []);
     } on ApiException catch (e) {
       if (kDebugMode) print("WashAdminApiException: $e");
@@ -187,10 +194,8 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
   }
 
   Future<void> _getWashServer() async {
-    print("_getWashServer");
     try {
       var washServer = await Common.washServerApi!.getWashServerById(_server.value.id!);
-      print("washServer.groupId: " + washServer!.groupId!);
       _server.value = _server.value.copyWith(
         name: washServer?.name,
         serviceKey: washServer?.serviceKey,
@@ -327,6 +332,20 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     _sbpTerminalKeyController = TextEditingController();
     _sbpTerminalPasswordController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _serverNameController.dispose();
+    _serverDescriptionController.dispose();
+
+    _sbpServerNameController.dispose();
+    _sbpServerDescriptionController.dispose();
+
+    _sbpTerminalKeyController.dispose();
+    _sbpTerminalPasswordController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -1039,6 +1058,37 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                         ),
                       ]
                   )
+              ),
+              Card(
+                child: FutureBuilder(
+                  future: manageOrganizations(),
+                  builder: (context, snapshot) {
+                    return ExpansionTile(
+                      title: Text("Привязка сервера"),
+                      children: [
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: DoubleDropDownWithRefresh(
+                                      firstItemsList: serverGroups,
+                                      firstCurrentItem: currentServerGroup,
+                                      firstOnChanged: changeGroup,
+                                      secondItemsList: serverGroups,
+                                      secondCurrentItem: currentServerGroup,
+                                      secondOnChanged: changeServer,
+                                      block: block,
+                                    )
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    );
+                  },
+                )
               )
             ],
           );

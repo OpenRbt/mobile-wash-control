@@ -332,6 +332,53 @@ class DefaultApi {
     return null;
   }
 
+  /// Performs an HTTP 'POST /tasks' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [CreateTask] args (required):
+  Future<Response> createTaskWithHttpInfo(CreateTask args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/tasks';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [CreateTask] args (required):
+  Future<Task?> createTask(CreateTask args,) async {
+    final response = await createTaskWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Task',) as Task;
+    
+    }
+    return null;
+  }
+
   /// Performs an HTTP 'POST /user' operation and returns the [Response].
   /// Parameters:
   ///
@@ -452,6 +499,86 @@ class DefaultApi {
   /// * [ArgDelStation] args (required):
   Future<void> delStation(ArgDelStation args,) async {
     final response = await delStationWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'DELETE /build-scripts/{id}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<Response> deleteBuildScriptWithHttpInfo(int id,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/build-scripts/{id}'
+      .replaceAll('{id}', id.toString());
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<void> deleteBuildScript(int id,) async {
+    final response = await deleteBuildScriptWithHttpInfo(id,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'DELETE /tasks/{id}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<Response> deleteTaskWithHttpInfo(int id,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/tasks/{id}'
+      .replaceAll('{id}', id.toString());
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<void> deleteTask(int id,) async {
+    final response = await deleteTaskWithHttpInfo(id,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -611,6 +738,54 @@ class DefaultApi {
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
+  }
+
+  /// Performs an HTTP 'GET /build-scripts/{id}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<Response> getBuildScriptWithHttpInfo(int id,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/build-scripts/{id}'
+      .replaceAll('{id}', id.toString());
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<BuildScript?> getBuildScript(int id,) async {
+    final response = await getBuildScriptWithHttpInfo(id,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'BuildScript',) as BuildScript;
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /get-config-var-bool' operation and returns the [Response].
@@ -801,6 +976,111 @@ class DefaultApi {
     return null;
   }
 
+  /// Performs an HTTP 'GET /build-scripts' operation and returns the [Response].
+  Future<Response> getListBuildScriptsWithHttpInfo() async {
+    // ignore: prefer_const_declarations
+    final path = r'/build-scripts';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<List<BuildScript>?> getListBuildScripts() async {
+    final response = await getListBuildScriptsWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<BuildScript>') as List)
+        .cast<BuildScript>()
+        .toList();
+
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'GET /tasks' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [int] stationID:
+  ///
+  /// * [String] status:
+  Future<Response> getListTasksWithHttpInfo({ int? stationID, String? status, }) async {
+    // ignore: prefer_const_declarations
+    final path = r'/tasks';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    if (stationID != null) {
+      queryParams.addAll(_queryParams('', 'stationID', stationID));
+    }
+    if (status != null) {
+      queryParams.addAll(_queryParams('', 'status', status));
+    }
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [int] stationID:
+  ///
+  /// * [String] status:
+  Future<List<Task>?> getListTasks({ int? stationID, String? status, }) async {
+    final response = await getListTasksWithHttpInfo( stationID: stationID, status: status, );
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<Task>') as List)
+        .cast<Task>()
+        .toList();
+
+    }
+    return null;
+  }
+
   /// Performs an HTTP 'GET /ping' operation and returns the [Response].
   Future<Response> getPingWithHttpInfo() async {
     // ignore: prefer_const_declarations
@@ -832,6 +1112,47 @@ class DefaultApi {
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
+  }
+
+  /// Performs an HTTP 'GET /public-key' operation and returns the [Response].
+  Future<Response> getPublicKeyWithHttpInfo() async {
+    // ignore: prefer_const_declarations
+    final path = r'/public-key';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<PublicKey?> getPublicKey() async {
+    final response = await getPublicKeyWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'PublicKey',) as PublicKey;
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'GET /server/info' operation and returns the [Response].
@@ -1066,6 +1387,57 @@ class DefaultApi {
     return null;
   }
 
+  /// Performs an HTTP 'GET /stations/{id}/firmware-versions' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<Response> getStationFirmwareVersionsWithHttpInfo(int id,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/stations/{id}/firmware-versions'
+      .replaceAll('{id}', id.toString());
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<List<FirmwareVersion>?> getStationFirmwareVersions(int id,) async {
+    final response = await getStationFirmwareVersionsWithHttpInfo(id,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<FirmwareVersion>') as List)
+        .cast<FirmwareVersion>()
+        .toList();
+
+    }
+    return null;
+  }
+
   /// Performs an HTTP 'POST /get-wash-config-var-bool' operation and returns the [Response].
   /// Parameters:
   ///
@@ -1202,6 +1574,54 @@ class DefaultApi {
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
       return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StationConfigVarString',) as StationConfigVarString;
+    
+    }
+    return null;
+  }
+
+  /// Performs an HTTP 'GET /tasks/{id}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<Response> getTaskWithHttpInfo(int id,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/tasks/{id}'
+      .replaceAll('{id}', id.toString());
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  Future<Task?> getTask(int id,) async {
+    final response = await getTaskWithHttpInfo(id,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Task',) as Task;
     
     }
     return null;
@@ -2200,6 +2620,53 @@ class DefaultApi {
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
+  }
+
+  /// Performs an HTTP 'POST /build-scripts' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [SetBuildScript] args (required):
+  Future<Response> setBuildScriptWithHttpInfo(SetBuildScript args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/build-scripts';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [SetBuildScript] args (required):
+  Future<BuildScript?> setBuildScript(SetBuildScript args,) async {
+    final response = await setBuildScriptWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'BuildScript',) as BuildScript;
+    
+    }
+    return null;
   }
 
   /// Performs an HTTP 'POST /set-card-reader-config' operation and returns the [Response].

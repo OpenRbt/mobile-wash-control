@@ -272,6 +272,41 @@ enum WeekDay {
   }
 }
 
+enum TaskStatus {
+  queue,
+  started,
+  completed,
+  error;
+
+  static TaskStatus fromString(String val) {
+
+    for(int i = 0; i < TaskStatus.values.length; i++){
+      if(TaskStatus.values[i].name == val) {
+        return TaskStatus.values[i];
+      }
+    }
+
+    return error;
+  }
+}
+
+enum TaskType {
+  build,
+  update;
+
+  static TaskType fromString(String val) {
+
+    for(int i = 0; i < TaskType.values.length; i++){
+      if(TaskType.values[i].name == val) {
+        return TaskType.values[i];
+      }
+    }
+
+    return update;
+  }
+
+}
+
 class DiscountCampaign {
   int? id;
   String? name;
@@ -535,4 +570,44 @@ class RunProgramConfig {
   bool Prefligth = false;
 
   RunProgramConfig({required this.stationHash, required this.programID, this.Prefligth = false, this.programName, this.stationID});
+}
+
+class FirmwareVersion {
+  int id;
+  String? hashLua;
+  String? hashEnv;
+  String? hashBinar;
+  DateTime? builtAt;
+  DateTime? commitedAt;
+
+  FirmwareVersion({
+    required this.id,
+    required this.hashLua,
+    required this.hashEnv,
+    required this.hashBinar,
+    required this.builtAt,
+    required this.commitedAt,
+  });
+}
+
+class Task {
+  Task({
+    required this.id,
+    required this.stationID,
+    required this.type,
+    required this.status,
+    this.error,
+    required this.createdAt,
+    this.startedAt,
+    this.stoppedAt,
+  });
+
+  int id;
+  int stationID;
+  TaskType type;
+  TaskStatus status;
+  String? error;
+  DateTime createdAt;
+  DateTime? startedAt;
+  DateTime? stoppedAt;
 }

@@ -32,7 +32,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
     var now = DateTime.now();
     _dateRange.value = DateTimeRange(
       start: DateTime(now.year, now.month, 1),
-      end: DateTime(now.year, (now.month + 1) <= 12 ? (now.month + 1) : 1, 0),
+      end: (now.month + 1) <= 12 ? DateTime(now.year, now.month + 1) : DateTime(now.year + 1, 1) ,
     );
 
     _currentDiscount = ValueNotifier(DiscountCampaign(

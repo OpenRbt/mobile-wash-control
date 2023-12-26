@@ -265,6 +265,8 @@ class ApiClient {
           return ArgUserPassword.fromJson(value);
         case 'ArgUserUpdate':
           return ArgUserUpdate.fromJson(value);
+        case 'BuildScript':
+          return BuildScript.fromJson(value);
         case 'ButtonDiscount':
           return ButtonDiscount.fromJson(value);
         case 'CardReaderConfig':
@@ -281,10 +283,14 @@ class ApiClient {
           return ConfigVarString.fromJson(value);
         case 'CreateSession':
           return CreateSession.fromJson(value);
+        case 'CreateTask':
+          return CreateTask.fromJson(value);
         case 'DeleteUser409Response':
           return DeleteUser409Response.fromJson(value);
         case 'DiscountProgram':
           return DiscountProgram.fromJson(value);
+        case 'FirmwareVersion':
+          return FirmwareVersion.fromJson(value);
         case 'KasseConfig':
           return KasseConfig.fromJson(value);
         case 'KeyPair':
@@ -303,6 +309,8 @@ class ApiClient {
           return Program.fromJson(value);
         case 'ProgramStat':
           return ProgramStat.fromJson(value);
+        case 'PublicKey':
+          return PublicKey.fromJson(value);
         case 'RelayBoard':
           return RelayBoardTypeTransformer().decode(value);
         case 'RelayConfig':
@@ -337,6 +345,8 @@ class ApiClient {
           return ServiceStatus.fromJson(value);
         case 'Session':
           return Session.fromJson(value);
+        case 'SetBuildScript':
+          return SetBuildScript.fromJson(value);
         case 'StationConfig':
           return StationConfig.fromJson(value);
         case 'StationConfigVarBool':
@@ -365,6 +375,8 @@ class ApiClient {
           return StatusCollectionReport.fromJson(value);
         case 'StatusReport':
           return StatusReport.fromJson(value);
+        case 'Task':
+          return Task.fromJson(value);
         case 'UserConfig':
           return UserConfig.fromJson(value);
         case 'UsersReport':
