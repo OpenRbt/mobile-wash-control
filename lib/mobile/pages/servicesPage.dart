@@ -110,22 +110,23 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     } catch (e) {
       print(e);
     }
+    String? id = '';
+    String? key = '';
     try {
       var id = await repository.getConfigVarString("server_id");
       var key = await repository.getConfigVarString("server_key");
-
-      _server.value = _server.value.copyWith(
-          id: id,
-          serviceKey: key
-      );
-      await _getWashServer();
-      await manageOrganizations();
-      if((_server.value.groupId?.isEmpty ?? true)){
-        print("groupIdisEmpty");
-        newGroupId = serverGroups.value.first.id!;
-      }
     } catch (e) {
       if (kDebugMode) print("_loadWashServer OtherException: $e");
+    }
+    _server.value = _server.value.copyWith(
+        id: id,
+        serviceKey: key
+    );
+    await _getWashServer();
+    await manageOrganizations();
+    if((_server.value.groupId?.isEmpty ?? true)){
+      print("groupIdisEmpty");
+      newGroupId = serverGroups.value.first.id!;
     }
   }
 
