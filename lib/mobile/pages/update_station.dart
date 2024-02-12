@@ -32,6 +32,17 @@ class _UpdateStationPageState extends State<UpdateStationPage> {
         title: Text(
           "Пост $id",
         ),
+        actions: [
+          TextButton(
+              onPressed: () async {},
+              child: Text(
+                  'Обновить до последней версии',
+                style: TextStyle(
+                  color: Colors.white
+                ),
+              )
+          )
+        ],
       ),
       body: FutureBuilder(
         future: _getPostVersions(repository, id),
@@ -63,11 +74,12 @@ class _UpdateStationPageState extends State<UpdateStationPage> {
                       ],
                     ),
                     leading: OutlinedButton.icon(
-                      onPressed: () async {
+                      onPressed: (avaliableVersions[index].isCurrent ?? false) ? null :
+                          () async {
 
-                      },
+                          },
                       icon: const Icon(Icons.download_outlined),
-                      label: const Text("Скачать"),
+                      label: Text((avaliableVersions[index].isCurrent ?? false) ? "Текущая" : "Загрузить")
                     ),
                   ),
                 );

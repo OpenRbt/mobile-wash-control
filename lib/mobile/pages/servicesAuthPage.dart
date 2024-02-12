@@ -11,11 +11,12 @@ import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
-import 'package:mobile_wash_control/utils/sbp_common.dart';
+import 'package:mobile_wash_control/Common/sbp_common.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../utils/common.dart';
+import '../../Common/common.dart';
+import '../../Common/management_common.dart';
 
 class SettingsServicesRegistrationPage extends StatefulWidget {
   @override
@@ -67,8 +68,12 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                           child: ElevatedButton(
                             child: Text("Продолжить"),
                             onPressed: () async {
-                              Common.setAuthToken((await snapshot.data!.getIdToken() ?? ""));
-                              SbpCommon.setAuthToken((await snapshot.data!.getIdToken() ?? ""));
+                              String token = (await snapshot.data!.getIdToken() ?? "");
+
+                              Common.setAuthToken(token);
+                              SbpCommon.setAuthToken(token);
+                              ManagementCommon.setAuthToken(token);
+
                               var args = Map<PageArgCode, dynamic>();
                               args[PageArgCode.repository] = repository;
 

@@ -16,6 +16,7 @@ class OrganizationCreation {
     required this.name,
     required this.description,
     this.displayName,
+    this.utcOffset,
     this.reportsProcessingDelayMinutes,
     this.bonusPercentage,
   });
@@ -32,6 +33,10 @@ class OrganizationCreation {
   ///
   String? displayName;
 
+  /// Minimum value: -720
+  /// Maximum value: 840
+  int? utcOffset;
+
   /// Minimum value: 0
   int? reportsProcessingDelayMinutes;
 
@@ -44,6 +49,7 @@ class OrganizationCreation {
      other.name == name &&
      other.description == description &&
      other.displayName == displayName &&
+     other.utcOffset == utcOffset &&
      other.reportsProcessingDelayMinutes == reportsProcessingDelayMinutes &&
      other.bonusPercentage == bonusPercentage;
 
@@ -53,11 +59,12 @@ class OrganizationCreation {
     (name.hashCode) +
     (description.hashCode) +
     (displayName == null ? 0 : displayName!.hashCode) +
+    (utcOffset == null ? 0 : utcOffset!.hashCode) +
     (reportsProcessingDelayMinutes == null ? 0 : reportsProcessingDelayMinutes!.hashCode) +
     (bonusPercentage == null ? 0 : bonusPercentage!.hashCode);
 
   @override
-  String toString() => 'OrganizationCreation[name=$name, description=$description, displayName=$displayName, reportsProcessingDelayMinutes=$reportsProcessingDelayMinutes, bonusPercentage=$bonusPercentage]';
+  String toString() => 'OrganizationCreation[name=$name, description=$description, displayName=$displayName, utcOffset=$utcOffset, reportsProcessingDelayMinutes=$reportsProcessingDelayMinutes, bonusPercentage=$bonusPercentage]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -67,6 +74,11 @@ class OrganizationCreation {
       json[r'displayName'] = this.displayName;
     } else {
       json[r'displayName'] = null;
+    }
+    if (this.utcOffset != null) {
+      json[r'utcOffset'] = this.utcOffset;
+    } else {
+      json[r'utcOffset'] = null;
     }
     if (this.reportsProcessingDelayMinutes != null) {
       json[r'reportsProcessingDelayMinutes'] = this.reportsProcessingDelayMinutes;
@@ -103,6 +115,7 @@ class OrganizationCreation {
         name: mapValueOfType<String>(json, r'name')!,
         description: mapValueOfType<String>(json, r'description')!,
         displayName: mapValueOfType<String>(json, r'displayName'),
+        utcOffset: mapValueOfType<int>(json, r'utcOffset'),
         reportsProcessingDelayMinutes: mapValueOfType<int>(json, r'reportsProcessingDelayMinutes'),
         bonusPercentage: mapValueOfType<int>(json, r'bonusPercentage'),
       );

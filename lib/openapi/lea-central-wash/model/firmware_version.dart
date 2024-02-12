@@ -14,6 +14,7 @@ class FirmwareVersion {
   /// Returns a new [FirmwareVersion] instance.
   FirmwareVersion({
     required this.id,
+    required this.isCurrent,
     required this.hashLua,
     required this.hashEnv,
     required this.hashBinar,
@@ -22,6 +23,8 @@ class FirmwareVersion {
   });
 
   int id;
+
+  bool isCurrent;
 
   String hashLua;
 
@@ -36,6 +39,7 @@ class FirmwareVersion {
   @override
   bool operator ==(Object other) => identical(this, other) || other is FirmwareVersion &&
      other.id == id &&
+     other.isCurrent == isCurrent &&
      other.hashLua == hashLua &&
      other.hashEnv == hashEnv &&
      other.hashBinar == hashBinar &&
@@ -46,6 +50,7 @@ class FirmwareVersion {
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (id.hashCode) +
+    (isCurrent.hashCode) +
     (hashLua.hashCode) +
     (hashEnv.hashCode) +
     (hashBinar.hashCode) +
@@ -53,11 +58,12 @@ class FirmwareVersion {
     (commitedAt.hashCode);
 
   @override
-  String toString() => 'FirmwareVersion[id=$id, hashLua=$hashLua, hashEnv=$hashEnv, hashBinar=$hashBinar, builtAt=$builtAt, commitedAt=$commitedAt]';
+  String toString() => 'FirmwareVersion[id=$id, isCurrent=$isCurrent, hashLua=$hashLua, hashEnv=$hashEnv, hashBinar=$hashBinar, builtAt=$builtAt, commitedAt=$commitedAt]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'id'] = this.id;
+      json[r'isCurrent'] = this.isCurrent;
       json[r'hashLua'] = this.hashLua;
       json[r'hashEnv'] = this.hashEnv;
       json[r'hashBinar'] = this.hashBinar;
@@ -86,6 +92,7 @@ class FirmwareVersion {
 
       return FirmwareVersion(
         id: mapValueOfType<int>(json, r'id')!,
+        isCurrent: mapValueOfType<bool>(json, r'isCurrent')!,
         hashLua: mapValueOfType<String>(json, r'hashLua')!,
         hashEnv: mapValueOfType<String>(json, r'hashEnv')!,
         hashBinar: mapValueOfType<String>(json, r'hashBinar')!,
@@ -141,6 +148,7 @@ class FirmwareVersion {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'id',
+    'isCurrent',
     'hashLua',
     'hashEnv',
     'hashBinar',

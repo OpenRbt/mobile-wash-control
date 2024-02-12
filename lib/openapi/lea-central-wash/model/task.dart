@@ -15,6 +15,7 @@ class Task {
   Task({
     required this.id,
     required this.stationID,
+    this.versionID,
     required this.type,
     required this.status,
     this.error,
@@ -27,9 +28,11 @@ class Task {
 
   int stationID;
 
-  TaskTypeEnum type;
+  int? versionID;
 
-  TaskStatusEnum status;
+  TaskType type;
+
+  TaskStatus status;
 
   String? error;
 
@@ -43,6 +46,7 @@ class Task {
   bool operator ==(Object other) => identical(this, other) || other is Task &&
      other.id == id &&
      other.stationID == stationID &&
+     other.versionID == versionID &&
      other.type == type &&
      other.status == status &&
      other.error == error &&
@@ -55,6 +59,7 @@ class Task {
     // ignore: unnecessary_parenthesis
     (id.hashCode) +
     (stationID.hashCode) +
+    (versionID == null ? 0 : versionID!.hashCode) +
     (type.hashCode) +
     (status.hashCode) +
     (error == null ? 0 : error!.hashCode) +
@@ -63,12 +68,17 @@ class Task {
     (stoppedAt == null ? 0 : stoppedAt!.hashCode);
 
   @override
-  String toString() => 'Task[id=$id, stationID=$stationID, type=$type, status=$status, error=$error, createdAt=$createdAt, startedAt=$startedAt, stoppedAt=$stoppedAt]';
+  String toString() => 'Task[id=$id, stationID=$stationID, versionID=$versionID, type=$type, status=$status, error=$error, createdAt=$createdAt, startedAt=$startedAt, stoppedAt=$stoppedAt]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'id'] = this.id;
       json[r'stationID'] = this.stationID;
+    if (this.versionID != null) {
+      json[r'versionID'] = this.versionID;
+    } else {
+      json[r'versionID'] = null;
+    }
       json[r'type'] = this.type;
       json[r'status'] = this.status;
     if (this.error != null) {
@@ -111,8 +121,9 @@ class Task {
       return Task(
         id: mapValueOfType<int>(json, r'id')!,
         stationID: mapValueOfType<int>(json, r'stationID')!,
-        type: TaskTypeEnum.fromJson(json[r'type'])!,
-        status: TaskStatusEnum.fromJson(json[r'status'])!,
+        versionID: mapValueOfType<int>(json, r'versionID'),
+        type: TaskType.fromJson(json[r'type'])!,
+        status: TaskStatus.fromJson(json[r'status'])!,
         error: mapValueOfType<String>(json, r'error'),
         createdAt: mapDateTime(json, r'createdAt', '')!,
         startedAt: mapDateTime(json, r'startedAt', ''),
@@ -173,158 +184,4 @@ class Task {
     'createdAt',
   };
 }
-
-
-class TaskTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const TaskTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const build = TaskTypeEnum._(r'build');
-  static const update = TaskTypeEnum._(r'update');
-
-  /// List of all possible values in this [enum][TaskTypeEnum].
-  static const values = <TaskTypeEnum>[
-    build,
-    update,
-  ];
-
-  static TaskTypeEnum? fromJson(dynamic value) => TaskTypeEnumTypeTransformer().decode(value);
-
-  static List<TaskTypeEnum>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <TaskTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = TaskTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [TaskTypeEnum] to String,
-/// and [decode] dynamic data back to [TaskTypeEnum].
-class TaskTypeEnumTypeTransformer {
-  factory TaskTypeEnumTypeTransformer() => _instance ??= const TaskTypeEnumTypeTransformer._();
-
-  const TaskTypeEnumTypeTransformer._();
-
-  String encode(TaskTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a TaskTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  TaskTypeEnum? decode(dynamic data, {bool allowNull = true}) {
-    if (data != null) {
-      switch (data) {
-        case r'build': return TaskTypeEnum.build;
-        case r'update': return TaskTypeEnum.update;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [TaskTypeEnumTypeTransformer] instance.
-  static TaskTypeEnumTypeTransformer? _instance;
-}
-
-
-
-class TaskStatusEnum {
-  /// Instantiate a new enum with the provided [value].
-  const TaskStatusEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const queue = TaskStatusEnum._(r'queue');
-  static const started = TaskStatusEnum._(r'started');
-  static const completed = TaskStatusEnum._(r'completed');
-  static const error = TaskStatusEnum._(r'error');
-
-  /// List of all possible values in this [enum][TaskStatusEnum].
-  static const values = <TaskStatusEnum>[
-    queue,
-    started,
-    completed,
-    error,
-  ];
-
-  static TaskStatusEnum? fromJson(dynamic value) => TaskStatusEnumTypeTransformer().decode(value);
-
-  static List<TaskStatusEnum>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <TaskStatusEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = TaskStatusEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [TaskStatusEnum] to String,
-/// and [decode] dynamic data back to [TaskStatusEnum].
-class TaskStatusEnumTypeTransformer {
-  factory TaskStatusEnumTypeTransformer() => _instance ??= const TaskStatusEnumTypeTransformer._();
-
-  const TaskStatusEnumTypeTransformer._();
-
-  String encode(TaskStatusEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a TaskStatusEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  TaskStatusEnum? decode(dynamic data, {bool allowNull = true}) {
-    if (data != null) {
-      switch (data) {
-        case r'queue': return TaskStatusEnum.queue;
-        case r'started': return TaskStatusEnum.started;
-        case r'completed': return TaskStatusEnum.completed;
-        case r'error': return TaskStatusEnum.error;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [TaskStatusEnumTypeTransformer] instance.
-  static TaskStatusEnumTypeTransformer? _instance;
-}
-
 

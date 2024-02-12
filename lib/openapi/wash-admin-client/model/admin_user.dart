@@ -17,7 +17,7 @@ class AdminUser {
     this.name,
     this.email,
     this.role,
-    this.organizationId,
+    this.organization,
   });
 
   ///
@@ -44,9 +44,15 @@ class AdminUser {
   ///
   String? email;
 
-  AdminUserRoleEnum? role;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  AdminUserRole? role;
 
-  String? organizationId;
+  AdminUserOrganization? organization;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is AdminUser &&
@@ -54,7 +60,7 @@ class AdminUser {
      other.name == name &&
      other.email == email &&
      other.role == role &&
-     other.organizationId == organizationId;
+     other.organization == organization;
 
   @override
   int get hashCode =>
@@ -63,10 +69,10 @@ class AdminUser {
     (name == null ? 0 : name!.hashCode) +
     (email == null ? 0 : email!.hashCode) +
     (role == null ? 0 : role!.hashCode) +
-    (organizationId == null ? 0 : organizationId!.hashCode);
+    (organization == null ? 0 : organization!.hashCode);
 
   @override
-  String toString() => 'AdminUser[id=$id, name=$name, email=$email, role=$role, organizationId=$organizationId]';
+  String toString() => 'AdminUser[id=$id, name=$name, email=$email, role=$role, organization=$organization]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -90,10 +96,10 @@ class AdminUser {
     } else {
       json[r'role'] = null;
     }
-    if (this.organizationId != null) {
-      json[r'organizationId'] = this.organizationId;
+    if (this.organization != null) {
+      json[r'organization'] = this.organization;
     } else {
-      json[r'organizationId'] = null;
+      json[r'organization'] = null;
     }
     return json;
   }
@@ -120,8 +126,8 @@ class AdminUser {
         id: mapValueOfType<String>(json, r'id'),
         name: mapValueOfType<String>(json, r'name'),
         email: mapValueOfType<String>(json, r'email'),
-        role: AdminUserRoleEnum.fromJson(json[r'role']),
-        organizationId: mapValueOfType<String>(json, r'organizationId'),
+        role: AdminUserRole.fromJson(json[r'role']),
+        organization: AdminUserOrganization.fromJson(json[r'organization']),
       );
     }
     return null;
@@ -173,78 +179,4 @@ class AdminUser {
   static const requiredKeys = <String>{
   };
 }
-
-
-class AdminUserRoleEnum {
-  /// Instantiate a new enum with the provided [value].
-  const AdminUserRoleEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const systemManager = AdminUserRoleEnum._(r'systemManager');
-  static const admin = AdminUserRoleEnum._(r'admin');
-
-  /// List of all possible values in this [enum][AdminUserRoleEnum].
-  static const values = <AdminUserRoleEnum>[
-    systemManager,
-    admin,
-  ];
-
-  static AdminUserRoleEnum? fromJson(dynamic value) => AdminUserRoleEnumTypeTransformer().decode(value);
-
-  static List<AdminUserRoleEnum>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <AdminUserRoleEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = AdminUserRoleEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [AdminUserRoleEnum] to String,
-/// and [decode] dynamic data back to [AdminUserRoleEnum].
-class AdminUserRoleEnumTypeTransformer {
-  factory AdminUserRoleEnumTypeTransformer() => _instance ??= const AdminUserRoleEnumTypeTransformer._();
-
-  const AdminUserRoleEnumTypeTransformer._();
-
-  String encode(AdminUserRoleEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a AdminUserRoleEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  AdminUserRoleEnum? decode(dynamic data, {bool allowNull = true}) {
-    if (data != null) {
-      switch (data) {
-        case r'systemManager': return AdminUserRoleEnum.systemManager;
-        case r'admin': return AdminUserRoleEnum.admin;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [AdminUserRoleEnumTypeTransformer] instance.
-  static AdminUserRoleEnumTypeTransformer? _instance;
-}
-
 

@@ -1,7 +1,7 @@
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
 
 import '../../openapi/wash-admin-client/api.dart';
-import '../../utils/common.dart';
+import '../../Common/common.dart';
 
 
 class WashAdminRepository {

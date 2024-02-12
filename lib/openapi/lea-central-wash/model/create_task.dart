@@ -14,30 +14,40 @@ class CreateTask {
   /// Returns a new [CreateTask] instance.
   CreateTask({
     required this.stationID,
+    this.versionID,
     required this.type,
   });
 
   int stationID;
 
-  CreateTaskTypeEnum type;
+  int? versionID;
+
+  TaskType type;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is CreateTask &&
      other.stationID == stationID &&
+     other.versionID == versionID &&
      other.type == type;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (stationID.hashCode) +
+    (versionID == null ? 0 : versionID!.hashCode) +
     (type.hashCode);
 
   @override
-  String toString() => 'CreateTask[stationID=$stationID, type=$type]';
+  String toString() => 'CreateTask[stationID=$stationID, versionID=$versionID, type=$type]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'stationID'] = this.stationID;
+    if (this.versionID != null) {
+      json[r'versionID'] = this.versionID;
+    } else {
+      json[r'versionID'] = null;
+    }
       json[r'type'] = this.type;
     return json;
   }
@@ -62,7 +72,8 @@ class CreateTask {
 
       return CreateTask(
         stationID: mapValueOfType<int>(json, r'stationID')!,
-        type: CreateTaskTypeEnum.fromJson(json[r'type'])!,
+        versionID: mapValueOfType<int>(json, r'versionID'),
+        type: TaskType.fromJson(json[r'type'])!,
       );
     }
     return null;
@@ -116,78 +127,4 @@ class CreateTask {
     'type',
   };
 }
-
-
-class CreateTaskTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const CreateTaskTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const build = CreateTaskTypeEnum._(r'build');
-  static const update = CreateTaskTypeEnum._(r'update');
-
-  /// List of all possible values in this [enum][CreateTaskTypeEnum].
-  static const values = <CreateTaskTypeEnum>[
-    build,
-    update,
-  ];
-
-  static CreateTaskTypeEnum? fromJson(dynamic value) => CreateTaskTypeEnumTypeTransformer().decode(value);
-
-  static List<CreateTaskTypeEnum>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <CreateTaskTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = CreateTaskTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [CreateTaskTypeEnum] to String,
-/// and [decode] dynamic data back to [CreateTaskTypeEnum].
-class CreateTaskTypeEnumTypeTransformer {
-  factory CreateTaskTypeEnumTypeTransformer() => _instance ??= const CreateTaskTypeEnumTypeTransformer._();
-
-  const CreateTaskTypeEnumTypeTransformer._();
-
-  String encode(CreateTaskTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a CreateTaskTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  CreateTaskTypeEnum? decode(dynamic data, {bool allowNull = true}) {
-    if (data != null) {
-      switch (data) {
-        case r'build': return CreateTaskTypeEnum.build;
-        case r'update': return CreateTaskTypeEnum.update;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [CreateTaskTypeEnumTypeTransformer] instance.
-  static CreateTaskTypeEnumTypeTransformer? _instance;
-}
-
 

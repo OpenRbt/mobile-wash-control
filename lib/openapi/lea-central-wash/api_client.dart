@@ -285,6 +285,8 @@ class ApiClient {
           return CreateSession.fromJson(value);
         case 'CreateTask':
           return CreateTask.fromJson(value);
+        case 'CreateTaskByHash':
+          return CreateTaskByHash.fromJson(value);
         case 'DeleteUser409Response':
           return DeleteUser409Response.fromJson(value);
         case 'DiscountProgram':
@@ -377,6 +379,12 @@ class ApiClient {
           return StatusReport.fromJson(value);
         case 'Task':
           return Task.fromJson(value);
+        case 'TaskPage':
+          return TaskPage.fromJson(value);
+        case 'TaskStatus':
+          return TaskStatusTypeTransformer().decode(value);
+        case 'TaskType':
+          return TaskTypeTypeTransformer().decode(value);
         case 'UserConfig':
           return UserConfig.fromJson(value);
         case 'UsersReport':

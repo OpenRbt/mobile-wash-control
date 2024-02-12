@@ -1658,10 +1658,11 @@ class LeaCentralRepository extends Repository {
   Future<List<entity.FirmwareVersion>?> getPostVersions(int id, {BuildContext? context}) async {
     try {
 
-      //final response = await api.getStationFirmwareVersions(id);
+      final response = await api.getStationFirmwareVersions(id);
       List<entity.FirmwareVersion> firmwareVersions = [];
-/*
-      for(int i = 0; i < response!.length; i++){
+
+      for(int i = 0; i < response!.length; i++) {
+
         firmwareVersions.add(
             entity.FirmwareVersion(
               id: response[i].id,
@@ -1669,25 +1670,13 @@ class LeaCentralRepository extends Repository {
               hashEnv: response[i].hashEnv,
               hashBinar: response[i].hashBinar,
               builtAt: response[i].builtAt,
-              commitedAt:response[i].commitedAt
+              commitedAt:response[i].commitedAt,
+              isCurrent: response[i].isCurrent
             )
         );
       }
 
- */
 
-      for(int i = 0; i < 10; i++){
-        firmwareVersions.add(
-            entity.FirmwareVersion(
-                id: i + 1,
-                hashLua: "response[i].hashLua",
-                hashEnv: "response[i].hashEnv",
-                hashBinar: "response[i].hashBinar",
-                builtAt: DateTime(2023, 12, 22),
-                commitedAt: DateTime(2023, 12, 10),
-            )
-        );
-      }
 
       return firmwareVersions;
 
@@ -1709,6 +1698,7 @@ class LeaCentralRepository extends Repository {
         ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
       }
     }
+    return null;
   }
 
   @override
@@ -1774,6 +1764,60 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
           }
           break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<entity.BuildScript?> getCurrentBuildScript(int id, {BuildContext? context}) async {
+    try{
+      final response = await api.getBuildScript(id);
+
+      entity.BuildScript buildScript = entity.BuildScript(
+        id: (response?.id ?? 0),
+        stationID: (response?.stationID ?? 0),
+        name: (response?.name ?? ''),
+        commands: (response?.commangs ?? []),
+      );
+
+      return buildScript;
+
+    }  on ApiException catch (e) {
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить скрипт. ${e.message}"));
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<void> setCurrentBuildScript(int id, {BuildContext? context, required String name, required List<String> commands, int? copyFrom}) async {
+    try{
+      await api.setBuildScript(
+          SetBuildScript(
+            copyFromStationID: copyFrom,
+            stationID: id,
+            name: name,
+            commangs: commands
+          )
+      );
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Скрипт сохранён"));
+      }
+    }  on ApiException catch (e) {
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сохранить скрипт скрипт. ${e.message}"));
       }
     } catch (e) {
       if (context != null) {

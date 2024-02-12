@@ -15,25 +15,42 @@ class AdminApplicationReview {
   AdminApplicationReview({
     this.status,
     this.organizationId,
+    this.role,
   });
 
-  AdminApplicationReviewStatusEnum? status;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  ApplicationStatusEnum? status;
 
   String? organizationId;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  AdminUserRole? role;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is AdminApplicationReview &&
      other.status == status &&
-     other.organizationId == organizationId;
+     other.organizationId == organizationId &&
+     other.role == role;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (status == null ? 0 : status!.hashCode) +
-    (organizationId == null ? 0 : organizationId!.hashCode);
+    (organizationId == null ? 0 : organizationId!.hashCode) +
+    (role == null ? 0 : role!.hashCode);
 
   @override
-  String toString() => 'AdminApplicationReview[status=$status, organizationId=$organizationId]';
+  String toString() => 'AdminApplicationReview[status=$status, organizationId=$organizationId, role=$role]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -46,6 +63,11 @@ class AdminApplicationReview {
       json[r'organizationId'] = this.organizationId;
     } else {
       json[r'organizationId'] = null;
+    }
+    if (this.role != null) {
+      json[r'role'] = this.role;
+    } else {
+      json[r'role'] = null;
     }
     return json;
   }
@@ -69,8 +91,9 @@ class AdminApplicationReview {
       }());
 
       return AdminApplicationReview(
-        status: AdminApplicationReviewStatusEnum.fromJson(json[r'status']),
+        status: ApplicationStatusEnum.fromJson(json[r'status']),
         organizationId: mapValueOfType<String>(json, r'organizationId'),
+        role: AdminUserRole.fromJson(json[r'role']),
       );
     }
     return null;
@@ -122,78 +145,4 @@ class AdminApplicationReview {
   static const requiredKeys = <String>{
   };
 }
-
-
-class AdminApplicationReviewStatusEnum {
-  /// Instantiate a new enum with the provided [value].
-  const AdminApplicationReviewStatusEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const accept = AdminApplicationReviewStatusEnum._(r'accept');
-  static const reject = AdminApplicationReviewStatusEnum._(r'reject');
-
-  /// List of all possible values in this [enum][AdminApplicationReviewStatusEnum].
-  static const values = <AdminApplicationReviewStatusEnum>[
-    accept,
-    reject,
-  ];
-
-  static AdminApplicationReviewStatusEnum? fromJson(dynamic value) => AdminApplicationReviewStatusEnumTypeTransformer().decode(value);
-
-  static List<AdminApplicationReviewStatusEnum>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <AdminApplicationReviewStatusEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = AdminApplicationReviewStatusEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [AdminApplicationReviewStatusEnum] to String,
-/// and [decode] dynamic data back to [AdminApplicationReviewStatusEnum].
-class AdminApplicationReviewStatusEnumTypeTransformer {
-  factory AdminApplicationReviewStatusEnumTypeTransformer() => _instance ??= const AdminApplicationReviewStatusEnumTypeTransformer._();
-
-  const AdminApplicationReviewStatusEnumTypeTransformer._();
-
-  String encode(AdminApplicationReviewStatusEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a AdminApplicationReviewStatusEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  AdminApplicationReviewStatusEnum? decode(dynamic data, {bool allowNull = true}) {
-    if (data != null) {
-      switch (data) {
-        case r'accept': return AdminApplicationReviewStatusEnum.accept;
-        case r'reject': return AdminApplicationReviewStatusEnum.reject;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [AdminApplicationReviewStatusEnumTypeTransformer] instance.
-  static AdminApplicationReviewStatusEnumTypeTransformer? _instance;
-}
-
 

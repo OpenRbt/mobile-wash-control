@@ -579,6 +579,7 @@ class FirmwareVersion {
   String? hashBinar;
   DateTime? builtAt;
   DateTime? commitedAt;
+  bool? isCurrent;
 
   FirmwareVersion({
     required this.id,
@@ -587,6 +588,7 @@ class FirmwareVersion {
     required this.hashBinar,
     required this.builtAt,
     required this.commitedAt,
+    required this.isCurrent,
   });
 }
 
@@ -610,4 +612,18 @@ class Task {
   DateTime createdAt;
   DateTime? startedAt;
   DateTime? stoppedAt;
+}
+
+class BuildScript {
+  BuildScript({
+    required this.id,
+    required this.stationID,
+    required this.name,
+    required this.commands,
+  });
+
+  int id;
+  int stationID;
+  String name;
+  List<String> commands;
 }

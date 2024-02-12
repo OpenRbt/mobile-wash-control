@@ -12,8 +12,10 @@ import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../utils/common.dart';
-import '../../utils/sbp_common.dart';
+import '../../Common/common.dart';
+import '../../Common/lcw_common.dart';
+import '../../Common/management_common.dart';
+import '../../Common/sbp_common.dart';
 import '../widgets/common/snackBars.dart';
 
 class Auth extends StatefulWidget {
@@ -49,6 +51,9 @@ class _AuthState extends State<Auth> {
     try {
       var client = lcw.DefaultApi(lcw.ApiClient(basePath: widget.host));
       client.apiClient.addDefaultHeader("Pin", pinController.text);
+
+      LcwCommon.initializeApis(widget.host, pinController.text);
+
       final prefs = await SharedPreferences.getInstance();
       final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
 
@@ -78,6 +83,7 @@ class _AuthState extends State<Auth> {
       }
       Common.initializeApis(basePath);
       SbpCommon.initializeApis((bonusUrl)! + '/api/sbp');
+      ManagementCommon.initializeApis((bonusUrl) + '/api/mngt');
       Navigator.pushNamed(
         context,
         "/mobile/home",

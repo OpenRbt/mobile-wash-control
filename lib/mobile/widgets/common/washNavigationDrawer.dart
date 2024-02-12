@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
-import '../../../utils/common.dart';
+import '../../../Common/common.dart';
 
 enum SelectedPage {
   Main,
@@ -125,9 +125,9 @@ class WashNavigationDrawer extends StatelessWidget {
     SelectedPage.Settings,
     SelectedPage.Discounts,
     SelectedPage.Accounts,
-    SelectedPage.Services,
     SelectedPage.Statistics,
     SelectedPage.Motors,
+    SelectedPage.Services,
     SelectedPage.Scripts,
     SelectedPage.Updates,
     SelectedPage.Tasks,

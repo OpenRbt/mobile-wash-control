@@ -16,6 +16,46 @@ class UsersApi {
 
   final ApiClient apiClient;
 
+  /// Performs an HTTP 'DELETE /users/{userId}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  Future<Response> blockAdminUserWithHttpInfo(String userId,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/users/{userId}'
+      .replaceAll('{userId}', userId);
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] userId (required):
+  Future<void> blockAdminUser(String userId,) async {
+    final response = await blockAdminUserWithHttpInfo(userId,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
   /// Performs an HTTP 'GET /users/{userId}' operation and returns the [Response].
   /// Parameters:
   ///
@@ -72,7 +112,11 @@ class UsersApi {
   ///
   /// * [int] limit:
   ///   Maximum number of records to return
-  Future<Response> getAdminUsersWithHttpInfo({ int? offset, int? limit, }) async {
+  ///
+  /// * [String] role:
+  ///
+  /// * [bool] isBlocked:
+  Future<Response> getAdminUsersWithHttpInfo({ int? offset, int? limit, String? role, bool? isBlocked, }) async {
     // ignore: prefer_const_declarations
     final path = r'/users';
 
@@ -88,6 +132,12 @@ class UsersApi {
     }
     if (limit != null) {
       queryParams.addAll(_queryParams('', 'limit', limit));
+    }
+    if (role != null) {
+      queryParams.addAll(_queryParams('', 'role', role));
+    }
+    if (isBlocked != null) {
+      queryParams.addAll(_queryParams('', 'isBlocked', isBlocked));
     }
 
     const contentTypes = <String>[];
@@ -111,8 +161,12 @@ class UsersApi {
   ///
   /// * [int] limit:
   ///   Maximum number of records to return
-  Future<List<AdminUser>?> getAdminUsers({ int? offset, int? limit, }) async {
-    final response = await getAdminUsersWithHttpInfo( offset: offset, limit: limit, );
+  ///
+  /// * [String] role:
+  ///
+  /// * [bool] isBlocked:
+  Future<List<AdminUser>?> getAdminUsers({ int? offset, int? limit, String? role, bool? isBlocked, }) async {
+    final response = await getAdminUsersWithHttpInfo( offset: offset, limit: limit, role: role, isBlocked: isBlocked, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

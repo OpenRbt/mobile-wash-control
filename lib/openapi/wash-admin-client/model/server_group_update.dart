@@ -15,25 +15,45 @@ class ServerGroupUpdate {
   ServerGroupUpdate({
     this.name,
     this.description,
+    this.utcOffset,
+    this.reportsProcessingDelayMinutes,
+    this.bonusPercentage,
   });
 
   String? name;
 
   String? description;
 
+  /// Minimum value: -720
+  /// Maximum value: 840
+  int? utcOffset;
+
+  /// Minimum value: 0
+  int? reportsProcessingDelayMinutes;
+
+  /// Minimum value: 0
+  /// Maximum value: 100
+  int? bonusPercentage;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is ServerGroupUpdate &&
      other.name == name &&
-     other.description == description;
+     other.description == description &&
+     other.utcOffset == utcOffset &&
+     other.reportsProcessingDelayMinutes == reportsProcessingDelayMinutes &&
+     other.bonusPercentage == bonusPercentage;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (name == null ? 0 : name!.hashCode) +
-    (description == null ? 0 : description!.hashCode);
+    (description == null ? 0 : description!.hashCode) +
+    (utcOffset == null ? 0 : utcOffset!.hashCode) +
+    (reportsProcessingDelayMinutes == null ? 0 : reportsProcessingDelayMinutes!.hashCode) +
+    (bonusPercentage == null ? 0 : bonusPercentage!.hashCode);
 
   @override
-  String toString() => 'ServerGroupUpdate[name=$name, description=$description]';
+  String toString() => 'ServerGroupUpdate[name=$name, description=$description, utcOffset=$utcOffset, reportsProcessingDelayMinutes=$reportsProcessingDelayMinutes, bonusPercentage=$bonusPercentage]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -46,6 +66,21 @@ class ServerGroupUpdate {
       json[r'description'] = this.description;
     } else {
       json[r'description'] = null;
+    }
+    if (this.utcOffset != null) {
+      json[r'utcOffset'] = this.utcOffset;
+    } else {
+      json[r'utcOffset'] = null;
+    }
+    if (this.reportsProcessingDelayMinutes != null) {
+      json[r'reportsProcessingDelayMinutes'] = this.reportsProcessingDelayMinutes;
+    } else {
+      json[r'reportsProcessingDelayMinutes'] = null;
+    }
+    if (this.bonusPercentage != null) {
+      json[r'bonusPercentage'] = this.bonusPercentage;
+    } else {
+      json[r'bonusPercentage'] = null;
     }
     return json;
   }
@@ -71,6 +106,9 @@ class ServerGroupUpdate {
       return ServerGroupUpdate(
         name: mapValueOfType<String>(json, r'name'),
         description: mapValueOfType<String>(json, r'description'),
+        utcOffset: mapValueOfType<int>(json, r'utcOffset'),
+        reportsProcessingDelayMinutes: mapValueOfType<int>(json, r'reportsProcessingDelayMinutes'),
+        bonusPercentage: mapValueOfType<int>(json, r'bonusPercentage'),
       );
     }
     return null;

@@ -379,6 +379,53 @@ class DefaultApi {
     return null;
   }
 
+  /// Performs an HTTP 'POST /tasks/create-by-hash' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [CreateTaskByHash] args (required):
+  Future<Response> createTaskByHashWithHttpInfo(CreateTaskByHash args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/tasks/create-by-hash';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [CreateTaskByHash] args (required):
+  Future<Task?> createTaskByHash(CreateTaskByHash args,) async {
+    final response = await createTaskByHashWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Task',) as Task;
+    
+    }
+    return null;
+  }
+
   /// Performs an HTTP 'POST /user' operation and returns the [Response].
   /// Parameters:
   ///
@@ -584,6 +631,39 @@ class DefaultApi {
     }
   }
 
+  /// Performs an HTTP 'DELETE /tasks' operation and returns the [Response].
+  Future<Response> deleteTasksWithHttpInfo() async {
+    // ignore: prefer_const_declarations
+    final path = r'/tasks';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<void> deleteTasks() async {
+    final response = await deleteTasksWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
   /// Performs an HTTP 'DELETE /user' operation and returns the [Response].
   /// Parameters:
   ///
@@ -735,6 +815,51 @@ class DefaultApi {
   /// * [ArgEndSession] args (required):
   Future<void> endSession(ArgEndSession args,) async {
     final response = await endSessionWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /stations/{id}/firmware-versions/copy-to/{toID}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  ///
+  /// * [int] toID (required):
+  Future<Response> firmwareVersionsCopyWithHttpInfo(int id, int toID,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/stations/{id}/firmware-versions/copy-to/{toID}'
+      .replaceAll('{id}', id.toString())
+      .replaceAll('{toID}', toID.toString());
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [int] id (required):
+  ///
+  /// * [int] toID (required):
+  Future<void> firmwareVersionsCopy(int id, int toID,) async {
+    final response = await firmwareVersionsCopyWithHttpInfo(id, toID,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1025,8 +1150,16 @@ class DefaultApi {
   ///
   /// * [int] stationID:
   ///
-  /// * [String] status:
-  Future<Response> getListTasksWithHttpInfo({ int? stationID, String? status, }) async {
+  /// * [List<String>] statuses:
+  ///
+  /// * [List<String>] types:
+  ///
+  /// * [String] sort:
+  ///
+  /// * [int] page:
+  ///
+  /// * [int] pageSize:
+  Future<Response> getListTasksWithHttpInfo({ int? stationID, List<String>? statuses, List<String>? types, String? sort, int? page, int? pageSize, }) async {
     // ignore: prefer_const_declarations
     final path = r'/tasks';
 
@@ -1040,8 +1173,20 @@ class DefaultApi {
     if (stationID != null) {
       queryParams.addAll(_queryParams('', 'stationID', stationID));
     }
-    if (status != null) {
-      queryParams.addAll(_queryParams('', 'status', status));
+    if (statuses != null) {
+      queryParams.addAll(_queryParams('multi', 'statuses', statuses));
+    }
+    if (types != null) {
+      queryParams.addAll(_queryParams('multi', 'types', types));
+    }
+    if (sort != null) {
+      queryParams.addAll(_queryParams('', 'sort', sort));
+    }
+    if (page != null) {
+      queryParams.addAll(_queryParams('', 'page', page));
+    }
+    if (pageSize != null) {
+      queryParams.addAll(_queryParams('', 'pageSize', pageSize));
     }
 
     const contentTypes = <String>[];
@@ -1062,9 +1207,17 @@ class DefaultApi {
   ///
   /// * [int] stationID:
   ///
-  /// * [String] status:
-  Future<List<Task>?> getListTasks({ int? stationID, String? status, }) async {
-    final response = await getListTasksWithHttpInfo( stationID: stationID, status: status, );
+  /// * [List<String>] statuses:
+  ///
+  /// * [List<String>] types:
+  ///
+  /// * [String] sort:
+  ///
+  /// * [int] page:
+  ///
+  /// * [int] pageSize:
+  Future<TaskPage?> getListTasks({ int? stationID, List<String>? statuses, List<String>? types, String? sort, int? page, int? pageSize, }) async {
+    final response = await getListTasksWithHttpInfo( stationID: stationID, statuses: statuses, types: types, sort: sort, page: page, pageSize: pageSize, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -1072,11 +1225,8 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<Task>') as List)
-        .cast<Task>()
-        .toList();
-
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'TaskPage',) as TaskPage;
+    
     }
     return null;
   }

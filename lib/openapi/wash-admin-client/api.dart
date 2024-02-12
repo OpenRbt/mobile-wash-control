@@ -38,6 +38,8 @@ part 'model/admin_application.dart';
 part 'model/admin_application_creation.dart';
 part 'model/admin_application_review.dart';
 part 'model/admin_user.dart';
+part 'model/admin_user_organization.dart';
+part 'model/admin_user_role.dart';
 part 'model/application_status_enum.dart';
 part 'model/create_admin_application_request.dart';
 part 'model/error.dart';

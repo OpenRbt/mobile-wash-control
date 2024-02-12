@@ -14,11 +14,14 @@ class SetBuildScript {
   /// Returns a new [SetBuildScript] instance.
   SetBuildScript({
     required this.stationID,
+    this.copyFromStationID,
     required this.name,
     this.commangs = const [],
   });
 
   int stationID;
+
+  int? copyFromStationID;
 
   String name;
 
@@ -27,6 +30,7 @@ class SetBuildScript {
   @override
   bool operator ==(Object other) => identical(this, other) || other is SetBuildScript &&
      other.stationID == stationID &&
+     other.copyFromStationID == copyFromStationID &&
      other.name == name &&
      other.commangs == commangs;
 
@@ -34,15 +38,21 @@ class SetBuildScript {
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (stationID.hashCode) +
+    (copyFromStationID == null ? 0 : copyFromStationID!.hashCode) +
     (name.hashCode) +
     (commangs.hashCode);
 
   @override
-  String toString() => 'SetBuildScript[stationID=$stationID, name=$name, commangs=$commangs]';
+  String toString() => 'SetBuildScript[stationID=$stationID, copyFromStationID=$copyFromStationID, name=$name, commangs=$commangs]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'stationID'] = this.stationID;
+    if (this.copyFromStationID != null) {
+      json[r'copyFromStationID'] = this.copyFromStationID;
+    } else {
+      json[r'copyFromStationID'] = null;
+    }
       json[r'name'] = this.name;
       json[r'commangs'] = this.commangs;
     return json;
@@ -68,6 +78,7 @@ class SetBuildScript {
 
       return SetBuildScript(
         stationID: mapValueOfType<int>(json, r'stationID')!,
+        copyFromStationID: mapValueOfType<int>(json, r'copyFromStationID'),
         name: mapValueOfType<String>(json, r'name')!,
         commangs: json[r'commangs'] is List
             ? (json[r'commangs'] as List).cast<String>()

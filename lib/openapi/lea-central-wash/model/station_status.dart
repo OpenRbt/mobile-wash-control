@@ -22,6 +22,7 @@ class StationStatus {
     this.currentProgram,
     this.currentProgramName,
     this.ip,
+    this.version,
   });
 
   ///
@@ -96,6 +97,14 @@ class StationStatus {
   ///
   String? ip;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  FirmwareVersion? version;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is StationStatus &&
      other.id == id &&
@@ -106,7 +115,8 @@ class StationStatus {
      other.currentBalance == currentBalance &&
      other.currentProgram == currentProgram &&
      other.currentProgramName == currentProgramName &&
-     other.ip == ip;
+     other.ip == ip &&
+     other.version == version;
 
   @override
   int get hashCode =>
@@ -119,10 +129,11 @@ class StationStatus {
     (currentBalance == null ? 0 : currentBalance!.hashCode) +
     (currentProgram == null ? 0 : currentProgram!.hashCode) +
     (currentProgramName == null ? 0 : currentProgramName!.hashCode) +
-    (ip == null ? 0 : ip!.hashCode);
+    (ip == null ? 0 : ip!.hashCode) +
+    (version == null ? 0 : version!.hashCode);
 
   @override
-  String toString() => 'StationStatus[id=$id, name=$name, hash=$hash, status=$status, info=$info, currentBalance=$currentBalance, currentProgram=$currentProgram, currentProgramName=$currentProgramName, ip=$ip]';
+  String toString() => 'StationStatus[id=$id, name=$name, hash=$hash, status=$status, info=$info, currentBalance=$currentBalance, currentProgram=$currentProgram, currentProgramName=$currentProgramName, ip=$ip, version=$version]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -171,6 +182,11 @@ class StationStatus {
     } else {
       json[r'ip'] = null;
     }
+    if (this.version != null) {
+      json[r'version'] = this.version;
+    } else {
+      json[r'version'] = null;
+    }
     return json;
   }
 
@@ -202,6 +218,7 @@ class StationStatus {
         currentProgram: mapValueOfType<int>(json, r'currentProgram'),
         currentProgramName: mapValueOfType<String>(json, r'currentProgramName'),
         ip: mapValueOfType<String>(json, r'ip'),
+        version: FirmwareVersion.fromJson(json[r'version']),
       );
     }
     return null;

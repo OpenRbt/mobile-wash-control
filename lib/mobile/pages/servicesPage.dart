@@ -9,9 +9,9 @@ import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.d
 import 'package:mobile_wash_control/openapi/sbp-client/api.dart' as sbp;
 import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
-import 'package:mobile_wash_control/utils/common.dart';
+import 'package:mobile_wash_control/Common/common.dart';
 import '../../repository/wash_admin_repo/repository.dart';
-import '../../utils/sbp_common.dart';
+import '../../Common/sbp_common.dart';
 import '../widgets/common/snackBars.dart';
 import '../widgets/dropDowns/double_drop_down_with_refresh.dart';
 
@@ -149,7 +149,7 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
     try{
       var org;
       var currentUser = await Common.userApi!.getAdminUserById(user?.uid ?? "");
-      org = await Common.organizationApi?.getOrganizationById(currentUser?.organizationId ?? "");
+      org = await Common.organizationApi?.getOrganizationById(currentUser?.organization?.id ?? "");
       currentOrganization.value = currentOrganization.value.copyWith(
         id: org?.id ?? "",
         name: org?.name ?? "",
@@ -1083,7 +1083,17 @@ class _SettingsServicesPageState extends State<SettingsServicesPage> {
                                     )
                                 ),
                               ],
-                            )
+                            ),
+                            SizedBox(height: 20,),
+                            ProgressButton(
+                              onPressed: () async {
+
+                              },
+                              child: Text(
+                                "Привязать",
+                                maxLines: 2,
+                              ),
+                            ),
                           ],
                         )
                       ],

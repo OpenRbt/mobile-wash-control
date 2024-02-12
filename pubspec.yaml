@@ -36,6 +36,8 @@ dependencies:
   firebase_core: ^2.14.0
   firebase_auth: ^4.7.2
   google_sign_in: ^6.0.2
+  provider: ^6.1.1
+  bloc: ^8.1.2
   oauth2: ^2.0.1
   url_launcher: ^6.1.11
   # firebase_core_desktop: ^1.0.2

@@ -55,6 +55,9 @@ String parameterToString(dynamic value) {
   if (value is DateTime) {
     return value.toUtc().toIso8601String();
   }
+  if (value is AdminUserRole) {
+    return AdminUserRoleTypeTransformer().encode(value).toString();
+  }
   if (value is ApplicationStatusEnum) {
     return ApplicationStatusEnumTypeTransformer().encode(value).toString();
   }

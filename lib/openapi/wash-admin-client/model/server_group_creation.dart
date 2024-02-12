@@ -13,38 +13,73 @@ part of openapi.api;
 class ServerGroupCreation {
   /// Returns a new [ServerGroupCreation] instance.
   ServerGroupCreation({
+    required this.organizationId,
     required this.name,
     required this.description,
-    required this.organizationId,
+    this.utcOffset,
+    this.reportsProcessingDelayMinutes,
+    this.bonusPercentage,
   });
+
+  String organizationId;
 
   String name;
 
   String description;
 
-  String organizationId;
+  /// Minimum value: -720
+  /// Maximum value: 840
+  int? utcOffset;
+
+  /// Minimum value: 0
+  int? reportsProcessingDelayMinutes;
+
+  /// Minimum value: 0
+  /// Maximum value: 100
+  int? bonusPercentage;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is ServerGroupCreation &&
+     other.organizationId == organizationId &&
      other.name == name &&
      other.description == description &&
-     other.organizationId == organizationId;
+     other.utcOffset == utcOffset &&
+     other.reportsProcessingDelayMinutes == reportsProcessingDelayMinutes &&
+     other.bonusPercentage == bonusPercentage;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
+    (organizationId.hashCode) +
     (name.hashCode) +
     (description.hashCode) +
-    (organizationId.hashCode);
+    (utcOffset == null ? 0 : utcOffset!.hashCode) +
+    (reportsProcessingDelayMinutes == null ? 0 : reportsProcessingDelayMinutes!.hashCode) +
+    (bonusPercentage == null ? 0 : bonusPercentage!.hashCode);
 
   @override
-  String toString() => 'ServerGroupCreation[name=$name, description=$description, organizationId=$organizationId]';
+  String toString() => 'ServerGroupCreation[organizationId=$organizationId, name=$name, description=$description, utcOffset=$utcOffset, reportsProcessingDelayMinutes=$reportsProcessingDelayMinutes, bonusPercentage=$bonusPercentage]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+      json[r'organizationId'] = this.organizationId;
       json[r'name'] = this.name;
       json[r'description'] = this.description;
-      json[r'organizationId'] = this.organizationId;
+    if (this.utcOffset != null) {
+      json[r'utcOffset'] = this.utcOffset;
+    } else {
+      json[r'utcOffset'] = null;
+    }
+    if (this.reportsProcessingDelayMinutes != null) {
+      json[r'reportsProcessingDelayMinutes'] = this.reportsProcessingDelayMinutes;
+    } else {
+      json[r'reportsProcessingDelayMinutes'] = null;
+    }
+    if (this.bonusPercentage != null) {
+      json[r'bonusPercentage'] = this.bonusPercentage;
+    } else {
+      json[r'bonusPercentage'] = null;
+    }
     return json;
   }
 
@@ -67,9 +102,12 @@ class ServerGroupCreation {
       }());
 
       return ServerGroupCreation(
+        organizationId: mapValueOfType<String>(json, r'organizationId')!,
         name: mapValueOfType<String>(json, r'name')!,
         description: mapValueOfType<String>(json, r'description')!,
-        organizationId: mapValueOfType<String>(json, r'organizationId')!,
+        utcOffset: mapValueOfType<int>(json, r'utcOffset'),
+        reportsProcessingDelayMinutes: mapValueOfType<int>(json, r'reportsProcessingDelayMinutes'),
+        bonusPercentage: mapValueOfType<int>(json, r'bonusPercentage'),
       );
     }
     return null;
@@ -119,9 +157,9 @@ class ServerGroupCreation {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
+    'organizationId',
     'name',
     'description',
-    'organizationId',
   };
 }
 

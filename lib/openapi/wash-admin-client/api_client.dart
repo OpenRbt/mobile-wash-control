@@ -189,6 +189,10 @@ class ApiClient {
           return AdminApplicationReview.fromJson(value);
         case 'AdminUser':
           return AdminUser.fromJson(value);
+        case 'AdminUserOrganization':
+          return AdminUserOrganization.fromJson(value);
+        case 'AdminUserRole':
+          return AdminUserRoleTypeTransformer().decode(value);
         case 'ApplicationStatusEnum':
           return ApplicationStatusEnumTypeTransformer().decode(value);
         case 'CreateAdminApplicationRequest':

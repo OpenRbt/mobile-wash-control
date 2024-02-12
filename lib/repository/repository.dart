@@ -91,6 +91,9 @@ abstract class Repository {
 
   Future<List<Task>?> getTasks(int id, String status, {BuildContext? context});
 
+  Future<BuildScript?> getCurrentBuildScript(int id, {BuildContext? context});
+  Future<void> setCurrentBuildScript(int id, {BuildContext? context, required String name, required List<String> commands, int? copyFrom});
+
   User? currentUser();
 
   void dispose();

@@ -8,7 +8,7 @@ import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
-import 'package:mobile_wash_control/utils/common.dart';
+import 'package:mobile_wash_control/Common/common.dart';
 
 class servicesWashParamsView extends StatefulWidget {
   const servicesWashParamsView({Key? key}) : super(key: key);

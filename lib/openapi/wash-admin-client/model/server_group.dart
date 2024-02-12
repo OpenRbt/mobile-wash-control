@@ -14,10 +14,13 @@ class ServerGroup {
   /// Returns a new [ServerGroup] instance.
   ServerGroup({
     this.id,
+    this.organizationId,
     this.name,
     this.description,
-    this.organizationId,
+    this.utcOffset,
     this.isDefault,
+    this.reportsProcessingDelayMinutes,
+    this.bonusPercentage,
   });
 
   ///
@@ -27,6 +30,14 @@ class ServerGroup {
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   String? id;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? organizationId;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -44,13 +55,15 @@ class ServerGroup {
   ///
   String? description;
 
+  /// Minimum value: -720
+  /// Maximum value: 840
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? organizationId;
+  int? utcOffset;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -60,25 +73,50 @@ class ServerGroup {
   ///
   bool? isDefault;
 
+  /// Minimum value: 0
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? reportsProcessingDelayMinutes;
+
+  /// Minimum value: 0
+  /// Maximum value: 100
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? bonusPercentage;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is ServerGroup &&
      other.id == id &&
+     other.organizationId == organizationId &&
      other.name == name &&
      other.description == description &&
-     other.organizationId == organizationId &&
-     other.isDefault == isDefault;
+     other.utcOffset == utcOffset &&
+     other.isDefault == isDefault &&
+     other.reportsProcessingDelayMinutes == reportsProcessingDelayMinutes &&
+     other.bonusPercentage == bonusPercentage;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (id == null ? 0 : id!.hashCode) +
+    (organizationId == null ? 0 : organizationId!.hashCode) +
     (name == null ? 0 : name!.hashCode) +
     (description == null ? 0 : description!.hashCode) +
-    (organizationId == null ? 0 : organizationId!.hashCode) +
-    (isDefault == null ? 0 : isDefault!.hashCode);
+    (utcOffset == null ? 0 : utcOffset!.hashCode) +
+    (isDefault == null ? 0 : isDefault!.hashCode) +
+    (reportsProcessingDelayMinutes == null ? 0 : reportsProcessingDelayMinutes!.hashCode) +
+    (bonusPercentage == null ? 0 : bonusPercentage!.hashCode);
 
   @override
-  String toString() => 'ServerGroup[id=$id, name=$name, description=$description, organizationId=$organizationId, isDefault=$isDefault]';
+  String toString() => 'ServerGroup[id=$id, organizationId=$organizationId, name=$name, description=$description, utcOffset=$utcOffset, isDefault=$isDefault, reportsProcessingDelayMinutes=$reportsProcessingDelayMinutes, bonusPercentage=$bonusPercentage]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -86,6 +124,11 @@ class ServerGroup {
       json[r'id'] = this.id;
     } else {
       json[r'id'] = null;
+    }
+    if (this.organizationId != null) {
+      json[r'organizationId'] = this.organizationId;
+    } else {
+      json[r'organizationId'] = null;
     }
     if (this.name != null) {
       json[r'name'] = this.name;
@@ -97,15 +140,25 @@ class ServerGroup {
     } else {
       json[r'description'] = null;
     }
-    if (this.organizationId != null) {
-      json[r'organizationId'] = this.organizationId;
+    if (this.utcOffset != null) {
+      json[r'utcOffset'] = this.utcOffset;
     } else {
-      json[r'organizationId'] = null;
+      json[r'utcOffset'] = null;
     }
     if (this.isDefault != null) {
       json[r'isDefault'] = this.isDefault;
     } else {
       json[r'isDefault'] = null;
+    }
+    if (this.reportsProcessingDelayMinutes != null) {
+      json[r'reportsProcessingDelayMinutes'] = this.reportsProcessingDelayMinutes;
+    } else {
+      json[r'reportsProcessingDelayMinutes'] = null;
+    }
+    if (this.bonusPercentage != null) {
+      json[r'bonusPercentage'] = this.bonusPercentage;
+    } else {
+      json[r'bonusPercentage'] = null;
     }
     return json;
   }
@@ -130,10 +183,13 @@ class ServerGroup {
 
       return ServerGroup(
         id: mapValueOfType<String>(json, r'id'),
+        organizationId: mapValueOfType<String>(json, r'organizationId'),
         name: mapValueOfType<String>(json, r'name'),
         description: mapValueOfType<String>(json, r'description'),
-        organizationId: mapValueOfType<String>(json, r'organizationId'),
+        utcOffset: mapValueOfType<int>(json, r'utcOffset'),
         isDefault: mapValueOfType<bool>(json, r'isDefault'),
+        reportsProcessingDelayMinutes: mapValueOfType<int>(json, r'reportsProcessingDelayMinutes'),
+        bonusPercentage: mapValueOfType<int>(json, r'bonusPercentage'),
       );
     }
     return null;

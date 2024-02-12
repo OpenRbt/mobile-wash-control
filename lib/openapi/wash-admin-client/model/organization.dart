@@ -16,6 +16,7 @@ class Organization {
     this.id,
     this.name,
     this.description,
+    this.utcOffset,
     this.displayName,
     this.isDefault,
     this.reportsProcessingDelayMinutes,
@@ -45,6 +46,16 @@ class Organization {
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   String? description;
+
+  /// Minimum value: -720
+  /// Maximum value: 840
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? utcOffset;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -86,6 +97,7 @@ class Organization {
      other.id == id &&
      other.name == name &&
      other.description == description &&
+     other.utcOffset == utcOffset &&
      other.displayName == displayName &&
      other.isDefault == isDefault &&
      other.reportsProcessingDelayMinutes == reportsProcessingDelayMinutes &&
@@ -97,13 +109,14 @@ class Organization {
     (id == null ? 0 : id!.hashCode) +
     (name == null ? 0 : name!.hashCode) +
     (description == null ? 0 : description!.hashCode) +
+    (utcOffset == null ? 0 : utcOffset!.hashCode) +
     (displayName == null ? 0 : displayName!.hashCode) +
     (isDefault == null ? 0 : isDefault!.hashCode) +
     (reportsProcessingDelayMinutes == null ? 0 : reportsProcessingDelayMinutes!.hashCode) +
     (bonusPercentage == null ? 0 : bonusPercentage!.hashCode);
 
   @override
-  String toString() => 'Organization[id=$id, name=$name, description=$description, displayName=$displayName, isDefault=$isDefault, reportsProcessingDelayMinutes=$reportsProcessingDelayMinutes, bonusPercentage=$bonusPercentage]';
+  String toString() => 'Organization[id=$id, name=$name, description=$description, utcOffset=$utcOffset, displayName=$displayName, isDefault=$isDefault, reportsProcessingDelayMinutes=$reportsProcessingDelayMinutes, bonusPercentage=$bonusPercentage]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -121,6 +134,11 @@ class Organization {
       json[r'description'] = this.description;
     } else {
       json[r'description'] = null;
+    }
+    if (this.utcOffset != null) {
+      json[r'utcOffset'] = this.utcOffset;
+    } else {
+      json[r'utcOffset'] = null;
     }
     if (this.displayName != null) {
       json[r'displayName'] = this.displayName;
@@ -167,6 +185,7 @@ class Organization {
         id: mapValueOfType<String>(json, r'id'),
         name: mapValueOfType<String>(json, r'name'),
         description: mapValueOfType<String>(json, r'description'),
+        utcOffset: mapValueOfType<int>(json, r'utcOffset'),
         displayName: mapValueOfType<String>(json, r'displayName'),
         isDefault: mapValueOfType<bool>(json, r'isDefault'),
         reportsProcessingDelayMinutes: mapValueOfType<int>(json, r'reportsProcessingDelayMinutes'),

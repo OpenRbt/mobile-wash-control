@@ -33,6 +33,7 @@ import '../mobile/pages/scripts_page.dart';
 import '../mobile/pages/tasks.dart';
 import '../mobile/pages/update_station.dart';
 import '../mobile/pages/updates_page.dart';
+import '../presentation/pages/services_page.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -68,7 +69,8 @@ class Application extends StatelessWidget {
         "/mobile/settings/post": (context) => StationPage(),
         "/mobile/settings/kasse": (context) => KassePage(),
         "/mobile/settings/default": (context) => PresetsPage(),
-        "/mobile/services": (context) => SettingsServicesPage(),
+        "/mobile/services": (context) => ServicesPage(),
+        //"/mobile/services": (context) => SettingsServicesPage(),
         "/mobile/services/organizations": (context) => OrganizationsView(),
         "/mobile/services/groups": (context) => CurrentOrganizationView(),
         "/mobile/services/current-organization/current-group": (context) => CurrentGroupView(),
