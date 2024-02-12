@@ -15,7 +15,6 @@ import 'package:mobile_wash_control/mobile/pages/overview/postInkassHistory.dart
 import 'package:mobile_wash_control/mobile/pages/programs.dart';
 import 'package:mobile_wash_control/mobile/pages/programs/editProgram.dart';
 import 'package:mobile_wash_control/mobile/pages/servicesAuthPage.dart';
-import 'package:mobile_wash_control/mobile/pages/servicesPage.dart';
 import 'package:mobile_wash_control/mobile/pages/settings.dart';
 import 'package:mobile_wash_control/mobile/pages/settings/kasse.dart';
 import 'package:mobile_wash_control/mobile/pages/settings/presets.dart';
@@ -30,10 +29,13 @@ import '../mobile/pages/organizations.dart';
 import '../mobile/pages/sbp_status.dart';
 import '../mobile/pages/script_station.dart';
 import '../mobile/pages/scripts_page.dart';
-import '../mobile/pages/tasks.dart';
 import '../mobile/pages/update_station.dart';
 import '../mobile/pages/updates_page.dart';
-import '../presentation/pages/services_page.dart';
+
+//BLoC architecture pages
+import 'package:mobile_wash_control/presentation/pages/services_page.dart';
+import 'package:mobile_wash_control/presentation/pages/tasks_page.dart';
+
 
 class Application extends StatelessWidget {
   @override
@@ -70,7 +72,6 @@ class Application extends StatelessWidget {
         "/mobile/settings/kasse": (context) => KassePage(),
         "/mobile/settings/default": (context) => PresetsPage(),
         "/mobile/services": (context) => ServicesPage(),
-        //"/mobile/services": (context) => SettingsServicesPage(),
         "/mobile/services/organizations": (context) => OrganizationsView(),
         "/mobile/services/groups": (context) => CurrentOrganizationView(),
         "/mobile/services/current-organization/current-group": (context) => CurrentGroupView(),

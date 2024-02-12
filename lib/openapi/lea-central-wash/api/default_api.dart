@@ -1148,7 +1148,7 @@ class DefaultApi {
   /// Performs an HTTP 'GET /tasks' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [int] stationID:
+  /// * [List<int>] stationsID:
   ///
   /// * [List<String>] statuses:
   ///
@@ -1159,7 +1159,7 @@ class DefaultApi {
   /// * [int] page:
   ///
   /// * [int] pageSize:
-  Future<Response> getListTasksWithHttpInfo({ int? stationID, List<String>? statuses, List<String>? types, String? sort, int? page, int? pageSize, }) async {
+  Future<Response> getListTasksWithHttpInfo({ List<int>? stationsID, List<String>? statuses, List<String>? types, String? sort, int? page, int? pageSize, }) async {
     // ignore: prefer_const_declarations
     final path = r'/tasks';
 
@@ -1170,8 +1170,8 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    if (stationID != null) {
-      queryParams.addAll(_queryParams('', 'stationID', stationID));
+    if (stationsID != null) {
+      queryParams.addAll(_queryParams('multi', 'stationsID', stationsID));
     }
     if (statuses != null) {
       queryParams.addAll(_queryParams('multi', 'statuses', statuses));
@@ -1205,7 +1205,7 @@ class DefaultApi {
 
   /// Parameters:
   ///
-  /// * [int] stationID:
+  /// * [List<int>] stationsID:
   ///
   /// * [List<String>] statuses:
   ///
@@ -1216,8 +1216,8 @@ class DefaultApi {
   /// * [int] page:
   ///
   /// * [int] pageSize:
-  Future<TaskPage?> getListTasks({ int? stationID, List<String>? statuses, List<String>? types, String? sort, int? page, int? pageSize, }) async {
-    final response = await getListTasksWithHttpInfo( stationID: stationID, statuses: statuses, types: types, sort: sort, page: page, pageSize: pageSize, );
+  Future<TaskPage?> getListTasks({ List<int>? stationsID, List<String>? statuses, List<String>? types, String? sort, int? page, int? pageSize, }) async {
+    final response = await getListTasksWithHttpInfo( stationsID: stationsID, statuses: statuses, types: types, sort: sort, page: page, pageSize: pageSize, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

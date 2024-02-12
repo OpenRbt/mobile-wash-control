@@ -2,6 +2,8 @@ import 'package:mobile_wash_control/domain/entities/services_entities.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart';
 
 import '../../Common/lcw_common.dart';
+import '../entities/lcw_enteties.dart' as lcw;
+import '../entities/pages_entities.dart';
 
 class LcwTransport {
   static Future<void> setConfigVarString(String key, String value) async {
@@ -46,6 +48,46 @@ class LcwTransport {
       rethrow;
     }
     return configVarStringValue;
+  }
+
+  static Future<lcw.TasksPagination> getTasksPage(TasksPageEntity tasksPageEntity) async {
+
+    late lcw.TasksPagination tasksPagination;
+    List<String> statuses = [];
+    List<String> types = [];
+
+    tasksPageEntity.statusFilter.forEach((element) {
+      statuses.add(element.name);
+    });
+
+    tasksPageEntity.typeFilter.forEach((element) {
+      types.add(element.name);
+    });
+
+    try {
+      final response = await LcwCommon.defaultApi?.getListTasks(
+        stationsID: tasksPageEntity.stationFilter.isNotEmpty ? tasksPageEntity.stationFilter : null,
+        statuses: statuses.isNotEmpty ? statuses : null,
+        types: types.isNotEmpty ? types : null,
+        sort: tasksPageEntity.sorted ? "createdAtAsc" : "createdAtDesc",
+        page: tasksPageEntity.tasksPagination.page,
+        pageSize: tasksPageEntity.tasksPagination.pageSize,
+      );
+
+      tasksPagination = lcw.TasksPagination.fromMap(response?.toJson() ?? {});
+
+      response?.items.forEach((element) {
+        tasksPagination.tasks.add(lcw.Task.fromMap(element.toJson()));
+      });
+    }
+    on ApiException catch (e) {
+      throw FormatException("${e.code}: ${e.message}");
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+    return tasksPagination;
   }
 
 }

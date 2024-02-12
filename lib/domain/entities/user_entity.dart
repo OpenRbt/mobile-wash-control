@@ -98,6 +98,6 @@ ServiceUserRole? convertAdminUserRoleToServiceUserRole(AdminUserRole? adminRole)
     case r'admin':
       return ServiceUserRole.admin;
     default:
-      return null; // или throw Exception, если неожиданное значение
+      return null;
   }
 }

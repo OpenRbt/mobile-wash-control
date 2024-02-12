@@ -13,7 +13,6 @@ class ServicesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Provider<ServicesPageCubit> (
       create: (_) => ServicesPageCubit(),
       child: const _ServicesPageView(),

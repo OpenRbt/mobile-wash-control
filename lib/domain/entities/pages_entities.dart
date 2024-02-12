@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:mobile_wash_control/domain/entities/user_entity.dart';
 
+import 'lcw_enteties.dart';
+
 class ServicesPageEntity {
 
   final auth.User? firebaseUser;
@@ -34,4 +36,61 @@ class ServicesPageEntity {
   String toString() {
     return 'ServicesPageEntity{firebaseUser: $firebaseUser, serviceUser: $serviceUser, sendApplicationButtonPressed: $sendApplicationButtonPressed, applicationDelivered: $applicationDelivered}';
   }
+}
+
+class TasksPageEntity {
+
+  TasksPagination tasksPagination;
+  List<TaskType> typeFilter;
+  List<TaskStatus> statusFilter;
+  List<int> stationFilter;
+  bool sorted;
+
+  TasksPageEntity({
+    required this.tasksPagination,
+    required this.typeFilter,
+    required this.statusFilter,
+    required this.stationFilter,
+    required this.sorted,
+  });
+
+  TasksPageEntity copyWith({
+    TasksPagination? tasksPagination,
+    List<TaskType>? typeFilter,
+    List<TaskStatus>? statusFilter,
+    List<int>? stationFilter,
+    bool? sorted,
+  }) {
+    return TasksPageEntity(
+      tasksPagination: tasksPagination ?? this.tasksPagination,
+      typeFilter: typeFilter ?? this.typeFilter,
+      statusFilter: statusFilter ?? this.statusFilter,
+      stationFilter: stationFilter ?? this.stationFilter,
+      sorted: sorted ?? this.sorted,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'TasksPageEntity{tasksPagination: $tasksPagination, typeFilter: $typeFilter, statusFilter: $statusFilter, stationFilter: $stationFilter, sorted: $sorted}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TasksPageEntity &&
+          runtimeType == other.runtimeType &&
+          tasksPagination == other.tasksPagination &&
+          typeFilter == other.typeFilter &&
+          statusFilter == other.statusFilter &&
+          stationFilter == other.stationFilter &&
+          sorted == other.sorted;
+
+  @override
+  int get hashCode =>
+      tasksPagination.hashCode ^
+      typeFilter.hashCode ^
+      statusFilter.hashCode ^
+      stationFilter.hashCode ^
+      sorted.hashCode;
 }
