@@ -1715,40 +1715,8 @@ class LeaCentralRepository extends Repository {
   Future<List<entity.Task>?> getTasks(int id, String status, {BuildContext? context}) async {
     try {
 
-      final response = await api.getListTasks(stationID: id, status: status);
+      //final response = await api.getListTasks(stationID: id, status: status);
       List<entity.Task> tasks = [];
-
-      for(int i = 0; i < response!.length; i++){
-        tasks.add(
-            entity.Task(
-              id: response[i].id,
-              stationID: response[i].hashCode,
-              type: entity.TaskType.fromString(response[i].type.value),
-              status: entity.TaskStatus.fromString(response[i].status.value),
-              error: response[i].error,
-              createdAt: response[i].createdAt,
-              startedAt: response[i].startedAt,
-              stoppedAt: response[i].startedAt,
-            )
-        );
-      }
-
-
-/*
-      for(int i = 0; i < 10; i++){
-        firmwareVersions.add(
-            entity.FirmwareVersion(
-              id: i + 1,
-              hashLua: "response[i].hashLua",
-              hashEnv: "response[i].hashEnv",
-              hashBinar: "response[i].hashBinar",
-              builtAt: DateTime(2023, 12, 22),
-              commitedAt: DateTime(2023, 12, 10),
-            )
-        );
-      }
-
- */
 
       return tasks;
 
@@ -1770,6 +1738,7 @@ class LeaCentralRepository extends Repository {
         ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
       }
     }
+    return null;
   }
 
   @override
