@@ -17,6 +17,8 @@ class StatusReport {
     this.kasseStatus,
     this.kasseInfo,
     this.stations = const [],
+    this.bonusStatus,
+    this.sbpStatus,
   });
 
   ///
@@ -45,12 +47,30 @@ class StatusReport {
 
   List<StationStatus> stations;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  ServiceStatus? bonusStatus;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  ServiceStatus? sbpStatus;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is StatusReport &&
      other.lcwInfo == lcwInfo &&
      other.kasseStatus == kasseStatus &&
      other.kasseInfo == kasseInfo &&
-     other.stations == stations;
+     other.stations == stations &&
+     other.bonusStatus == bonusStatus &&
+     other.sbpStatus == sbpStatus;
 
   @override
   int get hashCode =>
@@ -58,10 +78,12 @@ class StatusReport {
     (lcwInfo == null ? 0 : lcwInfo!.hashCode) +
     (kasseStatus == null ? 0 : kasseStatus!.hashCode) +
     (kasseInfo == null ? 0 : kasseInfo!.hashCode) +
-    (stations.hashCode);
+    (stations.hashCode) +
+    (bonusStatus == null ? 0 : bonusStatus!.hashCode) +
+    (sbpStatus == null ? 0 : sbpStatus!.hashCode);
 
   @override
-  String toString() => 'StatusReport[lcwInfo=$lcwInfo, kasseStatus=$kasseStatus, kasseInfo=$kasseInfo, stations=$stations]';
+  String toString() => 'StatusReport[lcwInfo=$lcwInfo, kasseStatus=$kasseStatus, kasseInfo=$kasseInfo, stations=$stations, bonusStatus=$bonusStatus, sbpStatus=$sbpStatus]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -81,6 +103,16 @@ class StatusReport {
       json[r'kasse_info'] = null;
     }
       json[r'stations'] = this.stations;
+    if (this.bonusStatus != null) {
+      json[r'bonus_status'] = this.bonusStatus;
+    } else {
+      json[r'bonus_status'] = null;
+    }
+    if (this.sbpStatus != null) {
+      json[r'sbp_status'] = this.sbpStatus;
+    } else {
+      json[r'sbp_status'] = null;
+    }
     return json;
   }
 
@@ -107,6 +139,8 @@ class StatusReport {
         kasseStatus: Status.fromJson(json[r'kasse_status']),
         kasseInfo: mapValueOfType<String>(json, r'kasse_info'),
         stations: StationStatus.listFromJson(json[r'stations']) ?? const [],
+        bonusStatus: ServiceStatus.fromJson(json[r'bonus_status']),
+        sbpStatus: ServiceStatus.fromJson(json[r'sbp_status']),
       );
     }
     return null;

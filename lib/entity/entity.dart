@@ -15,11 +15,66 @@ class Station {
   Station({required this.id, this.name, this.hash, this.status, this.currentBalance, this.currentProgram, this.currentProgramName, this.ip});
 }
 
+class Organization {
+  String? id;
+  String? name;
+  String? description;
+  bool? isDefault;
+
+  Organization({this.id, this.name, this.description, this.isDefault});
+
+  Organization copyWith({String? id, String? name, String? description, bool? isDefault}) {
+    return Organization(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        isDefault: isDefault ?? this.isDefault,
+    );
+  }
+}
+
+class ServerGroup {
+  String? id;
+  String? name;
+  String? description;
+  String? organizationId;
+
+  ServerGroup({this.id, this.name, this.description, this.organizationId});
+
+  ServerGroup copyWith({String? id, String? name, String? description, String? organizationId}) {
+    return ServerGroup(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      organizationId: organizationId ?? this.organizationId,
+    );
+  }
+}
+
+class FirebaseUser {
+  String? id;
+  String? name;
+  String? email;
+
+  FirebaseUser({this.id, this.name, this.email});
+}
+
 class KasseStatus {
   String? status;
   String? info;
 
   KasseStatus({this.status, this.info});
+}
+
+class ServiceStatus {
+  bool? available;
+  bool? disabledOnServer;
+  bool? isConnected;
+  String? lastErr;
+  int? dateLastErrUTC;
+  List<int>? unpaidStations;
+
+  ServiceStatus({this.available, this.disabledOnServer, this.isConnected, this.lastErr, this.dateLastErrUTC, this.unpaidStations});
 }
 
 class StationButton {
@@ -31,12 +86,29 @@ class StationButton {
 }
 
 class StationMoneyReport {
+  int? post;
   int? coins;
   int? banknotes;
   int? electronical;
+  int? qrMoney;
   int? service;
+  int? bonuses;
   int? carsTotal;
-  StationMoneyReport({this.coins, this.banknotes, this.electronical, this.service, this.carsTotal});
+  DateTime? dateTime;
+
+  StationMoneyReport({this.coins, this.banknotes, this.electronical, this.service, this.carsTotal, this.qrMoney, this.bonuses, this.post, this.dateTime});
+
+  double Average() {
+    if ((carsTotal ?? 0) == 0) {
+      return 0;
+    }
+
+    return ((coins ?? 0) + (banknotes ?? 0) + (electronical ?? 0) + (qrMoney ?? 0)) / carsTotal!;
+  }
+
+  bool notEmpty() {
+    return (coins ?? 0) != 0 || (banknotes ?? 0) != 0 || (electronical ?? 0) != 0 || (qrMoney ?? 0) != 0 || (service ?? 0) != 0 || (bonuses ?? 0) != 0 || (carsTotal ?? 0) != 0;
+  }
 }
 
 class User {
@@ -88,10 +160,12 @@ class StationCollectionReport {
   int? banknotes;
   int? electronical;
   int? service;
+  int? bonuses;
+  int? qrMoney;
   DateTime? ctime;
   String? user;
 
-  StationCollectionReport({this.id, this.carsTotal, this.coins, this.banknotes, this.electronical, this.service, this.ctime, this.user});
+  StationCollectionReport({this.id, this.carsTotal, this.coins, this.banknotes, this.electronical, this.service, this.bonuses, this.qrMoney, this.ctime, this.user});
 }
 
 class StationStats {
@@ -198,6 +272,41 @@ enum WeekDay {
   }
 }
 
+enum TaskStatus {
+  queue,
+  started,
+  completed,
+  error;
+
+  static TaskStatus fromString(String val) {
+
+    for(int i = 0; i < TaskStatus.values.length; i++){
+      if(TaskStatus.values[i].name == val) {
+        return TaskStatus.values[i];
+      }
+    }
+
+    return error;
+  }
+}
+
+enum TaskType {
+  build,
+  update;
+
+  static TaskType fromString(String val) {
+
+    for(int i = 0; i < TaskType.values.length; i++){
+      if(TaskType.values[i].name == val) {
+        return TaskType.values[i];
+      }
+    }
+
+    return update;
+  }
+
+}
+
 class DiscountCampaign {
   int? id;
   String? name;
@@ -277,7 +386,8 @@ class LeaCentralConfig {
 
 enum RelayBoard {
   localGPIO,
-  danBoard;
+  danBoard,
+  all;
 
   static RelayBoard? fromString(String str) {
     switch (str) {
@@ -285,6 +395,8 @@ enum RelayBoard {
         return RelayBoard.localGPIO;
       case "danBoard":
         return RelayBoard.danBoard;
+      case "all":
+        return RelayBoard.all;
       default:
         return null;
     }
@@ -296,6 +408,8 @@ enum RelayBoard {
         return "localGPIO";
       case RelayBoard.danBoard:
         return "danBoard";
+      case RelayBoard.all:
+        return "all";
       default:
         return "unknown";
     }
@@ -307,6 +421,8 @@ enum RelayBoard {
         return "локально";
       case RelayBoard.danBoard:
         return "на сервере";
+      case RelayBoard.all:
+        return "везде";
       default:
         return "unknown";
     }
@@ -443,4 +559,71 @@ class StationPreset {
   List<StationButton> stationButtons;
 
   StationPreset({required this.programs, required this.stationButtons, required this.name});
+}
+
+class RunProgramConfig {
+  String stationHash;
+  int? stationID;
+  int programID;
+  String? programName;
+  //UNUSED
+  bool Prefligth = false;
+
+  RunProgramConfig({required this.stationHash, required this.programID, this.Prefligth = false, this.programName, this.stationID});
+}
+
+class FirmwareVersion {
+  int id;
+  String? hashLua;
+  String? hashEnv;
+  String? hashBinar;
+  DateTime? builtAt;
+  DateTime? commitedAt;
+  bool? isCurrent;
+
+  FirmwareVersion({
+    required this.id,
+    required this.hashLua,
+    required this.hashEnv,
+    required this.hashBinar,
+    required this.builtAt,
+    required this.commitedAt,
+    required this.isCurrent,
+  });
+}
+
+class Task {
+  Task({
+    required this.id,
+    required this.stationID,
+    required this.type,
+    required this.status,
+    this.error,
+    required this.createdAt,
+    this.startedAt,
+    this.stoppedAt,
+  });
+
+  int id;
+  int stationID;
+  TaskType type;
+  TaskStatus status;
+  String? error;
+  DateTime createdAt;
+  DateTime? startedAt;
+  DateTime? stoppedAt;
+}
+
+class BuildScript {
+  BuildScript({
+    required this.id,
+    required this.stationID,
+    required this.name,
+    required this.commands,
+  });
+
+  int id;
+  int stationID;
+  String name;
+  List<String> commands;
 }

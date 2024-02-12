@@ -15,30 +15,42 @@ class ArgMeasureVolumeMilliliters {
   ArgMeasureVolumeMilliliters({
     required this.hash,
     required this.volume,
+    required this.startProgramID,
+    required this.stopProgramID,
   });
 
   String hash;
 
   int volume;
 
+  int startProgramID;
+
+  int stopProgramID;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is ArgMeasureVolumeMilliliters &&
      other.hash == hash &&
-     other.volume == volume;
+     other.volume == volume &&
+     other.startProgramID == startProgramID &&
+     other.stopProgramID == stopProgramID;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (hash.hashCode) +
-    (volume.hashCode);
+    (volume.hashCode) +
+    (startProgramID.hashCode) +
+    (stopProgramID.hashCode);
 
   @override
-  String toString() => 'ArgMeasureVolumeMilliliters[hash=$hash, volume=$volume]';
+  String toString() => 'ArgMeasureVolumeMilliliters[hash=$hash, volume=$volume, startProgramID=$startProgramID, stopProgramID=$stopProgramID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'hash'] = this.hash;
       json[r'volume'] = this.volume;
+      json[r'startProgramID'] = this.startProgramID;
+      json[r'stopProgramID'] = this.stopProgramID;
     return json;
   }
 
@@ -63,6 +75,8 @@ class ArgMeasureVolumeMilliliters {
       return ArgMeasureVolumeMilliliters(
         hash: mapValueOfType<String>(json, r'hash')!,
         volume: mapValueOfType<int>(json, r'volume')!,
+        startProgramID: mapValueOfType<int>(json, r'startProgramID')!,
+        stopProgramID: mapValueOfType<int>(json, r'stopProgramID')!,
       );
     }
     return null;
@@ -114,6 +128,8 @@ class ArgMeasureVolumeMilliliters {
   static const requiredKeys = <String>{
     'hash',
     'volume',
+    'startProgramID',
+    'stopProgramID',
   };
 }
 

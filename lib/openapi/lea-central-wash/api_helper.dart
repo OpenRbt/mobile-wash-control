@@ -61,6 +61,12 @@ String parameterToString(dynamic value) {
   if (value is Status) {
     return StatusTypeTransformer().encode(value).toString();
   }
+  if (value is TaskStatus) {
+    return TaskStatusTypeTransformer().encode(value).toString();
+  }
+  if (value is TaskType) {
+    return TaskTypeTypeTransformer().encode(value).toString();
+  }
   return value.toString();
 }
 

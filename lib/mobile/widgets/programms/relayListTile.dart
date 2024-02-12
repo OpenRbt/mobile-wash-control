@@ -29,7 +29,7 @@ class RelayListTile extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "% мотора",
+                "% реле",
                 style: theme.textTheme.bodyLarge,
               ),
             ),
@@ -58,7 +58,7 @@ class RelayListTile extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "% мотора прокачки",
+                "% реле прокачки",
                 style: theme.textTheme.bodyLarge,
               ),
             ),

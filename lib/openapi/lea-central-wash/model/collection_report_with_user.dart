@@ -19,8 +19,10 @@ class CollectionReportWithUser {
     this.banknotes,
     this.electronical,
     this.service,
+    this.bonuses,
     this.ctime,
     this.user,
+    this.qrMoney,
   });
 
   ///
@@ -77,6 +79,14 @@ class CollectionReportWithUser {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
+  int? bonuses;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
   int? ctime;
 
   ///
@@ -87,6 +97,14 @@ class CollectionReportWithUser {
   ///
   String? user;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? qrMoney;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is CollectionReportWithUser &&
      other.id == id &&
@@ -95,8 +113,10 @@ class CollectionReportWithUser {
      other.banknotes == banknotes &&
      other.electronical == electronical &&
      other.service == service &&
+     other.bonuses == bonuses &&
      other.ctime == ctime &&
-     other.user == user;
+     other.user == user &&
+     other.qrMoney == qrMoney;
 
   @override
   int get hashCode =>
@@ -107,11 +127,13 @@ class CollectionReportWithUser {
     (banknotes == null ? 0 : banknotes!.hashCode) +
     (electronical == null ? 0 : electronical!.hashCode) +
     (service == null ? 0 : service!.hashCode) +
+    (bonuses == null ? 0 : bonuses!.hashCode) +
     (ctime == null ? 0 : ctime!.hashCode) +
-    (user == null ? 0 : user!.hashCode);
+    (user == null ? 0 : user!.hashCode) +
+    (qrMoney == null ? 0 : qrMoney!.hashCode);
 
   @override
-  String toString() => 'CollectionReportWithUser[id=$id, carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, ctime=$ctime, user=$user]';
+  String toString() => 'CollectionReportWithUser[id=$id, carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, ctime=$ctime, user=$user, qrMoney=$qrMoney]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -145,6 +167,11 @@ class CollectionReportWithUser {
     } else {
       json[r'service'] = null;
     }
+    if (this.bonuses != null) {
+      json[r'bonuses'] = this.bonuses;
+    } else {
+      json[r'bonuses'] = null;
+    }
     if (this.ctime != null) {
       json[r'ctime'] = this.ctime;
     } else {
@@ -154,6 +181,11 @@ class CollectionReportWithUser {
       json[r'user'] = this.user;
     } else {
       json[r'user'] = null;
+    }
+    if (this.qrMoney != null) {
+      json[r'qrMoney'] = this.qrMoney;
+    } else {
+      json[r'qrMoney'] = null;
     }
     return json;
   }
@@ -183,8 +215,10 @@ class CollectionReportWithUser {
         banknotes: mapValueOfType<int>(json, r'banknotes'),
         electronical: mapValueOfType<int>(json, r'electronical'),
         service: mapValueOfType<int>(json, r'service'),
+        bonuses: mapValueOfType<int>(json, r'bonuses'),
         ctime: mapValueOfType<int>(json, r'ctime'),
         user: mapValueOfType<String>(json, r'user'),
+        qrMoney: mapValueOfType<int>(json, r'qrMoney'),
       );
     }
     return null;

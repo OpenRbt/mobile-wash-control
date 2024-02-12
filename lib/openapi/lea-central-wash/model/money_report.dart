@@ -19,8 +19,8 @@ class MoneyReport {
     this.electronical,
     this.service,
     this.bonuses,
-    this.hash,
     this.sessionId,
+    this.qrMoney,
   });
 
   ///
@@ -77,7 +77,7 @@ class MoneyReport {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? hash;
+  String? sessionId;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -85,7 +85,7 @@ class MoneyReport {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? sessionId;
+  int? qrMoney;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is MoneyReport &&
@@ -95,8 +95,8 @@ class MoneyReport {
      other.electronical == electronical &&
      other.service == service &&
      other.bonuses == bonuses &&
-     other.hash == hash &&
-     other.sessionId == sessionId;
+     other.sessionId == sessionId &&
+     other.qrMoney == qrMoney;
 
   @override
   int get hashCode =>
@@ -107,11 +107,11 @@ class MoneyReport {
     (electronical == null ? 0 : electronical!.hashCode) +
     (service == null ? 0 : service!.hashCode) +
     (bonuses == null ? 0 : bonuses!.hashCode) +
-    (hash == null ? 0 : hash!.hashCode) +
-    (sessionId == null ? 0 : sessionId!.hashCode);
+    (sessionId == null ? 0 : sessionId!.hashCode) +
+    (qrMoney == null ? 0 : qrMoney!.hashCode);
 
   @override
-  String toString() => 'MoneyReport[carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, hash=$hash, sessionId=$sessionId]';
+  String toString() => 'MoneyReport[carsTotal=$carsTotal, coins=$coins, banknotes=$banknotes, electronical=$electronical, service=$service, bonuses=$bonuses, sessionId=$sessionId, qrMoney=$qrMoney]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -145,15 +145,15 @@ class MoneyReport {
     } else {
       json[r'bonuses'] = null;
     }
-    if (this.hash != null) {
-      json[r'hash'] = this.hash;
-    } else {
-      json[r'hash'] = null;
-    }
     if (this.sessionId != null) {
       json[r'sessionId'] = this.sessionId;
     } else {
       json[r'sessionId'] = null;
+    }
+    if (this.qrMoney != null) {
+      json[r'qrMoney'] = this.qrMoney;
+    } else {
+      json[r'qrMoney'] = null;
     }
     return json;
   }
@@ -183,8 +183,8 @@ class MoneyReport {
         electronical: mapValueOfType<int>(json, r'electronical'),
         service: mapValueOfType<int>(json, r'service'),
         bonuses: mapValueOfType<int>(json, r'bonuses'),
-        hash: mapValueOfType<String>(json, r'hash'),
         sessionId: mapValueOfType<String>(json, r'sessionId'),
+        qrMoney: mapValueOfType<int>(json, r'qrMoney'),
       );
     }
     return null;

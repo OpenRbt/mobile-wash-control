@@ -18,14 +18,16 @@ class DiscountCampaignListTile extends StatelessWidget {
 
     return Card(
       child: ExpansionTile(
-        leading: IconButton(
-          icon: Icon(Icons.edit_outlined),
-          onPressed: onPressed,
-        ),
+        leading: Icon(Icons.discount_outlined),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(campaign.name ?? "Скидочная программа ${campaign.id!}"),
+            Flexible(
+                child: Text(
+                  campaign.name ?? "Скидочная программа ${campaign.id!}",
+                  overflow: TextOverflow.fade,
+                ),
+            ),
             Icon(
               Icons.circle,
               color: (campaign.enabled ?? false) ? Colors.green : Colors.red,
@@ -67,17 +69,27 @@ class DiscountCampaignListTile extends StatelessWidget {
               Flexible(
                 flex: 2,
                 fit: FlexFit.tight,
-                child: Row(
+                child: Wrap(
                   children: [
-                    Text("С ", style: theme.textTheme.titleMedium),
-                    Text(
-                      _dateFormatter.format(campaign.startDate),
-                      style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("С ", style: theme.textTheme.titleMedium),
+                        Text(
+                          _dateFormatter.format(campaign.startDate) + " ",
+                          style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+                        ),
+                      ],
                     ),
-                    Text(" по ", style: theme.textTheme.titleMedium),
-                    Text(
-                      _dateFormatter.format(campaign.endDate),
-                      style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("по ", style: theme.textTheme.titleMedium),
+                        Text(
+                          _dateFormatter.format(campaign.endDate),
+                          style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -147,7 +159,11 @@ class DiscountCampaignListTile extends StatelessWidget {
                 return ProgramDiscountListTile(discount: campaign.discountPrograms!.elementAt(index), repository: repository);
               },
             ),
-          ])
+          ]),
+          TextButton(
+            onPressed: onPressed,
+            child: Text("Редактировать"),
+          ),
         ],
       ),
     );

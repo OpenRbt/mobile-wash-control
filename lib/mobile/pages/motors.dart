@@ -3,9 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/dialogs/motors/resetMotorsStatsDialog.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
-import 'package:mobile_wash_control/mobile/widgets/motors/motorStatsListTile.dart';
-import 'package:mobile_wash_control/mobile/widgets/motors/relayStatsListTile.dart';
+import 'package:mobile_wash_control/mobile/widgets/motors/MotorsView.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 class MotorPage extends StatefulWidget {
@@ -13,9 +13,13 @@ class MotorPage extends StatefulWidget {
   State<StatefulWidget> createState() => _MotorPageState();
 }
 
+enum MotorStatsViewMode { current, dates }
+
 class _MotorPageState extends State<MotorPage> {
   ValueNotifier<bool> _showMode = ValueNotifier(true);
   ValueNotifier<bool> _showRelays = ValueNotifier(true);
+  ValueNotifier<MotorStatsViewMode> _statsMode = ValueNotifier(MotorStatsViewMode.current);
+  ValueNotifier<MotorsViewMode> _mode = ValueNotifier(MotorsViewMode.relays);
 
   ValueNotifier<DateTimeRange> _dateRange = ValueNotifier(DateTimeRange(start: DateTime.now(), end: DateTime.now()));
 
@@ -33,10 +37,38 @@ class _MotorPageState extends State<MotorPage> {
     super.initState();
   }
 
+  Map<int, StationStats?> _stationStats = Map();
+
+  Future<List<StationStats>> _loadAllStationsStats(Repository repository, BuildContext context) async {
+    List<StationStats> res = [];
+
+    var startTime = DateTime.now();
+
+    res = await repository.getAllStationStatsCurrent(context: context);
+
+    var timeTotal = DateTime.now().difference(startTime);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getInfoSnackBar(message: "Статистика загружена за ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} секунд"));
+    return res;
+  }
+
+  Future<List<StationStats>> _loadAllStationsStatsByDates(Repository repository, DateTimeRange range, BuildContext context) async {
+    List<StationStats> res = [];
+
+    var startTime = DateTime.now();
+
+    res = await repository.getAllStationStatsByDates(range.start, range.end, context: context);
+
+    var timeTotal = DateTime.now().difference(startTime);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getInfoSnackBar(message: "Статистика загружена за ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} секунд"));
+    return res;
+  }
+
   @override
   void dispose() {
+    _mode.dispose();
     _showMode.dispose();
     _dateRange.dispose();
+    _statsMode.dispose();
     super.dispose();
   }
 
@@ -58,15 +90,23 @@ class _MotorPageState extends State<MotorPage> {
                   return ResetMotorsStatsDialog(repository: repository);
                 },
               );
+              setState(() {});
             },
             icon: Icon(
               Icons.clear_all,
               color: theme.colorScheme.onPrimary,
             ),
             label: Text(
-              "Сбросить статистику",
+              "Сброс",
               style: theme.textTheme.titleMedium!.copyWith(color: theme.colorScheme.onPrimary),
             ),
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+              });
+            },
+            icon: Icon(Icons.refresh)
           ),
         ],
       ),
@@ -76,204 +116,210 @@ class _MotorPageState extends State<MotorPage> {
       ),
       body: Column(
         children: [
-          Card(
-            child: ExpansionTile(
-              title: Text(
-                "Параметры отображения",
-                style: theme.textTheme.titleLarge,
-              ),
-              childrenPadding: EdgeInsets.all(8),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
               children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "текущая статистика",
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                    ),
-                    ValueListenableBuilder(
-                      valueListenable: _showMode,
-                      builder: (BuildContext context, bool value, Widget? child) {
-                        return Switch(
-                          value: value,
-                          onChanged: (value) {
-                            _showMode.value = value;
-                          },
-                        );
+                ValueListenableBuilder(
+                  valueListenable: _statsMode,
+                  builder: (BuildContext context, MotorStatsViewMode value, Widget? child) {
+                    return SegmentedButton<MotorStatsViewMode>(
+                      segments: [
+                        ButtonSegment(
+                          value: MotorStatsViewMode.current,
+                          label: Text("Текущая"),
+                        ),
+                        ButtonSegment(
+                          value: MotorStatsViewMode.dates,
+                          label: Text("По датам"),
+                        ),
+                      ],
+                      selected: {value},
+                      onSelectionChanged: (val) {
+                        _statsMode.value = val.single;
                       },
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        "по датам",
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "статистика программ",
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                    ),
-                    ValueListenableBuilder(
-                      valueListenable: _showRelays,
-                      builder: (BuildContext context, bool value, Widget? child) {
-                        return Switch(
-                          value: value,
-                          onChanged: (value) {
-                            _showRelays.value = value;
-                          },
-                        );
-                      },
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        "статистика реле",
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
                 ValueListenableBuilder(
-                  valueListenable: _showMode,
-                  builder: (BuildContext context, bool value, Widget? child) {
-                    if (value) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ValueListenableBuilder(
-                            valueListenable: _dateRange,
-                            builder: (BuildContext context, DateTimeRange value, Widget? child) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Период с ",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  Text(
-                                    _dateFormatter.format(value.start),
-                                    style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
-                                  ),
-                                  Text(
-                                    " по ",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  Text(
-                                    _dateFormatter.format(value.end),
-                                    style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          ElevatedButton(
-                              onPressed: () async {
-                                DateTimeRange? range = await showDateRangePicker(
-                                  context: context,
-                                  firstDate: DateTime(2018),
-                                  lastDate: DateTime.now(),
-                                  initialEntryMode: DatePickerEntryMode.calendar,
-                                  initialDateRange: DateTimeRange(
-                                    start: _dateRange.value.start,
-                                    end: _dateRange.value.end,
-                                  ),
-                                );
-                                if (range != null) {
-                                  _dateRange.value = DateTimeRange(
-                                    start: range.start,
-                                    end: range.end.add(
-                                      Duration(days: 1, microseconds: -1),
+                  valueListenable: _statsMode,
+                  builder: (BuildContext context, MotorStatsViewMode value, Widget? child) {
+                    bool canSelectDates = value == MotorStatsViewMode.dates;
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ValueListenableBuilder(
+                          valueListenable: _dateRange,
+                          builder: (BuildContext context, DateTimeRange value, Widget? child) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Период с ",
+                                  style: canSelectDates ? theme.textTheme.bodyLarge : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
+                                ),
+                                Text(
+                                  _dateFormatter.format(value.start),
+                                  style: canSelectDates ? theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor) : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
+                                ),
+                                Text(
+                                  " по ",
+                                  style: canSelectDates ? theme.textTheme.bodyLarge : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
+                                ),
+                                Text(
+                                  _dateFormatter.format(value.end),
+                                  style: canSelectDates ? theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor) : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        ElevatedButton(
+                          onPressed: canSelectDates
+                              ? () async {
+                                  DateTimeRange? range = await showDateRangePicker(
+                                    context: context,
+                                    firstDate: DateTime(2018),
+                                    lastDate: DateTime.now(),
+                                    initialEntryMode: DatePickerEntryMode.calendar,
+                                    initialDateRange: DateTimeRange(
+                                      start: _dateRange.value.start,
+                                      end: _dateRange.value.end,
                                     ),
                                   );
+                                  if (range != null) {
+                                    _dateRange.value = DateTimeRange(
+                                      start: range.start,
+                                      end: range.end.add(
+                                        Duration(days: 1, microseconds: -1),
+                                      ),
+                                    );
+                                  }
                                 }
-                              },
-                              child: Text("Выбрать период"))
-                        ],
-                      );
-                    }
-                    return Container();
+                              : null,
+                          child: Text("Выбрать период"),
+                        ),
+                      ],
+                    );
                   },
                 ),
               ],
             ),
           ),
-          Expanded(child: StatefulBuilder(
-            builder: (context, setState) {
-              return Padding(
-                padding: EdgeInsets.all(8),
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    setState(() {});
-                  },
-                  child: ValueListenableBuilder(
-                    valueListenable: _showMode,
-                    builder: (BuildContext context, bool byDates, Widget? child) {
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ValueListenableBuilder(
+                valueListenable: _statsMode,
+                builder: (BuildContext context, MotorStatsViewMode mode, Widget? child) {
+                  switch (mode) {
+                    case MotorStatsViewMode.current:
+                      return FutureBuilder(
+                        future: _loadAllStationsStats(repository, context),
+                        builder: (BuildContext context, AsyncSnapshot<List<StationStats>> snapshot) {
+                          if (snapshot.connectionState != ConnectionState.done) {
+                            return Column(
+                              children: [
+                                LinearProgressIndicator(),
+                                Expanded(
+                                  child: MotorsView(
+                                    stationsStats: [],
+                                    mode: _mode,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                          return MotorsView(stationsStats: snapshot.data ?? [], mode: _mode);
+                        },
+                      );
+
+                    case MotorStatsViewMode.dates:
                       return ValueListenableBuilder(
                         valueListenable: _dateRange,
                         builder: (BuildContext context, DateTimeRange dateRange, Widget? child) {
-                          return ListView.builder(
-                            itemCount: 12,
-                            itemBuilder: (BuildContext context, int index) {
-                              return FutureBuilder(
-                                future: byDates ? repository.getStationStatsByDates(index + 1, dateRange.start, dateRange.end, context: context) : repository.getStationStatsCurrent(index + 1, context: context),
-                                builder: (BuildContext context, AsyncSnapshot<StationStats?> snapshot) {
-                                  if (snapshot.connectionState != ConnectionState.done) {
-                                    return Card(
-                                      child: ExpansionTile(
-                                        title: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Пост: ${index + 1}",
-                                              style: theme.textTheme.titleLarge,
-                                            ),
-                                            CircularProgressIndicator(),
-                                          ],
-                                        ),
+                          return FutureBuilder(
+                            future: _loadAllStationsStatsByDates(repository, dateRange, context),
+                            builder: (BuildContext context, AsyncSnapshot<List<StationStats>> snapshot) {
+                              if (snapshot.connectionState != ConnectionState.done) {
+                                return Column(
+                                  children: [
+                                    LinearProgressIndicator(),
+                                    Expanded(
+                                      child: MotorsView(
+                                        stationsStats: [],
+                                        mode: _mode,
                                       ),
-                                    );
-                                  }
-
-                                  final stats = snapshot.data;
-
-                                  return ValueListenableBuilder(
-                                    valueListenable: _showRelays,
-                                    builder: (BuildContext context, bool showRelayStats, Widget? child) {
-                                      if (showRelayStats) {
-                                        return RelayStatsListTile(
-                                          id: index + 1,
-                                          stats: stats,
-                                        );
-                                      }
-                                      return MotorStatsListTile(
-                                        id: index + 1,
-                                        stats: stats,
-                                      );
-                                    },
-                                  );
-                                },
-                              );
+                                    ),
+                                  ],
+                                );
+                              }
+                              return MotorsView(stationsStats: snapshot.data ?? [], mode: _mode,);
                             },
                           );
                         },
                       );
-                    },
-                  ),
-                ),
-              );
-            },
-          ))
+                  }
+                },
+              ),
+            ),
+          ),
+          // Expanded(
+          //   child: StatefulBuilder(
+          //     builder: (context, setState) {
+          //       return Padding(
+          //         padding: EdgeInsets.all(8),
+          //         child: RefreshIndicator(
+          //           onRefresh: () async {
+          //             setState(() {});
+          //           },
+          //           child: ValueListenableBuilder(
+          //             valueListenable: _showMode,
+          //             builder: (BuildContext context, bool byDates, Widget? child) {
+          //               return ValueListenableBuilder(
+          //                 valueListenable: _dateRange,
+          //                 builder: (BuildContext context, DateTimeRange dateRange, Widget? child) {
+          //                   return FutureBuilder(
+          //                     future: _loadStationsStats(repository, context, byDates, dateRange),
+          //                     builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          //                       if (snapshot.connectionState != ConnectionState.done) {
+          //                         return Center(
+          //                           child: CircularProgressIndicator(),
+          //                         );
+          //                       }
+          //
+          //                       return ListView.builder(
+          //                         itemCount: 12,
+          //                         itemBuilder: (context, index) {
+          //                           return ValueListenableBuilder(
+          //                             valueListenable: _showRelays,
+          //                             builder: (BuildContext context, bool showRelayStats, Widget? child) {
+          //                               if (showRelayStats) {
+          //                                 return RelayStatsListTile(
+          //                                   id: index + 1,
+          //                                   stats: _stationStats[index + 1],
+          //                                 );
+          //                               }
+          //                               return MotorStatsListTile(
+          //                                 id: index + 1,
+          //                                 stats: _stationStats[index + 1],
+          //                               );
+          //                             },
+          //                           );
+          //                         },
+          //                       );
+          //                     },
+          //                   );
+          //                 },
+          //               );
+          //             },
+          //           ),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );

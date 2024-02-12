@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 class StationPage extends StatefulWidget {
@@ -118,311 +119,333 @@ class _StationPageState extends State<StationPage> {
           FutureBuilder(
             future: _getPostConfig(repository, id, context),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return ValueListenableBuilder(
-                valueListenable: _config,
-                builder: (BuildContext context, entity.StationConfig? config, Widget? child) {
-                  var hashes = repository.getHashesNotifier().value ?? [];
+              return Card(
+                child: ExpansionTile(
+                  title: Text(
+                    "Параметры поста",
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  childrenPadding: EdgeInsets.all(8),
+                  children: [
+                    ValueListenableBuilder(
+                      valueListenable: _config,
+                      builder: (BuildContext context, entity.StationConfig? config, Widget? child) {
+                        var hashes = repository.getHashesNotifier().value ?? [];
 
-                  return Form(
-                    key: _formKeyPost,
-                    child: Card(
-                      child: ExpansionTile(
-                        title: Text(
-                          "Параметры поста",
-                          style: theme.textTheme.titleLarge,
-                        ),
-                        childrenPadding: EdgeInsets.all(8),
-                        children: [
-                          Row(
+                        return Form(
+                          key: _formKeyPost,
+                          child: Column(
                             children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "Имя",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: TextFormField(
-                                  controller: _controllers["postName"],
-                                  onChanged: (val) {
-                                    _config.value = _config.value.copyWith(name: val);
-                                  },
-                                  validator: (val) {
-                                    if ((val ?? "").trim().isEmpty) {
-                                      return "Поле не может быть пустым";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "Хэш",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: DropdownButtonFormField(
-                                  isExpanded: true,
-                                  value: config?.hash ?? "-",
-                                  items: List.generate(
-                                    hashes.length,
-                                    (index) => DropdownMenuItem(
-                                      child: Text(hashes[index]),
-                                      value: hashes[index],
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "Имя",
+                                      style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
-                                  onChanged: (String? value) {
-                                    _config.value = _config.value.copyWith(hash: value);
-                                  },
-                                  validator: (value) {
-                                    return value == "-" ? "Необходимо указать хэш" : null;
-                                  },
-                                ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: TextFormField(
+                                      controller: _controllers["postName"],
+                                      onChanged: (val) {
+                                        _config.value = _config.value.copyWith(name: val);
+                                      },
+                                      validator: (val) {
+                                        if ((val ?? "").trim().isEmpty) {
+                                          return "Поле не может быть пустым";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "Прокачка (сек)",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: TextFormField(
-                                  controller: _controllers["postPreflightSec"],
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    FilteringTextInputFormatter.singleLineFormatter,
-                                  ],
-                                  onChanged: (val) {
-                                    var amount = int.tryParse(val ?? "");
-                                    _config.value = _config.value.copyWith(preflightSec: amount);
-                                  },
-                                  validator: (val) {
-                                    var amount = int.tryParse(val ?? "");
-                                    if ((amount ?? 0) < 0) {
-                                      return "Время прокачки должно быть не меньше 0";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "Выполнение",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: DropdownButton(
-                                  isExpanded: true,
-                                  value: _config.value.relayBoard ?? entity.RelayBoard.localGPIO,
-                                  items: List.generate(
-                                    entity.RelayBoard.values.length,
-                                    (index) => DropdownMenuItem(
-                                      child: Text(
-                                        entity.RelayBoard.values[index].label(),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "Хэш",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: DropdownButtonFormField(
+                                      isExpanded: true,
+                                      value: config?.hash ?? "",
+                                      items: List.generate(
+                                        hashes.length,
+                                        (index) => DropdownMenuItem(
+                                          child: Text(hashes[index]),
+                                          value: hashes[index],
+                                        ),
                                       ),
-                                      value: entity.RelayBoard.values[index],
+                                      onChanged: (String? value) {
+                                        _config.value = _config.value.copyWith(hash: value);
+                                      },
+                                      validator: (value) {
+                                        return null;
+                                      },
                                     ),
                                   ),
-                                  onChanged: (value) {
-                                    _config.value = _config.value.copyWith(relayBoard: value);
-                                  },
-                                ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "Прокачка (сек)",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: TextFormField(
+                                      controller: _controllers["postPreflightSec"],
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        FilteringTextInputFormatter.singleLineFormatter,
+                                      ],
+                                      onChanged: (val) {
+                                        var amount = int.tryParse(val ?? "");
+                                        _config.value = _config.value.copyWith(preflightSec: amount);
+                                      },
+                                      validator: (val) {
+                                        var amount = int.tryParse(val ?? "");
+                                        if ((amount ?? 0) < 0) {
+                                          return "Время прокачки должно быть не меньше 0";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "Выполнение",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      value: _config.value.relayBoard ?? entity.RelayBoard.localGPIO,
+                                      items: List.generate(
+                                        entity.RelayBoard.values.length,
+                                        (index) => DropdownMenuItem(
+                                          child: Text(
+                                            entity.RelayBoard.values[index].label(),
+                                          ),
+                                          value: entity.RelayBoard.values[index],
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        _config.value = _config.value.copyWith(relayBoard: value);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                onPressed: () async {
-                                  if (_formKeyPost.currentState!.validate()) {
-                                    await repository.saveStationConfig(_config.value, context: context).then((value) => _getPostConfig(repository, id, context));
-                                  }
-                                },
-                                child: Text("Сохранить"),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  await _getPostConfig(repository, id, context);
-                                },
-                                child: Text("Получить текущую конфигурацию"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  );
-                },
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ProgressTextButton(
+                          onPressed: () async {
+                            if (_formKeyPost.currentState!.validate()) {
+                              await repository.saveStationConfig(_config.value, context: context).then((value) => _getPostConfig(repository, id, context));
+                            }
+                          },
+                          child: Text("Сохранить"),
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child: ProgressTextButton(
+                            onPressed: () async {
+                              await _getPostConfig(repository, id, context);
+                            },
+                            child: Text(
+                              "Получить текущую конфигурацию",
+                              softWrap: true,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               );
             },
           ),
           FutureBuilder(
             future: _getCardReaderConfig(repository, id),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return ValueListenableBuilder(
-                valueListenable: _cardReaderConfig,
-                builder: (BuildContext context, entity.StationCardReaderConfig value, Widget? child) {
-                  return Form(
-                    key: _formKeyCardReader,
-                    child: Card(
-                      child: ExpansionTile(
-                        title: Text(
-                          "Параметры кардридера",
-                          style: theme.textTheme.titleLarge,
-                        ),
-                        childrenPadding: EdgeInsets.all(8),
-                        children: [
-                          Row(
+              return Card(
+                child: ExpansionTile(
+                  title: Text(
+                    "Параметры кардридера",
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  childrenPadding: EdgeInsets.all(8),
+                  children: [
+                    ValueListenableBuilder(
+                      valueListenable: _cardReaderConfig,
+                      builder: (BuildContext context, entity.StationCardReaderConfig value, Widget? child) {
+                        return Form(
+                          key: _formKeyCardReader,
+                          child: Column(
                             children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "Тип",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: DropdownButton(
-                                  isExpanded: true,
-                                  value: _cardReaderConfig.value.cardReader,
-                                  items: List.generate(
-                                    entity.CardReader.values.length,
-                                    (index) => DropdownMenuItem(
-                                      child: Text(
-                                        entity.CardReader.values[index].label(),
-                                      ),
-                                      value: entity.CardReader.values[index],
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "Тип",
+                                      style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
-                                  onChanged: (value) {
-                                    _cardReaderConfig.value = _cardReaderConfig.value.copyWith(cardReader: value);
-                                  },
-                                ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      value: _cardReaderConfig.value.cardReader,
+                                      items: List.generate(
+                                        entity.CardReader.values.length,
+                                        (index) => DropdownMenuItem(
+                                          child: Text(
+                                            entity.CardReader.values[index].label(),
+                                          ),
+                                          value: entity.CardReader.values[index],
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        _cardReaderConfig.value = _cardReaderConfig.value.copyWith(cardReader: value);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "Хост",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: TextFormField(
+                                      controller: _controllers["cardReaderHost"],
+                                      onChanged: (val) {
+                                        _cardReaderConfig.value = _cardReaderConfig.value.copyWith(host: val);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      "Порт",
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: TextFormField(
+                                      controller: _controllers["cardReaderPort"],
+                                      onChanged: (val) {
+                                        _cardReaderConfig.value = _cardReaderConfig.value.copyWith(port: val);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "Хост",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: TextFormField(
-                                  controller: _controllers["cardReaderHost"],
-                                  onChanged: (val) {
-                                    _cardReaderConfig.value = _cardReaderConfig.value.copyWith(host: val);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  "Порт",
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                fit: FlexFit.tight,
-                                child: TextFormField(
-                                  controller: _controllers["cardReaderPort"],
-                                  onChanged: (val) {
-                                    _cardReaderConfig.value = _cardReaderConfig.value.copyWith(port: val);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                onPressed: () async {
-                                  if (_formKeyCardReader.currentState!.validate()) {
-                                    await repository.saveCardReaderConfig(id, _cardReaderConfig.value, context: context).then((value) => _getCardReaderConfig(repository, id));
-                                  }
-                                },
-                                child: Text("Сохранить"),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  await _getCardReaderConfig(repository, id);
-                                },
-                                child: Text("Получить текущую конфигурацию"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  );
-                },
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ProgressTextButton(
+                          onPressed: () async {
+                            if (_formKeyCardReader.currentState!.validate()) {
+                              await repository.saveCardReaderConfig(id, _cardReaderConfig.value, context: context).then((value) => _getCardReaderConfig(repository, id));
+                            }
+                          },
+                          child: Text("Сохранить"),
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child:ProgressTextButton(
+                            onPressed: () async {
+                              await _getCardReaderConfig(repository, id);
+                              },
+                            child: Text(
+                              "Получить текущую конфигурацию",
+                              softWrap: true,
+                            ),
+                        ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               );
             },
           ),
           FutureBuilder(
             future: _getStationButtonsConfig(repository, id),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return ValueListenableBuilder(
-                valueListenable: _buttonsConfig,
-                builder: (BuildContext context, List<entity.StationButton> buttons, Widget? child) {
-                  return Card(
-                    child: ExpansionTile(
-                      title: Text(
-                        "Привязка кнопок",
-                        style: theme.textTheme.titleLarge,
-                      ),
-                      childrenPadding: EdgeInsets.all(8),
-                      children: [
-                        Column(
+              return Card(
+                child: ExpansionTile(
+                  title: Text(
+                    "Привязка кнопок",
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  childrenPadding: EdgeInsets.all(8),
+                  children: [
+                    ValueListenableBuilder(
+                      valueListenable: _buttonsConfig,
+                      builder: (BuildContext context, List<entity.StationButton> buttons, Widget? child) {
+                        return Column(
                           children: List.generate(
                             buttons.length,
                             (index) {
@@ -459,29 +482,33 @@ class _StationPageState extends State<StationPage> {
                               );
                             },
                           ),
+                        );
+                      },
+                    ),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ProgressTextButton(
+                          onPressed: () async {
+                            await repository.saveStationButtons(id, _buttonsConfig.value, context: context).then((value) => _getStationButtonsConfig(repository, id));
+                          },
+                          child: Text("Сохранить"),
                         ),
-                        Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton(
-                              onPressed: () async {
-                                await repository.saveStationButtons(id, _buttonsConfig.value, context: context).then((value) => _getStationButtonsConfig(repository, id));
-                              },
-                              child: Text("Сохранить"),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                await _getStationButtonsConfig(repository, id);
-                              },
-                              child: Text("Получить текущую конфигурацию"),
-                            ),
-                          ],
-                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 1,
+                          child: ProgressTextButton(
+                            onPressed: () async {
+                              await _getStationButtonsConfig(repository, id);
+                            },
+                            child: Text("Получить текущую конфигурацию"),
+                          ),
+                        )
                       ],
                     ),
-                  );
-                },
+                  ],
+                ),
               );
             },
           ),

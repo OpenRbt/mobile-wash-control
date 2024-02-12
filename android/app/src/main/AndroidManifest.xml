@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mobile_wash_control">
+    package="com.openrbt.mobile_wash_control">
    <application
-        android:label="mobile_wash_control"
+        android:label="Mobile Wash Control"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

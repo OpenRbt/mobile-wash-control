@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/programms/relayListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+
+import '../../widgets/common/snackBars.dart';
 
 class EditProgramPage extends StatefulWidget {
   @override
@@ -14,8 +17,6 @@ class _EditProgramPageState extends State<EditProgramPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   ValueNotifier<entity.Program> _program = ValueNotifier(entity.Program(null));
-
-  entity.Program program = entity.Program(null);
 
   Map<String, TextEditingController> _controllers = Map();
   Map<String, List<TextEditingController>> _relaysControllers = Map();
@@ -109,11 +110,9 @@ class _EditProgramPageState extends State<EditProgramPage> {
     });
   }
 
-  void saveProgram(BuildContext context, int? id, Repository repository) async {
+  Future<void> saveProgram(BuildContext context, int? id, Repository repository) async {
     await repository.saveProgram(_program.value, context: context);
-    if (_program.value.id != null) {
-      await getProgram(id, repository, context);
-    }
+    Navigator.pop(context);
   }
 
   @override
@@ -129,7 +128,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
           title: ValueListenableBuilder(
             valueListenable: _program,
             builder: (BuildContext context, entity.Program? value, Widget? child) {
-              return Text(value != null ? "Программа ${value.name ?? "-"}" : "Новая программа");
+              return Text(value != null ? "Программа ${value.name}" : "Новая программа");
             },
           ),
         ),
@@ -145,7 +144,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
             return StatefulBuilder(builder: (context, setState) {
               return ValueListenableBuilder(
                 valueListenable: _program,
-                builder: (BuildContext context, entity.Program? value, Widget? child) {
+                builder: (BuildContext context, entity.Program program, Widget? child) {
                   return ListView(
                     padding: EdgeInsets.all(8.0),
                     children: [
@@ -173,6 +172,9 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   child: TextField(
                                     controller: _controllers["name"],
                                     keyboardType: TextInputType.text,
+                                    onChanged: (value) {
+                                      _program.value = program.copyWith(name: value);
+                                    },
                                   ),
                                 ),
                               ],
@@ -194,6 +196,10 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     controller: _controllers["price"],
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                     keyboardType: TextInputType.number,
+                                    onChanged: (value) {
+                                      int price = int.tryParse(value) ?? 0;
+                                      _program.value = program.copyWith(price: price);
+                                    },
                                   ),
                                 ),
                               ],
@@ -219,11 +225,9 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                         style: theme.textTheme.labelSmall,
                                       ),
                                       Switch(
-                                        value: program.ifFinishingProgram,
+                                        value: program.isFinishingProgram,
                                         onChanged: (val) {
-                                          setState(() {
-                                            program.ifFinishingProgram = val;
-                                          });
+                                          _program.value = _program.value.copyWith(isFinishingProgram: val);
                                         },
                                       ),
                                       Text(
@@ -263,14 +267,18 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     controller: _controllers["motor"],
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                     keyboardType: TextInputType.number,
-                                    onChanged: (val) {
-                                      if (val.isEmpty) {
-                                        _controllers["motor"]!.text = "0";
+                                    onChanged: (value) {
+                                      if (value.isEmpty) {
+                                        //_controllers["motor"]!.text = "0";
                                       } else {
-                                        if (int.parse(val) > 100) {
+                                        if (int.parse(value) > 100) {
                                           _controllers["motor"]!.text = "100";
                                         }
                                       }
+
+                                      int percent = int.tryParse(value) ?? 0;
+
+                                      _program.value = program.copyWith(motorSpeedPercent: percent);
                                     },
                                   ),
                                 ),
@@ -299,9 +307,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                       Switch(
                                         value: program.preflightEnabled,
                                         onChanged: (val) {
-                                          setState(() {
-                                            program.preflightEnabled = val;
-                                          });
+                                          _program.value = _program.value.copyWith(preflightEnabled: val);
                                         },
                                       ),
                                       Text(
@@ -330,14 +336,18 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     controller: _controllers["motorPreflight"],
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                     keyboardType: TextInputType.number,
-                                    onChanged: (val) {
-                                      if (val.isEmpty) {
-                                        _controllers["motorPreflight"]!.text = "0";
+                                    onChanged: (value) {
+                                      if (value.isEmpty) {
+                                        //_controllers["motorPreflight"]!.text = "0";
                                       } else {
-                                        if (int.parse(val) > 100) {
+                                        if (int.parse(value) > 100) {
                                           _controllers["motorPreflight"]!.text = "100";
                                         }
                                       }
+
+                                      int percent = int.tryParse(value) ?? 0;
+
+                                      _program.value = program.copyWith(preflightMotorSpeedPercent: percent);
                                     },
                                   ),
                                 ),
@@ -368,9 +378,18 @@ class _EditProgramPageState extends State<EditProgramPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                saveProgram(context, id, repository);
+                            ProgressButton(
+                              onPressed: () async {
+                                if(_controllers["name"]!.text.isEmpty){
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBars.getErrorSnackBar(
+                                      message: "Поле с именем программы не может быть пустым",
+                                    ),
+                                  );
+                                }
+                                else{
+                                  await saveProgram(context, id, repository);
+                                }
                               },
                               child: Text("Сохранить"),
                             ),

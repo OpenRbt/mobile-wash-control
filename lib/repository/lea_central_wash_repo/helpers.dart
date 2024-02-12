@@ -9,7 +9,7 @@ class Helpers {
     res.motorSpeedPercent = program.motorSpeedPercent ?? 100;
     res.preflightMotorSpeedPercent = program.preflightMotorSpeedPercent ?? 100;
     res.preflightEnabled = program.preflightEnabled ?? false;
-    res.ifFinishingProgram = program.isFinishingProgram ?? false;
+    res.isFinishingProgram = program.isFinishingProgram ?? false;
 
     program.relays.forEach((element) {
       if ((element.timeon ?? 0) + (element.timeoff ?? 0) > 0) {
@@ -18,8 +18,7 @@ class Helpers {
     });
     program.preflightRelays.forEach((element) {
       if ((element.timeon ?? 0) + (element.timeoff ?? 0) > 0) {
-        res.relaysPreflight[element.id! - 1] =
-            entity.RelayConfig.FromApi(element.id!, element.timeon ?? 0, element.timeoff ?? 0);
+        res.relaysPreflight[element.id! - 1] = entity.RelayConfig.FromApi(element.id!, element.timeon ?? 0, element.timeoff ?? 0);
       }
     });
     return res;
@@ -37,20 +36,14 @@ class Helpers {
     );
   }
 
-  static entity.StationMoneyReport stationMoneyReportFromAPI(MoneyReport report) {
-    return entity.StationMoneyReport(
-      coins: report.coins,
-      banknotes: report.banknotes,
-      electronical: report.electronical,
-      service: report.service,
-      carsTotal: report.carsTotal,
-    );
+  static entity.StationMoneyReport stationMoneyReportFromAPI(MoneyReport report, int post) {
+    return entity.StationMoneyReport(coins: report.coins, banknotes: report.banknotes, electronical: report.electronical, service: report.service, carsTotal: report.carsTotal, qrMoney: report.qrMoney, bonuses: report.bonuses, post: post);
   }
 
   static entity.StationCollectionReport stationCollectionReportFromAPI(CollectionReportWithUser report) {
     DateTime? dateTime;
     if (report.ctime != null) {
-      dateTime = DateTime.fromMillisecondsSinceEpoch(report.ctime! * 1000);
+      dateTime = DateTime.fromMillisecondsSinceEpoch(report.ctime! * 1000, isUtc: true).toLocal();
     }
 
     return entity.StationCollectionReport(
@@ -59,6 +52,8 @@ class Helpers {
       banknotes: report.banknotes,
       electronical: report.electronical,
       service: report.service,
+      bonuses: report.bonuses,
+      qrMoney: report.qrMoney,
       carsTotal: report.carsTotal,
       ctime: dateTime,
       user: report.user,
@@ -99,8 +94,8 @@ class Helpers {
 
     return entity.DiscountCampaign(
       id: campaign.id,
-      startDate: DateTime.fromMillisecondsSinceEpoch(campaign.startDate * 1000),
-      endDate: DateTime.fromMillisecondsSinceEpoch(campaign.endDate * 1000),
+      startDate: DateTime.fromMillisecondsSinceEpoch(campaign.startDate * 1000, isUtc: true).toLocal(),
+      endDate: DateTime.fromMillisecondsSinceEpoch(campaign.endDate * 1000, isUtc: true).toLocal(),
       enabled: campaign.enabled,
       startMinute: campaign.startMinute,
       endMinute: campaign.endMinute,
@@ -108,8 +103,7 @@ class Helpers {
       discountPrograms: Set.from(
         List.generate(
           campaign.discountPrograms.length ?? 0,
-          (index) => entity.DiscountProgram(
-              programID: campaign.discountPrograms[index].programID, discount: campaign.discountPrograms[index].discount),
+          (index) => entity.DiscountProgram(programID: campaign.discountPrograms[index].programID, discount: campaign.discountPrograms[index].discount),
         ),
       ),
       weekDays: weekDays,
@@ -157,8 +151,8 @@ class Helpers {
 
     return AdvertisingCampaign(
       id: campaign.id,
-      startDate: campaign.startDate.millisecondsSinceEpoch ~/ 1000,
-      endDate: campaign.endDate.millisecondsSinceEpoch ~/ 1000,
+      startDate: campaign.startDate.toUtc().millisecondsSinceEpoch ~/ 1000,
+      endDate: campaign.endDate.toUtc().millisecondsSinceEpoch ~/ 1000,
       enabled: campaign.enabled,
       startMinute: campaign.startMinute,
       endMinute: campaign.endMinute,
@@ -189,6 +183,9 @@ class Helpers {
       case entity.RelayBoard.danBoard:
         relayBoard = RelayBoard.danBoard;
         break;
+      case entity.RelayBoard.all:
+        relayBoard = RelayBoard.all;
+        break;
     }
 
     return StationConfig(
@@ -201,10 +198,7 @@ class Helpers {
   }
 
   static entity.StationCardReaderConfig cardReaderConfigFromAPI(CardReaderConfig config) {
-    return entity.StationCardReaderConfig(
-        host: config.host,
-        port: config.port,
-        cardReader: entity.CardReader.fromString(config.cardReaderType?.toString() ?? ""));
+    return entity.StationCardReaderConfig(host: config.host, port: config.port, cardReader: entity.CardReader.fromString(config.cardReaderType?.toString() ?? ""));
   }
 
   static CardReaderConfig cardReaderConfigToAPI(int id, entity.StationCardReaderConfig config) {
@@ -262,5 +256,10 @@ class Helpers {
       cashier: config.cashier,
       cashierINN: config.cashierINN,
     );
+  }
+
+  ///Currently config.preflight locked to false
+  static ArgRunProgram RunProgramConfigToAPI(entity.RunProgramConfig config) {
+    return ArgRunProgram(hash: config.stationHash, programID: config.programID, preflight: false);
   }
 }

@@ -25,11 +25,13 @@ class RelayBoard {
 
   static const localGPIO = RelayBoard._(r'localGPIO');
   static const danBoard = RelayBoard._(r'danBoard');
+  static const all = RelayBoard._(r'all');
 
   /// List of all possible values in this [enum][RelayBoard].
   static const values = <RelayBoard>[
     localGPIO,
     danBoard,
+    all,
   ];
 
   static RelayBoard? fromJson(dynamic value) => RelayBoardTypeTransformer().decode(value);
@@ -70,6 +72,7 @@ class RelayBoardTypeTransformer {
       switch (data) {
         case r'localGPIO': return RelayBoard.localGPIO;
         case r'danBoard': return RelayBoard.danBoard;
+        case r'all': return RelayBoard.all;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');

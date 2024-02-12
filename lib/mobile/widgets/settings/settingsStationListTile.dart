@@ -8,19 +8,15 @@ class SettingsStationListTile extends StatelessWidget {
   final Repository repository;
   final void Function()? onPressed;
 
-  const SettingsStationListTile({super.key, required this.station, required this.index, required this.repository, this.onPressed});
+  const SettingsStationListTile(
+      {super.key, required this.station, required this.index, required this.repository, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     final isOnline = station?.status == "online";
-
     return ExpansionTile(
-      leading: IconButton(
-        icon: Icon(Icons.edit_outlined),
-        onPressed: onPressed,
-      ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -84,7 +80,12 @@ class SettingsStationListTile extends StatelessWidget {
               ),
             ),
           ],
-        )
+        ),
+        Divider(),
+        OutlinedButton(
+          onPressed: onPressed,
+          child: Text("Открыть настройки"),
+        ),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 class ResetMotorsStatsDialog extends StatelessWidget {
@@ -58,15 +59,15 @@ class ResetMotorsStatsDialog extends StatelessWidget {
                           return AlertDialog(
                             title: Text("Вы уверены?"),
                             actions: [
-                              TextButton(
+                              ProgressTextButton(
                                 onPressed: () async {
                                   _posts.forEach((key, value) async {
                                     if (value) {
-                                      await repository.resetStationStats(key);
+                                      await repository.resetStationStats(key, context: context);
                                     }
                                   });
-
                                   Navigator.pop(context);
+
                                   Navigator.of(context).pop();
                                 },
                                 child: Text("Да"),

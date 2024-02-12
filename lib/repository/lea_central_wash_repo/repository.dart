@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -11,11 +12,16 @@ import 'package:mobile_wash_control/repository/repository.dart';
 
 class LeaCentralRepository extends Repository {
   final DefaultApi api;
+  entity.User? _currentUser;
 
-  Timer? refresh;
+  Future? refresh;
+  final refreshDelay = Duration(seconds: 1, milliseconds: 500);
 
   ValueNotifier<List<entity.Station>?> _stations = ValueNotifier(null);
+  ValueNotifier<List<entity.Organization>?> _organizations = ValueNotifier(null);
   ValueNotifier<entity.KasseStatus?> _kasseStatus = ValueNotifier(null);
+  ValueNotifier<entity.ServiceStatus?> _bonusStatus = ValueNotifier(null);
+  ValueNotifier<entity.ServiceStatus?> _sbpStatus = ValueNotifier(null);
   ValueNotifier<String?> _lcwRepo = ValueNotifier(null);
   ValueNotifier<List<entity.Program>?> _programs = ValueNotifier(null);
   ValueNotifier<List<entity.User>?> _users = ValueNotifier(null);
@@ -23,22 +29,23 @@ class LeaCentralRepository extends Repository {
   ValueNotifier<List<String>?> _hashes = ValueNotifier(null);
 
   LeaCentralRepository(this.api) {
-    _startTimer();
+    _prepareStatusRefresh();
   }
-  void _startTimer() {
-    refresh = Timer(Duration(seconds: 1), () async {
+
+  void _prepareStatusRefresh() {
+    refresh = Future.delayed(refreshDelay, () async {
       await updateStatus();
-      _startTimer();
+      _prepareStatusRefresh();
     });
   }
 
   @override
   void dispose() {
-    refresh?.cancel();
-    refresh = null;
-
     _stations.dispose();
+    _organizations.dispose();
     _kasseStatus.dispose();
+    _bonusStatus.dispose();
+    _sbpStatus.dispose();
     _lcwRepo.dispose();
     _programs.dispose();
     _users.dispose();
@@ -48,7 +55,16 @@ class LeaCentralRepository extends Repository {
   ValueNotifier<List<entity.Station>?> getStationsNotifier() => _stations;
 
   @override
+  ValueNotifier<List<entity.Organization>?> getOrganizationsNotifier() => _organizations;
+
+  @override
   ValueNotifier<entity.KasseStatus?> getKasseStatusNotifier() => _kasseStatus;
+
+  @override
+  ValueNotifier<entity.ServiceStatus?> getBonusStatusNotifier() => _bonusStatus;
+
+  @override
+  ValueNotifier<entity.ServiceStatus?> getSbpStatusNotifier() => _sbpStatus;
 
   @override
   ValueNotifier<String?> getLCWRepoNotifier() => _lcwRepo;
@@ -67,6 +83,7 @@ class LeaCentralRepository extends Repository {
 
   @override
   Future<List<entity.Station>?> getStations() async {
+    print("get Stations");
     final stations = _stations.value;
     if (stations == null) {
       await updateStatus();
@@ -102,7 +119,7 @@ class LeaCentralRepository extends Repository {
         _lcwRepo.value = res?.lcwInfo;
       }
 
-      var hashes = <String>["-"];
+      var hashes = <String>[""];
       res?.stations.where((element) => element.hash != null).forEach((element) {
         hashes.add(element.hash!);
       });
@@ -110,16 +127,82 @@ class LeaCentralRepository extends Repository {
         _hashes.value = hashes;
       }
 
+      //bonus_status
+      //sbp_status
+      //res?.bonusStatus?;
       var kasseStatus = entity.KasseStatus(status: res?.kasseStatus?.value, info: res?.kasseInfo);
       if (_kasseStatus.value != kasseStatus) {
         _kasseStatus.value = kasseStatus;
       }
+
+      var bonusStatus = entity.ServiceStatus(
+          available: res?.bonusStatus?.available,
+          disabledOnServer: res?.bonusStatus?.disabledOnServer,
+          isConnected: res?.bonusStatus?.isConnected,
+          lastErr: res?.bonusStatus?.lastErr,
+          dateLastErrUTC: res?.bonusStatus?.dateLastErrUTC,
+          unpaidStations: res?.bonusStatus?.unpaidStations
+      );
+      if (_bonusStatus.value != bonusStatus) {
+        _bonusStatus.value = bonusStatus;
+      }
+
+      var sbpStatus = entity.ServiceStatus(
+          available: res?.sbpStatus?.available,
+          disabledOnServer: res?.sbpStatus?.disabledOnServer,
+          isConnected: res?.sbpStatus?.isConnected,
+          lastErr: res?.sbpStatus?.lastErr,
+          dateLastErrUTC: res?.sbpStatus?.dateLastErrUTC,
+          unpaidStations: res?.sbpStatus?.unpaidStations
+      );
+      if (_sbpStatus.value != sbpStatus) {
+        _sbpStatus.value = sbpStatus;
+      }
+
     } on ApiException catch (e) {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось обновить статус, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось обновить статус, Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<void> updateOrganizations({BuildContext? context}) async {
+    try {
+      //final res = await api.organizations();
+
+      var organizations = <entity.Organization>[];
+      for(int i = 0; i < 12; i++){
+        organizations.add(entity.Organization(
+          id: i.toString(),
+          name: "Organization$i",
+          description: "Описание$i",
+        ));
+      }
+
+      organizations.sort((a, b) => a.id!.compareTo(b.id!));
+      if (!listEquals(_organizations.value, organizations)) {
+        _organizations.value = organizations;
+      }
+      /*
+      if (_lcwRepo.value != res?.lcwInfo) {
+        _lcwRepo.value = res?.lcwInfo;
+      }
+      */
+
+    } on ApiException catch (e) {
+      switch (e.code) {
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось обновить статус, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -155,8 +238,7 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить список программ, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить список программ, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -170,20 +252,14 @@ class LeaCentralRepository extends Repository {
   @override
   Future<entity.Program?> getProgram(int id, {BuildContext? context}) async {
     try {
-      var programs = _programs.value;
-      if (programs == null) {
-        await updatePrograms();
-        programs = _programs.value;
-      }
+      var programs = await api.programs(ArgPrograms(programID: id));
 
-      var programsFiltered = programs!.where((program) => program.id == id);
-      return programsFiltered.isNotEmpty ? programsFiltered.first : null;
+      return Helpers.programFromApi(programs!.single);
     } on ApiException catch (e) {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось загрузить программу, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось загрузить программу, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -198,6 +274,7 @@ class LeaCentralRepository extends Repository {
 
   @override
   Future<entity.Station?> getStation(int id) async {
+    print("GetStations");
     var stations = _stations.value;
     if (stations == null) {
       await updateStatus();
@@ -231,14 +308,13 @@ class LeaCentralRepository extends Repository {
           programName: (programsFiltered != null && programsFiltered.isNotEmpty) ? programsFiltered.first.name : null,
         ));
       });
+
+      res.sort((a, b) => a.buttonID.compareTo(b.buttonID));
+
       return res;
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
-          if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики для поста $id"));
-          }
           break;
         default:
           if (context != null) {
@@ -289,14 +365,10 @@ class LeaCentralRepository extends Repository {
 
     try {
       final response = await api.stationReportCurrentMoney(args);
-      return Helpers.stationMoneyReportFromAPI(response!.moneyReport!);
+      return Helpers.stationMoneyReportFromAPI(response!.moneyReport!, id);
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
-          if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики для поста $id"));
-          }
           break;
         default:
           if (context != null) {
@@ -319,8 +391,7 @@ class LeaCentralRepository extends Repository {
       final args = ArgOpenStation(stationID: id);
       final response = await api.openStation(args);
       if (context != null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Выполнена открытие двери нв посту $id"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Выполнена открытие двери на посту $id"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -360,6 +431,11 @@ class LeaCentralRepository extends Repository {
         case HttpStatus.unauthorized:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
           }
           break;
         default:
@@ -408,26 +484,12 @@ class LeaCentralRepository extends Repository {
         id: id,
         name: program.name,
         price: program.price,
-        isFinishingProgram: program.ifFinishingProgram,
+        isFinishingProgram: program.isFinishingProgram,
         motorSpeedPercent: program.motorSpeedPercent,
         preflightMotorSpeedPercent: program.preflightMotorSpeedPercent,
         preflightEnabled: program.preflightEnabled,
-        relays: List.generate(
-          program.relays.length,
-          (index) => RelayConfig(
-            id: program.relays[index].id,
-            timeon: program.relays[index].timeOn,
-            timeoff: program.relays[index].timeOff,
-          ),
-        ),
-        preflightRelays: List.generate(
-          program.relaysPreflight.length,
-          (index) => RelayConfig(
-            id: program.relaysPreflight[index].id,
-            timeon: program.relaysPreflight[index].timeOn,
-            timeoff: program.relaysPreflight[index].timeOff,
-          ),
-        ),
+        relays: program.relays.where((element) => element.timeOn > 0).map((e) => RelayConfig(id: e.id, timeon: e.timeOn, timeoff: e.timeOff)).toList(),
+        preflightRelays: program.relaysPreflight.where((element) => element.timeOn > 0).map((e) => RelayConfig(id: e.id, timeon: e.timeOn, timeoff: e.timeOff)).toList(),
       );
 
       await api.setProgram(args);
@@ -439,8 +501,7 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сохранить программу, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сохранить программу, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -484,8 +545,7 @@ class LeaCentralRepository extends Repository {
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBars.getErrorSnackBar(message: "Не удалось получить список пользователей, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить список пользователей, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -511,8 +571,7 @@ class LeaCentralRepository extends Repository {
       final response = api.updateUser(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно обновлен"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно обновлен"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -521,10 +580,66 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином не найден"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином не найден"));
+          }
+          break;
+
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<void> updateUserPassword(entity.User user, entity.User currentUser, String oldPassword, String newPassword, {BuildContext? context}) async {
+    try {
+      final args = ArgUserPassword(
+        login: user.login,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      );
+      final response = await api.updateUserPassword(args);
+      if(user.login == currentUser.login){
+        api.apiClient.addDefaultHeader("Pin", newPassword);
+      }
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пароль пользователя ${user.login} успешно обновлен"));
+      }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.unauthorized:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.notFound:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
 
@@ -562,8 +677,7 @@ class LeaCentralRepository extends Repository {
       final response = await api.createUser(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно добавлен"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно добавлен"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -572,10 +686,14 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
         case HttpStatus.conflict:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином уже существует"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином уже существует"));
           }
           break;
 
@@ -598,18 +716,62 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
+  entity.User? currentUser() {
+    return _currentUser;
+  }
+
+  @override
+  Future<String?> getServerInfo({BuildContext? context}) async {
+    try {
+      final response = await api.getServerInfo();
+      return response?.bonusServiceURL;
+    }
+    on ApiException catch (e){
+      switch (e.code) {
+        case HttpStatus.unauthorized:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить ссылку на сервис бонусов, Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    }
+    catch (e) {
+
+    }
+  }
+
+  @override
   Future<entity.User?> getCurrentUser({BuildContext? context}) async {
+    if (_currentUser != null) {
+      return _currentUser;
+    }
     try {
       final response = await api.getUser();
 
       if (response != null) {
-        return Helpers.userFromApi(response);
+        _currentUser = Helpers.userFromApi(response);
+        return _currentUser;
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
           }
           break;
         default:
@@ -661,22 +823,17 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<entity.StationMoneyReport?> getStationMoneyReportsByDates(int id, DateTime startDate, DateTime endDate,
-      {BuildContext? context}) async {
-    final args = ArgStationReportDates(
-        id: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
+  Future<entity.StationMoneyReport?> getStationMoneyReportByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context}) async {
+    final args = ArgStationReportDates(id: id, startDate: startDate.toUtc().millisecondsSinceEpoch ~/ 1000, endDate: endDate.toUtc().millisecondsSinceEpoch ~/ 1000);
 
     try {
+      print(args.toJson().toString());
       final response = await api.stationReportDates(args);
 
-      return Helpers.stationMoneyReportFromAPI(response!.moneyReport!);
+      return Helpers.stationMoneyReportFromAPI(response!.moneyReport!, id);
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
-          if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики для поста $id"));
-          }
           break;
         default:
           if (context != null) {
@@ -694,25 +851,20 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<List<entity.StationCollectionReport>?> getStationCollectionReports(
-      int id, DateTime startDate, DateTime endDate) async {
-    final args = ArgCollectionReportDates(
-        stationID: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
+  Future<List<entity.StationCollectionReport>?> getStationCollectionReports(int id, DateTime startDate, DateTime endDate) async {
+    final args = ArgCollectionReportDates(stationID: id, startDate: startDate.toUtc().millisecondsSinceEpoch ~/ 1000, endDate: endDate.toUtc().millisecondsSinceEpoch ~/ 1000);
     final response = await api.stationCollectionReportDates(args);
 
     if (response?.collectionReports != null) {
-      return List.generate(response!.collectionReports.length,
-          (index) => Helpers.stationCollectionReportFromAPI(response!.collectionReports[index]));
+      return List.generate(response!.collectionReports.length, (index) => Helpers.stationCollectionReportFromAPI(response!.collectionReports[index]));
     }
 
     return null;
   }
 
   @override
-  Future<List<entity.StationStats>?> getStationsStatsByDates(int id, DateTime startDate, DateTime endDate,
-      {BuildContext? context}) async {
-    final args = ArgStationStatDates(
-        stationID: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
+  Future<List<entity.StationStats>?> getStationsStatsByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context}) async {
+    final args = ArgStationStatDates(stationID: id, startDate: startDate.toUtc().millisecondsSinceEpoch ~/ 1000, endDate: endDate.toUtc().millisecondsSinceEpoch ~/ 1000);
     try {
       final response = await api.stationStatDates(args: args);
 
@@ -722,10 +874,6 @@ class LeaCentralRepository extends Repository {
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
-          if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса для поста $id"));
-          }
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
@@ -764,10 +912,6 @@ class LeaCentralRepository extends Repository {
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
-          if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса  для поста $id"));
-          }
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
@@ -800,11 +944,9 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<entity.StationStats?> getStationStatsByDates(int id, DateTime startDate, DateTime endDate,
-      {BuildContext? context}) async {
+  Future<entity.StationStats?> getStationStatsByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context}) async {
     try {
-      final args = ArgStationStatDates(
-          stationID: id, startDate: startDate.millisecondsSinceEpoch ~/ 1000, endDate: endDate.millisecondsSinceEpoch ~/ 1000);
+      final args = ArgStationStatDates(stationID: id, startDate: startDate.toUtc().millisecondsSinceEpoch ~/ 1000, endDate: endDate.toUtc().millisecondsSinceEpoch ~/ 1000);
       final response = await api.stationStatDates(args: args);
 
       if (response != null && response.length > 0) {
@@ -813,10 +955,6 @@ class LeaCentralRepository extends Repository {
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
-          if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса для поста $id"));
-          }
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
@@ -855,10 +993,6 @@ class LeaCentralRepository extends Repository {
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
-          if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено статистики моторесурса для поста $id"));
-          }
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
@@ -886,9 +1020,107 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<void> resetStationStats(int id) async {
-    final args = ArgResetStationStat(stationID: id);
-    final res = await api.resetStationStat(args: args);
+  Future<List<entity.StationStats>> getAllStationStatsByDates(DateTime startDate, DateTime endDate, {BuildContext? context}) async {
+    try {
+      final args = ArgStationStatDates(startDate: startDate.toUtc().millisecondsSinceEpoch ~/ 1000, endDate: endDate.toUtc().millisecondsSinceEpoch ~/ 1000);
+      final response = await api.stationStatDates(args: args);
+
+      if (response != null && response.length > 0) {
+        final res = response.map((e) => Helpers.stationStatsFromAPI(e)).toList();
+
+        res.sort((a, b) => a.id!.compareTo(b.id!));
+
+        return res;
+      }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.notFound:
+          break;
+        case HttpStatus.unauthorized:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+
+    return [];
+  }
+
+  @override
+  Future<List<entity.StationStats>> getAllStationStatsCurrent({BuildContext? context}) async {
+    try {
+      final args = ArgStationStat();
+      final response = await api.stationStatCurrent(args: args);
+
+      if (response != null && response.length > 0) {
+        final res = response.map((e) => Helpers.stationStatsFromAPI(e)).toList();
+
+        res.sort((a, b) => a.id!.compareTo(b.id!));
+
+        return res;
+      }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.notFound:
+          break;
+        case HttpStatus.unauthorized:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+          }
+          break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+
+    return [];
+  }
+
+  @override
+  Future<void> resetStationStats(int id, {BuildContext? context}) async {
+    try {
+      final args = ArgResetStationStat(stationID: id);
+      final res = await api.resetStationStat(args: args);
+    } on ApiException catch (e) {
+      switch (e.code) {
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сбросить статистику поста - $id, Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
   }
 
   @override
@@ -935,8 +1167,7 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
           }
           break;
         case HttpStatus.unauthorized:
@@ -1025,15 +1256,13 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найден параметр конфига - $name"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найден параметр конфига - $name"));
           }
           break;
 
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBars.getErrorSnackBar(message: "Не удалось получить параметр конфига - $name, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить параметр конфига - $name, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -1050,7 +1279,7 @@ class LeaCentralRepository extends Repository {
   Future<String?> getConfigVarString(String name) async {
     var args = ArgGetConfigVar(name: name);
     final response = await api.getConfigVarString(args);
-    return response?.value;
+    return response?.value ?? "";
   }
 
   @override
@@ -1061,19 +1290,33 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<String?> getStationTemperature(int id) async {
-    if (_stations.value == null) {
-      await updateStatus();
-    }
-    final stations = _stations.value;
+  Future<String?> getStationTemperature(int id, {BuildContext? context}) async {
+    try {
+      if (_stations.value == null) {
+        await updateStatus();
+      }
+      final stations = _stations.value;
 
-    final stationFiltered = stations?.where((element) => element.id == id);
-    if ((stationFiltered?.length ?? 0) > 0) {
-      final station = stationFiltered!.single;
-      if (station.hash != null) {
-        final args = ArgLoad(hash: station.hash!, key: "curr_temp");
-        final response = api.load(args);
-        return response;
+      final stationFiltered = stations?.where((element) => element.id == id);
+      if ((stationFiltered?.length ?? 0) > 0) {
+        final station = stationFiltered!.single;
+        if (station.hash != null) {
+          final args = ArgLoad(hash: station.hash!, key: "curr_temp");
+          final response = api.load(args);
+          return response;
+        }
+      }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить температуру, Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
       }
     }
 
@@ -1092,15 +1335,13 @@ class LeaCentralRepository extends Repository {
       var args = ConfigVarInt(name: name, value: value);
       final response = await api.setConfigVarInt(args);
       if (context != null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Параметр конфига $name успешно установлен"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Параметр конфига $name успешно установлен"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBars.getErrorSnackBar(message: "Не удалось установить параметр конфига - $name, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось установить параметр конфига - $name, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -1115,6 +1356,11 @@ class LeaCentralRepository extends Repository {
   Future<void> setConfigVarString(String name, String value) async {
     var args = ConfigVarString(name: name, value: value);
     final response = await api.setConfigVarString(args);
+  }
+
+  @override
+  Future<void> deleteConfigVarString(String name, String value) async {
+
   }
 
   @override
@@ -1133,10 +1379,14 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста $id"));
           }
           break;
         default:
@@ -1161,8 +1411,7 @@ class LeaCentralRepository extends Repository {
       final response = await api.setStation(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация поста ${config.id} успешно сохранена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация поста ${config.id} успешно сохранена"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -1171,10 +1420,14 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста ${config.id}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста ${config.id}"));
           }
           break;
         case HttpStatus.unprocessableEntity:
@@ -1208,8 +1461,7 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера для поста $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера для поста $id"));
           }
           break;
         default:
@@ -1234,8 +1486,7 @@ class LeaCentralRepository extends Repository {
       final response = await api.setCardReaderConfig(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кардридера поста $id успешно сохранена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кардридера поста $id успешно сохранена"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -1244,10 +1495,14 @@ class LeaCentralRepository extends Repository {
             ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
           }
           break;
+        case HttpStatus.forbidden:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+          }
+          break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера поста $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера поста $id"));
           }
           break;
         case HttpStatus.unprocessableEntity:
@@ -1280,15 +1535,13 @@ class LeaCentralRepository extends Repository {
         stationID: id,
         buttons: List.generate(
           buttonsToSave.length,
-          (index) => ResponseStationButtonButtonsInner(
-              buttonID: buttonsToSave.elementAt(index).buttonID, programID: buttonsToSave.elementAt(index).programID),
+          (index) => ResponseStationButtonButtonsInner(buttonID: buttonsToSave.elementAt(index).buttonID, programID: buttonsToSave.elementAt(index).programID),
         ),
       );
 
       final response = await api.setStationButton(args);
       if (context != null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кнопок поста $id сохранена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кнопок поста $id сохранена"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
@@ -1323,8 +1576,7 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
           }
           break;
         case HttpStatus.unauthorized:
@@ -1400,5 +1652,253 @@ class LeaCentralRepository extends Repository {
         ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
       }
     }
+  }
+
+  @override
+  Future<List<entity.FirmwareVersion>?> getPostVersions(int id, {BuildContext? context}) async {
+    try {
+
+      final response = await api.getStationFirmwareVersions(id);
+      List<entity.FirmwareVersion> firmwareVersions = [];
+
+      for(int i = 0; i < response!.length; i++) {
+
+        firmwareVersions.add(
+            entity.FirmwareVersion(
+              id: response[i].id,
+              hashLua: response[i].hashLua,
+              hashEnv: response[i].hashEnv,
+              hashBinar: response[i].hashBinar,
+              builtAt: response[i].builtAt,
+              commitedAt:response[i].commitedAt,
+              isCurrent: response[i].isCurrent
+            )
+        );
+      }
+
+
+
+      return firmwareVersions;
+
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.notFound:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось выполнить программу, Ошибка: ${e.message ?? "не найден один из параметров переданного конфига"}"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<void> getServerVersions({BuildContext? context}) async {
+
+  }
+
+  @override
+  Future<void> getApplicationVersions({BuildContext? context}) async {
+
+  }
+
+  @override
+  Future<List<entity.Task>?> getTasks(int id, String status, {BuildContext? context}) async {
+    try {
+
+      final response = await api.getListTasks(stationID: id, status: status);
+      List<entity.Task> tasks = [];
+
+      for(int i = 0; i < response!.length; i++){
+        tasks.add(
+            entity.Task(
+              id: response[i].id,
+              stationID: response[i].hashCode,
+              type: entity.TaskType.fromString(response[i].type.value),
+              status: entity.TaskStatus.fromString(response[i].status.value),
+              error: response[i].error,
+              createdAt: response[i].createdAt,
+              startedAt: response[i].startedAt,
+              stoppedAt: response[i].startedAt,
+            )
+        );
+      }
+
+
+/*
+      for(int i = 0; i < 10; i++){
+        firmwareVersions.add(
+            entity.FirmwareVersion(
+              id: i + 1,
+              hashLua: "response[i].hashLua",
+              hashEnv: "response[i].hashEnv",
+              hashBinar: "response[i].hashBinar",
+              builtAt: DateTime(2023, 12, 22),
+              commitedAt: DateTime(2023, 12, 10),
+            )
+        );
+      }
+
+ */
+
+      return tasks;
+
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.notFound:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось выполнить программу, Ошибка: ${e.message ?? "не найден один из параметров переданного конфига"}"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<entity.BuildScript?> getCurrentBuildScript(int id, {BuildContext? context}) async {
+    try{
+      final response = await api.getBuildScript(id);
+
+      entity.BuildScript buildScript = entity.BuildScript(
+        id: (response?.id ?? 0),
+        stationID: (response?.stationID ?? 0),
+        name: (response?.name ?? ''),
+        commands: (response?.commangs ?? []),
+      );
+
+      return buildScript;
+
+    }  on ApiException catch (e) {
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить скрипт. ${e.message}"));
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<void> setCurrentBuildScript(int id, {BuildContext? context, required String name, required List<String> commands, int? copyFrom}) async {
+    try{
+      await api.setBuildScript(
+          SetBuildScript(
+            copyFromStationID: copyFrom,
+            stationID: id,
+            name: name,
+            commangs: commands
+          )
+      );
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Скрипт сохранён"));
+      }
+    }  on ApiException catch (e) {
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сохранить скрипт скрипт. ${e.message}"));
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<void> runProgram(entity.RunProgramConfig cfg, {BuildContext? context}) async {
+    try {
+      final args = Helpers.RunProgramConfigToAPI(cfg);
+      final response = await api.runProgram(args);
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Программа запущена"));
+      }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.notFound:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось выполнить программу, Ошибка: ${e.message ?? "не найден один из параметров переданного конфига"}"));
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+  }
+
+  @override
+  Future<List<entity.StationMoneyReport>> lastCollectionReportsStats({BuildContext? context}) async {
+    List<entity.StationMoneyReport> res = [];
+    try {
+      final response = await api.statusCollection();
+
+      response?.stations?.forEach(
+        (element) {
+          DateTime? tmpCtime;
+          if (element.ctime != null) {
+            tmpCtime = DateTime.fromMillisecondsSinceEpoch(element.ctime! * 1000, isUtc: true).toLocal();
+          }
+          final tmpResReport = entity.StationMoneyReport(
+            carsTotal: element.carsTotal,
+            coins: element.coins,
+            banknotes: element.banknotes,
+            electronical: element.electronical,
+            service: element.service,
+            bonuses: element.bonuses,
+            qrMoney: element.qrMoney,
+            post: element.id,
+            dateTime: tmpCtime,
+          );
+          if (tmpResReport.notEmpty()) {
+            res.add(tmpResReport);
+          }
+        },
+      );
+      res.sort((a, b) => a.post!.compareTo(b.post!));
+
+      return res;
+    } on ApiException catch (e) {
+      switch (e.code) {
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+      }
+    }
+    return res;
   }
 }

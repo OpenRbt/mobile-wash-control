@@ -1,8 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+
+enum UserRole { operator, engineer, admin }
 
 class UserEditPage extends StatefulWidget {
   @override
@@ -10,9 +16,12 @@ class UserEditPage extends StatefulWidget {
 }
 
 class _UserEditPageState extends State<UserEditPage> {
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _changePinKey = GlobalKey<FormState>();
   ValueNotifier<User?> _currentUser = ValueNotifier(null);
 
+  late UserRole? _selectedRole;
   User? _user;
   Map<String, TextEditingController> _controllers = Map();
 
@@ -22,6 +31,7 @@ class _UserEditPageState extends State<UserEditPage> {
     _controllers["firstname"] = TextEditingController();
     _controllers["lastname"] = TextEditingController();
     _controllers["middlename"] = TextEditingController();
+    _controllers["oldpin"] = TextEditingController();
     _controllers["pin"] = TextEditingController();
     _controllers["pinRepeat"] = TextEditingController();
     super.initState();
@@ -32,6 +42,7 @@ class _UserEditPageState extends State<UserEditPage> {
     _controllers["firstname"]!.text = _currentUser.value?.firstName ?? "";
     _controllers["lastname"]!.text = _currentUser.value?.lastName ?? "";
     _controllers["middlename"]!.text = _currentUser.value?.middleName ?? "";
+    _controllers["oldpin"]!.text = "";
     _controllers["pin"]!.text = "";
     _controllers["pinRepeat"]!.text = "";
   }
@@ -51,6 +62,7 @@ class _UserEditPageState extends State<UserEditPage> {
     final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
     final Repository repository = args[PageArgCode.repository];
     User? argUser = args[PageArgCode.user];
+
     if (_currentUser.value == null) {
       var user = argUser ?? User(login: '');
       _currentUser.value = user;
@@ -78,7 +90,7 @@ class _UserEditPageState extends State<UserEditPage> {
                           return AlertDialog(
                             title: Text("Удалить пользователя - ${argUser.login} ?"),
                             actions: [
-                              TextButton(
+                              ProgressTextButton(
                                 onPressed: () async {
                                   await repository.deleteUser(argUser.login, context: context);
                                   Navigator.pop(context);
@@ -146,8 +158,9 @@ class _UserEditPageState extends State<UserEditPage> {
                         ),
                       ],
                     ),
-                    argUser == null
-                        ? Row(
+                    SizedBox(height: 20),
+                    argUser != null ? Container():
+                    Row(
                             children: [
                               Flexible(
                                 flex: 1,
@@ -172,14 +185,12 @@ class _UserEditPageState extends State<UserEditPage> {
                                     FilteringTextInputFormatter.singleLineFormatter,
                                   ],
                                   keyboardType: TextInputType.number,
-                                  enabled: argUser == null,
                                 ),
                               ),
                             ],
-                          )
-                        : Container(),
-                    argUser == null
-                        ? Row(
+                          ),
+                    argUser != null ? Container():
+                    Row(
                             children: [
                               Flexible(
                                 flex: 1,
@@ -198,7 +209,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                   maxLength: 16,
                                   validator: (String? value) {
                                     if (value != _controllers["pin"]!.text) {
-                                      return "Введенные пины не совпадают";
+                                      return "Пины не совпадают";
                                     }
 
                                     return value!.length < 4 ? "Требуется не менее 4х символов" : null;
@@ -208,12 +219,10 @@ class _UserEditPageState extends State<UserEditPage> {
                                     FilteringTextInputFormatter.singleLineFormatter,
                                   ],
                                   keyboardType: TextInputType.number,
-                                  enabled: argUser == null,
                                 ),
                               ),
                             ],
-                          )
-                        : Container(),
+                          ),
                     Row(
                       children: [
                         Flexible(
@@ -280,10 +289,147 @@ class _UserEditPageState extends State<UserEditPage> {
                         ),
                       ],
                     ),
+                    argUser == null ? Container():
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: ElevatedButton(
+                        child: Text("Сменить пин"),
+                        onPressed: () {
+                          _controllers["oldpin"]!.text = "";
+                          _controllers["pin"]!.text = "";
+                          _controllers["pinRepeat"]!.text = "";
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Сменить пин"),
+                              content: SingleChildScrollView(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(maxHeight: 230),
+                                  child: Form(
+                                    key: _changePinKey,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              flex: 1,
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                "Старый пин:",
+                                                style: theme.textTheme.bodyLarge,
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              fit: FlexFit.tight,
+                                              child: TextFormField(
+                                                controller: _controllers["oldpin"]!,
+                                                maxLength: 16,
+                                                obscureText: true,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.digitsOnly,
+                                                  FilteringTextInputFormatter.singleLineFormatter,
+                                                ],
+                                                keyboardType: TextInputType.number,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              flex: 1,
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                "Новый пин:",
+                                                style: theme.textTheme.bodyLarge,
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              fit: FlexFit.tight,
+                                              child: TextFormField(
+                                                controller: _controllers["pin"]!,
+                                                obscureText: true,
+                                                maxLength: 16,
+                                                validator: (String? value) {
+                                                  return value!.length < 4 ? "Требуется не менее 4х символов" : null;
+                                                },
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.digitsOnly,
+                                                  FilteringTextInputFormatter.singleLineFormatter,
+                                                ],
+                                                keyboardType: TextInputType.number,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              flex: 1,
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                "Повторите новый пин:",
+                                                style: theme.textTheme.bodyLarge,
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              fit: FlexFit.tight,
+                                              child: TextFormField(
+                                                controller: _controllers["pinRepeat"]!,
+                                                obscureText: true,
+                                                maxLength: 16,
+                                                validator: (String? value) {
+                                                  if (value != _controllers["pin"]!.text) {
+                                                    return "Введенные пины не совпадают";
+                                                  }
+                                                  return value!.length < 4 ? "Требуется не менее 4х символов" : null;
+                                                },
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.digitsOnly,
+                                                  FilteringTextInputFormatter.singleLineFormatter,
+                                                ],
+                                                keyboardType: TextInputType.number,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              actionsPadding: EdgeInsets.all(8),
+                              actions: [
+                                ProgressButton(
+                                  onPressed: () async {
+                                    if (_changePinKey.currentState!.validate()) {
+                                      await repository.updateUserPassword(_currentUser.value!, repository.currentUser()!, _controllers["oldpin"]!.text, _controllers["pin"]!.text, context: context);
+                                      Navigator.pop(context);
+                                      //setState(() {});
+                                    }
+                                  },
+                                  child: Text("Подтвердить"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Отмена"),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                     ValueListenableBuilder(
                       valueListenable: _currentUser,
                       builder: (BuildContext context, User? u, Widget? child) {
-                        return Column(
+                        return repository.currentUser()?.login == u?.login ? Container():
+                        Column(
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -293,9 +439,11 @@ class _UserEditPageState extends State<UserEditPage> {
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Checkbox(
-                                  value: u?.isOperator ?? false,
+                                  value: ((u?.isOperator ?? false) && ((u?.isEngineer ?? false) == false) && ((u?.isAdmin ?? false) == false)) ? true : false,
                                   onChanged: (bool? value) {
-                                    _currentUser.value = _currentUser.value!.copyWith(isOperator: value);
+                                    _currentUser.value = _currentUser.value!.copyWith(isOperator: true);
+                                    _currentUser.value = _currentUser.value!.copyWith(isEngineer: false);
+                                    _currentUser.value = _currentUser.value!.copyWith(isAdmin: false);
                                   },
                                 ),
                               ],
@@ -308,13 +456,16 @@ class _UserEditPageState extends State<UserEditPage> {
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Checkbox(
-                                  value: u?.isEngineer ?? false,
+                                  value: (((u?.isOperator ?? false) == false) && (u?.isEngineer ?? false) && ((u?.isAdmin ?? false) == false)) ? true : false,
                                   onChanged: (bool? value) {
-                                    _currentUser.value = _currentUser.value!.copyWith(isEngineer: value);
+                                    _currentUser.value = _currentUser.value!.copyWith(isEngineer: true);
+                                    _currentUser.value = _currentUser.value!.copyWith(isOperator: false);
+                                    _currentUser.value = _currentUser.value!.copyWith(isAdmin: false);
                                   },
                                 ),
                               ],
                             ),
+                            repository.currentUser()?.isAdmin == true ?
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -323,13 +474,15 @@ class _UserEditPageState extends State<UserEditPage> {
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Checkbox(
-                                  value: u?.isAdmin ?? false,
+                                  value: (((u?.isOperator ?? false) == false) && ((u?.isEngineer ?? false) == false) && (u?.isAdmin ?? false)) ? true : false,
                                   onChanged: (bool? value) {
-                                    _currentUser.value = _currentUser.value!.copyWith(isAdmin: value);
+                                    _currentUser.value = _currentUser.value!.copyWith(isAdmin: true);
+                                    _currentUser.value = _currentUser.value!.copyWith(isEngineer: false);
+                                    _currentUser.value = _currentUser.value!.copyWith(isOperator: false);
                                   },
                                 ),
                               ],
-                            ),
+                            ): Container(),
                           ],
                         );
                       },
@@ -342,27 +495,30 @@ class _UserEditPageState extends State<UserEditPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      if (argUser != null) {
-                        await repository.updateUser(_currentUser.value!, context: context);
-                        _user = _currentUser.value!.copyWith(login: _currentUser.value!.login);
+              ProgressButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    if (argUser != null) {
+                      await repository.updateUser(_currentUser.value!, context: context);
+                      _user = _currentUser.value!.copyWith(login: _currentUser.value!.login);
 
-                        Navigator.pop(context);
-                      } else {
-                        await repository.createUser(_currentUser.value!, _controllers["pin"]!.text, context: context);
-                        Navigator.pop(context);
-                      }
+                      Navigator.pop(context);
+                    } else {
+                      await repository.createUser(_currentUser.value!, _controllers["pin"]!.text, context: context);
+                      Navigator.pop(context);
                     }
-                  },
-                  child: Text("Сохранить")),
+                  }
+                },
+                child: Text("Сохранить"),
+              ),
               ElevatedButton(
-                  onPressed: () {
-                    _currentUser.value = _user!.copyWith(login: _user!.login);
-                    initControllersValues();
-                  },
-                  child: Text("Отменить")),
+                onPressed: () {
+                  _currentUser.value = _user!.copyWith(login: _user!.login);
+                  initControllersValues();
+                  repository.updateUsers(context: context);
+                },
+                child: Text("Отменить"),
+              ),
             ],
           )
         ],

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
@@ -5,6 +7,8 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/home/incassationHistoryListTile.dart';
 import 'package:mobile_wash_control/mobile/widgets/home/incassationHistoryTotalListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+
+import '../../widgets/incasHistory/IncasHistoryView.dart';
 
 class IncassationHistoryPage extends StatefulWidget {
   @override
@@ -79,48 +83,32 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
                       );
                     },
                   ),
-                  ElevatedButton(
-                      onPressed: () async {
-                        DateTimeRange? range = await showDateRangePicker(
-                          context: context,
-                          firstDate: DateTime(2018),
-                          lastDate: DateTime.now(),
-                          initialEntryMode: DatePickerEntryMode.calendar,
-                          initialDateRange: DateTimeRange(
-                            start: _dateRange.value.start,
-                            end: _dateRange.value.end,
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
                           ),
-                        );
-                        if (range != null) {
-                          _dateRange.value = DateTimeRange(start: range.start, end: range.end.add(Duration(days: 1, microseconds: -1)));
-                        }
-                      },
-                      child: Text("Выбрать период")),
+                          onPressed: () async {
+                            DateTimeRange? range = await showDateRangePicker(
+                              context: context,
+                              firstDate: DateTime(2018),
+                              lastDate: DateTime.now(),
+                              initialEntryMode: DatePickerEntryMode.calendar,
+                              initialDateRange: DateTimeRange(
+                                start: _dateRange.value.start,
+                                end: _dateRange.value.end,
+                              ),
+                            );
+                            if (range != null) {
+                              _dateRange.value = DateTimeRange(start: range.start, end: range.end.add(Duration(days: 1, microseconds: -1)));
+                            }
+                          },
+                          child: Text("Выбрать период")),
+                  )
                 ],
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.date_range_outlined)),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.circle_outlined)),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.money)),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Icon(Icons.credit_card_outlined)),
-                ),
-              ],
             ),
           ),
           Expanded(
@@ -164,22 +152,7 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
                               total.service = (total.service ?? 0) + (element.service ?? 0);
                             });
 
-                            return Column(
-                              children: [
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: snapshot.data?.length ?? 0,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 4),
-                                        child: IncassationHistoryListTile(report: snapshot.data![index]),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                IncassationHistoryTotalListTile(report: total),
-                              ],
-                            );
+                            return IncasHistoryView(reports: (snapshot.data ?? []));
                           },
                         );
                       },

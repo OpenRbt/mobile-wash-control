@@ -199,16 +199,20 @@ class ApiClient {
           return ArgDelAdvertisingCampagin.fromJson(value);
         case 'ArgDelStation':
           return ArgDelStation.fromJson(value);
+        case 'ArgDispenserStop':
+          return ArgDispenserStop.fromJson(value);
         case 'ArgEndSession':
           return ArgEndSession.fromJson(value);
         case 'ArgGetConfigVar':
           return ArgGetConfigVar.fromJson(value);
         case 'ArgGetLevel':
           return ArgGetLevel.fromJson(value);
+        case 'ArgGetStationConfigVar':
+          return ArgGetStationConfigVar.fromJson(value);
+        case 'ArgGetStationConfigVar1':
+          return ArgGetStationConfigVar1.fromJson(value);
         case 'ArgGetStationDiscounts':
           return ArgGetStationDiscounts.fromJson(value);
-        case 'ArgIsAuthorized':
-          return ArgIsAuthorized.fromJson(value);
         case 'ArgLoad':
           return ArgLoad.fromJson(value);
         case 'ArgLoadFromStation':
@@ -261,6 +265,8 @@ class ApiClient {
           return ArgUserPassword.fromJson(value);
         case 'ArgUserUpdate':
           return ArgUserUpdate.fromJson(value);
+        case 'BuildScript':
+          return BuildScript.fromJson(value);
         case 'ButtonDiscount':
           return ButtonDiscount.fromJson(value);
         case 'CardReaderConfig':
@@ -277,12 +283,16 @@ class ApiClient {
           return ConfigVarString.fromJson(value);
         case 'CreateSession':
           return CreateSession.fromJson(value);
+        case 'CreateTask':
+          return CreateTask.fromJson(value);
+        case 'CreateTaskByHash':
+          return CreateTaskByHash.fromJson(value);
         case 'DeleteUser409Response':
           return DeleteUser409Response.fromJson(value);
         case 'DiscountProgram':
           return DiscountProgram.fromJson(value);
-        case 'IsAuthorized':
-          return IsAuthorized.fromJson(value);
+        case 'FirmwareVersion':
+          return FirmwareVersion.fromJson(value);
         case 'KasseConfig':
           return KasseConfig.fromJson(value);
         case 'KeyPair':
@@ -291,12 +301,18 @@ class ApiClient {
           return LoadRelayRequest.fromJson(value);
         case 'MoneyReport':
           return MoneyReport.fromJson(value);
+        case 'MoneyReportCreation':
+          return MoneyReportCreation.fromJson(value);
+        case 'Pay':
+          return Pay.fromJson(value);
+        case 'PayReceived':
+          return PayReceived.fromJson(value);
         case 'Program':
           return Program.fromJson(value);
         case 'ProgramStat':
           return ProgramStat.fromJson(value);
-        case 'RefreshSession':
-          return RefreshSession.fromJson(value);
+        case 'PublicKey':
+          return PublicKey.fromJson(value);
         case 'RelayBoard':
           return RelayBoardTypeTransformer().decode(value);
         case 'RelayConfig':
@@ -325,12 +341,22 @@ class ApiClient {
           return ResponseUserUpdate.fromJson(value);
         case 'ResponseVolumeDispenser':
           return ResponseVolumeDispenser.fromJson(value);
+        case 'ServerInfo':
+          return ServerInfo.fromJson(value);
+        case 'ServiceStatus':
+          return ServiceStatus.fromJson(value);
         case 'Session':
           return Session.fromJson(value);
-        case 'SessionRefresh':
-          return SessionRefresh.fromJson(value);
+        case 'SetBuildScript':
+          return SetBuildScript.fromJson(value);
         case 'StationConfig':
           return StationConfig.fromJson(value);
+        case 'StationConfigVarBool':
+          return StationConfigVarBool.fromJson(value);
+        case 'StationConfigVarInt':
+          return StationConfigVarInt.fromJson(value);
+        case 'StationConfigVarString':
+          return StationConfigVarString.fromJson(value);
         case 'StationPrograms':
           return StationPrograms.fromJson(value);
         case 'StationProgramsProgramsInner':
@@ -351,6 +377,14 @@ class ApiClient {
           return StatusCollectionReport.fromJson(value);
         case 'StatusReport':
           return StatusReport.fromJson(value);
+        case 'Task':
+          return Task.fromJson(value);
+        case 'TaskPage':
+          return TaskPage.fromJson(value);
+        case 'TaskStatus':
+          return TaskStatusTypeTransformer().decode(value);
+        case 'TaskType':
+          return TaskTypeTypeTransformer().decode(value);
         case 'UserConfig':
           return UserConfig.fromJson(value);
         case 'UsersReport':

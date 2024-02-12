@@ -7,7 +7,8 @@ class IncassationHistoryListTile extends StatelessWidget {
 
   IncassationHistoryListTile({super.key, required this.report});
 
-  final _dateFormatter = DateFormat('dd.MM.yyyy HH:mm:ss');
+  final _dateFormatter = DateFormat('dd.MM.yyyy');
+  final _timeFormatter = DateFormat('HH:mm:ss');
 
   @override
   Widget build(BuildContext context) {
@@ -15,47 +16,64 @@ class IncassationHistoryListTile extends StatelessWidget {
 
     return Column(
       children: [
-        Row(
-          children: [
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Text(
-                "${report.ctime != null ? _dateFormatter.format(report.ctime!) : "нет данных"}",
-                style: theme.textTheme.titleLarge,
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(
-                  "${report.coins ?? 0}",
-                  style: theme.textTheme.titleLarge,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(
-                  "${report.banknotes ?? 0}",
-                  style: theme.textTheme.titleLarge,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(
-                  "${report.electronical ?? 0}",
-                  style: theme.textTheme.titleLarge,
-                ),
-              ),
-            ),
-          ],
+        LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return Row(
+                children: [
+                  Container(
+                    width: constraints.maxWidth * 0.4,
+                    child: Column(
+                      children: [
+                        Text(
+                          "${report.ctime != null ? _dateFormatter.format(report.ctime!) : "нет данных"}",
+                          style: theme.textTheme.titleLarge,
+                        ),
+                        Text(
+                          "${report.ctime != null ? _timeFormatter.format(report.ctime!) : "нет данных"}",
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: constraints.maxWidth * 0.2,
+                    child: Center(
+                      child: Text(
+                        "${report.coins ?? 0}",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: constraints.maxWidth * 0.2,
+                    child: Center(
+                      child: Text(
+                        "${report.banknotes ?? 0}",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: constraints.maxWidth * 0.1,
+                    child: Center(
+                      child: Text(
+                        "${report.electronical ?? 0}",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: constraints.maxWidth * 0.1,
+                    child: Center(
+                      child: Text(
+                        "${report.bonuses ?? 0}",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
         ),
         Row(),
       ],

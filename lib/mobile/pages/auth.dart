@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,9 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/auth/authButton.dart';
+import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart' as lcw;
 import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
+import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../Common/common.dart';
+import '../../Common/lcw_common.dart';
+import '../../Common/management_common.dart';
+import '../../Common/sbp_common.dart';
+import '../widgets/common/snackBars.dart';
 
 class Auth extends StatefulWidget {
   final String host;
@@ -23,6 +32,8 @@ class _AuthState extends State<Auth> {
 
   late TextEditingController pinController;
 
+  Repository? _repo = null;
+
   @override
   void initState() {
     pinController = TextEditingController();
@@ -32,6 +43,7 @@ class _AuthState extends State<Auth> {
   @override
   void dispose() {
     pinController.dispose();
+    _repo?.dispose();
     super.dispose();
   }
 
@@ -39,6 +51,9 @@ class _AuthState extends State<Auth> {
     try {
       var client = lcw.DefaultApi(lcw.ApiClient(basePath: widget.host));
       client.apiClient.addDefaultHeader("Pin", pinController.text);
+
+      LcwCommon.initializeApis(widget.host, pinController.text);
+
       final prefs = await SharedPreferences.getInstance();
       final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
 
@@ -46,16 +61,36 @@ class _AuthState extends State<Auth> {
       var repo = LeaCentralRepository(client);
       args[PageArgCode.repository] = repo;
 
-      final res = await repo.getCurrentUser();
-
+      final user = await repo.getCurrentUser();
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "Пользователя с таким паролем не существует",
+          ),
+        );
+        repo.dispose();
+        return;
+      }
+      _repo?.dispose();
+      _repo = repo;
       GlobalData.AddServiceValue = addServiceValue;
       SystemChrome.setPreferredOrientations([]);
-      Navigator.pushReplacementNamed(
+
+      String? bonusUrl = await repo.getServerInfo(context: context);
+      String basePath = "";
+      if(bonusUrl?.isNotEmpty ?? false){
+        basePath = (bonusUrl)! + '/api/bonus/admin';
+      }
+      Common.initializeApis(basePath);
+      SbpCommon.initializeApis((bonusUrl)! + '/api/sbp');
+      ManagementCommon.initializeApis((bonusUrl) + '/api/mngt');
+      Navigator.pushNamed(
         context,
         "/mobile/home",
         arguments: args,
       );
-    } catch (e) {}
+    } catch (e) {
+    }
   }
 
   Widget build(BuildContext context) {
@@ -119,7 +154,7 @@ class _AuthState extends State<Auth> {
                 crossAxisCount: 3,
                 childAspectRatio: 2,
                 children: List.generate(
-                  labels.length ?? 0,
+                  labels.length,
                   (index) {
                     return AuthButton(
                       label: labels[index],

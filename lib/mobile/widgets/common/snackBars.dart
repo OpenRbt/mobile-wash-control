@@ -15,7 +15,11 @@ class SnackBars {
             Icons.check,
             color: Colors.white,
           ),
-          Text(message),
+          Flexible(
+            child: Text(
+              message,
+            ),
+          ),
         ],
       ),
     );
@@ -31,7 +35,11 @@ class SnackBars {
             Icons.warning_amber_outlined,
             color: Colors.white,
           ),
-          Text(message),
+          Flexible(
+            child: Text(
+              message,
+            ),
+          ),
         ],
       ),
     );
@@ -39,7 +47,7 @@ class SnackBars {
 
   static SnackBar getErrorSnackBar({required String message}) {
     return SnackBar(
-      duration: Duration(seconds: 1),
+      duration: Duration(seconds: 2),
       backgroundColor: Colors.red,
       content: Row(
         children: [
@@ -47,7 +55,11 @@ class SnackBars {
             Icons.error_outline,
             color: Colors.white,
           ),
-          Text(message),
+          Flexible(
+            child: Text(
+              message,
+            ),
+          ),
         ],
       ),
     );
