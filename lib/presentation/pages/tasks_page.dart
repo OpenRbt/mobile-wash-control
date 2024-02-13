@@ -7,6 +7,7 @@ import '../../entity/vo/page_args_codes.dart';
 import '../../mobile/widgets/common/washNavigationDrawer.dart';
 import '../../repository/repository.dart';
 import '../../utils/utils.dart';
+import '../widgets/cards/task_card.dart';
 
 class TasksPage extends StatelessWidget {
   const TasksPage({Key? key}) : super(key: key);
@@ -31,7 +32,15 @@ class _TasksPageView extends StatelessWidget {
     final Repository repository = args[PageArgCode.repository];
 
     return Scaffold(
-      appBar: AppBar(title: Text("Задачи на обновление")),
+      appBar: AppBar(title: Text("Задачи на обновление"), actions: [
+        IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: () {
+            showFilterModalDialog(context);
+          },
+        )
+      ],
+      ),
       drawer: WashNavigationDrawer(selected: SelectedPage.Tasks, repository: repository),
       body: SafeArea(
         child: Padding(
@@ -70,7 +79,7 @@ class _TasksView extends StatelessWidget {
                 itemCount: length,
                 physics: const ClampingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  return _TaskCardView(
+                  return TaskCardView(
                     id: tasks[index].id,
                     stationID: tasks[index].stationID,
                     versionID: tasks[index].versionID,
@@ -79,7 +88,7 @@ class _TasksView extends StatelessWidget {
                     error: tasks[index].error ?? '',
                     createdAt: formatDate(tasks[index].createdAt),
                     startedAt: (tasks[index].startedAt != null && (tasks[index].startedAt ?? '').isNotEmpty) ? formatDate(tasks[index].startedAt!) : '',
-                    stoppedAt: (tasks[index].stoppedAt != null && (tasks[index].stoppedAt ?? '').isNotEmpty)? formatDate(tasks[index].stoppedAt!) : '',
+                    stoppedAt: (tasks[index].stoppedAt != null && (tasks[index].stoppedAt ?? '').isNotEmpty) ? formatDate(tasks[index].stoppedAt!) : '',
                   );
                 },
               )
@@ -96,151 +105,97 @@ class _PaginateTaskView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.watch<TasksPageCubit>();
 
-    return StreamBuilder(
-        initialData: cubit.state,
-        stream: cubit.stream,
-        builder: (context, snapshot) {
+    return StreamBuilder<TasksPageState>(
+      initialData: cubit.state,
+      stream: cubit.stream,
+      builder: (context, snapshot) {
 
-          return Container(
+        final currentPage = snapshot.data!.tasksPageEntity.tasksPagination.page;
+        final totalPages = snapshot.data!.tasksPageEntity.tasksPagination.totalPages;
 
-          );
-        }
+        List<int> pageNumbers = _calculatePageNumbers(currentPage, totalPages);
+
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.first_page),
+              onPressed: currentPage > 1 ? () => cubit.goToPage(1) : null,
+            ),
+            IconButton(
+              icon: Icon(Icons.chevron_left),
+              onPressed: currentPage > 1 ? () => cubit.goToPage(currentPage - 1) : null,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: pageNumbers.map((i) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: OutlinedButton(
+                      child: Text('$i'),
+                      onPressed: () => cubit.goToPage(i),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: currentPage == i ? Colors.white : null,
+                        backgroundColor: currentPage == i ? Colors.red : null,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  )).toList(),
+                ),
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.chevron_right),
+              onPressed: currentPage < totalPages ? () => cubit.goToPage(currentPage + 1) : null,
+            ),
+            IconButton(
+              icon: Icon(Icons.last_page),
+              onPressed: currentPage < totalPages ? () => cubit.goToPage(totalPages) : null,
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  List<int> _calculatePageNumbers(int currentPage, int totalPages) {
+    int startPage = currentPage > 2 ? currentPage - 2 : 1;
+    int endPage = currentPage + 2 <= totalPages ? currentPage + 2 : totalPages;
+    int length = endPage - startPage + 1;
+    return List.generate(length, (index) => startPage + index);
   }
 }
 
+showFilterModalDialog(BuildContext widgetContext, ){
+  showDialog(
+      context: widgetContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Фильтры"),
+          content: ConstrainedBox(
+            constraints: const BoxConstraints.expand(width: 320, height: 100),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
 
-class _TaskCardView extends StatelessWidget {
-  final int id;
-  final int stationID;
-  final int? versionID;
-  final String taskType;
-  final String taskStatus;
-  final String error;
-  final String createdAt;
-  final String startedAt;
-  final String stoppedAt;
-
-  const _TaskCardView({
-    required this.id,
-    required this.stationID,
-    required this.versionID,
-    required this.taskType,
-    required this.taskStatus,
-    required this.error,
-    required this.createdAt,
-    required this.startedAt,
-    required this.stoppedAt,
-  });
-
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'queue':
-        return Colors.blue.shade400;
-      case 'started':
-        return Colors.orange.shade400;
-      case 'completed':
-        return Colors.green.shade400;
-      case 'error':
-        return Colors.red.shade600;
-      case 'canceled':
-        return Colors.grey.shade600;
-      default:
-        return Colors.black;
-    }
-  }
-
-  IconData _getStatusIcon(String status) {
-    switch (status) {
-      case 'completed':
-        return Icons.check_circle;
-      case 'error':
-        return Icons.error;
-      case 'canceled':
-        return Icons.cancel;
-      default:
-        return Icons.hourglass_empty;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Color statusColor = _getStatusColor(taskStatus);
-    IconData statusIcon = _getStatusIcon(taskStatus);
-    return Card(
-      elevation: 5,
-      color: statusColor,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _cardHeader(statusIcon, statusColor),
-            Divider(color: Colors.white70),
-            _cardInfoSection(),
-            Divider(color: Colors.white70),
-            _cardDatesSection(),
-            if (error.isNotEmpty) ...[
-              Divider(color: Colors.white70),
-              _cardErrorSection(),
-            ]
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Ок")
+            )
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _cardHeader(IconData statusIcon, Color statusColor) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text('Задача #$id', style: TextStyles.cardHeader(),),
-        Icon(statusIcon, color: Colors.white),
-      ],
-    );
-  }
-
-  Widget _cardInfoSection() {
-    return Row(
-      children: <Widget>[
-        Expanded(child: _cardKeyValueRow('Тип:', taskType)),
-        Expanded(child: _cardKeyValueRow('Статус:', taskStatus)),
-      ],
-    );
-  }
-
-  Widget _cardDatesSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text('Время', style: TextStyles.cardSubHeader()),
-        _cardKeyValueRow('Создана:', createdAt),
-        _cardKeyValueRow('Начата:', startedAt),
-        _cardKeyValueRow('Прекращена:', stoppedAt),
-      ],
-    );
-  }
-
-  Widget _cardErrorSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text('Ошибка', style: TextStyles.cardSubHeader()),
-        Text(error, style: TextStyles.cardText()),
-      ],
-    );
-  }
-
-  Widget _cardKeyValueRow(String key, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
-      child: Row(
-        children: <Widget>[
-          Text(key, style: TextStyles.cardTextBold()),
-          SizedBox(width: 8),
-          Expanded(child: Text(value, style: TextStyles.cardText())),
-        ],
-      ),
-    );
-  }
+        );
+      }
+  );
 }

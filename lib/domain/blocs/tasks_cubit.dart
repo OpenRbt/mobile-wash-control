@@ -66,4 +66,30 @@ class TasksPageCubit extends Cubit<TasksPageState> {
     emit(newState);
   }
 
+  Future<void> goToPage(int page) async {
+    final tasksPagination = await LcwTransport.getTasksPage(
+        state.tasksPageEntity.copyWith(
+            tasksPagination: state.tasksPageEntity.tasksPagination.copyWith(page: page)
+        )
+    );
+
+    final tasksPageEntity = state.tasksPageEntity.copyWith(tasksPagination: tasksPagination);
+    final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
+
+    emit(newState);
+  }
+
+  void addFilter ({TaskType? taskType, TaskStatus? taskStatus, int? postNumber}) {
+
+  }
+
+  Future<void> getTasks() async {
+    final tasksPagination = await LcwTransport.getTasksPage(state.tasksPageEntity);
+
+    final tasksPageEntity = state.tasksPageEntity.copyWith(tasksPagination: tasksPagination);
+    final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
+
+    emit(newState);
+  }
+
 }
