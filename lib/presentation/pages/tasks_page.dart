@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../styles/text_styles.dart';
 import '../../domain/blocs/tasks_cubit.dart';
 import '../../entity/vo/page_args_codes.dart';
 import '../../mobile/widgets/common/washNavigationDrawer.dart';
 import '../../repository/repository.dart';
 import '../../utils/utils.dart';
+import '../../utils/widgets_utils.dart';
 import '../widgets/cards/task_card.dart';
 
 class TasksPage extends StatelessWidget {
@@ -28,31 +28,45 @@ class _TasksPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final cubit = context.watch<TasksPageCubit>();
+
     final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
     final Repository repository = args[PageArgCode.repository];
 
-    return Scaffold(
-      appBar: AppBar(title: Text("Задачи на обновление"), actions: [
-        IconButton(
-          icon: Icon(Icons.filter_list),
-          onPressed: () {
-            showFilterModalDialog(context);
-          },
-        )
-      ],
-      ),
-      drawer: WashNavigationDrawer(selected: SelectedPage.Tasks, repository: repository),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const _TasksView(),
-              const _PaginateTaskView(),
+    return StreamBuilder(
+        initialData: cubit.state,
+        stream: cubit.stream,
+        builder: (context, snapshot) {
+          return Scaffold(
+            appBar: AppBar(title: Text("Задачи на обновление"), actions: [
+              IconButton(
+                icon: Icon(Icons.filter_list),
+                onPressed: () {
+                  showFilterModalDialog(context);
+                },
+              ),
+              IconButton(
+                icon: Icon( snapshot.requireData.tasksPageEntity.sorted ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
+                onPressed: () async {
+                  await cubit.changeSort();
+                },
+              )
             ],
-          ),
-        ),
-      ),
+            ),
+            drawer: WashNavigationDrawer(selected: SelectedPage.Tasks, repository: repository),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    const _TasksView(),
+                    const _PaginateTaskView(),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
     );
   }
 }
@@ -170,32 +184,72 @@ class _PaginateTaskView extends StatelessWidget {
   }
 }
 
-showFilterModalDialog(BuildContext widgetContext, ){
+showFilterModalDialog(BuildContext widgetContext) {
   showDialog(
-      context: widgetContext,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Фильтры"),
-          content: ConstrainedBox(
-            constraints: const BoxConstraints.expand(width: 320, height: 100),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
+    context: widgetContext,
+    builder: (BuildContext context) {
+      
+      final cubit = widgetContext.watch<TasksPageCubit>();
+      
+      return AlertDialog(
+        title: Text("Фильтры"),
+        content: StreamBuilder<TasksPageState>(
+          stream: cubit.stream,
+          initialData: cubit.state,
+          builder: (context, snapshot) {
 
-                ],
+            final state = snapshot.requireData;
+            final selectedTypes = state.tasksPageEntity.typeFilter;
+            final selectedStatuses = state.tasksPageEntity.statusFilter;
+
+            return ConstrainedBox(
+              constraints: const BoxConstraints.expand(width: 320),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Типы задач", style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    ...selectedTypes.keys.map((key) {
+                      return CheckboxListTile(
+                        title: Text(getTypeName(key.name)),
+                        value: selectedTypes[key],
+                        onChanged: (bool? value) {
+                          cubit.changeTypeFilter(key, value!);
+                        },
+                      );
+                    }).toList(),
+                    Divider(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Статусы", style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    ...selectedStatuses.keys.map((key) {
+                      return CheckboxListTile(
+                        title: Text(getStatusName(key.name)),
+                        value: selectedStatuses[key],
+                        onChanged: (bool? value) {
+                          cubit.changeStatusFilter(key, value!);
+                        },
+                      );
+                    }).toList(),
+                  ],
+                ),
               ),
-            ),
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await cubit.getTasks();
+              Navigator.of(context).pop();
+            },
+            child: Text("Ок"),
           ),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text("Ок")
-            )
-          ],
-        );
-      }
+        ],
+      );
+    },
   );
 }

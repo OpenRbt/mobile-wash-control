@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../styles/text_styles.dart';
+import '../../../utils/widgets_utils.dart';
 
 class TaskCardView extends StatelessWidget {
   final int id;
@@ -120,8 +121,8 @@ class _CardInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Expanded(child: _cardKeyValueRow('Тип:', _getTypeName(taskType))),
-        Expanded(child: _cardKeyValueRow('Статус:', _getStatusName(taskStatus))),
+        Expanded(child: _cardKeyValueRow('Тип:', getTypeName(taskType))),
+        Expanded(child: _cardKeyValueRow('Статус:', getStatusName(taskStatus))),
       ],
     );
   }
@@ -137,42 +138,6 @@ class _CardInfoSection extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _getTypeName(String type) {
-    switch (type) {
-      case 'build':
-        return 'сборка';
-      case 'update':
-        return 'обновление';
-      case 'reboot':
-        return 'перезагрузка';
-      case 'getVersions':
-        return 'получение версий';
-      case 'pullFirmware':
-        return 'выгрузка на сервер';
-      case 'setVersion':
-        return 'смена версии';
-      default:
-        return '';
-    }
-  }
-
-  String _getStatusName(String status) {
-    switch (status) {
-      case 'queue':
-        return 'в очереди';
-      case 'started':
-        return 'начата';
-      case 'completed':
-        return 'завершена';
-      case 'error':
-        return 'ошибка';
-      case 'canceled':
-        return 'отменена';
-      default:
-        return '';
-    }
   }
 }
 

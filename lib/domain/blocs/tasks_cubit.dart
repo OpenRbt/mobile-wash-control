@@ -47,8 +47,21 @@ class TasksPageCubit extends Cubit<TasksPageState> {
               totalPages: 0,
               totalItems: 0,
             ),
-            typeFilter: [],
-            statusFilter: [],
+            typeFilter: {
+              TaskType.build: false,
+              TaskType.update: false,
+              TaskType.reboot: false,
+              TaskType.getVersions: false,
+              TaskType.pullFirmware: false,
+              TaskType.setVersion: false,
+            },
+            statusFilter: {
+              TaskStatus.queue: false,
+              TaskStatus.started: false,
+              TaskStatus.completed: false,
+              TaskStatus.error: false,
+              TaskStatus.canceled: false,
+            },
             stationFilter: [],
             sorted: false
           )
@@ -58,12 +71,7 @@ class TasksPageCubit extends Cubit<TasksPageState> {
   }
 
   Future<void> _initialize() async {
-
-    final tasksPagination = await LcwTransport.getTasksPage(state.tasksPageEntity);
-    final tasksPageEntity = state.tasksPageEntity.copyWith(tasksPagination: tasksPagination);
-    final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
-
-    emit(newState);
+    await getTasks();
   }
 
   Future<void> goToPage(int page) async {
@@ -79,13 +87,44 @@ class TasksPageCubit extends Cubit<TasksPageState> {
     emit(newState);
   }
 
-  void addFilter ({TaskType? taskType, TaskStatus? taskStatus, int? postNumber}) {
+  void changeTypeFilter (TaskType key, bool value) {
+    final filter = state.tasksPageEntity.typeFilter;
+    filter[key] = value;
+
+    Map<TaskType, bool> newFilterState = Map();
+    newFilterState.addAll(filter);
+
+    final tasksPageEntity = state.tasksPageEntity.copyWith(typeFilter: newFilterState);
+    final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
+
+    emit(newState);
+  }
+
+  void changeStatusFilter (TaskStatus key, bool value) {
+    final filter = state.tasksPageEntity.statusFilter;
+    filter[key] = value;
+
+    Map<TaskStatus, bool> newFilterState = Map();
+    newFilterState.addAll(filter);
+
+    final tasksPageEntity = state.tasksPageEntity.copyWith(statusFilter: newFilterState);
+    final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
+
+    emit(newState);
+  }
+
+  Future<void> changeSort() async {
+    final sorted = !state.tasksPageEntity.sorted;
+    final tasksPageEntity = state.tasksPageEntity.copyWith(sorted: sorted);
+    final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
+    emit(newState);
+
+    await getTasks();
 
   }
 
   Future<void> getTasks() async {
     final tasksPagination = await LcwTransport.getTasksPage(state.tasksPageEntity);
-
     final tasksPageEntity = state.tasksPageEntity.copyWith(tasksPagination: tasksPagination);
     final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
 

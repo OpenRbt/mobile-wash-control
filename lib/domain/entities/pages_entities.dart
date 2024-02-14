@@ -41,8 +41,8 @@ class ServicesPageEntity {
 class TasksPageEntity {
 
   TasksPagination tasksPagination;
-  List<TaskType> typeFilter;
-  List<TaskStatus> statusFilter;
+  Map<TaskType, bool> typeFilter;
+  Map<TaskStatus, bool> statusFilter;
   List<int> stationFilter;
   bool sorted;
 
@@ -56,8 +56,8 @@ class TasksPageEntity {
 
   TasksPageEntity copyWith({
     TasksPagination? tasksPagination,
-    List<TaskType>? typeFilter,
-    List<TaskStatus>? statusFilter,
+    Map<TaskType, bool>? typeFilter,
+    Map<TaskStatus, bool>? statusFilter,
     List<int>? stationFilter,
     bool? sorted,
   }) {

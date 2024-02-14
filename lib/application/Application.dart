@@ -71,10 +71,7 @@ class Application extends StatelessWidget {
         "/mobile/settings/post": (context) => StationPage(),
         "/mobile/settings/kasse": (context) => KassePage(),
         "/mobile/settings/default": (context) => PresetsPage(),
-        "/mobile/services": (context) => ServicesPage(),
-        "/mobile/services/organizations": (context) => OrganizationsView(),
-        "/mobile/services/groups": (context) => CurrentOrganizationView(),
-        "/mobile/services/current-organization/current-group": (context) => CurrentGroupView(),
+
         "/mobile/services-auth": (context) => SettingsServicesRegistrationPage(),
         "/mobile/statistics": (context) => StatisticsPage(),
         "/mobile/motors": (context) => MotorPage(),
@@ -88,6 +85,8 @@ class Application extends StatelessWidget {
         "/mobile/updates": (context) => UpdatesPage(),
         "/mobile/updates/post": (context) => UpdateStationPage(),
 
+        //BLoC architecture pages
+        "/mobile/services": (context) => ServicesPage(),
         "/mobile/tasks": (context) => TasksPage(),
 
       },

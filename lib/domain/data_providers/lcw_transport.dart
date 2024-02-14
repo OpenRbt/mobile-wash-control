@@ -56,12 +56,16 @@ class LcwTransport {
     List<String> statuses = [];
     List<String> types = [];
 
-    tasksPageEntity.statusFilter.forEach((element) {
-      statuses.add(element.name);
+    tasksPageEntity.statusFilter.forEach((taskStatus, selected) {
+      if(selected) {
+        statuses.add(taskStatus.name);
+      }
     });
 
-    tasksPageEntity.typeFilter.forEach((element) {
-      types.add(element.name);
+    tasksPageEntity.typeFilter.forEach((taskType, selected) {
+      if(selected) {
+        types.add(taskType.name);
+      }
     });
 
     try {

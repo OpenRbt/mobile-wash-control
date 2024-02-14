@@ -209,6 +209,42 @@ enum TaskStatus {
   canceled
 }
 
+TaskType taskTypeFromString(String taskType) {
+  switch (taskType) {
+    case 'build':
+      return TaskType.build;
+    case 'update':
+      return TaskType.update;
+    case 'reboot':
+      return TaskType.reboot;
+    case 'getVersions':
+      return TaskType.getVersions;
+    case 'pullFirmware':
+      return TaskType.pullFirmware;
+    case 'setVersion':
+      return TaskType.setVersion;
+    default:
+      throw FormatException("Wrong task type in convertTaskTypeEnum");
+  }
+}
+
+TaskStatus taskStatusFromString(String taskStatus) {
+  switch (taskStatus) {
+    case 'queue':
+      return TaskStatus.queue;
+    case 'started':
+      return TaskStatus.started;
+    case 'completed':
+      return TaskStatus.completed;
+    case 'error':
+      return TaskStatus.error;
+    case 'canceled':
+      return TaskStatus.canceled;
+    default:
+      throw FormatException("Wrong task status in convertTaskStatusEnum");
+  }
+}
+
 TaskType convertTaskTypeEnum(lcw.TaskType? taskType) {
   switch (taskType?.value) {
     case r'build':
