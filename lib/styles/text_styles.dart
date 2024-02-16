@@ -17,6 +17,10 @@ class TextStyles {
     return const TextStyle(color: Colors.white);
   }
 
+  static TextStyle cardTextBlack() {
+    return const TextStyle(color: Colors.black);
+  }
+
   static TextStyle cardTextBold() {
     return const TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   }

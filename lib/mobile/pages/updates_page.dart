@@ -63,7 +63,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
                                 children: [
                                   Text("Пост: ${filteredStations[index].id.toString()}, "),
                                   SizedBox(width: 5,),
-                                  Text("Версия: 1.22")
+                                  Text("Версия: ${filteredStations[index].firmwareVersion}")
                                 ],
                               ),
                               trailing: OutlinedButton.icon(

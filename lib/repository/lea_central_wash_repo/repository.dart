@@ -108,6 +108,7 @@ class LeaCentralRepository extends Repository {
           currentProgramName: element.currentProgramName,
           currentProgram: element.currentProgram,
           ip: element.ip,
+          firmwareVersion: element.version?.id
         ));
       });
 

@@ -94,4 +94,63 @@ class LcwTransport {
     return tasksPagination;
   }
 
+  static Future<List<lcw.FirmwareVersion>> getPostVersions(int id) async {
+
+    List<lcw.FirmwareVersion> firmwareVersions = [];
+
+    try {
+
+      final response = await LcwCommon.defaultApi?.getStationFirmwareVersions(id);
+
+      response?.forEach((element) {
+        firmwareVersions.add(lcw.FirmwareVersion.fromMap(element.toJson()));
+      });
+
+    } on ApiException catch (e) {
+      throw FormatException("${e.code}: ${e.message}");
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+    return firmwareVersions;
+  }
+
+  static Future<void> createTask(
+      {required lcw.TaskType taskType, required int stationID, int? versionID}) async {
+
+    try {
+
+      final response = await LcwCommon.defaultApi?.createTask(
+        CreateTask(
+          stationID: stationID,
+          type: TaskType.fromString(taskType.name),
+          versionID: versionID
+        )
+      );
+
+    } on ApiException catch (e) {
+      throw FormatException("${e.code}: ${e.message}");
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<void> copyFromPostToPost(int originStationId, int destinationStationId) async {
+
+    try {
+
+      final response = await LcwCommon.defaultApi?.firmwareVersionsCopy(originStationId, destinationStationId);
+
+    } on ApiException catch (e) {
+      throw FormatException("${e.code}: ${e.message}");
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 }

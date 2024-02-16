@@ -1,6 +1,5 @@
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart' as lcw;
 
-
 class Task {
   int id;
   int stationID;
@@ -190,6 +189,99 @@ class TasksPagination {
       pageSize.hashCode ^
       totalPages.hashCode ^
       totalItems.hashCode;
+}
+
+class FirmwareVersion {
+
+  int id;
+  bool isCurrent;
+  String? hashLua;
+  String? hashEnv;
+  String? hashBinar;
+  String? builtAt;
+  String? commitedAt;
+
+  FirmwareVersion({
+    required this.id,
+    required this.isCurrent,
+    this.hashLua,
+    this.hashEnv,
+    this.hashBinar,
+    this.builtAt,
+    this.commitedAt,
+  });
+
+  FirmwareVersion copyWith({
+    int? id,
+    bool? isCurrent,
+    String? hashLua,
+    String? hashEnv,
+    String? hashBinar,
+    String? builtAt,
+    String? commitedAt,
+  }) {
+    return FirmwareVersion(
+      id: id ?? this.id,
+      isCurrent: isCurrent ?? this.isCurrent,
+      hashLua: hashLua ?? this.hashLua,
+      hashEnv: hashEnv ?? this.hashEnv,
+      hashBinar: hashBinar ?? this.hashBinar,
+      builtAt: builtAt ?? this.builtAt,
+      commitedAt: commitedAt ?? this.commitedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'FirmwareVersion{id: $id, isCurrent: $isCurrent, hashLua: $hashLua, hashEnv: $hashEnv, hashBinar: $hashBinar, builtAt: $builtAt, commitedAt: $commitedAt}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FirmwareVersion &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          isCurrent == other.isCurrent &&
+          hashLua == other.hashLua &&
+          hashEnv == other.hashEnv &&
+          hashBinar == other.hashBinar &&
+          builtAt == other.builtAt &&
+          commitedAt == other.commitedAt;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      isCurrent.hashCode ^
+      hashLua.hashCode ^
+      hashEnv.hashCode ^
+      hashBinar.hashCode ^
+      builtAt.hashCode ^
+      commitedAt.hashCode;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': this.id,
+      'isCurrent': this.isCurrent,
+      'hashLua': this.hashLua,
+      'hashEnv': this.hashEnv,
+      'hashBinar': this.hashBinar,
+      'builtAt': this.builtAt,
+      'commitedAt': this.commitedAt,
+    };
+  }
+
+  factory FirmwareVersion.fromMap(Map<String, dynamic> map) {
+    return FirmwareVersion(
+      id: map['id'] as int,
+      isCurrent: map['isCurrent'] as bool,
+      hashLua: map['hashLua'] as String,
+      hashEnv: map['hashEnv'] as String,
+      hashBinar: map['hashBinar'] as String,
+      builtAt: map['builtAt'] as String,
+      commitedAt: map['commitedAt'] as String,
+    );
+  }
 }
 
 enum TaskType {

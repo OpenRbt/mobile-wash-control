@@ -94,3 +94,45 @@ class TasksPageEntity {
       stationFilter.hashCode ^
       sorted.hashCode;
 }
+
+class UpdatesStationPageEntity {
+  int stationId;
+  FirmwareVersion currentVersionOnServer;
+  List<FirmwareVersion> availableVersions;
+
+  UpdatesStationPageEntity({
+    required this.stationId,
+    required this.currentVersionOnServer,
+    required this.availableVersions,
+  });
+
+  UpdatesStationPageEntity copyWith({
+    int? stationId,
+    FirmwareVersion? currentVersion,
+    List<FirmwareVersion>? avaliableVersions,
+  }) {
+    return UpdatesStationPageEntity(
+      stationId: stationId ?? this.stationId,
+      currentVersionOnServer: currentVersion ?? this.currentVersionOnServer,
+      availableVersions: avaliableVersions ?? this.availableVersions,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'UpdatesStationPageEntity{stationId: $stationId, currentVersion: $currentVersionOnServer, avaliableVersions: $availableVersions}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UpdatesStationPageEntity &&
+          runtimeType == other.runtimeType &&
+          stationId == other.stationId &&
+          currentVersionOnServer == other.currentVersionOnServer &&
+          availableVersions == other.availableVersions;
+
+  @override
+  int get hashCode =>
+      stationId.hashCode ^ currentVersionOnServer.hashCode ^ availableVersions.hashCode;
+}

@@ -11,8 +11,9 @@ class Station {
   int? currentProgram;
   String? currentProgramName;
   String? ip;
+  int? firmwareVersion;
 
-  Station({required this.id, this.name, this.hash, this.status, this.currentBalance, this.currentProgram, this.currentProgramName, this.ip});
+  Station({required this.id, this.name, this.hash, this.status, this.currentBalance, this.currentProgram, this.currentProgramName, this.ip, this.firmwareVersion});
 }
 
 class Organization {

@@ -42,6 +42,25 @@ class TaskType {
 
   static TaskType? fromJson(dynamic value) => TaskTypeTypeTransformer().decode(value);
 
+  static TaskType fromString(String type) {
+    switch (type) {
+      case 'build':
+        return TaskType.build;
+      case 'update':
+        return TaskType.update;
+      case 'reboot':
+        return TaskType.reboot;
+      case 'getVersions':
+        return TaskType.getVersions;
+      case 'pullFirmware':
+        return TaskType.pullFirmware;
+      case 'setVersion':
+        return TaskType.setVersion;
+      default:
+        throw FormatException("Wrong task type in converter");
+    }
+  }
+
   static List<TaskType>? listFromJson(dynamic json, {bool growable = false,}) {
     final result = <TaskType>[];
     if (json is List && json.isNotEmpty) {

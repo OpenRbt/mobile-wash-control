@@ -100,9 +100,9 @@ class _TasksView extends StatelessWidget {
                     taskType: tasks[index].taskType.name,
                     taskStatus: tasks[index].taskStatus.name,
                     error: tasks[index].error ?? '',
-                    createdAt: formatDate(tasks[index].createdAt),
-                    startedAt: (tasks[index].startedAt != null && (tasks[index].startedAt ?? '').isNotEmpty) ? formatDate(tasks[index].startedAt!) : '',
-                    stoppedAt: (tasks[index].stoppedAt != null && (tasks[index].stoppedAt ?? '').isNotEmpty) ? formatDate(tasks[index].stoppedAt!) : '',
+                    createdAt: formatDateWithTime(tasks[index].createdAt),
+                    startedAt: (tasks[index].startedAt != null && (tasks[index].startedAt ?? '').isNotEmpty) ? formatDateWithTime(tasks[index].startedAt!) : '',
+                    stoppedAt: (tasks[index].stoppedAt != null && (tasks[index].stoppedAt ?? '').isNotEmpty) ? formatDateWithTime(tasks[index].stoppedAt!) : '',
                   );
                 },
               )
