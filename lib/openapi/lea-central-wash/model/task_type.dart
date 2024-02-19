@@ -23,25 +23,6 @@ class TaskType {
 
   String toJson() => value;
 
-  static const build = TaskType._(r'build');
-  static const update = TaskType._(r'update');
-  static const reboot = TaskType._(r'reboot');
-  static const getVersions = TaskType._(r'getVersions');
-  static const pullFirmware = TaskType._(r'pullFirmware');
-  static const setVersion = TaskType._(r'setVersion');
-
-  /// List of all possible values in this [enum][TaskType].
-  static const values = <TaskType>[
-    build,
-    update,
-    reboot,
-    getVersions,
-    pullFirmware,
-    setVersion,
-  ];
-
-  static TaskType? fromJson(dynamic value) => TaskTypeTypeTransformer().decode(value);
-
   static TaskType fromString(String type) {
     switch (type) {
       case 'build':
@@ -60,6 +41,25 @@ class TaskType {
         throw FormatException("Wrong task type in converter");
     }
   }
+
+  static const build = TaskType._(r'build');
+  static const update = TaskType._(r'update');
+  static const reboot = TaskType._(r'reboot');
+  static const getVersions = TaskType._(r'getVersions');
+  static const pullFirmware = TaskType._(r'pullFirmware');
+  static const setVersion = TaskType._(r'setVersion');
+
+  /// List of all possible values in this [enum][TaskType].
+  static const values = <TaskType>[
+    build,
+    update,
+    reboot,
+    getVersions,
+    pullFirmware,
+    setVersion,
+  ];
+
+  static TaskType? fromJson(dynamic value) => TaskTypeTypeTransformer().decode(value);
 
   static List<TaskType>? listFromJson(dynamic json, {bool growable = false,}) {
     final result = <TaskType>[];
