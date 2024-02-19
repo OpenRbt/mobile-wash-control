@@ -284,6 +284,114 @@ class FirmwareVersion {
   }
 }
 
+class Station {
+  int id;
+  String? name;
+  String? hash;
+  StationStatus? status;
+  int? currentBalance;
+  int? currentProgram;
+  String? currentProgramName;
+  String? ip;
+  int? firmwareVersion;
+
+  Station({
+    required this.id,
+    this.name,
+    this.hash,
+    this.status,
+    this.currentBalance,
+    this.currentProgram,
+    this.currentProgramName,
+    this.ip,
+    this.firmwareVersion
+  });
+
+  Station copyWith({
+    int? id,
+    String? name,
+    String? hash,
+    StationStatus? status,
+    int? currentBalance,
+    int? currentProgram,
+    String? currentProgramName,
+    String? ip,
+    int? firmwareVersion,
+  }) {
+    return Station(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      hash: hash ?? this.hash,
+      status: status ?? this.status,
+      currentBalance: currentBalance ?? this.currentBalance,
+      currentProgram: currentProgram ?? this.currentProgram,
+      currentProgramName: currentProgramName ?? this.currentProgramName,
+      ip: ip ?? this.ip,
+      firmwareVersion: firmwareVersion ?? this.firmwareVersion,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': this.id,
+      'name': this.name,
+      'hash': this.hash,
+      'status': this.status,
+      'currentBalance': this.currentBalance,
+      'currentProgram': this.currentProgram,
+      'currentProgramName': this.currentProgramName,
+      'ip': this.ip,
+      'firmwareVersion': this.firmwareVersion,
+    };
+  }
+
+  factory Station.fromMap(Map<String, dynamic> map) {
+    return Station(
+      id: map['id'] as int,
+      name: map['name'],
+      hash: map['hash'],
+      status: convertStationStatusEnum(map['status']) ,
+      currentBalance: map['currentBalance'],
+      currentProgram: map['currentProgram'],
+      currentProgramName: map['currentProgramName'],
+      ip: map['ip'],
+      firmwareVersion: map['firmwareVersion'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Station{id: $id, name: $name, hash: $hash, status: $status, currentBalance: $currentBalance, currentProgram: $currentProgram, currentProgramName: $currentProgramName, ip: $ip, firmwareVersion: $firmwareVersion}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Station &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          hash == other.hash &&
+          status == other.status &&
+          currentBalance == other.currentBalance &&
+          currentProgram == other.currentProgram &&
+          currentProgramName == other.currentProgramName &&
+          ip == other.ip &&
+          firmwareVersion == other.firmwareVersion;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      hash.hashCode ^
+      status.hashCode ^
+      currentBalance.hashCode ^
+      currentProgram.hashCode ^
+      currentProgramName.hashCode ^
+      ip.hashCode ^
+      firmwareVersion.hashCode;
+}
+
 enum TaskType {
   build,
   update,
@@ -299,6 +407,11 @@ enum TaskStatus {
   completed,
   error,
   canceled
+}
+
+enum StationStatus {
+  offline,
+  online,
 }
 
 TaskType taskTypeFromString(String taskType) {
@@ -368,6 +481,17 @@ TaskStatus convertTaskStatusEnum(lcw.TaskStatus? taskStatus) {
       return TaskStatus.error;
     case r'canceled':
       return TaskStatus.canceled;
+    default:
+      throw FormatException("Wrong task status in convertTaskStatusEnum");
+  }
+}
+
+StationStatus convertStationStatusEnum(lcw.Status? stationStatus) {
+  switch (stationStatus?.value) {
+    case r'online':
+      return StationStatus.online;
+    case r'offline':
+      return StationStatus.offline;
     default:
       throw FormatException("Wrong task status in convertTaskStatusEnum");
   }

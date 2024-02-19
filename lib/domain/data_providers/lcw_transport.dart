@@ -109,7 +109,7 @@ class LcwTransport {
     } on ApiException catch (e) {
       throw FormatException("${e.code}: ${e.message}");
     } on FormatException catch (e) {
-      rethrow;
+      throw e;
     } catch (e) {
       rethrow;
     }
@@ -139,9 +139,7 @@ class LcwTransport {
   }
 
   static Future<void> copyFromPostToPost(int originStationId, int destinationStationId) async {
-
     try {
-
       final response = await LcwCommon.defaultApi?.firmwareVersionsCopy(originStationId, destinationStationId);
 
     } on ApiException catch (e) {
@@ -151,6 +149,28 @@ class LcwTransport {
     } catch (e) {
       rethrow;
     }
+  }
+
+  static Future<List<lcw.Station>> getStations() async {
+
+    List<lcw.Station> stations = [];
+
+    try {
+      final response = await LcwCommon.defaultApi?.status();
+
+      response?.stations.where((element) => element.id != null).forEach((element) {
+        stations.add(lcw.Station.fromMap(element.toJson()));
+      });
+
+    } on ApiException catch (e) {
+      throw FormatException("${e.code}: ${e.message}");
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+
+    return stations;
   }
 
 }

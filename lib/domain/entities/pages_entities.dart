@@ -99,28 +99,37 @@ class UpdatesStationPageEntity {
   int stationId;
   FirmwareVersion currentVersionOnServer;
   List<FirmwareVersion> availableVersions;
+  List<Station> availableStations;
+  int? copyFromStationId;
 
   UpdatesStationPageEntity({
     required this.stationId,
     required this.currentVersionOnServer,
     required this.availableVersions,
+    required this.availableStations,
+    required this.copyFromStationId,
   });
 
   UpdatesStationPageEntity copyWith({
     int? stationId,
-    FirmwareVersion? currentVersion,
-    List<FirmwareVersion>? avaliableVersions,
+    FirmwareVersion? currentVersionOnServer,
+    List<FirmwareVersion>? availableVersions,
+    List<Station>? availableStations,
+    int? copyFromStationId,
   }) {
     return UpdatesStationPageEntity(
       stationId: stationId ?? this.stationId,
-      currentVersionOnServer: currentVersion ?? this.currentVersionOnServer,
-      availableVersions: avaliableVersions ?? this.availableVersions,
+      currentVersionOnServer:
+          currentVersionOnServer ?? this.currentVersionOnServer,
+      availableVersions: availableVersions ?? this.availableVersions,
+      availableStations: availableStations ?? this.availableStations,
+      copyFromStationId: copyFromStationId ?? this.copyFromStationId,
     );
   }
 
   @override
   String toString() {
-    return 'UpdatesStationPageEntity{stationId: $stationId, currentVersion: $currentVersionOnServer, avaliableVersions: $availableVersions}';
+    return 'UpdatesStationPageEntity{stationId: $stationId, currentVersionOnServer: $currentVersionOnServer, availableVersions: $availableVersions, availableStations: $availableStations, copyFromStationId: $copyFromStationId}';
   }
 
   @override
@@ -130,9 +139,15 @@ class UpdatesStationPageEntity {
           runtimeType == other.runtimeType &&
           stationId == other.stationId &&
           currentVersionOnServer == other.currentVersionOnServer &&
-          availableVersions == other.availableVersions;
+          availableVersions == other.availableVersions &&
+          availableStations == other.availableStations &&
+          copyFromStationId == other.copyFromStationId;
 
   @override
   int get hashCode =>
-      stationId.hashCode ^ currentVersionOnServer.hashCode ^ availableVersions.hashCode;
+      stationId.hashCode ^
+      currentVersionOnServer.hashCode ^
+      availableVersions.hashCode ^
+      availableStations.hashCode ^
+      copyFromStationId.hashCode;
 }

@@ -52,7 +52,9 @@ class _UpdatesPageState extends State<UpdatesPage> {
                       if (stations == null) {
                         return Center(child: CircularProgressIndicator());
                       }
-                      List<Station> filteredStations = stations.where((station) => (station.hash?.isNotEmpty ?? false)).toList();
+                      List<Station> filteredStations = stations.where((station) => (station.hash?.isNotEmpty ?? false)&& station.status.toString() == 'online').toList();
+
+
                       return ListView.builder(
                           shrinkWrap: true,
                           itemCount: filteredStations.length,

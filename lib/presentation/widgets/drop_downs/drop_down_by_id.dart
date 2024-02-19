@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class DropDownByIdAndName extends StatelessWidget {
+class DropDownByID extends StatelessWidget {
 
   final List<dynamic> values;
   final dynamic currentValue;
   final Future<void>Function(dynamic value) onChanged;
   final bool canEdit;
 
-  const DropDownByIdAndName({
+  const DropDownByID({
     Key? key,
     required this.values,
     this.currentValue,
@@ -25,14 +25,14 @@ class DropDownByIdAndName extends StatelessWidget {
         values.length,
             (index) => DropdownMenuItem(
           value: values[index],
-          child: Text(values[index].name),
+          child: Text('${values[index].id}'),
         ),
       ),
       onChanged: canEdit ?
           (value) async {
         onChanged(value);
       }
-      : null,
+          : null,
     );
   }
 }

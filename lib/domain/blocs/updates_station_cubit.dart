@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/domain/entities/lcw_enteties.dart';
 
+import '../../mobile/widgets/common/snackBars.dart';
 import '../data_providers/lcw_transport.dart';
 import '../entities/pages_entities.dart';
 
@@ -38,7 +40,7 @@ class UpdatesStationPageState {
 
 class UpdatesStationPageCubit extends Cubit<UpdatesStationPageState> {
 
-  UpdatesStationPageCubit(int stationId) : super(
+  UpdatesStationPageCubit(int stationId, {required BuildContext context}) : super(
       UpdatesStationPageState(
           updatesStationPageEntity: UpdatesStationPageEntity(
             stationId: stationId,
@@ -47,84 +49,146 @@ class UpdatesStationPageCubit extends Cubit<UpdatesStationPageState> {
                 isCurrent: false
             ),
             availableVersions: [],
+            availableStations: [],
+            copyFromStationId: null,
           )
       )
   ) {
-    _initialize();
+    _initialize(context);
   }
 
-  Future<void> _initialize() async {
-    final firmwareVersions = await LcwTransport.getPostVersions(state.updatesStationPageEntity.stationId);
+  Future<void> _initialize(BuildContext context) async {
 
-    final updatesStationPageEntity = state.updatesStationPageEntity.copyWith(avaliableVersions: firmwareVersions);
-    final newState = state.copyWith(updatesStationPageEntity: updatesStationPageEntity);
+    int stationId = state.updatesStationPageEntity.stationId;
 
+    try {
+      final firmwareVersions = await LcwTransport.getPostVersions(stationId);
+
+      final stations = await LcwTransport.getStations();
+
+      final availableStations = stations.where((station) => ((station.hash?.isNotEmpty ?? false) && stationId != station.id && station.status.toString() == 'StationStatus.online')).toList();
+
+      final copyFromStationId = availableStations.length > 0 ? availableStations[0].id : null;
+
+      final updatesStationPageEntity = state.updatesStationPageEntity.copyWith(
+          availableVersions: firmwareVersions,
+          availableStations: availableStations,
+          copyFromStationId: copyFromStationId
+      );
+      final newState = state.copyWith(updatesStationPageEntity: updatesStationPageEntity);
+
+      emit(newState);
+    } on FormatException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+      rethrow;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+      rethrow;
+    }
+  }
+
+  Future<void> setVersion(int versionId) async {
+    try {
+      await LcwTransport.createTask(
+          taskType: TaskType.setVersion,
+          stationID: state.updatesStationPageEntity.stationId,
+          versionID: versionId
+      );
+      await reboot();
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> uploadVersion(int versionId) async {
+    try {
+      await LcwTransport.createTask(
+          taskType: TaskType.pullFirmware,
+          stationID: state.updatesStationPageEntity.stationId,
+          versionID: versionId
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> downLoadVersion() async {
+    try {
+      await LcwTransport.createTask(
+        taskType: TaskType.update,
+        stationID: state.updatesStationPageEntity.stationId,
+      );
+
+      await reboot();
+    } on FormatException catch (e) {
+    rethrow;
+    } catch (e) {
+    rethrow;
+    }
+
+  }
+
+  Future<void> update() async {
+    try {
+      await LcwTransport.createTask(
+        taskType: TaskType.build,
+        stationID: state.updatesStationPageEntity.stationId,
+      );
+
+      await downLoadVersion();
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> reboot() async {
+    try {
+      await LcwTransport.createTask(
+        taskType: TaskType.reboot,
+        stationID: state.updatesStationPageEntity.stationId,
+      );
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> hashVersions() async {
+    try {
+      await LcwTransport.createTask(
+        taskType: TaskType.getVersions,
+        stationID: state.updatesStationPageEntity.stationId,
+      );
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> changeCopyFromStationId(int id) async {
+    final newState = state.copyWith(updatesStationPageEntity: state.updatesStationPageEntity.copyWith(copyFromStationId: id));
     emit(newState);
   }
 
-  Future<void> setVersion(int versionId, int stationId) async {
-    await LcwTransport.createTask(
-        taskType: TaskType.setVersion,
-        stationID: stationId,
-        versionID: versionId
-    );
-    await reboot(stationId);
+  Future<void> copyVersionFromPostToPost() async {
+    try {
+      await LcwTransport.copyFromPostToPost(
+          state.updatesStationPageEntity.copyFromStationId!,
+          state.updatesStationPageEntity.stationId
+      );
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Future<void> uploadVersion(int versionId, int stationId) async {
-    await LcwTransport.createTask(
-        taskType: TaskType.pullFirmware,
-        stationID: stationId,
-        versionID: versionId
-    );
-  }
 
-  Future<void> downLoadVersion(int stationId) async {
-    await LcwTransport.createTask(
-        taskType: TaskType.update,
-        stationID: stationId,
-    );
-
-    await reboot(stationId);
-
-  }
-
-  Future<void> update(int stationId) async {
-    await LcwTransport.createTask(
-      taskType: TaskType.build,
-      stationID: stationId,
-    );
-
-    await downLoadVersion(stationId);
-
-  }
-
-  Future<void> reboot(int stationId) async {
-    await LcwTransport.createTask(
-      taskType: TaskType.reboot,
-      stationID: stationId,
-    );
-  }
-
-  Future<void> hashVersions(int stationId) async {
-    await LcwTransport.createTask(
-      taskType: TaskType.getVersions,
-      stationID: stationId,
-    );
-  }
-
-  //Пока не использовать. Разобраться, как должно работать
-  Future<void> copyVersionFromPostToPost(int originStationId, int destinationStationId, int versionId) async {
-    await LcwTransport.createTask(
-        taskType: TaskType.pullFirmware,
-        stationID: originStationId,
-        versionID: versionId
-    );
-
-    await LcwTransport.copyFromPostToPost(
-        originStationId,
-        destinationStationId
-    );
-  }
 
 }

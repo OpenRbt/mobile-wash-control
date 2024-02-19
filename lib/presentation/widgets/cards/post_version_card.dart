@@ -2,27 +2,25 @@ import 'package:flutter/material.dart';
 
 import 'package:mobile_wash_control/utils/utils.dart';
 
+import '../../../mobile/widgets/common/snackBars.dart';
 import '../../../styles/text_styles.dart';
 
 class PostVersionCard extends StatelessWidget {
-
   final int id;
-  final int stationId;
   final String builtAt;
   final String commitedAt;
   final String hashLua;
   final String hashEnv;
   final String hashBinar;
   final bool isCurrent;
-  final Future<void> Function(int id, int postId) onDownloadPressed;
-  final Future<void> Function(int id, int postId) onUploadPressed;
+  final Future<void> Function(int id) onDownloadPressed;
+  final Future<void> Function(int id) onUploadPressed;
 
   const PostVersionCard({
     super.key,
     required this.builtAt,
     required this.isCurrent,
     required this.id,
-    required this.stationId,
     required this.commitedAt,
     required this.onDownloadPressed,
     required this.onUploadPressed,
@@ -34,56 +32,90 @@ class PostVersionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        elevation: 5,
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(isCurrent ? 'ID: $id (текущая)' : 'ID: $id'),
-            subtitle: Text(id == 0 ? 'Начальная версия' :
-            '\nБилд от: ${formatDateWithoutTime(builtAt)} \n\n'
-                'Обновление от: ${formatDateWithoutTime(commitedAt)}'),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Row(
+                children: [
+                  Text('ID', style: TextStyles.cardTextBlackBold()),
+                  SizedBox(width: 8),
+                  Expanded(child: Text(id.toString())),
+                  isCurrent ? Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text('Текущая версия', style: TextStyle(color: Colors.green)),
+                  ) : Container(),
+                ],
+              ),
+            ),
+            Divider(color: Colors.grey),
+            _buildKeyValueRow('Built At:', id != 0 ? formatDateWithoutTime(builtAt) : 'Начальная версия'),
+            _buildKeyValueRow('Commited At:', id != 0 ? formatDateWithoutTime(commitedAt) : 'Начальная версия'),
+            Divider(color: Colors.grey),
+            _buildKeyValueRow('Hash LUA:', hashLua.isNotEmpty ? hashLua.substring(1, 4) + '...' + hashLua.substring(hashLua.length - 4, hashLua.length - 1) : ''),
+            _buildKeyValueRow('Hash ENV:', hashEnv.isNotEmpty ? hashEnv.substring(1, 4) + '...' + hashEnv.substring(hashEnv.length - 4, hashEnv.length - 1) : ''),
+            _buildKeyValueRow('Hash BIN:', hashBinar.isNotEmpty ? hashBinar.substring(1, 4) + '...' + hashBinar.substring(hashBinar.length - 4, hashBinar.length - 1) : ''),
+            Row(
               children: [
-                IconButton(
-                  icon: Icon(Icons.download_outlined),
-                  onPressed: isCurrent ? null :
-                      () async {
-                    await onDownloadPressed(id, stationId);
-                  },
-                  tooltip: 'Загрузить версию на пост',
-                  color: Colors.red,
+                Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: isCurrent ? null : () async {
+                        try {
+                          await onDownloadPressed(id);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Задача на загрузку версии создана"));
+                        } on FormatException catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                          rethrow;
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                          rethrow;
+                        }
+                      },
+                      icon: const Icon(Icons.download_outlined),
+                      label: const Text("Загрузить на пост"),
+                    ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.upload_outlined),
-                  onPressed: () async {
-                    await onUploadPressed(id, stationId);
-                  },
-                  tooltip: 'Выгрузить версию на сервер',
-                  color: Colors.red,
+                SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      try {
+                        await onUploadPressed(id);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Задача на выгрузку версии создана"));
+                      } on FormatException catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                        rethrow;
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                        rethrow;
+                      }
+                    },
+                    icon: const Icon(Icons.upload_outlined),
+                    label: const Text("Выгрузить в кэш сервера"),
+                  ),
                 ),
               ],
             ),
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(hashLua.isNotEmpty ? 'Hash lua: ${hashLua.substring(0, 4)}...${hashLua.substring(hashLua.length-4, hashLua.length-1)}' : '', style: TextStyles.cardTextBlack(),),
-                    Text(hashEnv.isNotEmpty ? 'Hash env: ${hashEnv.substring(0, 4)}...${hashEnv.substring(hashEnv.length-4, hashEnv.length-1)}' : '', style: TextStyles.cardTextBlack(),),
-                    Text(hashBinar.isNotEmpty ? 'Hash binar: ${hashBinar.substring(0, 4)}...${hashBinar.substring(hashBinar.length-4, hashBinar.length-1)}' : '', style: TextStyles.cardTextBlack(),),
-                  ],
-                ),
-              )
-            ],
-          )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildKeyValueRow(String key, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Text(key, style: TextStyles.cardTextBlackBold()),
+          SizedBox(width: 8),
+          Expanded(child: Text(value)),
         ],
-      )
+      ),
     );
   }
 }
-
-//

@@ -3735,7 +3735,6 @@ class DefaultApi {
 
     const contentTypes = <String>[];
 
-
     return apiClient.invokeAPI(
       path,
       'GET',

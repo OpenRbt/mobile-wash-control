@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/domain/entities/lcw_enteties.dart';
 import 'package:mobile_wash_control/domain/entities/pages_entities.dart';
 
+import '../../mobile/widgets/common/snackBars.dart';
 import '../data_providers/lcw_transport.dart';
 
 class TasksPageState {
@@ -37,7 +40,7 @@ class TasksPageState {
 
 class TasksPageCubit extends Cubit<TasksPageState> {
 
-  TasksPageCubit() : super(
+  TasksPageCubit({required BuildContext context}) : super(
       TasksPageState(
           tasksPageEntity: TasksPageEntity(
             tasksPagination: TasksPagination(
@@ -67,24 +70,38 @@ class TasksPageCubit extends Cubit<TasksPageState> {
           )
       )
   ) {
-    _initialize();
+    _initialize(context);
   }
 
-  Future<void> _initialize() async {
-    await getTasks();
+  Future<void> _initialize(BuildContext context) async {
+    try {
+      await getTasks();
+    } on FormatException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+      rethrow;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+      rethrow;
+    }
   }
 
   Future<void> goToPage(int page) async {
-    final tasksPagination = await LcwTransport.getTasksPage(
-        state.tasksPageEntity.copyWith(
-            tasksPagination: state.tasksPageEntity.tasksPagination.copyWith(page: page)
-        )
-    );
+    try {
+      final tasksPagination = await LcwTransport.getTasksPage(
+          state.tasksPageEntity.copyWith(
+              tasksPagination: state.tasksPageEntity.tasksPagination.copyWith(page: page)
+          )
+      );
 
-    final tasksPageEntity = state.tasksPageEntity.copyWith(tasksPagination: tasksPagination);
-    final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
+      final tasksPageEntity = state.tasksPageEntity.copyWith(tasksPagination: tasksPagination);
+      final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
 
-    emit(newState);
+      emit(newState);
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void changeTypeFilter (TaskType key, bool value) {
@@ -114,21 +131,32 @@ class TasksPageCubit extends Cubit<TasksPageState> {
   }
 
   Future<void> changeSort() async {
-    final sorted = !state.tasksPageEntity.sorted;
-    final tasksPageEntity = state.tasksPageEntity.copyWith(sorted: sorted);
-    final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
-    emit(newState);
+    try {
+      final sorted = !state.tasksPageEntity.sorted;
+      final tasksPageEntity = state.tasksPageEntity.copyWith(sorted: sorted);
+      final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
+      emit(newState);
 
-    await getTasks();
-
+      await getTasks();
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> getTasks() async {
-    final tasksPagination = await LcwTransport.getTasksPage(state.tasksPageEntity);
-    final tasksPageEntity = state.tasksPageEntity.copyWith(tasksPagination: tasksPagination);
-    final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
+    try {
+      final tasksPagination = await LcwTransport.getTasksPage(state.tasksPageEntity);
+      final tasksPageEntity = state.tasksPageEntity.copyWith(tasksPagination: tasksPagination);
+      final newState = state.copyWith(tasksPageEntity: tasksPageEntity);
 
-    emit(newState);
+      emit(newState);
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
 }

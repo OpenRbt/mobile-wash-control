@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../domain/blocs/tasks_cubit.dart';
 import '../../entity/vo/page_args_codes.dart';
+import '../../mobile/widgets/common/snackBars.dart';
 import '../../mobile/widgets/common/washNavigationDrawer.dart';
 import '../../repository/repository.dart';
 import '../../utils/utils.dart';
@@ -15,7 +16,7 @@ class TasksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider<TasksPageCubit> (
-      create: (_) => TasksPageCubit(),
+      create: (_) => TasksPageCubit(context: context),
       child: const _TasksPageView(),
       dispose: (context, value) => value.close(),
     );
@@ -48,9 +49,28 @@ class _TasksPageView extends StatelessWidget {
               IconButton(
                 icon: Icon( snapshot.requireData.tasksPageEntity.sorted ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
                 onPressed: () async {
-                  await cubit.changeSort();
+                  try {
+                    await cubit.changeSort();
+                  } on FormatException catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                  }
                 },
-              )
+              ),
+              IconButton(
+                icon: Icon(Icons.refresh_outlined),
+                onPressed: () async {
+                  try {
+                    await cubit.getTasks();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Данные обновлены"));
+                  } on FormatException catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                  }
+                },
+              ),
             ],
             ),
             drawer: WashNavigationDrawer(selected: SelectedPage.Tasks, repository: repository),
@@ -243,7 +263,13 @@ showFilterModalDialog(BuildContext widgetContext) {
         actions: [
           TextButton(
             onPressed: () async {
-              await cubit.getTasks();
+              try {
+                await cubit.getTasks();
+              } on FormatException catch (e) {
+                ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+              } catch (e) {
+                ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+              }
               Navigator.of(context).pop();
             },
             child: Text("Ок"),

@@ -21,6 +21,14 @@ class TextStyles {
     return const TextStyle(color: Colors.black);
   }
 
+  static TextStyle cardTextBlackBold() {
+    return const TextStyle(color: Colors.black, fontWeight: FontWeight.bold,);
+  }
+
+  static TextStyle cardBlackHeader() {
+    return const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black);
+  }
+
   static TextStyle cardTextBold() {
     return const TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   }
