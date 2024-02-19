@@ -97,7 +97,7 @@ class TasksPageEntity {
 
 class UpdatesStationPageEntity {
   int stationId;
-  FirmwareVersion currentVersionOnServer;
+  FirmwareVersion? currentVersionOnServer;
   List<FirmwareVersion> availableVersions;
   List<Station> availableStations;
   int? copyFromStationId;

@@ -29,8 +29,8 @@ class DropDownByID extends StatelessWidget {
         ),
       ),
       onChanged: canEdit ?
-          (value) async {
-        onChanged(value);
+          (dynamic value) async {
+        onChanged(value.id);
       }
           : null,
     );

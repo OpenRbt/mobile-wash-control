@@ -173,4 +173,24 @@ class LcwTransport {
     return stations;
   }
 
+  static Future<lcw.FirmwareVersion> getBufferedVersion(int id) async {
+
+    late lcw.FirmwareVersion bufferedVersion;
+
+    try {
+      final response = await LcwCommon.defaultApi?.getStationFirmwareVersionBuffered(id);
+
+       bufferedVersion = lcw.FirmwareVersion.fromMap(response!.toJson());
+
+    } on ApiException catch (e) {
+      throw FormatException("${e.code}: ${e.message}");
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+
+    return bufferedVersion;
+  }
+
 }

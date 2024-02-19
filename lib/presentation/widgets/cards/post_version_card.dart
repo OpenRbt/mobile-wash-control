@@ -53,8 +53,8 @@ class PostVersionCard extends StatelessWidget {
               ),
             ),
             Divider(color: Colors.grey),
-            _buildKeyValueRow('Built At:', id != 0 ? formatDateWithoutTime(builtAt) : 'Начальная версия'),
-            _buildKeyValueRow('Commited At:', id != 0 ? formatDateWithoutTime(commitedAt) : 'Начальная версия'),
+            _buildKeyValueRow('Собрана:', id != 0 ? formatDateWithoutTime(builtAt) : 'Начальная версия'),
+            _buildKeyValueRow('Обновление от:', id != 0 ? formatDateWithoutTime(commitedAt) : 'Начальная версия'),
             Divider(color: Colors.grey),
             _buildKeyValueRow('Hash LUA:', hashLua.isNotEmpty ? hashLua.substring(1, 4) + '...' + hashLua.substring(hashLua.length - 4, hashLua.length - 1) : ''),
             _buildKeyValueRow('Hash ENV:', hashEnv.isNotEmpty ? hashEnv.substring(1, 4) + '...' + hashEnv.substring(hashEnv.length - 4, hashEnv.length - 1) : ''),
@@ -95,7 +95,7 @@ class PostVersionCard extends StatelessWidget {
                       }
                     },
                     icon: const Icon(Icons.upload_outlined),
-                    label: const Text("Выгрузить в кэш сервера"),
+                    label: const Text("Выгрузить в буфер"),
                   ),
                 ),
               ],
@@ -106,16 +106,47 @@ class PostVersionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildKeyValueRow(String key, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Text(key, style: TextStyles.cardTextBlackBold()),
-          SizedBox(width: 8),
-          Expanded(child: Text(value)),
-        ],
-      ),
+}
+
+class BufferedVersionView extends StatelessWidget {
+
+  final String builtAt;
+  final String commitedAt;
+  final String hashLua;
+  final String hashEnv;
+  final String hashBinar;
+
+  const BufferedVersionView({super.key, required this.builtAt, required this.commitedAt, required this.hashLua, required this.hashEnv, required this.hashBinar});
+
+  @override
+  Widget build(BuildContext context) {
+
+    final builtAtCheck = formatDateWithoutTime(builtAt);
+    final commitedAtCheck = formatDateWithoutTime(commitedAt);
+
+    return Column(
+      children: [
+        _buildKeyValueRow('Собрана:', builtAtCheck != '1 января 0001' ? builtAtCheck : 'Начальная версия'),
+        _buildKeyValueRow('Обновление от:', commitedAtCheck != '1 января 0001' ? commitedAtCheck : 'Начальная версия'),
+        Divider(color: Colors.grey),
+        _buildKeyValueRow('Hash LUA:', hashLua.isNotEmpty ? hashLua.substring(1, 4) + '...' + hashLua.substring(hashLua.length - 4, hashLua.length - 1) : ''),
+        _buildKeyValueRow('Hash ENV:', hashEnv.isNotEmpty ? hashEnv.substring(1, 4) + '...' + hashEnv.substring(hashEnv.length - 4, hashEnv.length - 1) : ''),
+        _buildKeyValueRow('Hash BIN:', hashBinar.isNotEmpty ? hashBinar.substring(1, 4) + '...' + hashBinar.substring(hashBinar.length - 4, hashBinar.length - 1) : ''),
+      ],
     );
   }
+}
+
+
+Widget _buildKeyValueRow(String key, String value) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4.0),
+    child: Row(
+      children: [
+        Text(key, style: TextStyles.cardTextBlackBold()),
+        SizedBox(width: 8),
+        Expanded(child: Text(value)),
+      ],
+    ),
+  );
 }

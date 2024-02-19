@@ -44,10 +44,7 @@ class UpdatesStationPageCubit extends Cubit<UpdatesStationPageState> {
       UpdatesStationPageState(
           updatesStationPageEntity: UpdatesStationPageEntity(
             stationId: stationId,
-            currentVersionOnServer: FirmwareVersion(
-                id: 0,
-                isCurrent: false
-            ),
+            currentVersionOnServer: null,
             availableVersions: [],
             availableStations: [],
             copyFromStationId: null,
@@ -70,10 +67,17 @@ class UpdatesStationPageCubit extends Cubit<UpdatesStationPageState> {
 
       final copyFromStationId = availableStations.length > 0 ? availableStations[0].id : null;
 
+      FirmwareVersion? currentVersionOnServer = null;
+
+      if(copyFromStationId != null) {
+        currentVersionOnServer = await LcwTransport.getBufferedVersion(copyFromStationId);
+      }
+
       final updatesStationPageEntity = state.updatesStationPageEntity.copyWith(
           availableVersions: firmwareVersions,
           availableStations: availableStations,
-          copyFromStationId: copyFromStationId
+          copyFromStationId: copyFromStationId,
+          currentVersionOnServer: currentVersionOnServer
       );
       final newState = state.copyWith(updatesStationPageEntity: updatesStationPageEntity);
 
@@ -172,8 +176,23 @@ class UpdatesStationPageCubit extends Cubit<UpdatesStationPageState> {
   }
 
   Future<void> changeCopyFromStationId(int id) async {
-    final newState = state.copyWith(updatesStationPageEntity: state.updatesStationPageEntity.copyWith(copyFromStationId: id));
-    emit(newState);
+    try {
+
+      print(id.toString());
+
+      final currentVersionOnServer = await LcwTransport.getBufferedVersion(id);
+
+      final newState = state.copyWith(updatesStationPageEntity: state.updatesStationPageEntity.copyWith(
+          copyFromStationId: id,
+          currentVersionOnServer: currentVersionOnServer
+      ));
+
+      emit(newState);
+    } on FormatException catch (e) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> copyVersionFromPostToPost() async {

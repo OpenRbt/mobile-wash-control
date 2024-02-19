@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../domain/blocs/updates_station_cubit.dart';
 import '../../entity/vo/page_args_codes.dart';
 import '../../mobile/widgets/common/snackBars.dart';
+import '../../styles/text_styles.dart';
 import '../widgets/cards/post_version_card.dart';
 import '../widgets/drop_downs/drop_down_by_id.dart';
 
@@ -58,8 +59,8 @@ class _UpdatesStationPageView extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    const _AvailableVersionsView(),
                     const _CopyVersionView(),
+                    const _AvailableVersionsView(),
                   ],
                 ),
               ),
@@ -124,43 +125,63 @@ class _CopyVersionView extends StatelessWidget {
         builder: (context, snapshot) {
 
           final availableStations = snapshot.requireData.updatesStationPageEntity.availableStations;
+          final currentVersionOnServer = snapshot.requireData.updatesStationPageEntity.currentVersionOnServer;
 
           print(availableStations.length);
 
           return Padding(
             padding: EdgeInsets.all(4),
-            child: Row(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: ElevatedButton(
-                      onPressed: availableStations.length > 0 ? () async {
-                        try {
-                          await cubit.copyVersionFromPostToPost();
-                          await cubit.downLoadVersion();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Идёт копирование из кэша"));
-                        } on FormatException catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
-                        }
-                      } : null,
-                      child: Text('Загрузить версию из кэша станции #')
-                  ),
-                  flex: 4,
+                Row(
+                  children: [
+                    Text('Версия в буфере станции #'),
+                    SizedBox(width: 10,),
+                    Expanded(
+                        child: DropDownByID(
+                          canEdit: true,
+                          onChanged: (value) async {
+                            await cubit.changeCopyFromStationId(value);
+                          },
+                          values: availableStations,
+                          currentValue: availableStations.length > 0 ? availableStations[0] : null,
+                        )
+                    ),
+                  ],
                 ),
-                SizedBox(width: 10,),
-                Flexible(
-                    flex: 1,
-                    child: DropDownByID(
-                      canEdit: true,
-                      onChanged: (value) async {
-                        await cubit.changeCopyFromStationId(value);
-                      },
-                      values: availableStations,
-                      currentValue: availableStations.length > 0 ? availableStations[0] : null,
+                currentVersionOnServer != null ?
+                Container(
+                  color: Colors.white,
+                  child: Container(
+                    child: BufferedVersionView(
+                      builtAt: currentVersionOnServer.builtAt ?? '',
+                      commitedAt: currentVersionOnServer.commitedAt ?? '',
+                      hashLua: currentVersionOnServer.hashLua ?? '',
+                      hashBinar: currentVersionOnServer.hashBinar ?? '',
+                      hashEnv: currentVersionOnServer.hashEnv ?? '',
+                    ),
+                  ),
+                ) : Container(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                          onPressed: availableStations.length > 0 ? () async {
+                            try {
+                              await cubit.copyVersionFromPostToPost();
+                              await cubit.downLoadVersion();
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Идёт копирование из буфера"));
+                            } on FormatException catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                            }
+                          } : null,
+                          child: Text('Установить версию из буфера')
+                      ),
                     )
+                  ],
                 )
               ],
             ),
