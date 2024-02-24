@@ -18,7 +18,7 @@ class UniversalCard extends StatelessWidget {
         title: Text("$title: ${titleData} "),
         trailing: subTitle == null ? const SizedBox(width: 0, height: 0,) :
         Text("$subTitle: ${subTitleData ?? ""} "),
-        subtitle: const Row(
+        subtitle: Row(
         ),
         childrenPadding: const EdgeInsets.all(8.0),
         expandedAlignment: Alignment.center,
