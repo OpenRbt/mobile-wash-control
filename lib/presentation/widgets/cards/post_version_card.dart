@@ -95,7 +95,7 @@ class PostVersionCard extends StatelessWidget {
                       }
                     },
                     icon: const Icon(Icons.upload_outlined),
-                    label: const Text("Выгрузить в буфер"),
+                    label: const Text("Скопировать на сервер"),
                   ),
                 ),
               ],

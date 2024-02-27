@@ -133,7 +133,7 @@ class _CopyVersionView extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text('Версия в буфере станции #'),
+                    Text('Версия на сервере для станции #'),
                     SizedBox(width: 10,),
                     Expanded(
                         child: DropDownByID(
@@ -175,7 +175,7 @@ class _CopyVersionView extends StatelessWidget {
                               ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
                             }
                           } : null,
-                          child: Text('Установить версию из буфера')
+                          child: Text('Установить версию с сервера и перезагрузить')
                       ),
                     )
                   ],
@@ -242,7 +242,7 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
                       Navigator.of(context).pop();
                     },
                     icon: const Icon(Icons.list_alt_outlined),
-                    label: const Text("Захэшировать версии с поста"),
+                    label: const Text("Получить информацию о всех версиях поста и отобразить"),
                   ),
                 ),
               ],
@@ -265,7 +265,7 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
                       Navigator.of(context).pop();
                     },
                     icon: const Icon(Icons.download_for_offline_outlined),
-                    label: const Text("Скачать последнюю версию"),
+                    label: const Text("Скачать версию с github, собрать локально и перезагрузить"),
                   ),
                 ),
               ],
@@ -288,7 +288,7 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
                       Navigator.of(context).pop();
                     },
                     icon: const Icon(Icons.create_new_folder_outlined),
-                    label: const Text("Создать новую версию"),
+                    label: const Text("Скопировать на пост текущую версию и перезагрузить"),
                   ),
                 ),
               ],
