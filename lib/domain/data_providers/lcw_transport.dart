@@ -2,7 +2,7 @@ import 'package:mobile_wash_control/domain/entities/services_entities.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart';
 
 import '../../Common/lcw_common.dart';
-import '../entities/lcw_enteties.dart' as lcw;
+import '../entities/lcw_entities.dart' as lcw;
 import '../entities/pages_entities.dart';
 
 class LcwTransport {

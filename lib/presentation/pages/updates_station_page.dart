@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../domain/blocs/updates_station_cubit.dart';
 import '../../entity/vo/page_args_codes.dart';
 import '../../mobile/widgets/common/snackBars.dart';
-import '../../styles/text_styles.dart';
 import '../widgets/cards/post_version_card.dart';
 import '../widgets/drop_downs/drop_down_by_id.dart';
 
@@ -17,8 +16,6 @@ class UpdatesStationPage extends StatelessWidget {
 
     final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
     final int id = args[PageArgCode.stationID];
-
-
 
     return Provider<UpdatesStationPageCubit> (
       create: (_) {

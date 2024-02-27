@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_wash_control/domain/entities/lcw_enteties.dart';
+import 'package:mobile_wash_control/domain/entities/lcw_entities.dart';
 
 import '../../mobile/widgets/common/snackBars.dart';
 import '../data_providers/lcw_transport.dart';

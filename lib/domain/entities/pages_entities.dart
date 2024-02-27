@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:mobile_wash_control/domain/entities/user_entity.dart';
 
-import 'lcw_enteties.dart';
+import 'lcw_entities.dart';
 
 class ServicesPageEntity {
 
