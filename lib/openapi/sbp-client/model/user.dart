@@ -10,14 +10,23 @@
 
 part of openapi.api;
 
-class WashUpdate {
-  /// Returns a new [WashUpdate] instance.
-  WashUpdate({
+class User {
+  /// Returns a new [User] instance.
+  User({
+    this.id,
     this.name,
-    this.description,
-    this.terminalKey,
-    this.terminalPassword,
+    this.email,
+    this.role,
+    this.organization,
   });
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? id;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -33,7 +42,7 @@ class WashUpdate {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? description;
+  String? email;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -41,63 +50,64 @@ class WashUpdate {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? terminalKey;
+  UserRole? role;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? terminalPassword;
+  UserOrganization? organization;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WashUpdate &&
+  bool operator ==(Object other) => identical(this, other) || other is User &&
+     other.id == id &&
      other.name == name &&
-     other.description == description &&
-     other.terminalKey == terminalKey &&
-     other.terminalPassword == terminalPassword;
+     other.email == email &&
+     other.role == role &&
+     other.organization == organization;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
+    (id == null ? 0 : id!.hashCode) +
     (name == null ? 0 : name!.hashCode) +
-    (description == null ? 0 : description!.hashCode) +
-    (terminalKey == null ? 0 : terminalKey!.hashCode) +
-    (terminalPassword == null ? 0 : terminalPassword!.hashCode);
+    (email == null ? 0 : email!.hashCode) +
+    (role == null ? 0 : role!.hashCode) +
+    (organization == null ? 0 : organization!.hashCode);
 
   @override
-  String toString() => 'WashUpdate[name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword]';
+  String toString() => 'User[id=$id, name=$name, email=$email, role=$role, organization=$organization]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    if (this.id != null) {
+      json[r'id'] = this.id;
+    } else {
+      json[r'id'] = null;
+    }
     if (this.name != null) {
       json[r'name'] = this.name;
     } else {
       json[r'name'] = null;
     }
-    if (this.description != null) {
-      json[r'description'] = this.description;
+    if (this.email != null) {
+      json[r'email'] = this.email;
     } else {
-      json[r'description'] = null;
+      json[r'email'] = null;
     }
-    if (this.terminalKey != null) {
-      json[r'terminalKey'] = this.terminalKey;
+    if (this.role != null) {
+      json[r'role'] = this.role;
     } else {
-      json[r'terminalKey'] = null;
+      json[r'role'] = null;
     }
-    if (this.terminalPassword != null) {
-      json[r'terminalPassword'] = this.terminalPassword;
+    if (this.organization != null) {
+      json[r'organization'] = this.organization;
     } else {
-      json[r'terminalPassword'] = null;
+      json[r'organization'] = null;
     }
     return json;
   }
 
-  /// Returns a new [WashUpdate] instance and imports its values from
+  /// Returns a new [User] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static WashUpdate? fromJson(dynamic value) {
+  static User? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -106,27 +116,28 @@ class WashUpdate {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "WashUpdate[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "WashUpdate[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "User[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "User[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return WashUpdate(
+      return User(
+        id: mapValueOfType<String>(json, r'id'),
         name: mapValueOfType<String>(json, r'name'),
-        description: mapValueOfType<String>(json, r'description'),
-        terminalKey: mapValueOfType<String>(json, r'terminalKey'),
-        terminalPassword: mapValueOfType<String>(json, r'terminalPassword'),
+        email: mapValueOfType<String>(json, r'email'),
+        role: UserRole.fromJson(json[r'role']),
+        organization: UserOrganization.fromJson(json[r'organization']),
       );
     }
     return null;
   }
 
-  static List<WashUpdate>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <WashUpdate>[];
+  static List<User>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <User>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = WashUpdate.fromJson(row);
+        final value = User.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -135,12 +146,12 @@ class WashUpdate {
     return result.toList(growable: growable);
   }
 
-  static Map<String, WashUpdate> mapFromJson(dynamic json) {
-    final map = <String, WashUpdate>{};
+  static Map<String, User> mapFromJson(dynamic json) {
+    final map = <String, User>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashUpdate.fromJson(entry.value);
+        final value = User.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -149,13 +160,13 @@ class WashUpdate {
     return map;
   }
 
-  // maps a json object with a list of WashUpdate-objects as value to a dart map
-  static Map<String, List<WashUpdate>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<WashUpdate>>{};
+  // maps a json object with a list of User-objects as value to a dart map
+  static Map<String, List<User>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<User>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashUpdate.listFromJson(entry.value, growable: growable,);
+        final value = User.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

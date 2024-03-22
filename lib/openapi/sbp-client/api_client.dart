@@ -181,28 +181,32 @@ class ApiClient {
           return valueString == 'true' || valueString == '1';
         case 'DateTime':
           return value is DateTime ? value : DateTime.tryParse(value);
-        case 'Cancel':
-          return Cancel.fromJson(value);
         case 'Error':
           return Error.fromJson(value);
-        case 'FirebaseToken':
-          return FirebaseToken.fromJson(value);
-        case 'HealthCheck200Response':
-          return HealthCheck200Response.fromJson(value);
+        case 'Group':
+          return Group.fromJson(value);
+        case 'Healthcheck200Response':
+          return Healthcheck200Response.fromJson(value);
         case 'Notification':
           return Notification.fromJson(value);
-        case 'Pagination':
-          return Pagination.fromJson(value);
-        case 'Pay':
-          return Pay.fromJson(value);
-        case 'PayResponse':
-          return PayResponse.fromJson(value);
+        case 'Organization':
+          return Organization.fromJson(value);
+        case 'Payment':
+          return Payment.fromJson(value);
+        case 'PaymentCancellation':
+          return PaymentCancellation.fromJson(value);
+        case 'PaymentResponse':
+          return PaymentResponse.fromJson(value);
+        case 'User':
+          return User.fromJson(value);
+        case 'UserOrganization':
+          return UserOrganization.fromJson(value);
+        case 'UserRole':
+          return UserRoleTypeTransformer().decode(value);
         case 'Wash':
           return Wash.fromJson(value);
-        case 'WashCreate':
-          return WashCreate.fromJson(value);
-        case 'WashDelete':
-          return WashDelete.fromJson(value);
+        case 'WashCreation':
+          return WashCreation.fromJson(value);
         case 'WashUpdate':
           return WashUpdate.fromJson(value);
         default:

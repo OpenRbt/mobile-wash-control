@@ -12,7 +12,7 @@ import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../Common/common.dart';
+import '../../Common/bonus_common.dart';
 import '../../Common/lcw_common.dart';
 import '../../Common/management_common.dart';
 import '../../Common/sbp_common.dart';
@@ -81,7 +81,7 @@ class _AuthState extends State<Auth> {
       if(bonusUrl?.isNotEmpty ?? false){
         basePath = (bonusUrl)! + '/api/bonus/admin';
       }
-      Common.initializeApis(basePath);
+      BonusCommon.initializeApis(basePath);
       SbpCommon.initializeApis((bonusUrl)! + '/api/sbp');
       ManagementCommon.initializeApis((bonusUrl) + '/api/mngt');
       Navigator.pushNamed(

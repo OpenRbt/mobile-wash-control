@@ -10,9 +10,9 @@
 
 part of openapi.api;
 
-class HealthCheck200Response {
-  /// Returns a new [HealthCheck200Response] instance.
-  HealthCheck200Response({
+class Healthcheck200Response {
+  /// Returns a new [Healthcheck200Response] instance.
+  Healthcheck200Response({
     this.ok,
   });
 
@@ -25,7 +25,7 @@ class HealthCheck200Response {
   bool? ok;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is HealthCheck200Response &&
+  bool operator ==(Object other) => identical(this, other) || other is Healthcheck200Response &&
      other.ok == ok;
 
   @override
@@ -34,7 +34,7 @@ class HealthCheck200Response {
     (ok == null ? 0 : ok!.hashCode);
 
   @override
-  String toString() => 'HealthCheck200Response[ok=$ok]';
+  String toString() => 'Healthcheck200Response[ok=$ok]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -46,10 +46,10 @@ class HealthCheck200Response {
     return json;
   }
 
-  /// Returns a new [HealthCheck200Response] instance and imports its values from
+  /// Returns a new [Healthcheck200Response] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static HealthCheck200Response? fromJson(dynamic value) {
+  static Healthcheck200Response? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -58,24 +58,24 @@ class HealthCheck200Response {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "HealthCheck200Response[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "HealthCheck200Response[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "Healthcheck200Response[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "Healthcheck200Response[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return HealthCheck200Response(
+      return Healthcheck200Response(
         ok: mapValueOfType<bool>(json, r'ok'),
       );
     }
     return null;
   }
 
-  static List<HealthCheck200Response>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <HealthCheck200Response>[];
+  static List<Healthcheck200Response>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <Healthcheck200Response>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = HealthCheck200Response.fromJson(row);
+        final value = Healthcheck200Response.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -84,12 +84,12 @@ class HealthCheck200Response {
     return result.toList(growable: growable);
   }
 
-  static Map<String, HealthCheck200Response> mapFromJson(dynamic json) {
-    final map = <String, HealthCheck200Response>{};
+  static Map<String, Healthcheck200Response> mapFromJson(dynamic json) {
+    final map = <String, Healthcheck200Response>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = HealthCheck200Response.fromJson(entry.value);
+        final value = Healthcheck200Response.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -98,13 +98,13 @@ class HealthCheck200Response {
     return map;
   }
 
-  // maps a json object with a list of HealthCheck200Response-objects as value to a dart map
-  static Map<String, List<HealthCheck200Response>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<HealthCheck200Response>>{};
+  // maps a json object with a list of Healthcheck200Response-objects as value to a dart map
+  static Map<String, List<Healthcheck200Response>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<Healthcheck200Response>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = HealthCheck200Response.listFromJson(entry.value, growable: growable,);
+        final value = Healthcheck200Response.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

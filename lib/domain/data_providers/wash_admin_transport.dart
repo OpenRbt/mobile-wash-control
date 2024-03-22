@@ -1,5 +1,5 @@
 import '../../openapi/wash-admin-client/api.dart';
-import '../../Common/common.dart';
+import '../../Common/bonus_common.dart';
 import '../entities/services_entities.dart' as srvcEntity;
 
 class WashAdminTransport {
@@ -9,7 +9,7 @@ class WashAdminTransport {
     List<srvcEntity.Organization> organizations = [];
 
     try {
-      final res = await Common.organizationApi!.getOrganizations(limit: 100, offset: 0);
+      final res = await BonusCommon.organizationApi!.getOrganizations(limit: 100, offset: 0);
       res?.forEach((element) {
         organizations.add(srvcEntity.Organization.fromMap(element.toJson()));
       });
@@ -32,7 +32,7 @@ class WashAdminTransport {
 
     try {
 
-      final res = await Common.organizationApi!.getOrganizationById(id);
+      final res = await BonusCommon.organizationApi!.getOrganizationById(id);
       organization = srvcEntity.Organization.fromMap(res?.toJson() ?? {});
 
     }
@@ -53,7 +53,7 @@ class WashAdminTransport {
 
     try{
 
-      final res = await Common.serversGroupApi!.getServerGroups(
+      final res = await BonusCommon.serversGroupApi!.getServerGroups(
           limit: 100,
           offset: 0,
           organizationId : organizationId
@@ -79,7 +79,7 @@ class WashAdminTransport {
     srvcEntity.ServerGroup? serverGroup;
 
     try{
-      final res = await Common.serversGroupApi!.getServerGroupById(id);
+      final res = await BonusCommon.serversGroupApi!.getServerGroupById(id);
 
       serverGroup = srvcEntity.ServerGroup.fromMap(res?.toJson() ?? {});
 
@@ -96,7 +96,7 @@ class WashAdminTransport {
 
   static Future<void> sendApplication(String id, String name, String email) async {
     try {
-      await Common.applicationApi!.createAdminApplication(
+      await BonusCommon.applicationApi!.createAdminApplication(
           CreateAdminApplicationRequest(
               application: AdminApplicationCreation(
                   user: FirebaseUser(

@@ -10,21 +10,21 @@
 
 part of openapi.api;
 
-class Pagination {
-  /// Returns a new [Pagination] instance.
-  Pagination({
-    this.limit,
-    this.offset,
+class PaymentCancellation {
+  /// Returns a new [PaymentCancellation] instance.
+  PaymentCancellation({
+    this.washID,
+    this.postID,
+    this.orderID,
   });
 
-  /// Maximum value: 100
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? limit;
+  String? washID;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -32,41 +32,56 @@ class Pagination {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? offset;
+  String? postID;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? orderID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is Pagination &&
-     other.limit == limit &&
-     other.offset == offset;
+  bool operator ==(Object other) => identical(this, other) || other is PaymentCancellation &&
+     other.washID == washID &&
+     other.postID == postID &&
+     other.orderID == orderID;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (limit == null ? 0 : limit!.hashCode) +
-    (offset == null ? 0 : offset!.hashCode);
+    (washID == null ? 0 : washID!.hashCode) +
+    (postID == null ? 0 : postID!.hashCode) +
+    (orderID == null ? 0 : orderID!.hashCode);
 
   @override
-  String toString() => 'Pagination[limit=$limit, offset=$offset]';
+  String toString() => 'PaymentCancellation[washID=$washID, postID=$postID, orderID=$orderID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.limit != null) {
-      json[r'limit'] = this.limit;
+    if (this.washID != null) {
+      json[r'washID'] = this.washID;
     } else {
-      json[r'limit'] = null;
+      json[r'washID'] = null;
     }
-    if (this.offset != null) {
-      json[r'offset'] = this.offset;
+    if (this.postID != null) {
+      json[r'postID'] = this.postID;
     } else {
-      json[r'offset'] = null;
+      json[r'postID'] = null;
+    }
+    if (this.orderID != null) {
+      json[r'orderID'] = this.orderID;
+    } else {
+      json[r'orderID'] = null;
     }
     return json;
   }
 
-  /// Returns a new [Pagination] instance and imports its values from
+  /// Returns a new [PaymentCancellation] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static Pagination? fromJson(dynamic value) {
+  static PaymentCancellation? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -75,25 +90,26 @@ class Pagination {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Pagination[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Pagination[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "PaymentCancellation[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "PaymentCancellation[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return Pagination(
-        limit: mapValueOfType<int>(json, r'limit'),
-        offset: mapValueOfType<int>(json, r'offset'),
+      return PaymentCancellation(
+        washID: mapValueOfType<String>(json, r'washID'),
+        postID: mapValueOfType<String>(json, r'postID'),
+        orderID: mapValueOfType<String>(json, r'orderID'),
       );
     }
     return null;
   }
 
-  static List<Pagination>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <Pagination>[];
+  static List<PaymentCancellation>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <PaymentCancellation>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = Pagination.fromJson(row);
+        final value = PaymentCancellation.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -102,12 +118,12 @@ class Pagination {
     return result.toList(growable: growable);
   }
 
-  static Map<String, Pagination> mapFromJson(dynamic json) {
-    final map = <String, Pagination>{};
+  static Map<String, PaymentCancellation> mapFromJson(dynamic json) {
+    final map = <String, PaymentCancellation>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Pagination.fromJson(entry.value);
+        final value = PaymentCancellation.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -116,13 +132,13 @@ class Pagination {
     return map;
   }
 
-  // maps a json object with a list of Pagination-objects as value to a dart map
-  static Map<String, List<Pagination>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<Pagination>>{};
+  // maps a json object with a list of PaymentCancellation-objects as value to a dart map
+  static Map<String, List<PaymentCancellation>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<PaymentCancellation>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Pagination.listFromJson(entry.value, growable: growable,);
+        final value = PaymentCancellation.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

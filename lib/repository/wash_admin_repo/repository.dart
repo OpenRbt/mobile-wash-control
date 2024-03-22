@@ -1,7 +1,7 @@
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
 
 import '../../openapi/wash-admin-client/api.dart';
-import '../../Common/common.dart';
+import '../../Common/bonus_common.dart';
 
 
 class WashAdminRepository {
@@ -9,7 +9,7 @@ class WashAdminRepository {
     try {
 
 
-      final res = await Common.organizationApi!.getOrganizations(limit: 100, offset: 0);
+      final res = await BonusCommon.organizationApi!.getOrganizations(limit: 100, offset: 0);
 
       var organizations = <entity.Organization>[];
       for(int i = 0; i < res!.length; i++){
@@ -40,7 +40,7 @@ class WashAdminRepository {
   static Future<entity.Organization?> getOrganization(String id) async {
     try {
 
-      final res = await Common.organizationApi!.getOrganizationById(id);
+      final res = await BonusCommon.organizationApi!.getOrganizationById(id);
 
       var organization = entity.Organization(
         id: res?.id,
@@ -66,7 +66,7 @@ class WashAdminRepository {
 
   static Future<void> createOrganization(entity.Organization newOrganization) async {
     try {
-      final res = await Common.organizationApi!.createOrganization(
+      final res = await BonusCommon.organizationApi!.createOrganization(
           body: OrganizationCreation(
             name: newOrganization.name ?? "",
             description: newOrganization.description ?? "",
@@ -93,7 +93,7 @@ class WashAdminRepository {
 
   static Future<void> updateOrganization(entity.Organization updatedOrganization) async {
     try {
-      final res = await Common.organizationApi!.updateOrganization(
+      final res = await BonusCommon.organizationApi!.updateOrganization(
           updatedOrganization.id ?? "",
           body: OrganizationUpdate(
             name: updatedOrganization.name,
@@ -121,7 +121,7 @@ class WashAdminRepository {
   static Future<void> deleteOrganization(String id) async {
     try {
 
-      final res = await Common.organizationApi!.deleteOrganization(id);
+      final res = await BonusCommon.organizationApi!.deleteOrganization(id);
 
       return;
 
@@ -142,7 +142,7 @@ class WashAdminRepository {
   static Future<List<entity.ServerGroup>?> getServerGroups(String organizationId) async {
     try{
 
-      final res = await Common.serversGroupApi!.getServerGroups(limit: 100, offset: 0);
+      final res = await BonusCommon.serversGroupApi!.getServerGroups(limit: 100, offset: 0);
 
       var serverGroups = <entity.ServerGroup>[];
       for(int i = 0; i < res!.length; i++) {
@@ -171,7 +171,7 @@ class WashAdminRepository {
 
   static Future<entity.ServerGroup?> getServerGroup(String id) async {
     try{
-      final res = await Common.serversGroupApi!.getServerGroupById(id);
+      final res = await BonusCommon.serversGroupApi!.getServerGroupById(id);
 
       var serverGroup = entity.ServerGroup(
           id: res?.id,
@@ -197,7 +197,7 @@ class WashAdminRepository {
 
   static Future<void> createServerGroup(String organizationId, entity.ServerGroup newServerGroup) async {
     try {
-      final res = await Common.serversGroupApi!.createServerGroup(
+      final res = await BonusCommon.serversGroupApi!.createServerGroup(
           body: ServerGroupCreation(
             name: newServerGroup.name ?? "",
             description: newServerGroup.description ?? "",
@@ -224,7 +224,7 @@ class WashAdminRepository {
 
   static Future<void> updateServerGroup(entity.ServerGroup updatedServerGroup) async {
     try {
-      final res = await Common.serversGroupApi!.updateServerGroup(
+      final res = await BonusCommon.serversGroupApi!.updateServerGroup(
           updatedServerGroup.id ?? "",
           body: ServerGroupUpdate(
             name: updatedServerGroup.name,
@@ -252,7 +252,7 @@ class WashAdminRepository {
   static Future<void> deleteServerGroup(String id) async {
     try {
 
-      final res = await Common.serversGroupApi!.deleteServerGroup(id);
+      final res = await BonusCommon.serversGroupApi!.deleteServerGroup(id);
 
       return;
 
@@ -358,7 +358,7 @@ class WashAdminRepository {
 
   static Future<void> createWashServer(String groupId, entity.WashServer newWashServer) async {
     try {
-      final res = await Common.washServerApi!.createWashServer(
+      final res = await BonusCommon.washServerApi!.createWashServer(
           body: WashServerCreation(
             name: newWashServer.name ?? "",
             description: newWashServer.description ?? "",
@@ -387,7 +387,7 @@ class WashAdminRepository {
 
   static Future<void> updateWashServer(entity.WashServer updatedWashServer) async {
     try {
-      final res = await Common.washServerApi!.updateWashServer(
+      final res = await BonusCommon.washServerApi!.updateWashServer(
           updatedWashServer.id ?? "",
           body: WashServerUpdate(
             name: updatedWashServer.name,
@@ -415,7 +415,7 @@ class WashAdminRepository {
   static Future<void> deleteWashServer(String id) async {
     try {
 
-      final res = await Common.washServerApi!.deleteWashServer(id);
+      final res = await BonusCommon.washServerApi!.deleteWashServer(id);
 
       return;
 
@@ -435,7 +435,7 @@ class WashAdminRepository {
 
   static Future<AdminApplication?> sendApplication(entity.FirebaseUser firebaseUser) async { //запрос на отправку заявки юзером
     try {
-      final res = await Common.applicationApi!.createAdminApplication(
+      final res = await BonusCommon.applicationApi!.createAdminApplication(
           CreateAdminApplicationRequest(
               application: AdminApplicationCreation(
                   user: FirebaseUser(

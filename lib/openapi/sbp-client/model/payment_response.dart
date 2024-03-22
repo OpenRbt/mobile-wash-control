@@ -10,10 +10,11 @@
 
 part of openapi.api;
 
-class FirebaseToken {
-  /// Returns a new [FirebaseToken] instance.
-  FirebaseToken({
-    this.value,
+class PaymentResponse {
+  /// Returns a new [PaymentResponse] instance.
+  PaymentResponse({
+    this.url,
+    this.orderID,
   });
 
   ///
@@ -22,34 +23,49 @@ class FirebaseToken {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? value;
+  String? url;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? orderID;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is FirebaseToken &&
-     other.value == value;
+  bool operator ==(Object other) => identical(this, other) || other is PaymentResponse &&
+     other.url == url &&
+     other.orderID == orderID;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (value == null ? 0 : value!.hashCode);
+    (url == null ? 0 : url!.hashCode) +
+    (orderID == null ? 0 : orderID!.hashCode);
 
   @override
-  String toString() => 'FirebaseToken[value=$value]';
+  String toString() => 'PaymentResponse[url=$url, orderID=$orderID]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.value != null) {
-      json[r'value'] = this.value;
+    if (this.url != null) {
+      json[r'url'] = this.url;
     } else {
-      json[r'value'] = null;
+      json[r'url'] = null;
+    }
+    if (this.orderID != null) {
+      json[r'orderID'] = this.orderID;
+    } else {
+      json[r'orderID'] = null;
     }
     return json;
   }
 
-  /// Returns a new [FirebaseToken] instance and imports its values from
+  /// Returns a new [PaymentResponse] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static FirebaseToken? fromJson(dynamic value) {
+  static PaymentResponse? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -58,24 +74,25 @@ class FirebaseToken {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "FirebaseToken[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "FirebaseToken[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "PaymentResponse[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "PaymentResponse[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return FirebaseToken(
-        value: mapValueOfType<String>(json, r'value'),
+      return PaymentResponse(
+        url: mapValueOfType<String>(json, r'url'),
+        orderID: mapValueOfType<String>(json, r'orderID'),
       );
     }
     return null;
   }
 
-  static List<FirebaseToken>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <FirebaseToken>[];
+  static List<PaymentResponse>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <PaymentResponse>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = FirebaseToken.fromJson(row);
+        final value = PaymentResponse.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -84,12 +101,12 @@ class FirebaseToken {
     return result.toList(growable: growable);
   }
 
-  static Map<String, FirebaseToken> mapFromJson(dynamic json) {
-    final map = <String, FirebaseToken>{};
+  static Map<String, PaymentResponse> mapFromJson(dynamic json) {
+    final map = <String, PaymentResponse>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = FirebaseToken.fromJson(entry.value);
+        final value = PaymentResponse.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -98,13 +115,13 @@ class FirebaseToken {
     return map;
   }
 
-  // maps a json object with a list of FirebaseToken-objects as value to a dart map
-  static Map<String, List<FirebaseToken>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<FirebaseToken>>{};
+  // maps a json object with a list of PaymentResponse-objects as value to a dart map
+  static Map<String, List<PaymentResponse>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<PaymentResponse>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = FirebaseToken.listFromJson(entry.value, growable: growable,);
+        final value = PaymentResponse.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

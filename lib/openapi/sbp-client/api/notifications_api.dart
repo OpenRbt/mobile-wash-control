@@ -11,29 +11,32 @@
 part of openapi.api;
 
 
-class StandardApi {
-  StandardApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+class NotificationsApi {
+  NotificationsApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /healthcheck' operation and returns the [Response].
-  Future<Response> healthcheckWithHttpInfo() async {
+  /// Performs an HTTP 'POST /notification' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [Notification] body:
+  Future<Response> receiveNotificationWithHttpInfo({ Notification? body, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/healthcheck';
+    final path = r'/notification';
 
     // ignore: prefer_final_locals
-    Object? postBody;
+    Object? postBody = body;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>[];
+    const contentTypes = <String>['application/json'];
 
 
     return apiClient.invokeAPI(
       path,
-      'GET',
+      'POST',
       queryParams,
       postBody,
       headerParams,
@@ -42,8 +45,11 @@ class StandardApi {
     );
   }
 
-  Future<Healthcheck200Response?> healthcheck() async {
-    final response = await healthcheckWithHttpInfo();
+  /// Parameters:
+  ///
+  /// * [Notification] body:
+  Future<String?> receiveNotification({ Notification? body, }) async {
+    final response = await receiveNotificationWithHttpInfo( body: body, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -51,7 +57,7 @@ class StandardApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Healthcheck200Response',) as Healthcheck200Response;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'String',) as String;
     
     }
     return null;

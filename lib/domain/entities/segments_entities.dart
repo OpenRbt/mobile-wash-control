@@ -70,6 +70,86 @@ class ServicesBonusProgramEntity {
       interactionBlocked.hashCode;
 }
 
+class ServicesSbpEntity {
+  final ServiceUser? serviceUser;
+  final WashServer? sbpWashServer;
+  final List<Organization> organizations;
+  final Organization? currentOrganization;
+  final List<ServerGroup> serverGroups;
+  final ServerGroup? currentServerGroup;
+  final String terminalKey;
+  final String terminalPassword;
+  final bool interactionBlocked;
+
+  const ServicesSbpEntity({
+    this.serviceUser,
+    this.sbpWashServer,
+    required this.organizations,
+    this.currentOrganization,
+    required this.serverGroups,
+    this.currentServerGroup,
+    required this.terminalKey,
+    required this.terminalPassword,
+    required this.interactionBlocked,
+  });
+
+  ServicesSbpEntity copyWith({
+    ServiceUser? serviceUser,
+    WashServer? sbpWashServer,
+    List<Organization>? organizations,
+    Organization? currentOrganization,
+    List<ServerGroup>? serverGroups,
+    ServerGroup? currentServerGroup,
+    String? terminalKey,
+    String? terminalPassword,
+    bool? interactionBlocked,
+  }) {
+    return ServicesSbpEntity(
+      serviceUser: serviceUser ?? this.serviceUser,
+      sbpWashServer: sbpWashServer ?? this.sbpWashServer,
+      organizations: organizations ?? this.organizations,
+      currentOrganization: currentOrganization ?? this.currentOrganization,
+      serverGroups: serverGroups ?? this.serverGroups,
+      currentServerGroup: currentServerGroup ?? this.currentServerGroup,
+      terminalKey: terminalKey ?? this.terminalKey,
+      terminalPassword: terminalPassword ?? this.terminalPassword,
+      interactionBlocked: interactionBlocked ?? this.interactionBlocked,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'ServicesSbpEntity{serviceUser: $serviceUser, sbpWashServer: $sbpWashServer, organizations: $organizations, currentOrganization: $currentOrganization, serverGroups: $serverGroups, currentServerGroup: $currentServerGroup, terminalKey: $terminalKey, terminalPassword: $terminalPassword, interactionBlocked: $interactionBlocked}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ServicesSbpEntity &&
+          runtimeType == other.runtimeType &&
+          serviceUser == other.serviceUser &&
+          sbpWashServer == other.sbpWashServer &&
+          organizations == other.organizations &&
+          currentOrganization == other.currentOrganization &&
+          serverGroups == other.serverGroups &&
+          currentServerGroup == other.currentServerGroup &&
+          terminalKey == other.terminalKey &&
+          terminalPassword == other.terminalPassword &&
+          interactionBlocked == other.interactionBlocked;
+
+  @override
+  int get hashCode =>
+      serviceUser.hashCode ^
+      sbpWashServer.hashCode ^
+      organizations.hashCode ^
+      currentOrganization.hashCode ^
+      serverGroups.hashCode ^
+      currentServerGroup.hashCode ^
+      terminalKey.hashCode ^
+      terminalPassword.hashCode ^
+      interactionBlocked.hashCode;
+}
+
 class ServicesServerBindingEntity {
 
   final ServiceUser? serviceUser;

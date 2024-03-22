@@ -11,15 +11,22 @@
 part of openapi.api;
 
 
-class StandardApi {
-  StandardApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+class GroupsApi {
+  GroupsApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /healthcheck' operation and returns the [Response].
-  Future<Response> healthcheckWithHttpInfo() async {
+  /// Performs an HTTP 'POST /groups/{groupId}/washes/{washId}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] groupId (required):
+  ///
+  /// * [String] washId (required):
+  Future<Response> assignWashToGroupWithHttpInfo(String groupId, String washId,) async {
     // ignore: prefer_const_declarations
-    final path = r'/healthcheck';
+    final path = r'/groups/{groupId}/washes/{washId}'
+      .replaceAll('{groupId}', groupId)
+      .replaceAll('{washId}', washId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -33,7 +40,7 @@ class StandardApi {
 
     return apiClient.invokeAPI(
       path,
-      'GET',
+      'POST',
       queryParams,
       postBody,
       headerParams,
@@ -42,18 +49,15 @@ class StandardApi {
     );
   }
 
-  Future<Healthcheck200Response?> healthcheck() async {
-    final response = await healthcheckWithHttpInfo();
+  /// Parameters:
+  ///
+  /// * [String] groupId (required):
+  ///
+  /// * [String] washId (required):
+  Future<void> assignWashToGroup(String groupId, String washId,) async {
+    final response = await assignWashToGroupWithHttpInfo(groupId, washId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    // When a remote server returns no body with a status of 204, we shall not decode it.
-    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
-    // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Healthcheck200Response',) as Healthcheck200Response;
-    
-    }
-    return null;
   }
 }

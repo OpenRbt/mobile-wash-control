@@ -8,6 +8,8 @@ import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:mobile_wash_control/presentation/segments/services_segments/services_bonus_program_segment.dart';
 import 'package:mobile_wash_control/presentation/segments/services_segments/services_server_binding_segment.dart';
 
+import '../segments/services_segments/services_sbp_segment.dart';
+
 class ServicesPage extends StatelessWidget {
   const ServicesPage({Key? key}) : super(key: key);
 
@@ -68,6 +70,9 @@ class _ServicesPageView extends StatelessWidget {
               ] :
               [
                 ServicesBonusProgramSegment(
+                  serviceUser: snapshot.requireData.servicesPageEntity.serviceUser!,
+                ),
+                ServicesSbpSegment(
                   serviceUser: snapshot.requireData.servicesPageEntity.serviceUser!,
                 ),
                 ServicesServerBindingSegment(

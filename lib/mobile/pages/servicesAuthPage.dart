@@ -15,7 +15,7 @@ import 'package:mobile_wash_control/Common/sbp_common.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../Common/common.dart';
+import '../../Common/bonus_common.dart';
 import '../../Common/management_common.dart';
 
 class SettingsServicesRegistrationPage extends StatefulWidget {
@@ -35,7 +35,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
         basePath = (bonusUrl)! + '/api/bonus/admin';
       }
       print(basePath);
-      Common.initializeApis(basePath);
+      BonusCommon.initializeApis(basePath);
     } catch (e){
 
     }
@@ -70,7 +70,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                             onPressed: () async {
                               String token = (await snapshot.data!.getIdToken() ?? "");
 
-                              Common.setAuthToken(token);
+                              BonusCommon.setAuthToken(token);
                               SbpCommon.setAuthToken(token);
                               ManagementCommon.setAuthToken(token);
 

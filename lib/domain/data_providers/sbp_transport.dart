@@ -1,10 +1,11 @@
-import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
+import 'package:mobile_wash_control/openapi/sbp-client/api.dart';
 
 import '../../Common/bonus_common.dart';
+import '../../Common/sbp_common.dart';
 import '../entities/services_entities.dart' as srvcEntity;
 import '../entities/user_entity.dart' as usrEntity;
 
-class BonusTransport {
+class SbpTransport {
 
   static Future<usrEntity.ServiceUser?> getServiceUser(String firebaseId) async {
 
@@ -28,13 +29,13 @@ class BonusTransport {
     return serviceUser;
   }
 
-  static Future<srvcEntity.WashServer> getBonusWashServer(String id) async {
+  static Future<srvcEntity.WashServer> getSbpWashServer(String id) async {
 
-    late srvcEntity.WashServer bonusWashServer;
+    late srvcEntity.WashServer sbpWashServer;
 
     try {
-      final res = await BonusCommon.washServerApi!.getWashServerById(id);
-      bonusWashServer = srvcEntity.WashServer.fromMap(res?.toJson() ?? {});
+      final res = await SbpCommon.washApi!.getWashById(id);
+      sbpWashServer = srvcEntity.WashServer.fromSbpWash(res?.toJson() ?? {});
     }
     on ApiException catch (e) {
       throw FormatException("${e.code}: ${e.message}");
@@ -43,22 +44,24 @@ class BonusTransport {
     } catch (e) {
       rethrow;
     }
-    return bonusWashServer;
+    return sbpWashServer;
   }
 
-  static Future<srvcEntity.WashServer> registerBonusWashServer(srvcEntity.WashServer bonusWashServer) async {
+  static Future<srvcEntity.WashServer> registerSbpWashServer(srvcEntity.WashServer washServer, String terminalKey, String terminalPassword) async {
 
-    late srvcEntity.WashServer registeredBonusWashServer;
+    late srvcEntity.WashServer sbpWashServer;
 
     try {
-      final res = await BonusCommon.washServerApi!.createWashServer(
-          body: WashServerCreation(
-              name: bonusWashServer.name,
-              description: bonusWashServer.description,
-              groupId: bonusWashServer.groupId
-          )
+      final res = await SbpCommon.washApi!.createWash(
+        body: WashCreation(
+            name: washServer.name,
+            description: washServer.description,
+            terminalKey: terminalKey,
+            terminalPassword: terminalPassword,
+            groupId: washServer.groupId
+        )
       );
-      registeredBonusWashServer = srvcEntity.WashServer.fromMap(res?.toJson() ?? {});
+      sbpWashServer = srvcEntity.WashServer.fromSbpWash(res?.toJson() ?? {});
     }
     on ApiException catch (e) {
       throw FormatException("${e.code}: ${e.message}");
@@ -67,17 +70,19 @@ class BonusTransport {
     } catch (e) {
       rethrow;
     }
-    return registeredBonusWashServer;
+    return sbpWashServer;
   }
 
-  static Future<void> updateBonusWashServer(srvcEntity.WashServer bonusWashServer) async {
-
+  static Future<void> updateSbpWashServer(srvcEntity.WashServer washServer) async {
     try {
-      await BonusCommon.washServerApi!.updateWashServer(
-          bonusWashServer.id,
-          body: WashServerUpdate(name: bonusWashServer.name, description: bonusWashServer.description)
+      await SbpCommon.washApi!.updateWash(
+          washServer.id,
+        body: WashUpdate(
+          name: washServer.name,
+          description: washServer.description
+        )
       );
-      await BonusCommon.washServerApi!.assignServerToGroup(bonusWashServer.groupId, bonusWashServer.id);
+      SbpCommon.washApi!.assignWashToGroup(washServer.groupId, washServer.id);
     }
     on ApiException catch (e) {
       throw FormatException("${e.code}: ${e.message}");

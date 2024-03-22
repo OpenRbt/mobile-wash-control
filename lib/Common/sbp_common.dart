@@ -2,7 +2,7 @@ import 'package:mobile_wash_control/openapi/sbp-client/api.dart';
 
 class SbpCommon {
   static StandardApi? standardApi;
-  static WashApi? washApi;
+  static WashesApi? washApi;
 
   static void setAuthToken(String idToken) {
     (SbpCommon.standardApi!.apiClient.authentication as HttpBearerAuth).accessToken = idToken;
@@ -14,7 +14,7 @@ class SbpCommon {
         authentication: HttpBearerAuth(),
         basePath: url
     ));
-    SbpCommon.washApi = WashApi(ApiClient(
+    SbpCommon.washApi = WashesApi(ApiClient(
         authentication: HttpBearerAuth(),
         basePath: url
     ));
