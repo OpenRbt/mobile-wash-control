@@ -20,12 +20,13 @@ class Notification {
     this.paymentId,
     this.errorCode,
     this.amount,
-    this.cardId,
     this.pan,
-    this.expDate,
     this.token,
+    this.cardId,
+    this.expDate,
   });
 
+  /// Terminal key
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -34,6 +35,7 @@ class Notification {
   ///
   String? terminalKey;
 
+  /// Order ID
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -42,6 +44,7 @@ class Notification {
   ///
   String? orderId;
 
+  /// Indicates whether the payment was successful
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -50,6 +53,7 @@ class Notification {
   ///
   bool? success;
 
+  /// Payment status
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -58,6 +62,7 @@ class Notification {
   ///
   String? status;
 
+  /// Payment ID
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -66,6 +71,7 @@ class Notification {
   ///
   int? paymentId;
 
+  /// Error code
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -74,6 +80,7 @@ class Notification {
   ///
   String? errorCode;
 
+  /// Payment amount
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -82,14 +89,7 @@ class Notification {
   ///
   int? amount;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  int? cardId;
-
+  /// PAN (Primary Account Number)
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -98,14 +98,7 @@ class Notification {
   ///
   String? pan;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? expDate;
-
+  /// Payment token
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -113,6 +106,10 @@ class Notification {
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   String? token;
+
+  int? cardId;
+
+  String? expDate;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is Notification &&
@@ -123,10 +120,10 @@ class Notification {
      other.paymentId == paymentId &&
      other.errorCode == errorCode &&
      other.amount == amount &&
-     other.cardId == cardId &&
      other.pan == pan &&
-     other.expDate == expDate &&
-     other.token == token;
+     other.token == token &&
+     other.cardId == cardId &&
+     other.expDate == expDate;
 
   @override
   int get hashCode =>
@@ -138,13 +135,13 @@ class Notification {
     (paymentId == null ? 0 : paymentId!.hashCode) +
     (errorCode == null ? 0 : errorCode!.hashCode) +
     (amount == null ? 0 : amount!.hashCode) +
-    (cardId == null ? 0 : cardId!.hashCode) +
     (pan == null ? 0 : pan!.hashCode) +
-    (expDate == null ? 0 : expDate!.hashCode) +
-    (token == null ? 0 : token!.hashCode);
+    (token == null ? 0 : token!.hashCode) +
+    (cardId == null ? 0 : cardId!.hashCode) +
+    (expDate == null ? 0 : expDate!.hashCode);
 
   @override
-  String toString() => 'Notification[terminalKey=$terminalKey, orderId=$orderId, success=$success, status=$status, paymentId=$paymentId, errorCode=$errorCode, amount=$amount, cardId=$cardId, pan=$pan, expDate=$expDate, token=$token]';
+  String toString() => 'Notification[terminalKey=$terminalKey, orderId=$orderId, success=$success, status=$status, paymentId=$paymentId, errorCode=$errorCode, amount=$amount, pan=$pan, token=$token, cardId=$cardId, expDate=$expDate]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -183,25 +180,25 @@ class Notification {
     } else {
       json[r'Amount'] = null;
     }
-    if (this.cardId != null) {
-      json[r'CardId'] = this.cardId;
-    } else {
-      json[r'CardId'] = null;
-    }
     if (this.pan != null) {
       json[r'Pan'] = this.pan;
     } else {
       json[r'Pan'] = null;
     }
-    if (this.expDate != null) {
-      json[r'ExpDate'] = this.expDate;
-    } else {
-      json[r'ExpDate'] = null;
-    }
     if (this.token != null) {
       json[r'Token'] = this.token;
     } else {
       json[r'Token'] = null;
+    }
+    if (this.cardId != null) {
+      json[r'CardId'] = this.cardId;
+    } else {
+      json[r'CardId'] = null;
+    }
+    if (this.expDate != null) {
+      json[r'ExpDate'] = this.expDate;
+    } else {
+      json[r'ExpDate'] = null;
     }
     return json;
   }
@@ -232,10 +229,10 @@ class Notification {
         paymentId: mapValueOfType<int>(json, r'PaymentId'),
         errorCode: mapValueOfType<String>(json, r'ErrorCode'),
         amount: mapValueOfType<int>(json, r'Amount'),
-        cardId: mapValueOfType<int>(json, r'CardId'),
         pan: mapValueOfType<String>(json, r'Pan'),
-        expDate: mapValueOfType<String>(json, r'ExpDate'),
         token: mapValueOfType<String>(json, r'Token'),
+        cardId: mapValueOfType<int>(json, r'CardId'),
+        expDate: mapValueOfType<String>(json, r'ExpDate'),
       );
     }
     return null;

@@ -176,13 +176,25 @@ class WashServer {
 
   factory WashServer.fromMap(Map<String, dynamic> map) {
     return WashServer(
-      id: map['id'] as String,
-      name: map['name'] ?? "",
-      description: map['description'] ?? "",
-      serviceKey: map['serviceKey'] as String,
-      createdBy: map['createdBy'] as String,
-      groupId: map['groupId'] as String,
-      organizationId: map['organizationId'] as String,
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      description: map['description'] ?? '',
+      serviceKey: map['serviceKey'] ?? '',
+      createdBy: map['createdBy'] ?? '',
+      groupId: map['groupId'] ?? '',
+      organizationId: map['organizationId'] ?? '',
+    );
+  }
+
+  static WashServer fromSbpWash(Map<String, dynamic> map) {
+    return WashServer(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      description: map['description'] ?? '',
+      serviceKey: map['password'] ?? '',
+      createdBy: map['createdBy'] ?? '',
+      groupId: map['groupId'] ?? '',
+      organizationId: map['organizationId'] ?? '',
     );
   }
 

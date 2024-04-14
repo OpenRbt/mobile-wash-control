@@ -16,10 +16,10 @@ class StandardApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'GET /health_check' operation and returns the [Response].
-  Future<Response> healthCheckWithHttpInfo() async {
+  /// Performs an HTTP 'GET /healthcheck' operation and returns the [Response].
+  Future<Response> healthcheckWithHttpInfo() async {
     // ignore: prefer_const_declarations
-    final path = r'/health_check';
+    final path = r'/healthcheck';
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -42,8 +42,8 @@ class StandardApi {
     );
   }
 
-  Future<HealthCheck200Response?> healthCheck() async {
-    final response = await healthCheckWithHttpInfo();
+  Future<Healthcheck200Response?> healthcheck() async {
+    final response = await healthcheckWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -51,7 +51,7 @@ class StandardApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'HealthCheck200Response',) as HealthCheck200Response;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Healthcheck200Response',) as Healthcheck200Response;
     
     }
     return null;

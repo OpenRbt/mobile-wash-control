@@ -17,7 +17,7 @@ class OrganizationCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         title: Text("Организация: ${data.name} "),
-        subtitle: const Row(
+        subtitle: Row(
           /*
           children: [
             Text("Описание: ${data.description ?? "-"}"),

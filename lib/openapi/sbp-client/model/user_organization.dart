@@ -10,16 +10,31 @@
 
 part of openapi.api;
 
-class WashCreate {
-  /// Returns a new [WashCreate] instance.
-  WashCreate({
-    required this.name,
+class UserOrganization {
+  /// Returns a new [UserOrganization] instance.
+  UserOrganization({
+    this.id,
+    this.name,
     this.description,
-    this.terminalKey,
-    this.terminalPassword,
+    this.displayName,
+    this.deleted,
   });
 
-  String name;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? id;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? name;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -35,7 +50,7 @@ class WashCreate {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? terminalKey;
+  String? displayName;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -43,51 +58,62 @@ class WashCreate {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? terminalPassword;
+  bool? deleted;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is WashCreate &&
+  bool operator ==(Object other) => identical(this, other) || other is UserOrganization &&
+     other.id == id &&
      other.name == name &&
      other.description == description &&
-     other.terminalKey == terminalKey &&
-     other.terminalPassword == terminalPassword;
+     other.displayName == displayName &&
+     other.deleted == deleted;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (name.hashCode) +
+    (id == null ? 0 : id!.hashCode) +
+    (name == null ? 0 : name!.hashCode) +
     (description == null ? 0 : description!.hashCode) +
-    (terminalKey == null ? 0 : terminalKey!.hashCode) +
-    (terminalPassword == null ? 0 : terminalPassword!.hashCode);
+    (displayName == null ? 0 : displayName!.hashCode) +
+    (deleted == null ? 0 : deleted!.hashCode);
 
   @override
-  String toString() => 'WashCreate[name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword]';
+  String toString() => 'UserOrganization[id=$id, name=$name, description=$description, displayName=$displayName, deleted=$deleted]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    if (this.id != null) {
+      json[r'id'] = this.id;
+    } else {
+      json[r'id'] = null;
+    }
+    if (this.name != null) {
       json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
+    }
     if (this.description != null) {
       json[r'description'] = this.description;
     } else {
       json[r'description'] = null;
     }
-    if (this.terminalKey != null) {
-      json[r'terminal_key'] = this.terminalKey;
+    if (this.displayName != null) {
+      json[r'displayName'] = this.displayName;
     } else {
-      json[r'terminal_key'] = null;
+      json[r'displayName'] = null;
     }
-    if (this.terminalPassword != null) {
-      json[r'terminal_password'] = this.terminalPassword;
+    if (this.deleted != null) {
+      json[r'deleted'] = this.deleted;
     } else {
-      json[r'terminal_password'] = null;
+      json[r'deleted'] = null;
     }
     return json;
   }
 
-  /// Returns a new [WashCreate] instance and imports its values from
+  /// Returns a new [UserOrganization] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static WashCreate? fromJson(dynamic value) {
+  static UserOrganization? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -96,27 +122,28 @@ class WashCreate {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "WashCreate[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "WashCreate[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "UserOrganization[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "UserOrganization[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return WashCreate(
-        name: mapValueOfType<String>(json, r'name')!,
+      return UserOrganization(
+        id: mapValueOfType<String>(json, r'id'),
+        name: mapValueOfType<String>(json, r'name'),
         description: mapValueOfType<String>(json, r'description'),
-        terminalKey: mapValueOfType<String>(json, r'terminal_key'),
-        terminalPassword: mapValueOfType<String>(json, r'terminal_password'),
+        displayName: mapValueOfType<String>(json, r'displayName'),
+        deleted: mapValueOfType<bool>(json, r'deleted'),
       );
     }
     return null;
   }
 
-  static List<WashCreate>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <WashCreate>[];
+  static List<UserOrganization>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <UserOrganization>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = WashCreate.fromJson(row);
+        final value = UserOrganization.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -125,12 +152,12 @@ class WashCreate {
     return result.toList(growable: growable);
   }
 
-  static Map<String, WashCreate> mapFromJson(dynamic json) {
-    final map = <String, WashCreate>{};
+  static Map<String, UserOrganization> mapFromJson(dynamic json) {
+    final map = <String, UserOrganization>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashCreate.fromJson(entry.value);
+        final value = UserOrganization.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -139,13 +166,13 @@ class WashCreate {
     return map;
   }
 
-  // maps a json object with a list of WashCreate-objects as value to a dart map
-  static Map<String, List<WashCreate>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<WashCreate>>{};
+  // maps a json object with a list of UserOrganization-objects as value to a dart map
+  static Map<String, List<UserOrganization>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<UserOrganization>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = WashCreate.listFromJson(entry.value, growable: growable,);
+        final value = UserOrganization.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -156,7 +183,6 @@ class WashCreate {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'name',
   };
 }
 

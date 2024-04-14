@@ -27,20 +27,25 @@ part 'auth/oauth.dart';
 part 'auth/http_basic_auth.dart';
 part 'auth/http_bearer_auth.dart';
 
+part 'api/groups_api.dart';
+part 'api/notifications_api.dart';
+part 'api/payments_api.dart';
 part 'api/standard_api.dart';
-part 'api/wash_api.dart';
+part 'api/washes_api.dart';
 
-part 'model/cancel.dart';
 part 'model/error.dart';
-part 'model/firebase_token.dart';
-part 'model/health_check200_response.dart';
+part 'model/group.dart';
+part 'model/healthcheck200_response.dart';
 part 'model/notification.dart';
-part 'model/pagination.dart';
-part 'model/pay.dart';
-part 'model/pay_response.dart';
+part 'model/organization.dart';
+part 'model/payment.dart';
+part 'model/payment_cancellation.dart';
+part 'model/payment_response.dart';
+part 'model/user.dart';
+part 'model/user_organization.dart';
+part 'model/user_role.dart';
 part 'model/wash.dart';
-part 'model/wash_create.dart';
-part 'model/wash_delete.dart';
+part 'model/wash_creation.dart';
 part 'model/wash_update.dart';
 
 

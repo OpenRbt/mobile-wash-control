@@ -1,6 +1,6 @@
 import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
 
-import '../../Common/common.dart';
+import '../../Common/bonus_common.dart';
 import '../entities/services_entities.dart' as srvcEntity;
 import '../entities/user_entity.dart' as usrEntity;
 
@@ -11,7 +11,7 @@ class BonusTransport {
     usrEntity.ServiceUser serviceUser;
 
     try {
-      final res = await Common.userApi!.getAdminUserById(firebaseId);
+      final res = await BonusCommon.userApi!.getAdminUserById(firebaseId);
       serviceUser = usrEntity.ServiceUser.fromMap(res?.toJson() ?? {});
       serviceUser.organizationId = res?.organization?.id ?? "";
     }
@@ -33,7 +33,7 @@ class BonusTransport {
     late srvcEntity.WashServer bonusWashServer;
 
     try {
-      final res = await Common.washServerApi!.getWashServerById(id);
+      final res = await BonusCommon.washServerApi!.getWashServerById(id);
       bonusWashServer = srvcEntity.WashServer.fromMap(res?.toJson() ?? {});
     }
     on ApiException catch (e) {
@@ -51,7 +51,7 @@ class BonusTransport {
     late srvcEntity.WashServer registeredBonusWashServer;
 
     try {
-      final res = await Common.washServerApi!.createWashServer(
+      final res = await BonusCommon.washServerApi!.createWashServer(
           body: WashServerCreation(
               name: bonusWashServer.name,
               description: bonusWashServer.description,
@@ -73,11 +73,11 @@ class BonusTransport {
   static Future<void> updateBonusWashServer(srvcEntity.WashServer bonusWashServer) async {
 
     try {
-      await Common.washServerApi!.updateWashServer(
+      await BonusCommon.washServerApi!.updateWashServer(
           bonusWashServer.id,
           body: WashServerUpdate(name: bonusWashServer.name, description: bonusWashServer.description)
       );
-      await Common.washServerApi!.assignServerToGroup(bonusWashServer.groupId, bonusWashServer.id);
+      await BonusCommon.washServerApi!.assignServerToGroup(bonusWashServer.groupId, bonusWashServer.id);
     }
     on ApiException catch (e) {
       throw FormatException("${e.code}: ${e.message}");

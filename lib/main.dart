@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/application/Application.dart';
 import 'package:mobile_wash_control/firebase_options.dart';
 import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
-import 'package:mobile_wash_control/Common/common.dart';
+import 'package:mobile_wash_control/Common/bonus_common.dart';
 
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {

@@ -13,20 +13,11 @@ part of openapi.api;
 class WashUpdate {
   /// Returns a new [WashUpdate] instance.
   WashUpdate({
-    this.id,
     this.name,
     this.description,
     this.terminalKey,
     this.terminalPassword,
   });
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? id;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -62,7 +53,6 @@ class WashUpdate {
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is WashUpdate &&
-     other.id == id &&
      other.name == name &&
      other.description == description &&
      other.terminalKey == terminalKey &&
@@ -71,22 +61,16 @@ class WashUpdate {
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (id == null ? 0 : id!.hashCode) +
     (name == null ? 0 : name!.hashCode) +
     (description == null ? 0 : description!.hashCode) +
     (terminalKey == null ? 0 : terminalKey!.hashCode) +
     (terminalPassword == null ? 0 : terminalPassword!.hashCode);
 
   @override
-  String toString() => 'WashUpdate[id=$id, name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword]';
+  String toString() => 'WashUpdate[name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.id != null) {
-      json[r'id'] = this.id;
-    } else {
-      json[r'id'] = null;
-    }
     if (this.name != null) {
       json[r'name'] = this.name;
     } else {
@@ -98,14 +82,14 @@ class WashUpdate {
       json[r'description'] = null;
     }
     if (this.terminalKey != null) {
-      json[r'terminal_key'] = this.terminalKey;
+      json[r'terminalKey'] = this.terminalKey;
     } else {
-      json[r'terminal_key'] = null;
+      json[r'terminalKey'] = null;
     }
     if (this.terminalPassword != null) {
-      json[r'terminal_password'] = this.terminalPassword;
+      json[r'terminalPassword'] = this.terminalPassword;
     } else {
-      json[r'terminal_password'] = null;
+      json[r'terminalPassword'] = null;
     }
     return json;
   }
@@ -129,11 +113,10 @@ class WashUpdate {
       }());
 
       return WashUpdate(
-        id: mapValueOfType<String>(json, r'id'),
         name: mapValueOfType<String>(json, r'name'),
         description: mapValueOfType<String>(json, r'description'),
-        terminalKey: mapValueOfType<String>(json, r'terminal_key'),
-        terminalPassword: mapValueOfType<String>(json, r'terminal_password'),
+        terminalKey: mapValueOfType<String>(json, r'terminalKey'),
+        terminalPassword: mapValueOfType<String>(json, r'terminalPassword'),
       );
     }
     return null;

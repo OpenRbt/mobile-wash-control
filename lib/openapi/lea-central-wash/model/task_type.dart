@@ -23,6 +23,25 @@ class TaskType {
 
   String toJson() => value;
 
+  static TaskType fromString(String type) {
+    switch (type) {
+      case 'build':
+        return TaskType.build;
+      case 'update':
+        return TaskType.update;
+      case 'reboot':
+        return TaskType.reboot;
+      case 'getVersions':
+        return TaskType.getVersions;
+      case 'pullFirmware':
+        return TaskType.pullFirmware;
+      case 'setVersion':
+        return TaskType.setVersion;
+      default:
+        throw FormatException("Wrong task type in converter");
+    }
+  }
+
   static const build = TaskType._(r'build');
   static const update = TaskType._(r'update');
   static const reboot = TaskType._(r'reboot');

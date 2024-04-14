@@ -108,6 +108,7 @@ class LeaCentralRepository extends Repository {
           currentProgramName: element.currentProgramName,
           currentProgram: element.currentProgram,
           ip: element.ip,
+          firmwareVersion: element.version?.id
         ));
       });
 
@@ -1709,36 +1710,6 @@ class LeaCentralRepository extends Repository {
   @override
   Future<void> getApplicationVersions({BuildContext? context}) async {
 
-  }
-
-  @override
-  Future<List<entity.Task>?> getTasks(int id, String status, {BuildContext? context}) async {
-    try {
-
-      //final response = await api.getListTasks(stationID: id, status: status);
-      List<entity.Task> tasks = [];
-
-      return tasks;
-
-    } on ApiException catch (e) {
-      switch (e.code) {
-        case HttpStatus.notFound:
-          if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось выполнить программу, Ошибка: ${e.message ?? "не найден один из параметров переданного конфига"}"));
-          }
-          break;
-        default:
-          if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
-          }
-          break;
-      }
-    } catch (e) {
-      if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
-      }
-    }
-    return null;
   }
 
   @override

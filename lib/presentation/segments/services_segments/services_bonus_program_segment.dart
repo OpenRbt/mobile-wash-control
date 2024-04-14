@@ -7,7 +7,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:mobile_wash_control/utils/validators.dart';
-import 'package:mobile_wash_control/presentation/widgets/drop_downs/drop_down_by_id_and_name.dart';
+import 'package:mobile_wash_control/presentation/widgets/drop_downs/drop_down_by_name.dart';
 
 class ServicesBonusProgramSegment extends StatelessWidget {
 
@@ -220,7 +220,7 @@ class _ChooseGroupView extends StatelessWidget {
                       flex: 3,
                       child: Padding(
                         padding:const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: DropDownByIdAndName(
+                        child: DropDownByName(
                           values: snapshot.requireData.servicesBonusProgramEntity.organizations,
                           currentValue: snapshot.requireData.servicesBonusProgramEntity.currentOrganization,
                           onChanged: (value) async { await cubit.onChangeOrganization(value); },
@@ -248,7 +248,7 @@ class _ChooseGroupView extends StatelessWidget {
                       flex: 3,
                       child: Padding(
                         padding:const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: DropDownByIdAndName(
+                        child: DropDownByName(
                           values: snapshot.requireData.servicesBonusProgramEntity.serverGroups,
                           currentValue: snapshot.requireData.servicesBonusProgramEntity.currentServerGroup,
                           onChanged: (value) async { await cubit.onChangeServerGroup(value); },

@@ -19,6 +19,8 @@ class Wash {
     this.description,
     this.terminalKey,
     this.terminalPassword,
+    this.organizationId,
+    this.groupId,
   });
 
   ///
@@ -69,6 +71,22 @@ class Wash {
   ///
   String? terminalPassword;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? organizationId;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? groupId;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is Wash &&
      other.id == id &&
@@ -76,7 +94,9 @@ class Wash {
      other.name == name &&
      other.description == description &&
      other.terminalKey == terminalKey &&
-     other.terminalPassword == terminalPassword;
+     other.terminalPassword == terminalPassword &&
+     other.organizationId == organizationId &&
+     other.groupId == groupId;
 
   @override
   int get hashCode =>
@@ -86,10 +106,12 @@ class Wash {
     (name == null ? 0 : name!.hashCode) +
     (description == null ? 0 : description!.hashCode) +
     (terminalKey == null ? 0 : terminalKey!.hashCode) +
-    (terminalPassword == null ? 0 : terminalPassword!.hashCode);
+    (terminalPassword == null ? 0 : terminalPassword!.hashCode) +
+    (organizationId == null ? 0 : organizationId!.hashCode) +
+    (groupId == null ? 0 : groupId!.hashCode);
 
   @override
-  String toString() => 'Wash[id=$id, password=$password, name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword]';
+  String toString() => 'Wash[id=$id, password=$password, name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword, organizationId=$organizationId, groupId=$groupId]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -114,14 +136,24 @@ class Wash {
       json[r'description'] = null;
     }
     if (this.terminalKey != null) {
-      json[r'terminal_key'] = this.terminalKey;
+      json[r'terminalKey'] = this.terminalKey;
     } else {
-      json[r'terminal_key'] = null;
+      json[r'terminalKey'] = null;
     }
     if (this.terminalPassword != null) {
-      json[r'terminal_password'] = this.terminalPassword;
+      json[r'terminalPassword'] = this.terminalPassword;
     } else {
-      json[r'terminal_password'] = null;
+      json[r'terminalPassword'] = null;
+    }
+    if (this.organizationId != null) {
+      json[r'organizationId'] = this.organizationId;
+    } else {
+      json[r'organizationId'] = null;
+    }
+    if (this.groupId != null) {
+      json[r'groupId'] = this.groupId;
+    } else {
+      json[r'groupId'] = null;
     }
     return json;
   }
@@ -149,8 +181,10 @@ class Wash {
         password: mapValueOfType<String>(json, r'password'),
         name: mapValueOfType<String>(json, r'name'),
         description: mapValueOfType<String>(json, r'description'),
-        terminalKey: mapValueOfType<String>(json, r'terminal_key'),
-        terminalPassword: mapValueOfType<String>(json, r'terminal_password'),
+        terminalKey: mapValueOfType<String>(json, r'terminalKey'),
+        terminalPassword: mapValueOfType<String>(json, r'terminalPassword'),
+        organizationId: mapValueOfType<String>(json, r'organizationId'),
+        groupId: mapValueOfType<String>(json, r'groupId'),
       );
     }
     return null;

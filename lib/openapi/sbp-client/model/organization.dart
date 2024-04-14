@@ -10,13 +10,13 @@
 
 part of openapi.api;
 
-class Pay {
-  /// Returns a new [Pay] instance.
-  Pay({
-    this.washId,
-    this.postId,
-    this.orderId,
-    this.amount,
+class Organization {
+  /// Returns a new [Organization] instance.
+  Organization({
+    this.id,
+    this.name,
+    this.description,
+    this.displayName,
   });
 
   ///
@@ -25,7 +25,7 @@ class Pay {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? washId;
+  String? id;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -33,7 +33,7 @@ class Pay {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? postId;
+  String? name;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -41,7 +41,7 @@ class Pay {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? orderId;
+  String? description;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -49,55 +49,55 @@ class Pay {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  int? amount;
+  String? displayName;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is Pay &&
-     other.washId == washId &&
-     other.postId == postId &&
-     other.orderId == orderId &&
-     other.amount == amount;
+  bool operator ==(Object other) => identical(this, other) || other is Organization &&
+     other.id == id &&
+     other.name == name &&
+     other.description == description &&
+     other.displayName == displayName;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (washId == null ? 0 : washId!.hashCode) +
-    (postId == null ? 0 : postId!.hashCode) +
-    (orderId == null ? 0 : orderId!.hashCode) +
-    (amount == null ? 0 : amount!.hashCode);
+    (id == null ? 0 : id!.hashCode) +
+    (name == null ? 0 : name!.hashCode) +
+    (description == null ? 0 : description!.hashCode) +
+    (displayName == null ? 0 : displayName!.hashCode);
 
   @override
-  String toString() => 'Pay[washId=$washId, postId=$postId, orderId=$orderId, amount=$amount]';
+  String toString() => 'Organization[id=$id, name=$name, description=$description, displayName=$displayName]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.washId != null) {
-      json[r'washId'] = this.washId;
+    if (this.id != null) {
+      json[r'id'] = this.id;
     } else {
-      json[r'washId'] = null;
+      json[r'id'] = null;
     }
-    if (this.postId != null) {
-      json[r'postId'] = this.postId;
+    if (this.name != null) {
+      json[r'name'] = this.name;
     } else {
-      json[r'postId'] = null;
+      json[r'name'] = null;
     }
-    if (this.orderId != null) {
-      json[r'orderId'] = this.orderId;
+    if (this.description != null) {
+      json[r'description'] = this.description;
     } else {
-      json[r'orderId'] = null;
+      json[r'description'] = null;
     }
-    if (this.amount != null) {
-      json[r'amount'] = this.amount;
+    if (this.displayName != null) {
+      json[r'displayName'] = this.displayName;
     } else {
-      json[r'amount'] = null;
+      json[r'displayName'] = null;
     }
     return json;
   }
 
-  /// Returns a new [Pay] instance and imports its values from
+  /// Returns a new [Organization] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static Pay? fromJson(dynamic value) {
+  static Organization? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -106,27 +106,27 @@ class Pay {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Pay[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Pay[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "Organization[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "Organization[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return Pay(
-        washId: mapValueOfType<String>(json, r'washId'),
-        postId: mapValueOfType<String>(json, r'postId'),
-        orderId: mapValueOfType<String>(json, r'orderId'),
-        amount: mapValueOfType<int>(json, r'amount'),
+      return Organization(
+        id: mapValueOfType<String>(json, r'id'),
+        name: mapValueOfType<String>(json, r'name'),
+        description: mapValueOfType<String>(json, r'description'),
+        displayName: mapValueOfType<String>(json, r'displayName'),
       );
     }
     return null;
   }
 
-  static List<Pay>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <Pay>[];
+  static List<Organization>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <Organization>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = Pay.fromJson(row);
+        final value = Organization.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -135,12 +135,12 @@ class Pay {
     return result.toList(growable: growable);
   }
 
-  static Map<String, Pay> mapFromJson(dynamic json) {
-    final map = <String, Pay>{};
+  static Map<String, Organization> mapFromJson(dynamic json) {
+    final map = <String, Organization>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Pay.fromJson(entry.value);
+        final value = Organization.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -149,13 +149,13 @@ class Pay {
     return map;
   }
 
-  // maps a json object with a list of Pay-objects as value to a dart map
-  static Map<String, List<Pay>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<Pay>>{};
+  // maps a json object with a list of Organization-objects as value to a dart map
+  static Map<String, List<Organization>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<Organization>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Pay.listFromJson(entry.value, growable: growable,);
+        final value = Organization.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

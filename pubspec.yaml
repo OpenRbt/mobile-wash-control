@@ -29,6 +29,10 @@ dependencies:
   package_info_plus: ^4.0.2
   network_info_plus: ^4.0.1
   http: ^1.1.0
+  permission_handler: ^11.3.1
+  open_file: ^3.3.2
+  path_provider: ^2.0.17
+  android_intent_plus: ^3.1.9
   intl: ^0.18.0
   meta: '^1.8.0'
   shared_preferences: ^2.0.17

@@ -10,12 +10,13 @@
 
 part of openapi.api;
 
-class Cancel {
-  /// Returns a new [Cancel] instance.
-  Cancel({
-    this.washID,
-    this.postID,
-    this.orderID,
+class Group {
+  /// Returns a new [Group] instance.
+  Group({
+    this.id,
+    this.name,
+    this.description,
+    this.organizationId,
   });
 
   ///
@@ -24,7 +25,7 @@ class Cancel {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? washID;
+  String? id;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -32,7 +33,7 @@ class Cancel {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? postID;
+  String? name;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -40,48 +41,63 @@ class Cancel {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  String? orderID;
+  String? description;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? organizationId;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is Cancel &&
-     other.washID == washID &&
-     other.postID == postID &&
-     other.orderID == orderID;
+  bool operator ==(Object other) => identical(this, other) || other is Group &&
+     other.id == id &&
+     other.name == name &&
+     other.description == description &&
+     other.organizationId == organizationId;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (washID == null ? 0 : washID!.hashCode) +
-    (postID == null ? 0 : postID!.hashCode) +
-    (orderID == null ? 0 : orderID!.hashCode);
+    (id == null ? 0 : id!.hashCode) +
+    (name == null ? 0 : name!.hashCode) +
+    (description == null ? 0 : description!.hashCode) +
+    (organizationId == null ? 0 : organizationId!.hashCode);
 
   @override
-  String toString() => 'Cancel[washID=$washID, postID=$postID, orderID=$orderID]';
+  String toString() => 'Group[id=$id, name=$name, description=$description, organizationId=$organizationId]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.washID != null) {
-      json[r'washID'] = this.washID;
+    if (this.id != null) {
+      json[r'id'] = this.id;
     } else {
-      json[r'washID'] = null;
+      json[r'id'] = null;
     }
-    if (this.postID != null) {
-      json[r'postID'] = this.postID;
+    if (this.name != null) {
+      json[r'name'] = this.name;
     } else {
-      json[r'postID'] = null;
+      json[r'name'] = null;
     }
-    if (this.orderID != null) {
-      json[r'orderID'] = this.orderID;
+    if (this.description != null) {
+      json[r'description'] = this.description;
     } else {
-      json[r'orderID'] = null;
+      json[r'description'] = null;
+    }
+    if (this.organizationId != null) {
+      json[r'organizationId'] = this.organizationId;
+    } else {
+      json[r'organizationId'] = null;
     }
     return json;
   }
 
-  /// Returns a new [Cancel] instance and imports its values from
+  /// Returns a new [Group] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static Cancel? fromJson(dynamic value) {
+  static Group? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -90,26 +106,27 @@ class Cancel {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Cancel[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Cancel[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "Group[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "Group[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return Cancel(
-        washID: mapValueOfType<String>(json, r'washID'),
-        postID: mapValueOfType<String>(json, r'postID'),
-        orderID: mapValueOfType<String>(json, r'orderID'),
+      return Group(
+        id: mapValueOfType<String>(json, r'id'),
+        name: mapValueOfType<String>(json, r'name'),
+        description: mapValueOfType<String>(json, r'description'),
+        organizationId: mapValueOfType<String>(json, r'organizationId'),
       );
     }
     return null;
   }
 
-  static List<Cancel>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <Cancel>[];
+  static List<Group>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <Group>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = Cancel.fromJson(row);
+        final value = Group.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -118,12 +135,12 @@ class Cancel {
     return result.toList(growable: growable);
   }
 
-  static Map<String, Cancel> mapFromJson(dynamic json) {
-    final map = <String, Cancel>{};
+  static Map<String, Group> mapFromJson(dynamic json) {
+    final map = <String, Group>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Cancel.fromJson(entry.value);
+        final value = Group.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -132,13 +149,13 @@ class Cancel {
     return map;
   }
 
-  // maps a json object with a list of Cancel-objects as value to a dart map
-  static Map<String, List<Cancel>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<Cancel>>{};
+  // maps a json object with a list of Group-objects as value to a dart map
+  static Map<String, List<Group>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<Group>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Cancel.listFromJson(entry.value, growable: growable,);
+        final value = Group.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

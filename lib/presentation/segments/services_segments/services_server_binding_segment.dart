@@ -5,7 +5,7 @@ import 'package:mobile_wash_control/domain/entities/user_entity.dart';
 import 'package:mobile_wash_control/domain/blocs/services_server_binding_cubit.dart';
 
 import '../../../mobile/widgets/common/ProgressButton.dart';
-import '../../widgets/drop_downs/drop_down_by_id_and_name.dart';
+import '../../widgets/drop_downs/drop_down_by_name.dart';
 
 
 class ServicesServerBindingSegment extends StatelessWidget {
@@ -89,7 +89,7 @@ class _ChooseServerView extends StatelessWidget {
                       flex: 3,
                       child: Padding(
                         padding:const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: DropDownByIdAndName(
+                        child: DropDownByName(
                           values: snapshot.requireData.servicesServerBindingEntity.organizations,
                           currentValue: snapshot.requireData.servicesServerBindingEntity.currentOrganization,
                           onChanged: (value) async {
@@ -119,7 +119,7 @@ class _ChooseServerView extends StatelessWidget {
                       flex: 3,
                       child: Padding(
                         padding:const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: DropDownByIdAndName(
+                        child: DropDownByName(
                             values: snapshot.requireData.servicesServerBindingEntity.serverGroups,
                             currentValue: snapshot.requireData.servicesServerBindingEntity.currentServerGroup,
                             onChanged: (value) async {
@@ -149,7 +149,7 @@ class _ChooseServerView extends StatelessWidget {
                       flex: 3,
                       child: Padding(
                         padding:const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: DropDownByIdAndName(
+                        child: DropDownByName(
                             values: snapshot.requireData.servicesServerBindingEntity.washServers,
                             currentValue: snapshot.requireData.servicesServerBindingEntity.currentWashServer,
                             onChanged: (value) async {

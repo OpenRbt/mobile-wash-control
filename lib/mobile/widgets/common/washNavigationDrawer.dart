@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
-import '../../../Common/common.dart';
+import '../../../Common/bonus_common.dart';
 
 enum SelectedPage {
   Main,
@@ -209,12 +209,12 @@ class WashNavigationDrawer extends StatelessWidget {
             ),
             decoration: BoxDecoration(color: theme.colorScheme.primary),
           ),
-          (Common.washServerApi?.apiClient.basePath ?? "").isNotEmpty ?
+          (BonusCommon.washServerApi?.apiClient.basePath ?? "").isNotEmpty ?
           Container(
             color: theme.colorScheme.primary,
             child: Text(
 
-              "URL сервера бонусов: ${Common.washServerApi?.apiClient.basePath}",
+              "URL сервера бонусов: ${BonusCommon.washServerApi?.apiClient.basePath}",
               style: theme.textTheme.titleLarge!.copyWith(
                 color: theme.colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
