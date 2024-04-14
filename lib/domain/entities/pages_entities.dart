@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:mobile_wash_control/domain/entities/user_entity.dart';
+import 'package:mobile_wash_control/entity/entity.dart' as ent;
 
 import 'lcw_entities.dart';
 
@@ -93,6 +94,70 @@ class TasksPageEntity {
       statusFilter.hashCode ^
       stationFilter.hashCode ^
       sorted.hashCode;
+}
+
+class UpdatesPageEntity {
+  List<Station> stations;
+  String currentApplicationVersion;
+  String availableApplicationVersion;
+  String downloadUrl;
+  bool isDownloadBlocked;
+  bool isDownloading;
+
+  UpdatesPageEntity({
+    required this.stations,
+    required this.currentApplicationVersion,
+    required this.availableApplicationVersion,
+    required this.downloadUrl,
+    required this.isDownloadBlocked,
+    required this.isDownloading,
+  });
+
+  UpdatesPageEntity copyWith({
+    List<Station>? stations,
+    String? currentApplicationVersion,
+    String? availableApplicationVersion,
+    String? downloadUrl,
+    bool? isDownloadBlocked,
+    bool? isDownloading,
+  }) {
+    return UpdatesPageEntity(
+      stations: stations ?? this.stations,
+      currentApplicationVersion:
+          currentApplicationVersion ?? this.currentApplicationVersion,
+      availableApplicationVersion:
+          availableApplicationVersion ?? this.availableApplicationVersion,
+      downloadUrl: downloadUrl ?? this.downloadUrl,
+      isDownloadBlocked: isDownloadBlocked ?? this.isDownloadBlocked,
+      isDownloading: isDownloading ?? this.isDownloading,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'UpdatesPageEntity{stations: $stations, currentApplicationVersion: $currentApplicationVersion, availableApplicationVersion: $availableApplicationVersion, downloadUrl: $downloadUrl, isDownloadBlocked: $isDownloadBlocked, isDownloading: $isDownloading}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UpdatesPageEntity &&
+          runtimeType == other.runtimeType &&
+          stations == other.stations &&
+          currentApplicationVersion == other.currentApplicationVersion &&
+          availableApplicationVersion == other.availableApplicationVersion &&
+          downloadUrl == other.downloadUrl &&
+          isDownloadBlocked == other.isDownloadBlocked &&
+          isDownloading == other.isDownloading;
+
+  @override
+  int get hashCode =>
+      stations.hashCode ^
+      currentApplicationVersion.hashCode ^
+      availableApplicationVersion.hashCode ^
+      downloadUrl.hashCode ^
+      isDownloadBlocked.hashCode ^
+      isDownloading.hashCode;
 }
 
 class UpdatesStationPageEntity {

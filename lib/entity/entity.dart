@@ -14,6 +14,34 @@ class Station {
   int? firmwareVersion;
 
   Station({required this.id, this.name, this.hash, this.status, this.currentBalance, this.currentProgram, this.currentProgramName, this.ip, this.firmwareVersion});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': this.id,
+      'name': this.name,
+      'hash': this.hash,
+      'status': this.status,
+      'currentBalance': this.currentBalance,
+      'currentProgram': this.currentProgram,
+      'currentProgramName': this.currentProgramName,
+      'ip': this.ip,
+      'firmwareVersion': this.firmwareVersion,
+    };
+  }
+
+  factory Station.fromMap(Map<String, dynamic> map) {
+    return Station(
+      id: map['id'] as int,
+      name: map['name'],
+      hash: map['hash'],
+      status: map['status'],
+      currentBalance: map['currentBalance'],
+      currentProgram: map['currentProgram'],
+      currentProgramName: map['currentProgramName'],
+      ip: map['ip'],
+      firmwareVersion: map['firmwareVersion'],
+    );
+  }
 }
 
 class Organization {

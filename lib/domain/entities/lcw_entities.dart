@@ -414,6 +414,11 @@ enum StationStatus {
   online,
 }
 
+const Map<String, StationStatus> fromStringToStationStatus = {
+  'offline': StationStatus.offline,
+  'online': StationStatus.online
+};
+
 TaskType taskTypeFromString(String taskType) {
   switch (taskType) {
     case 'build':

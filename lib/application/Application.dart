@@ -28,12 +28,12 @@ import '../mobile/pages/bonus_status.dart';
 import '../mobile/pages/sbp_status.dart';
 import '../mobile/pages/script_station.dart';
 import '../mobile/pages/scripts_page.dart';
-import '../mobile/pages/updates_page.dart';
 
 //BLoC architecture pages
 import 'package:mobile_wash_control/presentation/pages/services_page.dart';
 import 'package:mobile_wash_control/presentation/pages/tasks_page.dart';
 import 'package:mobile_wash_control/presentation/pages/updates_station_page.dart';
+import 'package:mobile_wash_control/presentation/pages/updates_page.dart';
 
 
 class Application extends StatelessWidget {
@@ -81,12 +81,15 @@ class Application extends StatelessWidget {
 
         "/mobile/scripts": (context) => ScriptsPage(),
         "/mobile/scripts/post": (context) => ScriptStationPage(),
-        "/mobile/updates": (context) => UpdatesPage(),
 
         //BLoC architecture pages
         "/mobile/services": (context) => ServicesPage(),
-        "/mobile/tasks": (context) => TasksPage(),
+
+        "/mobile/updates": (context) => UpdatesPage(),
         "/mobile/updates/post": (context) => UpdatesStationPage(),
+        
+        "/mobile/tasks": (context) => TasksPage(),
+
 
       },
       localizationsDelegates: [
