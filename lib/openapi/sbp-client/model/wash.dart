@@ -21,6 +21,7 @@ class Wash {
     this.terminalPassword,
     this.organizationId,
     this.groupId,
+    this.twoStagePayment,
   });
 
   ///
@@ -87,6 +88,14 @@ class Wash {
   ///
   String? groupId;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  bool? twoStagePayment;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is Wash &&
      other.id == id &&
@@ -96,7 +105,8 @@ class Wash {
      other.terminalKey == terminalKey &&
      other.terminalPassword == terminalPassword &&
      other.organizationId == organizationId &&
-     other.groupId == groupId;
+     other.groupId == groupId &&
+     other.twoStagePayment == twoStagePayment;
 
   @override
   int get hashCode =>
@@ -108,10 +118,11 @@ class Wash {
     (terminalKey == null ? 0 : terminalKey!.hashCode) +
     (terminalPassword == null ? 0 : terminalPassword!.hashCode) +
     (organizationId == null ? 0 : organizationId!.hashCode) +
-    (groupId == null ? 0 : groupId!.hashCode);
+    (groupId == null ? 0 : groupId!.hashCode) +
+    (twoStagePayment == null ? 0 : twoStagePayment!.hashCode);
 
   @override
-  String toString() => 'Wash[id=$id, password=$password, name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword, organizationId=$organizationId, groupId=$groupId]';
+  String toString() => 'Wash[id=$id, password=$password, name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword, organizationId=$organizationId, groupId=$groupId, twoStagePayment=$twoStagePayment]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -155,6 +166,11 @@ class Wash {
     } else {
       json[r'groupId'] = null;
     }
+    if (this.twoStagePayment != null) {
+      json[r'twoStagePayment'] = this.twoStagePayment;
+    } else {
+      json[r'twoStagePayment'] = null;
+    }
     return json;
   }
 
@@ -185,6 +201,7 @@ class Wash {
         terminalPassword: mapValueOfType<String>(json, r'terminalPassword'),
         organizationId: mapValueOfType<String>(json, r'organizationId'),
         groupId: mapValueOfType<String>(json, r'groupId'),
+        twoStagePayment: mapValueOfType<bool>(json, r'twoStagePayment'),
       );
     }
     return null;

@@ -197,6 +197,14 @@ class ApiClient {
           return PaymentCancellation.fromJson(value);
         case 'PaymentResponse':
           return PaymentResponse.fromJson(value);
+        case 'SimpleWash':
+          return SimpleWash.fromJson(value);
+        case 'Transaction':
+          return Transaction.fromJson(value);
+        case 'TransactionPage':
+          return TransactionPage.fromJson(value);
+        case 'TransactionStatus':
+          return TransactionStatusTypeTransformer().decode(value);
         case 'User':
           return User.fromJson(value);
         case 'UserOrganization':

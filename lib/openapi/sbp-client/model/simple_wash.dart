@@ -10,9 +10,9 @@
 
 part of openapi.api;
 
-class Organization {
-  /// Returns a new [Organization] instance.
-  Organization({
+class SimpleWash {
+  /// Returns a new [SimpleWash] instance.
+  SimpleWash({
     required this.id,
     required this.name,
     required this.deleted,
@@ -25,7 +25,7 @@ class Organization {
   bool deleted;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is Organization &&
+  bool operator ==(Object other) => identical(this, other) || other is SimpleWash &&
      other.id == id &&
      other.name == name &&
      other.deleted == deleted;
@@ -38,7 +38,7 @@ class Organization {
     (deleted.hashCode);
 
   @override
-  String toString() => 'Organization[id=$id, name=$name, deleted=$deleted]';
+  String toString() => 'SimpleWash[id=$id, name=$name, deleted=$deleted]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -48,10 +48,10 @@ class Organization {
     return json;
   }
 
-  /// Returns a new [Organization] instance and imports its values from
+  /// Returns a new [SimpleWash] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static Organization? fromJson(dynamic value) {
+  static SimpleWash? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -60,13 +60,13 @@ class Organization {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "Organization[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Organization[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "SimpleWash[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "SimpleWash[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return Organization(
+      return SimpleWash(
         id: mapValueOfType<String>(json, r'id')!,
         name: mapValueOfType<String>(json, r'name')!,
         deleted: mapValueOfType<bool>(json, r'deleted')!,
@@ -75,11 +75,11 @@ class Organization {
     return null;
   }
 
-  static List<Organization>? listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <Organization>[];
+  static List<SimpleWash>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <SimpleWash>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = Organization.fromJson(row);
+        final value = SimpleWash.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -88,12 +88,12 @@ class Organization {
     return result.toList(growable: growable);
   }
 
-  static Map<String, Organization> mapFromJson(dynamic json) {
-    final map = <String, Organization>{};
+  static Map<String, SimpleWash> mapFromJson(dynamic json) {
+    final map = <String, SimpleWash>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Organization.fromJson(entry.value);
+        final value = SimpleWash.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -102,13 +102,13 @@ class Organization {
     return map;
   }
 
-  // maps a json object with a list of Organization-objects as value to a dart map
-  static Map<String, List<Organization>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<Organization>>{};
+  // maps a json object with a list of SimpleWash-objects as value to a dart map
+  static Map<String, List<SimpleWash>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<SimpleWash>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = Organization.listFromJson(entry.value, growable: growable,);
+        final value = SimpleWash.listFromJson(entry.value, growable: growable,);
         if (value != null) {
           map[entry.key] = value;
         }

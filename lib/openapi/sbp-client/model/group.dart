@@ -13,84 +13,38 @@ part of openapi.api;
 class Group {
   /// Returns a new [Group] instance.
   Group({
-    this.id,
-    this.name,
-    this.description,
-    this.organizationId,
+    required this.id,
+    required this.name,
+    required this.deleted,
   });
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? id;
+  String id;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? name;
+  String name;
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? description;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? organizationId;
+  bool deleted;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is Group &&
      other.id == id &&
      other.name == name &&
-     other.description == description &&
-     other.organizationId == organizationId;
+     other.deleted == deleted;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (id == null ? 0 : id!.hashCode) +
-    (name == null ? 0 : name!.hashCode) +
-    (description == null ? 0 : description!.hashCode) +
-    (organizationId == null ? 0 : organizationId!.hashCode);
+    (id.hashCode) +
+    (name.hashCode) +
+    (deleted.hashCode);
 
   @override
-  String toString() => 'Group[id=$id, name=$name, description=$description, organizationId=$organizationId]';
+  String toString() => 'Group[id=$id, name=$name, deleted=$deleted]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.id != null) {
       json[r'id'] = this.id;
-    } else {
-      json[r'id'] = null;
-    }
-    if (this.name != null) {
       json[r'name'] = this.name;
-    } else {
-      json[r'name'] = null;
-    }
-    if (this.description != null) {
-      json[r'description'] = this.description;
-    } else {
-      json[r'description'] = null;
-    }
-    if (this.organizationId != null) {
-      json[r'organizationId'] = this.organizationId;
-    } else {
-      json[r'organizationId'] = null;
-    }
+      json[r'deleted'] = this.deleted;
     return json;
   }
 
@@ -113,10 +67,9 @@ class Group {
       }());
 
       return Group(
-        id: mapValueOfType<String>(json, r'id'),
-        name: mapValueOfType<String>(json, r'name'),
-        description: mapValueOfType<String>(json, r'description'),
-        organizationId: mapValueOfType<String>(json, r'organizationId'),
+        id: mapValueOfType<String>(json, r'id')!,
+        name: mapValueOfType<String>(json, r'name')!,
+        deleted: mapValueOfType<bool>(json, r'deleted')!,
       );
     }
     return null;
@@ -166,6 +119,9 @@ class Group {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
+    'id',
+    'name',
+    'deleted',
   };
 }
 

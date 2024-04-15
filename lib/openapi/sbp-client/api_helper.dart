@@ -55,6 +55,9 @@ String parameterToString(dynamic value) {
   if (value is DateTime) {
     return value.toUtc().toIso8601String();
   }
+  if (value is TransactionStatus) {
+    return TransactionStatusTypeTransformer().encode(value).toString();
+  }
   if (value is UserRole) {
     return UserRoleTypeTransformer().encode(value).toString();
   }

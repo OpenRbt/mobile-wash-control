@@ -60,7 +60,6 @@ class ServicesBonusProgramSegmentCubit extends Cubit<ServicesBonusProgramSegment
   Future<void> _initialize(ServiceUser serviceUser) async {
 
     String washId = '';
-    String washKey = '';
 
     WashServer? bonusWashServer;
     ServerGroup? currentServerGroup;
@@ -71,14 +70,13 @@ class ServicesBonusProgramSegmentCubit extends Cubit<ServicesBonusProgramSegment
 
     try {
       washId = await LcwTransport.getConfigVarString("server_id");
-      washKey = await LcwTransport.getConfigVarString("server_key");
     } on FormatException catch (e) {
       rethrow;
     } catch (e) {
       rethrow;
     }
 
-    if (washId.isNotEmpty && washKey.isNotEmpty) {
+    if (washId.isNotEmpty) {
       bonusWashServer = await BonusTransport.getBonusWashServer(washId);
     }
 

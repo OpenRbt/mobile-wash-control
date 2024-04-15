@@ -17,6 +17,7 @@ class WashUpdate {
     this.description,
     this.terminalKey,
     this.terminalPassword,
+    this.twoStagePayment,
   });
 
   ///
@@ -51,12 +52,15 @@ class WashUpdate {
   ///
   String? terminalPassword;
 
+  bool? twoStagePayment;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is WashUpdate &&
      other.name == name &&
      other.description == description &&
      other.terminalKey == terminalKey &&
-     other.terminalPassword == terminalPassword;
+     other.terminalPassword == terminalPassword &&
+     other.twoStagePayment == twoStagePayment;
 
   @override
   int get hashCode =>
@@ -64,10 +68,11 @@ class WashUpdate {
     (name == null ? 0 : name!.hashCode) +
     (description == null ? 0 : description!.hashCode) +
     (terminalKey == null ? 0 : terminalKey!.hashCode) +
-    (terminalPassword == null ? 0 : terminalPassword!.hashCode);
+    (terminalPassword == null ? 0 : terminalPassword!.hashCode) +
+    (twoStagePayment == null ? 0 : twoStagePayment!.hashCode);
 
   @override
-  String toString() => 'WashUpdate[name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword]';
+  String toString() => 'WashUpdate[name=$name, description=$description, terminalKey=$terminalKey, terminalPassword=$terminalPassword, twoStagePayment=$twoStagePayment]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -90,6 +95,11 @@ class WashUpdate {
       json[r'terminalPassword'] = this.terminalPassword;
     } else {
       json[r'terminalPassword'] = null;
+    }
+    if (this.twoStagePayment != null) {
+      json[r'twoStagePayment'] = this.twoStagePayment;
+    } else {
+      json[r'twoStagePayment'] = null;
     }
     return json;
   }
@@ -117,6 +127,7 @@ class WashUpdate {
         description: mapValueOfType<String>(json, r'description'),
         terminalKey: mapValueOfType<String>(json, r'terminalKey'),
         terminalPassword: mapValueOfType<String>(json, r'terminalPassword'),
+        twoStagePayment: mapValueOfType<bool>(json, r'twoStagePayment'),
       );
     }
     return null;

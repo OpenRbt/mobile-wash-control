@@ -29,13 +29,22 @@ class SbpTransport {
     return serviceUser;
   }
 
-  static Future<srvcEntity.WashServer> getSbpWashServer(String id) async {
+  static Future<srvcEntity.SbpWashServer> getSbpWashServer(String id) async {
 
-    late srvcEntity.WashServer sbpWashServer;
+    late srvcEntity.SbpWashServer sbpWashServer;
 
     try {
       final res = await SbpCommon.washApi!.getWashById(id);
-      sbpWashServer = srvcEntity.WashServer.fromSbpWash(res?.toJson() ?? {});
+
+      sbpWashServer = srvcEntity.SbpWashServer(
+        id: res?.id ?? '',
+        name: res?.name ?? '',
+        description: res?.description ?? '',
+        servicePassword: '',
+        isTwoStagePayment: res?.twoStagePayment ?? false,
+        groupId: res?.groupId ?? '',
+        organizationId: res?.organizationId ?? '',
+      );
     }
     on ApiException catch (e) {
       throw FormatException("${e.code}: ${e.message}");
@@ -47,9 +56,9 @@ class SbpTransport {
     return sbpWashServer;
   }
 
-  static Future<srvcEntity.WashServer> registerSbpWashServer(srvcEntity.WashServer washServer, String terminalKey, String terminalPassword) async {
+  static Future<srvcEntity.SbpWashServer> registerSbpWashServer(srvcEntity.SbpWashServer washServer, String terminalKey, String terminalPassword) async {
 
-    late srvcEntity.WashServer sbpWashServer;
+    late srvcEntity.SbpWashServer sbpWashServer;
 
     try {
       final res = await SbpCommon.washApi!.createWash(
@@ -61,7 +70,17 @@ class SbpTransport {
             groupId: washServer.groupId
         )
       );
-      sbpWashServer = srvcEntity.WashServer.fromSbpWash(res?.toJson() ?? {});
+
+      sbpWashServer = srvcEntity.SbpWashServer(
+        id: res?.id ?? '',
+        name: res?.name ?? '',
+        description: res?.description ?? '',
+        servicePassword: '',
+        isTwoStagePayment: res?.twoStagePayment ?? false,
+        groupId: res?.groupId ?? '',
+        organizationId: res?.organizationId ?? '',
+      );
+
     }
     on ApiException catch (e) {
       throw FormatException("${e.code}: ${e.message}");
@@ -73,7 +92,7 @@ class SbpTransport {
     return sbpWashServer;
   }
 
-  static Future<void> updateSbpWashServer(srvcEntity.WashServer washServer) async {
+  static Future<void> updateSbpWashServer(srvcEntity.SbpWashServer washServer) async {
     try {
       await SbpCommon.washApi!.updateWash(
           washServer.id,

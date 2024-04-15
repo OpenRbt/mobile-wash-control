@@ -31,6 +31,7 @@ part 'api/groups_api.dart';
 part 'api/notifications_api.dart';
 part 'api/payments_api.dart';
 part 'api/standard_api.dart';
+part 'api/transactions_api.dart';
 part 'api/washes_api.dart';
 
 part 'model/error.dart';
@@ -41,6 +42,10 @@ part 'model/organization.dart';
 part 'model/payment.dart';
 part 'model/payment_cancellation.dart';
 part 'model/payment_response.dart';
+part 'model/simple_wash.dart';
+part 'model/transaction.dart';
+part 'model/transaction_page.dart';
+part 'model/transaction_status.dart';
 part 'model/user.dart';
 part 'model/user_organization.dart';
 part 'model/user_role.dart';

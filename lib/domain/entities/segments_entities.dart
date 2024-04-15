@@ -72,7 +72,7 @@ class ServicesBonusProgramEntity {
 
 class ServicesSbpEntity {
   final ServiceUser? serviceUser;
-  final WashServer? sbpWashServer;
+  final SbpWashServer? sbpWashServer;
   final List<Organization> organizations;
   final Organization? currentOrganization;
   final List<ServerGroup> serverGroups;
@@ -95,7 +95,7 @@ class ServicesSbpEntity {
 
   ServicesSbpEntity copyWith({
     ServiceUser? serviceUser,
-    WashServer? sbpWashServer,
+    SbpWashServer? sbpWashServer,
     List<Organization>? organizations,
     Organization? currentOrganization,
     List<ServerGroup>? serverGroups,

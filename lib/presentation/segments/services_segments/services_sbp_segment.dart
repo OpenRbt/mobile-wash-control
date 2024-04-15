@@ -194,6 +194,7 @@ class _BaseInfoView extends StatelessWidget {
                       padding:const EdgeInsets.symmetric(horizontal: 8.0),
                       child: TextFormField(
                         controller: serverDescriptionController,
+                        validator: textValidator,
                         onChanged: (val) { cubit.onDescriptionChanged(val); },
                       ),
                     ),
@@ -357,7 +358,6 @@ class _DisplayWashDataView extends StatelessWidget {
         builder: (context, snapshot) {
 
           String id = (snapshot.requireData.servicesSbpEntity.sbpWashServer?.id ?? '').isEmpty ? "Не зарегистрирована" :  snapshot.requireData.servicesSbpEntity.sbpWashServer!.id;
-          String serviceKey = (snapshot.requireData.servicesSbpEntity.sbpWashServer?.serviceKey ?? '').isEmpty ? "Не зарегистрирована" :  snapshot.requireData.servicesSbpEntity.sbpWashServer!.serviceKey;
 
           return Column(
             children: [
@@ -391,45 +391,6 @@ class _DisplayWashDataView extends StatelessWidget {
                           children: [
                             Text(
                               id,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Password",
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 3,
-                    child: Padding(
-                      padding:  const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: TextButton(
-                        onPressed: null,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              serviceKey,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],

@@ -61,9 +61,8 @@ class ServicesSbpSegmentCubit extends Cubit<ServicesSbpSegmentState> {
   Future<void> _initialize(ServiceUser serviceUser) async {
 
     String washId = '';
-    String washKey = '';
 
-    WashServer? sbpWashServer;
+    SbpWashServer? sbpWashServer;
     ServerGroup? currentServerGroup;
     Organization? currentOrganization;
 
@@ -72,14 +71,13 @@ class ServicesSbpSegmentCubit extends Cubit<ServicesSbpSegmentState> {
 
     try {
       washId = await LcwTransport.getConfigVarString("sbp_server_id");
-      washKey = await LcwTransport.getConfigVarString("sbp_server_password");
     } on FormatException catch (e) {
       rethrow;
     } catch (e) {
       rethrow;
     }
 
-    if (washId.isNotEmpty && washKey.isNotEmpty) {
+    if (washId.isNotEmpty) {
       sbpWashServer = await SbpTransport.getSbpWashServer(washId);
     }
 
@@ -106,7 +104,7 @@ class ServicesSbpSegmentCubit extends Cubit<ServicesSbpSegmentState> {
 
     final servicesSbpEntity = ServicesSbpEntity(
         serviceUser: serviceUser,
-        sbpWashServer: sbpWashServer ?? WashServer(id: '', name: '', description: '', serviceKey: '', createdBy: '', groupId: currentServerGroup.id, organizationId: currentOrganization?.id ?? ''),
+        sbpWashServer: sbpWashServer ?? SbpWashServer(id: '', name: '', description: '', servicePassword: '', isTwoStagePayment: false, groupId: currentServerGroup.id, organizationId: currentOrganization?.id ?? '', ),
         organizations: organizations,
         currentOrganization: currentOrganization,
         serverGroups: serverGroups,
@@ -163,7 +161,7 @@ class ServicesSbpSegmentCubit extends Cubit<ServicesSbpSegmentState> {
     List<ServerGroup> serverGroups = List.from(await WashAdminTransport.getServerGroups(currentOrganization.id));
     serverGroups = serverGroups.where((element) => element.organizationId == currentOrganization.id).toList();
     ServerGroup currentServerGroup = serverGroups.first;
-    WashServer? sbpWashServer = servicesSbpEntity.sbpWashServer?.copyWith(groupId: currentServerGroup.id, organizationId: currentOrganization.id);
+    SbpWashServer? sbpWashServer = servicesSbpEntity.sbpWashServer?.copyWith(groupId: currentServerGroup.id, organizationId: currentOrganization.id);
 
     servicesSbpEntity = state.servicesSbpEntity;
     servicesSbpEntity = servicesSbpEntity.copyWith(currentOrganization: currentOrganization, serverGroups: serverGroups, currentServerGroup: currentServerGroup, interactionBlocked: false, sbpWashServer: sbpWashServer);
@@ -172,7 +170,7 @@ class ServicesSbpSegmentCubit extends Cubit<ServicesSbpSegmentState> {
 
   Future<void> onChangeServerGroup (ServerGroup value) async {
     var servicesSbpEntity = state.servicesSbpEntity;
-    WashServer? sbpWashServer = servicesSbpEntity.sbpWashServer?.copyWith(groupId: value.id);
+    SbpWashServer? sbpWashServer = servicesSbpEntity.sbpWashServer?.copyWith(groupId: value.id);
 
     servicesSbpEntity = servicesSbpEntity.copyWith(currentServerGroup: value, sbpWashServer: sbpWashServer);
     emit(state.copyWith(servicesSbpEntity: servicesSbpEntity));
@@ -185,7 +183,7 @@ class ServicesSbpSegmentCubit extends Cubit<ServicesSbpSegmentState> {
 
     var sbpWashServer = await SbpTransport.registerSbpWashServer(servicesSbpEntity.sbpWashServer!, servicesSbpEntity.terminalKey, servicesSbpEntity.terminalPassword);
     await LcwTransport.setConfigVarString("sbp_server_id", sbpWashServer.id);
-    await LcwTransport.setConfigVarString("sbp_server_password", sbpWashServer.serviceKey);
+    await LcwTransport.setConfigVarString("sbp_server_password", sbpWashServer.servicePassword);
 
     servicesSbpEntity = state.servicesSbpEntity;
     servicesSbpEntity = servicesSbpEntity.copyWith(interactionBlocked: false, sbpWashServer: sbpWashServer);
