@@ -1,7 +1,8 @@
 #!/bin/bash
 
+ cd ../
  docker run \
   -it \
-  -v /home/kronusol/StudioProjects/mobile_wash_control/:/src \
-  -v ./out:/out \
+  -v ./:/src \
+  -v ./build_script/buid:/out \
   build_mobile_wash_control

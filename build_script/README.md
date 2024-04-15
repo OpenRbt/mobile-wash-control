@@ -1,21 +1,12 @@
-# Prepare image
-> docker build -t build_mobile_wash_control .
+<!--Сборка-->
+## Linux
+1. Подготовка образа Docker
+```docker build -t build_mobile_wash_control .```
 
-# Usage
+2. Удалите файл "pubspec.yaml" и переименуйте "pubspec (for Linux build).yaml" в "pubspec.yaml"
+3. Запустите "build_app_in_docker.sh" из директории "build_script" внутри проекта
 
-1. Create directory for build output
-2. Run builder to make linux build
+## Android
 
->  docker run \
-  -it \
-  -v PATH_TO_APP_SOURCE_ROOT:/src \
-  -v PATH_TO_OUTPUT_FOLDER:/out \
-  build_mobile_wash_control
-
-## Example
-
->  docker run \
-  -it \
-  -v /home/user/mobile_wash_control:/src \
-  -v /home/user/build/:/out \
-  build_mobile_wash_control
+1. Выполнить следующую команду с указаним нужных параметров, взятых из Google Firebase
+``` flutter build apk --release --dart-define=android_api_key="" --dart-define=android_app_id="" --dart-define=messaging_sender_id="" --dart-define=project_id="" --dart-define=storage_bucket="" ```
