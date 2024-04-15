@@ -8,6 +8,7 @@ import 'package:mobile_wash_control/domain/entities/lcw_entities.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../presentation/widgets/dialogs/permission_dialog.dart';
 import '../../repository/repository.dart';
@@ -69,7 +70,7 @@ class UpdatesPageCubit extends Cubit<UpdatesPageState> {
     final stations = await LcwTransport.getStations();
     List<Station> filteredStations = stations.where((station) => (station.hash?.isNotEmpty ?? false) && station.status == StationStatus.online).toList();
 
-    final updateData = await checkLatestRelease();
+    final updateData = await checkLatestRelease(Platform.isAndroid);
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String currentVersion = packageInfo.version;
@@ -94,7 +95,7 @@ class UpdatesPageCubit extends Cubit<UpdatesPageState> {
     );
   }
 
-  Future<void> updateApplication(BuildContext context) async {
+  Future<void> updateMobileApplication(BuildContext context) async {
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String packageName = packageInfo.packageName;
@@ -141,6 +142,11 @@ class UpdatesPageCubit extends Cubit<UpdatesPageState> {
         )
     );
 
+  }
+
+  Future<void> updateDesktopApplication() async {
+    final downloadUrl = state.updatesPageEntity.downloadUrl;
+    await launchUrl(Uri.parse(downloadUrl));
   }
 
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 
 import '../../domain/blocs/updates_cubit.dart';
-import '../../entity/entity.dart';
 import '../../entity/vo/page_args_codes.dart';
 import '../../repository/repository.dart';
 import '../../mobile/widgets/common/washNavigationDrawer.dart';
@@ -45,7 +45,7 @@ class _UpdatesPageView extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         children: [
           _PostsUpdatesView(repository: repository,),
-          _MobileApplicationUpdateView()
+          _ApplicationUpdateView()
         ],
       ),
     );
@@ -112,8 +112,8 @@ class _PostsUpdatesView extends StatelessWidget {
   }
 }
 
-class _MobileApplicationUpdateView extends StatelessWidget {
-  const _MobileApplicationUpdateView({super.key});
+class _ApplicationUpdateView extends StatelessWidget {
+  const _ApplicationUpdateView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +146,8 @@ class _MobileApplicationUpdateView extends StatelessWidget {
                   ),
                   trailing: updatesPageEntity.isDownloading ? CircularProgressIndicator() : OutlinedButton.icon(
                     onPressed: updatesPageEntity.isDownloadBlocked ? null : () async {
-                      await cubit.updateApplication(context);
+                      Platform.isAndroid ? await cubit.updateMobileApplication(context) :
+                      cubit.updateDesktopApplication();
                     },
                     icon: const Icon(Icons.download_outlined),
                     label: const Text("Обновить"),
