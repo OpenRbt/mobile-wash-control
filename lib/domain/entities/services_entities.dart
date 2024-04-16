@@ -270,7 +270,7 @@ class WashServer {
       id: map['id'] ?? '',
       name: map['name'] ?? '',
       description: map['description'] ?? '',
-      serviceKey: '',
+      serviceKey: map['serviceKey'] ?? '',
       createdBy: map['createdBy'] ?? '',
       groupId: map['groupId'] ?? '',
       organizationId: map['organizationId'] ?? '',

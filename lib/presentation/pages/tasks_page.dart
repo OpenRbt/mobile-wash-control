@@ -34,6 +34,8 @@ class _TasksPageView extends StatelessWidget {
     final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
     final Repository repository = args[PageArgCode.repository];
 
+    bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+
     return StreamBuilder(
         initialData: cubit.state,
         stream: cubit.stream,
@@ -80,7 +82,7 @@ class _TasksPageView extends StatelessWidget {
                 child: Column(
                   children: [
                     const _TasksView(),
-                    const _PaginateTaskView(),
+                    isPortrait ? const _PortraitOrientationPaginateTaskView() : const _LandscapeOrientationPaginateTaskView()
                   ],
                 ),
               ),
@@ -132,8 +134,73 @@ class _TasksView extends StatelessWidget {
   }
 }
 
-class _PaginateTaskView extends StatelessWidget {
-  const _PaginateTaskView({Key? key}) : super(key: key);
+class _LandscapeOrientationPaginateTaskView extends StatelessWidget {
+
+  const _LandscapeOrientationPaginateTaskView({Key? key,}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    final cubit = context.watch<TasksPageCubit>();
+
+    return StreamBuilder(
+      initialData: cubit.state,
+      stream: cubit.stream,
+      builder: (context, snapshot) {
+
+        final currentPage = snapshot.data!.tasksPageEntity.tasksPagination.page;
+        final totalPages = snapshot.data!.tasksPageEntity.tasksPagination.totalPages;
+
+        List<int> pageNumbers = _calculatePageNumbers(currentPage, totalPages);
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.first_page),
+              onPressed: currentPage > 1 ? () => cubit.goToPage(1) : null,
+            ),
+            IconButton(
+              icon: const Icon(Icons.chevron_left),
+              onPressed: currentPage > 1 ? () => cubit.goToPage(currentPage - 1) : null,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: pageNumbers.map((i) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: OutlinedButton(
+                  onPressed: () => cubit.goToPage(i),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: currentPage == i ? Colors.white : null,
+                    backgroundColor: currentPage == i ? Colors.red : null,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                    padding: EdgeInsets.zero,
+                  ),
+                  child: Text('$i'),
+                ),
+              )).toList(),
+            ),
+            IconButton(
+              icon: const Icon(Icons.chevron_right),
+              onPressed: currentPage < totalPages ? () => cubit.goToPage(currentPage + 1) : null,
+            ),
+            IconButton(
+              icon: const Icon(Icons.last_page),
+              onPressed: currentPage < totalPages ? () => cubit.goToPage(totalPages) : null,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+
+class _PortraitOrientationPaginateTaskView extends StatelessWidget {
+  const _PortraitOrientationPaginateTaskView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,13 +261,6 @@ class _PaginateTaskView extends StatelessWidget {
         );
       },
     );
-  }
-
-  List<int> _calculatePageNumbers(int currentPage, int totalPages) {
-    int startPage = currentPage > 2 ? currentPage - 2 : 1;
-    int endPage = currentPage + 2 <= totalPages ? currentPage + 2 : totalPages;
-    int length = endPage - startPage + 1;
-    return List.generate(length, (index) => startPage + index);
   }
 }
 
@@ -278,4 +338,11 @@ showFilterModalDialog(BuildContext widgetContext) {
       );
     },
   );
+}
+
+List<int> _calculatePageNumbers(int currentPage, int totalPages) {
+  int startPage = currentPage > 2 ? currentPage - 2 : 1;
+  int endPage = currentPage + 2 <= totalPages ? currentPage + 2 : totalPages;
+  int length = endPage - startPage + 1;
+  return List.generate(length, (index) => startPage + index);
 }

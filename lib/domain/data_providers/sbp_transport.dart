@@ -75,7 +75,7 @@ class SbpTransport {
         id: res?.id ?? '',
         name: res?.name ?? '',
         description: res?.description ?? '',
-        servicePassword: '',
+        servicePassword: res?.password ?? '',
         isTwoStagePayment: res?.twoStagePayment ?? false,
         groupId: res?.groupId ?? '',
         organizationId: res?.organizationId ?? '',
