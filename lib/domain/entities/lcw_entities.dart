@@ -10,6 +10,7 @@ class Task {
   String createdAt;
   String? startedAt;
   String? stoppedAt;
+  int? triesCount;
 
   Task({
     required this.id,
@@ -21,6 +22,7 @@ class Task {
     required this.createdAt,
     this.startedAt,
     this.stoppedAt,
+    this.triesCount,
   });
 
   Task copyWith({
@@ -33,6 +35,7 @@ class Task {
     String? createdAt,
     String? startedAt,
     String? stoppedAt,
+    int? triesCount,
   }) {
     return Task(
       id: id ?? this.id,
@@ -44,22 +47,43 @@ class Task {
       createdAt: createdAt ?? this.createdAt,
       startedAt: startedAt ?? this.startedAt,
       stoppedAt: stoppedAt ?? this.stoppedAt,
+      triesCount: triesCount ?? this.triesCount,
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': this.id,
-      'stationID': this.stationID,
-      'versionID': this.versionID,
-      'taskType': this.taskType,
-      'taskStatus': this.taskStatus,
-      'error': this.error,
-      'createdAt': this.createdAt,
-      'startedAt': this.startedAt,
-      'stoppedAt': this.stoppedAt,
-    };
+  @override
+  String toString() {
+    return 'Task{id: $id, stationID: $stationID, versionID: $versionID, taskType: $taskType, taskStatus: $taskStatus, error: $error, createdAt: $createdAt, startedAt: $startedAt, stoppedAt: $stoppedAt, triesCount: $triesCount}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Task &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          stationID == other.stationID &&
+          versionID == other.versionID &&
+          taskType == other.taskType &&
+          taskStatus == other.taskStatus &&
+          error == other.error &&
+          createdAt == other.createdAt &&
+          startedAt == other.startedAt &&
+          stoppedAt == other.stoppedAt &&
+          triesCount == other.triesCount;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      stationID.hashCode ^
+      versionID.hashCode ^
+      taskType.hashCode ^
+      taskStatus.hashCode ^
+      error.hashCode ^
+      createdAt.hashCode ^
+      startedAt.hashCode ^
+      stoppedAt.hashCode ^
+      triesCount.hashCode;
 
   factory Task.fromMap(Map<String, dynamic> map) {
 
@@ -79,40 +103,9 @@ class Task {
       createdAt: map['createdAt'] as String,
       startedAt: map['startedAt'] ?? "",
       stoppedAt: map['stoppedAt'] ?? "",
+        triesCount: map['retryCount'] ?? 0
     );
   }
-
-  @override
-  String toString() {
-    return 'Task{id: $id, stationID: $stationID, versionID: $versionID, taskType: $taskType, taskStatus: $taskStatus, error: $error, createdAt: $createdAt, startedAt: $startedAt, stoppedAt: $stoppedAt}';
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Task &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          stationID == other.stationID &&
-          versionID == other.versionID &&
-          taskType == other.taskType &&
-          taskStatus == other.taskStatus &&
-          error == other.error &&
-          createdAt == other.createdAt &&
-          startedAt == other.startedAt &&
-          stoppedAt == other.stoppedAt;
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      stationID.hashCode ^
-      versionID.hashCode ^
-      taskType.hashCode ^
-      taskStatus.hashCode ^
-      error.hashCode ^
-      createdAt.hashCode ^
-      startedAt.hashCode ^
-      stoppedAt.hashCode;
 }
 
 class TasksPagination {

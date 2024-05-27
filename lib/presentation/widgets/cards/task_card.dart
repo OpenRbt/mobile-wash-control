@@ -12,6 +12,7 @@ class TaskCardView extends StatelessWidget {
   final String createdAt;
   final String startedAt;
   final String stoppedAt;
+  final int triesCount;
 
   const TaskCardView({
     required this.id,
@@ -23,6 +24,7 @@ class TaskCardView extends StatelessWidget {
     required this.createdAt,
     required this.startedAt,
     required this.stoppedAt,
+    required this.triesCount,
   });
 
   Color _getStatusColor(String status) {
@@ -80,6 +82,10 @@ class TaskCardView extends StatelessWidget {
             if (error.isNotEmpty) ...[
               Divider(color: Colors.white70),
               _CardErrorSection(error: error,),
+            ],
+            if (triesCount > 0) ...[
+              Divider(color: Colors.white70),
+              _TriesCountSection(triesCount: triesCount,),
             ]
           ],
         ),
@@ -205,6 +211,23 @@ class _CardErrorSection extends StatelessWidget {
       children: <Widget>[
         Text('Ошибка', style: TextStyles.cardSubHeader()),
         Text(error, style: TextStyles.cardText()),
+      ],
+    );
+  }
+}
+
+class _TriesCountSection extends StatelessWidget {
+
+  final int triesCount;
+
+  const _TriesCountSection({super.key, required this.triesCount});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text('Кол-во попыток: $triesCount', style: TextStyles.cardSubHeader()),
       ],
     );
   }

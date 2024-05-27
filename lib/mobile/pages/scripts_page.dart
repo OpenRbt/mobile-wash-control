@@ -37,7 +37,7 @@ class _ScriptsPageState extends State<ScriptsPage> {
             return Center(child: CircularProgressIndicator());
           }
 
-          List<Station> filteredStations = stations.where((station) => (station.hash?.isNotEmpty ?? false)).toList();
+          List<Station> filteredStations = stations;
           return ListView.builder(
             shrinkWrap: true,
             itemCount: filteredStations.length,

@@ -119,7 +119,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                             await auth.signInWithCredential(credential);
                           } catch (err) {
                             log(err.toString());
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось авторизоваться"));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось авторизоваться $err"));
                           }
                         } else {
                           try {

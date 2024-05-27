@@ -68,7 +68,7 @@ class UpdatesPageCubit extends Cubit<UpdatesPageState> {
   Future<void> _initialize(Repository repository) async {
 
     final stations = await LcwTransport.getStations();
-    List<Station> filteredStations = stations.where((station) => (station.hash?.isNotEmpty ?? false) && station.status == StationStatus.online).toList();
+    List<Station> filteredStations = stations.where((station) => (station.hash?.isNotEmpty ?? false) && (station.ip?.isNotEmpty ?? false)).toList();
 
     final updateData = await checkLatestRelease(Platform.isAndroid);
 
@@ -92,6 +92,19 @@ class UpdatesPageCubit extends Cubit<UpdatesPageState> {
             currentApplicationVersion: currentVersion
         )
       )
+    );
+  }
+
+  Future<void> getStations() async {
+    final stations = await LcwTransport.getStations();
+    List<Station> filteredStations = stations.where((station) => (station.hash?.isNotEmpty ?? false) && (station.ip?.isNotEmpty ?? false)).toList();
+
+    emit(
+        state.copyWith(
+            updatesPageEntity: state.updatesPageEntity.copyWith(
+                stations: filteredStations,
+            )
+        )
     );
   }
 

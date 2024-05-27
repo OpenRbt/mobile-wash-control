@@ -76,7 +76,7 @@ class PostVersionCard extends StatelessWidget {
                         }
                       },
                       icon: const Icon(Icons.download_outlined),
-                      label: const Text("Загрузить на пост"),
+                      label: const Text("Сделать текущей"),
                     ),
                 ),
                 SizedBox(width: 8),

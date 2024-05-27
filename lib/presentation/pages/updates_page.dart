@@ -76,6 +76,11 @@ class _PostsUpdatesView extends StatelessWidget {
                 style: theme.textTheme.titleLarge,
               ),
               childrenPadding: EdgeInsets.all(8),
+              onExpansionChanged: (bool? isExpanded) {
+                if(isExpanded ?? false) {
+                  cubit.getStations();
+                }
+              },
               children: [
                 ListView.builder(
                     shrinkWrap: true,

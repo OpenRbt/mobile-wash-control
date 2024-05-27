@@ -18,6 +18,7 @@ class Task {
     this.versionID,
     required this.type,
     required this.status,
+    required this.retryCount,
     this.error,
     required this.createdAt,
     this.startedAt,
@@ -34,6 +35,8 @@ class Task {
 
   TaskStatus status;
 
+  int retryCount;
+
   String? error;
 
   DateTime createdAt;
@@ -49,6 +52,7 @@ class Task {
      other.versionID == versionID &&
      other.type == type &&
      other.status == status &&
+     other.retryCount == retryCount &&
      other.error == error &&
      other.createdAt == createdAt &&
      other.startedAt == startedAt &&
@@ -62,13 +66,14 @@ class Task {
     (versionID == null ? 0 : versionID!.hashCode) +
     (type.hashCode) +
     (status.hashCode) +
+    (retryCount.hashCode) +
     (error == null ? 0 : error!.hashCode) +
     (createdAt.hashCode) +
     (startedAt == null ? 0 : startedAt!.hashCode) +
     (stoppedAt == null ? 0 : stoppedAt!.hashCode);
 
   @override
-  String toString() => 'Task[id=$id, stationID=$stationID, versionID=$versionID, type=$type, status=$status, error=$error, createdAt=$createdAt, startedAt=$startedAt, stoppedAt=$stoppedAt]';
+  String toString() => 'Task[id=$id, stationID=$stationID, versionID=$versionID, type=$type, status=$status, retryCount=$retryCount, error=$error, createdAt=$createdAt, startedAt=$startedAt, stoppedAt=$stoppedAt]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -81,6 +86,7 @@ class Task {
     }
       json[r'type'] = this.type;
       json[r'status'] = this.status;
+      json[r'retryCount'] = this.retryCount;
     if (this.error != null) {
       json[r'error'] = this.error;
     } else {
@@ -124,6 +130,7 @@ class Task {
         versionID: mapValueOfType<int>(json, r'versionID'),
         type: TaskType.fromJson(json[r'type'])!,
         status: TaskStatus.fromJson(json[r'status'])!,
+        retryCount: mapValueOfType<int>(json, r'retryCount')!,
         error: mapValueOfType<String>(json, r'error'),
         createdAt: mapDateTime(json, r'createdAt', '')!,
         startedAt: mapDateTime(json, r'startedAt', ''),
@@ -181,6 +188,7 @@ class Task {
     'stationID',
     'type',
     'status',
+    'retryCount',
     'createdAt',
   };
 }

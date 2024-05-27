@@ -78,70 +78,71 @@ class _ScriptStationPageState extends State<ScriptStationPage> {
             return Container();
           }
 
-          return ValueListenableBuilder(
-              valueListenable: repository.getStationsNotifier(),
-              builder: (context, stations, _) {
+          else if(snapshot.connectionState == ConnectionState.done) {
+            return ValueListenableBuilder(
+                valueListenable: repository.getStationsNotifier(),
+                builder: (context, stations, _) {
 
-                if (stations == null) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                List<String> filteredStations = [];
-
-                stations.where((station) => (station.hash?.isNotEmpty ?? false)).forEach((element) {
-                  if(element.id != id) {
-                    filteredStations.add(element.id.toString() ?? '');
+                  if (stations == null) {
+                    return Center(child: CircularProgressIndicator());
                   }
-                });
 
-                copyFromStation = filteredStations[0];
+                  List<Station> filteredStations = stations;
+                  List<String> stationsNames = filteredStations.map((e) => e.id.toString()).toList();
 
-                return Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          EditField(
-                            name: "Название скрипта: ",
-                            controller: scriptNameController,
-                            onChanged: (val) {},
-                            validator: (val) {
-                              return null;
-                            },
-                            canEdit: true,
-                            style: null,
-                          ),
-                          SizedBox(height: 20,),
-                          DropDownWithButton(
-                            onChanged: (String val) {
-                              copyFromStation = val;
-                            },
-                            onPressed: () async {
-                              await repository.setCurrentBuildScript(id, context: context, name: scriptNameController.text, commands: [], copyFrom: int.parse(copyFromStation));
-                              await _getCurrentScript(repository, id);
+                  copyFromStation = filteredStations[0].id.toString();
+
+
+                  return Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            EditField(
+                              name: "Название скрипта: ",
+                              controller: scriptNameController,
+                              onChanged: (val) {},
+                              validator: (val) {
+                                return null;
                               },
-                            currentValue: filteredStations[0],
-                            values: filteredStations,
-                            buttonText: 'Скопировать скрипт со станции',
-                          ),
-                          SizedBox(height: 20,),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: TextFormField(
-                              controller: scriptController,
-                              maxLines: null,
-                              keyboardType: TextInputType.multiline,
-                              textAlign: TextAlign.start,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                              canEdit: true,
+                              style: null,
+                            ),
+                            SizedBox(height: 20,),
+                            DropDownWithButton(
+                              onChanged: (String val) {
+                                copyFromStation = val;
+                              },
+                              onPressed: () async {
+                                await repository.setCurrentBuildScript(id, context: context, name: scriptNameController.text, commands: [], copyFrom: int.parse(copyFromStation));
+                                await _getCurrentScript(repository, id);
+                              },
+                              currentValue: filteredStations[0].id.toString(),
+                              values: stationsNames,
+                              buttonText: 'Скопировать скрипт со станции',
+                            ),
+                            SizedBox(height: 20,),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: TextFormField(
+                                controller: scriptController,
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                textAlign: TextAlign.start,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                );
-              }
-          );
+                          ],
+                        ),
+                      )
+                  );
+                }
+            );
+          }
+
+          return Container();
         },
       ),
     );

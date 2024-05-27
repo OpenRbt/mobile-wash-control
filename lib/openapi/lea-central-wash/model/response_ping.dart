@@ -14,6 +14,7 @@ class ResponsePing {
   /// Returns a new [ResponsePing] instance.
   ResponsePing({
     required this.serviceAmount,
+    required this.kaspiAmount,
     this.sessionID,
     this.bonusAmount,
     this.bonusSystemActive,
@@ -30,6 +31,8 @@ class ResponsePing {
   });
 
   int serviceAmount;
+
+  int kaspiAmount;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -108,6 +111,7 @@ class ResponsePing {
   @override
   bool operator ==(Object other) => identical(this, other) || other is ResponsePing &&
      other.serviceAmount == serviceAmount &&
+     other.kaspiAmount == kaspiAmount &&
      other.sessionID == sessionID &&
      other.bonusAmount == bonusAmount &&
      other.bonusSystemActive == bonusSystemActive &&
@@ -126,6 +130,7 @@ class ResponsePing {
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (serviceAmount.hashCode) +
+    (kaspiAmount.hashCode) +
     (sessionID == null ? 0 : sessionID!.hashCode) +
     (bonusAmount == null ? 0 : bonusAmount!.hashCode) +
     (bonusSystemActive == null ? 0 : bonusSystemActive!.hashCode) +
@@ -141,11 +146,12 @@ class ResponsePing {
     (sbpSystemActive == null ? 0 : sbpSystemActive!.hashCode);
 
   @override
-  String toString() => 'ResponsePing[serviceAmount=$serviceAmount, sessionID=$sessionID, bonusAmount=$bonusAmount, bonusSystemActive=$bonusSystemActive, qrMoney=$qrMoney, qrUrl=$qrUrl, qrOrderId=$qrOrderId, qrFailed=$qrFailed, openStation=$openStation, lastUpdate=$lastUpdate, lastDiscountUpdate=$lastDiscountUpdate, buttonID=$buttonID, authorizedSessionID=$authorizedSessionID, sbpSystemActive=$sbpSystemActive]';
+  String toString() => 'ResponsePing[serviceAmount=$serviceAmount, kaspiAmount=$kaspiAmount, sessionID=$sessionID, bonusAmount=$bonusAmount, bonusSystemActive=$bonusSystemActive, qrMoney=$qrMoney, qrUrl=$qrUrl, qrOrderId=$qrOrderId, qrFailed=$qrFailed, openStation=$openStation, lastUpdate=$lastUpdate, lastDiscountUpdate=$lastDiscountUpdate, buttonID=$buttonID, authorizedSessionID=$authorizedSessionID, sbpSystemActive=$sbpSystemActive]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'serviceAmount'] = this.serviceAmount;
+      json[r'kaspiAmount'] = this.kaspiAmount;
     if (this.sessionID != null) {
       json[r'sessionID'] = this.sessionID;
     } else {
@@ -214,6 +220,7 @@ class ResponsePing {
 
       return ResponsePing(
         serviceAmount: mapValueOfType<int>(json, r'serviceAmount')!,
+        kaspiAmount: mapValueOfType<int>(json, r'kaspiAmount')!,
         sessionID: mapValueOfType<String>(json, r'sessionID'),
         bonusAmount: mapValueOfType<int>(json, r'bonusAmount'),
         bonusSystemActive: mapValueOfType<bool>(json, r'bonusSystemActive'),
@@ -277,6 +284,7 @@ class ResponsePing {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'serviceAmount',
+    'kaspiAmount',
     'qrMoney',
     'qrUrl',
     'qrOrderId',
