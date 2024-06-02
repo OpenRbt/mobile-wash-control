@@ -37,7 +37,7 @@ class PickDaysDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            campaign.value = campaign.value.copyWith(weekDays: days);
+            campaign.value = campaign.value.copyWith(weekDays: WeekDaySorting.sortDays(days));
             Navigator.pop(context);
           },
           child: Text("Применить"),

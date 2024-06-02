@@ -118,18 +118,8 @@ class _TimeRangeDialogState extends State<TimeRangeDialog> {
       actions: [
         TextButton(
             onPressed: () {
-              if (startMinute.value >= endMinute.value) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                    "Время окончания не должно быть меньше времени начала",
-                    style: theme.textTheme.bodyLarge!.copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                  backgroundColor: theme.colorScheme.primary,
-                ));
-              } else {
-                widget.campaign.value = widget.campaign.value.copyWith(startMinute: startMinute.value, endMinute: endMinute.value);
-                Navigator.pop(context);
-              }
+              widget.campaign.value = widget.campaign.value.copyWith(startMinute: startMinute.value, endMinute: endMinute.value);
+              Navigator.pop(context);
             },
             child: Text("Применить"))
       ],

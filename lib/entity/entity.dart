@@ -301,6 +301,14 @@ enum WeekDay {
   }
 }
 
+extension WeekDaySorting on WeekDay {
+  static Set<WeekDay> sortDays(Set<WeekDay> days) {
+    List<WeekDay> sortedList = days.toList()
+      ..sort((a, b) => a.index.compareTo(b.index));
+    return sortedList.toSet();
+  }
+}
+
 enum TaskStatus {
   queue,
   started,

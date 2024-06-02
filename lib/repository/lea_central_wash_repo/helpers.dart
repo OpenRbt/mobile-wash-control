@@ -91,7 +91,6 @@ class Helpers {
     campaign.weekday.forEach((element) {
       weekDays.add(entity.WeekDay.fromString(element.toString()));
     });
-
     return entity.DiscountCampaign(
       id: campaign.id,
       startDate: DateTime.fromMillisecondsSinceEpoch(campaign.startDate * 1000, isUtc: true).toLocal(),
@@ -106,7 +105,7 @@ class Helpers {
           (index) => entity.DiscountProgram(programID: campaign.discountPrograms[index].programID, discount: campaign.discountPrograms[index].discount),
         ),
       ),
-      weekDays: weekDays,
+      weekDays: entity.WeekDaySorting.sortDays(weekDays),
       name: campaign.name,
     );
   }
@@ -151,8 +150,8 @@ class Helpers {
 
     return AdvertisingCampaign(
       id: campaign.id,
-      startDate: campaign.startDate.toUtc().millisecondsSinceEpoch ~/ 1000,
-      endDate: campaign.endDate.toUtc().millisecondsSinceEpoch ~/ 1000,
+      startDate: campaign.startDate.millisecondsSinceEpoch ~/ 1000,
+      endDate: campaign.endDate.millisecondsSinceEpoch ~/ 1000,
       enabled: campaign.enabled,
       startMinute: campaign.startMinute,
       endMinute: campaign.endMinute,
