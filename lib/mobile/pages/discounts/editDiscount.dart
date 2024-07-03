@@ -130,7 +130,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                     color: theme.colorScheme.onPrimary,
                   ),
                   label: Text(
-                    "Удалить",
+                    "${context.tr('delete')}",
                     style: theme.textTheme.titleMedium!.copyWith(color: theme.colorScheme.onPrimary),
                   ),
                 )
@@ -159,7 +159,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                             flex: 1,
                             fit: FlexFit.tight,
                             child: Text(
-                              "Название",
+                              "${context.tr('name')}",
                               style: theme.textTheme.bodyLarge,
                             ),
                           ),
@@ -173,7 +173,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                               },
                               validator: (val) {
                                 if ((val ?? "").trim().isEmpty) {
-                                  return "Поле не может быть пустым";
+                                  return "${context.tr('field_must_not_be_empty')}";
                                 }
                                 return null;
                               },
@@ -321,7 +321,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                               }
                             },
                             child: Text(
-                              "Выбрать период",
+                              "${context.tr('choose_period')}",
                             ),
                           ),
                         ],
@@ -371,7 +371,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                               );
                             },
                             child: Text(
-                              "Выбрать период",
+                              "${context.tr('choose_period')}",
                             ),
                           ),
                         ],

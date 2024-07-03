@@ -20,7 +20,7 @@ class _SbpStatusPageState extends State<SbpStatusPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Информация о СБП"),
+        title: Text(context.tr('SBP_info')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -28,7 +28,7 @@ class _SbpStatusPageState extends State<SbpStatusPage> {
           valueListenable: repository.getSbpStatusNotifier(),
           builder: (context, sbpStatus, _) {
             return ServiceStatus(
-              serviceName: 'Сервис СБП',
+              serviceName: context.tr('SBP_service'),
               disabledOnServer: sbpStatus?.disabledOnServer,
               isConnected: sbpStatus?.isConnected,
               lastErr: sbpStatus?.lastErr,

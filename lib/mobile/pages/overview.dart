@@ -68,18 +68,18 @@ class _OverviewPageState extends State<OverviewPage> {
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text("Главная"),
+        title: Text(context.tr('overview')),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Text("Касса: "),
+                Text("${context.tr('cash_desk')}: "),
                 ValueListenableBuilder(
                   valueListenable: repository.getKasseStatusNotifier(),
                   builder: (BuildContext context, KasseStatus? value, Widget? child) {
                     return Text(
-                      "${value?.status ?? "Нет данных"}",
+                      "${value?.status ?? ${context.tr('no_data')}}",
                     );
                   },
                 ),
@@ -144,11 +144,11 @@ class _OverviewPageState extends State<OverviewPage> {
                             segments: [
                               ButtonSegment(
                                 value: PostsViewMode.hashes,
-                                label: Text("Все"),
+                                label: Text(context.tr('all')),
                               ),
                               ButtonSegment(
                                 value: PostsViewMode.active,
-                                label: Text("Активные"),
+                                label: Text(context.tr('active')),
                               ),
                             ],
                             selected: {value},

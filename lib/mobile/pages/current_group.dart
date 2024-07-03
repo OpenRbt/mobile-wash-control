@@ -70,7 +70,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text("Организация ${currentOrganizationID}, группа ${currentGroupID}"),
+            title: Text("${context.tr('organization')} ${currentOrganizationID}, ${context.tr('group"')} ${currentGroupID}"),
             actions: [
               IconButton(
                 onPressed: () async {
@@ -103,7 +103,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Название группы",
+                                      context.tr('group_name'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -117,7 +117,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                       },
                                       validator: (val) {
                                         if ((val ?? "").trim().isEmpty) {
-                                          return "Поле не может быть пустым";
+                                          return "${context.tr('field_must_not_be_empty')}";
                                         }
                                         return null;
                                       },
@@ -131,7 +131,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Описание группы",
+                                      context.tr('group_description'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -174,7 +174,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                         await getPageData(currentGroupID, currentOrganizationID);
                                       },
                                       child: const Text(
-                                        "Получить текущую конфигурацию",
+                                        "${context.tr('get_current_configuration')}",
                                         softWrap: true,
                                       ),
                                     ),
@@ -204,9 +204,9 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                             showDialog(
                                 context: context,
                                 builder: (context) =>  TwoFieldDialog(
-                                  title: "Редактировать сервер",
-                                  firstFieldName: 'Название',
-                                  seconFieldName: 'Описание',
+                                  title: context.tr('edit'),
+                                  firstFieldName: '${context.tr('name')}',
+                                  seconFieldName: '${context.tr('description')}',
                                   firstController: firstController,
                                   secondController: secondController,
                                   validateKey: editWashServerKey,
@@ -222,7 +222,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                         await WashAdminRepository.deleteWashServer((washServers?[index].id ?? ""));
                                         print(washServers?[index].id);
                                       },
-                                      child: const Text("Удалить"),
+                                      child: const Text("${context.tr('delete')}"),
                                     ),
                                     ProgressButton(
                                       onPressed: () async {
@@ -258,9 +258,9 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                         showDialog(
                             context: context,
                             builder: (context) =>  TwoFieldDialog(
-                              title: "Создать сервер",
-                              firstFieldName: 'Название',
-                              seconFieldName: 'Описание',
+                              title: "${context.tr('create')} ${context.tr('server')}",
+                              firstFieldName: '${context.tr('name')}',
+                              seconFieldName: '${context.tr('description')}',
                               firstController: firstController,
                               secondController: secondController,
                               validateKey: addWashServerKey,
@@ -285,13 +285,13 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                       print(secondController.text);
                                     }
                                   },
-                                  child: const Text("Создать"),
+                                  child: const Text("${context.tr('create')}"),
                                 )
                               ],
                             )
                         );
                       },
-                      child: const Text("Добавить сервер"),
+                      child: const Text("${context.tr('add')}"),
                     ),
                   )
                 ],

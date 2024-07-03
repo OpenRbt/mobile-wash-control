@@ -170,7 +170,7 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
                                   }
                                 }
                               : null,
-                          child: Text("Выбрать период"),
+                          child: Text("${context.tr('choose_period')}"),
                         )
                       ],
                     );

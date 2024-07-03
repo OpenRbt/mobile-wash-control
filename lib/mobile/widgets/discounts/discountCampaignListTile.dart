@@ -162,7 +162,7 @@ class DiscountCampaignListTile extends StatelessWidget {
           ]),
           TextButton(
             onPressed: onPressed,
-            child: Text("Редактировать"),
+            child: Text("${context.tr('edit')}"),
           ),
         ],
       ),

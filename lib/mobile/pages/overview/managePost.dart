@@ -174,7 +174,7 @@ class _ManagePostPageState extends State<ManagePostPage> with TickerProviderStat
                           ),
                         ),
                         Text(
-                          "Добавить сервисные",
+                          "${context.tr('add')} сервисные",
                           style: theme.textTheme.titleLarge,
                         ),
                         (repository.currentUser()?.isAdmin ?? false)

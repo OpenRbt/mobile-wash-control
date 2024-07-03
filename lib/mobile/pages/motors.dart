@@ -47,7 +47,7 @@ class _MotorPageState extends State<MotorPage> {
     res = await repository.getAllStationStatsCurrent(context: context);
 
     var timeTotal = DateTime.now().difference(startTime);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getInfoSnackBar(message: "Статистика загружена за ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} секунд"));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getInfoSnackBar(message: "${context.tr('statistics_uploaded_in')} ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} ${context.tr('seconds')}"));
     return res;
   }
 
@@ -59,7 +59,7 @@ class _MotorPageState extends State<MotorPage> {
     res = await repository.getAllStationStatsByDates(range.start, range.end, context: context);
 
     var timeTotal = DateTime.now().difference(startTime);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getInfoSnackBar(message: "Статистика загружена за ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} секунд"));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getInfoSnackBar(message: "${context.tr('statistics_uploaded_in')} ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} ${context.tr('seconds')}"));
     return res;
   }
 
@@ -80,7 +80,7 @@ class _MotorPageState extends State<MotorPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Моторесурс"),
+        title: Text(context.tr('motor_life')),
         actions: [
           TextButton.icon(
             onPressed: () async {
@@ -97,7 +97,7 @@ class _MotorPageState extends State<MotorPage> {
               color: theme.colorScheme.onPrimary,
             ),
             label: Text(
-              "Сброс",
+              context.tr('reset'),
               style: theme.textTheme.titleMedium!.copyWith(color: theme.colorScheme.onPrimary),
             ),
           ),
@@ -127,11 +127,11 @@ class _MotorPageState extends State<MotorPage> {
                       segments: [
                         ButtonSegment(
                           value: MotorStatsViewMode.current,
-                          label: Text("Текущая"),
+                          label: Text(context.tr('current')),
                         ),
                         ButtonSegment(
                           value: MotorStatsViewMode.dates,
-                          label: Text("По датам"),
+                          label: Text(context.tr('by_dates')),
                         ),
                       ],
                       selected: {value},
@@ -156,7 +156,7 @@ class _MotorPageState extends State<MotorPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Период с ",
+                                  "${context.tr('period')} ${context.tr('from')} ",
                                   style: canSelectDates ? theme.textTheme.bodyLarge : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
                                 ),
                                 Text(
@@ -164,7 +164,7 @@ class _MotorPageState extends State<MotorPage> {
                                   style: canSelectDates ? theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor) : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
                                 ),
                                 Text(
-                                  " по ",
+                                  " ${context.tr('to')} ",
                                   style: canSelectDates ? theme.textTheme.bodyLarge : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
                                 ),
                                 Text(
@@ -198,7 +198,7 @@ class _MotorPageState extends State<MotorPage> {
                                   }
                                 }
                               : null,
-                          child: Text("Выбрать период"),
+                          child: Text("${context.tr('choose_period')}"),
                         ),
                       ],
                     );

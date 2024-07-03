@@ -160,7 +160,7 @@ class _NameAndDescriptionView extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                       child: Text(
-                        "Описание",
+                        "${context.tr('description')}",
                       ),
                     ),
                   ),

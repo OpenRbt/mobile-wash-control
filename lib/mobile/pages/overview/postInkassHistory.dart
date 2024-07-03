@@ -105,7 +105,7 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
                               _dateRange.value = DateTimeRange(start: range.start, end: range.end.add(Duration(days: 1, microseconds: -1)));
                             }
                           },
-                          child: Text("Выбрать период")),
+                          child: Text("${context.tr('choose_period')}")),
                   )
                 ],
               ),

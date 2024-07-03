@@ -20,7 +20,7 @@ class OrganizationCard extends StatelessWidget {
         subtitle: Row(
           /*
           children: [
-            Text("Описание: ${data.description ?? "-"}"),
+            Text("${context.tr('description')}: ${data.description ?? "-"}"),
           ],
            */
         ),
@@ -35,7 +35,7 @@ class OrganizationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Описание: ${data.description} ",
+                    "${context.tr('description')}: ${data.description} ",
                     style: theme.textTheme.bodyMedium,
                   ),
                 ],

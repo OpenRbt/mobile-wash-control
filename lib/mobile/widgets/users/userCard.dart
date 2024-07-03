@@ -141,7 +141,7 @@ class UserCard extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: onPress,
-            child: Text("Редактировать"),
+            child: Text("${context.tr('edit')}"),
           ),
         ],
       ),

@@ -28,7 +28,7 @@ class _OrganizationsViewState extends State<OrganizationsView> {
         return false;
       },
       child: Scaffold(
-          appBar: AppBar(title: const Text("Организации")),
+          appBar: AppBar(title: const Text(context.tr('organizations'))),
           body: FutureBuilder<List<entity.Organization>?>(
               future: WashAdminRepository.getOrganizations(),
               builder: (BuildContext context, AsyncSnapshot<List<entity.Organization>?> snapshot) {
@@ -71,9 +71,9 @@ class _OrganizationsViewState extends State<OrganizationsView> {
                                 showDialog(
                                     context: context,
                                     builder: (context) =>  TwoFieldDialog(
-                                      title: "Добавить организацию",
-                                      firstFieldName: 'Название',
-                                      seconFieldName: 'Описание',
+                                      title: "${context.tr('add')}",
+                                      firstFieldName: '${context.tr('name')}',
+                                      seconFieldName: '${context.tr('description')}',
                                       firstController: firstController,
                                       secondController: secondController,
                                       validateKey: addOrganizationKey,
@@ -95,14 +95,14 @@ class _OrganizationsViewState extends State<OrganizationsView> {
                                               print(secondController.text);
                                             }
                                           },
-                                          child: const Text("Добавить"),
+                                          child: const Text("${context.tr('add')}"),
                                         )
                                       ],
                                     )
                                 );
 
                               },
-                              child: const Text("Добавить организацию"),
+                              child: const Text("${context.tr('add')}"),
                             ),
                           )
                         ]

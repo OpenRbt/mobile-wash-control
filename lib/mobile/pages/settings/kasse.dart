@@ -135,7 +135,7 @@ class _KassePageState extends State<KassePage> {
                                       controller: _controller["receipt"],
                                       validator: (val) {
                                         if ((val ?? "").trim().isEmpty) {
-                                          return "Поле не может быть пустым";
+                                          return "${context.tr('field_must_not_be_empty')}";
                                         }
 
                                         return null;
@@ -167,7 +167,7 @@ class _KassePageState extends State<KassePage> {
                                         if (val?.isNotEmpty ?? false) {
                                           var trimmed = (val ?? "").trim();
                                           if (trimmed.isEmpty) {
-                                            return "поле не может быть пустым";
+                                            return "${context.tr('field_must_not_be_empty')}";
                                           }
                                           if (trimmed.length < 1) {
                                             return "не менее 1 символа";
@@ -208,7 +208,7 @@ class _KassePageState extends State<KassePage> {
                                         if (_config.value.cashier?.isNotEmpty ?? false) {
                                           var trimmed = (val ?? "").trim();
                                           if (trimmed.isEmpty) {
-                                            return "поле не может быть пустым";
+                                            return "${context.tr('field_must_not_be_empty')}";
                                           }
 
                                           if (trimmed.length < 12) {
@@ -249,7 +249,7 @@ class _KassePageState extends State<KassePage> {
                               onPressed: () async {
                                 await _getKasseConfig(repository, context);
                               },
-                              child: Text("Получить текущую конфигурацию"),
+                              child: Text("${context.tr('get_current_configuration')}"),
                             )
                         )
                       ],

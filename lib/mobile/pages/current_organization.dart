@@ -66,7 +66,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Управление группами"),
+          title: Text(context.tr('group_management')),
         ),
         body: FutureBuilder<void>(
             future: getPageData(currentOrganizationID),
@@ -93,7 +93,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                             flex: 1,
                             fit: FlexFit.tight,
                             child: Text(
-                              "Название организации",
+                              "${context.tr('name')}",
                               style: theme.textTheme.bodyLarge,
                             ),
                           ),
@@ -113,7 +113,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                             flex: 1,
                             fit: FlexFit.tight,
                             child: Text(
-                              "Описание организации",
+                              "${context.tr('description')}",
                               style: theme.textTheme.bodyLarge,
                             ),
                           ),
@@ -154,9 +154,9 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                                 showDialog(
                                     context: context,
                                     builder: (context) =>  TwoFieldDialog(
-                                      title: "Редактировать группу",
-                                      firstFieldName: 'Название',
-                                      seconFieldName: 'Описание',
+                                      title: "${context.tr('edit')}",
+                                      firstFieldName: '${context.tr('name')}',
+                                      seconFieldName: '${context.tr('description')}',
                                       firstController: firstController,
                                       secondController: secondController,
                                       validateKey: editGroupKey,
@@ -193,7 +193,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                                                   Navigator.pop(context);
                                                   setState(() {});
                                                 },
-                                                child: const Text("Удалить"),
+                                                child: const Text("${context.tr('delete')}"),
                                               ),
 
                                             ],
@@ -216,9 +216,9 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                           showDialog(
                               context: context,
                               builder: (context) =>  TwoFieldDialog(
-                                title: "Добавить группу",
-                                firstFieldName: 'Название',
-                                seconFieldName: 'Описание',
+                                title: "${context.tr('add')}",
+                                firstFieldName: '${context.tr('name')}',
+                                seconFieldName: '${context.tr('description')}',
                                 firstController: firstController,
                                 secondController: secondController,
                                 validateKey: addGroupKey,
@@ -243,13 +243,13 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                                         print(secondController.text);
                                       }
                                     },
-                                    child: const Text("Добавить"),
+                                    child: const Text("${context.tr('add')}"),
                                   )
                                 ],
                               )
                           );
                         },
-                        child: const Text("Добавить группу"),
+                        child: const Text("${context.tr('add')}"),
                       ),
                     )
                   ],

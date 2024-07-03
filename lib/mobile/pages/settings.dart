@@ -219,7 +219,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                   ],
                                                   validator: (value) {
                                                     if (value == null || value.isEmpty) {
-                                                      return "поле не может быть пустым";
+                                                      return "${context.tr('field_must_not_be_empty')}";
                                                     }
                                                     return null;
                                                   },

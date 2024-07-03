@@ -185,7 +185,7 @@ class LeaCentralRepository extends Repository {
         organizations.add(entity.Organization(
           id: i.toString(),
           name: "Organization$i",
-          description: "Описание$i",
+          description: "${context.tr('description')}$i",
         ));
       }
 

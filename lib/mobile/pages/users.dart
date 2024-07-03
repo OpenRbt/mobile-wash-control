@@ -70,7 +70,7 @@ class _UsersPageState extends State<UsersPage> {
                         args[PageArgCode.user] = null;
                         Navigator.pushNamed(context, "/mobile/users/edit", arguments: args).then((value) => repository.updateUsers(context: context));
                       },
-                      child: Text("добавить пользователя"),
+                      child: Text("${context.tr('add')} пользователя"),
                     ),
                   ],
                 ),

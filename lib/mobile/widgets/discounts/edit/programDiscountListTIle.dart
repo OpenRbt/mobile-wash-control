@@ -71,7 +71,7 @@ class EditProgramDiscountListTile extends StatelessWidget {
                 discounts.remove(discount);
                 campaign.value = campaign.value.copyWith(discountPrograms: discounts);
               },
-              child: Text("Удалить"),
+              child: Text("${context.tr('delete')}"),
             ),
             TextButton(
               onPressed: () {
@@ -82,7 +82,7 @@ class EditProgramDiscountListTile extends StatelessWidget {
                   },
                 );
               },
-              child: Text("Редактировать"),
+              child: Text("${context.tr('edit')}"),
             ),
           ],
         ),

@@ -65,7 +65,7 @@ class _AuthState extends State<Auth> {
       if (user == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBars.getErrorSnackBar(
-            message: "Пользователя с таким паролем не существует",
+            message: 'there_is_no_user_with_this_password'.tr(),
           ),
         );
         repo.dispose();
@@ -118,7 +118,7 @@ class _AuthState extends State<Auth> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Авторизация",
+                  context.tr('authorization'),
                   style: theme.textTheme.headlineMedium,
                 ),
               ),

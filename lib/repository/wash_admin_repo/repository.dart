@@ -294,7 +294,7 @@ class WashAdminRepository {
         washServers.add(entity.WashServer(
           id: "$i",
           name: "Сервер$i",
-          description: "Описание$i",
+          description: "${context.tr('description')}$i",
           serviceKey: "ServiceKey $i",
           createdBy: "Кем создано $i",
           groupId: "Номер группы$i",
@@ -336,7 +336,7 @@ class WashAdminRepository {
       var washServer = entity.WashServer(
         id: "1",
         name: "Группа2",
-        description: "Описание3",
+        description: "${context.tr('description')}3",
         organizationId: "organizationId4",
         createdBy: "Создан5",
       );

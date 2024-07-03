@@ -195,7 +195,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
-                                            "Описание",
+                                            "${context.tr('description')}",
                                             style: theme.textTheme.bodyMedium,
                                           ),
                                         ),

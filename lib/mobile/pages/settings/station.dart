@@ -156,7 +156,7 @@ class _StationPageState extends State<StationPage> {
                                       },
                                       validator: (val) {
                                         if ((val ?? "").trim().isEmpty) {
-                                          return "Поле не может быть пустым";
+                                          return "${context.tr('field_must_not_be_empty')}";
                                         }
                                         return null;
                                       },
@@ -288,7 +288,7 @@ class _StationPageState extends State<StationPage> {
                               await _getPostConfig(repository, id, context);
                             },
                             child: Text(
-                              "Получить текущую конфигурацию",
+                              "${context.tr('get_current_configuration')}",
                               softWrap: true,
                             ),
                           ),
@@ -419,7 +419,7 @@ class _StationPageState extends State<StationPage> {
                               await _getCardReaderConfig(repository, id);
                               },
                             child: Text(
-                              "Получить текущую конфигурацию",
+                              "${context.tr('get_current_configuration')}",
                               softWrap: true,
                             ),
                         ),
@@ -502,7 +502,7 @@ class _StationPageState extends State<StationPage> {
                             onPressed: () async {
                               await _getStationButtonsConfig(repository, id);
                             },
-                            child: Text("Получить текущую конфигурацию"),
+                            child: Text("${context.tr('get_current_configuration')}"),
                           ),
                         )
                       ],

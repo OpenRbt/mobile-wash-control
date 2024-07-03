@@ -53,7 +53,7 @@ class WashServerCard extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Описание",
+                  "${context.tr('description')}",
                   style: theme.textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -89,7 +89,7 @@ class WashServerCard extends StatelessWidget {
           const Divider(),
           OutlinedButton(
             onPressed: onPressed,
-            child: const Text("Редактировать"),
+            child: const Text("${context.tr('edit')}"),
           ),
         ],
       ),

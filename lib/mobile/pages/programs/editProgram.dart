@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
@@ -162,7 +163,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   flex: 1,
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    "Название",
+                                    "${context.tr('name')}",
                                     style: theme.textTheme.bodyLarge,
                                   ),
                                 ),

@@ -19,7 +19,7 @@ class _BonusStatusPageState extends State<BonusStatusPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Информация о СБП"),
+        title: Text(context.tr('SBP_info')),
       ),
       body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -27,7 +27,7 @@ class _BonusStatusPageState extends State<BonusStatusPage> {
             valueListenable: repository.getBonusStatusNotifier(),
             builder: (context, bonusStatus, _) {
               return ServiceStatus(
-                serviceName: 'Сервис Бонусов',
+                serviceName: context.tr('bonus_service'),
                 disabledOnServer: bonusStatus?.disabledOnServer,
                 isConnected: bonusStatus?.isConnected,
                 lastErr: bonusStatus?.lastErr,

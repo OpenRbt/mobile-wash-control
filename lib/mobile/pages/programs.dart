@@ -27,7 +27,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Программы"),
+        title: Text(context.tr('programs')),
       ),
       drawer: WashNavigationDrawer(
         selected: SelectedPage.Programs,
@@ -65,7 +65,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "Название",
+                            "${context.tr('name')}",
                             style: theme.textTheme.titleLarge,
                           ),
                         ),
@@ -74,7 +74,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "Прокачка",
+                            context.tr('preflight'),
                             style: theme.textTheme.titleLarge,
                           ),
                         ),
@@ -83,7 +83,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "Чистовая",
+                            context.tr('finishing'),
                             style: theme.textTheme.titleLarge,
                           ),
                         ),
@@ -144,7 +144,7 @@ class _ProgramsPageState extends State<ProgramsPage> {
                         (value) => repository.updatePrograms(context: context),
                       );
                     },
-                    child: Text("Добавить программу"),
+                    child: Text("${context.tr('add')}"),
                   ),
                 ],
               ),

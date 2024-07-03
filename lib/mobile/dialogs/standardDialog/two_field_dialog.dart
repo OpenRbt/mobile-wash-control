@@ -71,7 +71,7 @@ class _TwoFieldDialogState extends State<TwoFieldDialog> {
                     child: TextFormField(
                       controller: widget.firstController,
                         validator: (String? value) {
-                          return value!.isEmpty ? "Поле не должно быть пустым" : null;
+                          return value!.isEmpty ? ${context.tr('field_must_not_be_empty')} : null;
                         }
                     ),
                   ),
