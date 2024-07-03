@@ -179,13 +179,13 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                                                     setState(() {});
                                                   }
                                                 },
-                                                child: const Text("Сохранить"),
+                                                child: const Text("${context.tr('save')}"),
                                               ),
                                               ElevatedButton(
                                                 onPressed: () {
                                                   Navigator.pop(context);
                                                 },
-                                                child: const Text("Отмена"),
+                                                child: const Text(context.tr('cancel')),
                                               ),
                                               ElevatedButton(
                                                 onPressed: () async {
@@ -227,7 +227,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: const Text("Отмена"),
+                                    child: const Text(context.tr('cancel')),
                                   ),
                                   ProgressButton(
                                     onPressed: () async {

@@ -72,7 +72,7 @@ class _UserEditPageState extends State<UserEditPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(argUser != null ? "Редактирование пользователя" : "Создание пользователя"),
+        title: Text(argUser != null ? "${context.tr('editing')} пользователя" : "Создание пользователя"),
         actions: [
           FutureBuilder(
             future: repository.getCurrentUser(context: context),
@@ -411,13 +411,13 @@ class _UserEditPageState extends State<UserEditPage> {
                                       //setState(() {});
                                     }
                                   },
-                                  child: Text("Подтвердить"),
+                                  child: Text("${context.tr('confirm')}"),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text("Отмена"),
+                                  child: Text(context.tr('cancel')),
                                 )
                               ],
                             ),
@@ -509,7 +509,7 @@ class _UserEditPageState extends State<UserEditPage> {
                     }
                   }
                 },
-                child: Text("Сохранить"),
+                child: Text("${context.tr('save')}"),
               ),
               ElevatedButton(
                 onPressed: () {

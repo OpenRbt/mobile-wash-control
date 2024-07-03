@@ -11,7 +11,8 @@ class PickDaysDialog extends StatelessWidget {
     Set<WeekDay> days = campaign.value.weekDays ?? {};
 
     return AlertDialog(
-      title: Text("Выбрать дни"),
+      //
+      title: Text(context.tr('select_days')),
       content: StatefulBuilder(
         builder: (BuildContext context, void Function(void Function()) setState) {
           return Column(
@@ -40,7 +41,7 @@ class PickDaysDialog extends StatelessWidget {
             campaign.value = campaign.value.copyWith(weekDays: WeekDaySorting.sortDays(days));
             Navigator.pop(context);
           },
-          child: Text("Применить"),
+          child: Text(context.tr('accept')),
         ),
       ],
     );

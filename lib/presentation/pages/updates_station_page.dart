@@ -300,7 +300,7 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
             onPressed: () async {
               Navigator.of(context).pop();
             },
-            child: Text("Отмена"),
+            child: Text(context.tr('cancel')),
           ),
         ],
       );

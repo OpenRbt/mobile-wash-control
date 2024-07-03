@@ -82,7 +82,7 @@ class _OrganizationsViewState extends State<OrganizationsView> {
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
-                                          child: const Text("Отмена"),
+                                          child: const Text(context.tr('cancel')),
                                         ),
                                         ProgressButton(
                                           onPressed: () async {

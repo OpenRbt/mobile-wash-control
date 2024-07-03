@@ -77,10 +77,10 @@ class TasksPageCubit extends Cubit<TasksPageState> {
     try {
       await getTasks();
     } on FormatException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${'error_has_occurred'.tr()} $e"));
       rethrow;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${'unknown_error_has_occurred'.tr()} $e"));
       rethrow;
     }
   }

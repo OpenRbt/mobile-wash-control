@@ -14,3 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+In order to generate new added localization, run this commands:
+1) flutter pub run easy_localization:generate -S assets/translations/
+2) flutter pub run easy_localization:generate -f keys -o locale_keys.g.dart -S assets/translations/

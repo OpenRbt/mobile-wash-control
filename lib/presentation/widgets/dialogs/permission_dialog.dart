@@ -17,7 +17,7 @@ void permissionDialog({
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('Отмена')
+                child: Text('context.tr('cancel')')
             ),
             TextButton(
                 onPressed: () async {

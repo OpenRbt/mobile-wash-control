@@ -52,8 +52,8 @@ class ServicesServerBindingSegmentCubit extends Cubit<ServicesServerBindingSegme
               washServers: [],
               currentWashServer: null,
               interactionBlocked : true,
-              currentId: 'Не зарегистрирована',
-            currentServiceKey: 'Не зарегистрирована',
+              currentId: 'not_registered'.tr(),
+            currentServiceKey: 'not_registered'.tr(),
           )
       )
   ) {
@@ -85,8 +85,8 @@ class ServicesServerBindingSegmentCubit extends Cubit<ServicesServerBindingSegme
     if (washId.isNotEmpty && washKey.isNotEmpty) {
       currentWashServer = await ManagementTransport.getWashServer(washId);
     } else {
-      washId = 'Не зарегистрирована';
-      washKey = 'Не зарегистрирована';
+      washId = 'not_registered'.tr();
+      washKey = 'not_registered'.tr();
     }
 
     if(serviceUser.role == ServiceUserRole.admin) {

@@ -93,7 +93,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
         title: ValueListenableBuilder(
           valueListenable: _discount,
           builder: (BuildContext context, DiscountCampaign? value, Widget? child) {
-            return Text(value?.name != null ? "Редактирование" : "Создание скидочной программы");
+            return Text(value?.name != null ? "${context.tr('editing')}" : "Создание скидочной программы");
           },
         ),
         actions: [
@@ -478,7 +478,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                           Navigator.pop(context);
                         }
                       },
-                      child: Text("Сохранить"),
+                      child: Text("${context.tr('save')}"),
                     ),
                   ],
                 )

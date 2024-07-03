@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
@@ -34,9 +35,9 @@ Future<void> downloadFile(String url, String filename) async {
       await file.writeAsBytes(response.bodyBytes);
       print("$file Downloaded");
     } else {
-      print("Ошибка при загрузке файла: ${response.statusCode}");
+      print("${'failed_to_download_the_file'.tr()}: ${response.statusCode}");
     }
   } catch (e) {
-    print("Ошибка при загрузке файла: $e");
+    print("${'failed_to_download_the_file'.tr()}: $e");
   }
 }

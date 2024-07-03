@@ -240,7 +240,7 @@ class _KassePageState extends State<KassePage> {
                               await repository.saveKasseConfig(_config.value, context: context);
                             }
                           },
-                          child: Text("Сохранить"),
+                          child: Text("${context.tr('save')}"),
                         ),
                         Flexible(
                           flex: 1,

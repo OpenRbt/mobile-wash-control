@@ -14,10 +14,10 @@ class ConfirmRunProgramDialog extends StatelessWidget {
     final theme = Theme.of(context);
 
     return AlertDialog(
-      title: Text("Запуск программы"),
+      title: Text(context.tr('program_launching')), 
       content: RichText(
         text: TextSpan(
-          text: "Запустить программу ",
+          text: "${context.tr('launch_program')} ",
           style: theme.textTheme.bodyMedium,
           children: [
             TextSpan(
@@ -25,7 +25,7 @@ class ConfirmRunProgramDialog extends StatelessWidget {
               style: theme.textTheme.bodyMedium!.copyWith(fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
             ),
             TextSpan(
-              text: " на посту ",
+              text: " ${context.tr('on_post')} ",
             ),
             TextSpan(
               text: "${config.stationID} (${config.stationHash})",
@@ -44,7 +44,7 @@ class ConfirmRunProgramDialog extends StatelessWidget {
             Navigator.pop(context);
           },
           child: Text(
-            "Подтвердить",
+            "${context.tr('confirm')}",
           ),
         ),
         ElevatedButton(
@@ -52,7 +52,7 @@ class ConfirmRunProgramDialog extends StatelessWidget {
             Navigator.pop(context);
           },
           child: Text(
-            "Отмена",
+            context.tr('cancel'),
           ),
         ),
       ],

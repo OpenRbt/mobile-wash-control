@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 
 import '../../../Common/bonus_common.dart';
+import '../../../generated/locale_keys.g.dart';
 
 enum SelectedPage {
   Main,
@@ -30,7 +32,7 @@ enum SelectedPage {
       case SelectedPage.Discounts:
         return "Управление скидками";
       case SelectedPage.Settings:
-        return "Настройки";
+        return 'settings'.tr();
       case SelectedPage.Accounts:
         return "Пользователи";
       case SelectedPage.Services:

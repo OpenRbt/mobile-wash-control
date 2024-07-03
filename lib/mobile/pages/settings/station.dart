@@ -278,7 +278,7 @@ class _StationPageState extends State<StationPage> {
                               await repository.saveStationConfig(_config.value, context: context).then((value) => _getPostConfig(repository, id, context));
                             }
                           },
-                          child: Text("Сохранить"),
+                          child: Text("${context.tr('save')}"),
                         ),
                         Flexible(
                           fit: FlexFit.tight,
@@ -409,7 +409,7 @@ class _StationPageState extends State<StationPage> {
                               await repository.saveCardReaderConfig(id, _cardReaderConfig.value, context: context).then((value) => _getCardReaderConfig(repository, id));
                             }
                           },
-                          child: Text("Сохранить"),
+                          child: Text("${context.tr('save')}"),
                         ),
                         Flexible(
                           fit: FlexFit.tight,
@@ -493,7 +493,7 @@ class _StationPageState extends State<StationPage> {
                           onPressed: () async {
                             await repository.saveStationButtons(id, _buttonsConfig.value, context: context).then((value) => _getStationButtonsConfig(repository, id));
                           },
-                          child: Text("Сохранить"),
+                          child: Text("${context.tr('save')}"),
                         ),
                         Flexible(
                           fit: FlexFit.tight,

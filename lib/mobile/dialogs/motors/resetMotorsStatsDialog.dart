@@ -24,7 +24,7 @@ class ResetMotorsStatsDialog extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                "Сброс статистики моторесурса",
+                context.tr('resetting_the_motor_life_statistics'),
                 style: theme.textTheme.titleLarge,
               ),
               Expanded(
@@ -41,7 +41,7 @@ class ResetMotorsStatsDialog extends StatelessWidget {
                             _posts[index + 1] = value ?? false;
                             setState(() {});
                           },
-                          title: Text("Пост ${index + 1}"),
+                          title: Text("${context.tr('post')} ${index + 1}"),
                         );
                       },
                     );
@@ -57,7 +57,7 @@ class ResetMotorsStatsDialog extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text("Вы уверены?"),
+                            title: Text("${context.tr('are_you_sure')}?"),
                             actions: [
                               ProgressTextButton(
                                 onPressed: () async {
@@ -70,26 +70,26 @@ class ResetMotorsStatsDialog extends StatelessWidget {
 
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Да"),
+                                child: Text(context.tr('yes')),
                               ),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text("Нет"),
+                                child: Text(context.tr('no')),
                               ),
                             ],
                           );
                         },
                       );
                     },
-                    child: Text("Сбросить"),
+                    child: Text(context.tr('reset')),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text("Отмена"),
+                    child: Text(context.tr('cancel')),
                   ),
                 ],
               ),

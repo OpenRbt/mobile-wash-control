@@ -391,7 +391,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   await saveProgram(context, id, repository);
                                 }
                               },
-                              child: Text("Сохранить"),
+                              child: Text("${context.tr('save')}"),
                             ),
                             ElevatedButton(
                               onPressed: () {

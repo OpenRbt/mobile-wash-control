@@ -346,7 +346,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                             }
                                           },
                                           child: Text(
-                                            "Сохранить изменения",
+                                            "${context.tr('save')} изменения",
                                             maxLines: 2,
                                           ),
                                         ),

@@ -470,7 +470,7 @@ class _InteractionView extends StatelessWidget {
                           }
                         },
                         child: Text(
-                          "Сохранить изменения",
+                          "${context.tr('save')} изменения",
                           maxLines: 2,
                         ),
                       ),

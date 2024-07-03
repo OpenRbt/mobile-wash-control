@@ -24,7 +24,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
   int selectedID = -1;
   List<DropdownMenuItem<int>> items = [
     DropdownMenuItem(
-      child: Text("Не выбрано"),
+      child: Text('not_selected').tr(),
       value: -1,
     )
   ];
@@ -66,7 +66,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
 
     return AlertDialog(
       title: Text(
-        (widget.discount == null ? "Добавление": "Редактирование") + " скидки для программы",
+        (widget.discount == null ? 'adding'.tr(): 'editing'.tr()) + 'discounts_for_program'.tr(),
       ),
       content: SingleChildScrollView(
         child: Form(
@@ -83,7 +83,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
                         flex: 1,
                         fit: FlexFit.tight,
                         child: Text(
-                          "Программа",
+                          context.tr('program'),
                           style: theme.textTheme.bodyLarge,
                         ),
                       ),
@@ -99,7 +99,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
                           value: selectedID,
                           validator: (value) {
                             if (value == -1) {
-                              return "необходимо выбрать программу";
+                              return context.tr('you_must_select_the_program');
                             }
                             return null;
                           },
@@ -109,7 +109,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
                   ),
                   widget.discount != null ? Container():
                   Text(
-                    "Добавление уже имеющейся программы перезапишет старое значение",
+                    context.tr('adding_an_existing_program_will_overwrite_the_old_value'),
                     style: theme.textTheme.labelLarge!.copyWith(
                       fontWeight: FontWeight.normal,
                     ),
@@ -121,7 +121,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
                         flex: 1,
                         fit: FlexFit.tight,
                         child: Text(
-                          "Скидка",
+                          context.tr('discount'),
                           style: theme.textTheme.bodyLarge,
                         ),
                       ),
@@ -141,11 +141,11 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
                                 validator: (value) {
                                   int percent = int.tryParse(value ?? "0") ?? 0;
                                   if (percent <= 0) {
-                                    return "скидка должна быть больше 0%";
+                                    return "${context.tr('the_discount_must_be_greater_than')} 0%";
                                   }
 
                                   if (percent > 100) {
-                                    return "скидка не может быть больше 100%";
+                                    return "${context.tr('the_discount_cannot_be_greater_than')} 100%";
                                   }
 
                                   return null;
@@ -186,13 +186,13 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
               Navigator.pop(context);
             }
           },
-          child: Text("Применить"),
+          child: Text(context.tr('accept'),),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("Отмена"),
+          child: Text(context.tr('cancel'),),
         ),
       ],
     );

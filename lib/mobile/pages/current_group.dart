@@ -164,7 +164,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                         );
                                       }
                                     },
-                                    child: const Text("Сохранить"),
+                                    child: const Text("${context.tr('save')}"),
                                   ),
                                   Flexible(
                                     fit: FlexFit.tight,
@@ -215,7 +215,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: const Text("Отмена"),
+                                      child: const Text(context.tr('cancel')),
                                     ),
                                     ElevatedButton(
                                       onPressed: () async {
@@ -238,7 +238,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                           print(secondController.text);
                                         }
                                       },
-                                      child: const Text("Сохранить"),
+                                      child: const Text("${context.tr('save')}"),
                                     )
                                   ],
                                 )
@@ -269,7 +269,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: const Text("Отмена"),
+                                  child: const Text(context.tr('cancel')),
                                 ),
                                 ProgressButton(
                                   onPressed: () async {

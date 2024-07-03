@@ -238,7 +238,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 _operatorServiceAmountController.text = value?.toString() ?? "10";
                                               }
                                             },
-                                            child: Text("Сохранить"),
+                                            child: Text("${context.tr('save')}"),
                                           ),
                                         ),
                                       ],

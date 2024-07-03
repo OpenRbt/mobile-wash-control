@@ -502,7 +502,7 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сохранить программу, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось ${context.tr('save')} программу, Ошибка: ${e.code}"));
           }
           break;
       }
@@ -1757,7 +1757,7 @@ class LeaCentralRepository extends Repository {
     }  on ApiException catch (e) {
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сохранить скрипт скрипт. ${e.message}"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось ${context.tr('save')} скрипт скрипт. ${e.message}"));
       }
     } catch (e) {
       if (context != null) {
