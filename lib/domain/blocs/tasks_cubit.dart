@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/domain/entities/lcw_entities.dart';
 import 'package:mobile_wash_control/domain/entities/pages_entities.dart';

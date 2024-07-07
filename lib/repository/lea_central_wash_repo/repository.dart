@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -164,13 +165,13 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось обновить статус, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_update_status')}, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -185,7 +186,7 @@ class LeaCentralRepository extends Repository {
         organizations.add(entity.Organization(
           id: i.toString(),
           name: "Organization$i",
-          description: "${context.tr('description')}$i",
+          description: "${context?.tr('description')} $i",
         ));
       }
 
@@ -203,13 +204,13 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось обновить статус, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_update_status')}, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -239,13 +240,13 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить список программ, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('programs_list')}, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -260,13 +261,13 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось загрузить программу, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_load_program')}, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -319,13 +320,13 @@ class LeaCentralRepository extends Repository {
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -343,19 +344,19 @@ class LeaCentralRepository extends Repository {
       final args = ArgAddServiceAmount(amount: amount, hash: station.hash!);
       final response = await api.addServiceAmount(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Зачислено $amount  на пост $id"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('credited')} $amount  ${context.tr('to_post')} $id"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -373,13 +374,13 @@ class LeaCentralRepository extends Repository {
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -392,24 +393,24 @@ class LeaCentralRepository extends Repository {
       final args = ArgOpenStation(stationID: id);
       final response = await api.openStation(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Выполнена открытие двери на посту $id"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('the_lid_has_been_opened_on_post')} $id"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найден пост $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "${context.tr('post_not_found')} $id"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -420,34 +421,34 @@ class LeaCentralRepository extends Repository {
       final args = StationRequest(id: id);
       final response = await api.saveCollection(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пост $id проинкассирован"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('post')} $id ${context.tr('collected')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найден пост $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "${context.tr('post_not_found')} $id"));
           }
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -496,19 +497,19 @@ class LeaCentralRepository extends Repository {
       await api.setProgram(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Программа успешно сохранена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: context.tr('program_saved_successfully')));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось ${context.tr('save')} программу, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_save_program')}, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -536,23 +537,23 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить список пользователей, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('users_list')}, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -572,40 +573,40 @@ class LeaCentralRepository extends Repository {
       final response = api.updateUser(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно обновлен"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('user')} ${user.login} ${context.tr('updated_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином не найден"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('user')} ${context.tr('not_found_with_this_login')}"));
           }
           break;
 
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -624,40 +625,40 @@ class LeaCentralRepository extends Repository {
       }
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пароль пользователя ${user.login} успешно обновлен"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('users_password')} ${user.login} ${context.tr('updated_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
 
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -678,40 +679,40 @@ class LeaCentralRepository extends Repository {
       final response = await api.createUser(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь ${user.login} успешно добавлен"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('user')} ${user.login} ${context.tr('added_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         case HttpStatus.conflict:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пользователь с данным логином уже существует"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('user')} ${context.tr('with_this_login_already_exists')}"));
           }
           break;
 
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -731,17 +732,17 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить ссылку на сервис бонусов, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('link_to_bonus_server')}, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
@@ -767,23 +768,23 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
     return null;
@@ -796,29 +797,29 @@ class LeaCentralRepository extends Repository {
       final response = await api.deleteUser(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Пользователь $login успешно удален"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('user')} $login ${context.tr('deleted_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -838,13 +839,13 @@ class LeaCentralRepository extends Repository {
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -878,23 +879,23 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -916,23 +917,23 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
     final response = await api.stationStatCurrent(args: args);
@@ -959,23 +960,23 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -997,23 +998,23 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Пост $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -1039,23 +1040,23 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -1081,23 +1082,23 @@ class LeaCentralRepository extends Repository {
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -1113,13 +1114,13 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось сбросить статистику поста - $id, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_reset_posts_statistics')} - $id, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1134,23 +1135,23 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1168,28 +1169,28 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "${context.tr('discount_program_not_found')} - $id"));
           }
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -1214,35 +1215,35 @@ class LeaCentralRepository extends Repository {
       if (campaign.id != null) {
         await api.editAdvertisingCampaign(args);
         if (context != null) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Изменения сохранены"));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('changes_have_been_saved')}"));
         }
       } else {
         await api.addAdvertisingCampaign(args);
         if (context != null) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Скидочная программа добавлена"));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: context.tr('discount_program_has_been_added')));
         }
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1257,19 +1258,19 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найден параметр конфига - $name"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "${context.tr('config_settings_not_found')} - $name"));
           }
           break;
 
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить параметр конфига - $name, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('config_settings')} - $name, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -1311,13 +1312,13 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить температуру, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get_temperature')}, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -1336,19 +1337,19 @@ class LeaCentralRepository extends Repository {
       var args = ConfigVarInt(name: name, value: value);
       final response = await api.setConfigVarInt(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Параметр конфига $name успешно установлен"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('config_settings')} $name ${context.tr('set_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось установить параметр конфига - $name, Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_set_config_settings')} - $name, ${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1377,28 +1378,28 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post_configuration_not_found')} $id"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -1412,39 +1413,39 @@ class LeaCentralRepository extends Repository {
       final response = await api.setStation(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация поста ${config.id} успешно сохранена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('post_configuration')} ${config.id} ${context.tr('saved_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация поста ${config.id}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('post_configuration_not_found')} ${config.id}"));
           }
           break;
         case HttpStatus.unprocessableEntity:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Конфигурация не прошла проверку"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('configuration_has_failed_the_test')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1462,18 +1463,18 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера для поста $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('no_card_reader_configuration_found_for_the_post')} $id"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -1487,39 +1488,39 @@ class LeaCentralRepository extends Repository {
       final response = await api.setCardReaderConfig(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кардридера поста $id успешно сохранена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('card_reader_configuration_for_post')} $id ${context.tr('saved_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не найдена конфигурация кардридера поста $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('no_card_reader_configuration_found_for_the_post')} $id"));
           }
           break;
         case HttpStatus.unprocessableEntity:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Конфигурация не прошла проверку"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: context.tr('configuration_has_failed_the_test')));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1542,24 +1543,24 @@ class LeaCentralRepository extends Repository {
 
       final response = await api.setStationButton(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кнопок поста $id сохранена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('buttons_configuration_for_post')} $id ${context.tr('saved_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.unprocessableEntity:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неприемдимая конфигурация кнопок"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('unacceptable_buttons_configuration')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1571,34 +1572,34 @@ class LeaCentralRepository extends Repository {
       final response = await api.delAdvertisingCampaign(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Скидочная программа $id удалена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('discount_program')} $id ${context.tr('deleted_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено скидочной программы - $id"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "${context.tr('discount_program_not_found')} - $id"));
           }
           break;
         case HttpStatus.unauthorized:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Неверный PIN"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('wrong')} PIN"));
           }
           break;
         case HttpStatus.forbidden:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Доступ запрещен"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('access_denied')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1614,18 +1615,18 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "Не найдено конфигурации кассы"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getWarningSnackBar(message: "${context.tr('cash_desk_configuration_not_found')}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
 
@@ -1638,19 +1639,19 @@ class LeaCentralRepository extends Repository {
       final args = Helpers.kasseConfigToAPI(config);
       final response = await api.setKasse(args);
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Конфигурация кассы сохранена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('cash_desk_configuration')} ${context.tr('saved_successfully')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1685,18 +1686,18 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось выполнить программу, Ошибка: ${e.message ?? "не найден один из параметров переданного конфига"}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_execute_program')}, ${context.tr('error')}: ${e.message ?? "${context.tr('one_of_the_parameters_of_the_passed_config_was_not_found')}"}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
     return null;
@@ -1729,11 +1730,11 @@ class LeaCentralRepository extends Repository {
     }  on ApiException catch (e) {
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось получить скрипт. ${e.message}"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('script')}. ${e.message}"));
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
     return null;
@@ -1752,16 +1753,16 @@ class LeaCentralRepository extends Repository {
       );
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Скрипт сохранён"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('script')} ${context.tr('saved_successfully')}"));
       }
     }  on ApiException catch (e) {
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось ${context.tr('save')} скрипт скрипт. ${e.message}"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('save')} ${context.tr('script')}. ${e.message}"));
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1773,24 +1774,24 @@ class LeaCentralRepository extends Repository {
       final response = await api.runProgram(args);
 
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Программа запущена"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "${context.tr('the_program_is_running')}"));
       }
     } on ApiException catch (e) {
       switch (e.code) {
         case HttpStatus.notFound:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось выполнить программу, Ошибка: ${e.message ?? "не найден один из параметров переданного конфига"}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_execute_program')}, ${context.tr('error')}: ${e.message ?? "${context.tr('one_of_the_parameters_of_the_passed_config_was_not_found')}"}"));
           }
           break;
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
   }
@@ -1830,13 +1831,13 @@ class LeaCentralRepository extends Repository {
       switch (e.code) {
         default:
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Ошибка: ${e.code}"));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${e.code}"));
           }
           break;
       }
     } catch (e) {
       if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка: $e"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"));
       }
     }
     return res;

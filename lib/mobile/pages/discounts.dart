@@ -4,6 +4,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/discounts/discountCampaignListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DiscountsPage extends StatefulWidget {
   @override

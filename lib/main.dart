@@ -18,11 +18,11 @@ void main() async {
   runApp(
     EasyLocalization(
       supportedLocales: const [
-        Locale('ru'),
+        //Locale('ru'),
         Locale('en'),
       ],
       path: 'assets/translations',
-      fallbackLocale: const Locale('ru'),
+      fallbackLocale: Locale('en'),
       assetLoader: const CodegenLoader(),
       child: Application(),
     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:mobile_wash_control/domain/entities/user_entity.dart';
 import 'package:mobile_wash_control/domain/blocs/services_server_binding_cubit.dart';
@@ -35,7 +36,7 @@ class _ServicesServerBindingSegmentViewState extends State<_ServicesServerBindin
   Widget build(BuildContext context) {
     return Card(
       child: ExpansionTile(
-        title: Text("Привязка сервера"),
+        title: Text(context.tr('server_binding')),
         children: [
           Wrap(
             children: [
@@ -81,7 +82,7 @@ class _ChooseServerView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                         child: Text(
-                          "Организация",
+                          context.tr('organization'),
                         ),
                       ),
                     ),
@@ -111,7 +112,7 @@ class _ChooseServerView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                         child: Text(
-                          "Группа",
+                          context.tr('group'),
                         ),
                       ),
                     ),
@@ -141,7 +142,7 @@ class _ChooseServerView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                         child: Text(
-                          "Сервер",
+                          context.tr('server'),
                         ),
                       ),
                     ),
@@ -307,7 +308,7 @@ class _InteractionView extends StatelessWidget {
                           cubit.bindWashServer();
                         },
                         child: Text(
-                          "Привязать мойку",
+                          context.tr('bind_wash'),
                           maxLines: 2,
                         ),
                       ),

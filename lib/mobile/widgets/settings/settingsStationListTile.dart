@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingsStationListTile extends StatelessWidget {
   final int index;
@@ -21,7 +22,7 @@ class SettingsStationListTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            station.name ?? "Пост $index",
+            station.name ?? "${context.tr('post')} $index",
             style: theme.textTheme.titleLarge,
           ),
           Icon(
@@ -36,7 +37,7 @@ class SettingsStationListTile extends StatelessWidget {
             flex: 1,
             fit: FlexFit.tight,
             child: Text(
-              "Хэш",
+              context.tr('hash'),
               style: theme.textTheme.bodyLarge!.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -60,7 +61,7 @@ class SettingsStationListTile extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "Температура",
+                context.tr('temperature'),
                 style: theme.textTheme.bodyLarge!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -84,7 +85,7 @@ class SettingsStationListTile extends StatelessWidget {
         Divider(),
         OutlinedButton(
           onPressed: onPressed,
-          child: Text("Открыть настройки"),
+          child: Text(context.tr('open_settings')),
         ),
       ],
     );

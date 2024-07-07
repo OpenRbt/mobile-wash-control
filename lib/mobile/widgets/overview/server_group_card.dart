@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ServerGroupCard extends StatelessWidget {
 
@@ -47,7 +48,7 @@ class ServerGroupCard extends StatelessWidget {
           const Divider(),
           OutlinedButton(
             onPressed: onPressed,
-            child: const Text("${context.tr('edit')}"),
+            child: Text("${context.tr('edit')}"),
           ),
         ],
       ),

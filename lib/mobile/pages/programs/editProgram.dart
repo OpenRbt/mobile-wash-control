@@ -129,7 +129,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
           title: ValueListenableBuilder(
             valueListenable: _program,
             builder: (BuildContext context, entity.Program? value, Widget? child) {
-              return Text(value != null ? "Программа ${value.name}" : "Новая программа");
+              return Text(value != null ? "${context.tr('program')} ${value.name}" : '${context.tr('new_program')}');
             },
           ),
         ),
@@ -152,7 +152,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                       Card(
                         child: ExpansionTile(
                           title: Text(
-                            "Параметры программы",
+                            context.tr('program_settings'),
                             style: theme.textTheme.titleLarge,
                           ),
                           childrenPadding: EdgeInsets.all(8),
@@ -186,7 +186,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   flex: 1,
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    "Цена",
+                                    context.tr('price'),
                                     style: theme.textTheme.bodyLarge,
                                   ),
                                 ),
@@ -211,7 +211,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   flex: 1,
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    "Чистовая программа",
+                                    "${context.tr('finishing')} ${context.tr('program')}",
                                     style: theme.textTheme.bodyLarge,
                                   ),
                                 ),
@@ -222,7 +222,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "Нет",
+                                        context.tr('no'),
                                         style: theme.textTheme.labelSmall,
                                       ),
                                       Switch(
@@ -232,7 +232,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                         },
                                       ),
                                       Text(
-                                        "Да",
+                                        context.tr('yes'),
                                         style: theme.textTheme.labelSmall,
                                       ),
                                     ],
@@ -246,7 +246,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                       Card(
                         child: ExpansionTile(
                           title: Text(
-                            "Параметры выполнения",
+                            context.tr('execution_parameters'),
                             style: theme.textTheme.titleLarge,
                           ),
                           childrenPadding: EdgeInsets.all(8),
@@ -257,7 +257,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   flex: 1,
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    "% мотора",
+                                    context.tr('motor_percentage'),
                                     style: theme.textTheme.bodyLarge,
                                   ),
                                 ),
@@ -291,7 +291,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   flex: 1,
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    "Прокачка",
+                                    context.tr('preflight'),
                                     style: theme.textTheme.bodyLarge,
                                   ),
                                 ),
@@ -302,7 +302,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "Нет",
+                                        context.tr('no'),
                                         style: theme.textTheme.labelSmall,
                                       ),
                                       Switch(
@@ -312,7 +312,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                         },
                                       ),
                                       Text(
-                                        "Да",
+                                        context.tr('yes'),
                                         style: theme.textTheme.labelSmall,
                                       ),
                                     ],
@@ -326,7 +326,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   flex: 1,
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    "% мотора прокачки",
+                                    context.tr('preflight_motor_percentage'),
                                     style: theme.textTheme.bodyLarge,
                                   ),
                                 ),
@@ -360,7 +360,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                       Card(
                         child: ExpansionTile(
                           title: Text(
-                            "Параметры реле",
+                            context.tr('relay_settings'),
                             style: theme.textTheme.titleLarge,
                           ),
                           childrenPadding: EdgeInsets.all(8),
@@ -384,7 +384,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                 if(_controllers["name"]!.text.isEmpty){
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBars.getErrorSnackBar(
-                                      message: "Поле с именем программы не может быть пустым",
+                                      message: context.tr('field_must_not_be_empty'),
                                     ),
                                   );
                                 }
@@ -398,7 +398,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
                               onPressed: () {
                                 getProgram(id, repository, context);
                               },
-                              child: Text("Отменить"),
+                              child: Text(context.tr('cancel')),
                             ),
                           ],
                         ),

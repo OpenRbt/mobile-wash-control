@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -49,7 +50,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
     final repository = args[PageArgCode.repository] as Repository;
 
     return Scaffold(
-      appBar: AppBar(title: Text("Авторизация в сервисах")),
+      appBar: AppBar(title: Text(context.tr('authorisation_in_services'))),
       drawer: WashNavigationDrawer(selected: SelectedPage.Services, repository: repository),
       body: Center(
         child: FutureBuilder<void>(
@@ -66,7 +67,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
-                            child: Text("Продолжить"),
+                            child: Text(context.tr('continue_word')),
                             onPressed: () async {
                               String token = (await snapshot.data!.getIdToken() ?? "");
 
@@ -97,7 +98,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                               }
                               await auth.signOut();
                             },
-                            child: Text("Выйти из учетной записи ${snapshot.data!.email ?? ""}"),
+                            child: Text("${context.tr('log_out_of_the_account')} ${snapshot.data!.email ?? ""}"),
                           ),
                         ),
                       ],
@@ -119,7 +120,7 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
                             await auth.signInWithCredential(credential);
                           } catch (err) {
                             log(err.toString());
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось авторизоваться $err"));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed_to_authorise')} $err"));
                           }
                         } else {
                           try {
@@ -132,11 +133,11 @@ class _SettingsServicesRegistrationPageState extends State<SettingsServicesRegis
 
                             await auth.signInWithCredential(authCredential);
                           } catch (err) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Не удалось авторизоваться"));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('failed_to_authorise')}"));
                           }
                         }
                       },
-                      child: Text("Войти с помощью Google"),
+                      child: Text(context.tr('enter_with_google')),
                     );
                   }
                 },
@@ -221,7 +222,7 @@ class DesktopAuthBridge {
       <body>
         <center>
           <h1>
-            Авторизация завершена, вернитесь в приложение!
+            Authorization complete, return to application!
           </h1>
         </center>
       </body>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../domain/blocs/tasks_cubit.dart';
 import '../../entity/vo/page_args_codes.dart';
@@ -41,7 +42,7 @@ class _TasksPageView extends StatelessWidget {
         stream: cubit.stream,
         builder: (context, snapshot) {
           return Scaffold(
-            appBar: AppBar(title: Text("Задачи на обновление"), actions: [
+            appBar: AppBar(title: Text(context.tr('updates_tasks')), actions: [
               IconButton(
                 icon: Icon(Icons.filter_list),
                 onPressed: () {
@@ -54,9 +55,9 @@ class _TasksPageView extends StatelessWidget {
                   try {
                     await cubit.changeSort();
                   } on FormatException catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error_has_occurred')} $e"));
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')} $e"));
                   }
                 },
               ),
@@ -65,11 +66,11 @@ class _TasksPageView extends StatelessWidget {
                 onPressed: () async {
                   try {
                     await cubit.getTasks();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Данные обновлены"));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: context.tr('data_has_been_updated')));
                   } on FormatException catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error_has_occurred')} $e"));
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')} $e"));
                   }
                 },
               ),
@@ -273,7 +274,7 @@ showFilterModalDialog(BuildContext widgetContext) {
       final cubit = widgetContext.watch<TasksPageCubit>();
       
       return AlertDialog(
-        title: Text("Фильтры"),
+        title: Text(context.tr('filters')),
         content: StreamBuilder<TasksPageState>(
           stream: cubit.stream,
           initialData: cubit.state,
@@ -290,7 +291,7 @@ showFilterModalDialog(BuildContext widgetContext) {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("Типы задач", style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text(context.tr('tasks_types'), style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     ...selectedTypes.keys.map((key) {
                       return CheckboxListTile(
@@ -304,7 +305,7 @@ showFilterModalDialog(BuildContext widgetContext) {
                     Divider(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("Статусы", style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text(context.tr('statuses'), style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     ...selectedStatuses.keys.map((key) {
                       return CheckboxListTile(
@@ -327,13 +328,13 @@ showFilterModalDialog(BuildContext widgetContext) {
               try {
                 await cubit.getTasks();
               } on FormatException catch (e) {
-                ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error_has_occurred')} $e"));
               } catch (e) {
-                ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')} $e"));
               }
               Navigator.of(context).pop();
             },
-            child: Text("Ок"),
+            child: Text(context.tr('ok')),
           ),
         ],
       );

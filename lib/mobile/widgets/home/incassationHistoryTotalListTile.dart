@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class IncassationHistoryTotalListTile extends StatelessWidget {
   final StationCollectionReport report;
@@ -22,7 +23,7 @@ class IncassationHistoryTotalListTile extends StatelessWidget {
                   Container(
                     width: constraints.maxWidth * 0.4,
                     child: Text(
-                      "Итого",
+                      context.tr('total'),
                       style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
                     ),
                   ),

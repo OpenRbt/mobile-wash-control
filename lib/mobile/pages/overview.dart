@@ -6,6 +6,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/overview/stationCard.dart';
 import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OverviewPage extends StatefulWidget {
   const OverviewPage({super.key});
@@ -79,7 +80,7 @@ class _OverviewPageState extends State<OverviewPage> {
                   valueListenable: repository.getKasseStatusNotifier(),
                   builder: (BuildContext context, KasseStatus? value, Widget? child) {
                     return Text(
-                      "${value?.status ?? ${context.tr('no_data')}}",
+                      "${value?.status ?? context.tr('no_data')}",
                     );
                   },
                 ),

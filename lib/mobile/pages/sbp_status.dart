@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../entity/vo/page_args_codes.dart';
 import '../../repository/lea_central_wash_repo/repository.dart';

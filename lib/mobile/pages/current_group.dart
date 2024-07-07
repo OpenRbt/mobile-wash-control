@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
@@ -164,7 +165,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                         );
                                       }
                                     },
-                                    child: const Text("${context.tr('save')}"),
+                                    child: Text("${context.tr('save')}"),
                                   ),
                                   Flexible(
                                     fit: FlexFit.tight,
@@ -173,7 +174,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                       onPressed: () async {
                                         await getPageData(currentGroupID, currentOrganizationID);
                                       },
-                                      child: const Text(
+                                      child: Text(
                                         "${context.tr('get_current_configuration')}",
                                         softWrap: true,
                                       ),
@@ -215,14 +216,14 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: const Text(context.tr('cancel')),
+                                      child: Text(context.tr('cancel')),
                                     ),
                                     ElevatedButton(
                                       onPressed: () async {
                                         await WashAdminRepository.deleteWashServer((washServers?[index].id ?? ""));
                                         print(washServers?[index].id);
                                       },
-                                      child: const Text("${context.tr('delete')}"),
+                                      child: Text("${context.tr('delete')}"),
                                     ),
                                     ProgressButton(
                                       onPressed: () async {
@@ -238,7 +239,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                           print(secondController.text);
                                         }
                                       },
-                                      child: const Text("${context.tr('save')}"),
+                                      child: Text("${context.tr('save')}"),
                                     )
                                   ],
                                 )
@@ -269,7 +270,7 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: const Text(context.tr('cancel')),
+                                  child: Text(context.tr('cancel')),
                                 ),
                                 ProgressButton(
                                   onPressed: () async {
@@ -285,13 +286,13 @@ class _CurrentGroupViewState extends State<CurrentGroupView> {
                                       print(secondController.text);
                                     }
                                   },
-                                  child: const Text("${context.tr('create')}"),
+                                  child: Text("${context.tr('create')}"),
                                 )
                               ],
                             )
                         );
                       },
-                      child: const Text("${context.tr('add')}"),
+                      child: Text("${context.tr('add')}"),
                     ),
                   )
                 ],

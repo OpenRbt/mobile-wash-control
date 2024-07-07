@@ -1,12 +1,11 @@
-import 'dart:developer';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/auth/authButton.dart';
-import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart' as lcw;
 import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
 import 'package:mobile_wash_control/repository/repository.dart';

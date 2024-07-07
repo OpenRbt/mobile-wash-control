@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
-import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:mobile_wash_control/Common/bonus_common.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class servicesWashParamsView extends StatefulWidget {
   const servicesWashParamsView({Key? key}) : super(key: key);
@@ -122,7 +122,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
     return Card(
       child: ExpansionTile(
         title: Text(
-          "Параметры мойки",
+          context.tr('wash_settings'),
           style: theme.textTheme.titleLarge,
         ),
         childrenPadding: EdgeInsets.all(8),
@@ -168,7 +168,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
-                                            "Имя",
+                                            context.tr('name'),
                                             style: theme.textTheme.bodyMedium,
                                           ),
                                         ),
@@ -227,7 +227,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                             children: [
                                               Text("ID"),
                                               Text(
-                                                "ID на сервере",
+                                                context.tr('id_on_server'),
                                                 style: theme.textTheme.bodySmall,
                                               ),
                                             ],
@@ -244,7 +244,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                               crossAxisAlignment: CrossAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  server.id ?? "Не зарегистрирована",
+                                                  server.id ?? context.tr('not_registered'),
                                                   style: theme.textTheme.labelMedium,
                                                   overflow: TextOverflow.ellipsis,
                                                 ),
@@ -282,7 +282,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                                 style: theme.textTheme.labelMedium,
                                               ),
                                               Text(
-                                                "SERVICE_KEY на сервере",
+                                                context.tr('service_key_on_server'),
                                                 style: theme.textTheme.bodySmall,
                                               ),
                                             ],
@@ -299,7 +299,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                               crossAxisAlignment: CrossAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  server.serviceKey ?? "Не зарегистрирована",
+                                                  server.serviceKey ?? context.tr('not_registered'),
                                                   style: theme.textTheme.labelMedium,
                                                   overflow: TextOverflow.ellipsis,
                                                 ),
@@ -332,7 +332,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                           }
                                               : null,
                                           child: Text(
-                                            "Зарегистрировать мойку",
+                                            context.tr('register_wash'),
                                             maxLines: 2,
                                           ),
                                         ),
@@ -346,7 +346,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                             }
                                           },
                                           child: Text(
-                                            "${context.tr('save')} изменения",
+                                            "${context.tr('save')} ${context.tr('changes')}",
                                             maxLines: 2,
                                           ),
                                         ),
@@ -365,7 +365,7 @@ class _servicesWashParamsViewState extends State<servicesWashParamsView> {
                                           }
                                               : null,
                                           child: Text(
-                                            "Повторно записать ID и ключ",
+                                            context.tr('rewrite_id_and_key'),
                                             maxLines: 2,
                                           ),
                                         ),

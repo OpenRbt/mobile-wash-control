@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../entity/entity.dart';
 import '../../entity/vo/page_args_codes.dart';

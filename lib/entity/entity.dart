@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 part 'program.dart';
 part 'relay_config.dart';
 part 'wash_server.dart';

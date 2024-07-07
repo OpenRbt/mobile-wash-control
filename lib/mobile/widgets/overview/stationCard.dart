@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class StationCard extends StatelessWidget {
   final Station data;
@@ -30,10 +31,10 @@ class StationCard extends StatelessWidget {
 
     return Card(
       child: ExpansionTile(
-        title: Text("Пост: ${data.name} | Баланс: ${data.currentBalance ?? "-"}"),
+        title: Text("${context.tr('post')}: ${data.name} | ${context.tr('balance')}: ${data.currentBalance ?? "-"}"),
         subtitle: Row(
           children: [
-            Text("Программа: ${data.hash != null ? data.currentProgramName ?? "Ожидание клиента" : "-"} "),
+            Text("${context.tr('program')}: ${data.hash != null ? data.currentProgramName ?? "${context.tr('waiting_for_the_customer')}" : "-"} "),
           ],
         ),
         leading: leading,
@@ -52,7 +53,7 @@ class StationCard extends StatelessWidget {
                     style: theme.textTheme.bodyMedium,
                   ),
                   Text(
-                    "Хэш: ${data.hash ?? "-"}",
+                    "${context.tr('hash')}: ${data.hash ?? "-"}",
                     style: theme.textTheme.bodyMedium,
                   ),
                 ],
@@ -60,7 +61,7 @@ class StationCard extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: onPressed,
                 icon: Icon(Icons.settings_outlined),
-                label: Text("Управление"),
+                label: Text(context.tr('management')),
               )
             ],
           )

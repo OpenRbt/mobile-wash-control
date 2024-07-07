@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class IncasHistoryView extends StatefulWidget {
   final List<StationCollectionReport> reports;
@@ -35,7 +36,7 @@ class _IncasHistoryViewState extends State<IncasHistoryView> {
     final columns = [
       DataColumn(
         label: Text(
-          "Дата",
+          'date'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
@@ -48,11 +49,11 @@ class _IncasHistoryViewState extends State<IncasHistoryView> {
             Column(
               children: [
                 Text(
-                  "${widget.reports[index].ctime != null ? _dateFormatter.format(widget.reports[index].ctime!) : "нет данных"}",
+                  "${widget.reports[index].ctime != null ? _dateFormatter.format(widget.reports[index].ctime!) : 'no_data'.tr()}",
                   style: theme.textTheme.titleLarge,
                 ),
                 Text(
-                  "${widget.reports[index].ctime != null ? _timeFormatter.format(widget.reports[index].ctime!) : "нет данных"}",
+                  "${widget.reports[index].ctime != null ? _timeFormatter.format(widget.reports[index].ctime!) : 'no_data'.tr()}",
                   style: theme.textTheme.titleMedium,
                 )
               ],
@@ -65,7 +66,7 @@ class _IncasHistoryViewState extends State<IncasHistoryView> {
           cells: [
             DataCell(
               Text(
-                "Итого",
+                'total'.tr(),
                 style: theme.textTheme.titleLarge!.copyWith(
                   color: theme.colorScheme.primary,
                 ),
@@ -94,37 +95,37 @@ class _IncasHistoryViewState extends State<IncasHistoryView> {
     var columns = [
       DataColumn(
         label: Text(
-          "Монеты",
+          'coins'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Банкноты",
+          'banknotes'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Электронные",
+          'electronic'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Платежи по QR",
+          'qr_payments'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Бонусы",
+          'bonuses'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Сервисные",
+          'service_money'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),

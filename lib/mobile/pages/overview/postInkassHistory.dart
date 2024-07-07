@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -47,7 +48,7 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Пост $id | История инкассаций"),
+        title: Text("${context.tr('post')} $id | ${context.tr('collections_history')}"),
       ),
       body: Column(
         children: [
@@ -64,7 +65,7 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Период с ",
+                            "${context.tr('period')} ${context.tr('from')} ",
                             style: theme.textTheme.bodyLarge,
                           ),
                           Text(
@@ -72,7 +73,7 @@ class _IncassationHistoryPageState extends State<IncassationHistoryPage> {
                             style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
                           ),
                           Text(
-                            " по ",
+                            " ${context.tr('to')} ",
                             style: theme.textTheme.bodyLarge,
                           ),
                           Text(

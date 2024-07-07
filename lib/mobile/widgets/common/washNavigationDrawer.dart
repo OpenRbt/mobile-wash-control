@@ -26,29 +26,29 @@ enum SelectedPage {
   String getLabel() {
     switch (this) {
       case SelectedPage.Main:
-        return "Главная";
+        return 'main'.tr();
       case SelectedPage.Programs:
-        return "Программы";
+        return 'programs'.tr();
       case SelectedPage.Discounts:
-        return "Управление скидками";
+        return 'discounts_management'.tr();
       case SelectedPage.Settings:
         return 'settings'.tr();
       case SelectedPage.Accounts:
-        return "Пользователи";
+        return 'users'.tr();
       case SelectedPage.Services:
-        return "Сервисы";
+        return 'services'.tr();
       case SelectedPage.Statistics:
-        return "Статистика";
+        return 'statistics'.tr();
       case SelectedPage.Motors:
-        return "Моторесурс";
+        return 'motor_life'.tr();
       case SelectedPage.Scripts:
-        return "Скрипты";
+        return 'scripts'.tr();
       case SelectedPage.Updates:
-        return "Обновления";
+        return 'updates'.tr();
       case SelectedPage.Tasks:
-        return "Задачи на обновление";
+        return 'updates_tasks'.tr();
       case SelectedPage.Exit:
-        return "Выход";
+        return 'exit'.tr();
       case SelectedPage.None:
         return "";
     }
@@ -163,7 +163,7 @@ class WashNavigationDrawer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Логин: ${user?.login ?? ""}",
+                  "${'login'.tr()}: ${user?.login ?? ""}",
                   style: theme.textTheme.titleLarge!.copyWith(
                     color: theme.colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
@@ -198,7 +198,7 @@ class WashNavigationDrawer extends StatelessWidget {
                       color: theme.colorScheme.onPrimary,
                     ),
                     Text(
-                      "${(user?.isAdmin ?? false) ? "Админ" : ""} ${(user?.isOperator ?? false) ? "Оператор" : ""} ${(user?.isEngineer ?? false) ? "Инженер" : ""}",
+                      "${(user?.isAdmin ?? false) ? 'admin'.tr() : ""} ${(user?.isOperator ?? false) ? 'operator'.tr() : ""} ${(user?.isEngineer ?? false) ? 'engineer'.tr() : ""}",
                       style: theme.textTheme.titleLarge!.copyWith(
                         color: theme.colorScheme.onPrimary,
                         fontWeight: FontWeight.w900,
@@ -216,7 +216,7 @@ class WashNavigationDrawer extends StatelessWidget {
             color: theme.colorScheme.primary,
             child: Text(
 
-              "URL сервера бонусов: ${BonusCommon.washServerApi?.apiClient.basePath}",
+              "${'bonus_server_URL'.tr()}: ${BonusCommon.washServerApi?.apiClient.basePath}",
               style: theme.textTheme.titleLarge!.copyWith(
                 color: theme.colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
@@ -247,20 +247,20 @@ class WashNavigationDrawer extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text("Выход"),
-                            content: Text("Выйти из приложения?"),
+                            title: Text('exit'.tr()),
+                            content: Text("${'are_you_sure_you_want_to_exit'.tr()}?"),
                             actions: [
                               ElevatedButton(
                                 onPressed: () {
                                   exit(0);
                                 },
-                                child: Text("Да"),
+                                child: Text('yes'.tr()),
                               ),
                               ElevatedButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text("Нет"),
+                                child: Text('no'.tr()),
                               )
                             ],
                           ),

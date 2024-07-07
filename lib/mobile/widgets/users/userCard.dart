@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class UserCard extends StatelessWidget {
   final Function()? onPress;
@@ -25,7 +26,7 @@ class UserCard extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Права",
+                  context.tr('access_rights'),
                   style: theme.textTheme.titleLarge,
                 ),
               ),
@@ -33,7 +34,7 @@ class UserCard extends StatelessWidget {
                 flex: 2,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Данные пользователя",
+                  context.tr('user_data'),
                   style: theme.textTheme.titleLarge,
                 ),
               ),
@@ -51,7 +52,7 @@ class UserCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Оператор: ",
+                          "${context.tr('operator')}: ",
                           style: theme.textTheme.bodyLarge,
                         ),
                         Checkbox(
@@ -64,7 +65,7 @@ class UserCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Инженер: ",
+                          "${context.tr('engineer')}: ",
                           style: theme.textTheme.bodyLarge,
                         ),
                         Checkbox(
@@ -77,7 +78,7 @@ class UserCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Админ: ",
+                          "${context.tr('admin')}: ",
                           style: theme.textTheme.bodyLarge,
                         ),
                         Checkbox(
@@ -101,7 +102,7 @@ class UserCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Фамилия: ",
+                            "${context.tr('lastname')}: ",
                             style: theme.textTheme.bodyLarge,
                           ),
                           Text(user.lastName ?? ""),
@@ -114,7 +115,7 @@ class UserCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Имя: ",
+                            "${context.tr('firstname')}: ",
                             style: theme.textTheme.bodyLarge,
                           ),
                           Text(user.firstName ?? ""),
@@ -127,7 +128,7 @@ class UserCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Отчество: ",
+                            "${context.tr('middlename')}: ",
                             style: theme.textTheme.bodyLarge,
                           ),
                           Text(user.middleName ?? ""),

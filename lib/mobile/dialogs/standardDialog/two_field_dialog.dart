@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TwoFieldDialog extends StatefulWidget {
   final String title;
@@ -71,7 +72,7 @@ class _TwoFieldDialogState extends State<TwoFieldDialog> {
                     child: TextFormField(
                       controller: widget.firstController,
                         validator: (String? value) {
-                          return value!.isEmpty ? ${context.tr('field_must_not_be_empty')} : null;
+                          return value!.isEmpty ? '${context.tr('field_must_not_be_empty')}' : null;
                         }
                     ),
                   ),

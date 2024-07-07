@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TimeRangeDialog extends StatefulWidget {
   final ValueNotifier<DiscountCampaign> campaign;

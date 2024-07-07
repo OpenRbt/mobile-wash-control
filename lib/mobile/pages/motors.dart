@@ -7,6 +7,7 @@ import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/motors/MotorsView.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MotorPage extends StatefulWidget {
   @override

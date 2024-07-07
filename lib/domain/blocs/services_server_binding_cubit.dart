@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_wash_control/domain/entities/services_entities.dart';
 
 import '../data_providers/lcw_transport.dart';

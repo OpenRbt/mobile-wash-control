@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class StatisticsView extends StatefulWidget {
   final List<StationMoneyReport> reports;
@@ -32,7 +33,7 @@ class _StatisticsViewState extends State<StatisticsView> {
     final columns = [
       DataColumn(
         label: Text(
-          "Пост",
+          "${context.tr('post')}",
           style: theme.textTheme.titleLarge,
         ),
       ),
@@ -54,7 +55,7 @@ class _StatisticsViewState extends State<StatisticsView> {
           cells: [
             DataCell(
               Text(
-                "Итого",
+                'total'.tr(),
                 style: theme.textTheme.titleLarge!.copyWith(
                   color: theme.colorScheme.primary,
                 ),
@@ -86,49 +87,49 @@ class _StatisticsViewState extends State<StatisticsView> {
     var columns = [
       DataColumn(
         label: Text(
-          "Монеты",
+          'coins'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Банкноты",
+          'banknotes'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Электронные",
+          'electronic'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Платежи по QR",
+          'qr_payments'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Бонусы",
+          'bonuses'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Сервисные",
+          'service_money'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Число машин",
+          'cars_count'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
       DataColumn(
         label: Text(
-          "Средний чек",
+          'average_bill'.tr(),
           style: theme.textTheme.titleLarge,
         ),
       ),
@@ -137,7 +138,7 @@ class _StatisticsViewState extends State<StatisticsView> {
       columns.add(
         DataColumn(
           label: Text(
-            "Дата",
+            'date'.tr(),
             style: theme.textTheme.titleLarge,
           ),
         ),

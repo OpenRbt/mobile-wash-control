@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/mobile/widgets/discounts/programDiscountListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DiscountCampaignListTile extends StatelessWidget {
   final DiscountCampaign campaign;
@@ -24,7 +25,7 @@ class DiscountCampaignListTile extends StatelessWidget {
           children: [
             Flexible(
                 child: Text(
-                  campaign.name ?? "Скидочная программа ${campaign.id!}",
+                  campaign.name ?? "${context.tr('discount_program')} ${campaign.id!}",
                   overflow: TextOverflow.fade,
                 ),
             ),
@@ -42,7 +43,7 @@ class DiscountCampaignListTile extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Скидка по умолчанию",
+                  context.tr('discount_by_default'),
                   style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -62,7 +63,7 @@ class DiscountCampaignListTile extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Даты проведения",
+                  context.tr('dates_of_the_event'),
                   style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -74,7 +75,7 @@ class DiscountCampaignListTile extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("С ", style: theme.textTheme.titleMedium),
+                        Text("${context.tr('from')} ", style: theme.textTheme.titleMedium),
                         Text(
                           _dateFormatter.format(campaign.startDate) + " ",
                           style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
@@ -84,7 +85,7 @@ class DiscountCampaignListTile extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("по ", style: theme.textTheme.titleMedium),
+                        Text("${context.tr('to')} ", style: theme.textTheme.titleMedium),
                         Text(
                           _dateFormatter.format(campaign.endDate),
                           style: theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
@@ -102,7 +103,7 @@ class DiscountCampaignListTile extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Часы проведения",
+                  context.tr('active_hours'),
                   style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -125,7 +126,7 @@ class DiscountCampaignListTile extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  "Дни действия",
+                  context.tr('active_days_of_week'),
                   style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Row(
@@ -140,7 +141,7 @@ class DiscountCampaignListTile extends StatelessWidget {
                         )
                       : [
                           Text(
-                            "Не определены",
+                            context.tr('not_defined'),
                             style: theme.textTheme.titleMedium!.copyWith(
                               color: theme.primaryColor,
                               fontWeight: FontWeight.bold,
@@ -151,7 +152,7 @@ class DiscountCampaignListTile extends StatelessWidget {
               ],
             ),
           ),
-          ExpansionTile(title: Text("Скидки по программам - ${campaign.discountPrograms?.length ?? 0} шт"), children: [
+          ExpansionTile(title: Text("${context.tr('programs_discounts')} - ${campaign.discountPrograms?.length ?? 0}"), children: [
             ListView.builder(
               shrinkWrap: true,
               itemCount: campaign.discountPrograms?.length ?? 0,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class UniversalCard extends StatelessWidget {
 
@@ -30,7 +31,7 @@ class UniversalCard extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: onPressed,
                 icon: const Icon(Icons.settings_outlined),
-                label: const Text("Управление"),
+                label: Text(context.tr('management')),
               )
             ],
           )

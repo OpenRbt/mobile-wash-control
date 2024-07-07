@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:mobile_wash_control/mobile/dialogs/standardDialog/two_field_dialog.dart';
 import 'package:mobile_wash_control/mobile/widgets/overview/server_group_card.dart';
@@ -179,13 +180,13 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                                                     setState(() {});
                                                   }
                                                 },
-                                                child: const Text("${context.tr('save')}"),
+                                                child: Text("${context.tr('save')}"),
                                               ),
                                               ElevatedButton(
                                                 onPressed: () {
                                                   Navigator.pop(context);
                                                 },
-                                                child: const Text(context.tr('cancel')),
+                                                child: Text(context.tr('cancel')),
                                               ),
                                               ElevatedButton(
                                                 onPressed: () async {
@@ -193,7 +194,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                                                   Navigator.pop(context);
                                                   setState(() {});
                                                 },
-                                                child: const Text("${context.tr('delete')}"),
+                                                child: Text("${context.tr('delete')}"),
                                               ),
 
                                             ],
@@ -227,7 +228,7 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: const Text(context.tr('cancel')),
+                                    child: Text(context.tr('cancel')),
                                   ),
                                   ProgressButton(
                                     onPressed: () async {
@@ -243,13 +244,13 @@ class _CurrentOrganizationViewState extends State<CurrentOrganizationView> {
                                         print(secondController.text);
                                       }
                                     },
-                                    child: const Text("${context.tr('add')}"),
+                                    child: Text("${context.tr('add')}"),
                                   )
                                 ],
                               )
                           );
                         },
-                        child: const Text("${context.tr('add')}"),
+                        child: Text("${context.tr('add')}"),
                       ),
                     )
                   ],

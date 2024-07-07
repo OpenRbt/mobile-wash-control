@@ -4,6 +4,7 @@ import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class KassePage extends StatefulWidget {
   @override
@@ -62,7 +63,7 @@ class _KassePageState extends State<KassePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Параметры кассы"),
+        title: Text(context.tr('cash_desk_parameters')),
       ),
       key: _scaffoldKey,
       body: ListView(
@@ -74,7 +75,7 @@ class _KassePageState extends State<KassePage> {
               return Card(
                 child: ExpansionTile(
                   title: Text(
-                    "Параметры кассы",
+                    context.tr('cash_desk_parameters'),
                     style: theme.textTheme.titleLarge,
                   ),
                   childrenPadding: EdgeInsets.all(8),
@@ -124,7 +125,7 @@ class _KassePageState extends State<KassePage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Товар",
+                                      context.tr('product'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -154,7 +155,7 @@ class _KassePageState extends State<KassePage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Кассир",
+                                      context.tr('cashier'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -170,7 +171,7 @@ class _KassePageState extends State<KassePage> {
                                             return "${context.tr('field_must_not_be_empty')}";
                                           }
                                           if (trimmed.length < 1) {
-                                            return "не менее 1 символа";
+                                            return context.tr('field_must_contain_more_symbols');
                                           }
                                         }
 
@@ -190,7 +191,7 @@ class _KassePageState extends State<KassePage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "ИНН Кассира",
+                                      context.tr('cashier_document'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -212,7 +213,7 @@ class _KassePageState extends State<KassePage> {
                                           }
 
                                           if (trimmed.length < 12) {
-                                            return "Требуется длина 12 символов";
+                                            return context.tr('field_must_contain_more_symbols');
                                           }
                                         }
                                         return null;

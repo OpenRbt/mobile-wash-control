@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:mobile_wash_control/domain/blocs/services_sbp_cubit.dart';
 import 'package:mobile_wash_control/domain/entities/user_entity.dart';
@@ -95,7 +96,7 @@ class _ServicesSbpSegmentViewState extends State<_ServicesSbpSegmentView> {
   Widget build(BuildContext context) {
     return Card(
       child: ExpansionTile(
-        title: Text('СБП'),
+        title: Text(context.tr('SBP')),
         children: [
           Form(
             key: _formKey,
@@ -157,7 +158,7 @@ class _BaseInfoView extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                       child: Text(
-                        "Имя",
+                        context.tr('name'),
                       ),
                     ),
                   ),
@@ -291,7 +292,7 @@ class _ChooseGroupView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                         child: Text(
-                          "Организация",
+                          context.tr('organization'),
                         ),
                       ),
                     ),
@@ -319,7 +320,7 @@ class _ChooseGroupView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                         child: Text(
-                          "Группа",
+                          context.tr('group'),
                         ),
                       ),
                     ),
@@ -357,7 +358,7 @@ class _DisplayWashDataView extends StatelessWidget {
         stream: cubit.stream,
         builder: (context, snapshot) {
 
-          String id = (snapshot.requireData.servicesSbpEntity.sbpWashServer?.id ?? '').isEmpty ? "Не зарегистрирована" :  snapshot.requireData.servicesSbpEntity.sbpWashServer!.id;
+          String id = (snapshot.requireData.servicesSbpEntity.sbpWashServer?.id ?? '').isEmpty ? context.tr('not_registered') :  snapshot.requireData.servicesSbpEntity.sbpWashServer!.id;
 
           return Column(
             children: [
@@ -450,7 +451,7 @@ class _InteractionView extends StatelessWidget {
                           Navigator.pushNamed(context, "/mobile/home/bonus-status", arguments: args);
                         },
                         child: Text(
-                          "Статус сервиса",
+                          context.tr('service_status'),
                           maxLines: 2,
                         ),
                       ),
@@ -470,7 +471,7 @@ class _InteractionView extends StatelessWidget {
                           }
                         },
                         child: Text(
-                          "${context.tr('save')} изменения",
+                          "${context.tr('save')} ${context.tr('changes')}",
                           maxLines: 2,
                         ),
                       ),
@@ -497,7 +498,7 @@ class _InteractionView extends StatelessWidget {
                           }
                         },
                         child: Text(
-                          "Зарегистрировать мойку",
+                          context.tr('register_wash'),
                           maxLines: 2,
                         ),
                       ),

@@ -6,6 +6,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/users/userCard.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class UsersPage extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class _UsersPageState extends State<UsersPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Пользователи",
+          context.tr('users'),
         ),
       ),
       drawer: WashNavigationDrawer(
@@ -70,7 +71,7 @@ class _UsersPageState extends State<UsersPage> {
                         args[PageArgCode.user] = null;
                         Navigator.pushNamed(context, "/mobile/users/edit", arguments: args).then((value) => repository.updateUsers(context: context));
                       },
-                      child: Text("${context.tr('add')} пользователя"),
+                      child: Text("${context.tr('add')}"),
                     ),
                   ],
                 ),

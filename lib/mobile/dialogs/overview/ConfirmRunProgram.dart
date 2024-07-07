@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ConfirmRunProgramDialog extends StatelessWidget {
   final RunProgramConfig config;
