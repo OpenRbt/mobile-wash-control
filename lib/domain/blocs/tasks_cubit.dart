@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/domain/entities/lcw_entities.dart';
 import 'package:mobile_wash_control/domain/entities/pages_entities.dart';
@@ -77,10 +77,10 @@ class TasksPageCubit extends Cubit<TasksPageState> {
     try {
       await getTasks();
     } on FormatException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${'error_has_occurred'.tr()} $e"));
       rethrow;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${'unknown_error_has_occurred'.tr()} $e"));
       rethrow;
     }
   }

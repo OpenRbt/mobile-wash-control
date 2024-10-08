@@ -7,6 +7,7 @@ import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/settings/settingsStationListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -127,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Настройки"),
+        title: Text(context.tr('settings')),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -135,7 +136,7 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Дата: ${_dateFormat.format(currentTime)}",
+                  "${context.tr('date')}: ${_dateFormat.format(currentTime)}",
                 ),
               ],
             ),
@@ -166,7 +167,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               flex: 1,
                               fit: FlexFit.tight,
                               child: Text(
-                                "Часовой пояс: ",
+                                "${context.tr('time_zone')}: ",
                                 style: theme.textTheme.bodyLarge,
                               ),
                             ),
@@ -219,13 +220,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                                   ],
                                                   validator: (value) {
                                                     if (value == null || value.isEmpty) {
-                                                      return "поле не может быть пустым";
+                                                      return "${context.tr('field_must_not_be_empty')}";
                                                     }
                                                     return null;
                                                   },
                                                 ),
                                         ),
-                                        Text("Сервисные деньги, которые зачисляет оператор"),
+                                        Text(context.tr('service_money_credited_by_operator')),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: ProgressButton(
@@ -238,7 +239,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 _operatorServiceAmountController.text = value?.toString() ?? "10";
                                               }
                                             },
-                                            child: Text("Сохранить"),
+                                            child: Text("${context.tr('save')}"),
                                           ),
                                         ),
                                       ],
@@ -257,7 +258,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(
-                        child: Text("Настройки кассы"),
+                        child: Text(context.tr('cash_desk_settings')),
                         onPressed: () {
                           var args = Map<PageArgCode, dynamic>();
                           args[PageArgCode.repository] = repository;
@@ -270,7 +271,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                       ),
                       ElevatedButton(
-                        child: Text("Предустановки постов"),
+                        child: Text(context.tr('posts_presets')),
                         onPressed: () {
                           args[PageArgCode.repository] = repository;
                           Navigator.pushNamed(

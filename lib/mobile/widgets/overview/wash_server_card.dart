@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class WashServerCard extends StatelessWidget {
 
@@ -53,7 +54,7 @@ class WashServerCard extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Описание",
+                  "${context.tr('description')}",
                   style: theme.textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -73,7 +74,7 @@ class WashServerCard extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Создатель",
+                  context.tr('the_creator'),
                   style: theme.textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -89,7 +90,7 @@ class WashServerCard extends StatelessWidget {
           const Divider(),
           OutlinedButton(
             onPressed: onPressed,
-            child: const Text("Редактировать"),
+            child: Text("${context.tr('edit')}"),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../dialogs/discounts/edit/programDiscountDialog.dart';
 
@@ -23,7 +24,7 @@ class EditProgramDiscountListTile extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "Программа: ",
+                "${context.tr('program')}: ",
                 style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
@@ -34,7 +35,7 @@ class EditProgramDiscountListTile extends StatelessWidget {
                 future: repository.getProgramNameFromCache(discount.programID!),
                 builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
                   return Text(
-                    snapshot.data ?? "Программа ${discount.programID!}",
+                    snapshot.data ?? "${context.tr('program')} ${discount.programID!}",
                     style: theme.textTheme.titleMedium,
                   );
                 },
@@ -48,7 +49,7 @@ class EditProgramDiscountListTile extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "Скидка: ",
+                "${context.tr('discount')}: ",
                 style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
@@ -71,7 +72,7 @@ class EditProgramDiscountListTile extends StatelessWidget {
                 discounts.remove(discount);
                 campaign.value = campaign.value.copyWith(discountPrograms: discounts);
               },
-              child: Text("Удалить"),
+              child: Text("${context.tr('delete')}"),
             ),
             TextButton(
               onPressed: () {
@@ -82,7 +83,7 @@ class EditProgramDiscountListTile extends StatelessWidget {
                   },
                 );
               },
-              child: Text("Редактировать"),
+              child: Text("${context.tr('edit')}"),
             ),
           ],
         ),

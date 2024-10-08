@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../domain/blocs/updates_cubit.dart';
 import '../../entity/vo/page_args_codes.dart';
@@ -34,7 +35,7 @@ class _UpdatesPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Обновления"),
+        title: Text(context.tr('updates')),
 
       ),
       drawer: WashNavigationDrawer(
@@ -72,7 +73,7 @@ class _PostsUpdatesView extends StatelessWidget {
           return Card(
             child: ExpansionTile(
               title: Text(
-                "Обновление постов",
+                context.tr('posts_updates'),
                 style: theme.textTheme.titleLarge,
               ),
               childrenPadding: EdgeInsets.all(8),
@@ -90,9 +91,9 @@ class _PostsUpdatesView extends StatelessWidget {
                       return ListTile(
                         title: Row(
                           children: [
-                            Text("Пост: ${filteredStations[index].id.toString()}, "),
+                            Text("${context.tr('post')}: ${filteredStations[index].id.toString()}, "),
                             SizedBox(width: 5,),
-                            Text("Версия: ${filteredStations[index].firmwareVersion}")
+                            Text("${context.tr('version')}: ${filteredStations[index].firmwareVersion}")
                           ],
                         ),
                         trailing: OutlinedButton.icon(
@@ -104,7 +105,7 @@ class _PostsUpdatesView extends StatelessWidget {
                             Navigator.pushNamed(context, "/mobile/updates/post", arguments: args);
                           },
                           icon: const Icon(Icons.settings_outlined),
-                          label: const Text("Управление"),
+                          label: Text(context.tr('management')),
                         ),
                       );
                     }
@@ -136,7 +137,7 @@ class _ApplicationUpdateView extends StatelessWidget {
           return Card(
             child: ExpansionTile(
               title: Text(
-                "Обновление приложения",
+                context.tr('application_updates'),
                 style: theme.textTheme.titleLarge,
               ),
               childrenPadding: EdgeInsets.all(8),
@@ -144,9 +145,9 @@ class _ApplicationUpdateView extends StatelessWidget {
                 ListTile(
                   title: Column(
                     children: [
-                      Text("Текущая версия: ${updatesPageEntity.currentApplicationVersion}"),
+                      Text("${context.tr('current_version')}: ${updatesPageEntity.currentApplicationVersion}"),
                       SizedBox(height: 10,),
-                      Text("Последняя версия: ${updatesPageEntity.availableApplicationVersion}")
+                      Text("${context.tr('last_version')}: ${updatesPageEntity.availableApplicationVersion}")
                     ],
                   ),
                   trailing: updatesPageEntity.isDownloading ? CircularProgressIndicator() : OutlinedButton.icon(
@@ -155,7 +156,7 @@ class _ApplicationUpdateView extends StatelessWidget {
                       cubit.updateDesktopApplication();
                     },
                     icon: const Icon(Icons.download_outlined),
-                    label: const Text("Обновить"),
+                    label: Text(context.tr('update')),
                   ),
                 )
               ],

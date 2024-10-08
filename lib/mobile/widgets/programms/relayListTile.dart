@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class RelayListTile extends StatelessWidget {
   final int id;
@@ -20,7 +21,7 @@ class RelayListTile extends StatelessWidget {
       children: [
         Divider(),
         Text(
-          "Реле: $id",
+          "${context.tr('relay')}: $id",
           style: theme.textTheme.titleLarge,
         ),
         Row(
@@ -29,7 +30,7 @@ class RelayListTile extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "% реле",
+                context.tr('relay_percentage'),
                 style: theme.textTheme.bodyLarge,
               ),
             ),
@@ -58,7 +59,7 @@ class RelayListTile extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "% реле прокачки",
+                context.tr('preflight_relay_percentage'),
                 style: theme.textTheme.bodyLarge,
               ),
             ),

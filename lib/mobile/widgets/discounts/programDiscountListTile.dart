@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProgramDiscountListTile extends StatelessWidget {
   final DiscountProgram discount;
@@ -21,7 +22,7 @@ class ProgramDiscountListTile extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Программа: ",
+                  "${context.tr('program')}: ",
                   style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -32,7 +33,7 @@ class ProgramDiscountListTile extends StatelessWidget {
                   future: repository.getProgramNameFromCache(discount.programID!),
                   builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
                     return Text(
-                      snapshot.data ?? "Программа ${discount.programID!}",
+                      snapshot.data ?? "${context.tr('program')} ${discount.programID!}",
                       style: theme.textTheme.titleMedium,
                     );
                   },
@@ -46,7 +47,7 @@ class ProgramDiscountListTile extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Скидка: ",
+                  "${context.tr('discount')}: ",
                   style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),

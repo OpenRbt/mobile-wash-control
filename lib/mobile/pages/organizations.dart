@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:mobile_wash_control/mobile/widgets/overview/organization_card.dart';
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
@@ -28,7 +29,7 @@ class _OrganizationsViewState extends State<OrganizationsView> {
         return false;
       },
       child: Scaffold(
-          appBar: AppBar(title: const Text("Организации")),
+          appBar: AppBar(title: Text(context.tr('organizations'))),
           body: FutureBuilder<List<entity.Organization>?>(
               future: WashAdminRepository.getOrganizations(),
               builder: (BuildContext context, AsyncSnapshot<List<entity.Organization>?> snapshot) {
@@ -71,9 +72,9 @@ class _OrganizationsViewState extends State<OrganizationsView> {
                                 showDialog(
                                     context: context,
                                     builder: (context) =>  TwoFieldDialog(
-                                      title: "Добавить организацию",
-                                      firstFieldName: 'Название',
-                                      seconFieldName: 'Описание',
+                                      title: "${context.tr('add')}",
+                                      firstFieldName: '${context.tr('name')}',
+                                      seconFieldName: '${context.tr('description')}',
                                       firstController: firstController,
                                       secondController: secondController,
                                       validateKey: addOrganizationKey,
@@ -82,7 +83,7 @@ class _OrganizationsViewState extends State<OrganizationsView> {
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
-                                          child: const Text("Отмена"),
+                                          child: Text(context.tr('cancel')),
                                         ),
                                         ProgressButton(
                                           onPressed: () async {
@@ -95,14 +96,14 @@ class _OrganizationsViewState extends State<OrganizationsView> {
                                               print(secondController.text);
                                             }
                                           },
-                                          child: const Text("Добавить"),
+                                          child: Text("${context.tr('add')}"),
                                         )
                                       ],
                                     )
                                 );
 
                               },
-                              child: const Text("Добавить организацию"),
+                              child: Text("${context.tr('add')}"),
                             ),
                           )
                         ]

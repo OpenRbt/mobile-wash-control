@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../entity/vo/page_args_codes.dart';
 import '../../repository/lea_central_wash_repo/repository.dart';
@@ -20,7 +21,7 @@ class _SbpStatusPageState extends State<SbpStatusPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Информация о СБП"),
+        title: Text(context.tr('SBP_info')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -28,7 +29,7 @@ class _SbpStatusPageState extends State<SbpStatusPage> {
           valueListenable: repository.getSbpStatusNotifier(),
           builder: (context, sbpStatus, _) {
             return ServiceStatus(
-              serviceName: 'Сервис СБП',
+              serviceName: context.tr('SBP_service'),
               disabledOnServer: sbpStatus?.disabledOnServer,
               isConnected: sbpStatus?.isConnected,
               lastErr: sbpStatus?.lastErr,

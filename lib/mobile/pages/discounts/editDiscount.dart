@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,7 +39,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
     _currentDiscount = ValueNotifier(DiscountCampaign(
       startDate: _dateRange.value.start,
       endDate: _dateRange.value.end,
-      name: "Новая скидочная программа",
+      name: 'new_discount_program'.tr(),
       startMinute: 0,
       endMinute: 24 * 60 - 1,
     ));
@@ -72,7 +73,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
 
   Future<void> _resetUI() async {
     if (_discount.value != null) {
-      _currentDiscount.value = _discount.value!.copyWith(startDate: null, endDate: null, name: _discount.value!.name ?? "Новая скидочная ппрограмма");
+      _currentDiscount.value = _discount.value!.copyWith(startDate: null, endDate: null, name: _discount.value!.name ?? 'new_discount_program'.tr());
     }
 
     _controllers["name"]!.text = _currentDiscount.value.name ?? "";
@@ -93,7 +94,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
         title: ValueListenableBuilder(
           valueListenable: _discount,
           builder: (BuildContext context, DiscountCampaign? value, Widget? child) {
-            return Text(value?.name != null ? "Редактирование" : "Создание скидочной программы");
+            return Text(value?.name != null ? "${context.tr('editing')}" : '${context.tr('discount_program_creation')}');
           },
         ),
         actions: [
@@ -104,7 +105,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text("Вы уверены?"),
+                          title: Text(context.tr('are_you_sure')),
                           actions: [
                             TextButton(
                               onPressed: () async {
@@ -112,13 +113,13 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                                 Navigator.of(context).pop();
                                 Navigator.pop(context);
                               },
-                              child: Text("Да"),
+                              child: Text(context.tr('yes')),
                             ),
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: Text("Нет"),
+                              child: Text(context.tr('no')),
                             ),
                           ],
                         );
@@ -130,7 +131,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                     color: theme.colorScheme.onPrimary,
                   ),
                   label: Text(
-                    "Удалить",
+                    "${context.tr('delete')}",
                     style: theme.textTheme.titleMedium!.copyWith(color: theme.colorScheme.onPrimary),
                   ),
                 )
@@ -148,7 +149,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                 Card(
                   child: ExpansionTile(
                     title: Text(
-                      "Параметры скидочной программы",
+                      context.tr('discount_program_settings'),
                       style: theme.textTheme.titleLarge,
                     ),
                     childrenPadding: EdgeInsets.all(8),
@@ -159,7 +160,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                             flex: 1,
                             fit: FlexFit.tight,
                             child: Text(
-                              "Название",
+                              "${context.tr('name')}",
                               style: theme.textTheme.bodyLarge,
                             ),
                           ),
@@ -173,7 +174,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                               },
                               validator: (val) {
                                 if ((val ?? "").trim().isEmpty) {
-                                  return "Поле не может быть пустым";
+                                  return "${context.tr('field_must_not_be_empty')}";
                                 }
                                 return null;
                               },
@@ -187,7 +188,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                             flex: 1,
                             fit: FlexFit.tight,
                             child: Text(
-                              "Активна",
+                              context.tr('is_active'),
                               style: theme.textTheme.bodyLarge,
                             ),
                           ),
@@ -214,7 +215,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                             flex: 1,
                             fit: FlexFit.tight,
                             child: Text(
-                              "Скидка",
+                              context.tr('discount'),
                               style: theme.textTheme.bodyLarge,
                             ),
                           ),
@@ -245,10 +246,10 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                                     validator: (val) {
                                       int res = int.tryParse(val ?? "0") ?? 0;
                                       if (res > 100) {
-                                        return "скидка не может быть больше 100%";
+                                        return "${context.tr('the_discount_cannot_be_greater_than')} 100%";
                                       }
                                       if (res < 0) {
-                                        return "скидка не может быть отрицательной";
+                                        return "${context.tr('the_discount_must_be_greater_than')} 0%";
                                       }
 
                                       return null;
@@ -272,7 +273,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Даты проведения",
+                                context.tr('dates_of_the_event'),
                                 style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                               ),
                               ValueListenableBuilder(
@@ -281,12 +282,12 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                                   _dateRange.value = DateTimeRange(start: value.startDate, end: value.endDate);
                                   return Row(
                                     children: [
-                                      Text("С "),
+                                      Text("${context.tr('from')} "),
                                       Text(
                                         _dateFormatter.format(value.startDate),
                                         style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
                                       ),
-                                      Text(" по "),
+                                      Text(" ${context.tr('to')} "),
                                       Text(
                                         _dateFormatter.format(value.endDate),
                                         style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
@@ -321,7 +322,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                               }
                             },
                             child: Text(
-                              "Выбрать период",
+                              "${context.tr('choose_period')}",
                             ),
                           ),
                         ],
@@ -334,7 +335,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Время действия",
+                                context.tr('discount_active_time'),
                                 style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                               ),
                               ValueListenableBuilder(
@@ -342,12 +343,12 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                                 builder: (BuildContext context, DiscountCampaign value, Widget? child) {
                                   return Row(
                                     children: [
-                                      Text("С "),
+                                      Text("${context.tr('from')} "),
                                       Text(
                                         _durationFormat(Duration(minutes: value.startMinute ?? 0)),
                                         style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
                                       ),
-                                      Text(" по "),
+                                      Text(" ${context.tr('to')} "),
                                       Text(
                                         _durationFormat(Duration(minutes: value.endMinute ?? 0)),
                                         style: theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor),
@@ -371,7 +372,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                               );
                             },
                             child: Text(
-                              "Выбрать период",
+                              "${context.tr('choose_period')}",
                             ),
                           ),
                         ],
@@ -382,7 +383,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                             flex: 1,
                             fit: FlexFit.tight,
                             child: Text(
-                              "Дни действия",
+                              context.tr('active_days_of_week'),
                               style: theme.textTheme.bodyLarge!.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -413,7 +414,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                                             ),
                                           )
                                         : [
-                                            Text("Выбрать дни"),
+                                            Text(context.tr('select_days')),
                                           ],
                                   ),
                                 );
@@ -432,7 +433,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                     return Card(
                       child: ExpansionTile(
                         title: Text(
-                          "Скидки по программам - ${discountCampaign.discountPrograms?.length ?? 0} шт",
+                          "${context.tr('programs_discounts')} - ${discountCampaign.discountPrograms?.length ?? 0}",
                           style: theme.textTheme.titleLarge,
                         ),
                         childrenPadding: EdgeInsets.all(8),
@@ -478,7 +479,7 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
                           Navigator.pop(context);
                         }
                       },
-                      child: Text("Сохранить"),
+                      child: Text("${context.tr('save')}"),
                     ),
                   ],
                 )

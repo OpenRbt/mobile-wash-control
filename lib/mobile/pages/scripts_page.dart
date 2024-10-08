@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../entity/entity.dart';
 import '../../entity/vo/page_args_codes.dart';
@@ -22,7 +23,7 @@ class _ScriptsPageState extends State<ScriptsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Скрипты"),
+        title: Text(context.tr('scripts')),
 
       ),
       drawer: WashNavigationDrawer(
@@ -47,7 +48,7 @@ class _ScriptsPageState extends State<ScriptsPage> {
                   child: ListTile(
                     title: Row(
                       children: [
-                        Text("Пост: ${filteredStations[index].id.toString()}"),
+                        Text("${context.tr('post')}: ${filteredStations[index].id.toString()}"),
                       ],
                     ),
                     trailing: OutlinedButton.icon(
@@ -59,7 +60,7 @@ class _ScriptsPageState extends State<ScriptsPage> {
                         Navigator.pushNamed(context, "/mobile/scripts/post", arguments: args);
                       },
                       icon: const Icon(Icons.edit_outlined),
-                      label: const Text("Редактировать"),
+                      label: Text("${context.tr('edit')}"),
                     ),
                   ),
                 );

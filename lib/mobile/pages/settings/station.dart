@@ -4,6 +4,7 @@ import 'package:mobile_wash_control/entity/entity.dart' as entity;
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class StationPage extends StatefulWidget {
   @override
@@ -109,7 +110,7 @@ class _StationPageState extends State<StationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Пост $id - $ip",
+          "${context.tr('post')} $id - $ip",
         ),
       ),
       key: _scaffoldKey,
@@ -122,7 +123,7 @@ class _StationPageState extends State<StationPage> {
               return Card(
                 child: ExpansionTile(
                   title: Text(
-                    "Параметры поста",
+                    context.tr('post_settings'),
                     style: theme.textTheme.titleLarge,
                   ),
                   childrenPadding: EdgeInsets.all(8),
@@ -142,7 +143,7 @@ class _StationPageState extends State<StationPage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Имя",
+                                      context.tr('name'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -156,7 +157,7 @@ class _StationPageState extends State<StationPage> {
                                       },
                                       validator: (val) {
                                         if ((val ?? "").trim().isEmpty) {
-                                          return "Поле не может быть пустым";
+                                          return "${context.tr('field_must_not_be_empty')}";
                                         }
                                         return null;
                                       },
@@ -170,7 +171,7 @@ class _StationPageState extends State<StationPage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Хэш",
+                                      context.tr('hash'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -203,7 +204,7 @@ class _StationPageState extends State<StationPage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Прокачка (сек)",
+                                      "${context.tr('preflight')} (${context.tr('seconds')})",
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -223,7 +224,7 @@ class _StationPageState extends State<StationPage> {
                                       validator: (val) {
                                         var amount = int.tryParse(val ?? "");
                                         if ((amount ?? 0) < 0) {
-                                          return "Время прокачки должно быть не меньше 0";
+                                          return "${context.tr('the_preflight_time_must_not_be_less_than')} 0";
                                         }
                                         return null;
                                       },
@@ -237,7 +238,7 @@ class _StationPageState extends State<StationPage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Выполнение",
+                                      context.tr('processing'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -278,7 +279,7 @@ class _StationPageState extends State<StationPage> {
                               await repository.saveStationConfig(_config.value, context: context).then((value) => _getPostConfig(repository, id, context));
                             }
                           },
-                          child: Text("Сохранить"),
+                          child: Text("${context.tr('save')}"),
                         ),
                         Flexible(
                           fit: FlexFit.tight,
@@ -288,7 +289,7 @@ class _StationPageState extends State<StationPage> {
                               await _getPostConfig(repository, id, context);
                             },
                             child: Text(
-                              "Получить текущую конфигурацию",
+                              "${context.tr('get_current_configuration')}",
                               softWrap: true,
                             ),
                           ),
@@ -306,7 +307,7 @@ class _StationPageState extends State<StationPage> {
               return Card(
                 child: ExpansionTile(
                   title: Text(
-                    "Параметры кардридера",
+                    context.tr('card_reader_settings'),
                     style: theme.textTheme.titleLarge,
                   ),
                   childrenPadding: EdgeInsets.all(8),
@@ -324,7 +325,7 @@ class _StationPageState extends State<StationPage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Тип",
+                                      context.tr('type'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -356,7 +357,7 @@ class _StationPageState extends State<StationPage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Хост",
+                                      context.tr('host'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -378,7 +379,7 @@ class _StationPageState extends State<StationPage> {
                                     flex: 1,
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      "Порт",
+                                      context.tr('port'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
@@ -409,7 +410,7 @@ class _StationPageState extends State<StationPage> {
                               await repository.saveCardReaderConfig(id, _cardReaderConfig.value, context: context).then((value) => _getCardReaderConfig(repository, id));
                             }
                           },
-                          child: Text("Сохранить"),
+                          child: Text("${context.tr('save')}"),
                         ),
                         Flexible(
                           fit: FlexFit.tight,
@@ -419,7 +420,7 @@ class _StationPageState extends State<StationPage> {
                               await _getCardReaderConfig(repository, id);
                               },
                             child: Text(
-                              "Получить текущую конфигурацию",
+                              "${context.tr('get_current_configuration')}",
                               softWrap: true,
                             ),
                         ),
@@ -437,7 +438,7 @@ class _StationPageState extends State<StationPage> {
               return Card(
                 child: ExpansionTile(
                   title: Text(
-                    "Привязка кнопок",
+                    context.tr('buttons_binding'),
                     style: theme.textTheme.titleLarge,
                   ),
                   childrenPadding: EdgeInsets.all(8),
@@ -454,7 +455,7 @@ class _StationPageState extends State<StationPage> {
                                   Flexible(
                                     flex: 1,
                                     fit: FlexFit.tight,
-                                    child: Text("Кнопка ${buttons[index].buttonID}"),
+                                    child: Text("${context.tr('button')} ${buttons[index].buttonID}"),
                                   ),
                                   Flexible(
                                     flex: 2,
@@ -493,7 +494,7 @@ class _StationPageState extends State<StationPage> {
                           onPressed: () async {
                             await repository.saveStationButtons(id, _buttonsConfig.value, context: context).then((value) => _getStationButtonsConfig(repository, id));
                           },
-                          child: Text("Сохранить"),
+                          child: Text("${context.tr('save')}"),
                         ),
                         Flexible(
                           fit: FlexFit.tight,
@@ -502,7 +503,7 @@ class _StationPageState extends State<StationPage> {
                             onPressed: () async {
                               await _getStationButtonsConfig(repository, id);
                             },
-                            child: Text("Получить текущую конфигурацию"),
+                            child: Text("${context.tr('get_current_configuration')}"),
                           ),
                         )
                       ],

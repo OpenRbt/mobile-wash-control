@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/domain/entities/lcw_entities.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../mobile/widgets/common/snackBars.dart';
 import '../data_providers/lcw_transport.dart';
@@ -83,10 +84,10 @@ class UpdatesStationPageCubit extends Cubit<UpdatesStationPageState> {
 
       emit(newState);
     } on FormatException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${'error_has_occurred'.tr()} $e"));
       rethrow;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${'unknown_error_has_occurred'.tr()} $e"));
       rethrow;
     }
   }

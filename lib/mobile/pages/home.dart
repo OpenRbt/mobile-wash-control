@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/mobile/widgets/scan_host_list_tile.dart';
@@ -163,7 +164,7 @@ class _HomeState extends State<Home> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Доступные серверы"),
+        title: Text(context.tr('available_servers')),
         leading: Text("${_packageInfo.version}"),
       ),
       body: Column(
@@ -173,17 +174,17 @@ class _HomeState extends State<Home> {
             child: ExpansionTile(
               initiallyExpanded: true,
               title: Text(
-                "Информация о сети",
+                context.tr('network_info'),
                 style: theme.textTheme.titleLarge,
               ),
               childrenPadding: EdgeInsets.all(8),
               children: [
                 Text("IP: ${lanIP ?? ""}"),
                 Text("Broadcast: ${lanBroadcast ?? ""}"),
-                Text("Шлюз: ${lanGateway ?? ""}"),
+                Text("${context.tr('gateway')}: ${lanGateway ?? ""}"),
                 TextButton.icon(
                   onPressed: _canCheckInfo ? _initNetworkInfo : null,
-                  label: Text("Обновить данные сети"),
+                  label: Text(context.tr('update_network_data')),
                   icon: Container(
                     height: 24,
                     width: 24,
@@ -197,7 +198,7 @@ class _HomeState extends State<Home> {
             child: ExpansionTile(
               initiallyExpanded: true,
               title: Text(
-                "Сканирование",
+                context.tr('scanning'),
                 style: theme.textTheme.titleLarge,
               ),
               children: [
@@ -219,7 +220,7 @@ class _HomeState extends State<Home> {
                             ),
                             onPressed: null,
                             label: Text(
-                              "Сканирование...",
+                              "${context.tr('scanning')}...",
                             ),
                           );
                         } else {
@@ -229,7 +230,7 @@ class _HomeState extends State<Home> {
                               setState(() {});
                             },
                             label: Text(
-                              "Сканировать хост",
+                              context.tr('scan_host'),
                             ),
                           );
                         }
@@ -264,7 +265,7 @@ class _HomeState extends State<Home> {
                                           ),
                                           onPressed: null,
                                           label: Text(
-                                            "Сканирование",
+                                            context.tr('scanning'),
                                           ),
                                         );
                                       } else {
@@ -274,7 +275,7 @@ class _HomeState extends State<Home> {
                                             setState(() {});
                                           },
                                           label: Text(
-                                            "Сканировать хост",
+                                            context.tr('scan_host'),
                                           ),
                                         );
                                       }
@@ -316,7 +317,7 @@ class _HomeState extends State<Home> {
                 ),
                 TextButton.icon(
                   onPressed: _findServers,
-                  label: Text("Сканировать сеть"),
+                  label: Text(context.tr('scan_network')),
                   icon: Container(
                     height: theme.iconTheme.size ?? 24,
                     child: FittedBox(
@@ -329,7 +330,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           Text(
-            "Результаты сканирования",
+            context.tr('scan_result'),
             style: theme.textTheme.titleLarge,
           ),
           Divider(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ServerGroupCard extends StatelessWidget {
 
@@ -31,7 +32,7 @@ class ServerGroupCard extends StatelessWidget {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Описание",
+                  "${context.tr('description')}",
                   style: theme.textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -47,7 +48,7 @@ class ServerGroupCard extends StatelessWidget {
           const Divider(),
           OutlinedButton(
             onPressed: onPressed,
-            child: const Text("Редактировать"),
+            child: Text("${context.tr('edit')}"),
           ),
         ],
       ),

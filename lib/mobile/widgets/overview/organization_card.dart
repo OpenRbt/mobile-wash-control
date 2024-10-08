@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OrganizationCard extends StatelessWidget {
   final Organization data;
@@ -16,11 +17,11 @@ class OrganizationCard extends StatelessWidget {
 
     return Card(
       child: ExpansionTile(
-        title: Text("Организация: ${data.name} "),
+        title: Text("${context.tr('organization')}: ${data.name} "),
         subtitle: Row(
           /*
           children: [
-            Text("Описание: ${data.description ?? "-"}"),
+            Text("${context.tr('description')}: ${data.description ?? "-"}"),
           ],
            */
         ),
@@ -35,7 +36,7 @@ class OrganizationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Описание: ${data.description} ",
+                    "${context.tr('description')}: ${data.description} ",
                     style: theme.textTheme.bodyMedium,
                   ),
                 ],
@@ -43,7 +44,7 @@ class OrganizationCard extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: onPressed,
                 icon: const Icon(Icons.settings_outlined),
-                label: const Text("Управление"),
+                label: Text(context.tr('management')),
               )
             ],
           )

@@ -1,17 +1,19 @@
+import 'package:easy_localization/easy_localization.dart';
+
 String getTypeName(String type) {
   switch (type) {
     case 'build':
-      return 'сборка';
+      return 'build_noun'.tr();
     case 'update':
-      return 'обновление';
+      return 'update_noun'.tr();
     case 'reboot':
-      return 'перезагрузка';
+      return 'reboot_noun'.tr();
     case 'getVersions':
-      return 'получение версий';
+      return 'get_versions_noun'.tr();
     case 'pullFirmware':
-      return 'выгрузка на сервер';
+      return 'server_uploading'.tr();
     case 'setVersion':
-      return 'смена версии';
+      return 'set_version_noun'.tr();
     default:
       return '';
   }
@@ -20,15 +22,15 @@ String getTypeName(String type) {
 String getStatusName(String status) {
   switch (status) {
     case 'queue':
-      return 'в очереди';
+      return 'in_queue'.tr();
     case 'started':
-      return 'начата';
+      return 'started'.tr();
     case 'completed':
-      return 'завершена';
+      return 'completed'.tr();
     case 'error':
-      return 'ошибка';
+      return 'error'.tr();
     case 'canceled':
-      return 'отменена';
+      return 'canceled'.tr();
     default:
       return '';
   }

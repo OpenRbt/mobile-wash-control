@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class IncassationHistoryListTile extends StatelessWidget {
   final StationCollectionReport report;
@@ -25,11 +26,11 @@ class IncassationHistoryListTile extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(
-                          "${report.ctime != null ? _dateFormatter.format(report.ctime!) : "нет данных"}",
+                          "${report.ctime != null ? _dateFormatter.format(report.ctime!) : context.tr('no_data')}",
                           style: theme.textTheme.titleLarge,
                         ),
                         Text(
-                          "${report.ctime != null ? _timeFormatter.format(report.ctime!) : "нет данных"}",
+                          "${report.ctime != null ? _timeFormatter.format(report.ctime!) : context.tr('no_data')}",
                           style: theme.textTheme.titleMedium,
                         ),
                       ],

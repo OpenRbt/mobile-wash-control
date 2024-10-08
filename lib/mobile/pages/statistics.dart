@@ -8,6 +8,7 @@ import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/statistics/StatisticsView.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class StatisticsPage extends StatefulWidget {
   @override
@@ -59,7 +60,7 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
       appBar: AppBar(
           title: Row(
             children: [
-              Text("Статистика"),
+              Text(context.tr('statistics')),
               Align(
                 alignment: Alignment.centerRight
               )
@@ -94,15 +95,15 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
                       segments: [
                         ButtonSegment(
                           value: StatisticsShowMode.FromLastIncass,
-                          label: Text("С последней инкассации"),
+                          label: Text(context.tr('from_last_collection')),
                         ),
                         ButtonSegment(
                           value: StatisticsShowMode.Dates,
-                          label: Text("По датам"),
+                          label: Text(context.tr('by_dates')),
                         ),
                         ButtonSegment(
                           value: StatisticsShowMode.LastIncass,
-                          label: Text("Последняя инкассация"),
+                          label: Text(context.tr('last_collection')),
                         ),
                       ],
                       selected: {value},
@@ -128,7 +129,7 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Период с ",
+                                  "${context.tr('period')} ${context.tr('from')} ",
                                   style: canSelectDates ? theme.textTheme.bodyLarge : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
                                 ),
                                 Text(
@@ -136,7 +137,7 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
                                   style: canSelectDates ? theme.textTheme.bodyLarge!.copyWith(color: theme.primaryColor) : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
                                 ),
                                 Text(
-                                  " по ",
+                                  " ${context.tr('to')} ",
                                   style: canSelectDates ? theme.textTheme.bodyLarge : theme.textTheme.bodyLarge!.copyWith(color: theme.disabledColor),
                                 ),
                                 Text(
@@ -170,7 +171,7 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
                                   }
                                 }
                               : null,
-                          child: Text("Выбрать период"),
+                          child: Text("${context.tr('choose_period')}"),
                         )
                       ],
                     );
@@ -275,7 +276,7 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
     var timeTotal = DateTime.now().difference(startTime);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBars.getInfoSnackBar(
-        message: "Статистика загружена за ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} секунд",
+        message: "${context.tr('statistics_uploaded_in')} ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} ${context.tr('seconds')}",
       ),
     );
 
@@ -290,7 +291,7 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
     var timeTotal = DateTime.now().difference(startTime);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBars.getInfoSnackBar(
-        message: "Статистика загружена за ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} секунд",
+        message: "${context.tr('statistics_uploaded_in')} ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} ${context.tr('seconds')}",
       ),
     );
 
@@ -311,7 +312,7 @@ class _StatisticsPageState extends State<StatisticsPage> with TickerProviderStat
     var timeTotal = DateTime.now().difference(startTime);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBars.getInfoSnackBar(
-        message: "Статистика загружена за ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} секунд",
+        message: "${context.tr('statistics_uploaded_in')} ${timeTotal.inSeconds}.${timeTotal.inMilliseconds % 1000} ${context.tr('seconds')}",
       ),
     );
 

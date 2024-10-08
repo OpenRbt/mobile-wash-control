@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../domain/blocs/updates_station_cubit.dart';
 import '../../entity/vo/page_args_codes.dart';
@@ -41,7 +42,7 @@ class _UpdatesStationPageView extends StatelessWidget {
         builder: (context, snapshot) {
           return Scaffold(
             appBar: AppBar(
-              title: Text("Пост ${snapshot.requireData.updatesStationPageEntity.stationId}"),
+              title: Text("${context.tr('post')} ${snapshot.requireData.updatesStationPageEntity.stationId}"),
               actions: [
                 IconButton(
                   icon: Icon(Icons.more_horiz_rounded),
@@ -133,7 +134,7 @@ class _CopyVersionView extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text('Версия на сервере для станции #'),
+                    Text('${context.tr('version_on_server_for_station')} #'),
                     SizedBox(width: 10,),
                     Expanded(
                         child: DropDownByID(
@@ -168,14 +169,14 @@ class _CopyVersionView extends StatelessWidget {
                             try {
                               await cubit.copyVersionFromPostToPost();
                               await cubit.downLoadVersion();
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: "Идёт копирование из буфера"));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBars.getSuccessSnackBar(message: context.tr('copying_from_buffer_in_progress')));
                             } on FormatException catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error_has_occurred')} $e"));
                             } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')} $e"));
                             }
                           } : null,
-                          child: Text('Установить версию с сервера и перезагрузить')
+                          child: Text(context.tr('set_version_from_server_and_reboot'))
                       ),
                     )
                   ],
@@ -197,7 +198,7 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
       final cubit = widgetContext.watch<UpdatesStationPageCubit>();
 
       return AlertDialog(
-        title: Text("Действия"),
+        title: Text(context.tr('actions')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,16 +211,16 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
                     onPressed: () async {
                       try {
                         await cubit.reboot();
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getSuccessSnackBar(message: "Задача на перезагрузку создана"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getSuccessSnackBar(message: context.tr('the_reboot_task_has_been_created')));
                       } on FormatException catch (e) {
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error_has_occurred')} $e"));
                       } catch (e) {
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')} $e"));
                       }
                       Navigator.of(context).pop();
                     },
                     icon: const Icon(Icons.restart_alt_outlined),
-                    label: const Text("Перезагрузить пост"),
+                    label: Text(context.tr('reboot_post')),
                   ),
                 ),
               ],
@@ -233,16 +234,16 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
                     onPressed: () async {
                       try {
                         await cubit.hashVersions();
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getSuccessSnackBar(message: "Задача на хэширование версий с поста создана"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getSuccessSnackBar(message: context.tr('the_task_to_hash_the_versions_from_the_post_has_been_created')));
                       } on FormatException catch (e) {
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error_has_occurred')} $e"));
                       } catch (e) {
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')} $e"));
                       }
                       Navigator.of(context).pop();
                     },
                     icon: const Icon(Icons.list_alt_outlined),
-                    label: const Text("Получить информацию о всех версиях поста и отобразить"),
+                    label: Text("${context.tr('to_get')} ${context.tr('information_about_all_post_versions_and_display')}"),
                   ),
                 ),
               ],
@@ -256,16 +257,16 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
                     onPressed: () async {
                       try {
                         await cubit.update();
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getSuccessSnackBar(message: "Задача на загрузку последней версии создана"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getSuccessSnackBar(message: context.tr('the_task_to_download_the_latest_version_has_been_created')));
                       } on FormatException catch (e) {
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error_has_occurred')} $e"));
                       } catch (e) {
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')} $e"));
                       }
                       Navigator.of(context).pop();
                     },
                     icon: const Icon(Icons.download_for_offline_outlined),
-                    label: const Text("Скачать версию с github, собрать локально и перезагрузить"),
+                    label: Text(context.tr('download_version_from_github_build_local_and_reboot')),
                   ),
                 ),
               ],
@@ -279,16 +280,16 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
                     onPressed: () async {
                       try {
                         await cubit.downLoadVersion();
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getSuccessSnackBar(message: "Задача на создание новой версии создана"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getSuccessSnackBar(message: context.tr('the_task_to_create_a_new_version_has_been_created')));
                       } on FormatException catch (e) {
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла ошибка $e"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('error_has_occurred')} $e"));
                       } catch (e) {
-                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "Произошла неизвестная ошибка $e"));
+                        ScaffoldMessenger.of(widgetContext).showSnackBar(SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')} $e"));
                       }
                       Navigator.of(context).pop();
                     },
                     icon: const Icon(Icons.create_new_folder_outlined),
-                    label: const Text("Скопировать на пост текущую версию и перезагрузить"),
+                    label: Text(context.tr('copy_to_post_current_version_and_reboot')),
                   ),
                 ),
               ],
@@ -300,7 +301,7 @@ showMoreActionsModalDialog(BuildContext widgetContext) {
             onPressed: () async {
               Navigator.of(context).pop();
             },
-            child: Text("Отмена"),
+            child: Text(context.tr('cancel')),
           ),
         ],
       );

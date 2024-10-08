@@ -1,4 +1,5 @@
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../openapi/wash-admin-client/api.dart';
 import '../../Common/bonus_common.dart';
@@ -27,12 +28,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось получить список организаций, Ошибка: ${e.code}");
+          print("${'failed'.tr()} ${'to_get'.tr()} ${'organizations_list'.tr()}, ${'error'.tr()}: ${e.code}");
           break;
       }
       return null;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return null;
   }
@@ -54,12 +55,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось получить параметры организации, Ошибка: ${e.code}");
+          print("${'failed'.tr()} ${'to_get'.tr()} ${'organization_parameters'.tr()}, ${'error'.tr()}: ${e.code}");
           break;
       }
       return null;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return null;
   }
@@ -81,12 +82,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось создать новую организацию, Ошибка: ${e.code}");
+          print("${'failed'.tr()} ${'to_create_new_organization'.tr()}, ${'error'.tr()}: ${e.code}");
           break;
       }
       return;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return;
   }
@@ -108,12 +109,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось обновить параметры организации, Ошибка: ${e.code}");
+          print("${'failed'.tr()} обновить параметры организации, ${'error'.tr()}: ${e.code}");
           break;
       }
       return;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return;
   }
@@ -129,12 +130,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось удалить организацию, Ошибка: ${e.code}");
+          print("${'failed'.tr()} удалить организацию, ${'error'.tr()}: ${e.code}");
           break;
       }
       return;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return;
   }
@@ -158,13 +159,13 @@ class WashAdminRepository {
     } on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось получить список групп, Ошибка: ${e.code}");
+          print("${'failed'.tr()} ${'to_get'.tr()} список групп, ${'error'.tr()}: ${e.code}");
           print(e.message);
           break;
       }
       return null;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return null;
   }
@@ -185,12 +186,12 @@ class WashAdminRepository {
     } on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось получить параметры группы, Ошибка: ${e.code}");
+          print("${'failed'.tr()} ${'to_get'.tr()} параметры группы, ${'error'.tr()}: ${e.code}");
           break;
       }
       return null;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return null;
   }
@@ -212,12 +213,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось создать группу серверов, Ошибка: ${e.code}");
+          print("${'failed'.tr()} создать группу серверов, ${'error'.tr()}: ${e.code}");
           break;
       }
       return;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return;
   }
@@ -239,12 +240,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось обновить параметры группы серверов, Ошибка: ${e.code}");
+          print("${'failed'.tr()} обновить параметры группы серверов, ${'error'.tr()}: ${e.code}");
           break;
       }
       return;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return;
   }
@@ -260,12 +261,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось удалить группу серверов, Ошибка: ${e.code}");
+          print("${'failed'.tr()} удалить группу серверов, ${'error'.tr()}: ${e.code}");
           break;
       }
       return;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return;
   }
@@ -294,7 +295,7 @@ class WashAdminRepository {
         washServers.add(entity.WashServer(
           id: "$i",
           name: "Сервер$i",
-          description: "Описание$i",
+          description: "${'description'.tr()}$i",
           serviceKey: "ServiceKey $i",
           createdBy: "Кем создано $i",
           groupId: "Номер группы$i",
@@ -307,12 +308,12 @@ class WashAdminRepository {
     } on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось получить список серверов, Ошибка: ${e.code}");
+          print("${'failed'.tr()} ${'to_get'.tr()} список серверов, ${'error'.tr()}: ${e.code}");
           break;
       }
       return null;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return null;
   }
@@ -336,7 +337,7 @@ class WashAdminRepository {
       var washServer = entity.WashServer(
         id: "1",
         name: "Группа2",
-        description: "Описание3",
+        description: "${'description'.tr()}3",
         organizationId: "organizationId4",
         createdBy: "Создан5",
       );
@@ -346,12 +347,12 @@ class WashAdminRepository {
     } on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось получить сервера, Ошибка: ${e.code}");
+          print("${'failed'.tr()} ${'to_get'.tr()} сервера, ${'error'.tr()}: ${e.code}");
           break;
       }
       return null;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return null;
   }
@@ -373,12 +374,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось создать Сервер, Ошибка: ${e.code}");
+          print("${'failed'.tr()} создать Сервер, ${'error'.tr()}: ${e.code}");
           break;
       }
       return;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return;
   }
@@ -402,12 +403,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось обновить параметры сервера, Ошибка: ${e.code}");
+          print("${'failed'.tr()} обновить параметры сервера, ${'error'.tr()}: ${e.code}");
           break;
       }
       return;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return;
   }
@@ -423,12 +424,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось удалить сервер, Ошибка: ${e.code}");
+          print("${'failed'.tr()} удалить сервер, ${'error'.tr()}: ${e.code}");
           break;
       }
       return;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return;
   }
@@ -452,12 +453,12 @@ class WashAdminRepository {
     on ApiException catch (e) {
       switch (e.code){
         default:
-          print("Не удалось отправить заявку, Ошибка: ${e.code}");
+          print("${'failed'.tr()} отправить заявку, ${'error'.tr()}: ${e.code}");
           break;
       }
       return null;
     } catch (e) {
-      print("Произошла неизвестная ошибка: $e");
+      print("${'an_unknown_error_has_occurred'.tr()}: $e");
     }
     return null;
   }

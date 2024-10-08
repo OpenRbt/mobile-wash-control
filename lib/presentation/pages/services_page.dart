@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:mobile_wash_control/domain/blocs/services_cubit.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
@@ -43,7 +44,7 @@ class _ServicesPageView extends StatelessWidget {
         final serviceUser = snapshot.requireData.servicesPageEntity.serviceUser;
 
         return Scaffold(
-          appBar: AppBar(title: Text("Сервисы")),
+          appBar: AppBar(title: Text(context.tr('services'))),
           drawer: WashNavigationDrawer(selected: SelectedPage.Services, repository: repository),
           body: SafeArea(
             child: firebaseUser == null ? Center(
@@ -53,18 +54,18 @@ class _ServicesPageView extends StatelessWidget {
               physics: BouncingScrollPhysics(),
               children: serviceUser == null ? [
                 Center(
-                  child: Text("Вы не зарегистрированы в админ-панели"),
+                  child: Text(context.tr('you_are_not_registered_in_the_admin_panel')),
                 ),
                 Center(
                   child: ElevatedButton(
-                    child: Text("Подать заявку"),
+                    child: Text(context.tr('send_application')),
                     onPressed: snapshot.requireData.servicesPageEntity.sendApplicationButtonPressed ? null :
                         () async { await cubit.sendApplication();},
                   ),
                 ),
                 Center(
                   child: snapshot.requireData.servicesPageEntity.applicationDelivered ?
-                  Text("Ваша заявка находится на рассмотрении") :
+                  Text(context.tr('your_application_is_pending')) :
                   Text(""),
                 )
               ] :

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/mobile/dialogs/overview/ConfirmRunProgram.dart';
@@ -23,7 +24,7 @@ class WashPostButton extends StatelessWidget {
           flex: 1,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("Кнопка ${btn.buttonID}"),
+            child: Text("${context.tr('button')} ${btn.buttonID}"),
           ),
         ),
         Flexible(
@@ -41,7 +42,7 @@ class WashPostButton extends StatelessWidget {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBars.getErrorSnackBar(
-                    message: "Не удалось вызвать запуск программы, так как нет данных о хэше станции",
+                    message: context.tr('failed_to_cause_the_programme_to_run_because_no_station_hash_data_is_available'),
                   ),
                 );
               }
@@ -65,7 +66,7 @@ class WashPostButton extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Активна",
+                      context.tr('is_active'),
                       style: theme.textTheme.bodyLarge,
                     ),
                     Checkbox(value: btn.programID == program?.id, onChanged: null)

@@ -4,6 +4,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/discounts/discountCampaignListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DiscountsPage extends StatefulWidget {
   @override
@@ -29,7 +30,7 @@ class _DiscountsPageState extends State<DiscountsPage> {
         repository: repository,
       ),
       appBar: AppBar(
-        title: Text("Управление скидками"),
+        title: Text(context.tr('discount_management')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -77,7 +78,7 @@ class _DiscountsPageState extends State<DiscountsPage> {
 
                 Navigator.pushNamed(context, "/mobile/discounts/edit", arguments: args).then((value) => repository.updateDiscounts(context: context));
               },
-              child: Text("Добавить скидочную программу"),
+              child: Text("${context.tr('add')}"),
             ),
           ],
         ),

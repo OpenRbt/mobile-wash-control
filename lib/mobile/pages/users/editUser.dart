@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,7 +73,7 @@ class _UserEditPageState extends State<UserEditPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(argUser != null ? "Редактирование пользователя" : "Создание пользователя"),
+        title: Text(argUser != null ? context.tr('user_editing') : context.tr('user_creating')),
         actions: [
           FutureBuilder(
             future: repository.getCurrentUser(context: context),
@@ -88,7 +89,7 @@ class _UserEditPageState extends State<UserEditPage> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text("Удалить пользователя - ${argUser.login} ?"),
+                            title: Text("${context.tr('delete_user')} - ${argUser.login} ?"),
                             actions: [
                               ProgressTextButton(
                                 onPressed: () async {
@@ -96,13 +97,13 @@ class _UserEditPageState extends State<UserEditPage> {
                                   Navigator.pop(context);
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Да"),
+                                child: Text(context.tr('yes')),
                               ),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text("Нет"),
+                                child: Text(context.tr('no')),
                               ),
                             ],
                           );
@@ -131,7 +132,7 @@ class _UserEditPageState extends State<UserEditPage> {
                           flex: 1,
                           fit: FlexFit.tight,
                           child: Text(
-                            "Логин:",
+                            "${context.tr('login')}:",
                             style: theme.textTheme.bodyLarge,
                           ),
                         ),
@@ -143,14 +144,14 @@ class _UserEditPageState extends State<UserEditPage> {
                             controller: _controllers["login"]!,
                             validator: (value) {
                               var trimmedValue = value!.trim();
-                              return trimmedValue.length < 4 ? "Логин должен быть не менее 4х символов" : null;
+                              return trimmedValue.length < 4 ? "${context.tr('field_must_contain_more_symbols')}" : null;
                             },
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                 RegExp("[a-zA-Z0-9_]"),
                               )
                             ],
-                            decoration: InputDecoration(label: Text("Допускается латиница, цифры, _")),
+                            decoration: InputDecoration(label: Text(context.tr('latin_characters_numerals_and_space_are_allowed'))),
                             onChanged: (value) {
                               _currentUser.value = _currentUser.value!.copyWith(login: value);
                             },
@@ -166,7 +167,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                 flex: 1,
                                 fit: FlexFit.tight,
                                 child: Text(
-                                  "Пин:",
+                                  "${context.tr('pin')}:",
                                   style: theme.textTheme.bodyLarge,
                                 ),
                               ),
@@ -178,7 +179,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                   obscureText: true,
                                   maxLength: 16,
                                   validator: (String? value) {
-                                    return value!.length < 4 ? "Требуется не менее 4х символов" : null;
+                                    return value!.length < 4 ? context.tr('field_must_contain_more_symbols') : null;
                                   },
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
@@ -196,7 +197,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                 flex: 1,
                                 fit: FlexFit.tight,
                                 child: Text(
-                                  "Повторите пин:",
+                                  "${context.tr('repeat_pin')}:",
                                   style: theme.textTheme.bodyLarge,
                                 ),
                               ),
@@ -209,10 +210,10 @@ class _UserEditPageState extends State<UserEditPage> {
                                   maxLength: 16,
                                   validator: (String? value) {
                                     if (value != _controllers["pin"]!.text) {
-                                      return "Пины не совпадают";
+                                      return context.tr('pins_dont_match');
                                     }
 
-                                    return value!.length < 4 ? "Требуется не менее 4х символов" : null;
+                                    return value!.length < 4 ? context.tr('field_must_contain_more_symbols') : null;
                                   },
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
@@ -229,7 +230,7 @@ class _UserEditPageState extends State<UserEditPage> {
                           flex: 1,
                           fit: FlexFit.tight,
                           child: Text(
-                            "Фамилия:",
+                            "${context.tr('lastname')}:",
                             style: theme.textTheme.bodyLarge,
                           ),
                         ),
@@ -251,7 +252,7 @@ class _UserEditPageState extends State<UserEditPage> {
                           flex: 1,
                           fit: FlexFit.tight,
                           child: Text(
-                            "Имя:",
+                            "${context.tr('firstname')}:",
                             style: theme.textTheme.bodyLarge,
                           ),
                         ),
@@ -273,7 +274,7 @@ class _UserEditPageState extends State<UserEditPage> {
                           flex: 1,
                           fit: FlexFit.tight,
                           child: Text(
-                            "Отчество:",
+                            "${context.tr('middlename')}:",
                             style: theme.textTheme.bodyLarge,
                           ),
                         ),
@@ -293,7 +294,7 @@ class _UserEditPageState extends State<UserEditPage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: ElevatedButton(
-                        child: Text("Сменить пин"),
+                        child: Text(context.tr('change_pin')),
                         onPressed: () {
                           _controllers["oldpin"]!.text = "";
                           _controllers["pin"]!.text = "";
@@ -301,7 +302,7 @@ class _UserEditPageState extends State<UserEditPage> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text("Сменить пин"),
+                              title: Text(context.tr('change_pin')),
                               content: SingleChildScrollView(
                                 child: ConstrainedBox(
                                   constraints: BoxConstraints(maxHeight: 230),
@@ -315,7 +316,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                               flex: 1,
                                               fit: FlexFit.tight,
                                               child: Text(
-                                                "Старый пин:",
+                                                "${context.tr('old_pin')}:",
                                                 style: theme.textTheme.bodyLarge,
                                               ),
                                             ),
@@ -341,7 +342,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                               flex: 1,
                                               fit: FlexFit.tight,
                                               child: Text(
-                                                "Новый пин:",
+                                                "${context.tr('new_pin')}:",
                                                 style: theme.textTheme.bodyLarge,
                                               ),
                                             ),
@@ -353,7 +354,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                                 obscureText: true,
                                                 maxLength: 16,
                                                 validator: (String? value) {
-                                                  return value!.length < 4 ? "Требуется не менее 4х символов" : null;
+                                                  return value!.length < 4 ? context.tr('field_must_contain_more_symbols') : null;
                                                 },
                                                 inputFormatters: [
                                                   FilteringTextInputFormatter.digitsOnly,
@@ -370,7 +371,7 @@ class _UserEditPageState extends State<UserEditPage> {
                                               flex: 1,
                                               fit: FlexFit.tight,
                                               child: Text(
-                                                "Повторите новый пин:",
+                                                "${context.tr('repeat_new_pin')}:",
                                                 style: theme.textTheme.bodyLarge,
                                               ),
                                             ),
@@ -383,9 +384,9 @@ class _UserEditPageState extends State<UserEditPage> {
                                                 maxLength: 16,
                                                 validator: (String? value) {
                                                   if (value != _controllers["pin"]!.text) {
-                                                    return "Введенные пины не совпадают";
+                                                    return context.tr('pins_dont_match');
                                                   }
-                                                  return value!.length < 4 ? "Требуется не менее 4х символов" : null;
+                                                  return value!.length < 4 ? context.tr('field_must_contain_more_symbols') : null;
                                                 },
                                                 inputFormatters: [
                                                   FilteringTextInputFormatter.digitsOnly,
@@ -411,13 +412,13 @@ class _UserEditPageState extends State<UserEditPage> {
                                       //setState(() {});
                                     }
                                   },
-                                  child: Text("Подтвердить"),
+                                  child: Text("${context.tr('confirm')}"),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text("Отмена"),
+                                  child: Text(context.tr('cancel')),
                                 )
                               ],
                             ),
@@ -435,7 +436,7 @@ class _UserEditPageState extends State<UserEditPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Оператор: ",
+                                  "${context.tr('operator')}: ",
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Checkbox(
@@ -452,7 +453,7 @@ class _UserEditPageState extends State<UserEditPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Инженер: ",
+                                  "${context.tr('engineer')}: ",
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Checkbox(
@@ -470,7 +471,7 @@ class _UserEditPageState extends State<UserEditPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Админ: ",
+                                  "${context.tr('admin')}: ",
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Checkbox(
@@ -509,7 +510,7 @@ class _UserEditPageState extends State<UserEditPage> {
                     }
                   }
                 },
-                child: Text("Сохранить"),
+                child: Text("${context.tr('save')}"),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -517,7 +518,7 @@ class _UserEditPageState extends State<UserEditPage> {
                   initControllersValues();
                   repository.updateUsers(context: context);
                 },
-                child: Text("Отменить"),
+                child: Text(context.tr('cancel')),
               ),
             ],
           )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PickDaysDialog extends StatelessWidget {
   final ValueNotifier<DiscountCampaign> campaign;
@@ -11,7 +12,8 @@ class PickDaysDialog extends StatelessWidget {
     Set<WeekDay> days = campaign.value.weekDays ?? {};
 
     return AlertDialog(
-      title: Text("Выбрать дни"),
+      //
+      title: Text(context.tr('select_days')),
       content: StatefulBuilder(
         builder: (BuildContext context, void Function(void Function()) setState) {
           return Column(
@@ -40,7 +42,7 @@ class PickDaysDialog extends StatelessWidget {
             campaign.value = campaign.value.copyWith(weekDays: WeekDaySorting.sortDays(days));
             Navigator.pop(context);
           },
-          child: Text("Применить"),
+          child: Text(context.tr('accept')),
         ),
       ],
     );

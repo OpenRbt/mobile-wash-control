@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ServiceStatus extends StatelessWidget {
   final String serviceName;
@@ -41,12 +42,12 @@ class ServiceStatus extends StatelessWidget {
                   ListTile(
                     leading: Icon((disabledOnServer ?? false) ? Icons.cloud_off : Icons.cloud_done,
                         color: (disabledOnServer ?? false) ? Colors.red : Colors.green),
-                    title: Text((disabledOnServer ?? false) ? "Выключен на сервере" : "Включен на сервере"),
+                    title: Text((disabledOnServer ?? false) ? context.tr('disabled_on_server') : context.tr('enabled_on_server')),
                   ),
                   ListTile(
                     leading: Icon((isConnected ?? false) ? Icons.link : Icons.link_off,
                         color: (isConnected ?? false) ? Colors.green : Colors.red),
-                    title: Text((isConnected ?? false) ? "Подключен" : "Не подключен"),
+                    title: Text((isConnected ?? false) ? context.tr('connected') : context.tr('not_connected')),
                   ),
                 ],
               ),
@@ -61,7 +62,7 @@ class ServiceStatus extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Неоплаченные станции:",
+                      "${context.tr('unpaid_stations')}:",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -73,7 +74,7 @@ class ServiceStatus extends StatelessWidget {
                         Icon(Icons.warning, color: Colors.red),
                         SizedBox(width: 8),
                         Text(
-                          "Станция $station",
+                          "${context.tr('station')} $station",
                           style: TextStyle(
                             color: Colors.red,
                             fontSize: 16,
@@ -94,14 +95,14 @@ class ServiceStatus extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Последняя ошибка",
+                      context.tr('last_error'),
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 10),
                     Text("$lastErr"),
                     SizedBox(height: 10),
                     Text(
-                      "Время ошибки: ${DateFormat('d MMMM y HH:mm', 'ru_RU').format(DateTime.fromMillisecondsSinceEpoch(dateLastErrUTC! * 1000).toLocal())}",
+                      "${context.tr('error_time')}: ${DateFormat('d MMMM y HH:mm', 'ru_RU').format(DateTime.fromMillisecondsSinceEpoch(dateLastErrUTC! * 1000).toLocal())}",
                     ),
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../styles/text_styles.dart';
 import '../../../utils/widgets_utils.dart';
 
@@ -108,8 +109,8 @@ class _CardHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Text('Задача #$id', style: TextStyles.cardHeader(),),
-        Text('Станция #$stationId', style: TextStyles.cardHeader(),),
+        Text('${context.tr('task')} #$id', style: TextStyles.cardHeader(),),
+        Text('${context.tr('station')} #$stationId', style: TextStyles.cardHeader(),),
         Icon(statusIcon, color: Colors.white),
       ],
     );
@@ -127,8 +128,8 @@ class _CardInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Expanded(child: _cardKeyValueRow('Тип:', getTypeName(taskType))),
-        Expanded(child: _cardKeyValueRow('Статус:', getStatusName(taskStatus))),
+        Expanded(child: _cardKeyValueRow('${context.tr('type')}:', getTypeName(taskType))),
+        Expanded(child: _cardKeyValueRow('${context.tr('status')}:', getStatusName(taskStatus))),
       ],
     );
   }
@@ -163,7 +164,7 @@ class _CardDatesSection extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text('Время', style: TextStyles.cardSubHeader()),
+          child: Text(context.tr('time'), style: TextStyles.cardSubHeader()),
         ),
         Table(
           columnWidths: const {
@@ -172,9 +173,9 @@ class _CardDatesSection extends StatelessWidget {
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: [
-            _buildTableRow('Создана: ', createdAt),
-            _buildTableRow('Начата: ', startedAt),
-            _buildTableRow(error.isNotEmpty ? 'Прекращена: ' : 'Заверешена: ', stoppedAt),
+            _buildTableRow('${context.tr('created_at')}: ', createdAt),
+            _buildTableRow('${context.tr('started_at')}: ', startedAt),
+            _buildTableRow(error.isNotEmpty ? '${context.tr('stopped_at')}: ' : '${context.tr('completed_at')}: ', stoppedAt),
           ],
         ),
       ],
@@ -209,7 +210,7 @@ class _CardErrorSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Ошибка', style: TextStyles.cardSubHeader()),
+        Text('${context.tr('error')}', style: TextStyles.cardSubHeader()),
         Text(error, style: TextStyles.cardText()),
       ],
     );
@@ -227,7 +228,7 @@ class _TriesCountSection extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Кол-во попыток: $triesCount', style: TextStyles.cardSubHeader()),
+        Text('${context.tr('tries_count')}: $triesCount', style: TextStyles.cardSubHeader()),
       ],
     );
   }

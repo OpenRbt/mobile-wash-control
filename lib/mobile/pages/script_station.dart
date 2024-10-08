@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../entity/entity.dart';
 import '../../entity/vo/page_args_codes.dart';
@@ -52,7 +53,7 @@ class _ScriptStationPageState extends State<ScriptStationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Пост $id",
+          "${context.tr('post')} $id",
         ),
         actions: [
           IconButton(
@@ -99,7 +100,7 @@ class _ScriptStationPageState extends State<ScriptStationPage> {
                         child: Column(
                           children: [
                             EditField(
-                              name: "Название скрипта: ",
+                              name: "${context.tr('name')}: ",
                               controller: scriptNameController,
                               onChanged: (val) {},
                               validator: (val) {
@@ -119,7 +120,7 @@ class _ScriptStationPageState extends State<ScriptStationPage> {
                               },
                               currentValue: filteredStations[0].id.toString(),
                               values: stationsNames,
-                              buttonText: 'Скопировать скрипт со станции',
+                              buttonText: context.tr('copy_script_from_station'),
                             ),
                             SizedBox(height: 20,),
                             Align(

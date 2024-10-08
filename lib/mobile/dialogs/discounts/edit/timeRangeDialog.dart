@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TimeRangeDialog extends StatefulWidget {
   final ValueNotifier<DiscountCampaign> campaign;
@@ -37,7 +38,7 @@ class _TimeRangeDialogState extends State<TimeRangeDialog> {
     final theme = Theme.of(context);
 
     return AlertDialog(
-      title: Text("Время действия скидки"),
+      title: Text(context.tr('discount_active_time')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -50,7 +51,7 @@ class _TimeRangeDialogState extends State<TimeRangeDialog> {
                   Row(
                     children: [
                       Text(
-                        "С ",
+                        context.tr('from'),
                         style: theme.textTheme.bodyLarge,
                       ),
                       Text(
@@ -71,7 +72,7 @@ class _TimeRangeDialogState extends State<TimeRangeDialog> {
                         startMinute.value = res.hour * 60 + res.minute;
                       }
                     },
-                    child: Text("Выбрать"),
+                    child: Text(context.tr('select')),
                   ),
                 ],
               );
@@ -86,7 +87,7 @@ class _TimeRangeDialogState extends State<TimeRangeDialog> {
                   Row(
                     children: [
                       Text(
-                        "По ",
+                        context.tr('to'),
                         style: theme.textTheme.bodyLarge,
                       ),
                       Text(
@@ -107,7 +108,7 @@ class _TimeRangeDialogState extends State<TimeRangeDialog> {
                         endMinute.value = res.hour * 60 + res.minute;
                       }
                     },
-                    child: Text("Выбрать"),
+                    child: Text(context.tr('select')),
                   ),
                 ],
               );
@@ -121,7 +122,7 @@ class _TimeRangeDialogState extends State<TimeRangeDialog> {
               widget.campaign.value = widget.campaign.value.copyWith(startMinute: startMinute.value, endMinute: endMinute.value);
               Navigator.pop(context);
             },
-            child: Text("Применить"))
+            child: Text(context.tr('accept')))
       ],
     );
   }

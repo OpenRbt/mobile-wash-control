@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MotorsView extends StatefulWidget {
   final List<StationStats> stationsStats;
@@ -24,7 +25,7 @@ class _MotorsViewState extends State<MotorsView> {
     final header = TableRow(
       children: [
         Text(
-          "Пост",
+          'post'.tr(),
           style: theme.textTheme.titleLarge,
         ),
         Row(
@@ -32,21 +33,21 @@ class _MotorsViewState extends State<MotorsView> {
             Container(
               width: 75,
               child: Text(
-                "Реле",
+                'relay'.tr(),
                 style: theme.textTheme.titleLarge,
               ),
             ),
             Flexible(
               fit: FlexFit.tight,
               child: Text(
-                "Включений",
+                'switches_count'.tr(),
                 style: theme.textTheme.titleLarge,
               ),
             ),
             Flexible(
               fit: FlexFit.tight,
               child: Text(
-                "Время работы",
+                'working_time'.tr(),
                 style: theme.textTheme.titleLarge,
               ),
             ),
@@ -117,7 +118,7 @@ class _MotorsViewState extends State<MotorsView> {
     final header = TableRow(
       children: [
         Text(
-          "Пост",
+          'post'.tr(),
           style: theme.textTheme.titleLarge,
         ),
         Row(
@@ -125,14 +126,14 @@ class _MotorsViewState extends State<MotorsView> {
             Flexible(
               fit: FlexFit.tight,
               child: Text(
-                "Программа",
+                'program'.tr(),
                 style: theme.textTheme.titleLarge,
               ),
             ),
             Flexible(
               fit: FlexFit.tight,
               child: Text(
-                "Время работы",
+                'working_time'.tr(),
                 style: theme.textTheme.titleLarge,
               ),
             ),
@@ -163,7 +164,7 @@ class _MotorsViewState extends State<MotorsView> {
 
                         return TableRow(children: [
                           Text(
-                            programStat.programName ?? "Программа ${programStat.programID ?? "_"}",
+                            programStat.programName ?? "${'program'.tr()} ${programStat.programID ?? "_"}",
                             style: theme.textTheme.titleMedium,
                           ),
                           Text(
@@ -204,11 +205,11 @@ class _MotorsViewState extends State<MotorsView> {
                 segments: [
                   ButtonSegment(
                     value: MotorsViewMode.relays,
-                    label: Text("Статистика реле"),
+                    label: Text(context.tr('relay_statistics')),
                   ),
                   ButtonSegment(
                     value: MotorsViewMode.programs,
-                    label: Text("Статистика программ"),
+                    label: Text(context.tr('programs_statistics')),
                   ),
                 ],
                 selected: {value},
@@ -245,6 +246,6 @@ class _MotorsViewState extends State<MotorsView> {
   }
 
   String _durationFormat(Duration d) {
-    return "${d.inHours.toString()} ч ${d.inMinutes.remainder(60).toString()} мин ${d.inSeconds.remainder(60).toString()} сек";
+    return "${d.inHours.toString()} ${'h'.tr()} ${d.inMinutes.remainder(60).toString()} ${'min'.tr()} ${d.inSeconds.remainder(60).toString()} ${'sec'.tr()}";
   }
 }

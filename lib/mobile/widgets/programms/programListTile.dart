@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProgramListTile extends StatelessWidget {
   final Function()? onPress;
@@ -34,12 +35,12 @@ class ProgramListTile extends StatelessWidget {
             Flexible(
               flex: 2,
               fit: FlexFit.tight,
-              child: Center(child: Text("${"${(program.preflightEnabled ?? false) ? "Да" : "Нет"}"}")),
+              child: Center(child: Text("${"${(program.preflightEnabled ?? false) ? context.tr('yes') : context.tr('no')}"}")),
             ),
             Flexible(
               flex: 2,
               fit: FlexFit.tight,
-              child: Center(child: Text("${"${(program.isFinishingProgram ?? false) ? "Да" : "Нет"}"}")),
+              child: Center(child: Text("${"${(program.isFinishingProgram ?? false) ? context.tr('yes') : context.tr('no')}"}")),
             ),
             Flexible(
               flex: 1,

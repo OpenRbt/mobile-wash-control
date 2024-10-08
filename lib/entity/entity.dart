@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 part 'program.dart';
 part 'relay_config.dart';
 part 'wash_server.dart';
@@ -261,42 +263,42 @@ enum WeekDay {
   String label() {
     switch (this) {
       case WeekDay.monday:
-        return "Понедельник";
+        return 'monday'.tr();
       case WeekDay.tuesday:
-        return "Вторник";
+        return 'tuesday'.tr();
       case WeekDay.wednesday:
-        return "Среда";
+        return 'wednesday'.tr();
       case WeekDay.thursday:
-        return "Четверг";
+        return 'thursday'.tr();
       case WeekDay.friday:
-        return "Пятница";
+        return 'friday'.tr();
       case WeekDay.saturday:
-        return "Суббота";
+        return 'saturday'.tr();
       case WeekDay.sunday:
-        return "Воскресенье";
+        return 'sunday'.tr();
       default:
-        return "ОШИБКА";
+        return 'ERROR'.tr();
     }
   }
 
   String labelShort() {
     switch (this) {
       case WeekDay.monday:
-        return "Пн";
+        return 'mo"'.tr();
       case WeekDay.tuesday:
-        return "Вт";
+        return 'tu'.tr();
       case WeekDay.wednesday:
-        return "Ср";
+        return 'we'.tr();
       case WeekDay.thursday:
-        return "Чт";
+        return 'th'.tr();
       case WeekDay.friday:
-        return "Пт";
+        return 'fr'.tr();
       case WeekDay.saturday:
-        return "Сб";
+        return 'sa'.tr();
       case WeekDay.sunday:
-        return "Вс";
+        return 'su'.tr();
       default:
-        return "ОШИБКА";
+        return 'ERROR'.tr();
     }
   }
 }
@@ -455,11 +457,11 @@ enum RelayBoard {
   String label() {
     switch (this) {
       case RelayBoard.localGPIO:
-        return "локально";
+        return 'local'.tr();
       case RelayBoard.danBoard:
-        return "на сервере";
+        return 'on_server'.tr();
       case RelayBoard.all:
-        return "везде";
+        return 'everywhere'.tr();
       default:
         return "unknown";
     }
@@ -512,7 +514,7 @@ enum CardReader {
       case CardReader.paymentWorld:
         return "PAYMENT WORLD";
       case CardReader.not_used:
-        return "не используется";
+        return 'not_used'.tr();;
     }
   }
 }

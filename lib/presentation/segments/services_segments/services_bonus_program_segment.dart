@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:mobile_wash_control/domain/blocs/services_bonus_program_cubit.dart';
 import 'package:mobile_wash_control/domain/entities/user_entity.dart';
@@ -77,7 +78,7 @@ class _ServicesBonusProgramSegmentViewState extends State<_ServicesBonusProgramS
   Widget build(BuildContext context) {
     return Card(
       child: ExpansionTile(
-        title: Text("Бонусная программа"),
+        title: Text(context.tr('bonus_program')),
         children: [
           Form(
             key: _formKey,
@@ -133,7 +134,7 @@ class _NameAndDescriptionView extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                       child: Text(
-                        "Имя",
+                        context.tr('name'),
                       ),
                     ),
                   ),
@@ -160,7 +161,7 @@ class _NameAndDescriptionView extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                       child: Text(
-                        "Описание",
+                        "${context.tr('description')}",
                       ),
                     ),
                   ),
@@ -212,7 +213,7 @@ class _ChooseGroupView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                         child: Text(
-                          "Организация",
+                          context.tr('organization'),
                         ),
                       ),
                     ),
@@ -240,7 +241,7 @@ class _ChooseGroupView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                         child: Text(
-                          "Группа",
+                          context.tr('group'),
                         ),
                       ),
                     ),
@@ -278,7 +279,7 @@ class _DisplayWashDataView extends StatelessWidget {
         stream: cubit.stream,
         builder: (context, snapshot) {
 
-          String id = (snapshot.requireData.servicesBonusProgramEntity.bonusWashServer?.id ?? '').isEmpty ? "Не зарегистрирована" :  snapshot.requireData.servicesBonusProgramEntity.bonusWashServer!.id;
+          String id = (snapshot.requireData.servicesBonusProgramEntity.bonusWashServer?.id ?? '').isEmpty ? context.tr('not_registered') :  snapshot.requireData.servicesBonusProgramEntity.bonusWashServer!.id;
 
           return Column(
             children: [
@@ -371,7 +372,7 @@ class _InteractionView extends StatelessWidget {
                               Navigator.pushNamed(context, "/mobile/home/bonus-status", arguments: args);
                         },
                         child: Text(
-                          "Статус сервиса",
+                          context.tr('service_status'),
                           maxLines: 2,
                         ),
                       ),
@@ -391,7 +392,7 @@ class _InteractionView extends StatelessWidget {
                               }
                         },
                         child: Text(
-                          "Сохранить изменения",
+                          "${context.tr('save')} ${context.tr('changes')}",
                           maxLines: 2,
                         ),
                       ),
@@ -418,7 +419,7 @@ class _InteractionView extends StatelessWidget {
                           }
                         },
                         child: Text(
-                          "Зарегистрировать мойку",
+                          context.tr('register_wash'),
                           maxLines: 2,
                         ),
                       ),

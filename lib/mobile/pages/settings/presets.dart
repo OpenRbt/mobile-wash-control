@@ -4,6 +4,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/utils/ConfigPresets.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PresetsPage extends StatefulWidget {
   @override
@@ -73,14 +74,14 @@ class _PresetsPageState extends State<PresetsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Предустановки постов"),
+        title: Text(context.tr('posts_presets')),
       ),
       key: _scaffoldKey,
       body: ListView(
         padding: EdgeInsets.all(8),
         children: [
           Text(
-            "Выберите тип поста",
+            context.tr('select_post_preset'),
             style: theme.textTheme.titleLarge,
           ),
           ValueListenableBuilder(
@@ -97,14 +98,14 @@ class _PresetsPageState extends State<PresetsPage> {
             },
           ),
           Text(
-            "Выберите посты",
+            context.tr('select_posts'),
             style: theme.textTheme.titleLarge,
           ),
           Column(
             children: List.generate(_stationsToSave.length, (index) {
               return Card(
                 child: CheckboxListTile(
-                  title: Text("Пост ${index + 1}"),
+                  title: Text("${context.tr('post')} ${index + 1}"),
                   value: _stationsToSave[index],
                   onChanged: (newValue) {
                     _stationsToSave[index] = !_stationsToSave[index];
@@ -118,14 +119,14 @@ class _PresetsPageState extends State<PresetsPage> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               child: Text(
-                "Установить",
+                context.tr('set'),
               ),
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text("Загрузить настройки?"),
-                    content: Text("Настройки для программи кнопок будут установлены по умолчанию"),
+                    title: Text("${context.tr('upload_settings')}?"),
+                    content: Text(context.tr('settings_for_programs_and_buttons_will_be_set_by_default')),
                     actionsPadding: EdgeInsets.all(10),
                     actions: [
                       ProgressButton(
@@ -133,13 +134,13 @@ class _PresetsPageState extends State<PresetsPage> {
                           await _applyPreset(repository, context);
                           Navigator.pop(context);
                         },
-                        child: Text("Да"),
+                        child: Text(context.tr('yes')),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text("Нет"),
+                        child: Text(context.tr('no')),
                       )
                     ],
                   ),
