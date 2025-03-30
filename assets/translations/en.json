@@ -94,7 +94,7 @@
     "scan_host": "Scan host",
     "scan_network": "Scan network",
     "scan_result": "Scan result",
-    "statistics_uploaded_in ": "Statistics uploaded in",
+    "statistics_uploaded_in": "Statistics uploaded in",
     "seconds": "seconds",
     "current": "Current",
     "by_dates": "By dates",
@@ -342,5 +342,7 @@
     "cash_desk_configuration": "Cash desk configuration",
     "to_execute_program": "to execute program",
     "one_of_the_parameters_of_the_passed_config_was_not_found": "one of the parameters of the passed config was not found",
-    "the_program_is_running": "The program is running"
+    "the_program_is_running": "The program is running",
+    "full_view": "Full view",
+    "part_view": "Part view"
 }

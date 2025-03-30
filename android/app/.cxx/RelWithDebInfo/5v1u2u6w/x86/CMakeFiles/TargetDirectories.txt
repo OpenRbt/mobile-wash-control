@@ -1,0 +1,2 @@
+F:/Projects/mobile-wash-control/android/app/.cxx/RelWithDebInfo/5v1u2u6w/x86/CMakeFiles/edit_cache.dir
+F:/Projects/mobile-wash-control/android/app/.cxx/RelWithDebInfo/5v1u2u6w/x86/CMakeFiles/rebuild_cache.dir
