@@ -3,16 +3,16 @@ import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class FullStatisticsView extends StatefulWidget {
+class PartStatisticsView extends StatefulWidget {
   final List<StationMoneyReport> reports;
 
-  const FullStatisticsView({super.key, required this.reports});
+  const PartStatisticsView({super.key, required this.reports});
 
   @override
-  State<StatefulWidget> createState() => _FullStatisticsViewState();
+  State<StatefulWidget> createState() => _PartStatisticsViewState();
 }
 
-class _FullStatisticsViewState extends State<FullStatisticsView> {
+class _PartStatisticsViewState extends State<PartStatisticsView> {
   ScrollController _scrollableController = ScrollController();
   ScrollController _viewScrollController = ScrollController();
   final _dateFormatter = DateFormat('dd.MM.yyyy HH:mm:ss');
@@ -71,14 +71,14 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
     return DataTable(
       columns: columns,
       rows: rows,
-      columnSpacing: 8,
+      columnSpacing: 0,
       dataRowMinHeight: 24,
-      headingRowHeight: 150,
+      headingRowHeight: 50,
       horizontalMargin: 8,
     );
   }
 
-  DataColumn wrappedColumn(String text, TextStyle? style, {double width = 20}) {
+  DataColumn wrappedColumn(String text, TextStyle? style, {double width = 58}) {
     return DataColumn(
       label: SizedBox(
         width: width,
@@ -98,11 +98,6 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
     widget.reports.forEach((report) {
       total.coins = total.coins! + (report.coins ?? 0);
       total.banknotes = total.banknotes! + (report.banknotes ?? 0);
-      total.electronical = total.electronical! + (report.electronical ?? 0);
-      total.qrMoney = total.qrMoney! + (report.qrMoney ?? 0);
-      total.service = total.service! + (report.service ?? 0);
-      total.bonuses = total.bonuses! + (report.bonuses ?? 0);
-      total.carsTotal = total.carsTotal! + (report.carsTotal ?? 0);
     });
 
     final bool addCtime = widget.reports.where((element) => element.dateTime != null).isNotEmpty;
@@ -111,12 +106,6 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
     final columns = [
       wrappedColumn('coins'.tr(), smallTextStyle),
       wrappedColumn('banknotes'.tr(), smallTextStyle),
-      wrappedColumn('electronic'.tr(), smallTextStyle),
-      wrappedColumn('qr_payments'.tr(), smallTextStyle),
-      wrappedColumn('bonuses'.tr(), smallTextStyle),
-      wrappedColumn('service_money'.tr(), smallTextStyle),
-      wrappedColumn('cars_count'.tr(), smallTextStyle),
-      wrappedColumn('average_bill'.tr(), smallTextStyle),
     ];
 
     if (addCtime) {
@@ -128,12 +117,6 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
       final cells = [
         DataCell(Text(report.coins?.toString() ?? "0", style: smallTextStyle)),
         DataCell(Text(report.banknotes?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.electronical?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.qrMoney?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.bonuses?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.service?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.carsTotal?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.Average().toStringAsFixed(2), style: smallTextStyle)),
       ];
       if (addCtime) {
         cells.add(DataCell(Text(_dateFormatter.format(report.dateTime!), style: smallTextStyle)));
@@ -159,54 +142,6 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
             ),
           ),
         ),
-        DataCell(
-          Text(
-            total.electronical?.toString() ?? "0",
-            style: theme.textTheme.titleSmall!.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ),
-        DataCell(
-          Text(
-            total.qrMoney?.toString() ?? "0",
-            style: theme.textTheme.titleSmall!.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ),
-        DataCell(
-          Text(
-            total.bonuses?.toString() ?? "0",
-            style: theme.textTheme.titleSmall!.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ),
-        DataCell(
-          Text(
-            total.service?.toString() ?? "0",
-            style: theme.textTheme.titleSmall!.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ),
-        DataCell(
-          Text(
-            total.carsTotal?.toString() ?? "0",
-            style: theme.textTheme.titleSmall!.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ),
-        DataCell(
-          Text(
-            total.Average().toStringAsFixed(2),
-            style: theme.textTheme.titleSmall!.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ),
       ],
     );
     if (addCtime) {
@@ -216,10 +151,10 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
     return DataTable(
       columns: columns,
       rows: [...rows, totalRow],
-      columnSpacing: 8,           // уменьшить отступы между колонками
-      dataRowMinHeight: 24,       // сделать строки пониже
-      headingRowHeight: 150,       // заголовки тоже пониже
-      horizontalMargin: 8,        // уменьшить боковые отступы
+      columnSpacing: 0,
+      dataRowMinHeight: 24,
+      headingRowHeight: 50,
+      horizontalMargin: 8,
     );
   }
 

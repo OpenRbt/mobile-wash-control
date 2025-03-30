@@ -3,16 +3,16 @@ import 'package:intl/intl.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class StatisticsView extends StatefulWidget {
+class FullStatisticsView extends StatefulWidget {
   final List<StationMoneyReport> reports;
 
-  const StatisticsView({super.key, required this.reports});
+  const FullStatisticsView({super.key, required this.reports});
 
   @override
-  State<StatefulWidget> createState() => _StatisticsViewState();
+  State<StatefulWidget> createState() => _FullStatisticsViewState();
 }
 
-class _StatisticsViewState extends State<StatisticsView> {
+class _FullStatisticsViewState extends State<FullStatisticsView> {
   ScrollController _scrollableController = ScrollController();
   ScrollController _viewScrollController = ScrollController();
   final _dateFormatter = DateFormat('dd.MM.yyyy HH:mm:ss');
@@ -216,10 +216,10 @@ class _StatisticsViewState extends State<StatisticsView> {
     return DataTable(
       columns: columns,
       rows: [...rows, totalRow],
-      columnSpacing: 8,           // уменьшить отступы между колонками
-      dataRowMinHeight: 24,       // сделать строки пониже
-      headingRowHeight: 150,       // заголовки тоже пониже
-      horizontalMargin: 8,        // уменьшить боковые отступы
+      columnSpacing: 8,
+      dataRowMinHeight: 24,
+      headingRowHeight: 150,
+      horizontalMargin: 8,
     );
   }
 

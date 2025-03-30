@@ -94,7 +94,7 @@
     "scan_host": "Сканировать хост",
     "scan_network": "Сканировать сеть",
     "scan_result": "Результаты сканирования",
-    "statistics_uploaded_in ": "Статистика загружена за",
+    "statistics_uploaded_in": "Статистика загружена за",
     "seconds": "секунд",
     "current": "Текущая",
     "by_dates": "По датам",
@@ -342,5 +342,7 @@
     "cash_desk_configuration": "Конфигурация кассы",
     "to_execute_program": "выполнить программу",
     "one_of_the_parameters_of_the_passed_config_was_not_found": "не найден один из параметров переданного конфига",
-    "the_program_is_running": "Программа запущена"
+    "the_program_is_running": "Программа запущена",
+    "full_view": "Полный вид",
+    "part_view": "Частичный вид"
 }

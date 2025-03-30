@@ -1,8 +1,8 @@
 import 'package:android_intent_plus/android_intent.dart';
+//import 'package:open_file/open_file.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:open_file/open_file.dart';
 import 'dart:io';
 import 'package:mobile_wash_control/domain/entities/lcw_entities.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -144,7 +144,7 @@ class UpdatesPageCubit extends Cubit<UpdatesPageState> {
 
       String dir = (await getExternalStorageDirectory())?.path ?? '';
       File file = File('$dir/$fileName');
-      OpenFile.open(file.path, type: "application/vnd.android.package-archive");
+      //OpenFile.open(file.path, type: "application/vnd.android.package-archive");
     }
 
     emit(
