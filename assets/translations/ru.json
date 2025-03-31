@@ -343,6 +343,6 @@
     "to_execute_program": "выполнить программу",
     "one_of_the_parameters_of_the_passed_config_was_not_found": "не найден один из параметров переданного конфига",
     "the_program_is_running": "Программа запущена",
-    "full_view": "Полный вид",
-    "part_view": "Частичный вид"
+    "full_statistics": "Общая статистика",
+    "part_statistics": "Частичная статистика"
 }
