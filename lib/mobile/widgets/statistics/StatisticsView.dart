@@ -31,11 +31,11 @@ class _StatisticsViewState extends State<StatisticsView> {
               segments: [
                 ButtonSegment(
                   value: StatisticsViewMode.full,
-                  label: Text(context.tr('full_view')),
+                  label: Text(context.tr('full_statistics')),
                 ),
                 ButtonSegment(
                   value: StatisticsViewMode.part,
-                  label: Text(context.tr('part_view')),
+                  label: Text(context.tr('part_statistics')),
                 ),
               ],
               selected: {value},
