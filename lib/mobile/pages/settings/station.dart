@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
@@ -48,6 +50,19 @@ class _StationPageState extends State<StationPage> {
 
     _controllers["cardReaderHost"] = TextEditingController();
     _controllers["cardReaderPort"] = TextEditingController();
+
+    //_controllers["banknoteMultiplicator"] = TextEditingController();
+    //_controllers["coinMultiplicator"] = TextEditingController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+      final int id = args[PageArgCode.stationID];
+      final repository = args[PageArgCode.repository] as Repository;
+
+      _getPostConfig(repository, id, context);
+      _getCardReaderConfig(repository, id);
+      _getStationButtonsConfig(repository, id);
+    });
   }
 
   void dispose() {
@@ -79,6 +94,17 @@ class _StationPageState extends State<StationPage> {
     _controllers["cardReaderHost"]!.text = _cardReaderConfig.value.host ?? "";
     _controllers["cardReaderPort"]!.text = _cardReaderConfig.value.port ?? "";
   }
+
+  /*
+
+    Future<void> _getCardMultiplicatorsConfig(Repository repository, int id) async {
+    String banknoteMultiplicator = await repository.getConfigVarString("banknote_multiplicator") ?? '';
+    _controllers["banknoteMultiplicator"]!.text = banknoteMultiplicator;
+
+    String coinMultiplicator = await repository.getConfigVarString("coin_multiplicator") ?? '';
+    _controllers["coinMultiplicator"]!.text = coinMultiplicator;
+  }
+   */
 
   Future<void> _getStationButtonsConfig(Repository repository, int id) async {
     var buttons = List.generate(maxButtons, (index) => entity.StationButton(buttonID: index + 1));
@@ -117,189 +143,185 @@ class _StationPageState extends State<StationPage> {
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
-          FutureBuilder(
-            future: _getPostConfig(repository, id, context),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return Card(
-                child: ExpansionTile(
-                  title: Text(
-                    context.tr('post_settings'),
-                    style: theme.textTheme.titleLarge,
-                  ),
-                  childrenPadding: EdgeInsets.all(8),
-                  children: [
-                    ValueListenableBuilder(
-                      valueListenable: _config,
-                      builder: (BuildContext context, entity.StationConfig? config, Widget? child) {
-                        var hashes = repository.getHashesNotifier().value ?? [];
+          Card(
+            child: ExpansionTile(
+              title: Text(
+                context.tr('post_settings'),
+                style: theme.textTheme.titleLarge,
+              ),
+              childrenPadding: EdgeInsets.all(8),
+              children: [
+                ValueListenableBuilder(
+                  valueListenable: _config,
+                  builder: (BuildContext context, entity.StationConfig? config, Widget? child) {
+                    var hashes = repository.getHashesNotifier().value ?? [];
 
-                        return Form(
-                          key: _formKeyPost,
-                          child: Column(
+                    return Form(
+                      key: _formKeyPost,
+                      child: Column(
+                        children: [
+                          Row(
                             children: [
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      context.tr('name'),
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    fit: FlexFit.tight,
-                                    child: TextFormField(
-                                      controller: _controllers["postName"],
-                                      onChanged: (val) {
-                                        _config.value = _config.value.copyWith(name: val);
-                                      },
-                                      validator: (val) {
-                                        if ((val ?? "").trim().isEmpty) {
-                                          return "${context.tr('field_must_not_be_empty')}";
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  context.tr('name'),
+                                  style: theme.textTheme.bodyLarge,
+                                ),
                               ),
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      context.tr('hash'),
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    fit: FlexFit.tight,
-                                    child: DropdownButtonFormField(
-                                      isExpanded: true,
-                                      value: config?.hash ?? "",
-                                      items: List.generate(
-                                        hashes.length,
-                                        (index) => DropdownMenuItem(
-                                          child: Text(hashes[index]),
-                                          value: hashes[index],
-                                        ),
-                                      ),
-                                      onChanged: (String? value) {
-                                        _config.value = _config.value.copyWith(hash: value);
-                                      },
-                                      validator: (value) {
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      "${context.tr('preflight')} (${context.tr('seconds')})",
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    fit: FlexFit.tight,
-                                    child: TextFormField(
-                                      controller: _controllers["postPreflightSec"],
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly,
-                                        FilteringTextInputFormatter.singleLineFormatter,
-                                      ],
-                                      onChanged: (val) {
-                                        var amount = int.tryParse(val ?? "");
-                                        _config.value = _config.value.copyWith(preflightSec: amount);
-                                      },
-                                      validator: (val) {
-                                        var amount = int.tryParse(val ?? "");
-                                        if ((amount ?? 0) < 0) {
-                                          return "${context.tr('the_preflight_time_must_not_be_less_than')} 0";
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      context.tr('processing'),
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    fit: FlexFit.tight,
-                                    child: DropdownButton(
-                                      isExpanded: true,
-                                      value: _config.value.relayBoard ?? entity.RelayBoard.localGPIO,
-                                      items: List.generate(
-                                        entity.RelayBoard.values.length,
-                                        (index) => DropdownMenuItem(
-                                          child: Text(
-                                            entity.RelayBoard.values[index].label(),
-                                          ),
-                                          value: entity.RelayBoard.values[index],
-                                        ),
-                                      ),
-                                      onChanged: (value) {
-                                        _config.value = _config.value.copyWith(relayBoard: value);
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: TextFormField(
+                                  controller: _controllers["postName"],
+                                  onChanged: (val) {
+                                    _config.value = _config.value.copyWith(name: val);
+                                  },
+                                  validator: (val) {
+                                    if ((val ?? "").trim().isEmpty) {
+                                      return "${context.tr('field_must_not_be_empty')}";
+                                    }
+                                    return null;
+                                  },
+                                ),
                               ),
                             ],
                           ),
-                        );
-                      },
-                    ),
-                    Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ProgressTextButton(
-                          onPressed: () async {
-                            if (_formKeyPost.currentState!.validate()) {
-                              await repository.saveStationConfig(_config.value, context: context).then((value) => _getPostConfig(repository, id, context));
-                            }
-                          },
-                          child: Text("${context.tr('save')}"),
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          flex: 1,
-                          child: ProgressTextButton(
-                            onPressed: () async {
-                              await _getPostConfig(repository, id, context);
-                            },
-                            child: Text(
-                              "${context.tr('get_current_configuration')}",
-                              softWrap: true,
-                            ),
+                          Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  context.tr('hash'),
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: DropdownButtonFormField(
+                                  isExpanded: true,
+                                  value: config?.hash ?? "",
+                                  items: List.generate(
+                                    hashes.length,
+                                        (index) => DropdownMenuItem(
+                                      child: Text(hashes[index]),
+                                      value: hashes[index],
+                                    ),
+                                  ),
+                                  onChanged: (String? value) {
+                                    _config.value = _config.value.copyWith(hash: value);
+                                    log(value.toString());
+                                  },
+                                  validator: (value) {
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        )
-                      ],
+                          Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  "${context.tr('preflight')} (${context.tr('seconds')})",
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: TextFormField(
+                                  controller: _controllers["postPreflightSec"],
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    FilteringTextInputFormatter.singleLineFormatter,
+                                  ],
+                                  onChanged: (val) {
+                                    var amount = int.tryParse(val ?? "");
+                                    _config.value = _config.value.copyWith(preflightSec: amount);
+                                  },
+                                  validator: (val) {
+                                    var amount = int.tryParse(val ?? "");
+                                    if ((amount ?? 0) < 0) {
+                                      return "${context.tr('the_preflight_time_must_not_be_less_than')} 0";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  context.tr('processing'),
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: DropdownButton(
+                                  isExpanded: true,
+                                  value: _config.value.relayBoard ?? entity.RelayBoard.localGPIO,
+                                  items: List.generate(
+                                    entity.RelayBoard.values.length,
+                                        (index) => DropdownMenuItem(
+                                      child: Text(
+                                        entity.RelayBoard.values[index].label(),
+                                      ),
+                                      value: entity.RelayBoard.values[index],
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    _config.value = _config.value.copyWith(relayBoard: value);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ProgressTextButton(
+                      onPressed: () async {
+                        if (_formKeyPost.currentState!.validate()) {
+                          await repository.saveStationConfig(_config.value, context: context).then((value) => _getPostConfig(repository, id, context));
+                        }
+                      },
+                      child: Text("${context.tr('save')}"),
                     ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 1,
+                      child: ProgressTextButton(
+                        onPressed: () async {
+                          await _getPostConfig(repository, id, context);
+                        },
+                        child: Text(
+                          "${context.tr('get_current_configuration')}",
+                          softWrap: true,
+                        ),
+                      ),
+                    )
                   ],
                 ),
-              );
-            },
+              ],
+            ),
           ),
           FutureBuilder(
             future: _getCardReaderConfig(repository, id),
