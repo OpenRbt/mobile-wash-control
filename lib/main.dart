@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  await Firebase.initializeApp(name: "openwashing", options: DefaultFirebaseOptions.currentPlatform);
+  //await Firebase.initializeApp(name: "openwashing", options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
     EasyLocalization(

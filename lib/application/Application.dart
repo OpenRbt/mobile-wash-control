@@ -87,7 +87,7 @@ class Application extends StatelessWidget {
         "/mobile/scripts/post": (context) => ScriptStationPage(),
 
         //BLoC architecture pages
-        "/mobile/services": (context) => ServicesPage(),
+        //"/mobile/services": (context) => ServicesPage(),
 
         "/mobile/updates": (context) => UpdatesPage(),
         "/mobile/updates/post": (context) => UpdatesStationPage(),
