@@ -1,0 +1,7 @@
+services:
+  mobile_wash_control_web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"

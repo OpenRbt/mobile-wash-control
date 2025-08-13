@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+
+import '../entity/vo/page_args_codes.dart';
 
 String formatDateWithTime(String dateString) {
   DateTime dateTime = DateTime.parse(dateString);
@@ -28,4 +31,16 @@ bool versionIsGreater({required String version1, required String version2}) {
   }
 
   return false;
+}
+
+bool isArgsValid(Object? args, BuildContext context) {
+
+  if (args is! Map<PageArgCode, dynamic>) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.of(context).pushReplacementNamed("/");
+    });
+    return false;
+  }
+
+  return true;
 }

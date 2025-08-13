@@ -7,6 +7,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mobile_wash_control/utils/utils.dart';
 
 class StationPage extends StatefulWidget {
   @override
@@ -122,7 +123,13 @@ class _StationPageState extends State<StationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+    final initialArgs = ModalRoute.of(context)?.settings.arguments;
+
+    if (!isArgsValid(initialArgs, context)) {
+      return const SizedBox.shrink();
+    }
+
+    final args = initialArgs as Map<PageArgCode, dynamic>;
     final int id = args[PageArgCode.stationID];
     final String ip = args[PageArgCode.stationIP] ?? "";
     final repository = args[PageArgCode.repository] as Repository;

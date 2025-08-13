@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mobile_wash_control/utils/utils.dart';
 
 import '../../entity/vo/page_args_codes.dart';
 import '../../repository/lea_central_wash_repo/repository.dart';
@@ -15,8 +16,13 @@ class SbpStatusPage extends StatefulWidget {
 class _SbpStatusPageState extends State<SbpStatusPage> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+    final initialArgs = ModalRoute.of(context)?.settings.arguments;
+
+    if (!isArgsValid(initialArgs, context)) {
+      return const SizedBox.shrink();
+    }
+
+    final args = initialArgs as Map<PageArgCode, dynamic>;
     final repository = args[PageArgCode.repository] as LeaCentralRepository;
 
     return Scaffold(

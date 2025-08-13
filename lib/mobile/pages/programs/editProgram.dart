@@ -6,6 +6,7 @@ import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/programms/relayListTile.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:mobile_wash_control/utils/utils.dart';
 
 import '../../widgets/common/snackBars.dart';
 
@@ -118,7 +119,13 @@ class _EditProgramPageState extends State<EditProgramPage> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+    final initialArgs = ModalRoute.of(context)?.settings.arguments;
+
+    if (!isArgsValid(initialArgs, context)) {
+      return const SizedBox.shrink();
+    }
+
+    final args = initialArgs as Map<PageArgCode, dynamic>;
     final int? id = args[PageArgCode.programID];
     final Repository repository = args[PageArgCode.repository];
 

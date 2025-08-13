@@ -284,7 +284,7 @@ enum WeekDay {
   String labelShort() {
     switch (this) {
       case WeekDay.monday:
-        return 'mo"'.tr();
+        return 'mo'.tr();
       case WeekDay.tuesday:
         return 'tu'.tr();
       case WeekDay.wednesday:

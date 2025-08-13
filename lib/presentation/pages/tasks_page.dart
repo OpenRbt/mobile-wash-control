@@ -32,7 +32,13 @@ class _TasksPageView extends StatelessWidget {
 
     final cubit = context.watch<TasksPageCubit>();
 
-    final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+    final initialArgs = ModalRoute.of(context)?.settings.arguments;
+
+    if (!isArgsValid(initialArgs, context)) {
+      return const SizedBox.shrink();
+    }
+
+    final args = initialArgs as Map<PageArgCode, dynamic>;
     final Repository repository = args[PageArgCode.repository];
 
     bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;

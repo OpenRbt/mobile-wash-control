@@ -12,6 +12,7 @@ import 'package:mobile_wash_control/mobile/dialogs/discounts/edit/timeRangeDialo
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressButton.dart';
 import 'package:mobile_wash_control/mobile/widgets/discounts/edit/programDiscountListTIle.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:mobile_wash_control/utils/utils.dart';
 
 class EditDiscountPage extends StatefulWidget {
   @override
@@ -84,7 +85,13 @@ class _EditDiscountPageState extends State<EditDiscountPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    var args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+    final initialArgs = ModalRoute.of(context)?.settings.arguments;
+
+    if (!isArgsValid(initialArgs, context)) {
+      return const SizedBox.shrink();
+    }
+
+    var args = initialArgs as Map<PageArgCode, dynamic>;
     final Repository repository = args[PageArgCode.repository];
 
     final int? discountID = args[PageArgCode.discountID] as int?;
