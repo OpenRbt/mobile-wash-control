@@ -1,0 +1,14 @@
+.git
+.github
+.gitignore
+
+Dockerfile
+.dockerignore
+docker-compose.yaml
+
+README.md
+
+.idea
+
+**/google-services.json
+**/build_config.json

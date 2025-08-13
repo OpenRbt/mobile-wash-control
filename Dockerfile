@@ -1,28 +1,28 @@
-FROM ubuntu:22.04 AS build
+FROM dart:3.8.3-sdk AS build
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    curl unzip xz-utils zip git libglu1-mesa ca-certificates bash file sudo && \
-    rm -rf /var/lib/apt/lists/*
+ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
 
-RUN useradd -m flutter && echo "flutter ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-USER flutter
-WORKDIR /home/flutter
+RUN apt-get update && apt-get install -y \
+  curl unzip xz-utils zip git && \
+  rm -rf /var/lib/apt/lists/* && \
+  git clone https://github.com/flutter/flutter.git -b stable /usr/local/flutter && \
+  flutter config --enable-web
 
-RUN git clone https://github.com/flutter/flutter.git -b stable /home/flutter/flutter
-ENV PATH="/home/flutter/flutter/bin:/home/flutter/flutter/bin/cache/dart-sdk/bin:${PATH}"
+#RUN useradd -m flutter && echo "flutter ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+#USER flutter
+#WORKDIR /home/flutter
 
-RUN flutter config --enable-web
-
-WORKDIR /home/flutter/app
-COPY --chown=flutter:flutter pubspec.* ./
+WORKDIR /app
+COPY pubspec.* ./
 RUN flutter pub get
 
-COPY --chown=flutter:flutter . .
+COPY . .
 
 RUN flutter build web --release
 
-FROM nginx:alpine
-COPY --from=build /home/flutter/app/build/web /usr/share/nginx/html
+FROM nginx:1.27.5-alpine-slim
+
+COPY --from=build /app/build/web /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
