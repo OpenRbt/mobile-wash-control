@@ -330,217 +330,196 @@ class _StationPageState extends State<StationPage> {
               ],
             ),
           ),
-          FutureBuilder(
-            future: _getCardReaderConfig(repository, id),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return Card(
-                child: ExpansionTile(
-                  title: Text(
-                    context.tr('card_reader_settings'),
-                    style: theme.textTheme.titleLarge,
-                  ),
-                  childrenPadding: EdgeInsets.all(8),
-                  children: [
-                    ValueListenableBuilder(
-                      valueListenable: _cardReaderConfig,
-                      builder: (BuildContext context, entity.StationCardReaderConfig value, Widget? child) {
-                        return Form(
-                          key: _formKeyCardReader,
-                          child: Column(
+          Card(
+            child: ExpansionTile(
+              title: Text(
+                context.tr('card_reader_settings'),
+                style: theme.textTheme.titleLarge,
+              ),
+              childrenPadding: EdgeInsets.all(8),
+              children: [
+                ValueListenableBuilder(
+                  valueListenable: _cardReaderConfig,
+                  builder: (BuildContext context, entity.StationCardReaderConfig value, Widget? child) {
+                    return Form(
+                      key: _formKeyCardReader,
+                      child: Column(
+                        children: [
+                          Row(
                             children: [
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      context.tr('type'),
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    fit: FlexFit.tight,
-                                    child: DropdownButton(
-                                      isExpanded: true,
-                                      value: _cardReaderConfig.value.cardReader,
-                                      items: List.generate(
-                                        entity.CardReader.values.length,
-                                        (index) => DropdownMenuItem(
-                                          child: Text(
-                                            entity.CardReader.values[index].label(),
-                                          ),
-                                          value: entity.CardReader.values[index],
-                                        ),
-                                      ),
-                                      onChanged: (value) {
-                                        _cardReaderConfig.value = _cardReaderConfig.value.copyWith(cardReader: value);
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(context.tr('type')),
                               ),
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      context.tr('host'),
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    fit: FlexFit.tight,
-                                    child: TextFormField(
-                                      controller: _controllers["cardReaderHost"],
-                                      onChanged: (val) {
-                                        _cardReaderConfig.value = _cardReaderConfig.value.copyWith(host: val);
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      context.tr('port'),
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    fit: FlexFit.tight,
-                                    child: TextFormField(
-                                      controller: _controllers["cardReaderPort"],
-                                      onChanged: (val) {
-                                        _cardReaderConfig.value = _cardReaderConfig.value.copyWith(port: val);
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: DropdownButton(
+                                  isExpanded: true,
+                                  value: value.cardReader,
+                                  items: entity.CardReader.values.map((e) {
+                                    return DropdownMenuItem(
+                                      value: e,
+                                      child: Text(e.label()),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newVal) {
+                                    _cardReaderConfig.value = value.copyWith(cardReader: newVal);
+                                  },
+                                ),
                               ),
                             ],
                           ),
-                        );
-                      },
-                    ),
-                    Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ProgressTextButton(
-                          onPressed: () async {
-                            if (_formKeyCardReader.currentState!.validate()) {
-                              await repository.saveCardReaderConfig(id, _cardReaderConfig.value, context: context).then((value) => _getCardReaderConfig(repository, id));
-                            }
-                          },
-                          child: Text("${context.tr('save')}"),
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          flex: 1,
-                          child:ProgressTextButton(
-                            onPressed: () async {
-                              await _getCardReaderConfig(repository, id);
-                              },
-                            child: Text(
-                              "${context.tr('get_current_configuration')}",
-                              softWrap: true,
-                            ),
-                        ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  context.tr('host'),
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: TextFormField(
+                                  controller: _controllers["cardReaderHost"],
+                                  onChanged: (val) {
+                                    _cardReaderConfig.value = _cardReaderConfig.value.copyWith(host: val);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  context.tr('port'),
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: TextFormField(
+                                  controller: _controllers["cardReaderPort"],
+                                  onChanged: (val) {
+                                    _cardReaderConfig.value = _cardReaderConfig.value.copyWith(port: val);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-          FutureBuilder(
-            future: _getStationButtonsConfig(repository, id),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return Card(
-                child: ExpansionTile(
-                  title: Text(
-                    context.tr('buttons_binding'),
-                    style: theme.textTheme.titleLarge,
-                  ),
-                  childrenPadding: EdgeInsets.all(8),
+                Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ValueListenableBuilder(
-                      valueListenable: _buttonsConfig,
-                      builder: (BuildContext context, List<entity.StationButton> buttons, Widget? child) {
-                        return Column(
-                          children: List.generate(
-                            buttons.length,
-                            (index) {
-                              return Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
-                                    child: Text("${context.tr('button')} ${buttons[index].buttonID}"),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    fit: FlexFit.tight,
-                                    child: DropdownButton(
-                                      isExpanded: true,
-                                      value: buttons[index].programID ?? -1,
-                                      items: List.generate(_programs.length, (index) {
-                                        return DropdownMenuItem(
-                                          child: Text("${(_programs[index].id != -1 ? _programs[index].id : "").toString().padLeft(4)} : ${_programs[index].name}"),
-                                          value: _programs[index].id ?? -1,
-                                        );
-                                      }),
-                                      onChanged: (int? value) {
-                                        final buttonConfig = _buttonsConfig.value;
-                                        var config = <entity.StationButton>[];
-                                        config.addAll(buttonConfig);
-                                        config[index].programID = value;
-
-                                        _buttonsConfig.value = config;
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        );
+                    ProgressTextButton(
+                      onPressed: () async {
+                        if (_formKeyCardReader.currentState!.validate()) {
+                          await repository.saveCardReaderConfig(id, _cardReaderConfig.value, context: context);
+                        }
                       },
+                      child: Text("${context.tr('save')}"),
                     ),
-                    Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ProgressTextButton(
-                          onPressed: () async {
-                            await repository.saveStationButtons(id, _buttonsConfig.value, context: context).then((value) => _getStationButtonsConfig(repository, id));
-                          },
-                          child: Text("${context.tr('save')}"),
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          flex: 1,
-                          child: ProgressTextButton(
-                            onPressed: () async {
-                              await _getStationButtonsConfig(repository, id);
-                            },
-                            child: Text("${context.tr('get_current_configuration')}"),
-                          ),
-                        )
-                      ],
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 1,
+                      child: ProgressTextButton(
+                        onPressed: () async {
+                          await _getCardReaderConfig(repository, id);
+                        },
+                        child: Text("${context.tr('get_current_configuration')}"),
+                      ),
                     ),
                   ],
                 ),
-              );
-            },
+              ],
+            ),
+          ),
+          Card(
+            child: ExpansionTile(
+              title: Text(
+                context.tr('buttons_binding'),
+                style: theme.textTheme.titleLarge,
+              ),
+              childrenPadding: EdgeInsets.all(8),
+              children: [
+                ValueListenableBuilder(
+                  valueListenable: _buttonsConfig,
+                  builder: (BuildContext context, List<entity.StationButton> buttons, Widget? child) {
+                    return Column(
+                      children: List.generate(
+                        buttons.length,
+                            (index) {
+                          return Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text("${context.tr('button')} ${buttons[index].buttonID}"),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: DropdownButton<int>(
+                                  isExpanded: true,
+                                  value: buttons[index].programID ?? -1,
+                                  items: _programs.map((p) {
+                                    return DropdownMenuItem(
+                                      value: p.id ?? -1,
+                                      child: Text("${p.id != -1 ? p.id : ""}".padLeft(4) + " : ${p.name}"),
+                                    );
+                                  }).toList(),
+                                  onChanged: (int? value) {
+                                    final config = [..._buttonsConfig.value];
+                                    config[index] = config[index].copyWith(programID: value, clearProgramID: value == null);
+                                    _buttonsConfig.value = config;
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ProgressTextButton(
+                      onPressed: () async {
+                        await repository.saveStationButtons(id, _buttonsConfig.value, context: context);
+                        await _getStationButtonsConfig(repository, id);
+                      },
+                      child: Text("${context.tr('save')}"),
+                    ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 1,
+                      child: ProgressTextButton(
+                        onPressed: () async {
+                          await _getStationButtonsConfig(repository, id);
+                        },
+                        child: Text("${context.tr('get_current_configuration')}"),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

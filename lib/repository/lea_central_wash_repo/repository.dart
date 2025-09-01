@@ -1528,9 +1528,6 @@ class LeaCentralRepository extends Repository {
   Future<void> saveStationButtons(int id, List<entity.StationButton> buttons, {BuildContext? context}) async {
     try {
       final buttonsToSave = buttons.where((element) => (element.programID ?? -1) > 0);
-      if (buttonsToSave.length == 0) {
-        return null;
-      }
 
       final args = ArgSetStationButton(
         stationID: id,

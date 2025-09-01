@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:web/web.dart' as web;
 
 class Home extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  TextEditingController _hostField = TextEditingController(text: "localhost");
+  TextEditingController _hostField = TextEditingController(text: web.window.location.hostname);
 
   PackageInfo _packageInfo = PackageInfo(
     appName: '',

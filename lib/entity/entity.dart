@@ -114,6 +114,19 @@ class StationButton {
   String? programName;
 
   StationButton({required this.buttonID, this.programID, this.programName});
+
+  StationButton copyWith({
+    int? buttonID,
+    bool clearProgramID = false,
+    int? programID,
+    String? programName,
+  }) {
+    return StationButton(
+      buttonID: buttonID ?? this.buttonID,
+      programID: clearProgramID ? null : (programID ?? this.programID),
+      programName: programName ?? this.programName,
+    );
+  }
 }
 
 class StationMoneyReport {
