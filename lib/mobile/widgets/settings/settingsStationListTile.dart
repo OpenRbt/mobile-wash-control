@@ -6,17 +6,22 @@ import 'package:easy_localization/easy_localization.dart';
 class SettingsStationListTile extends StatelessWidget {
   final int index;
   final Station station;
-  final Repository repository;
-  final void Function()? onPressed;
+  final double? temperature;
+  final VoidCallback? onPressed;
 
-  const SettingsStationListTile(
-      {super.key, required this.station, required this.index, required this.repository, this.onPressed});
+  const SettingsStationListTile({
+    super.key,
+    required this.station,
+    required this.index,
+    this.temperature,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isOnline = station.status == "online";
 
-    final isOnline = station?.status == "online";
     return ExpansionTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -33,56 +38,32 @@ class SettingsStationListTile extends StatelessWidget {
       ),
       subtitle: Row(
         children: [
-          Flexible(
-            flex: 1,
-            fit: FlexFit.tight,
+          Expanded(
             child: Text(
-              context.tr('hash'),
-              style: theme.textTheme.bodyLarge!.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 2,
-            fit: FlexFit.tight,
-            child: Text(
-              station?.hash ?? "-",
-              style: theme.textTheme.bodyLarge,
+              "${context.tr('hash')}: ${station.hash ?? '-'}",
             ),
           ),
         ],
       ),
-      childrenPadding: EdgeInsets.all(8),
+      childrenPadding: const EdgeInsets.all(8),
       children: [
         Row(
           children: [
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
+            Expanded(
               child: Text(
                 context.tr('temperature'),
-                style: theme.textTheme.bodyLarge!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: theme.textTheme.bodyLarge!
+                    .copyWith(fontWeight: FontWeight.bold),
               ),
             ),
-            Flexible(
-              flex: 2,
-              fit: FlexFit.tight,
-              child: FutureBuilder(
-                future: repository.getStationTemperature(station.id),
-                builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                  String tempString = (snapshot.data ?? "").replaceAll('"', '');
-
-                  double? temp = double.tryParse(tempString ?? "");
-                  return Text(temp?.toString() ?? "-");
-                },
+            Expanded(
+              child: Text(
+                temperature != null ? temperature!.toString() : "-",
               ),
             ),
           ],
         ),
-        Divider(),
+        const Divider(),
         OutlinedButton(
           onPressed: onPressed,
           child: Text(context.tr('open_settings')),

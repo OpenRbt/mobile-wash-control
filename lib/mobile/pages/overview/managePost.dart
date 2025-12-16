@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_wash_control/CommonElements.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
@@ -11,14 +12,33 @@ import 'package:easy_localization/easy_localization.dart';
 
 class ManagePostPage extends StatefulWidget {
   const ManagePostPage({super.key});
-
   @override
   State<StatefulWidget> createState() => _ManagePostPageState();
 }
 
-//TODO: Cleanup and rework
 class _ManagePostPageState extends State<ManagePostPage>
     with TickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late final AnimationController _animationController;
+  late TextEditingController addAmountController;
+  bool _isRefreshing = false;
+  int _currentProgram = -1;
+  List<StationButton> _stationButtons = [];
+  final ValueNotifier<int> _addAmount = ValueNotifier(
+    GlobalData.AddServiceValue,
+  );
+  @override
+  void initState() {
+    super.initState();
+    addAmountController = TextEditingController(
+      text: GlobalData.AddServiceValue.toString(),
+    );
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+  }
+
   @override
   void dispose() {
     _animationController.stop();
@@ -27,42 +47,16 @@ class _ManagePostPageState extends State<ManagePostPage>
     super.dispose();
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  late final AnimationController _animationController;
-  late TextEditingController addAmountController;
-  final ValueNotifier<int> refreshTrigger = ValueNotifier(0);
-  bool _isRefreshing = false;
-  int _currentProgram = -1;
-
-  @override
-  void initState() {
-    super.initState();
-    addAmountController = TextEditingController(
-      text: GlobalData.AddServiceValue.toString(),
-    );
-    
-    _animationController = AnimationController(
-      duration: const Duration(
-        seconds: 2,
-      ), // this will decide the speed of the rotation
-      vsync: this,
-    );
-  }
-
-  List<StationButton> _stationButtons = [];
-
-  void _changeServiceValue({int value = 10}) async {
-    GlobalData.AddServiceValue += value;
-    if (GlobalData.AddServiceValue < 0) {
-      GlobalData.AddServiceValue = 0;
+  int? _getCurrentBalance(Repository repository, int stationID) {
+    final stations = repository.getStationsNotifier().value;
+    if (stations == null) return null;
+    try {
+      final station = stations.firstWhere((e) => e.id == stationID);
+      return station.currentBalance;
+    } catch (_) {
+      return null;
     }
-
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt("AddServiceValue", GlobalData.AddServiceValue);
-    _addAmount.value = GlobalData.AddServiceValue;
   }
-
-  ValueNotifier<int> _addAmount = ValueNotifier(GlobalData.AddServiceValue);
 
   @override
   Widget build(BuildContext context) {
@@ -221,12 +215,30 @@ class _ManagePostPageState extends State<ManagePostPage>
                                     child: TextField(
                                       controller: addAmountController,
                                       keyboardType: TextInputType.number,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter
+                                            .digitsOnly,
+                                      ],
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: context.tr('service_money'),
                                       ),
                                       onChanged: (value) async {
-                                        final intVal = int.tryParse(value) ?? 0;
+                                        int intVal = int.tryParse(value) ?? 0;
+
+                                        if (intVal < 1) {
+                                          intVal = 1;
+                                          addAmountController.text = "1";
+                                          addAmountController.selection =
+                                              TextSelection.fromPosition(
+                                                TextPosition(
+                                                  offset:
+                                                      addAmountController
+                                                          .text
+                                                          .length,
+                                                ),
+                                              );
+                                        }
 
                                         _addAmount.value = intVal;
                                         GlobalData.AddServiceValue = intVal;
@@ -240,6 +252,21 @@ class _ManagePostPageState extends State<ManagePostPage>
                                 ),
                                 ProgressButton(
                                   onPressed: () async {
+                                    if (GlobalData.AddServiceValue < 1) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            context.tr(
+                                              'amount_must_be_greater_than_zero',
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                      return;
+                                    }
+
                                     await repository.addServiceMoney(
                                       stationID,
                                       GlobalData.AddServiceValue,
@@ -247,7 +274,60 @@ class _ManagePostPageState extends State<ManagePostPage>
                                     );
                                   },
                                   child: Text(
-                                    context.tr('send'),
+                                    context.tr('add_service_money'),
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 8),
+
+                                ProgressButton(
+                                  onPressed: () async {
+                                    final balance = _getCurrentBalance(
+                                      repository,
+                                      stationID,
+                                    );
+
+                                    if (balance == null || balance <= 0) return;
+
+                                    showDialog(
+                                      context: context,
+                                      builder:
+                                          (context) => AlertDialog(
+                                            title: Text(
+                                              context.tr('cancel_amount'),
+                                            ),
+                                            content: Text(
+                                              "${context.tr('are_you_sure')}?\n"
+                                              "${context.tr('current_balance')}: $balance",
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed:
+                                                    () =>
+                                                        Navigator.pop(context),
+                                                child: Text(context.tr('no')),
+                                              ),
+                                              ProgressButton(
+                                                onPressed: () async {
+                                                  await repository.addServiceMoney(
+                                                    stationID,
+                                                    -balance,
+                                                    context: context,
+                                                  );
+                                                  Navigator.pop(context);
+                                                  setState(() {});
+                                                },
+                                                child: Text(context.tr('yes')),
+                                              ),
+                                            ],
+                                          ),
+                                    );
+                                  },
+                                  child: Text(
+                                    context.tr(
+                                      'cancel_amount',
+                                    ),
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),

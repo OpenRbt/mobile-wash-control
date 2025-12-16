@@ -33,17 +33,12 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
     final smallTextStyle = theme.textTheme.bodySmall;
 
     final columns = [
-      DataColumn(
-        label: Text(
-          "${context.tr('post')}",
-          style: smallTextStyle,
-        ),
-      ),
+      DataColumn(label: Text("${context.tr('post')}", style: smallTextStyle)),
     ];
 
     final rows = List.generate(
       widget.reports.length,
-          (index) => DataRow(
+      (index) => DataRow(
         cells: [
           DataCell(
             Text(
@@ -59,9 +54,7 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
           DataCell(
             Text(
               'total'.tr(),
-              style: smallTextStyle!.copyWith(
-                color: theme.colorScheme.primary,
-              ),
+              style: smallTextStyle!.copyWith(color: theme.colorScheme.primary),
             ),
           ),
         ],
@@ -94,7 +87,15 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
   }
 
   DataTable getScrollable(ThemeData theme) {
-    final total = StationMoneyReport(coins: 0, banknotes: 0, electronical: 0, qrMoney: 0, bonuses: 0, service: 0, carsTotal: 0);
+    final total = StationMoneyReport(
+      coins: 0,
+      banknotes: 0,
+      electronical: 0,
+      qrMoney: 0,
+      bonuses: 0,
+      service: 0,
+      carsTotal: 0,
+    );
     widget.reports.forEach((report) {
       total.coins = total.coins! + (report.coins ?? 0);
       total.banknotes = total.banknotes! + (report.banknotes ?? 0);
@@ -105,7 +106,8 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
       total.carsTotal = total.carsTotal! + (report.carsTotal ?? 0);
     });
 
-    final bool addCtime = widget.reports.where((element) => element.dateTime != null).isNotEmpty;
+    final bool addCtime =
+        widget.reports.where((element) => element.dateTime != null).isNotEmpty;
     final smallTextStyle = theme.textTheme.bodySmall;
 
     final columns = [
@@ -127,16 +129,37 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
       final report = widget.reports[index];
       final cells = [
         DataCell(Text(report.coins?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.banknotes?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.electronical?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.qrMoney?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.bonuses?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.service?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.carsTotal?.toString() ?? "0", style: smallTextStyle)),
-        DataCell(Text(report.Average().toStringAsFixed(2), style: smallTextStyle)),
+        DataCell(
+          Text(report.banknotes?.toString() ?? "0", style: smallTextStyle),
+        ),
+        DataCell(
+          Text(report.electronical?.toString() ?? "0", style: smallTextStyle),
+        ),
+        DataCell(
+          Text(report.qrMoney?.toString() ?? "0", style: smallTextStyle),
+        ),
+        DataCell(
+          Text(report.bonuses?.toString() ?? "0", style: smallTextStyle),
+        ),
+        DataCell(
+          Text(report.service?.toString() ?? "0", style: smallTextStyle),
+        ),
+        DataCell(
+          Text(report.carsTotal?.toString() ?? "0", style: smallTextStyle),
+        ),
+        DataCell(
+          Text(report.Average().toStringAsFixed(2), style: smallTextStyle),
+        ),
       ];
       if (addCtime) {
-        cells.add(DataCell(Text(_dateFormatter.format(report.dateTime!), style: smallTextStyle)));
+        cells.add(
+          DataCell(
+            Text(
+              _dateFormatter.format(report.dateTime!),
+              style: smallTextStyle,
+            ),
+          ),
+        );
       }
       return DataRow(cells: cells);
     });
@@ -234,12 +257,7 @@ class _FullStatisticsViewState extends State<FullStatisticsView> {
         controller: _viewScrollController,
         scrollDirection: Axis.vertical,
         child: Row(
-          children: [
-            getStatic(theme),
-            Expanded(
-              child: getScrollable(theme)
-            ),
-          ],
+          children: [getStatic(theme), Expanded(child: getScrollable(theme))],
         ),
       ),
     );

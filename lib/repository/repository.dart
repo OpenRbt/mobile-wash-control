@@ -11,8 +11,14 @@ abstract class Repository {
 
   Future<List<Station>?> getStations();
   Future<Station?> getStation(int id);
-  Future<List<StationButton>?> getStationButtons(int id, {BuildContext? context});
-  Future<StationMoneyReport?> getStationMoneyReport(int id, {BuildContext? context});
+  Future<List<StationButton>?> getStationButtons(
+    int id, {
+    BuildContext? context,
+  });
+  Future<StationMoneyReport?> getStationMoneyReport(
+    int id, {
+    BuildContext? context,
+  });
 
   Future<void> stationSaveCollection(int id, {BuildContext? context});
   Future<void> stationOpenDoor(int id, {BuildContext? context});
@@ -23,30 +29,61 @@ abstract class Repository {
   Program? getCurrentProgram(int id);
 
   Future<void> addServiceMoney(int id, int amount, {BuildContext? context});
-
+  Future<String?> getCommonTemperature({BuildContext? context});
   Future<List<User>?> getUsers();
   Future<String?> getServerInfo({BuildContext? context});
   Future<User?> getCurrentUser({BuildContext? context});
   Future<void> createUser(User user, String pin, {BuildContext? context});
   Future<void> updateUser(User user, {BuildContext? context});
-  Future<void> updateUserPassword(User user, User currentUser, String oldPassword, String newPassword, {BuildContext? context});
+  Future<void> updateUserPassword(
+    User user,
+    User currentUser,
+    String oldPassword,
+    String newPassword, {
+    BuildContext? context,
+  });
   Future<void> deleteUser(String login, {BuildContext? context});
 
-  Future<StationMoneyReport?> getStationMoneyReportByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context});
-  Future<List<StationCollectionReport>?> getStationCollectionReports(int id, DateTime startDate, DateTime endDate);
+  Future<StationMoneyReport?> getStationMoneyReportByDates(
+    int id,
+    DateTime startDate,
+    DateTime endDate, {
+    BuildContext? context,
+  });
+  Future<List<StationCollectionReport>?> getStationCollectionReports(
+    int id,
+    DateTime startDate,
+    DateTime endDate,
+  );
 
-  Future<List<StationStats>?> getStationsStatsByDates(int id, DateTime startDate, DateTime endDate);
+  Future<List<StationStats>?> getStationsStatsByDates(
+    int id,
+    DateTime startDate,
+    DateTime endDate,
+  );
   Future<List<StationStats>?> getStationsStatsCurrent(int id);
 
-  Future<StationStats?> getStationStatsByDates(int id, DateTime startDate, DateTime endDate, {BuildContext? context});
+  Future<StationStats?> getStationStatsByDates(
+    int id,
+    DateTime startDate,
+    DateTime endDate, {
+    BuildContext? context,
+  });
   Future<StationStats?> getStationStatsCurrent(int id, {BuildContext? context});
 
-  Future<List<StationStats>> getAllStationStatsByDates(DateTime startDate, DateTime endDate, {BuildContext? context});
+  Future<List<StationStats>> getAllStationStatsByDates(
+    DateTime startDate,
+    DateTime endDate, {
+    BuildContext? context,
+  });
   Future<List<StationStats>> getAllStationStatsCurrent({BuildContext? context});
 
   Future<void> resetStationStats(int id, {BuildContext? context});
 
-  Future<DiscountCampaign?> getDiscountCampaign(int id, {BuildContext? context});
+  Future<DiscountCampaign?> getDiscountCampaign(
+    int id, {
+    BuildContext? context,
+  });
 
   ValueNotifier<List<Station>?> getStationsNotifier();
   ValueNotifier<List<Organization>?> getOrganizationsNotifier();
@@ -61,7 +98,10 @@ abstract class Repository {
 
   Future<String?> getProgramNameFromCache(int id);
 
-  Future<void> saveDiscountCampaign(DiscountCampaign campaign, {BuildContext? context});
+  Future<void> saveDiscountCampaign(
+    DiscountCampaign campaign, {
+    BuildContext? context,
+  });
 
   Future<int?> getConfigVarInt(String name, {BuildContext? context});
   Future<String?> getConfigVarString(String name);
@@ -76,21 +116,41 @@ abstract class Repository {
   Future<StationConfig?> getStationConfig(int id, {BuildContext? context});
   Future<void> saveStationConfig(StationConfig config, {BuildContext? context});
 
-  Future<StationCardReaderConfig?> getCardReaderConfig(int id, {BuildContext? context});
-  Future<void> saveCardReaderConfig(int id, StationCardReaderConfig config, {BuildContext? context});
+  Future<StationCardReaderConfig?> getCardReaderConfig(
+    int id, {
+    BuildContext? context,
+  });
+  Future<void> saveCardReaderConfig(
+    int id,
+    StationCardReaderConfig config, {
+    BuildContext? context,
+  });
 
-  Future<void> saveStationButtons(int id, List<StationButton> buttons, {BuildContext? context});
+  Future<void> saveStationButtons(
+    int id,
+    List<StationButton> buttons, {
+    BuildContext? context,
+  });
   Future<void> deleteDiscountCampaign(int id, {BuildContext? context});
 
   Future<KasseConfig?> getKasseConfig({BuildContext? context});
   Future<void> saveKasseConfig(KasseConfig config, {BuildContext? context});
 
-  Future<List<FirmwareVersion>?> getPostVersions(int id, {BuildContext? context});
+  Future<List<FirmwareVersion>?> getPostVersions(
+    int id, {
+    BuildContext? context,
+  });
   Future<void> getServerVersions({BuildContext? context});
   Future<void> getApplicationVersions({BuildContext? context});
 
   Future<BuildScript?> getCurrentBuildScript(int id, {BuildContext? context});
-  Future<void> setCurrentBuildScript(int id, {BuildContext? context, required String name, required List<String> commands, int? copyFrom});
+  Future<void> setCurrentBuildScript(
+    int id, {
+    BuildContext? context,
+    required String name,
+    required List<String> commands,
+    int? copyFrom,
+  });
 
   User? currentUser();
 
@@ -98,5 +158,7 @@ abstract class Repository {
 
   Future<void> runProgram(RunProgramConfig cfg, {BuildContext? context});
 
-  Future<List<StationMoneyReport>> lastCollectionReportsStats({BuildContext? context});
+  Future<List<StationMoneyReport>> lastCollectionReportsStats({
+    BuildContext? context,
+  });
 }

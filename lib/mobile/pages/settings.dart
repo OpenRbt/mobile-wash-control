@@ -17,6 +17,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  Future<String?>? _temperatureFuture;
   @override
   void initState() {
     _dateFormat = new DateFormat("dd.MM.yyyy");
@@ -88,20 +89,17 @@ class _SettingsPageState extends State<SettingsPage> {
         value: _timeZoneValues[index],
       ),
     )..add(
-        DropdownMenuItem(
-          enabled: false,
-          child: Center(
-            child: Text(
-              "...",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+      DropdownMenuItem(
+        enabled: false,
+        child: Center(
+          child: Text(
+            "...",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          value: -1,
         ),
-      );
+        value: -1,
+      ),
+    );
   }
 
   List<DropdownMenuItem> _timeZoneValuesDropList = [];
@@ -116,7 +114,8 @@ class _SettingsPageState extends State<SettingsPage> {
   late DateFormat _dateFormat;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _operatorServiceAmountController = TextEditingController();
+  TextEditingController _operatorServiceAmountController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +130,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final args = initialArgs as Map<PageArgCode, dynamic>;
     final repository = args[PageArgCode.repository] as Repository;
     final DateTime currentTime = DateTime.now();
+
+    _temperatureFuture ??= repository.getCommonTemperature(context: context);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -147,7 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
       drawer: WashNavigationDrawer(
@@ -182,82 +183,131 @@ class _SettingsPageState extends State<SettingsPage> {
                               flex: 2,
                               fit: FlexFit.tight,
                               child: StatefulBuilder(
-                                builder: (BuildContext context, void Function(void Function()) setState) {
+                                builder: (
+                                  BuildContext context,
+                                  void Function(void Function()) setState,
+                                ) {
                                   return DropdownButton(
                                     isExpanded: true,
                                     items: _timeZoneValuesDropList,
                                     value: _config.value?.timeZone ?? -1,
                                     onChanged: (val) async {
-                                      await repository.setConfigVarInt("TIMEZONE", val, context: context).then((value) => getSettings(repository, context));
+                                      await repository
+                                          .setConfigVarInt(
+                                            "TIMEZONE",
+                                            val,
+                                            context: context,
+                                          )
+                                          .then(
+                                            (value) => getSettings(
+                                              repository,
+                                              context,
+                                            ),
+                                          );
                                       setState(() {});
                                     },
                                   );
                                 },
                               ),
-                            )
+                            ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
                 (repository.currentUser()?.isAdmin ?? false)
                     ? Card(
-                        child: Form(
-                          key: _formKey,
-                          child: StatefulBuilder(
-                            builder: (BuildContext context, void Function(void Function()) setState) {
-                              return FutureBuilder(
-                                future: repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY").then((value) {
-                                  _operatorServiceAmountController.text = value?.toString() ?? "10";
-                                }),
-                                builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: (snapshot.connectionState != ConnectionState.done)
-                                              ? LinearProgressIndicator()
-                                              : TextFormField(
-                                                  controller: _operatorServiceAmountController,
+                      child: Form(
+                        key: _formKey,
+                        child: StatefulBuilder(
+                          builder: (
+                            BuildContext context,
+                            void Function(void Function()) setState,
+                          ) {
+                            return FutureBuilder(
+                              future: repository
+                                  .getConfigVarInt(
+                                    "DEFAULT_OPERATOR_SERVICE_MONEY",
+                                  )
+                                  .then((value) {
+                                    _operatorServiceAmountController.text =
+                                        value?.toString() ?? "10";
+                                  }),
+                              builder: (
+                                BuildContext context,
+                                AsyncSnapshot<int?> snapshot,
+                              ) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child:
+                                            (snapshot.connectionState !=
+                                                    ConnectionState.done)
+                                                ? LinearProgressIndicator()
+                                                : TextFormField(
+                                                  controller:
+                                                      _operatorServiceAmountController,
                                                   inputFormatters: [
-                                                    FilteringTextInputFormatter.digitsOnly,
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly,
                                                   ],
                                                   validator: (value) {
-                                                    if (value == null || value.isEmpty) {
+                                                    if (value == null ||
+                                                        value.isEmpty) {
                                                       return "${context.tr('field_must_not_be_empty')}";
                                                     }
                                                     return null;
                                                   },
                                                 ),
+                                      ),
+                                      Text(
+                                        context.tr(
+                                          'service_money_credited_by_operator',
                                         ),
-                                        Text(context.tr('service_money_credited_by_operator')),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: ProgressButton(
-                                            onPressed: () async {
-                                              if (_formKey.currentState!.validate()) {
-                                                int amount = int.tryParse(_operatorServiceAmountController.value.text) ?? 0;
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ProgressButton(
+                                          onPressed: () async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              int amount =
+                                                  int.tryParse(
+                                                    _operatorServiceAmountController
+                                                        .value
+                                                        .text,
+                                                  ) ??
+                                                  0;
 
-                                                await repository.setConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY", amount);
-                                                var value = await repository.getConfigVarInt("DEFAULT_OPERATOR_SERVICE_MONEY");
-                                                _operatorServiceAmountController.text = value?.toString() ?? "10";
-                                              }
-                                            },
-                                            child: Text("${context.tr('save')}"),
-                                          ),
+                                              await repository.setConfigVarInt(
+                                                "DEFAULT_OPERATOR_SERVICE_MONEY",
+                                                amount,
+                                              );
+                                              var value = await repository
+                                                  .getConfigVarInt(
+                                                    "DEFAULT_OPERATOR_SERVICE_MONEY",
+                                                  );
+                                              _operatorServiceAmountController
+                                                      .text =
+                                                  value?.toString() ?? "10";
+                                            }
+                                          },
+                                          child: Text("${context.tr('save')}"),
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
-                      )
+                      ),
+                    )
                     : SizedBox(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -291,34 +341,87 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   ),
                 ),
-                Card(
-                  child: ValueListenableBuilder(
-                    valueListenable: repository.getStationsNotifier(),
-                    builder: (BuildContext context, List<Station>? value, Widget? child) {
-                      return Column(
-                        children: List.generate(
-                          value?.length ?? 0,
-                          (index) => SettingsStationListTile(
-                            index: index + 1,
-                            station: value![index],
-                            repository: repository,
-                            onPressed: () {
-                              var args = Map<PageArgCode, dynamic>();
-                              args[PageArgCode.stationID] = value[index].id;
-                              args[PageArgCode.stationIP] = value[index].ip;
-                              args[PageArgCode.repository] = repository;
+                // Card(
+                //   child: ValueListenableBuilder(
+                //     valueListenable: repository.getStationsNotifier(),
+                //     builder: (
+                //       BuildContext context,
+                //       List<Station>? value,
+                //       Widget? child,
+                //     ) {
+                //       return Column(
+                //         children: List.generate(
+                //           value?.length ?? 0,
+                //           (index) => SettingsStationListTile(
+                //             index: index + 1,
+                //             station: value![index],
+                //             temperature: temp,
+                //             onPressed: () {
+                //               var args = Map<PageArgCode, dynamic>();
+                //               args[PageArgCode.stationID] = value[index].id;
+                //               args[PageArgCode.stationIP] = value[index].ip;
+                //               args[PageArgCode.repository] = repository;
 
-                              Navigator.pushNamed(context, "/mobile/settings/post", arguments: args).then(
-                                (value) {
-                                  getSettings(repository, context);
+                //               Navigator.pushNamed(
+                //                 context,
+                //                 "/mobile/settings/post",
+                //                 arguments: args,
+                //               ).then((value) {
+                //                 getSettings(repository, context);
+                //               });
+                //             },
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
+                FutureBuilder<String?>(
+                  future: _temperatureFuture,
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<String?> tempSnapshot,
+                  ) {
+                    final String tempString = (tempSnapshot.data ?? "")
+                        .replaceAll('"', '');
+                    final double? temp = double.tryParse(tempString);
+
+                    return Card(
+                      child: ValueListenableBuilder(
+                        valueListenable: repository.getStationsNotifier(),
+                        builder: (
+                          BuildContext context,
+                          List<Station>? value,
+                          Widget? child,
+                        ) {
+                          return Column(
+                            children: List.generate(
+                              value?.length ?? 0,
+                              (index) => SettingsStationListTile(
+                                index: index + 1,
+                                station: value![index],
+                                temperature: temp,
+                                onPressed: () {
+                                  var args = Map<PageArgCode, dynamic>();
+                                  args[PageArgCode.stationID] = value[index].id;
+                                  args[PageArgCode.stationIP] = value[index].ip;
+                                  args[PageArgCode.repository] = repository;
+
+                                  Navigator.pushNamed(
+                                    context,
+                                    "/mobile/settings/post",
+                                    arguments: args,
+                                  ).then((_) {
+                                    getSettings(repository, context);
+                                  });
                                 },
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
