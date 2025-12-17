@@ -61,7 +61,6 @@ class _ManagePostPageState extends State<ManagePostPage>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     final initialArgs = ModalRoute.of(context)?.settings.arguments;
 
     if (!isArgsValid(initialArgs, context)) {
@@ -176,16 +175,20 @@ class _ManagePostPageState extends State<ManagePostPage>
                                         List<Station>? value,
                                         Widget? child,
                                       ) {
-                                        final int? balance =
+                                        final int rawBalance =
                                             value
                                                 ?.firstWhere(
                                                   (element) =>
                                                       element.id == stationID,
                                                   orElse: null,
                                                 )
-                                                .currentBalance;
+                                                .currentBalance ??
+                                            0;
+                                        final int displayBalance =
+                                            rawBalance < 0 ? 0 : rawBalance;
+
                                         return Text(
-                                          "${balance ?? "-"}",
+                                          "$displayBalance",
                                           style: theme.textTheme.bodyLarge,
                                         );
                                       },
@@ -216,8 +219,7 @@ class _ManagePostPageState extends State<ManagePostPage>
                                       controller: addAmountController,
                                       keyboardType: TextInputType.number,
                                       inputFormatters: [
-                                        FilteringTextInputFormatter
-                                            .digitsOnly,
+                                        FilteringTextInputFormatter.digitsOnly,
                                       ],
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(),
@@ -275,7 +277,7 @@ class _ManagePostPageState extends State<ManagePostPage>
                                   },
                                   child: Text(
                                     context.tr('add_service_money'),
-                                    style: TextStyle(fontSize: 15),
+                                    style: const TextStyle(fontSize: 15),
                                   ),
                                 ),
 
@@ -288,15 +290,25 @@ class _ManagePostPageState extends State<ManagePostPage>
                                       stationID,
                                     );
 
-                                    if (balance == null || balance <= 0) return;
+                                    if (balance == null || balance <= 0) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            context.tr(
+                                              'balance_must_be_greater_than_zero',
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                      return;
+                                    }
 
                                     showDialog(
                                       context: context,
                                       builder:
                                           (context) => AlertDialog(
-                                            title: Text(
-                                              context.tr('cancel_amount'),
-                                            ),
                                             content: Text(
                                               "${context.tr('are_you_sure')}?\n"
                                               "${context.tr('current_balance')}: $balance",
@@ -310,11 +322,12 @@ class _ManagePostPageState extends State<ManagePostPage>
                                               ),
                                               ProgressButton(
                                                 onPressed: () async {
-                                                  await repository.addServiceMoney(
-                                                    stationID,
-                                                    -balance,
-                                                    context: context,
-                                                  );
+                                                  await repository
+                                                      .addServiceMoney(
+                                                        stationID,
+                                                        -balance,
+                                                        context: context,
+                                                      );
                                                   Navigator.pop(context);
                                                   setState(() {});
                                                 },
@@ -325,9 +338,7 @@ class _ManagePostPageState extends State<ManagePostPage>
                                     );
                                   },
                                   child: Text(
-                                    context.tr(
-                                      'cancel_amount',
-                                    ),
+                                    context.tr('cancel_amount'),
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),

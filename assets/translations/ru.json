@@ -140,6 +140,7 @@
     "add_service_money": "Пополнить",
     "cancel_amount": "Обнулить",
     "amount_must_be_greater_than_zero": "Сумма должна быть больше 0",
+    "balance_must_be_greater_than_zero": "Для списания баланс должен быть больше 0",
     "post_management": "Управление постом",
     "open_lid": "Открыть дверь",
     "collections_history": "История инкассаций",
