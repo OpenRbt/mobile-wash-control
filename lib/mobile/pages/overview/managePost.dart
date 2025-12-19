@@ -226,21 +226,8 @@ class _ManagePostPageState extends State<ManagePostPage>
                                         labelText: context.tr('service_money'),
                                       ),
                                       onChanged: (value) async {
-                                        int intVal = int.tryParse(value) ?? 0;
-
-                                        if (intVal < 1) {
-                                          intVal = 1;
-                                          addAmountController.text = "1";
-                                          addAmountController.selection =
-                                              TextSelection.fromPosition(
-                                                TextPosition(
-                                                  offset:
-                                                      addAmountController
-                                                          .text
-                                                          .length,
-                                                ),
-                                              );
-                                        }
+                                        final int intVal =
+                                            int.tryParse(value) ?? 0;
 
                                         _addAmount.value = intVal;
                                         GlobalData.AddServiceValue = intVal;
@@ -254,21 +241,6 @@ class _ManagePostPageState extends State<ManagePostPage>
                                 ),
                                 ProgressButton(
                                   onPressed: () async {
-                                    if (GlobalData.AddServiceValue < 1) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            context.tr(
-                                              'amount_must_be_greater_than_zero',
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                      return;
-                                    }
-
                                     await repository.addServiceMoney(
                                       stationID,
                                       GlobalData.AddServiceValue,
