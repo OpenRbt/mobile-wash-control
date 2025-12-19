@@ -184,8 +184,8 @@ class _ManagePostPageState extends State<ManagePostPage>
                                                 )
                                                 .currentBalance ??
                                             0;
-                                        final int displayBalance =
-                                            rawBalance < 0 ? 0 : rawBalance;
+                                        final Object displayBalance =
+                                            rawBalance < 0 ? '-' : rawBalance;
 
                                         return Text(
                                           "$displayBalance",
@@ -285,57 +285,23 @@ class _ManagePostPageState extends State<ManagePostPage>
 
                                 ProgressButton(
                                   onPressed: () async {
-                                    final balance = _getCurrentBalance(
-                                      repository,
+                                    const int cancelValue = -1000000;
+
+                                    await repository.addServiceMoney(
                                       stationID,
-                                    );
-
-                                    if (balance == null || balance <= 0) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            context.tr(
-                                              'balance_must_be_greater_than_zero',
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                      return;
-                                    }
-
-                                    showDialog(
+                                      cancelValue,
                                       context: context,
-                                      builder:
-                                          (context) => AlertDialog(
-                                            content: Text(
-                                              "${context.tr('are_you_sure')}?\n"
-                                              "${context.tr('current_balance')}: $balance",
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed:
-                                                    () =>
-                                                        Navigator.pop(context),
-                                                child: Text(context.tr('no')),
-                                              ),
-                                              ProgressButton(
-                                                onPressed: () async {
-                                                  await repository
-                                                      .addServiceMoney(
-                                                        stationID,
-                                                        -balance,
-                                                        context: context,
-                                                      );
-                                                  Navigator.pop(context);
-                                                  setState(() {});
-                                                },
-                                                child: Text(context.tr('yes')),
-                                              ),
-                                            ],
-                                          ),
                                     );
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          context.tr('balance_reset'),
+                                        ),
+                                      ),
+                                    );
+
+                                    setState(() {});
                                   },
                                   child: Text(
                                     context.tr('cancel_amount'),
@@ -367,10 +333,12 @@ class _ManagePostPageState extends State<ManagePostPage>
                                     ),
                                     ProgressButton(
                                       onPressed: () async {
+                                        const int cancelValue = -1000000;
                                         await repository.addServiceMoney(
                                           stationID,
-                                          snapshot.data ?? 10,
+                                          cancelValue,
                                           context: context,
+                                          showMessage: false,
                                         );
                                       },
                                       child: Text(

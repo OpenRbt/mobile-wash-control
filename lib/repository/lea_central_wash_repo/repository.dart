@@ -458,6 +458,7 @@ class LeaCentralRepository extends Repository {
     int id,
     int amount, {
     BuildContext? context,
+    bool showMessage = true,
   }) async {
     try {
       final station = await getStation(id);
@@ -466,27 +467,31 @@ class LeaCentralRepository extends Repository {
       }
 
       final args = ArgAddServiceAmount(amount: amount, hash: station.hash!);
-      final response = await api.addServiceAmount(args);
-      if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBars.getSuccessSnackBar(
-            message:
-                "${context.tr('credited')} $amount  ${context.tr('to_post')} $id",
-          ),
-        );
+
+      await api.addServiceAmount(args);
+
+      if (context != null && showMessage) {
+        String message;
+
+        if (amount < 0) {
+          return;
+        } else {
+          message =
+              "${context.tr('credited')} $amount ${context.tr('to_post')} $id";
+        }
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBars.getSuccessSnackBar(message: message));
       }
     } on ApiException catch (e) {
-      switch (e.code) {
-        default:
-          if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBars.getErrorSnackBar(
-                message:
-                    "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}",
-              ),
-            );
-          }
-          break;
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message:
+                "${context.tr('post')} $id, ${context.tr('error')}: ${e.code}",
+          ),
+        );
       }
     } catch (e) {
       if (context != null) {
