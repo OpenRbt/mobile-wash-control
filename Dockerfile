@@ -12,9 +12,14 @@ RUN apt-get update && apt-get install -y \
 #USER flutter
 #WORKDIR /home/flutter
 
+
 WORKDIR /app
 COPY pubspec.* ./
-RUN flutter pub get
+
+RUN flutter pub run easy_localization:generate -S assets/translations/
+RUN flutter pub run easy_localization:generate -f keys -o locale_keys.g.dart -S assets/translations/
+
+RUN flutter pub cache repair
 
 COPY . .
 
