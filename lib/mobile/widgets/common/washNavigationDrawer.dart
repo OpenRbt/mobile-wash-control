@@ -19,6 +19,7 @@ enum SelectedPage {
   Scripts,
   Updates,
   Tasks,
+  Constructor,
   Exit,
   None;
 
@@ -42,6 +43,8 @@ enum SelectedPage {
         return 'scripts'.tr();
       case SelectedPage.Updates:
         return 'updates'.tr();
+      case SelectedPage.Constructor:
+        return 'constructor'.tr();
       case SelectedPage.Tasks:
         return 'updates_tasks'.tr();
       case SelectedPage.Exit:
@@ -100,6 +103,8 @@ enum SelectedPage {
         return "/mobile/scripts";
       case SelectedPage.Updates:
         return "/mobile/updates";
+      case SelectedPage.Constructor:
+        return "/mobile/constructor";
       case SelectedPage.Tasks:
         return "/mobile/tasks";
       case SelectedPage.Exit:
@@ -120,6 +125,7 @@ class WashNavigationDrawer extends StatelessWidget {
     SelectedPage.Settings,
     SelectedPage.Discounts,
     SelectedPage.Accounts,
+    SelectedPage.Constructor,
     SelectedPage.Statistics,
     SelectedPage.Motors,
     SelectedPage.Scripts,
@@ -128,9 +134,12 @@ class WashNavigationDrawer extends StatelessWidget {
     SelectedPage.Exit,
   ];
 
-  WashNavigationDrawer({super.key, required SelectedPage selected, required Repository repository})
-      : _selected = selected,
-        _repository = repository {
+  WashNavigationDrawer({
+    super.key,
+    required SelectedPage selected,
+    required Repository repository,
+  }) : _selected = selected,
+       _repository = repository {
     final user = repository.currentUser();
     if ((user?.isOperator ?? false)) {
       _availablePages = [SelectedPage.Main, SelectedPage.Exit];
@@ -186,9 +195,7 @@ class WashNavigationDrawer extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Divider(
-                      color: theme.colorScheme.onPrimary,
-                    ),
+                    Divider(color: theme.colorScheme.onPrimary),
                     Text(
                       "${(user?.isAdmin ?? false) ? 'admin'.tr() : ""} ${(user?.isOperator ?? false) ? 'operator'.tr() : ""} ${(user?.isEngineer ?? false) ? 'engineer'.tr() : ""}",
                       style: theme.textTheme.titleLarge!.copyWith(
@@ -198,58 +205,58 @@ class WashNavigationDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
-
               ],
             ),
             decoration: BoxDecoration(color: theme.colorScheme.primary),
           ),
-          (BonusCommon.washServerApi?.apiClient.basePath ?? "").isNotEmpty ?
-          Container(
-            color: theme.colorScheme.primary,
-            child: Text(
-
-              "${'bonus_server_URL'.tr()}: ${BonusCommon.washServerApi?.apiClient.basePath}",
-              style: theme.textTheme.titleLarge!.copyWith(
-                color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ): Text(""),
+          (BonusCommon.washServerApi?.apiClient.basePath ?? "").isNotEmpty
+              ? Container(
+                color: theme.colorScheme.primary,
+                child: Text(
+                  "${'bonus_server_URL'.tr()}: ${BonusCommon.washServerApi?.apiClient.basePath}",
+                  style: theme.textTheme.titleLarge!.copyWith(
+                    color: theme.colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+              : Text(""),
         ]..addAll(
-            List.generate(
-              _availablePages.length,
-              (index) {
-                bool current = _availablePages[index] == _selected;
+          List.generate(_availablePages.length, (index) {
+            bool current = _availablePages[index] == _selected;
 
-                return ListTile(
-                  title: Text(
-                    _availablePages[index].getLabel(),
-                    style: theme.textTheme.titleLarge!.copyWith(
-                      fontWeight: current ? FontWeight.bold : null,
-                      color: current ? theme.colorScheme.primary : null,
-                    ),
-                  ),
-                  trailing: Icon(
-                    _availablePages[index].getIcon(),
-                    color: current ? theme.colorScheme.primary : null,
-                  ),
-                  onTap: () {
-                    if (_availablePages[index] == SelectedPage.Exit) {
-                      Navigator.of(context).pop();
-                      Navigator.pop(context);
-                      return;
-                    }
+            return ListTile(
+              title: Text(
+                _availablePages[index].getLabel(),
+                style: theme.textTheme.titleLarge!.copyWith(
+                  fontWeight: current ? FontWeight.bold : null,
+                  color: current ? theme.colorScheme.primary : null,
+                ),
+              ),
+              trailing: Icon(
+                _availablePages[index].getIcon(),
+                color: current ? theme.colorScheme.primary : null,
+              ),
+              onTap: () {
+                if (_availablePages[index] == SelectedPage.Exit) {
+                  Navigator.of(context).pop();
+                  Navigator.pop(context);
+                  return;
+                }
 
-                    if (!current) {
-                      var args = Map<PageArgCode, dynamic>();
-                      args[PageArgCode.repository] = _repository;
-                      Navigator.pushReplacementNamed(Navigator.of(context).context, _availablePages[index].getRoute(), arguments: args);
-                    }
-                  },
-                );
+                if (!current) {
+                  var args = Map<PageArgCode, dynamic>();
+                  args[PageArgCode.repository] = _repository;
+                  Navigator.pushReplacementNamed(
+                    Navigator.of(context).context,
+                    _availablePages[index].getRoute(),
+                    arguments: args,
+                  );
+                }
               },
-            ),
-          ),
+            );
+          }),
+        ),
       ),
     );
   }
