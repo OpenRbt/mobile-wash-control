@@ -180,13 +180,17 @@ class KasseConfigTaxEnum {
   static const vAT0 = KasseConfigTaxEnum._(r'TAX_VAT0');
   static const NO = KasseConfigTaxEnum._(r'TAX_NO');
   static const vAT120 = KasseConfigTaxEnum._(r'TAX_VAT120');
-
+  static const vAT105 = KasseConfigTaxEnum._(r'TAX_VAT105');
+  static const vAT107 = KasseConfigTaxEnum._(r'TAX_VAT107');
+  
   /// List of all possible values in this [enum][KasseConfigTaxEnum].
   static const values = <KasseConfigTaxEnum>[
     vAT110,
     vAT0,
     NO,
     vAT120,
+    vAT105,
+    vAT107,
   ];
 
   static KasseConfigTaxEnum? fromJson(dynamic value) => KasseConfigTaxEnumTypeTransformer().decode(value);

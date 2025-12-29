@@ -554,7 +554,9 @@ enum TaxType {
   vAT110,
   vAT0,
   no,
-  vat120;
+  vat120,
+  vat105,
+  vat107;
 
   static TaxType fromString(String value) {
     switch (value) {
@@ -564,6 +566,10 @@ enum TaxType {
         return TaxType.vAT0;
       case "TAX_VAT120":
         return TaxType.vat120;
+      case "TAX_VAT105":
+        return TaxType.vat105;
+      case "TAX_VAT107":
+        return TaxType.vat107;
       default:
         return TaxType.no;
     }
@@ -580,6 +586,10 @@ enum TaxType {
         return "TAX_NO";
       case TaxType.vat120:
         return "TAX_VAT120";
+      case TaxType.vat105:
+        return "TAX_VAT105";
+      case TaxType.vat107:
+        return "TAX_VAT107";
     }
   }
 }

@@ -247,6 +247,12 @@ class Helpers {
       case entity.TaxType.vat120:
         taxType = KasseConfigTaxEnum.vAT120;
         break;
+      case entity.TaxType.vat105:
+        taxType = KasseConfigTaxEnum.vAT105;
+        break;
+      case entity.TaxType.vat107:
+        taxType = KasseConfigTaxEnum.vAT107;
+        break;
     }
 
     return KasseConfig(
