@@ -17,6 +17,7 @@ enum SelectedPage {
   Statistics,
   Motors,
   Scripts,
+  Skins,
   Updates,
   Tasks,
   Exit,
@@ -40,6 +41,8 @@ enum SelectedPage {
         return 'motor_life'.tr();
       case SelectedPage.Scripts:
         return 'scripts'.tr();
+      case SelectedPage.Skins:
+        return 'skins'.tr();
       case SelectedPage.Updates:
         return 'updates'.tr();
       case SelectedPage.Tasks:
@@ -69,6 +72,8 @@ enum SelectedPage {
         return Icons.table_chart_outlined;
       case SelectedPage.Scripts:
         return Icons.description_outlined;
+      case SelectedPage.Skins:
+        return Icons.palette_outlined;
       case SelectedPage.Updates:
         return Icons.download_outlined;
       case SelectedPage.Tasks:
@@ -98,6 +103,8 @@ enum SelectedPage {
         return "/mobile/motors";
       case SelectedPage.Scripts:
         return "/mobile/scripts";
+      case SelectedPage.Skins:
+        return "/mobile/skins";
       case SelectedPage.Updates:
         return "/mobile/updates";
       case SelectedPage.Tasks:
@@ -123,6 +130,7 @@ class WashNavigationDrawer extends StatelessWidget {
     SelectedPage.Statistics,
     SelectedPage.Motors,
     SelectedPage.Scripts,
+    SelectedPage.Skins,
     SelectedPage.Updates,
     SelectedPage.Tasks,
     SelectedPage.Exit,

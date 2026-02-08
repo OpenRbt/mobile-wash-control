@@ -169,6 +169,7 @@ class Helpers {
       hash: config.hash,
       preflightSec: config.preflightSec,
       relayBoard: entity.RelayBoard.fromString(config.relayBoard?.toString() ?? "") ?? entity.RelayBoard.localGPIO,
+      firmwareSkin: config.firmwareSkin,
     );
   }
 
@@ -193,6 +194,7 @@ class Helpers {
       hash: config.hash,
       relayBoard: relayBoard,
       preflightSec: config.preflightSec,
+      firmwareSkin: config.firmwareSkin,
     );
   }
 

@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
 import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart';
@@ -2739,5 +2741,98 @@ class LeaCentralRepository extends Repository {
       }
     }
     return res;
+  }
+
+  // --- Skins ---
+
+  @override
+  Future<List<entity.SkinInfo>> listSkins({BuildContext? context}) async {
+    try {
+      final url = Uri.parse('${api.apiClient.basePath}/firmware/skins');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((e) => entity.SkinInfo(
+          name: e['name'] ?? '',
+          label: e['label'],
+        )).toList();
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+    return [];
+  }
+
+  @override
+  Future<void> uploadSkin(String name, List<int> zipBytes, {BuildContext? context}) async {
+    try {
+      final url = Uri.parse('${api.apiClient.basePath}/firmware/skin/$name/upload');
+      final request = http.MultipartRequest('POST', url);
+      request.files.add(http.MultipartFile.fromBytes('file', zipBytes, filename: '$name.zip'));
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      if (response.statusCode == 204) {
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getSuccessSnackBar(message: "Skin '$name' uploaded"),
+          );
+        }
+      } else {
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${response.statusCode}"),
+          );
+        }
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  Future<void> deleteSkin(String name, {BuildContext? context}) async {
+    try {
+      final url = Uri.parse('${api.apiClient.basePath}/firmware/skin/$name');
+      final response = await http.delete(url);
+      if (response.statusCode == 204) {
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getSuccessSnackBar(message: "Skin '$name' deleted"),
+          );
+        }
+      } else if (response.statusCode == 404) {
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getErrorSnackBar(message: "Skin '$name' not found"),
+          );
+        }
+      } else {
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${response.statusCode}"),
+          );
+        }
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
   }
 }

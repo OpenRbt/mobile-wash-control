@@ -487,8 +487,9 @@ class StationConfig {
   String? name;
   String? hash;
   RelayBoard relayBoard;
+  String? firmwareSkin;
 
-  StationConfig({required this.id, this.preflightSec, this.name, this.hash, required this.relayBoard});
+  StationConfig({required this.id, this.preflightSec, this.name, this.hash, required this.relayBoard, this.firmwareSkin});
 
   StationConfig copyWith({
     int? id,
@@ -496,11 +497,13 @@ class StationConfig {
     String? name,
     String? hash,
     RelayBoard? relayBoard,
+    String? firmwareSkin,
   }) {
     return StationConfig(id: id ?? this.id, relayBoard: relayBoard ?? this.relayBoard)
       ..preflightSec = preflightSec ?? this.preflightSec
       ..name = name ?? this.name
-      ..hash = hash ?? this.hash;
+      ..hash = hash ?? this.hash
+      ..firmwareSkin = firmwareSkin ?? this.firmwareSkin;
   }
 }
 
@@ -688,4 +691,11 @@ class BuildScript {
   int stationID;
   String name;
   List<String> commands;
+}
+
+class SkinInfo {
+  String name;
+  String? label;
+
+  SkinInfo({required this.name, this.label});
 }

@@ -161,4 +161,9 @@ abstract class Repository {
   Future<List<StationMoneyReport>> lastCollectionReportsStats({
     BuildContext? context,
   });
+
+  // Skins
+  Future<List<SkinInfo>> listSkins({BuildContext? context});
+  Future<void> uploadSkin(String name, List<int> zipBytes, {BuildContext? context});
+  Future<void> deleteSkin(String name, {BuildContext? context});
 }

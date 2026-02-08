@@ -25,6 +25,8 @@ class _StationPageState extends State<StationPage> {
     relayBoard: entity.RelayBoard.localGPIO,
   ));
 
+  List<entity.SkinInfo> _availableSkins = [];
+
   ValueNotifier<entity.StationCardReaderConfig> _cardReaderConfig = ValueNotifier(entity.StationCardReaderConfig(
     cardReader: entity.CardReader.not_used,
   ));
@@ -63,6 +65,7 @@ class _StationPageState extends State<StationPage> {
       _getPostConfig(repository, id, context);
       _getCardReaderConfig(repository, id);
       _getStationButtonsConfig(repository, id);
+      _loadSkins(repository);
     });
   }
 
@@ -106,6 +109,15 @@ class _StationPageState extends State<StationPage> {
     _controllers["coinMultiplicator"]!.text = coinMultiplicator;
   }
    */
+
+  Future<void> _loadSkins(Repository repository) async {
+    try {
+      final skins = await repository.listSkins(context: context);
+      setState(() {
+        _availableSkins = skins;
+      });
+    } catch (_) {}
+  }
 
   Future<void> _getStationButtonsConfig(Repository repository, int id) async {
     var buttons = List.generate(maxButtons, (index) => entity.StationButton(buttonID: index + 1));
@@ -290,6 +302,41 @@ class _StationPageState extends State<StationPage> {
                                   ),
                                   onChanged: (value) {
                                     _config.value = _config.value.copyWith(relayBoard: value);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  context.tr('skins'),
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: DropdownButtonFormField<String>(
+                                  isExpanded: true,
+                                  value: (config?.firmwareSkin ?? "").isEmpty ? "" : config?.firmwareSkin,
+                                  items: [
+                                    DropdownMenuItem(
+                                      value: "",
+                                      child: Text("—"),
+                                    ),
+                                    ..._availableSkins.map(
+                                      (s) => DropdownMenuItem(
+                                        value: s.name,
+                                        child: Text(s.name),
+                                      ),
+                                    ),
+                                  ],
+                                  onChanged: (String? value) {
+                                    _config.value = _config.value.copyWith(firmwareSkin: value ?? "");
                                   },
                                 ),
                               ),
