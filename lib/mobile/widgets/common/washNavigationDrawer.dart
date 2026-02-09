@@ -14,10 +14,10 @@ enum SelectedPage {
   Discounts,
   Settings,
   Accounts,
-  Services,
   Statistics,
   Motors,
   Scripts,
+  Skins,
   Updates,
   Tasks,
   Exit,
@@ -35,14 +35,14 @@ enum SelectedPage {
         return 'settings'.tr();
       case SelectedPage.Accounts:
         return 'users'.tr();
-      case SelectedPage.Services:
-        return 'services'.tr();
       case SelectedPage.Statistics:
         return 'statistics'.tr();
       case SelectedPage.Motors:
         return 'motor_life'.tr();
       case SelectedPage.Scripts:
         return 'scripts'.tr();
+      case SelectedPage.Skins:
+        return 'skins'.tr();
       case SelectedPage.Updates:
         return 'updates'.tr();
       case SelectedPage.Tasks:
@@ -66,14 +66,14 @@ enum SelectedPage {
         return Icons.settings_outlined;
       case SelectedPage.Accounts:
         return Icons.people_outline;
-      case SelectedPage.Services:
-        return Icons.power_outlined;
       case SelectedPage.Statistics:
         return Icons.show_chart_outlined;
       case SelectedPage.Motors:
         return Icons.table_chart_outlined;
       case SelectedPage.Scripts:
         return Icons.description_outlined;
+      case SelectedPage.Skins:
+        return Icons.color_lens;
       case SelectedPage.Updates:
         return Icons.download_outlined;
       case SelectedPage.Tasks:
@@ -97,14 +97,14 @@ enum SelectedPage {
         return "/mobile/settings";
       case SelectedPage.Accounts:
         return "/mobile/users";
-      case SelectedPage.Services:
-        return "/mobile/services-auth";
       case SelectedPage.Statistics:
         return "/mobile/statistics";
       case SelectedPage.Motors:
         return "/mobile/motors";
       case SelectedPage.Scripts:
         return "/mobile/scripts";
+      case SelectedPage.Skins:
+        return "/mobile/skins";
       case SelectedPage.Updates:
         return "/mobile/updates";
       case SelectedPage.Tasks:
@@ -129,8 +129,8 @@ class WashNavigationDrawer extends StatelessWidget {
     SelectedPage.Accounts,
     SelectedPage.Statistics,
     SelectedPage.Motors,
-    SelectedPage.Services,
     SelectedPage.Scripts,
+    SelectedPage.Skins,
     SelectedPage.Updates,
     SelectedPage.Tasks,
     SelectedPage.Exit,
@@ -243,32 +243,8 @@ class WashNavigationDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     if (_availablePages[index] == SelectedPage.Exit) {
-                      if (Platform.isAndroid) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('exit'.tr()),
-                            content: Text("${'are_you_sure_you_want_to_exit'.tr()}?"),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  exit(0);
-                                },
-                                child: Text('yes'.tr()),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('no'.tr()),
-                              )
-                            ],
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).pop();
-                        Navigator.pop(context);
-                      }
+                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                       return;
                     }
 

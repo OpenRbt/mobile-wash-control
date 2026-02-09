@@ -18,6 +18,7 @@ class StationConfig {
     this.name,
     this.hash,
     this.relayBoard,
+    this.firmwareSkin,
   });
 
   int id;
@@ -54,13 +55,16 @@ class StationConfig {
   ///
   RelayBoard? relayBoard;
 
+  String? firmwareSkin;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is StationConfig &&
      other.id == id &&
      other.preflightSec == preflightSec &&
      other.name == name &&
      other.hash == hash &&
-     other.relayBoard == relayBoard;
+     other.relayBoard == relayBoard &&
+     other.firmwareSkin == firmwareSkin;
 
   @override
   int get hashCode =>
@@ -69,10 +73,11 @@ class StationConfig {
     (preflightSec == null ? 0 : preflightSec!.hashCode) +
     (name == null ? 0 : name!.hashCode) +
     (hash == null ? 0 : hash!.hashCode) +
-    (relayBoard == null ? 0 : relayBoard!.hashCode);
+    (relayBoard == null ? 0 : relayBoard!.hashCode) +
+    (firmwareSkin == null ? 0 : firmwareSkin!.hashCode);
 
   @override
-  String toString() => 'StationConfig[id=$id, preflightSec=$preflightSec, name=$name, hash=$hash, relayBoard=$relayBoard]';
+  String toString() => 'StationConfig[id=$id, preflightSec=$preflightSec, name=$name, hash=$hash, relayBoard=$relayBoard, firmwareSkin=$firmwareSkin]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -96,6 +101,9 @@ class StationConfig {
       json[r'relayBoard'] = this.relayBoard;
     } else {
       json[r'relayBoard'] = null;
+    }
+    if (this.firmwareSkin != null) {
+      json[r'firmwareSkin'] = this.firmwareSkin;
     }
     return json;
   }
@@ -124,6 +132,7 @@ class StationConfig {
         name: mapValueOfType<String>(json, r'name'),
         hash: mapValueOfType<String>(json, r'hash'),
         relayBoard: RelayBoard.fromJson(json[r'relayBoard']),
+        firmwareSkin: mapValueOfType<String>(json, r'firmwareSkin'),
       );
     }
     return null;

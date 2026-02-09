@@ -1,228 +1,265 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/ProgressTextButton.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:mobile_wash_control/utils/utils.dart';
 
 class KassePage extends StatefulWidget {
+  const KassePage({super.key});
+
   @override
-  State<StatefulWidget> createState() => _KassePageState();
+  State<KassePage> createState() => _KassePageState();
 }
 
 class _KassePageState extends State<KassePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  late List<TextEditingController> _inputControllers;
+  final Map<String, TextEditingController> _controller = {};
 
-  Map<String, TextEditingController> _controller = Map();
-  ValueNotifier<KasseConfig> _config = ValueNotifier(KasseConfig(taxType: TaxType.no));
+  final ValueNotifier<KasseConfig> _config =
+      ValueNotifier(KasseConfig(taxType: TaxType.no));
 
+  Repository? _repository;
+  bool _loaded = false;
+  late Future<void> _loadFuture;
+
+  @override
   void initState() {
+    super.initState();
+
     _controller["receipt"] = TextEditingController();
     _controller["cashier"] = TextEditingController();
     _controller["cashierINN"] = TextEditingController();
-
-    super.initState();
-    _inputControllers = List.generate(3, (index) {
-      var controller = new TextEditingController();
-      switch (index) {
-        default:
-          break;
-      }
-      return controller;
-    });
   }
 
+  @override
   void dispose() {
-    _controller.values.forEach((element) {
-      element.dispose();
-    });
-
-    for (var controller in _inputControllers) {
-      controller.dispose();
+    for (final c in _controller.values) {
+      c.dispose();
     }
+    _config.dispose();
     super.dispose();
   }
 
-  Future<void> _getKasseConfig(Repository repository, BuildContext context) async {
-    _config.value = await repository.getKasseConfig(context: context) ?? KasseConfig(taxType: TaxType.no);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    _controller["receipt"]!.text = _config.value.receiptItemName ?? "";
-    _controller["cashier"]!.text = _config.value.cashier ?? "";
-    _controller["cashierINN"]!.text = _config.value.cashierINN ?? "";
+    if (_loaded) return;
+
+    final initialArgs = ModalRoute.of(context)?.settings.arguments;
+    if (!isArgsValid(initialArgs, context)) return;
+
+    final args = initialArgs as Map<PageArgCode, dynamic>;
+    _repository = args[PageArgCode.repository] as Repository;
+
+    _loadFuture = _loadKasseConfig();
+    _loaded = true;
+  }
+
+  Future<void> _loadKasseConfig() async {
+    final config =
+        await _repository!.getKasseConfig(context: context) ??
+            KasseConfig(taxType: TaxType.no);
+
+    _config.value = config;
+
+    _controller["receipt"]!.text = config.receiptItemName ?? "";
+    _controller["cashier"]!.text = config.cashier ?? "";
+    _controller["cashierINN"]!.text = config.cashierINN ?? "";
+  }
+
+  Future<void> _saveConfig() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    await _repository!.saveKasseConfig(
+      _config.value,
+      context: context,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
-    final repository = args[PageArgCode.repository] as Repository;
+    if (!_loaded) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     final theme = Theme.of(context);
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(context.tr('cash_desk_parameters')),
       ),
-      key: _scaffoldKey,
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: [
-          FutureBuilder(
-            future: _getKasseConfig(repository, context),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return Card(
+      body: FutureBuilder<void>(
+        future: _loadFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return ListView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(12),
+            children: [
+              Card(
                 child: ExpansionTile(
+                  initiallyExpanded: true,
                   title: Text(
                     context.tr('cash_desk_parameters'),
                     style: theme.textTheme.titleLarge,
                   ),
-                  childrenPadding: EdgeInsets.all(8),
+                  childrenPadding: const EdgeInsets.all(12),
                   children: [
-                    ValueListenableBuilder(
+                    ValueListenableBuilder<KasseConfig>(
                       valueListenable: _config,
-                      builder: (BuildContext context, KasseConfig value, Widget? child) {
+                      builder: (context, value, _) {
                         return Form(
                           key: _formKey,
                           child: Column(
                             children: [
                               Row(
                                 children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
+                                  Expanded(
                                     child: Text(
                                       "TAX",
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
-                                  Flexible(
+                                  Expanded(
                                     flex: 2,
-                                    fit: FlexFit.tight,
-                                    child: DropdownButtonFormField(
+                                    child: DropdownButtonFormField<TaxType>(
+                                      value: value.taxType,
                                       isExpanded: true,
-                                      value: _config.value.taxType,
-                                      items: List.generate(
-                                        TaxType.values.length,
-                                        (index) => DropdownMenuItem(
-                                          child: Text(
-                                            TaxType.values[index].label(),
-                                          ),
-                                          value: TaxType.values[index],
-                                        ),
-                                      ),
+                                      items: TaxType.values
+                                          .map(
+                                            (e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(e.label()),
+                                            ),
+                                          )
+                                          .toList(),
                                       onChanged: (val) {
-                                        _config.value = _config.value.copyWith(taxType: val);
+                                        if (val == null) return;
+                                        _config.value =
+                                            value.copyWith(taxType: val);
                                       },
                                     ),
                                   ),
                                 ],
                               ),
+
+                              const SizedBox(height: 12),
                               Row(
                                 children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
+                                  Expanded(
                                     child: Text(
                                       context.tr('product'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
-                                  Flexible(
+                                  Expanded(
                                     flex: 2,
-                                    fit: FlexFit.tight,
                                     child: TextFormField(
                                       controller: _controller["receipt"],
                                       validator: (val) {
                                         if ((val ?? "").trim().isEmpty) {
-                                          return "${context.tr('field_must_not_be_empty')}";
+                                          return context.tr(
+                                              'field_must_not_be_empty');
                                         }
-
                                         return null;
                                       },
                                       onChanged: (val) {
-                                        val = (val ?? "").trim();
-                                        _config.value = _config.value.copyWith(receiptItemName: val);
+                                        _config.value = value.copyWith(
+                                          receiptItemName: val.trim(),
+                                        );
                                       },
                                     ),
                                   ),
                                 ],
                               ),
+
+                              const SizedBox(height: 12),
                               Row(
                                 children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
+                                  Expanded(
                                     child: Text(
                                       context.tr('cashier'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
-                                  Flexible(
+                                  Expanded(
                                     flex: 2,
-                                    fit: FlexFit.tight,
                                     child: TextFormField(
                                       controller: _controller["cashier"],
-                                      validator: (val) {
-                                        if (val?.isNotEmpty ?? false) {
-                                          var trimmed = (val ?? "").trim();
-                                          if (trimmed.isEmpty) {
-                                            return "${context.tr('field_must_not_be_empty')}";
-                                          }
-                                          if (trimmed.length < 1) {
-                                            return context.tr('field_must_contain_more_symbols');
-                                          }
-                                        }
-
-                                        return null;
-                                      },
                                       onChanged: (val) {
-                                        val = (val ?? "").trim();
-                                        _config.value = _config.value.copyWith(cashier: val);
+                                        _config.value = value.copyWith(
+                                          cashier: val.trim(),
+                                        );
                                       },
                                     ),
                                   ),
                                 ],
                               ),
+
+                              const SizedBox(height: 12),
                               Row(
                                 children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.tight,
+                                  Expanded(
                                     child: Text(
                                       context.tr('cashier_document'),
                                       style: theme.textTheme.bodyLarge,
                                     ),
                                   ),
-                                  Flexible(
+                                  Expanded(
                                     flex: 2,
-                                    fit: FlexFit.tight,
                                     child: TextFormField(
                                       controller: _controller["cashierINN"],
                                       maxLength: 12,
                                       inputFormatters: [
                                         FilteringTextInputFormatter.digitsOnly,
-                                        FilteringTextInputFormatter.singleLineFormatter,
                                       ],
                                       validator: (val) {
-                                        if (_config.value.cashier?.isNotEmpty ?? false) {
-                                          var trimmed = (val ?? "").trim();
-                                          if (trimmed.isEmpty) {
-                                            return "${context.tr('field_must_not_be_empty')}";
-                                          }
-
-                                          if (trimmed.length < 12) {
-                                            return context.tr('field_must_contain_more_symbols');
+                                        if (value.cashier?.isNotEmpty ?? false) {
+                                          if ((val ?? "").length < 12) {
+                                            return context.tr(
+                                              'field_must_contain_more_symbols',
+                                            );
                                           }
                                         }
                                         return null;
                                       },
                                       onChanged: (val) {
-                                        val = (val ?? "").trim();
-                                        _config.value = _config.value.copyWith(cashierINN: val);
+                                        _config.value = value.copyWith(
+                                          cashierINN: val.trim(),
+                                        );
                                       },
                                     ),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 20),
+
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ProgressTextButton(
+                                    onPressed: _saveConfig,
+                                    child: Text(context.tr('save')),
+                                  ),
+                                  ProgressTextButton(
+                                    onPressed: _loadKasseConfig,
+                                    child: Text(context.tr(
+                                        'get_current_configuration')),
                                   ),
                                 ],
                               ),
@@ -231,36 +268,12 @@ class _KassePageState extends State<KassePage> {
                         );
                       },
                     ),
-                    Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ProgressTextButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              await repository.saveKasseConfig(_config.value, context: context);
-                            }
-                          },
-                          child: Text("${context.tr('save')}"),
-                        ),
-                        Flexible(
-                          flex: 1,
-                            fit: FlexFit.tight,
-                            child: ProgressTextButton(
-                              onPressed: () async {
-                                await _getKasseConfig(repository, context);
-                              },
-                              child: Text("${context.tr('get_current_configuration')}"),
-                            )
-                        )
-                      ],
-                    ),
                   ],
                 ),
-              );
-            },
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }

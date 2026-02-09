@@ -8,5 +8,6 @@ enum PageArgCode {
   user,
   discountID,
   currentOrganizationID,
-  currentGroupID
+  currentGroupID,
+  skinName
 }

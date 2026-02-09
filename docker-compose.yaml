@@ -1,0 +1,8 @@
+services:
+  mobile_wash_control_web:
+    image: reg.registry.open-rbt.com/mobile-wash-control-web:v0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"

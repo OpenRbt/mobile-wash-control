@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mobile_wash_control/utils/utils.dart';
 
 import '../../entity/entity.dart';
 import '../../entity/vo/page_args_codes.dart';
@@ -46,7 +47,13 @@ class _ScriptStationPageState extends State<ScriptStationPage> {
   @override
   Widget build(BuildContext context) {
 
-    final args = ModalRoute.of(context)?.settings.arguments as Map<PageArgCode, dynamic>;
+    final initialArgs = ModalRoute.of(context)?.settings.arguments;
+
+    if (!isArgsValid(initialArgs, context)) {
+      return const SizedBox.shrink();
+    }
+
+    final args = initialArgs as Map<PageArgCode, dynamic>;
     final int id = args[PageArgCode.stationID];
     final repository = args[PageArgCode.repository] as Repository;
 

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ import '../../Common/sbp_common.dart';
 import '../widgets/common/snackBars.dart';
 
 class Auth extends StatefulWidget {
-  final String host;
+  final String? host;
 
   const Auth({super.key, required this.host});
 
@@ -48,10 +47,10 @@ class _AuthState extends State<Auth> {
 
   Future<void> _tryAuth() async {
     try {
-      var client = lcw.DefaultApi(lcw.ApiClient(basePath: widget.host));
+      var client = lcw.DefaultApi(lcw.ApiClient(basePath: widget.host!));
       client.apiClient.addDefaultHeader("Pin", pinController.text);
 
-      LcwCommon.initializeApis(widget.host, pinController.text);
+      LcwCommon.initializeApis(widget.host!, pinController.text);
 
       final prefs = await SharedPreferences.getInstance();
       final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
@@ -93,18 +92,24 @@ class _AuthState extends State<Auth> {
   }
 
   Widget build(BuildContext context) {
+
+    if (widget.host == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacementNamed("/");
+      });
+      return const SizedBox.shrink();
+    }
+
     final theme = Theme.of(context);
 
     var appBarPadding = AppBar().preferredSize.height + MediaQuery.of(context).padding.top;
     return Scaffold(
-      floatingActionButton: Platform.isAndroid
-          ? null
-          : FloatingActionButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Icon(Icons.exit_to_app_outlined),
-            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Icon(Icons.exit_to_app_outlined),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         // crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,7 +129,7 @@ class _AuthState extends State<Auth> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  widget.host,
+                  widget.host!,
                   style: theme.textTheme.labelMedium,
                 ),
               ),

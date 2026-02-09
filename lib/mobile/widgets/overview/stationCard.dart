@@ -21,20 +21,25 @@ class StationCard extends StatelessWidget {
           color: data.status == "online" ? Colors.green : Colors.red,
         );
       } else {
-        leading = Icon(
-          Icons.circle,
-        );
+        leading = Icon(Icons.circle);
       }
     } else {
       leading = Icon(Icons.circle_outlined);
     }
+    final int displayBalance =
+        (data.currentBalance ?? 0) < 0 ? 0 : (data.currentBalance ?? 0);
 
     return Card(
       child: ExpansionTile(
-        title: Text("${context.tr('post')}: ${data.name} | ${context.tr('balance')}: ${data.currentBalance ?? "-"}"),
+        title: Text(
+          "${context.tr('post')}: ${data.name} | ${context.tr('balance')}: $displayBalance",
+        ),
+
         subtitle: Row(
           children: [
-            Text("${context.tr('program')}: ${data.hash != null ? data.currentProgramName ?? "${context.tr('waiting_for_the_customer')}" : "-"} "),
+            Text(
+              "${context.tr('program')}: ${data.hash != null ? data.currentProgramName ?? "${context.tr('waiting_for_the_customer')}" : "-"} ",
+            ),
           ],
         ),
         leading: leading,
@@ -62,9 +67,9 @@ class StationCard extends StatelessWidget {
                 onPressed: onPressed,
                 icon: Icon(Icons.settings_outlined),
                 label: Text(context.tr('management')),
-              )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

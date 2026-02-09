@@ -114,6 +114,19 @@ class StationButton {
   String? programName;
 
   StationButton({required this.buttonID, this.programID, this.programName});
+
+  StationButton copyWith({
+    int? buttonID,
+    bool clearProgramID = false,
+    int? programID,
+    String? programName,
+  }) {
+    return StationButton(
+      buttonID: buttonID ?? this.buttonID,
+      programID: clearProgramID ? null : (programID ?? this.programID),
+      programName: programName ?? this.programName,
+    );
+  }
 }
 
 class StationMoneyReport {
@@ -284,7 +297,7 @@ enum WeekDay {
   String labelShort() {
     switch (this) {
       case WeekDay.monday:
-        return 'mo"'.tr();
+        return 'mo'.tr();
       case WeekDay.tuesday:
         return 'tu'.tr();
       case WeekDay.wednesday:
@@ -474,8 +487,9 @@ class StationConfig {
   String? name;
   String? hash;
   RelayBoard relayBoard;
+  String? firmwareSkin;
 
-  StationConfig({required this.id, this.preflightSec, this.name, this.hash, required this.relayBoard});
+  StationConfig({required this.id, this.preflightSec, this.name, this.hash, required this.relayBoard, this.firmwareSkin});
 
   StationConfig copyWith({
     int? id,
@@ -483,11 +497,13 @@ class StationConfig {
     String? name,
     String? hash,
     RelayBoard? relayBoard,
+    String? firmwareSkin,
   }) {
     return StationConfig(id: id ?? this.id, relayBoard: relayBoard ?? this.relayBoard)
       ..preflightSec = preflightSec ?? this.preflightSec
       ..name = name ?? this.name
-      ..hash = hash ?? this.hash;
+      ..hash = hash ?? this.hash
+      ..firmwareSkin = firmwareSkin ?? this.firmwareSkin;
   }
 }
 
@@ -541,7 +557,9 @@ enum TaxType {
   vAT110,
   vAT0,
   no,
-  vat120;
+  vat120,
+  vat105,
+  vat107;
 
   static TaxType fromString(String value) {
     switch (value) {
@@ -551,6 +569,10 @@ enum TaxType {
         return TaxType.vAT0;
       case "TAX_VAT120":
         return TaxType.vat120;
+      case "TAX_VAT105":
+        return TaxType.vat105;
+      case "TAX_VAT107":
+        return TaxType.vat107;
       default:
         return TaxType.no;
     }
@@ -567,6 +589,10 @@ enum TaxType {
         return "TAX_NO";
       case TaxType.vat120:
         return "TAX_VAT120";
+      case TaxType.vat105:
+        return "TAX_VAT105";
+      case TaxType.vat107:
+        return "TAX_VAT107";
     }
   }
 }
@@ -665,4 +691,19 @@ class BuildScript {
   int stationID;
   String name;
   List<String> commands;
+}
+
+class SkinInfo {
+  String name;
+  String? label;
+
+  SkinInfo({required this.name, this.label});
+}
+
+class SkinFileInfo {
+  String path;
+  String hash;
+  int size;
+
+  SkinFileInfo({required this.path, required this.hash, required this.size});
 }
