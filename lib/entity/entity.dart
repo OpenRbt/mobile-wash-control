@@ -699,3 +699,11 @@ class SkinInfo {
 
   SkinInfo({required this.name, this.label});
 }
+
+class SkinFileInfo {
+  String path;
+  String hash;
+  int size;
+
+  SkinFileInfo({required this.path, required this.hash, required this.size});
+}

@@ -73,7 +73,7 @@ enum SelectedPage {
       case SelectedPage.Scripts:
         return Icons.description_outlined;
       case SelectedPage.Skins:
-        return Icons.palette_outlined;
+        return Icons.color_lens;
       case SelectedPage.Updates:
         return Icons.download_outlined;
       case SelectedPage.Tasks:

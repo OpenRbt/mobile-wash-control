@@ -168,6 +168,12 @@ class _SkinsPageState extends State<SkinsPage> {
                           icon: Icon(Icons.delete_outline, color: Colors.red),
                           onPressed: () => _deleteSkin(repository, skin.name),
                         ),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/mobile/skins/edit', arguments: {
+                            PageArgCode.repository: repository,
+                            PageArgCode.skinName: skin.name,
+                          });
+                        },
                       ),
                     );
                   },

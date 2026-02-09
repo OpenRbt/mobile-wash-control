@@ -2835,4 +2835,87 @@ class LeaCentralRepository extends Repository {
       }
     }
   }
+
+  // --- Skin editor ---
+
+  @override
+  Future<List<entity.SkinFileInfo>> getSkinManifest(String name, {BuildContext? context}) async {
+    try {
+      final url = Uri.parse('${api.apiClient.basePath}/firmware/skin/$name/manifest');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((e) => entity.SkinFileInfo(
+          path: e['path'] ?? '',
+          hash: e['hash'] ?? '',
+          size: e['size'] ?? 0,
+        )).toList();
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+    return [];
+  }
+
+  @override
+  Future<List<int>> getSkinFile(String name, String path, {BuildContext? context}) async {
+    try {
+      final url = Uri.parse('${api.apiClient.basePath}/firmware/skin/$name/file').replace(
+        queryParameters: {'path': path},
+      );
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        return response.bodyBytes;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+    return [];
+  }
+
+  @override
+  Future<void> uploadSkinFile(String name, String path, List<int> bytes, {BuildContext? context}) async {
+    try {
+      final url = Uri.parse('${api.apiClient.basePath}/firmware/skin/$name/file').replace(
+        queryParameters: {'path': path},
+      );
+      final request = http.MultipartRequest('PUT', url);
+      request.files.add(http.MultipartFile.fromBytes('file', bytes, filename: path.split('/').last));
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      if (response.statusCode == 204) {
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getSuccessSnackBar(message: "File '$path' saved"),
+          );
+        }
+      } else {
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${response.statusCode}"),
+          );
+        }
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+  }
 }

@@ -166,4 +166,9 @@ abstract class Repository {
   Future<List<SkinInfo>> listSkins({BuildContext? context});
   Future<void> uploadSkin(String name, List<int> zipBytes, {BuildContext? context});
   Future<void> deleteSkin(String name, {BuildContext? context});
+
+  // Skin editor
+  Future<List<SkinFileInfo>> getSkinManifest(String name, {BuildContext? context});
+  Future<List<int>> getSkinFile(String name, String path, {BuildContext? context});
+  Future<void> uploadSkinFile(String name, String path, List<int> bytes, {BuildContext? context});
 }

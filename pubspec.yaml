@@ -38,6 +38,7 @@ dependencies:
   provider: ^6.1.1
   bloc: ^8.1.2
   file_picker: ^8.0.0
+  web: ^1.1.1
 
 
 # dependency_overrides:
