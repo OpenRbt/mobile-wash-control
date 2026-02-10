@@ -44,6 +44,7 @@ part 'model/arg_get_config_var.dart';
 part 'model/arg_get_level.dart';
 part 'model/arg_get_station_config_var.dart';
 part 'model/arg_get_station_config_var1.dart';
+part 'model/arg_list_station_config_var.dart';
 part 'model/arg_get_station_discounts.dart';
 part 'model/arg_load.dart';
 part 'model/arg_load_from_station.dart';

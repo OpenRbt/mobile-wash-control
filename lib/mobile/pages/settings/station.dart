@@ -46,6 +46,15 @@ class _StationPageState extends State<StationPage> {
 
   static final int maxButtons = 20;
 
+  ValueNotifier<Map<String, String>> _constantsConfig = ValueNotifier({});
+  ValueNotifier<Map<String, bool>> _boolConstantsConfig = ValueNotifier({});
+  ValueNotifier<Map<String, String>> _stringConstantsConfig = ValueNotifier({});
+
+  // Original values to track changes
+  Map<String, String> _origIntValues = {};
+  Map<String, bool> _origBoolValues = {};
+  Map<String, String> _origStringValues = {};
+
   void initState() {
     super.initState();
     _controllers["postName"] = TextEditingController();
@@ -66,6 +75,7 @@ class _StationPageState extends State<StationPage> {
       _getCardReaderConfig(repository, id);
       _getStationButtonsConfig(repository, id);
       _loadSkins(repository);
+      _loadConstants(repository, id);
     });
   }
 
@@ -78,6 +88,9 @@ class _StationPageState extends State<StationPage> {
 
     _config.dispose();
     _cardReaderConfig.dispose();
+    _constantsConfig.dispose();
+    _boolConstantsConfig.dispose();
+    _stringConstantsConfig.dispose();
 
     super.dispose();
   }
@@ -117,6 +130,79 @@ class _StationPageState extends State<StationPage> {
         _availableSkins = skins;
       });
     } catch (_) {}
+  }
+
+  Future<void> _loadConstants(Repository repository, int id) async {
+    // int
+    final vars = await repository.listStationConfigVarInt(id, context: context);
+    if (vars != null) {
+      final oldKeys = _constantsConfig.value.keys.toSet();
+      for (var key in oldKeys) {
+        if (!vars.containsKey(key)) {
+          _controllers["const_$key"]?.dispose();
+          _controllers.remove("const_$key");
+        }
+      }
+      for (var entry in vars.entries) {
+        final ctrlKey = "const_${entry.key}";
+        if (!_controllers.containsKey(ctrlKey)) {
+          _controllers[ctrlKey] = TextEditingController();
+        }
+        _controllers[ctrlKey]!.text = entry.value;
+      }
+      _constantsConfig.value = vars;
+      _origIntValues = Map.from(vars);
+    }
+
+    // bool
+    final boolVars = await repository.listStationConfigVarBool(id, context: context);
+    if (boolVars != null) {
+      _boolConstantsConfig.value = boolVars;
+      _origBoolValues = Map.from(boolVars);
+    }
+
+    // string
+    final stringVars = await repository.listStationConfigVarString(id, context: context);
+    if (stringVars != null) {
+      for (var key in _stringConstantsConfig.value.keys) {
+        if (!stringVars.containsKey(key)) {
+          _controllers["strconst_$key"]?.dispose();
+          _controllers.remove("strconst_$key");
+        }
+      }
+      for (var entry in stringVars.entries) {
+        final ctrlKey = "strconst_${entry.key}";
+        if (!_controllers.containsKey(ctrlKey)) {
+          _controllers[ctrlKey] = TextEditingController();
+        }
+        _controllers[ctrlKey]!.text = entry.value;
+      }
+      _stringConstantsConfig.value = stringVars;
+      _origStringValues = Map.from(stringVars);
+    }
+  }
+
+  Future<void> _saveConstants(Repository repository, int id) async {
+    // int — only changed
+    for (var key in _constantsConfig.value.keys) {
+      final text = _controllers["const_$key"]?.text ?? "";
+      if (text == _origIntValues[key]) continue;
+      final val = int.tryParse(text);
+      if (val != null) {
+        await repository.setStationConfigVarInt(id, key, val, context: context);
+      }
+    }
+    // bool — only changed
+    for (var entry in _boolConstantsConfig.value.entries) {
+      if (entry.value == _origBoolValues[entry.key]) continue;
+      await repository.setStationConfigVarBool(id, entry.key, entry.value, context: context);
+    }
+    // string — only changed
+    for (var key in _stringConstantsConfig.value.keys) {
+      final text = _controllers["strconst_$key"]?.text ?? "";
+      if (text == _origStringValues[key]) continue;
+      await repository.setStationConfigVarString(id, key, text, context: context);
+    }
   }
 
   Future<void> _getStationButtonsConfig(Repository repository, int id) async {
@@ -563,6 +649,179 @@ class _StationPageState extends State<StationPage> {
                         child: Text("${context.tr('get_current_configuration')}"),
                       ),
                     )
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Card(
+            child: ExpansionTile(
+              title: Text(
+                context.tr('station_constants'),
+                style: theme.textTheme.titleLarge,
+              ),
+              childrenPadding: EdgeInsets.all(8),
+              children: [
+                ValueListenableBuilder(
+                  valueListenable: _constantsConfig,
+                  builder: (BuildContext context, Map<String, String> vars, Widget? child) {
+                    if (vars.isEmpty) {
+                      return Text(context.tr('no_data'));
+                    }
+                    return Table(
+                      border: TableBorder.all(color: theme.dividerColor),
+                      columnWidths: const {
+                        0: FlexColumnWidth(2),
+                        1: FlexColumnWidth(1),
+                      },
+                      children: [
+                        TableRow(
+                          decoration: BoxDecoration(color: theme.colorScheme.surfaceVariant),
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(context.tr('name'), style: theme.textTheme.titleSmall),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(context.tr('value'), style: theme.textTheme.titleSmall),
+                            ),
+                          ],
+                        ),
+                        ...vars.keys.map((key) {
+                          return TableRow(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(key, style: theme.textTheme.bodyMedium),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: TextFormField(
+                                  controller: _controllers["const_$key"],
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    FilteringTextInputFormatter.singleLineFormatter,
+                                  ],
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(vertical: 8),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      ],
+                    );
+                  },
+                ),
+                SizedBox(height: 8),
+                // Bool constants
+                ValueListenableBuilder(
+                  valueListenable: _boolConstantsConfig,
+                  builder: (BuildContext context, Map<String, bool> boolVars, Widget? child) {
+                    if (boolVars.isEmpty) return SizedBox.shrink();
+                    return Table(
+                      border: TableBorder.all(color: theme.dividerColor),
+                      columnWidths: const {
+                        0: FlexColumnWidth(2),
+                        1: FlexColumnWidth(1),
+                      },
+                      children: [
+                        ...boolVars.entries.map((entry) {
+                          return TableRow(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(entry.key, style: theme.textTheme.bodyMedium),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: Switch(
+                                  value: entry.value,
+                                  onChanged: (val) {
+                                    final updated = Map<String, bool>.from(_boolConstantsConfig.value);
+                                    updated[entry.key] = val;
+                                    _boolConstantsConfig.value = updated;
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      ],
+                    );
+                  },
+                ),
+                SizedBox(height: 8),
+                // String constants
+                ValueListenableBuilder(
+                  valueListenable: _stringConstantsConfig,
+                  builder: (BuildContext context, Map<String, String> strVars, Widget? child) {
+                    if (strVars.isEmpty) return SizedBox.shrink();
+                    return Table(
+                      border: TableBorder.all(color: theme.dividerColor),
+                      columnWidths: const {
+                        0: FlexColumnWidth(2),
+                        1: FlexColumnWidth(1),
+                      },
+                      children: [
+                        ...strVars.keys.map((key) {
+                          return TableRow(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(key, style: theme.textTheme.bodyMedium),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: TextFormField(
+                                  controller: _controllers["strconst_$key"],
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(vertical: 8),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      ],
+                    );
+                  },
+                ),
+                Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ProgressTextButton(
+                      onPressed: () async {
+                        await _saveConstants(repository, id);
+                      },
+                      child: Text("${context.tr('save')}"),
+                    ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 1,
+                      child: ProgressTextButton(
+                        onPressed: () async {
+                          await _loadConstants(repository, id);
+                        },
+                        child: Text("${context.tr('get_current_configuration')}"),
+                      ),
+                    ),
                   ],
                 ),
               ],

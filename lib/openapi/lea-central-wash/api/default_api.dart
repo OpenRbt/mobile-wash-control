@@ -1440,6 +1440,103 @@ class DefaultApi {
     return null;
   }
 
+  /// Performs an HTTP 'POST /list-station-config-var-int' operation and returns the [Response].
+  Future<Response> listStationConfigVarIntWithHttpInfo(ArgListStationConfigVar args,) async {
+    final path = r'/list-station-config-var-int';
+    Object? postBody = args;
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+    const contentTypes = <String>['application/json'];
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<List<StationConfigVarInt>?> listStationConfigVarInt(ArgListStationConfigVar args,) async {
+    final response = await listStationConfigVarIntWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<StationConfigVarInt>',) as List)
+          .cast<StationConfigVarInt>()
+          .toList();
+    }
+    return null;
+  }
+
+  Future<Response> listStationConfigVarBoolWithHttpInfo(ArgListStationConfigVar args,) async {
+    final path = r'/list-station-config-var-bool';
+    Object? postBody = args;
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+    const contentTypes = <String>['application/json'];
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<List<StationConfigVarBool>?> listStationConfigVarBool(ArgListStationConfigVar args,) async {
+    final response = await listStationConfigVarBoolWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<StationConfigVarBool>',) as List)
+          .cast<StationConfigVarBool>()
+          .toList();
+    }
+    return null;
+  }
+
+  Future<Response> listStationConfigVarStringWithHttpInfo(ArgListStationConfigVar args,) async {
+    final path = r'/list-station-config-var-string';
+    Object? postBody = args;
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+    const contentTypes = <String>['application/json'];
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<List<StationConfigVarString>?> listStationConfigVarString(ArgListStationConfigVar args,) async {
+    final response = await listStationConfigVarStringWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      final responseBody = await _decodeBodyBytes(response);
+      return (await apiClient.deserializeAsync(responseBody, 'List<StationConfigVarString>',) as List)
+          .cast<StationConfigVarString>()
+          .toList();
+    }
+    return null;
+  }
+
   /// Performs an HTTP 'POST /get-station-config-var-string' operation and returns the [Response].
   /// Parameters:
   ///

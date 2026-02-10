@@ -475,6 +475,17 @@ class _SkinEditorPageState extends State<SkinEditorPage> {
                                   Expanded(
                                     child: Text(id, style: TextStyle(fontSize: 13, fontWeight: isActive ? FontWeight.bold : FontWeight.normal)),
                                   ),
+                                  if (isActive)
+                                    SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: IconButton(
+                                        icon: const Icon(Icons.add, size: 16),
+                                        padding: EdgeInsets.zero,
+                                        tooltip: 'Add component',
+                                        onPressed: () => _showAddComponentDialog(),
+                                      ),
+                                    ),
                                 ],
                               ),
                             ),
@@ -484,40 +495,106 @@ class _SkinEditorPageState extends State<SkinEditorPage> {
                         // Component sub-tree — use cache so trees stay open across screen switches
                         final cachedItems = _screenItemsCache[src];
                         if (isExpanded && cachedItems != null) {
-                          for (final item in cachedItems) {
-                            if (item is! Map<String, dynamic>) continue;
-                            final itemId = item['id']?.toString() ?? '';
-                            final itemType = (item['type'] ?? '').toString();
-                            final isItemSelected = isActive && _selectedItemId == itemId;
+                          if (isActive) {
+                            // Active screen: reorderable list with drag handles and delete buttons
                             widgets.add(
-                              InkWell(
-                                onTap: () {
-                                  if (!isActive) _selectScreen(s);
-                                  setState(() => _selectedItemId = itemId);
+                              ReorderableListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                buildDefaultDragHandles: false,
+                                itemCount: cachedItems.length,
+                                onReorder: (oldIndex, newIndex) {
+                                  setState(() {
+                                    if (newIndex > oldIndex) newIndex--;
+                                    final moved = cachedItems.removeAt(oldIndex);
+                                    cachedItems.insert(newIndex, moved);
+                                    _screenDirty = true;
+                                  });
                                 },
-                                child: Container(
-                                  color: isItemSelected ? Colors.yellow.withValues(alpha: 0.2) : null,
-                                  padding: const EdgeInsets.only(left: 44, top: 3, bottom: 3, right: 8),
-                                  child: Row(
-                                    children: [
-                                      Icon(_iconForItemType(itemType), size: 14, color: isItemSelected ? Colors.orange.shade700 : Colors.grey.shade600),
-                                      const SizedBox(width: 6),
-                                      Expanded(
-                                        child: Text(
-                                          '$itemId ($itemType)',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: isItemSelected ? FontWeight.bold : FontWeight.normal,
-                                            color: isItemSelected ? Colors.orange.shade900 : null,
+                                itemBuilder: (ctx, i) {
+                                  final item = cachedItems[i];
+                                  if (item is! Map<String, dynamic>) {
+                                    return SizedBox.shrink(key: ValueKey('item-skip-$i'));
+                                  }
+                                  final itemId = item['id']?.toString() ?? '';
+                                  final itemType = (item['type'] ?? '').toString();
+                                  final isItemSelected = _selectedItemId == itemId;
+                                  return InkWell(
+                                    key: ValueKey('item-$itemId-$i'),
+                                    onTap: () {
+                                      setState(() => _selectedItemId = itemId);
+                                    },
+                                    child: Container(
+                                      color: isItemSelected ? Colors.yellow.withValues(alpha: 0.2) : null,
+                                      padding: const EdgeInsets.only(left: 28, top: 3, bottom: 3, right: 0),
+                                      child: Row(
+                                        children: [
+                                          ReorderableDragStartListener(
+                                            index: i,
+                                            child: Icon(Icons.drag_handle, size: 14, color: Colors.grey.shade400),
                                           ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                                          const SizedBox(width: 4),
+                                          Icon(_iconForItemType(itemType), size: 14, color: isItemSelected ? Colors.orange.shade700 : Colors.grey.shade600),
+                                          const SizedBox(width: 6),
+                                          Expanded(
+                                            child: Text(
+                                              '$itemId ($itemType)',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: isItemSelected ? FontWeight.bold : FontWeight.normal,
+                                                color: isItemSelected ? Colors.orange.shade900 : null,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 24,
+                                            height: 24,
+                                            child: IconButton(
+                                              icon: Icon(Icons.close, size: 14, color: Colors.red.shade300),
+                                              padding: EdgeInsets.zero,
+                                              tooltip: 'Delete',
+                                              onPressed: () => _confirmDeleteItem(itemId),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
                             );
+                          } else {
+                            // Non-active screen: read-only plain list
+                            for (final item in cachedItems) {
+                              if (item is! Map<String, dynamic>) continue;
+                              final itemId = item['id']?.toString() ?? '';
+                              final itemType = (item['type'] ?? '').toString();
+                              widgets.add(
+                                InkWell(
+                                  onTap: () {
+                                    _selectScreen(s);
+                                    setState(() => _selectedItemId = itemId);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.only(left: 44, top: 3, bottom: 3, right: 8),
+                                    child: Row(
+                                      children: [
+                                        Icon(_iconForItemType(itemType), size: 14, color: Colors.grey.shade600),
+                                        const SizedBox(width: 6),
+                                        Expanded(
+                                          child: Text(
+                                            '$itemId ($itemType)',
+                                            style: const TextStyle(fontSize: 12),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
                           }
                         }
 
@@ -637,6 +714,149 @@ class _SkinEditorPageState extends State<SkinEditorPage> {
       }
     }
     return widgets;
+  }
+
+  // --- Add / Delete component ---
+
+  void _showAddComponentDialog() {
+    String selectedType = 'image';
+    String idText = '';
+    final idController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            final existingIds = (_screenItems ?? [])
+                .whereType<Map<String, dynamic>>()
+                .map((i) => i['id']?.toString() ?? '')
+                .toSet();
+            final isDuplicate = existingIds.contains(idText);
+            final isValid = idText.isNotEmpty && !isDuplicate;
+
+            return AlertDialog(
+              title: const Text('Add component'),
+              content: SizedBox(
+                width: 320,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField<String>(
+                      value: selectedType,
+                      decoration: const InputDecoration(
+                        labelText: 'Type',
+                        isDense: true,
+                        border: OutlineInputBorder(),
+                      ),
+                      items: const [
+                        DropdownMenuItem(value: 'image', child: Text('image')),
+                        DropdownMenuItem(value: 'image_array', child: Text('image_array')),
+                        DropdownMenuItem(value: 'digits', child: Text('digits')),
+                        DropdownMenuItem(value: 'text', child: Text('text')),
+                        DropdownMenuItem(value: 'animation', child: Text('animation')),
+                      ],
+                      onChanged: (v) {
+                        if (v != null) setDialogState(() => selectedType = v);
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: idController,
+                      decoration: InputDecoration(
+                        labelText: 'ID',
+                        isDense: true,
+                        border: const OutlineInputBorder(),
+                        errorText: isDuplicate ? 'ID already exists' : null,
+                      ),
+                      onChanged: (v) => setDialogState(() => idText = v.trim()),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: isValid
+                      ? () {
+                          Navigator.of(ctx).pop();
+                          _addComponent(selectedType, idText);
+                        }
+                      : null,
+                  child: const Text('Add'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _addComponent(String type, String id) {
+    final item = <String, dynamic>{
+      'id': id,
+      'type': type,
+      'position': '0;0',
+      'size': '100;100',
+      'visible': 'true',
+    };
+    switch (type) {
+      case 'image':
+        item['src'] = '';
+        break;
+      case 'image_array':
+        item['sources'] = <dynamic>[];
+        item['length'] = '0';
+        item['index'] = '0';
+        break;
+      case 'digits':
+        item['font'] = '';
+        item['symbol_size'] = '10;10';
+        item['length'] = '1';
+        item['padding'] = '0';
+        break;
+    }
+    setState(() {
+      _screenItems ??= [];
+      _screenItems!.add(item);
+      if (_selectedPath != null) {
+        _screenItemsCache[_selectedPath!] = _screenItems!;
+      }
+      _screenDirty = true;
+      _selectedItemId = id;
+    });
+  }
+
+  Future<void> _confirmDeleteItem(String itemId) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete item'),
+        content: Text('Delete "$itemId"?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      setState(() {
+        _screenItems?.removeWhere((i) => i is Map<String, dynamic> && i['id'] == itemId);
+        if (_selectedPath != null && _screenItems != null) {
+          _screenItemsCache[_selectedPath!] = _screenItems!;
+        }
+        _screenDirty = true;
+        if (_selectedItemId == itemId) _selectedItemId = null;
+      });
+    }
   }
 
   // --- Center panel ---

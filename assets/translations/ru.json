@@ -140,6 +140,8 @@
     "send": "Отправить",
     "add_service_money": "Пополнить",
     "cancel_amount": "Обнулить",
+    "balance_reset": "Баланс обнулён",
+    "balance_reset_confirm": "Вы уверены, что хотите обнулить баланс?",
     "amount_must_be_greater_than_zero": "Сумма должна быть больше 0",
     "balance_must_be_greater_than_zero": "Для списания баланс должен быть больше 0",
     "post_management": "Управление постом",
@@ -351,5 +353,7 @@
     "one_of_the_parameters_of_the_passed_config_was_not_found": "не найден один из параметров переданного конфига",
     "the_program_is_running": "Программа запущена",
     "full_statistics": "Общая статистика",
-    "part_statistics": "Частичная статистика"
+    "part_statistics": "Частичная статистика",
+    "station_constants": "Константы станции",
+    "value": "Значение"
 }

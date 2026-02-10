@@ -23,7 +23,17 @@ COPY . .
 RUN flutter pub run easy_localization:generate -S assets/translations/
 RUN flutter pub run easy_localization:generate -f keys -o locale_keys.g.dart -S assets/translations/
 
-RUN flutter build web --release
+RUN flutter build web --release --no-tree-shake-icons
+
+# Cache-bust fonts: rename with version suffix so browsers re-fetch
+RUN cd build/web/assets/fonts && \
+    for f in *.otf *.ttf; do \
+      [ -f "$f" ] || continue; \
+      base="${f%.*}"; ext="${f##*.}"; \
+      mv "$f" "${base}_v14.${ext}"; \
+    done && \
+    cd /app/build/web/assets && \
+    sed -i 's|MaterialIcons-Regular.otf|MaterialIcons-Regular_v14.otf|g' FontManifest.json
 
 FROM nginx:1.27.5-alpine-slim
 

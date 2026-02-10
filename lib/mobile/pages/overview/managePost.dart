@@ -257,6 +257,26 @@ class _ManagePostPageState extends State<ManagePostPage>
 
                                 ProgressButton(
                                   onPressed: () async {
+                                    final confirmed = await showDialog<bool>(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                        title: Text(context.tr('cancel_amount')),
+                                        content: Text(context.tr('balance_reset_confirm')),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.of(ctx).pop(false),
+                                            child: Text(context.tr('no')),
+                                          ),
+                                          TextButton(
+                                            onPressed: () => Navigator.of(ctx).pop(true),
+                                            child: Text(context.tr('yes')),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+
+                                    if (confirmed != true) return;
+
                                     const int cancelValue = -1000000;
 
                                     await repository.addServiceMoney(

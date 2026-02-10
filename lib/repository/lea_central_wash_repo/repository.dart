@@ -1910,6 +1910,251 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
+  Future<int?> getStationConfigVarInt(int stationID, String name, {BuildContext? context}) async {
+    try {
+      var args = ArgGetStationConfigVar1(name: name, stationID: stationID);
+      final response = await api.getStationConfigVarInt(args);
+      return response?.value;
+    } on ApiException catch (e) {
+      switch (e.code) {
+        case HttpStatus.notFound:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBars.getWarningSnackBar(
+                message: "${context.tr('config_settings_not_found')} - $name",
+              ),
+            );
+          }
+          break;
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBars.getErrorSnackBar(
+                message:
+                    "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('config_settings')} - $name, ${context.tr('error')}: ${e.code}",
+              ),
+            );
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<void> setStationConfigVarInt(
+    int stationID,
+    String name,
+    int value, {
+    BuildContext? context,
+  }) async {
+    try {
+      var args = StationConfigVarInt(name: name, value: value, stationID: stationID);
+      await api.setStationConfigVarInt(args);
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getSuccessSnackBar(
+            message:
+                "${context.tr('config_settings')} $name ${context.tr('set_successfully')}",
+          ),
+        );
+      }
+    } on ApiException catch (e) {
+      switch (e.code) {
+        default:
+          if (context != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBars.getErrorSnackBar(
+                message:
+                    "${context.tr('failed')} ${context.tr('to_set_config_settings')} - $name, ${context.tr('error')}: ${e.code}",
+              ),
+            );
+          }
+          break;
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  Future<Map<String, String>?> listStationConfigVarInt(int stationID, {BuildContext? context}) async {
+    try {
+      var args = ArgListStationConfigVar(stationID: stationID);
+      final response = await api.listStationConfigVarInt(args);
+      if (response != null) {
+        return {for (var v in response) v.name!: v.value!.toString()};
+      }
+    } on ApiException catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message:
+                "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('config_settings')}, ${context.tr('error')}: ${e.code}",
+          ),
+        );
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<bool?> getStationConfigVarBool(int stationID, String name, {BuildContext? context}) async {
+    try {
+      var args = ArgGetStationConfigVar1(name: name, stationID: stationID);
+      final response = await api.getStationConfigVarBool(args);
+      return response?.value;
+    } on ApiException catch (e) {
+      if (e.code == HttpStatus.notFound) return null;
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('config_settings')} - $name, ${context.tr('error')}: ${e.code}"),
+        );
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"),
+        );
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<void> setStationConfigVarBool(int stationID, String name, bool value, {BuildContext? context}) async {
+    try {
+      var args = StationConfigVarBool(name: name, value: value, stationID: stationID);
+      await api.setStationConfigVarBool(args);
+    } on ApiException catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_set_config_settings')} - $name, ${context.tr('error')}: ${e.code}"),
+        );
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"),
+        );
+      }
+    }
+  }
+
+  @override
+  Future<Map<String, bool>?> listStationConfigVarBool(int stationID, {BuildContext? context}) async {
+    try {
+      var args = ArgListStationConfigVar(stationID: stationID);
+      final response = await api.listStationConfigVarBool(args);
+      if (response != null) {
+        return {for (var v in response) v.name!: v.value!};
+      }
+    } on ApiException catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('config_settings')}, ${context.tr('error')}: ${e.code}"),
+        );
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"),
+        );
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<String?> getStationConfigVarString(int stationID, String name, {BuildContext? context}) async {
+    try {
+      var args = ArgGetStationConfigVar1(name: name, stationID: stationID);
+      final response = await api.getStationConfigVarString(args);
+      return response?.value;
+    } on ApiException catch (e) {
+      if (e.code == HttpStatus.notFound) return null;
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('config_settings')} - $name, ${context.tr('error')}: ${e.code}"),
+        );
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"),
+        );
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<void> setStationConfigVarString(int stationID, String name, String value, {BuildContext? context}) async {
+    try {
+      var args = StationConfigVarString(name: name, value: value, stationID: stationID);
+      await api.setStationConfigVarString(args);
+    } on ApiException catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_set_config_settings')} - $name, ${context.tr('error')}: ${e.code}"),
+        );
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"),
+        );
+      }
+    }
+  }
+
+  @override
+  Future<Map<String, String>?> listStationConfigVarString(int stationID, {BuildContext? context}) async {
+    try {
+      var args = ArgListStationConfigVar(stationID: stationID);
+      final response = await api.listStationConfigVarString(args);
+      if (response != null) {
+        return {for (var v in response) v.name!: v.value!};
+      }
+    } on ApiException catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('failed')} ${context.tr('to_get')} ${context.tr('config_settings')}, ${context.tr('error')}: ${e.code}"),
+        );
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(message: "${context.tr('an_unknown_error_has_occurred')}: $e"),
+        );
+      }
+    }
+    return null;
+  }
+
+  @override
   Future<String?> getConfigVarString(String name) async {
     var args = ArgGetConfigVar(name: name);
     final response = await api.getConfigVarString(args);

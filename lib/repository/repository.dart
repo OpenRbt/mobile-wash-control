@@ -111,6 +111,18 @@ abstract class Repository {
   Future<void> deleteConfigVarString(String name, String value);
   Future<void> setConfigVarBool(String name, bool value);
 
+  Future<int?> getStationConfigVarInt(int stationID, String name, {BuildContext? context});
+  Future<void> setStationConfigVarInt(int stationID, String name, int value, {BuildContext? context});
+  Future<Map<String, String>?> listStationConfigVarInt(int stationID, {BuildContext? context});
+
+  Future<bool?> getStationConfigVarBool(int stationID, String name, {BuildContext? context});
+  Future<void> setStationConfigVarBool(int stationID, String name, bool value, {BuildContext? context});
+  Future<Map<String, bool>?> listStationConfigVarBool(int stationID, {BuildContext? context});
+
+  Future<String?> getStationConfigVarString(int stationID, String name, {BuildContext? context});
+  Future<void> setStationConfigVarString(int stationID, String name, String value, {BuildContext? context});
+  Future<Map<String, String>?> listStationConfigVarString(int stationID, {BuildContext? context});
+
   Future<String?> getStationTemperature(int id, {BuildContext? context});
 
   Future<StationConfig?> getStationConfig(int id, {BuildContext? context});
