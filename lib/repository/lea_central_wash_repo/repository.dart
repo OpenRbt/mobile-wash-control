@@ -3081,6 +3081,38 @@ class LeaCentralRepository extends Repository {
     }
   }
 
+  @override
+  Future<List<int>> downloadSkin(String name, {BuildContext? context}) async {
+    try {
+      final url = Uri.parse('${api.apiClient.basePath}/firmware/skin/$name/download');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        return response.bodyBytes;
+      } else if (response.statusCode == 404) {
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getErrorSnackBar(message: "Skin '$name' not found"),
+          );
+        }
+      } else {
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getErrorSnackBar(message: "${context.tr('error')}: ${response.statusCode}"),
+          );
+        }
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+    return [];
+  }
+
   // --- Skin editor ---
 
   @override

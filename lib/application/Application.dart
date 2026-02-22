@@ -22,15 +22,8 @@ import 'package:mobile_wash_control/mobile/pages/users/editUser.dart';
 
 import '../mobile/pages/bonus_status.dart';
 import '../mobile/pages/sbp_status.dart';
-import '../mobile/pages/script_station.dart';
-import '../mobile/pages/scripts_page.dart';
 import '../mobile/pages/skins.dart';
 import '../mobile/pages/skin_editor.dart';
-
-//BLoC architecture pages
-import 'package:mobile_wash_control/presentation/pages/tasks_page.dart';
-import 'package:mobile_wash_control/presentation/pages/updates_station_page.dart';
-import 'package:mobile_wash_control/presentation/pages/updates_page.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -80,17 +73,8 @@ class Application extends StatelessWidget {
         "/mobile/discounts": (context) => DiscountsPage(),
         "/mobile/discounts/edit": (context) => EditDiscountPage(),
 
-        "/mobile/scripts": (context) => ScriptsPage(),
-        "/mobile/scripts/post": (context) => ScriptStationPage(),
         "/mobile/skins": (context) => SkinsPage(),
         "/mobile/skins/edit": (context) => SkinEditorPage(),
-
-        //BLoC architecture pages
-        //"/mobile/services": (context) => ServicesPage(),
-        "/mobile/updates": (context) => UpdatesPage(),
-        "/mobile/updates/post": (context) => UpdatesStationPage(),
-
-        "/mobile/tasks": (context) => TasksPage(),
       },
     );
   }

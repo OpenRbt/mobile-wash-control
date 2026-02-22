@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_wash_control/utils/utils.dart';
+import 'package:mobile_wash_control/utils/download.dart' as dl;
 
 import '../../entity/entity.dart';
 import '../../entity/vo/page_args_codes.dart';
@@ -114,6 +116,17 @@ class _SkinsPageState extends State<SkinsPage> {
     await _loadSkins(repository);
   }
 
+  Future<void> _downloadSkin(Repository repository, String name) async {
+    final bytes = await repository.downloadSkin(name, context: context);
+    if (bytes.isEmpty) return;
+    await dl.downloadBytes(Uint8List.fromList(bytes), '$name.zip');
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("'$name.zip' downloaded")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final initialArgs = ModalRoute.of(context)?.settings.arguments;
@@ -164,9 +177,18 @@ class _SkinsPageState extends State<SkinsPage> {
                           style: theme.textTheme.titleMedium,
                         ),
                         subtitle: skin.label != null ? Text(skin.label!) : null,
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete_outline, color: Colors.red),
-                          onPressed: () => _deleteSkin(repository, skin.name),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.download),
+                              onPressed: () => _downloadSkin(repository, skin.name),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete_outline, color: Colors.red),
+                              onPressed: () => _deleteSkin(repository, skin.name),
+                            ),
+                          ],
                         ),
                         onTap: () {
                           Navigator.pushNamed(context, '/mobile/skins/edit', arguments: {

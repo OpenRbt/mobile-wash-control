@@ -129,10 +129,7 @@ class WashNavigationDrawer extends StatelessWidget {
     SelectedPage.Accounts,
     SelectedPage.Statistics,
     SelectedPage.Motors,
-    SelectedPage.Scripts,
     SelectedPage.Skins,
-    SelectedPage.Updates,
-    SelectedPage.Tasks,
     SelectedPage.Exit,
   ];
 
