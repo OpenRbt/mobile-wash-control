@@ -28,7 +28,7 @@ abstract class Repository {
   Future<void> saveProgram(Program program, {BuildContext? context});
   Program? getCurrentProgram(int id);
 
-  Future<void> addServiceMoney(int id, int amount, {BuildContext? context, bool showMessage});
+  Future<bool> addServiceMoney(int id, int amount, {BuildContext? context, bool showMessage});
   Future<String?> getCommonTemperature({BuildContext? context});
   Future<List<User>?> getUsers();
   Future<String?> getServerInfo({BuildContext? context});

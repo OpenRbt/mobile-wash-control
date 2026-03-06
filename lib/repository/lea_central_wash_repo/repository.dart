@@ -456,7 +456,7 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
-  Future<void> addServiceMoney(
+  Future<bool> addServiceMoney(
     int id,
     int amount, {
     BuildContext? context,
@@ -465,27 +465,29 @@ class LeaCentralRepository extends Repository {
     try {
       final station = await getStation(id);
       if (station?.hash == null || station!.hash!.isEmpty) {
-        return;
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBars.getErrorSnackBar(
+              message:
+                  "${context.tr('post')} $id, ${context.tr('error')}: hash not found",
+            ),
+          );
+        }
+        return false;
       }
 
       final args = ArgAddServiceAmount(amount: amount, hash: station.hash!);
 
       await api.addServiceAmount(args);
 
-      if (context != null && showMessage) {
-        String message;
-
-        if (amount < 0) {
-          return;
-        } else {
-          message =
-              "${context.tr('credited')} $amount ${context.tr('to_post')} $id";
-        }
-
+      if (context != null && showMessage && amount >= 0) {
+        final message =
+            "${context.tr('credited')} $amount ${context.tr('to_post')} $id";
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBars.getSuccessSnackBar(message: message));
       }
+      return true;
     } on ApiException catch (e) {
       if (context != null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -495,6 +497,7 @@ class LeaCentralRepository extends Repository {
           ),
         );
       }
+      return false;
     } catch (e) {
       if (context != null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -503,6 +506,7 @@ class LeaCentralRepository extends Repository {
           ),
         );
       }
+      return false;
     }
   }
 

@@ -279,19 +279,21 @@ class _ManagePostPageState extends State<ManagePostPage>
 
                                     const int cancelValue = -1000000;
 
-                                    await repository.addServiceMoney(
+                                    final success = await repository.addServiceMoney(
                                       stationID,
                                       cancelValue,
                                       context: context,
                                     );
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          context.tr('balance_reset'),
+                                    if (success) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            context.tr('balance_reset'),
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    }
 
                                     setState(() {});
                                   },
