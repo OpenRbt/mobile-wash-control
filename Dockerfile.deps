@@ -1,0 +1,5 @@
+FROM instrumentisto/flutter:3.41
+
+WORKDIR /app
+COPY pubspec.* ./
+RUN flutter pub get

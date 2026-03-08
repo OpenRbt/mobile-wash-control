@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:js' as js;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ enum SelectedPage {
   Skins,
   Updates,
   Tasks,
+  Monitoring,
   Exit,
   None;
 
@@ -47,6 +49,8 @@ enum SelectedPage {
         return 'updates'.tr();
       case SelectedPage.Tasks:
         return 'updates_tasks'.tr();
+      case SelectedPage.Monitoring:
+        return 'Monitoring';
       case SelectedPage.Exit:
         return 'exit'.tr();
       case SelectedPage.None:
@@ -78,6 +82,8 @@ enum SelectedPage {
         return Icons.download_outlined;
       case SelectedPage.Tasks:
         return Icons.task_outlined;
+      case SelectedPage.Monitoring:
+        return Icons.monitor_heart_outlined;
       case SelectedPage.Exit:
         return Icons.exit_to_app_outlined;
       default:
@@ -109,6 +115,8 @@ enum SelectedPage {
         return "/mobile/updates";
       case SelectedPage.Tasks:
         return "/mobile/tasks";
+      case SelectedPage.Monitoring:
+        return "";
       case SelectedPage.Exit:
         return "";
       default:
@@ -130,6 +138,7 @@ class WashNavigationDrawer extends StatelessWidget {
     SelectedPage.Statistics,
     SelectedPage.Motors,
     SelectedPage.Skins,
+    SelectedPage.Monitoring,
     SelectedPage.Exit,
   ];
 
@@ -242,6 +251,15 @@ class WashNavigationDrawer extends StatelessWidget {
                     if (_availablePages[index] == SelectedPage.Exit) {
                       Navigator.of(context).pop();
                       Navigator.pop(context);
+                      return;
+                    }
+
+                    if (_availablePages[index] == SelectedPage.Monitoring) {
+                      js.context.callMethod('open', [
+                        Uri.base.replace(port: 3000, path: '/d/openrbt-wash/openrbt-wash-station').toString(),
+                        '_blank'
+                      ]);
+                      Navigator.of(context).pop();
                       return;
                     }
 

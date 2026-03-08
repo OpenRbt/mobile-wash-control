@@ -1,23 +1,8 @@
-FROM dart:3.8.3-sdk AS build
-
-ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
-
-RUN apt-get update && apt-get install -y \
-  curl unzip xz-utils zip git && \
-  rm -rf /var/lib/apt/lists/* && \
-  git clone https://github.com/flutter/flutter.git -b stable /usr/local/flutter && \
-  flutter config --enable-web
-
-#RUN useradd -m flutter && echo "flutter ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-#USER flutter
-#WORKDIR /home/flutter
-
+FROM instrumentisto/flutter:3.41 AS build
 
 WORKDIR /app
 COPY pubspec.* ./
-
-RUN flutter pub cache repair
-
+RUN flutter pub get
 COPY . .
 
 RUN flutter pub run easy_localization:generate -S assets/translations/
