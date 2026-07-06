@@ -2596,6 +2596,38 @@ class LeaCentralRepository extends Repository {
   }
 
   @override
+  Future<void> copyStationConfig(
+    int fromStationID,
+    int toStationID, {
+    bool copyButtons = true,
+    BuildContext? context,
+  }) async {
+    try {
+      await api.copyStationConfig(ArgCopyStationConfig(
+        fromStationID: fromStationID,
+        toStationID: toStationID,
+        copyButtons: copyButtons,
+      ));
+    } on ApiException catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('error')}: ${e.code}",
+          ),
+        );
+      }
+    } catch (e) {
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${context.tr('an_unknown_error_has_occurred')}: $e",
+          ),
+        );
+      }
+    }
+  }
+
+  @override
   Future<void> deleteDiscountCampaign(int id, {BuildContext? context}) async {
     try {
       final args = ArgDelAdvertisingCampagin(id: id);

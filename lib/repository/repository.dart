@@ -143,6 +143,13 @@ abstract class Repository {
     List<StationButton> buttons, {
     BuildContext? context,
   });
+
+  Future<void> copyStationConfig(
+    int fromStationID,
+    int toStationID, {
+    bool copyButtons = true,
+    BuildContext? context,
+  });
   Future<void> deleteDiscountCampaign(int id, {BuildContext? context});
 
   Future<KasseConfig?> getKasseConfig({BuildContext? context});

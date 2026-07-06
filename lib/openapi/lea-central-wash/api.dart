@@ -61,6 +61,7 @@ part 'model/arg_save.dart';
 part 'model/arg_save_if_not_exists.dart';
 part 'model/arg_set_bonuses.dart';
 part 'model/arg_set_station_button.dart';
+part 'model/arg_copy_station_config.dart';
 part 'model/arg_station_button.dart';
 part 'model/arg_station_by_hash.dart';
 part 'model/arg_station_program_by_hash.dart';
