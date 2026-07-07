@@ -840,6 +840,7 @@ class _StationPageState extends State<StationPage> {
                                 padding: EdgeInsets.symmetric(horizontal: 8),
                                 child: TextFormField(
                                   controller: _controllers["strconst_$key"],
+                                  maxLines: null,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     isDense: true,
