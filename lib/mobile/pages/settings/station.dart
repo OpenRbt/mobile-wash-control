@@ -50,6 +50,8 @@ class _StationPageState extends State<StationPage> {
   ValueNotifier<Map<String, bool>> _boolConstantsConfig = ValueNotifier({});
   ValueNotifier<Map<String, String>> _stringConstantsConfig = ValueNotifier({});
 
+  bool _isCopying = false;
+
   // Original values to track changes
   Map<String, String> _origIntValues = {};
   Map<String, bool> _origBoolValues = {};
@@ -182,6 +184,56 @@ class _StationPageState extends State<StationPage> {
       _stringConstantsConfig.value = stringVars;
       _origStringValues = Map.from(stringVars);
     }
+  }
+
+  Future<void> _copyConstantsToStations(Repository repository, int fromId) async {
+    final stations = await repository.getStations();
+    if (stations == null || stations.isEmpty) return;
+
+    final others = stations.where((s) => s.id != fromId).toList();
+    if (others.isEmpty) return;
+
+    final selected = <int>{};
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogCtx) => StatefulBuilder(
+        builder: (_, setDialogState) => AlertDialog(
+          title: Text("Скопировать настройки на станции"),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: others
+                  .map((s) => CheckboxListTile(
+                        title: Text(s.name ?? 'Станция ${s.id}'),
+                        value: selected.contains(s.id),
+                        onChanged: (v) => setDialogState(() {
+                          if (v == true)
+                            selected.add(s.id);
+                          else
+                            selected.remove(s.id);
+                        }),
+                      ))
+                  .toList(),
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(dialogCtx).pop(false), child: Text("Отмена")),
+            TextButton(onPressed: () => Navigator.of(dialogCtx).pop(true), child: Text("Копировать")),
+          ],
+        ),
+      ),
+    );
+
+    if (confirmed != true || selected.isEmpty) return;
+
+    for (final toId in selected) {
+      await repository.copyStationConfig(fromId, toId, copyButtons: true);
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Настройки скопированы")),
+    );
   }
 
   Future<void> _saveConstants(Repository repository, int id) async {
@@ -813,6 +865,7 @@ class _StationPageState extends State<StationPage> {
                                 padding: EdgeInsets.symmetric(horizontal: 8),
                                 child: TextFormField(
                                   controller: _controllers["strconst_$key"],
+                                  maxLines: null,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     isDense: true,
@@ -850,6 +903,35 @@ class _StationPageState extends State<StationPage> {
                   ],
                 ),
               ],
+            ),
+          ),
+          Card(
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  Flexible(
+                    fit: FlexFit.tight,
+                    flex: 1,
+                    child: TextButton.icon(
+                      onPressed: _isCopying
+                          ? null
+                          : () async {
+                              setState(() => _isCopying = true);
+                              try {
+                                await _copyConstantsToStations(repository, id);
+                              } finally {
+                                if (mounted) setState(() => _isCopying = false);
+                              }
+                            },
+                      icon: _isCopying
+                          ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                          : Icon(Icons.arrow_right_outlined),
+                      label: Text("Скопировать на другие станции"),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
