@@ -3276,6 +3276,37 @@ class DefaultApi {
     }
   }
 
+  Future<Response> copyStationConfigWithHttpInfo(ArgCopyStationConfig args,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/copy-station-config';
+
+    // ignore: prefer_final_locals
+    Object? postBody = args;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  Future<void> copyStationConfig(ArgCopyStationConfig args,) async {
+    final response = await copyStationConfigWithHttpInfo(args,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
   /// Performs an HTTP 'POST /set-station-config-var-bool' operation and returns the [Response].
   /// Parameters:
   ///

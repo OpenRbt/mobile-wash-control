@@ -243,6 +243,8 @@ class ApiClient {
           return ArgSetBonuses.fromJson(value);
         case 'ArgSetStationButton':
           return ArgSetStationButton.fromJson(value);
+        case 'ArgCopyStationConfig':
+          return ArgCopyStationConfig.fromJson(value);
         case 'ArgStationButton':
           return ArgStationButton.fromJson(value);
         case 'ArgStationByHash':
