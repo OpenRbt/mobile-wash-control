@@ -199,7 +199,12 @@ class Helpers {
   }
 
   static entity.StationCardReaderConfig cardReaderConfigFromAPI(CardReaderConfig config) {
-    return entity.StationCardReaderConfig(host: config.host, port: config.port, cardReader: entity.CardReader.fromString(config.cardReaderType?.toString() ?? ""));
+    return entity.StationCardReaderConfig(
+      host: config.host,
+      port: config.port,
+      cashName: config.cashName,
+      cardReader: entity.CardReader.fromString(config.cardReaderType?.toString() ?? ""),
+    );
   }
 
   static CardReaderConfig cardReaderConfigToAPI(int id, entity.StationCardReaderConfig config) {
@@ -212,6 +217,9 @@ class Helpers {
       case entity.CardReader.paymentWorld:
         cardReader = CardReaderConfigCardReaderTypeEnum.PAYMENT_WORLD;
         break;
+      case entity.CardReader.kaspi:
+        cardReader = CardReaderConfigCardReaderTypeEnum.KASPI;
+        break;
       case entity.CardReader.not_used:
         cardReader = CardReaderConfigCardReaderTypeEnum.NOT_USED;
         break;
@@ -221,6 +229,7 @@ class Helpers {
       stationID: id,
       host: config.host,
       port: config.port,
+      cashName: config.cashName,
       cardReaderType: cardReader,
     );
   }

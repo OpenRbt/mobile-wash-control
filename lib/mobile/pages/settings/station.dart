@@ -62,6 +62,7 @@ class _StationPageState extends State<StationPage> {
 
     _controllers["cardReaderHost"] = TextEditingController();
     _controllers["cardReaderPort"] = TextEditingController();
+    _controllers["cardReaderCashName"] = TextEditingController();
 
     //_controllers["banknoteMultiplicator"] = TextEditingController();
     //_controllers["coinMultiplicator"] = TextEditingController();
@@ -110,6 +111,7 @@ class _StationPageState extends State<StationPage> {
 
     _controllers["cardReaderHost"]!.text = _cardReaderConfig.value.host ?? "";
     _controllers["cardReaderPort"]!.text = _cardReaderConfig.value.port ?? "";
+    _controllers["cardReaderCashName"]!.text = _cardReaderConfig.value.cashName ?? "";
   }
 
   /*
@@ -548,6 +550,29 @@ class _StationPageState extends State<StationPage> {
                               ),
                             ],
                           ),
+                          if (value.cardReader == entity.CardReader.kaspi)
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  fit: FlexFit.tight,
+                                  child: Text(
+                                    context.tr('cash_name'),
+                                    style: theme.textTheme.bodyLarge,
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 2,
+                                  fit: FlexFit.tight,
+                                  child: TextFormField(
+                                    controller: _controllers["cardReaderCashName"],
+                                    onChanged: (val) {
+                                      _cardReaderConfig.value = _cardReaderConfig.value.copyWith(cashName: val);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     );

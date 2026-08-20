@@ -510,6 +510,7 @@ class StationConfig {
 enum CardReader {
   vendotek,
   paymentWorld,
+  kaspi,
   not_used;
 
   static CardReader fromString(String str) {
@@ -518,6 +519,8 @@ enum CardReader {
         return CardReader.paymentWorld;
       case "VENDOTEK":
         return CardReader.vendotek;
+      case "KASPI":
+        return CardReader.kaspi;
       default:
         return CardReader.not_used;
     }
@@ -529,6 +532,8 @@ enum CardReader {
         return "VENDOTEK";
       case CardReader.paymentWorld:
         return "PAYMENT WORLD";
+      case CardReader.kaspi:
+        return "KASPI";
       case CardReader.not_used:
         return 'not_used'.tr();;
     }
@@ -539,17 +544,20 @@ class StationCardReaderConfig {
   CardReader cardReader;
   String? host;
   String? port;
+  String? cashName;
 
-  StationCardReaderConfig({required this.cardReader, this.host, this.port});
+  StationCardReaderConfig({required this.cardReader, this.host, this.port, this.cashName});
 
   StationCardReaderConfig copyWith({
     CardReader? cardReader,
     String? host,
     String? port,
+    String? cashName,
   }) {
     return StationCardReaderConfig(cardReader: cardReader ?? this.cardReader)
       ..host = host ?? this.host
-      ..port = port ?? this.port;
+      ..port = port ?? this.port
+      ..cashName = cashName ?? this.cashName;
   }
 }
 

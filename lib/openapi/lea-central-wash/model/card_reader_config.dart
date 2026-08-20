@@ -17,6 +17,7 @@ class CardReaderConfig {
     this.cardReaderType,
     this.host,
     this.port,
+    this.cashName,
   });
 
   int stationID;
@@ -39,12 +40,16 @@ class CardReaderConfig {
   ///
   String? port;
 
+  /// Cash name sent to Kaspi Smart POS on registration (used only with KASPI type).
+  String? cashName;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is CardReaderConfig &&
      other.stationID == stationID &&
      other.cardReaderType == cardReaderType &&
      other.host == host &&
-     other.port == port;
+     other.port == port &&
+     other.cashName == cashName;
 
   @override
   int get hashCode =>
@@ -52,10 +57,11 @@ class CardReaderConfig {
     (stationID.hashCode) +
     (cardReaderType == null ? 0 : cardReaderType!.hashCode) +
     (host == null ? 0 : host!.hashCode) +
-    (port == null ? 0 : port!.hashCode);
+    (port == null ? 0 : port!.hashCode) +
+    (cashName == null ? 0 : cashName!.hashCode);
 
   @override
-  String toString() => 'CardReaderConfig[stationID=$stationID, cardReaderType=$cardReaderType, host=$host, port=$port]';
+  String toString() => 'CardReaderConfig[stationID=$stationID, cardReaderType=$cardReaderType, host=$host, port=$port, cashName=$cashName]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -74,6 +80,11 @@ class CardReaderConfig {
       json[r'port'] = this.port;
     } else {
       json[r'port'] = null;
+    }
+    if (this.cashName != null) {
+      json[r'cashName'] = this.cashName;
+    } else {
+      json[r'cashName'] = null;
     }
     return json;
   }
@@ -101,6 +112,7 @@ class CardReaderConfig {
         cardReaderType: CardReaderConfigCardReaderTypeEnum.fromJson(json[r'cardReaderType']),
         host: mapValueOfType<String>(json, r'host'),
         port: mapValueOfType<String>(json, r'port'),
+        cashName: mapValueOfType<String>(json, r'cashName'),
       );
     }
     return null;
@@ -170,12 +182,14 @@ class CardReaderConfigCardReaderTypeEnum {
   static const NOT_USED = CardReaderConfigCardReaderTypeEnum._(r'NOT_USED');
   static const VENDOTEK = CardReaderConfigCardReaderTypeEnum._(r'VENDOTEK');
   static const PAYMENT_WORLD = CardReaderConfigCardReaderTypeEnum._(r'PAYMENT_WORLD');
+  static const KASPI = CardReaderConfigCardReaderTypeEnum._(r'KASPI');
 
   /// List of all possible values in this [enum][CardReaderConfigCardReaderTypeEnum].
   static const values = <CardReaderConfigCardReaderTypeEnum>[
     NOT_USED,
     VENDOTEK,
     PAYMENT_WORLD,
+    KASPI,
   ];
 
   static CardReaderConfigCardReaderTypeEnum? fromJson(dynamic value) => CardReaderConfigCardReaderTypeEnumTypeTransformer().decode(value);
@@ -217,6 +231,7 @@ class CardReaderConfigCardReaderTypeEnumTypeTransformer {
         case r'NOT_USED': return CardReaderConfigCardReaderTypeEnum.NOT_USED;
         case r'VENDOTEK': return CardReaderConfigCardReaderTypeEnum.VENDOTEK;
         case r'PAYMENT_WORLD': return CardReaderConfigCardReaderTypeEnum.PAYMENT_WORLD;
+        case r'KASPI': return CardReaderConfigCardReaderTypeEnum.KASPI;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
