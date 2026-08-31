@@ -488,8 +488,10 @@ class StationConfig {
   String? hash;
   RelayBoard relayBoard;
   String? firmwareSkin;
+  int invertedInput;
+  bool inputInvertedEnabled;
 
-  StationConfig({required this.id, this.preflightSec, this.name, this.hash, required this.relayBoard, this.firmwareSkin});
+  StationConfig({required this.id, this.preflightSec, this.name, this.hash, required this.relayBoard, this.firmwareSkin, this.invertedInput = 0, this.inputInvertedEnabled = false});
 
   StationConfig copyWith({
     int? id,
@@ -498,12 +500,16 @@ class StationConfig {
     String? hash,
     RelayBoard? relayBoard,
     String? firmwareSkin,
+    int? invertedInput,
+    bool? inputInvertedEnabled,
   }) {
     return StationConfig(id: id ?? this.id, relayBoard: relayBoard ?? this.relayBoard)
       ..preflightSec = preflightSec ?? this.preflightSec
       ..name = name ?? this.name
       ..hash = hash ?? this.hash
-      ..firmwareSkin = firmwareSkin ?? this.firmwareSkin;
+      ..firmwareSkin = firmwareSkin ?? this.firmwareSkin
+      ..invertedInput = invertedInput ?? this.invertedInput
+      ..inputInvertedEnabled = inputInvertedEnabled ?? this.inputInvertedEnabled;
   }
 }
 

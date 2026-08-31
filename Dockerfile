@@ -1,4 +1,4 @@
-FROM instrumentisto/flutter:3.41 AS build
+FROM --platform=$BUILDPLATFORM instrumentisto/flutter:3.41 AS build
 
 WORKDIR /app
 COPY pubspec.* ./

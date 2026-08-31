@@ -10,6 +10,8 @@ class Helpers {
     res.preflightMotorSpeedPercent = program.preflightMotorSpeedPercent ?? 100;
     res.preflightEnabled = program.preflightEnabled ?? false;
     res.isFinishingProgram = program.isFinishingProgram ?? false;
+    res.script = program.script ?? "";
+    res.scriptEnabled = program.scriptEnabled ?? false;
 
     program.relays.forEach((element) {
       if ((element.timeon ?? 0) + (element.timeoff ?? 0) > 0) {
@@ -170,6 +172,8 @@ class Helpers {
       preflightSec: config.preflightSec,
       relayBoard: entity.RelayBoard.fromString(config.relayBoard?.toString() ?? "") ?? entity.RelayBoard.localGPIO,
       firmwareSkin: config.firmwareSkin,
+      invertedInput: config.invertedInput ?? 0,
+      inputInvertedEnabled: config.inputInvertedEnabled ?? false,
     );
   }
 
@@ -195,6 +199,8 @@ class Helpers {
       relayBoard: relayBoard,
       preflightSec: config.preflightSec,
       firmwareSkin: config.firmwareSkin,
+      invertedInput: config.invertedInput,
+      inputInvertedEnabled: config.inputInvertedEnabled,
     );
   }
 

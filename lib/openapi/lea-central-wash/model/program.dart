@@ -22,6 +22,8 @@ class Program {
     this.preflightMotorSpeedPercent,
     this.relays = const [],
     this.preflightRelays = const [],
+    this.script,
+    this.scriptEnabled,
   });
 
   /// Minimum value: 1
@@ -83,6 +85,10 @@ class Program {
 
   List<RelayConfig> preflightRelays;
 
+  String? script;
+
+  bool? scriptEnabled;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is Program &&
      other.id == id &&
@@ -93,7 +99,9 @@ class Program {
      other.motorSpeedPercent == motorSpeedPercent &&
      other.preflightMotorSpeedPercent == preflightMotorSpeedPercent &&
      other.relays == relays &&
-     other.preflightRelays == preflightRelays;
+     other.preflightRelays == preflightRelays &&
+     other.script == script &&
+     other.scriptEnabled == scriptEnabled;
 
   @override
   int get hashCode =>
@@ -106,10 +114,12 @@ class Program {
     (motorSpeedPercent == null ? 0 : motorSpeedPercent!.hashCode) +
     (preflightMotorSpeedPercent == null ? 0 : preflightMotorSpeedPercent!.hashCode) +
     (relays.hashCode) +
-    (preflightRelays.hashCode);
+    (preflightRelays.hashCode) +
+    (script == null ? 0 : script!.hashCode) +
+    (scriptEnabled == null ? 0 : scriptEnabled!.hashCode);
 
   @override
-  String toString() => 'Program[id=$id, name=$name, price=$price, preflightEnabled=$preflightEnabled, isFinishingProgram=$isFinishingProgram, motorSpeedPercent=$motorSpeedPercent, preflightMotorSpeedPercent=$preflightMotorSpeedPercent, relays=$relays, preflightRelays=$preflightRelays]';
+  String toString() => 'Program[id=$id, name=$name, price=$price, preflightEnabled=$preflightEnabled, isFinishingProgram=$isFinishingProgram, motorSpeedPercent=$motorSpeedPercent, preflightMotorSpeedPercent=$preflightMotorSpeedPercent, relays=$relays, preflightRelays=$preflightRelays, script=$script, scriptEnabled=$scriptEnabled]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -146,6 +156,12 @@ class Program {
     }
       json[r'relays'] = this.relays;
       json[r'preflightRelays'] = this.preflightRelays;
+    if (this.script != null) {
+      json[r'script'] = this.script;
+    }
+    if (this.scriptEnabled != null) {
+      json[r'scriptEnabled'] = this.scriptEnabled;
+    }
     return json;
   }
 
@@ -177,6 +193,8 @@ class Program {
         preflightMotorSpeedPercent: mapValueOfType<int>(json, r'preflightMotorSpeedPercent'),
         relays: RelayConfig.listFromJson(json[r'relays']) ?? const [],
         preflightRelays: RelayConfig.listFromJson(json[r'preflightRelays']) ?? const [],
+        script: mapValueOfType<String>(json, r'script'),
+        scriptEnabled: mapValueOfType<bool>(json, r'scriptEnabled'),
       );
     }
     return null;

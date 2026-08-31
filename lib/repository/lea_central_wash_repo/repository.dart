@@ -696,6 +696,8 @@ class LeaCentralRepository extends Repository {
         motorSpeedPercent: program.motorSpeedPercent,
         preflightMotorSpeedPercent: program.preflightMotorSpeedPercent,
         preflightEnabled: program.preflightEnabled,
+        script: program.script,
+        scriptEnabled: program.scriptEnabled,
         relays:
             program.relays
                 .where((element) => element.timeOn > 0)

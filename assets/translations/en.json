@@ -356,5 +356,9 @@
   "part_statistics": "Part statistics",
   "station_constants": "Station Constants",
   "value": "Value",
-  "cash_name": "Cash name"
+  "cash_name": "Cash name",
+  "script": "Script",
+  "script_enabled": "Script enabled",
+  "inverted_input": "Inverted input",
+  "input_inverted_enabled": "Input inversion enabled"
 }

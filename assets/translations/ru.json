@@ -356,5 +356,9 @@
   "part_statistics": "Частичная статистика",
   "station_constants": "Константы станции",
   "value": "Значение",
-  "cash_name": "Имя кассы"
+  "cash_name": "Имя кассы",
+  "script": "Скрипт",
+  "script_enabled": "Скрипт включён",
+  "inverted_input": "Инвертируемый вход",
+  "input_inverted_enabled": "Инверсия входа включена"
 }

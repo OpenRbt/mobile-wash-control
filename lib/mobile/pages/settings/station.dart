@@ -61,6 +61,7 @@ class _StationPageState extends State<StationPage> {
     super.initState();
     _controllers["postName"] = TextEditingController();
     _controllers["postPreflightSec"] = TextEditingController();
+    _controllers["invertedInput"] = TextEditingController();
 
     _controllers["cardReaderHost"] = TextEditingController();
     _controllers["cardReaderPort"] = TextEditingController();
@@ -106,6 +107,7 @@ class _StationPageState extends State<StationPage> {
         );
     _controllers["postName"]!.text = _config.value.name ?? "station ${id}";
     _controllers["postPreflightSec"]!.text = _config.value.preflightSec?.toString() ?? "0";
+    _controllers["invertedInput"]!.text = _config.value.invertedInput.toString();
   }
 
   Future<void> _getCardReaderConfig(Repository repository, int id) async {
@@ -478,6 +480,71 @@ class _StationPageState extends State<StationPage> {
                                   onChanged: (String? value) {
                                     _config.value = _config.value.copyWith(firmwareSkin: value ?? "");
                                   },
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  "${context.tr('inverted_input')} (1-8)",
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: TextFormField(
+                                  controller: _controllers["invertedInput"],
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    FilteringTextInputFormatter.singleLineFormatter,
+                                  ],
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (val) {
+                                    var amount = int.tryParse(val ?? "") ?? 0;
+                                    if (amount < 0) amount = 0;
+                                    if (amount > 8) amount = 8;
+                                    _config.value = _config.value.copyWith(invertedInput: amount);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  "${context.tr('input_inverted_enabled')}",
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      context.tr('no'),
+                                      style: theme.textTheme.labelSmall,
+                                    ),
+                                    Switch(
+                                      value: _config.value.inputInvertedEnabled,
+                                      onChanged: (val) {
+                                        _config.value = _config.value.copyWith(inputInvertedEnabled: val);
+                                      },
+                                    ),
+                                    Text(
+                                      context.tr('yes'),
+                                      style: theme.textTheme.labelSmall,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

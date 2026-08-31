@@ -28,6 +28,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
     _controllers["price"] = TextEditingController();
     _controllers["motor"] = TextEditingController();
     _controllers["motorPreflight"] = TextEditingController();
+    _controllers["script"] = TextEditingController();
     _relaysControllers["relays"] = List.generate(entity.Program.relayCount, (index) {
       var controller = TextEditingController();
       controller.addListener(() {
@@ -100,6 +101,7 @@ class _EditProgramPageState extends State<EditProgramPage> {
     _controllers["price"]!.text = program.price.toString();
     _controllers["motor"]!.text = program.motorSpeedPercent.toString();
     _controllers["motorPreflight"]!.text = program.preflightMotorSpeedPercent.toString();
+    _controllers["script"]!.text = program.script;
 
     var relays = _relaysControllers["relays"];
     program.relays.forEach((element) {
@@ -360,6 +362,61 @@ class _EditProgramPageState extends State<EditProgramPage> {
                                   ),
                                 ),
                               ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        child: ExpansionTile(
+                          title: Text(
+                            context.tr('script'),
+                            style: theme.textTheme.titleLarge,
+                          ),
+                          childrenPadding: EdgeInsets.all(8),
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  fit: FlexFit.tight,
+                                  child: Text(
+                                    "${context.tr('script_enabled')}",
+                                    style: theme.textTheme.bodyLarge,
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 2,
+                                  fit: FlexFit.tight,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        context.tr('no'),
+                                        style: theme.textTheme.labelSmall,
+                                      ),
+                                      Switch(
+                                        value: program.scriptEnabled,
+                                        onChanged: (val) {
+                                          _program.value = _program.value.copyWith(scriptEnabled: val);
+                                        },
+                                      ),
+                                      Text(
+                                        context.tr('yes'),
+                                        style: theme.textTheme.labelSmall,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            TextField(
+                              controller: _controllers["script"],
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              minLines: 1,
+                              onChanged: (value) {
+                                _program.value = program.copyWith(script: value);
+                              },
                             ),
                           ],
                         ),

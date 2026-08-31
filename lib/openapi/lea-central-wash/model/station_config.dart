@@ -19,6 +19,8 @@ class StationConfig {
     this.hash,
     this.relayBoard,
     this.firmwareSkin,
+    this.invertedInput,
+    this.inputInvertedEnabled,
   });
 
   int id;
@@ -57,6 +59,10 @@ class StationConfig {
 
   String? firmwareSkin;
 
+  int? invertedInput;
+
+  bool? inputInvertedEnabled;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is StationConfig &&
      other.id == id &&
@@ -64,7 +70,9 @@ class StationConfig {
      other.name == name &&
      other.hash == hash &&
      other.relayBoard == relayBoard &&
-     other.firmwareSkin == firmwareSkin;
+     other.firmwareSkin == firmwareSkin &&
+     other.invertedInput == invertedInput &&
+     other.inputInvertedEnabled == inputInvertedEnabled;
 
   @override
   int get hashCode =>
@@ -74,10 +82,12 @@ class StationConfig {
     (name == null ? 0 : name!.hashCode) +
     (hash == null ? 0 : hash!.hashCode) +
     (relayBoard == null ? 0 : relayBoard!.hashCode) +
-    (firmwareSkin == null ? 0 : firmwareSkin!.hashCode);
+    (firmwareSkin == null ? 0 : firmwareSkin!.hashCode) +
+    (invertedInput == null ? 0 : invertedInput!.hashCode) +
+    (inputInvertedEnabled == null ? 0 : inputInvertedEnabled!.hashCode);
 
   @override
-  String toString() => 'StationConfig[id=$id, preflightSec=$preflightSec, name=$name, hash=$hash, relayBoard=$relayBoard, firmwareSkin=$firmwareSkin]';
+  String toString() => 'StationConfig[id=$id, preflightSec=$preflightSec, name=$name, hash=$hash, relayBoard=$relayBoard, firmwareSkin=$firmwareSkin, invertedInput=$invertedInput, inputInvertedEnabled=$inputInvertedEnabled]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -104,6 +114,12 @@ class StationConfig {
     }
     if (this.firmwareSkin != null) {
       json[r'firmwareSkin'] = this.firmwareSkin;
+    }
+    if (this.invertedInput != null) {
+      json[r'invertedInput'] = this.invertedInput;
+    }
+    if (this.inputInvertedEnabled != null) {
+      json[r'inputInvertedEnabled'] = this.inputInvertedEnabled;
     }
     return json;
   }
@@ -133,6 +149,8 @@ class StationConfig {
         hash: mapValueOfType<String>(json, r'hash'),
         relayBoard: RelayBoard.fromJson(json[r'relayBoard']),
         firmwareSkin: mapValueOfType<String>(json, r'firmwareSkin'),
+        invertedInput: mapValueOfType<int>(json, r'invertedInput'),
+        inputInvertedEnabled: mapValueOfType<bool>(json, r'inputInvertedEnabled'),
       );
     }
     return null;

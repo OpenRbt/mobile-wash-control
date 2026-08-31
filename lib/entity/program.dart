@@ -14,6 +14,9 @@ class Program {
   int motorSpeedPercent = 100;
   int preflightMotorSpeedPercent = 100;
 
+  String script = "";
+  bool scriptEnabled = false;
+
   List<RelayConfig> relays = List.generate(relayCount, (index) => RelayConfig(id: index + 1));
   List<RelayConfig> relaysPreflight = List.generate(relayCount, (index) => RelayConfig(id: index + 1));
 
@@ -27,6 +30,8 @@ class Program {
     bool? isFinishingProgram,
     int? motorSpeedPercent,
     int? preflightMotorSpeedPercent,
+    String? script,
+    bool? scriptEnabled,
     List<RelayConfig>? relays,
     List<RelayConfig>? relaysPreflight,
   }) {
@@ -37,6 +42,8 @@ class Program {
       ..isFinishingProgram = isFinishingProgram ?? this.isFinishingProgram
       ..motorSpeedPercent = motorSpeedPercent ?? this.motorSpeedPercent
       ..preflightMotorSpeedPercent = preflightMotorSpeedPercent ?? this.preflightMotorSpeedPercent
+      ..script = script ?? this.script
+      ..scriptEnabled = scriptEnabled ?? this.scriptEnabled
       ..relays = relays ?? this.relays
       ..relaysPreflight = relaysPreflight ?? this.relaysPreflight;
   }
