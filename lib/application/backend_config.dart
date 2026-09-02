@@ -1,6 +1,6 @@
 class BackendConfig {
   static const int defaultPort = 8020;
-  static const String _apiBaseUrl = String.fromEnvironment('API_BASE_URL');
+  static const String _apiBaseUrl = String.fromEnvironment('api_base_url');
 
   static String get defaultScanHost => 'localhost';
 

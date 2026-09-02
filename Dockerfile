@@ -5,12 +5,12 @@ COPY pubspec.* ./
 RUN flutter pub get
 COPY . .
 
-ARG API_BASE_URL=""
+ARG api_base_url=""
 
 RUN flutter pub run easy_localization:generate -S assets/translations/
 RUN flutter pub run easy_localization:generate -f keys -o locale_keys.g.dart -S assets/translations/
 
-RUN flutter build web --release --no-tree-shake-icons --dart-define=API_BASE_URL="$API_BASE_URL"
+RUN flutter build web --release --no-tree-shake-icons --dart-define=api_base_url="$api_base_url"
 
 # Cache-bust fonts: rename with version suffix so browsers re-fetch
 RUN cd build/web/assets/fonts && \
