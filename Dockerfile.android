@@ -7,22 +7,9 @@ RUN flutter pub get
 COPY . .
 RUN flutter create --platforms=android --no-overwrite .
 
-ARG api_base_url=""
-ARG android_api_key=""
-ARG android_app_id=""
-ARG messaging_sender_id=""
-ARG project_id=""
-ARG storage_bucket=""
-
 RUN flutter pub run easy_localization:generate -S assets/translations/
 RUN flutter pub run easy_localization:generate -f keys -o locale_keys.g.dart -S assets/translations/
-RUN flutter build apk --release --no-tree-shake-icons \
-    --dart-define=api_base_url="$api_base_url" \
-    --dart-define=android_api_key="$android_api_key" \
-    --dart-define=android_app_id="$android_app_id" \
-    --dart-define=messaging_sender_id="$messaging_sender_id" \
-    --dart-define=project_id="$project_id" \
-    --dart-define=storage_bucket="$storage_bucket"
+RUN flutter build apk --release --no-tree-shake-icons
 
 FROM scratch AS export
 
