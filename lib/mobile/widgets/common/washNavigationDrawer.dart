@@ -218,15 +218,15 @@ class WashNavigationDrawer extends StatelessWidget {
           (BonusCommon.washServerApi?.apiClient.basePath ?? "").isNotEmpty ?
           Container(
             color: theme.colorScheme.primary,
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
             child: Text(
-
               "${'bonus_server_URL'.tr()}: ${BonusCommon.washServerApi?.apiClient.basePath}",
-              style: theme.textTheme.titleLarge!.copyWith(
+              style: theme.textTheme.bodyMedium!.copyWith(
                 color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
-          ): Text(""),
+          ): const SizedBox.shrink(),
         ]..addAll(
             List.generate(
               _availablePages.length,
@@ -234,16 +234,18 @@ class WashNavigationDrawer extends StatelessWidget {
                 bool current = _availablePages[index] == _selected;
 
                 return ListTile(
+                  selected: current,
+                  selectedTileColor: theme.colorScheme.primary.withValues(alpha: 0.06),
                   title: Text(
                     _availablePages[index].getLabel(),
-                    style: theme.textTheme.titleLarge!.copyWith(
-                      fontWeight: current ? FontWeight.bold : null,
+                    style: theme.textTheme.titleMedium!.copyWith(
+                      fontWeight: current ? FontWeight.w700 : FontWeight.w500,
                       color: current ? theme.colorScheme.primary : null,
                     ),
                   ),
                   trailing: Icon(
                     _availablePages[index].getIcon(),
-                    color: current ? theme.colorScheme.primary : null,
+                    color: current ? theme.colorScheme.primary : Colors.black54,
                   ),
                   onTap: () {
                     if (_availablePages[index] == SelectedPage.Exit) {

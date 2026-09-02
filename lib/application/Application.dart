@@ -20,6 +20,7 @@ import 'package:mobile_wash_control/mobile/pages/settings/station.dart';
 import 'package:mobile_wash_control/mobile/pages/statistics.dart';
 import 'package:mobile_wash_control/mobile/pages/users.dart';
 import 'package:mobile_wash_control/mobile/pages/users/editUser.dart';
+import 'package:mobile_wash_control/styles/app_theme.dart';
 
 import '../mobile/pages/bonus_status.dart';
 import '../mobile/pages/sbp_status.dart';
@@ -43,11 +44,7 @@ class Application extends StatelessWidget {
       ),
 
       title: "Mobile Wash Control",
-      theme: ThemeData(
-        useMaterial3: false,
-        primarySwatch: Colors.red,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: AppTheme.build(),
       initialRoute: "/",
       routes: {
         "/": (context) => kIsWeb ? const WebStartupPage() : Home(),

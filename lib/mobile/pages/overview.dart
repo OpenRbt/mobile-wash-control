@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/entity.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/content_container.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/washNavigationDrawer.dart';
 import 'package:mobile_wash_control/mobile/widgets/overview/stationCard.dart';
 import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
@@ -74,11 +75,10 @@ class _OverviewPageState extends State<OverviewPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.red,
         title: Text(context.tr('overview')),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: Row(
               children: [
                 Text("${context.tr('cash_desk')}: "),
@@ -137,13 +137,13 @@ class _OverviewPageState extends State<OverviewPage> {
                   child: CircularProgressIndicator(),
                 );
               }
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
+              return ContentContainer(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
-                      heightFactor: 1.5,
+                      heightFactor: 1.2,
                       child: ValueListenableBuilder(
                         valueListenable: _postsMode,
                         builder: (BuildContext context, PostsViewMode value, Widget? child) {
@@ -190,6 +190,7 @@ class _OverviewPageState extends State<OverviewPage> {
                                     child: ListView.builder(
                                         shrinkWrap: true,
                                         itemCount: filteredStations.length,
+                                        padding: const EdgeInsets.only(top: 4, bottom: 16),
                                         physics: ClampingScrollPhysics(),
                                         itemBuilder: (BuildContext context, int index) {
                                           var data = filteredStations[index];

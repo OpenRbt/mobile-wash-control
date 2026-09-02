@@ -102,7 +102,6 @@ class _AuthState extends State<Auth> {
 
     final theme = Theme.of(context);
 
-    var appBarPadding = AppBar().preferredSize.height + MediaQuery.of(context).padding.top;
     return Scaffold(
       floatingActionButton: Navigator.of(context).canPop()
           ? FloatingActionButton(
@@ -112,99 +111,105 @@ class _AuthState extends State<Auth> {
               child: Icon(Icons.exit_to_app_outlined),
             )
           : null,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              Container(
-                height: appBarPadding,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  context.tr('authorization'),
-                  style: theme.textTheme.headlineMedium,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  widget.host!,
-                  style: theme.textTheme.labelMedium,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: pinController,
-                  readOnly: true,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineSmall,
-                  obscureText: true,
-                  maxLength: 16,
-                ),
-              )
-            ],
-          ),
-          Expanded(
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 500),
-              child: GridView.count(
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 3,
-                childAspectRatio: 2,
-                children: List.generate(
-                  labels.length,
-                  (index) {
-                    return AuthButton(
-                      label: labels[index],
-                      onPressed: () {
-                        setState(
-                          () {
-                            switch (labels[index]) {
-                              case "+":
-                                _tryAuth();
-                                break;
-                              case "-":
-                                var tmp = pinController.text;
-                                if (tmp.length > 1) {
-                                  tmp = tmp.substring(0, tmp.length - 1);
-                                } else {
-                                  tmp = "";
-                                }
-                                pinController.text = tmp;
-                                break;
-                              default:
-                                var tmp = pinController.text;
-                                if (tmp.length == 16) {
-                                  break;
-                                }
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        context.tr('authorization'),
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        widget.host!,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      TextField(
+                        controller: pinController,
+                        readOnly: true,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          letterSpacing: 6,
+                        ),
+                        obscureText: true,
+                        maxLength: 16,
+                        decoration: const InputDecoration(counterText: ""),
+                      ),
+                      const SizedBox(height: 24),
+                      GridView.count(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        crossAxisCount: 3,
+                        childAspectRatio: 1.9,
+                        children: List.generate(
+                          labels.length,
+                          (index) {
+                            return AuthButton(
+                              label: labels[index],
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    switch (labels[index]) {
+                                      case "+":
+                                        _tryAuth();
+                                        break;
+                                      case "-":
+                                        var tmp = pinController.text;
+                                        if (tmp.length > 1) {
+                                          tmp = tmp.substring(0, tmp.length - 1);
+                                        } else {
+                                          tmp = "";
+                                        }
+                                        pinController.text = tmp;
+                                        break;
+                                      default:
+                                        var tmp = pinController.text;
+                                        if (tmp.length == 16) {
+                                          break;
+                                        }
 
-                                tmp += labels[index];
-                                pinController.text = tmp;
-                                break;
-                            }
+                                        tmp += labels[index];
+                                        pinController.text = tmp;
+                                        break;
+                                    }
+                                  },
+                                );
+                              },
+                              onLongPressed: (labels[index] == "-")
+                                  ? () {
+                                      pinController.text = "";
+                                    }
+                                  : null,
+                            );
                           },
-                        );
-                      },
-                      onLongPressed: (labels[index] == "-")
-                          ? () {
-                              pinController.text = "";
-                            }
-                          : null,
-                    );
-                  },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
