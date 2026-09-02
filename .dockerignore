@@ -18,6 +18,7 @@ README.md
 build
 **/.gradle
 **/.cxx
+**/local.properties
 
 **/google-services.json
 **/build_config.json

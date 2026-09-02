@@ -47,7 +47,7 @@ class Application extends StatelessWidget {
       theme: AppTheme.build(),
       initialRoute: "/",
       routes: {
-        "/": (context) => kIsWeb ? const WebStartupPage() : Home(),
+        "/": (context) => kIsWeb ? const WebStartupPage() : const Home(),
         "/mobile/auth":
             (context) => Auth(
               host: ModalRoute.of(context)?.settings.arguments as String?,

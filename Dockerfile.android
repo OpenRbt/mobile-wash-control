@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM instrumentisto/flutter:3.41 AS build
 
 WORKDIR /app
@@ -9,7 +10,10 @@ RUN flutter create --platforms=android --no-overwrite .
 
 RUN flutter pub run easy_localization:generate -S assets/translations/
 RUN flutter pub run easy_localization:generate -f keys -o locale_keys.g.dart -S assets/translations/
-RUN flutter build apk --release --no-tree-shake-icons
+# Gradle re-downloads its distribution and the whole Android dependency tree on
+# every build otherwise, which dominates the build time.
+RUN --mount=type=cache,target=/root/.gradle,sharing=locked \
+    flutter build apk --release --no-tree-shake-icons
 
 FROM scratch AS export
 

@@ -360,5 +360,10 @@
   "script": "Скрипт",
   "script_enabled": "Скрипт включён",
   "inverted_input": "Инвертируемый вход",
-  "input_inverted_enabled": "Инверсия входа включена"
+  "input_inverted_enabled": "Инверсия входа включена",
+  "connecting": "Подключение",
+  "servers_not_found": "Серверы не найдены",
+  "network_unavailable": "Сеть недоступна",
+  "check_wifi_connection": "Проверьте подключение к Wi-Fi",
+  "saved_server": "Сохранённый сервер"
 }
