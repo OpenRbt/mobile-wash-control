@@ -1,0 +1,29 @@
+FROM instrumentisto/flutter:3.41 AS build
+
+WORKDIR /app
+COPY pubspec.* ./
+RUN flutter pub get
+
+COPY . .
+RUN flutter create --platforms=android --no-overwrite .
+
+ARG API_BASE_URL=""
+ARG android_api_key=""
+ARG android_app_id=""
+ARG messaging_sender_id=""
+ARG project_id=""
+ARG storage_bucket=""
+
+RUN flutter pub run easy_localization:generate -S assets/translations/
+RUN flutter pub run easy_localization:generate -f keys -o locale_keys.g.dart -S assets/translations/
+RUN flutter build apk --release --no-tree-shake-icons \
+    --dart-define=API_BASE_URL="$API_BASE_URL" \
+    --dart-define=android_api_key="$android_api_key" \
+    --dart-define=android_app_id="$android_app_id" \
+    --dart-define=messaging_sender_id="$messaging_sender_id" \
+    --dart-define=project_id="$project_id" \
+    --dart-define=storage_bucket="$storage_bucket"
+
+FROM scratch AS export
+
+COPY --from=build /app/build/app/outputs/flutter-apk/app-release.apk /app-release.apk

@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:mobile_wash_control/application/backend_bootstrap.dart';
+import 'package:mobile_wash_control/application/backend_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:web/web.dart' as web;
 
 class Home extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  TextEditingController _hostField = TextEditingController(text: web.window.location.hostname);
+  TextEditingController _hostField = TextEditingController(text: BackendConfig.defaultScanHost);
 
   PackageInfo _packageInfo = PackageInfo(
     appName: '',
@@ -40,17 +40,11 @@ class _HomeState extends State<Home> {
   }
 
   Future<bool> _scanManual(String host) async {
-    try {
-      final uri = Uri.parse('http://$host:8020/ping');
-      final res = await http.get(uri).timeout(const Duration(seconds: 1));
-      if (res.statusCode == 200) {
-        manualHost = host;
-        return true;
-      }
-      return false;
-    } catch (_) {
-      return false;
+    final valid = await BackendBootstrap.validate(BackendConfig.baseUrlForHost(host));
+    if (valid) {
+      manualHost = host;
     }
+    return valid;
   }
 
   String? manualHost;
@@ -190,7 +184,7 @@ class _HomeState extends State<Home> {
                                                             context,
                                                             "/mobile/auth",
                                                             arguments:
-                                                                "http://${manualHost ?? ""}:8020",
+                                                                BackendConfig.baseUrlForHost(manualHost ?? ""),
                                                           ).then(
                                                             (value) {},
                                                             onError: (value) {},

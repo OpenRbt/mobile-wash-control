@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/mobile/pages/auth.dart';
 import 'package:mobile_wash_control/mobile/pages/discounts.dart';
@@ -24,6 +25,7 @@ import '../mobile/pages/bonus_status.dart';
 import '../mobile/pages/sbp_status.dart';
 import '../mobile/pages/skins.dart';
 import '../mobile/pages/skin_editor.dart';
+import '../mobile/pages/web_startup.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -48,7 +50,7 @@ class Application extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => Home(),
+        "/": (context) => kIsWeb ? const WebStartupPage() : Home(),
         "/mobile/auth":
             (context) => Auth(
               host: ModalRoute.of(context)?.settings.arguments as String?,

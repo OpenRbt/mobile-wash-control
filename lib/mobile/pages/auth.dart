@@ -104,12 +104,14 @@ class _AuthState extends State<Auth> {
 
     var appBarPadding = AppBar().preferredSize.height + MediaQuery.of(context).padding.top;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Icon(Icons.exit_to_app_outlined),
-      ),
+      floatingActionButton: Navigator.of(context).canPop()
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.exit_to_app_outlined),
+            )
+          : null,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         // crossAxisAlignment: CrossAxisAlignment.center,

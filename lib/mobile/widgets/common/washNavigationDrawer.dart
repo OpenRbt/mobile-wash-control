@@ -1,10 +1,8 @@
-import 'dart:io';
-import 'dart:js' as js;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:mobile_wash_control/utils/browser_window.dart';
 
 import '../../../Common/bonus_common.dart';
 import '../../../generated/locale_keys.g.dart';
@@ -255,10 +253,15 @@ class WashNavigationDrawer extends StatelessWidget {
                     }
 
                     if (_availablePages[index] == SelectedPage.Monitoring) {
-                      js.context.callMethod('open', [
-                        Uri.base.replace(port: 3000, path: '/d/openrbt-wash/openrbt-wash-station').toString(),
-                        '_blank'
-                      ]);
+                      openUrl(
+                        Uri.base
+                            .replace(
+                              port: 3000,
+                              path: '/d/openrbt-wash/openrbt-wash-station',
+                            )
+                            .toString(),
+                        '_blank',
+                      );
                       Navigator.of(context).pop();
                       return;
                     }

@@ -3,12 +3,21 @@
 .gitignore
 
 Dockerfile
+Dockerfile.android
+Dockerfile.deps
 .dockerignore
 docker-compose.yaml
 
 README.md
 
 .idea
+
+.dart_tool
+.flutter-plugins
+.flutter-plugins-dependencies
+build
+**/.gradle
+**/.cxx
 
 **/google-services.json
 **/build_config.json
