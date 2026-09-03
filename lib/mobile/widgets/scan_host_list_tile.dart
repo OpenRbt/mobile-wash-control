@@ -5,8 +5,15 @@ class ScanHostListTile extends StatelessWidget {
 
   final Function()? onPressed;
   final String host;
+  final String? label;
 
-  const ScanHostListTile({super.key, required this.host, this.onPressed, required this.inProgress});
+  const ScanHostListTile({
+    super.key,
+    required this.host,
+    this.onPressed,
+    this.label,
+    required this.inProgress,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,23 +22,37 @@ class ScanHostListTile extends StatelessWidget {
     Widget icon;
 
     if (inProgress) {
-      icon = Container(
-        height: theme.iconTheme.size ?? 24,
-        child: FittedBox(
-          fit: BoxFit.fitHeight,
-          child: CircularProgressIndicator(),
-        ),
+      icon = const SizedBox(
+        height: 20,
+        width: 20,
+        child: CircularProgressIndicator(strokeWidth: 2.4),
       );
     } else {
-      icon = Icon(
-        Icons.check_circle_outline,
-        color: Colors.green,
-      );
+      icon = const Icon(Icons.check_circle_outline, color: Colors.green);
     }
-    return ListTile(
-      title: Text(host),
-      leading: icon,
-      onTap: onPressed,
+
+    return Card(
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: SizedBox(height: 24, width: 24, child: Center(child: icon)),
+        title: Text(
+          host,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        subtitle:
+            label == null
+                ? null
+                : Text(
+                  label!,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: Colors.black54,
+                  ),
+                ),
+        trailing: const Icon(Icons.chevron_right, color: Colors.black38),
+        onTap: onPressed,
+      ),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/foundation.dart';
@@ -9,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobile_wash_control/entity/entity.dart' as entity;
 import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart';
+import 'package:mobile_wash_control/utils/http_compat.dart';
 import 'package:mobile_wash_control/repository/lea_central_wash_repo/helpers.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 

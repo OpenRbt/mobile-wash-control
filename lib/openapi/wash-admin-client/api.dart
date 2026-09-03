@@ -12,11 +12,11 @@ library openapi.api;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile_wash_control/utils/http_compat.dart';
 
 part 'api_client.dart';
 part 'api_helper.dart';

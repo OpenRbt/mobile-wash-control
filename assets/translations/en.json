@@ -360,5 +360,10 @@
   "script": "Script",
   "script_enabled": "Script enabled",
   "inverted_input": "Inverted input",
-  "input_inverted_enabled": "Input inversion enabled"
+  "input_inverted_enabled": "Input inversion enabled",
+  "connecting": "Connecting",
+  "servers_not_found": "No servers found",
+  "network_unavailable": "Network unavailable",
+  "check_wifi_connection": "Check the Wi-Fi connection",
+  "saved_server": "Saved server"
 }

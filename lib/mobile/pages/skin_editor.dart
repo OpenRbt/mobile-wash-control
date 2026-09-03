@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mobile_wash_control/utils/file_bytes.dart';
 import 'package:mobile_wash_control/utils/utils.dart';
 
 import '../../entity/entity.dart';
@@ -332,14 +332,8 @@ class _SkinEditorPageState extends State<SkinEditorPage> {
     if (result == null || result.files.isEmpty) return;
 
     final file = result.files.first;
-    List<int> bytes;
-    if (file.bytes != null) {
-      bytes = file.bytes!;
-    } else if (file.path != null) {
-      bytes = await File(file.path!).readAsBytes();
-    } else {
-      return;
-    }
+    final bytes = await readPickedFileBytes(file);
+    if (bytes == null) return;
 
     await _repository!.uploadSkinFile(_skinName!, _selectedPath!, bytes, context: context);
     setState(() => _imageBytes = bytes);

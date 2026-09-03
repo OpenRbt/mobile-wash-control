@@ -1,10 +1,8 @@
-import 'dart:io';
-import 'dart:js' as js;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:mobile_wash_control/utils/browser_window.dart';
 
 import '../../../Common/bonus_common.dart';
 import '../../../generated/locale_keys.g.dart';
@@ -220,15 +218,15 @@ class WashNavigationDrawer extends StatelessWidget {
           (BonusCommon.washServerApi?.apiClient.basePath ?? "").isNotEmpty ?
           Container(
             color: theme.colorScheme.primary,
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
             child: Text(
-
               "${'bonus_server_URL'.tr()}: ${BonusCommon.washServerApi?.apiClient.basePath}",
-              style: theme.textTheme.titleLarge!.copyWith(
+              style: theme.textTheme.bodyMedium!.copyWith(
                 color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
-          ): Text(""),
+          ): const SizedBox.shrink(),
         ]..addAll(
             List.generate(
               _availablePages.length,
@@ -236,16 +234,18 @@ class WashNavigationDrawer extends StatelessWidget {
                 bool current = _availablePages[index] == _selected;
 
                 return ListTile(
+                  selected: current,
+                  selectedTileColor: theme.colorScheme.primary.withValues(alpha: 0.06),
                   title: Text(
                     _availablePages[index].getLabel(),
-                    style: theme.textTheme.titleLarge!.copyWith(
-                      fontWeight: current ? FontWeight.bold : null,
+                    style: theme.textTheme.titleMedium!.copyWith(
+                      fontWeight: current ? FontWeight.w700 : FontWeight.w500,
                       color: current ? theme.colorScheme.primary : null,
                     ),
                   ),
                   trailing: Icon(
                     _availablePages[index].getIcon(),
-                    color: current ? theme.colorScheme.primary : null,
+                    color: current ? theme.colorScheme.primary : Colors.black54,
                   ),
                   onTap: () {
                     if (_availablePages[index] == SelectedPage.Exit) {
@@ -255,10 +255,15 @@ class WashNavigationDrawer extends StatelessWidget {
                     }
 
                     if (_availablePages[index] == SelectedPage.Monitoring) {
-                      js.context.callMethod('open', [
-                        Uri.base.replace(port: 3000, path: '/d/openrbt-wash/openrbt-wash-station').toString(),
-                        '_blank'
-                      ]);
+                      openUrl(
+                        Uri.base
+                            .replace(
+                              port: 3000,
+                              path: '/d/openrbt-wash/openrbt-wash-station',
+                            )
+                            .toString(),
+                        '_blank',
+                      );
                       Navigator.of(context).pop();
                       return;
                     }

@@ -12,13 +12,14 @@ class AuthButton extends StatelessWidget {
 
     switch (label) {
       case "+":
-        return OutlinedButton(
+        return ElevatedButton(
           onPressed: onPressed,
           child: Icon(Icons.login_outlined),
         );
       case "-":
         return OutlinedButton(
           onPressed: onPressed,
+          onLongPress: onLongPressed,
           child: Icon(Icons.backspace_outlined),
         );
       default:
@@ -27,7 +28,10 @@ class AuthButton extends StatelessWidget {
             onPressed: onPressed,
             child: Text(
               label,
-              style: theme.textTheme.displaySmall,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           );
         }

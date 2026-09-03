@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The wash server is a LAN appliance reached over plain HTTP, and the host scan
+    probes arbitrary addresses inside the phone's own subnet, so cleartext cannot be
+    restricted to a fixed domain list here.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

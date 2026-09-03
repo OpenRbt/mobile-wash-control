@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:mobile_wash_control/utils/file_bytes.dart';
 import 'package:mobile_wash_control/utils/utils.dart';
 import 'package:mobile_wash_control/utils/download.dart' as dl;
 
@@ -76,14 +76,8 @@ class _SkinsPageState extends State<SkinsPage> {
     if (result == null || result.files.isEmpty) return;
 
     final file = result.files.first;
-    List<int> bytes;
-    if (file.bytes != null) {
-      bytes = file.bytes!;
-    } else if (file.path != null) {
-      bytes = await File(file.path!).readAsBytes();
-    } else {
-      return;
-    }
+    final bytes = await readPickedFileBytes(file);
+    if (bytes == null) return;
 
     await repository.uploadSkin(name, bytes, context: context);
     await _loadSkins(repository);

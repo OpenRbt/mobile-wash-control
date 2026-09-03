@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:mobile_wash_control/utils/download.dart' as dl;
 
 Future<Map<String, String>> checkLatestRelease(bool isAndroid) async {
   String url = 'https://api.github.com/repos/OpenRbt/mobile-wash-control/releases/latest';
@@ -30,10 +31,7 @@ Future<void> downloadFile(String url, String filename) async {
   try {
     var response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      String dir = (await getExternalStorageDirectory())?.path ?? '';
-      File file = File('$dir/$filename');
-      await file.writeAsBytes(response.bodyBytes);
-      print("$file Downloaded");
+      await dl.downloadBytes(Uint8List.fromList(response.bodyBytes), filename);
     } else {
       print("${'failed_to_download_the_file'.tr()}: ${response.statusCode}");
     }

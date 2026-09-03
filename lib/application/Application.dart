@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/mobile/pages/auth.dart';
 import 'package:mobile_wash_control/mobile/pages/discounts.dart';
@@ -19,11 +20,13 @@ import 'package:mobile_wash_control/mobile/pages/settings/station.dart';
 import 'package:mobile_wash_control/mobile/pages/statistics.dart';
 import 'package:mobile_wash_control/mobile/pages/users.dart';
 import 'package:mobile_wash_control/mobile/pages/users/editUser.dart';
+import 'package:mobile_wash_control/styles/app_theme.dart';
 
 import '../mobile/pages/bonus_status.dart';
 import '../mobile/pages/sbp_status.dart';
 import '../mobile/pages/skins.dart';
 import '../mobile/pages/skin_editor.dart';
+import '../mobile/pages/web_startup.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -41,14 +44,10 @@ class Application extends StatelessWidget {
       ),
 
       title: "Mobile Wash Control",
-      theme: ThemeData(
-        useMaterial3: false,
-        primarySwatch: Colors.red,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: AppTheme.build(),
       initialRoute: "/",
       routes: {
-        "/": (context) => Home(),
+        "/": (context) => kIsWeb ? const WebStartupPage() : const Home(),
         "/mobile/auth":
             (context) => Auth(
               host: ModalRoute.of(context)?.settings.arguments as String?,
