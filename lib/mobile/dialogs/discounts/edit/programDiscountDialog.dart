@@ -97,7 +97,7 @@ class _ProgramDiscountDialogState extends State<ProgramDiscountDialog> {
                           onChanged: (val) {
                             selectedID = val!;
                           },
-                          value: selectedID,
+                          initialValue: selectedID,
                           validator: (value) {
                             if (value == -1) {
                               return context.tr('you_must_select_the_program');

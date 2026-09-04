@@ -1,4 +1,4 @@
-FROM instrumentisto/flutter:3.41
+FROM instrumentisto/flutter:3.41.6-androidsdk36-r0
 
 WORKDIR /app
 COPY pubspec.* ./

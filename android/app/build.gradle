@@ -41,7 +41,7 @@ def hasReleaseSigning = ['storeFile', 'storePassword', 'keyAlias', 'keyPassword'
 
 android {
     namespace "com.openrbt.mobile_wash_control"
-    compileSdkVersion 35
+    compileSdkVersion 36
     ndkVersion "27.0.12077973"
 
     compileOptions {

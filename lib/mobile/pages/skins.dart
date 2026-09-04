@@ -68,14 +68,13 @@ class _SkinsPageState extends State<SkinsPage> {
 
     if (name == null || name.isEmpty) return;
 
-    final result = await FilePicker.platform.pickFiles(
+    final file = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: ['zip'],
     );
 
-    if (result == null || result.files.isEmpty) return;
+    if (file == null) return;
 
-    final file = result.files.first;
     final bytes = await readPickedFileBytes(file);
     if (bytes == null) return;
 
