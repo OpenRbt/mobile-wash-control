@@ -5,7 +5,6 @@ import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:mobile_wash_control/utils/browser_window.dart';
 
 import '../../../Common/bonus_common.dart';
-import '../../../generated/locale_keys.g.dart';
 
 enum SelectedPage {
   Main,

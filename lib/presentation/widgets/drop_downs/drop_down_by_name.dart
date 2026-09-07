@@ -20,7 +20,7 @@ class DropDownByName extends StatelessWidget {
 
     return DropdownButtonFormField(
       isExpanded: true,
-      value: currentValue,
+      initialValue: currentValue,
       items: List.generate(
         values.length,
             (index) => DropdownMenuItem(

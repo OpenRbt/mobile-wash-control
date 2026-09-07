@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_wash_control/utils/file_bytes.dart';
 import 'package:mobile_wash_control/utils/utils.dart';
 
@@ -326,12 +325,11 @@ class _SkinEditorPageState extends State<SkinEditorPage> {
   Future<void> _replaceImage() async {
     if (_selectedPath == null) return;
 
-    final result = await FilePicker.platform.pickFiles(
+    final file = await FilePicker.pickFile(
       type: FileType.image,
     );
-    if (result == null || result.files.isEmpty) return;
+    if (file == null) return;
 
-    final file = result.files.first;
     final bytes = await readPickedFileBytes(file);
     if (bytes == null) return;
 
@@ -737,7 +735,7 @@ class _SkinEditorPageState extends State<SkinEditorPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField<String>(
-                      value: selectedType,
+                      initialValue: selectedType,
                       decoration: const InputDecoration(
                         labelText: 'Type',
                         isDense: true,

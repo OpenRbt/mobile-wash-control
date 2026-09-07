@@ -29,6 +29,8 @@ import '../mobile/pages/skin_editor.dart';
 import '../mobile/pages/web_startup.dart';
 
 class Application extends StatelessWidget {
+  const Application({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,16 +50,14 @@ class Application extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => kIsWeb ? const WebStartupPage() : const Home(),
-        "/mobile/auth":
-            (context) => Auth(
-              host: ModalRoute.of(context)?.settings.arguments as String?,
-            ),
+        "/mobile/auth": (context) =>
+            Auth(host: ModalRoute.of(context)?.settings.arguments as String?),
         "/mobile/home": (context) => OverviewPage(),
         "/mobile/home/bonus-status": (context) => BonusStatusPage(),
         "/mobile/home/sbp-status": (context) => SbpStatusPage(),
         "/mobile/home/managePost": (context) => ManagePostPage(),
-        "/mobile/home/incassation-history":
-            (context) => IncassationHistoryPage(),
+        "/mobile/home/incassation-history": (context) =>
+            IncassationHistoryPage(),
         "/mobile/programs": (context) => ProgramsPage(),
         "/mobile/programs/edit": (context) => EditProgramPage(),
         "/mobile/settings": (context) => SettingsPage(),

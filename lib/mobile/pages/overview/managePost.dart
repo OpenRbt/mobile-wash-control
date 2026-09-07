@@ -72,10 +72,11 @@ class _ManagePostPageState extends State<ManagePostPage>
     final int stationID = args[PageArgCode.stationID];
     final String? stationHash = args[PageArgCode.stationHash];
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) return;
         Navigator.pop(context, _currentProgram);
-        return false;
       },
       child: Scaffold(
         key: _scaffoldKey,

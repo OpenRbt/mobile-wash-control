@@ -18,26 +18,24 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.0.18+25
 
 environment:
-  sdk: '>=3.7.0 <4.0.0'
+  sdk: '>=3.10.0 <4.0.0'
+  flutter: '>=3.41.6'
 
 
 dependencies:
   flutter:
     sdk: flutter
 
-  flutter_localizations:
-    sdk: flutter
-
-  easy_localization: ^3.0.3
-  package_info_plus: ^8.3.0
-  http: ^1.1.0
-  path_provider: ^2.0.17
-  android_intent_plus: ^5.3.0
-  meta: ^1.8.0
-  shared_preferences: ^2.0.17
-  provider: ^6.1.1
-  bloc: ^8.1.2
-  file_picker: ^8.0.0
+  easy_localization: ^3.0.8
+  package_info_plus: ^10.2.1
+  http: ^1.6.0
+  path_provider: ^2.1.6
+  intl: ^0.20.2
+  meta: ^1.17.0
+  shared_preferences: ^2.5.5
+  provider: ^6.1.5+1
+  bloc: ^9.2.1
+  file_picker: ^12.2.0
   web: ^1.1.1
 
 
@@ -47,8 +45,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
-  dependency_validator: ^3.0.0
+  flutter_lints: ^6.0.0
+  dependency_validator: ^5.0.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

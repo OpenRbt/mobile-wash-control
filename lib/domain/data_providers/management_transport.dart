@@ -2,7 +2,6 @@ import 'package:mobile_wash_control/openapi/management-client/api.dart';
 
 import '../../Common/management_common.dart';
 import '../entities/services_entities.dart' as srvcEntity;
-import '../entities/user_entity.dart' as usrEntity;
 
 class ManagementTransport {
   static Future<srvcEntity.WashServer?> getWashServer(String id) async {

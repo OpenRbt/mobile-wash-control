@@ -43,7 +43,7 @@ class DoubleDropDownWithRefresh extends StatelessWidget {
                           padding: const EdgeInsets.all(0.0),
                           child: DropdownButtonFormField(
                             isExpanded: true,
-                            value: (firstCurrentItem.value.id?.isEmpty ?? true) ? orgs[0].id: firstCurrentItem.value.id,
+                            initialValue: (firstCurrentItem.value.id?.isEmpty ?? true) ? orgs[0].id: firstCurrentItem.value.id,
                             items: List.generate(
                               orgs.length,
                                   (index) => DropdownMenuItem(
@@ -76,7 +76,7 @@ class DoubleDropDownWithRefresh extends StatelessWidget {
                                 padding: const EdgeInsets.all(0.0),
                                 child: DropdownButtonFormField(
                                   isExpanded: true,
-                                  value: (secondCurrentItem.value.id?.isEmpty ?? true) ? grps[0].id: secondCurrentItem.value.id,
+                                  initialValue: (secondCurrentItem.value.id?.isEmpty ?? true) ? grps[0].id: secondCurrentItem.value.id,
                                   items: blck ? null: List.generate(
                                     grps.length,
                                         (index) => DropdownMenuItem(
