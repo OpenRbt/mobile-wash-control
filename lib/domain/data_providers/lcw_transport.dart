@@ -1,4 +1,3 @@
-import 'package:mobile_wash_control/domain/entities/services_entities.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart';
 
 import '../../Common/lcw_common.dart';

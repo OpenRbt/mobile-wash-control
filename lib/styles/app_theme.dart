@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
-/// Single place where the shared look of the app is defined. The red brand
-/// colour and the Material 2 base are kept as they were; only spacing, shape
-/// and typography are normalised so the screens stop drifting apart.
+/// Single place where the shared look of the app is defined.
 class AppTheme {
-  static const double cardRadius = 14;
-  static const double controlRadius = 10;
+  static const double cardRadius = 8;
+  static const double controlRadius = 8;
   static const double contentMaxWidth = 720;
 
-  static const Color _surface = Color(0xFFF5F5F7);
-  static const Color _outline = Color(0xFFE2E2E6);
+  static const Color _surface = Color(0xFFF7F8FA);
+  static const Color _outline = Color(0xFFE4E7EC);
+  static const Color _mutedText = Color(0xFF667085);
 
   static ThemeData build() {
     final base = ThemeData(
@@ -24,6 +23,10 @@ class AppTheme {
       scaffoldBackgroundColor: _surface,
       canvasColor: _surface,
       dividerColor: _outline,
+      textTheme: base.textTheme.apply(
+        bodyColor: const Color(0xFF1D2939),
+        displayColor: const Color(0xFF101828),
+      ),
       appBarTheme: base.appBarTheme.copyWith(
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
@@ -32,6 +35,13 @@ class AppTheme {
         titleTextStyle: base.textTheme.titleLarge?.copyWith(
           color: colorScheme.onPrimary,
           fontWeight: FontWeight.w600,
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: Colors.white,
+        elevation: 8,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(cardRadius),
         ),
       ),
       cardTheme: base.cardTheme.copyWith(
@@ -114,6 +124,26 @@ class AppTheme {
         collapsedIconColor: Colors.black54,
         childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
         tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+      ),
+      dataTableTheme: base.dataTableTheme.copyWith(
+        headingTextStyle: base.textTheme.labelLarge?.copyWith(
+          color: _mutedText,
+          fontWeight: FontWeight.w700,
+        ),
+        dataTextStyle: base.textTheme.bodyMedium?.copyWith(
+          color: const Color(0xFF1D2939),
+        ),
+        dividerThickness: 1,
+      ),
+      floatingActionButtonTheme: base.floatingActionButtonTheme.copyWith(
+        elevation: 1,
+        focusElevation: 1,
+        hoverElevation: 2,
+        highlightElevation: 2,
+      ),
+      progressIndicatorTheme: base.progressIndicatorTheme.copyWith(
+        color: colorScheme.primary,
+        linearTrackColor: _outline,
       ),
     );
   }

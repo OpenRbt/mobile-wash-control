@@ -1,0 +1,207 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1040" viewBox="0 0 1440 1040" role="img" aria-labelledby="title desc">
+  <title id="title">Mobile Wash Control: схема логики приложения</title>
+  <desc id="desc">Схема показывает запуск приложения, поиск сервера, авторизацию, основные экраны, слой репозиториев и внешние API.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f9fb"/>
+      <stop offset="1" stop-color="#eef3f6"/>
+    </linearGradient>
+    <linearGradient id="entry" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#177e89"/>
+      <stop offset="1" stop-color="#084c61"/>
+    </linearGradient>
+    <linearGradient id="logic" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2f80ed"/>
+      <stop offset="1" stop-color="#1565c0"/>
+    </linearGradient>
+    <linearGradient id="state" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7b61ff"/>
+      <stop offset="1" stop-color="#4e3bbd"/>
+    </linearGradient>
+    <linearGradient id="api" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2e7d32"/>
+      <stop offset="1" stop-color="#1b5e20"/>
+    </linearGradient>
+    <linearGradient id="risk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d97706"/>
+      <stop offset="1" stop-color="#9a3412"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#092635" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#53606c"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#1565c0"/>
+    </marker>
+    <style>
+      .page { fill: url(#bg); }
+      .title { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 31px; font-weight: 800; fill: #102a43; letter-spacing: 0; }
+      .subtitle { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 15px; font-weight: 500; fill: #53606c; letter-spacing: 0; }
+      .section { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 18px; font-weight: 800; fill: #102a43; letter-spacing: 0; }
+      .boxTitle { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 16px; font-weight: 800; fill: #ffffff; letter-spacing: 0; }
+      .boxText { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 13px; font-weight: 500; fill: #eaf2f8; letter-spacing: 0; }
+      .plainTitle { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 15px; font-weight: 800; fill: #16324a; letter-spacing: 0; }
+      .plainText { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 12.5px; font-weight: 500; fill: #52616f; letter-spacing: 0; }
+      .tag { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 11px; font-weight: 800; fill: #ffffff; letter-spacing: 0; }
+      .noteTitle { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 14px; font-weight: 800; fill: #502314; letter-spacing: 0; }
+      .noteText { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 12.5px; font-weight: 600; fill: #6b3a1f; letter-spacing: 0; }
+      .card { fill: #ffffff; stroke: #d9e3ea; stroke-width: 1.2; rx: 14; filter: url(#shadow); }
+      .mini { fill: #ffffff; stroke: #d9e3ea; stroke-width: 1.2; rx: 12; }
+      .line { fill: none; stroke: #53606c; stroke-width: 2.2; marker-end: url(#arrow); }
+      .lineSoft { fill: none; stroke: #8ca0af; stroke-width: 1.7; marker-end: url(#arrow); }
+      .lineBlue { fill: none; stroke: #1565c0; stroke-width: 2.3; marker-end: url(#arrowBlue); }
+      .dash { fill: none; stroke: #8ca0af; stroke-width: 1.8; stroke-dasharray: 7 7; marker-end: url(#arrow); }
+      .smallLabel { font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 11.5px; font-weight: 800; fill: #53606c; letter-spacing: 0; }
+    </style>
+  </defs>
+
+  <rect class="page" x="0" y="0" width="1440" height="1040"/>
+
+  <text class="title" x="64" y="66">Mobile Wash Control: логика работы</text>
+  <text class="subtitle" x="64" y="94">Запуск, подключение к серверу автомойки, PIN-авторизация, рабочие экраны, состояние, REST API и внешние сервисы.</text>
+
+  <rect class="card" x="54" y="132" width="322" height="710"/>
+  <text class="section" x="82" y="168">1. Запуск и подключение</text>
+
+  <rect x="82" y="196" width="246" height="76" rx="13" fill="url(#entry)"/>
+  <text class="boxTitle" x="108" y="225">main.dart</text>
+  <text class="boxText" x="108" y="248">EasyLocalization</text>
+  <text class="boxText" x="108" y="266">MaterialApp + routes</text>
+
+  <path class="line" d="M205 272 L205 304"/>
+
+  <rect x="82" y="304" width="246" height="96" rx="13" fill="url(#logic)"/>
+  <text class="boxTitle" x="108" y="334">Выбор входного сценария</text>
+  <text class="boxText" x="108" y="357">Web: проверка backend URL</text>
+  <text class="boxText" x="108" y="376">Mobile/Linux: поиск сервера</text>
+
+  <path class="line" d="M205 400 L205 432"/>
+
+  <rect x="82" y="432" width="246" height="116" rx="13" fill="url(#logic)"/>
+  <text class="boxTitle" x="108" y="462">Home / WebStartup</text>
+  <text class="boxText" x="108" y="485">чтение сохраненного host</text>
+  <text class="boxText" x="108" y="504">/ping с timeout</text>
+  <text class="boxText" x="108" y="523">сканирование /24 сети</text>
+
+  <path class="line" d="M205 548 L205 580"/>
+
+  <rect x="82" y="580" width="246" height="114" rx="13" fill="url(#state)"/>
+  <text class="boxTitle" x="108" y="610">BackendHostStore</text>
+  <text class="boxText" x="108" y="633">SharedPreferences</text>
+  <text class="boxText" x="108" y="652">последний рабочий сервер</text>
+  <text class="boxText" x="108" y="671">ускоряет повторный вход</text>
+
+  <path class="line" d="M205 694 L205 726"/>
+
+  <rect x="82" y="726" width="246" height="76" rx="13" fill="url(#entry)"/>
+  <text class="boxTitle" x="108" y="755">Auth</text>
+  <text class="boxText" x="108" y="778">PIN в header: Pin</text>
+
+  <rect class="card" x="410" y="132" width="458" height="710"/>
+  <text class="section" x="438" y="168">2. Сессия, состояние и навигация</text>
+
+  <rect x="438" y="196" width="392" height="112" rx="13" fill="url(#entry)"/>
+  <text class="boxTitle" x="464" y="226">LeaCentralRepository</text>
+  <text class="boxText" x="464" y="249">создается после успешного PIN</text>
+  <text class="boxText" x="464" y="268">хранится в route arguments</text>
+  <text class="boxText" x="464" y="287">основная точка доступа к LCW API</text>
+
+  <path class="lineBlue" d="M634 308 L634 346"/>
+
+  <rect x="438" y="346" width="392" height="116" rx="13" fill="url(#state)"/>
+  <text class="boxTitle" x="464" y="376">Периодическое состояние</text>
+  <text class="boxText" x="464" y="399">каждые 1.5 сек: status()</text>
+  <text class="boxText" x="464" y="418">stations, kasse, bonus, sbp</text>
+  <text class="boxText" x="464" y="437">ValueNotifier обновляет UI</text>
+
+  <path class="lineBlue" d="M634 462 L634 500"/>
+
+  <rect x="438" y="500" width="392" height="294" rx="13" fill="#ffffff" stroke="#d9e3ea" stroke-width="1.2"/>
+  <text class="plainTitle" x="464" y="532">Основные экраны</text>
+  <text class="plainText" x="464" y="558">Overview: список постов, статус кассы, bonus, SBP</text>
+  <text class="plainText" x="464" y="582">ManagePost: баланс, сервисные деньги, инкассация, крышка</text>
+  <text class="plainText" x="464" y="606">Programs: список и редактирование программ</text>
+  <text class="plainText" x="464" y="630">Settings: timezone, станции, касса, пресеты</text>
+  <text class="plainText" x="464" y="654">Discounts: кампании, дни, время, скидки по программам</text>
+  <text class="plainText" x="464" y="678">Users: пользователи и роли</text>
+  <text class="plainText" x="464" y="702">Statistics / Motors: отчеты по деньгам и ресурсу моторов</text>
+  <text class="plainText" x="464" y="726">Skins / SkinEditor: zip, manifest, файлы, экранные элементы</text>
+  <text class="plainText" x="464" y="750">Monitoring: переход на Grafana-панель</text>
+  <text class="plainText" x="464" y="774">Operator role: только главный экран и выход</text>
+
+  <rect class="card" x="902" y="132" width="484" height="710"/>
+  <text class="section" x="930" y="168">3. API и внешние сервисы</text>
+
+  <rect x="930" y="196" width="196" height="132" rx="13" fill="url(#api)"/>
+  <text class="boxTitle" x="956" y="226">LCW API</text>
+  <text class="boxText" x="956" y="249">/ping, /status</text>
+  <text class="boxText" x="956" y="268">станции, программы</text>
+  <text class="boxText" x="956" y="287">пользователи, отчеты</text>
+  <text class="boxText" x="956" y="306">прошивки, skins</text>
+
+  <rect x="1162" y="196" width="196" height="132" rx="13" fill="url(#api)"/>
+  <text class="boxTitle" x="1188" y="226">Bonus Admin API</text>
+  <text class="boxText" x="1188" y="249">organizations</text>
+  <text class="boxText" x="1188" y="268">server groups</text>
+  <text class="boxText" x="1188" y="287">wash servers</text>
+  <text class="boxText" x="1188" y="306">applications/users</text>
+
+  <rect x="930" y="364" width="196" height="118" rx="13" fill="url(#api)"/>
+  <text class="boxTitle" x="956" y="394">SBP API</text>
+  <text class="boxText" x="956" y="417">washes</text>
+  <text class="boxText" x="956" y="436">registration</text>
+  <text class="boxText" x="956" y="455">service binding</text>
+
+  <rect x="1162" y="364" width="196" height="118" rx="13" fill="url(#api)"/>
+  <text class="boxTitle" x="1188" y="394">Management API</text>
+  <text class="boxText" x="1188" y="417">wash server config</text>
+  <text class="boxText" x="1188" y="436">groups by org</text>
+  <text class="boxText" x="1188" y="455">reports/config</text>
+
+  <path class="lineSoft" d="M1028 328 L1028 364"/>
+  <path class="lineSoft" d="M1260 328 L1260 364"/>
+
+  <rect x="930" y="522" width="428" height="132" rx="13" fill="#ffffff" stroke="#d9e3ea" stroke-width="1.2"/>
+  <text class="plainTitle" x="956" y="552">Файлы и обновления</text>
+  <text class="plainText" x="956" y="578">GitHub Releases: проверка актуальной версии приложения</text>
+  <text class="plainText" x="956" y="602">file_picker: выбор zip/изображений для skins</text>
+  <text class="plainText" x="956" y="626">download: сохранение zip/файлов через web или local FS</text>
+
+  <rect x="930" y="690" width="428" height="104" rx="13" fill="#ffffff" stroke="#d9e3ea" stroke-width="1.2"/>
+  <text class="plainTitle" x="956" y="720">Нативный слой</text>
+  <text class="plainText" x="956" y="746">Android: FlutterActivity, интернет, сеть, FileProvider</text>
+  <text class="plainText" x="956" y="770">iOS: папка проекта отсутствует, Swift-кода нет</text>
+
+  <path class="lineBlue" d="M328 764 C370 764 378 252 438 252"/>
+  <text class="smallLabel" x="338" y="742">успешный PIN</text>
+
+  <path class="line" d="M830 252 C860 252 880 252 930 252"/>
+  <path class="line" d="M830 404 C870 404 884 423 930 423"/>
+  <path class="line" d="M830 646 C876 646 886 584 930 584"/>
+
+  <rect x="54" y="880" width="408" height="106" rx="14" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.4"/>
+  <text class="noteTitle" x="82" y="912">Ключевой вывод</text>
+  <text class="noteText" x="82" y="938">Приложение в основном REST/JSON + формы управления.</text>
+  <text class="noteText" x="82" y="962">Тяжелых мобильных SDK: GPS, BLE, camera, maps нет.</text>
+
+  <rect x="516" y="880" width="408" height="106" rx="14" fill="#eef6ff" stroke="#bfdbfe" stroke-width="1.4"/>
+  <text class="plainTitle" x="544" y="912">Что несет основную сложность</text>
+  <text class="plainText" x="544" y="938">Большой репозиторий, много экранов и много API-операций.</text>
+  <text class="plainText" x="544" y="962">Смешанное состояние: ValueNotifier, FutureBuilder, Cubit.</text>
+
+  <rect x="978" y="880" width="408" height="106" rx="14" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.4"/>
+  <text class="plainTitle" x="1006" y="912">Swift rewrite</text>
+  <text class="plainText" x="1006" y="938">Технически реалистично: SwiftUI + URLSession + UserDefaults.</text>
+  <text class="plainText" x="1006" y="962">Но выгода ограничена: нет сложных iOS-only интеграций.</text>
+
+  <rect x="82" y="812" width="92" height="26" rx="13" fill="#084c61"/>
+  <text class="tag" x="103" y="830">entry</text>
+  <rect x="184" y="812" width="92" height="26" rx="13" fill="#1565c0"/>
+  <text class="tag" x="207" y="830">logic</text>
+  <rect x="286" y="812" width="92" height="26" rx="13" fill="#4e3bbd"/>
+  <text class="tag" x="310" y="830">state</text>
+  <rect x="388" y="812" width="92" height="26" rx="13" fill="#1b5e20"/>
+  <text class="tag" x="418" y="830">api</text>
+</svg>

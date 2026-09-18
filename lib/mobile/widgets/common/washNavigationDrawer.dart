@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_wash_control/entity/vo/page_args_codes.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
 import 'package:mobile_wash_control/utils/browser_window.dart';
 
 import '../../../Common/bonus_common.dart';
-import '../../../generated/locale_keys.g.dart';
 
 enum SelectedPage {
   Main,
@@ -136,7 +136,10 @@ class WashNavigationDrawer extends StatelessWidget {
     SelectedPage.Statistics,
     SelectedPage.Motors,
     SelectedPage.Skins,
-    SelectedPage.Monitoring,
+    // Monitoring opens the Grafana dashboard next to the web build with
+    // window.open(); there is no such window in the Android build, so the row would
+    // just do nothing there.
+    if (kIsWeb) SelectedPage.Monitoring,
     SelectedPage.Exit,
   ];
 

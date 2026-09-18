@@ -41,7 +41,7 @@ def hasReleaseSigning = ['storeFile', 'storePassword', 'keyAlias', 'keyPassword'
 
 android {
     namespace "com.openrbt.mobile_wash_control"
-    compileSdkVersion 35
+    compileSdkVersion 36
     ndkVersion "27.0.12077973"
 
     compileOptions {
@@ -87,6 +87,23 @@ android {
             signingConfig hasReleaseSigning ? signingConfigs.release : signingConfigs.debug
         }
     }
+
+    // An app bundle is only ever built to be uploaded, and Google Play rejects anything
+    // signed with the debug key. Fail the build here instead of producing an .aab that is
+    // refused on upload.
+    if (!hasReleaseSigning) {
+        gradle.taskGraph.whenReady { graph ->
+            def uploadTask = graph.allTasks.find { it.name ==~ /(?i).*bundle.*release.*/ }
+            if (uploadTask != null) {
+                throw new GradleException(
+                    "android/key.properties is missing, so this bundle would be signed with the " +
+                    "Android debug key and Google Play would reject it. Copy " +
+                    "android/key.properties.sample to android/key.properties and point storeFile " +
+                    "at the release keystore."
+                )
+            }
+        }
+    }
 }
 
 flutter {
@@ -94,7 +111,8 @@ flutter {
 }
 
 dependencies {
-    implementation platform('com.google.firebase:firebase-bom:31.2.3')
-    implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.android.support:multidex:2.0.1'
+    // Nothing here for now. Firebase was removed: no Dart code uses it, there is no
+    // google-services.json, and firebase-auth only added exported deep-link activities.
+    // multidex needs no artifact either - it is native from minSdk 21 and
+    // multiDexEnabled is already set in defaultConfig.
 }

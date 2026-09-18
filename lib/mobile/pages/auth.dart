@@ -8,6 +8,7 @@ import 'package:mobile_wash_control/mobile/widgets/auth/authButton.dart';
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart' as lcw;
 import 'package:mobile_wash_control/repository/lea_central_wash_repo/repository.dart';
 import 'package:mobile_wash_control/repository/repository.dart';
+import 'package:mobile_wash_control/utils/timeout_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Common/bonus_common.dart';
@@ -31,6 +32,7 @@ class _AuthState extends State<Auth> {
   late TextEditingController pinController;
 
   Repository? _repo = null;
+  bool _authInProgress = false;
 
   @override
   void initState() {
@@ -46,8 +48,20 @@ class _AuthState extends State<Auth> {
   }
 
   Future<void> _tryAuth() async {
+    // The keypad can be tapped again while the request is in flight; without this
+    // every tap built another repository with its own polling loop.
+    if (_authInProgress) {
+      return;
+    }
+    setState(() {
+      _authInProgress = true;
+    });
+
+    // Owned by this method until it is handed over to _repo / the next route.
+    LeaCentralRepository? pendingRepo;
     try {
       var client = lcw.DefaultApi(lcw.ApiClient(basePath: widget.host!));
+      client.apiClient.client = TimeoutClient();
       client.apiClient.addDefaultHeader("Pin", pinController.text);
 
       LcwCommon.initializeApis(widget.host!, pinController.text);
@@ -56,41 +70,68 @@ class _AuthState extends State<Auth> {
       final int addServiceValue = prefs.getInt("AddServiceValue") ?? 0;
 
       var args = Map<PageArgCode, dynamic>();
-      var repo = LeaCentralRepository(client);
-      args[PageArgCode.repository] = repo;
+      pendingRepo = LeaCentralRepository(client);
+      args[PageArgCode.repository] = pendingRepo;
 
-      final user = await repo.getCurrentUser();
+      final user = await pendingRepo.getCurrentUser();
+      if (!mounted) {
+        return;
+      }
       if (user == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBars.getErrorSnackBar(
             message: 'there_is_no_user_with_this_password'.tr(),
           ),
         );
-        repo.dispose();
         return;
       }
+
       _repo?.dispose();
-      _repo = repo;
+      _repo = pendingRepo;
+      pendingRepo = null;
       GlobalData.AddServiceValue = addServiceValue;
       SystemChrome.setPreferredOrientations([]);
 
-      String? bonusUrl = await repo.getServerInfo(context: context);
-      String basePath = "";
-      if(bonusUrl?.isNotEmpty ?? false){
-        basePath = (bonusUrl)! + '/api/bonus/admin';
+      // A server that reports no bonus URL is a valid setup: the bonus, SBP and
+      // management APIs stay unconfigured instead of throwing on a null check and
+      // leaving the confirm key looking dead.
+      final String bonusUrl = (await _repo!.getServerInfo(context: context)) ?? '';
+      BonusCommon.initializeApis(
+        bonusUrl.isEmpty ? '' : '$bonusUrl/api/bonus/admin',
+      );
+      SbpCommon.initializeApis(bonusUrl.isEmpty ? '' : '$bonusUrl/api/sbp');
+      ManagementCommon.initializeApis(
+        bonusUrl.isEmpty ? '' : '$bonusUrl/api/mngt',
+      );
+
+      if (!mounted) {
+        return;
       }
-      BonusCommon.initializeApis(basePath);
-      SbpCommon.initializeApis((bonusUrl)! + '/api/sbp');
-      ManagementCommon.initializeApis((bonusUrl) + '/api/mngt');
       Navigator.pushNamed(
         context,
         "/mobile/home",
         arguments: args,
       );
     } catch (e) {
+      if (mounted) {
+        // An empty catch here used to make the confirm key look dead whenever the
+        // server was unreachable or answered with an error.
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBars.getErrorSnackBar(
+            message: "${'an_unknown_error_has_occurred'.tr()}: $e",
+          ),
+        );
+      }
+    } finally {
+      pendingRepo?.dispose();
+      _authInProgress = false;
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 
+  @override
   Widget build(BuildContext context) {
 
     if (widget.host == null) {
@@ -139,7 +180,14 @@ class _AuthState extends State<Auth> {
                           color: Colors.black54,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 2,
+                        child: _authInProgress
+                            ? const LinearProgressIndicator(minHeight: 2)
+                            : null,
+                      ),
+                      const SizedBox(height: 10),
                       TextField(
                         controller: pinController,
                         readOnly: true,

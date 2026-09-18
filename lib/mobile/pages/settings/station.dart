@@ -364,7 +364,7 @@ class _StationPageState extends State<StationPage> {
                                 fit: FlexFit.tight,
                                 child: DropdownButtonFormField(
                                   isExpanded: true,
-                                  value: config?.hash ?? "",
+                                  initialValue: config?.hash ?? "",
                                   items: List.generate(
                                     hashes.length,
                                         (index) => DropdownMenuItem(
@@ -464,7 +464,7 @@ class _StationPageState extends State<StationPage> {
                                 fit: FlexFit.tight,
                                 child: DropdownButtonFormField<String>(
                                   isExpanded: true,
-                                  value: (config?.firmwareSkin ?? "").isEmpty ? "" : config?.firmwareSkin,
+                                  initialValue: (config?.firmwareSkin ?? "").isEmpty ? "" : config?.firmwareSkin,
                                   items: [
                                     DropdownMenuItem(
                                       value: "",
@@ -820,7 +820,7 @@ class _StationPageState extends State<StationPage> {
                       },
                       children: [
                         TableRow(
-                          decoration: BoxDecoration(color: theme.colorScheme.surfaceVariant),
+                          decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest),
                           children: [
                             Padding(
                               padding: EdgeInsets.all(8),

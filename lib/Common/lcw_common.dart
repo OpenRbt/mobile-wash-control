@@ -1,4 +1,5 @@
 import 'package:mobile_wash_control/openapi/lea-central-wash/api.dart';
+import 'package:mobile_wash_control/utils/timeout_client.dart';
 
 class LcwCommon {
   static DefaultApi? defaultApi;
@@ -8,6 +9,7 @@ class LcwCommon {
         basePath: url
     ));
 
+    defaultApi?.apiClient.client = TimeoutClient();
     defaultApi?.apiClient.addDefaultHeader("Pin", pin);
 
   }
