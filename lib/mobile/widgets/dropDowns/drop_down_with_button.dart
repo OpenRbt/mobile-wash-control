@@ -22,7 +22,7 @@ class DropDownWithButton extends StatelessWidget {
           fit: FlexFit.loose,
           child: DropdownButtonFormField(
             isExpanded: true,
-            value: currentValue,
+            initialValue: currentValue,
             items: List.generate(
               values.length,
                   (index) => DropdownMenuItem(

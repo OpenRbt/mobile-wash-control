@@ -18,6 +18,7 @@ class LeaCentralRepository extends Repository {
 
   Future? refresh;
   final refreshDelay = Duration(seconds: 1, milliseconds: 500);
+  bool _disposed = false;
 
   ValueNotifier<List<entity.Station>?> _stations = ValueNotifier(null);
   ValueNotifier<List<entity.Organization>?> _organizations = ValueNotifier(
@@ -42,13 +43,26 @@ class LeaCentralRepository extends Repository {
 
   void _prepareStatusRefresh() {
     refresh = Future.delayed(refreshDelay, () async {
+      // Without this guard the loop kept polling and kept writing to ValueNotifiers
+      // that dispose() had already closed, which throws and leaks one poller per
+      // repository that was ever created (every failed login created one).
+      if (_disposed) {
+        return;
+      }
       await updateStatus();
+      if (_disposed) {
+        return;
+      }
       _prepareStatusRefresh();
     });
   }
 
   @override
   void dispose() {
+    if (_disposed) {
+      return;
+    }
+    _disposed = true;
     _stations.dispose();
     _organizations.dispose();
     _kasseStatus.dispose();
@@ -57,6 +71,8 @@ class LeaCentralRepository extends Repository {
     _lcwRepo.dispose();
     _programs.dispose();
     _users.dispose();
+    _hashes.dispose();
+    _discount.dispose();
   }
 
   @override
@@ -143,7 +159,6 @@ class LeaCentralRepository extends Repository {
 
   @override
   Future<List<entity.Station>?> getStations() async {
-    print("get Stations");
     final stations = _stations.value;
     if (stations == null) {
       await updateStatus();
@@ -156,6 +171,9 @@ class LeaCentralRepository extends Repository {
   Future<void> updateStatus({BuildContext? context}) async {
     try {
       final res = await api.status();
+      if (_disposed) {
+        return;
+      }
 
       var stations = <entity.Station>[];
       res?.stations.where((element) => element.id != null).forEach((element) {
@@ -379,7 +397,6 @@ class LeaCentralRepository extends Repository {
 
   @override
   Future<entity.Station?> getStation(int id) async {
-    print("GetStations");
     var stations = _stations.value;
     if (stations == null) {
       await updateStatus();
@@ -1228,7 +1245,6 @@ class LeaCentralRepository extends Repository {
     );
 
     try {
-      print(args.toJson().toString());
       final response = await api.stationReportDates(args);
 
       return Helpers.stationMoneyReportFromAPI(response!.moneyReport!, id);

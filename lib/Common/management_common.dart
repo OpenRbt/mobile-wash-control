@@ -1,4 +1,5 @@
 import 'package:mobile_wash_control/openapi/management-client/api.dart';
+import 'package:mobile_wash_control/utils/timeout_client.dart';
 
 class ManagementCommon {
   static ConfigApi? configApi;
@@ -18,6 +19,8 @@ class ManagementCommon {
         authentication: HttpBearerAuth(),
         basePath: url
     ));
+    ManagementCommon.configApi?.apiClient.client = TimeoutClient();
+    ManagementCommon.reportApi?.apiClient.client = TimeoutClient();
   }
 
 }

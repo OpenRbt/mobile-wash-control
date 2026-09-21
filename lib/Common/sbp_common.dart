@@ -1,4 +1,5 @@
 import 'package:mobile_wash_control/openapi/sbp-client/api.dart';
+import 'package:mobile_wash_control/utils/timeout_client.dart';
 
 class SbpCommon {
   static StandardApi? standardApi;
@@ -18,6 +19,8 @@ class SbpCommon {
         authentication: HttpBearerAuth(),
         basePath: url
     ));
+    SbpCommon.standardApi?.apiClient.client = TimeoutClient();
+    SbpCommon.washApi?.apiClient.client = TimeoutClient();
   }
 
 }

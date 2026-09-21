@@ -132,3 +132,6 @@ app.*.symbols
 
 **/google-services.json
 **/build_config.json
+
+# Logs produced by ./verify_release.sh
+audit_logs/

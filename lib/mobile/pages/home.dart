@@ -8,6 +8,7 @@ import 'package:mobile_wash_control/application/backend_host_store.dart';
 import 'package:mobile_wash_control/application/local_network_scan_models.dart';
 import 'package:mobile_wash_control/application/local_network_scanner.dart';
 import 'package:mobile_wash_control/mobile/widgets/common/content_container.dart';
+import 'package:mobile_wash_control/mobile/widgets/common/snackBars.dart';
 import 'package:mobile_wash_control/mobile/widgets/scan_host_list_tile.dart';
 import 'package:mobile_wash_control/styles/app_theme.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -43,6 +44,9 @@ class _HomeState extends State<Home> {
   int _scanned = 0;
   int _scanTotal = 0;
 
+  final TextEditingController _manualHostController = TextEditingController();
+  bool _manualConnectInProgress = false;
+
   @override
   void initState() {
     super.initState();
@@ -53,6 +57,7 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     _scanSubscription?.cancel();
+    _manualHostController.dispose();
     super.dispose();
   }
 
@@ -208,6 +213,44 @@ class _HomeState extends State<Home> {
     ).then((value) {}, onError: (value) {});
   }
 
+  /// Reaches a server the subnet sweep cannot see: a wash on another network,
+  /// or the public demo server a store reviewer is handed. Parsing stays in
+  /// [BackendConfig.normalizeBaseUrl], which already accepts a bare host, a
+  /// host:port pair and an explicit scheme.
+  Future<void> _connectManually() async {
+    if (_manualConnectInProgress) {
+      return;
+    }
+    final input = _manualHostController.text.trim();
+    if (input.isEmpty) {
+      return;
+    }
+
+    final host = BackendConfig.normalizeBaseUrl(input);
+    setState(() {
+      _manualConnectInProgress = true;
+    });
+
+    final reachable = await _scanner.probeHost(host);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _manualConnectInProgress = false;
+    });
+
+    if (!reachable) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBars.getErrorSnackBar(message: context.tr('servers_not_found')),
+      );
+      return;
+    }
+
+    // Reuses the discovery path, so the address is saved via BackendHostStore
+    // and the next launch reconnects to it without a scan.
+    _openServer(host);
+  }
+
   bool get _busy =>
       _stage == _ScanStage.scanning || _stage == _ScanStage.connecting;
 
@@ -303,6 +346,10 @@ class _HomeState extends State<Home> {
                     primaryAddress == null ? null : '${primaryAddress.prefix}.0/24',
                 foundCount: _hosts.length,
                 onScan: _busy ? null : _refreshAndScan,
+                manualController: _manualHostController,
+                manualBusy: _manualConnectInProgress,
+                onManualConnect:
+                    _manualConnectInProgress ? null : _connectManually,
               ),
               const SizedBox(height: 20),
               Expanded(child: _buildServerList(theme)),
@@ -349,6 +396,9 @@ class _StatusCard extends StatelessWidget {
     required this.subnet,
     required this.foundCount,
     required this.onScan,
+    required this.manualController,
+    required this.manualBusy,
+    required this.onManualConnect,
   });
 
   final bool busy;
@@ -359,6 +409,9 @@ class _StatusCard extends StatelessWidget {
   final String? subnet;
   final int foundCount;
   final VoidCallback? onScan;
+  final TextEditingController manualController;
+  final bool manualBusy;
+  final VoidCallback? onManualConnect;
 
   @override
   Widget build(BuildContext context) {
@@ -436,6 +489,38 @@ class _StatusCard extends StatelessWidget {
                 onPressed: onScan,
                 icon: const Icon(Icons.wifi_find_outlined, size: 20),
                 label: Text(context.tr('scan_network')),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Divider(height: 1),
+            const SizedBox(height: 16),
+            TextField(
+              controller: manualController,
+              enabled: !manualBusy,
+              autocorrect: false,
+              keyboardType: TextInputType.url,
+              textInputAction: TextInputAction.go,
+              onSubmitted: (_) => onManualConnect?.call(),
+              decoration: InputDecoration(
+                labelText: context.tr('server_address'),
+                hintText: 'demo-wash.example.com',
+                prefixIcon: const Icon(Icons.dns_outlined, size: 20),
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: onManualConnect,
+                icon:
+                    manualBusy
+                        ? const SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2.2),
+                        )
+                        : const Icon(Icons.link_outlined, size: 20),
+                label: Text(context.tr('connect')),
               ),
             ),
           ],

@@ -134,9 +134,9 @@
   "programs_discounts": "Programs discounts",
   "currency_value": "dol.",
   "collect": "Collect",
-  "current_balance": "Current_balance",
+  "current_balance": "Current balance",
   "service": "Service",
-  "service_money": "Service_money",
+  "service_money": "Service money",
   "send": "Send",
   "add_service_money": "Add service money",
   "cancel_amount": "Reset to zero",
@@ -159,7 +159,7 @@
   "select_post_preset": "Select post preset",
   "select_posts": "Select posts",
   "set": "Set",
-  "upload_settings ": "Upload settings",
+  "upload_settings": "Upload settings",
   "settings_for_programs_and_buttons_will_be_set_by_default": "Settings for programs and buttons will be set by default",
   "post_settings": "Post settings",
   "hash": "Hash",
@@ -346,7 +346,7 @@
   "no_card_reader_configuration_found_for_the_post": "No card reader configuration found for the post",
   "card_reader_configuration_for_post": "Card reader configuration for post",
   "buttons_configuration_for_post": "Buttons configuration for post",
-  "unacceptable_buttons_configuration": "Unacceptable_buttons_configuration",
+  "unacceptable_buttons_configuration": "Unacceptable buttons configuration",
   "cash_desk_configuration_not_found": "Cash desk configuration not found",
   "cash_desk_configuration": "Cash desk configuration",
   "to_execute_program": "to execute program",
@@ -365,5 +365,6 @@
   "servers_not_found": "No servers found",
   "network_unavailable": "Network unavailable",
   "check_wifi_connection": "Check the Wi-Fi connection",
-  "saved_server": "Saved server"
+  "saved_server": "Saved server",
+  "server_address": "Server address"
 }

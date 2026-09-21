@@ -159,7 +159,7 @@
   "select_post_preset": "Выберите тип поста",
   "select_posts": "Выберите посты",
   "set": "Установить",
-  "upload_settings ": "Загрузить настройки",
+  "upload_settings": "Загрузить настройки",
   "settings_for_programs_and_buttons_will_be_set_by_default": "Настройки для программ и кнопок будут установлены по умолчанию",
   "post_settings": "Параметры поста",
   "hash": "Хэш",
@@ -365,5 +365,6 @@
   "servers_not_found": "Серверы не найдены",
   "network_unavailable": "Сеть недоступна",
   "check_wifi_connection": "Проверьте подключение к Wi-Fi",
-  "saved_server": "Сохранённый сервер"
+  "saved_server": "Сохранённый сервер",
+  "server_address": "Адрес сервера"
 }

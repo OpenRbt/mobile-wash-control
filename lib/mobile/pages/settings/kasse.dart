@@ -136,7 +136,7 @@ class _KassePageState extends State<KassePage> {
                                   Expanded(
                                     flex: 2,
                                     child: DropdownButtonFormField<TaxType>(
-                                      value: value.taxType,
+                                      initialValue: value.taxType,
                                       isExpanded: true,
                                       items: TaxType.values
                                           .map(

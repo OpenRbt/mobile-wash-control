@@ -1,4 +1,5 @@
 import 'package:mobile_wash_control/openapi/wash-admin-client/api.dart';
+import 'package:mobile_wash_control/utils/timeout_client.dart';
 
 class BonusCommon {
   static OrganizationsApi? organizationApi;
@@ -36,5 +37,10 @@ class BonusCommon {
         authentication: HttpBearerAuth(),
         basePath: url
     ));
+    BonusCommon.organizationApi?.apiClient.client = TimeoutClient();
+    BonusCommon.serversGroupApi?.apiClient.client = TimeoutClient();
+    BonusCommon.userApi?.apiClient.client = TimeoutClient();
+    BonusCommon.washServerApi?.apiClient.client = TimeoutClient();
+    BonusCommon.applicationApi?.apiClient.client = TimeoutClient();
   }
 }
